@@ -1,0 +1,7 @@
+flutter_native_splash:
+  fill: false
+  android_gravity: center
+  ios_content_mode: center
+  #color: "011C35"
+  background_image: "assets/images/vegi-splash-background.png"
+  ios: true
