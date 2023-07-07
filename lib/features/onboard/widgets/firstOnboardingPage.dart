@@ -66,6 +66,16 @@ class _FirstOnboardingPageState extends State<FirstOnboardingPage> {
         children: [
           Container(
             decoration: const BoxDecoration(
+              image: DecorationImage(
+                fit: BoxFit.cover,
+                image: AssetImage(
+                  ImagePaths.onboardingTextureBelowBackgroundBrightCream,
+                ),
+              ),
+            ),
+          ),
+          Container(
+            decoration: const BoxDecoration(
               color: Color.fromARGB(
                 255,
                 248,

@@ -28,7 +28,8 @@ class PaymentSheet extends StatelessWidget {
           ..dispatch(SetPaymentButtonFlag(false))
           ..dispatch(
             UpdateSelectedAmounts(
-              gbpxAmount: store.state.cartState.cartTotal.inGBPxValue.toDouble(),
+              gbpxAmount:
+                  store.state.cartState.cartTotal.inGBPxValue.toDouble(),
               pplAmount: 0,
             ),
           );
@@ -85,7 +86,7 @@ class PaymentSheet extends StatelessWidget {
               builder: (context) {
                 return const StripePaymentConfirmedDialog(); //TODO: Replace this with MintingDialog copy
               },
-              barrierDismissible: true,
+              barrierDismissible: false,
             );
           } else if (newViewModel.stripePaymentStatus ==
               StripePaymentStatus.paymentFailed) {

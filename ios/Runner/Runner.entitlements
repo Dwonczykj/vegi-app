@@ -6,7 +6,7 @@
 	<string>development</string>
 	<key>com.apple.developer.in-app-payments</key>
 	<array>
-		<string>merchant.com.vegiapp</string>
+		<string>merchant.com.vegi</string>
 	</array>
 </dict>
 </plist>

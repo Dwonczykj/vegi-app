@@ -585,10 +585,11 @@ class FirebaseStrategy implements IOnBoardStrategy {
 
     if (store.state.userState.email.isNotEmpty &&
         (currentUser.email == null ||
-            currentUser.email != store.state.userState.email)) {
+            currentUser.email?.toLowerCase().trim() !=
+                store.state.userState.email.toLowerCase().trim())) {
       try {
         await updateEmail(
-          email: store.state.userState.email,
+          email: store.state.userState.email.toLowerCase().trim(),
           dontComplete: true,
         );
       } on FirebaseAuthException catch (e, s) {
@@ -626,8 +627,8 @@ class FirebaseStrategy implements IOnBoardStrategy {
 
   @override
   bool registeredEmailIs(String email) {
-    final currentUserEmail = firebaseAuth.currentUser?.email;
-    return currentUserEmail != null && currentUserEmail == email;
+    final currentUserEmail = firebaseAuth.currentUser?.email?.toLowerCase().trim();
+    return currentUserEmail != null && currentUserEmail == email.toLowerCase().trim();
   }
 
   Future<void> _processSigninPhoneNumber(
@@ -676,7 +677,7 @@ class FirebaseStrategy implements IOnBoardStrategy {
 
     final result = await loginToVegiWithEmail(
       store: store,
-      email: store.state.userState.email,
+      email: store.state.userState.email.toLowerCase().trim(),
       firebaseSessionToken: firebaseSessionToken,
     );
     if (result != LoggedInToVegiResult.success) {
@@ -699,7 +700,7 @@ class FirebaseStrategy implements IOnBoardStrategy {
   Future<void> resetPassword({
     required String email,
   }) async {
-    await firebaseAuth.sendPasswordResetEmail(email: email);
+    await firebaseAuth.sendPasswordResetEmail(email: email.toLowerCase().trim());
   }
 
   @override
@@ -707,13 +708,15 @@ class FirebaseStrategy implements IOnBoardStrategy {
     required String email,
     bool dontComplete = false,
   }) async {
+    email = email.toLowerCase().trim();
     final store = await reduxStore;
     store.dispatch(
       SignupLoading(
         isLoading: true,
       ),
     );
-    final existingEmail = firebaseAuth.currentUser?.email ?? email;
+    final existingEmail =
+        (firebaseAuth.currentUser?.email ?? email).toLowerCase().trim();
     try {
       // we are seeing an issue here where we already have 2 different firebase accounts set up for jdwonczyk@gmail.com and joey@vegiapp.co.uk and therefore when we try to update form jdwnoczyk to joey@vegi, we get an error as the email already has a different account registered to it.
       // we need to first check if joey@vegiapp already has a firebase account and if it does, we need to get the user to login with it first to link the account.
@@ -756,7 +759,7 @@ class FirebaseStrategy implements IOnBoardStrategy {
         e,
         s,
         additionalMessage:
-            'Error whilst firebaseOnBoarding.updateEmail using firebaseAuth?.currentUser?.verifyBeforeUpdateEmail(email) $e',
+            'Error whilst firebaseOnBoarding.updateEmail to email "$email" using firebaseAuth?.currentUser?.verifyBeforeUpdateEmail("$email") $e',
         firebaseStatusIfNotHandled:
             FirebaseAuthenticationStatus.updateEmailUsingVerificationFailed,
         dontComplete: dontComplete,
@@ -1252,7 +1255,7 @@ class FirebaseStrategy implements IOnBoardStrategy {
         SignupFailed(
           error: SignUpErrorDetails(
             title: message,
-            message: '',
+            message: additionalMessage ?? '',
             code: SignUpErrCode.invalidCredentials,
           ),
         ),
@@ -1266,7 +1269,7 @@ class FirebaseStrategy implements IOnBoardStrategy {
         SignupFailed(
           error: SignUpErrorDetails(
             title: message,
-            message: '',
+            message: additionalMessage ?? '',
             code: SignUpErrCode.invalidEmail,
           ),
         ),
@@ -1280,7 +1283,7 @@ class FirebaseStrategy implements IOnBoardStrategy {
         SignupFailed(
           error: SignUpErrorDetails(
             title: message,
-            message: '',
+            message: additionalMessage ?? '',
             code: SignUpErrCode.emailLinkExpired,
           ),
         ),
@@ -1308,7 +1311,7 @@ class FirebaseStrategy implements IOnBoardStrategy {
         SignupFailed(
           error: SignUpErrorDetails(
             title: message,
-            message: '',
+            message: additionalMessage ?? '',
             code: SignUpErrCode.userDisabled,
           ),
         ),
@@ -1348,7 +1351,7 @@ class FirebaseStrategy implements IOnBoardStrategy {
         SignupFailed(
           error: SignUpErrorDetails(
             title: message,
-            message: '',
+            message: additionalMessage ?? '',
             code: SignUpErrCode.sessionExpired,
           ),
         ),
@@ -1366,7 +1369,7 @@ class FirebaseStrategy implements IOnBoardStrategy {
         SignupFailed(
           error: SignUpErrorDetails(
             title: message,
-            message: '',
+            message: additionalMessage ?? '',
             code: SignUpErrCode.userNotFound,
           ),
         ),

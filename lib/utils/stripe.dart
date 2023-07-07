@@ -24,6 +24,7 @@ import 'package:vegan_liverpool/redux/actions/cart_actions.dart';
 import 'package:vegan_liverpool/redux/actions/home_page_actions.dart';
 import 'package:vegan_liverpool/services.dart';
 import 'package:vegan_liverpool/utils/analytics.dart';
+import 'package:vegan_liverpool/utils/config.dart';
 import 'package:vegan_liverpool/utils/constants.dart';
 import 'package:vegan_liverpool/utils/log/log.dart';
 
@@ -53,7 +54,7 @@ class StripeService {
     //   );
     //   throw e;
     // }
-    Stripe.merchantIdentifier = 'merchant.com.vegiapp';
+    Stripe.merchantIdentifier = 'merchant.com.vegi';
   }
 
   Future<bool> _handleStripeCardPaymentFlow({
@@ -142,7 +143,7 @@ class StripeService {
       );
       await instance.presentPaymentSheet(
         options: const PaymentSheetPresentOptions(
-          timeout: 10 * 1000,
+          timeout: AppConfig.stripeCardPaymentFlowTimeOutMillis,
         ),
       );
     } on StripeException catch (e, s) {

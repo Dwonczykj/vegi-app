@@ -10,8 +10,10 @@ class Addresses {
   static const String gbpxTokenAddress =
       '0x40afcd9421577407abb0d82e2ff25fd2ef4c68bd';
 
-  static const String pplTokenAddress =
-      '0xa2c7cdb72d177f6259cd12a9a06fdfd9625419d4';
+  // static const String pplTokenAddress =
+  //     '0xa2c7cdb72d177f6259cd12a9a06fdfd9625419d4';
+  static const String gbtTokenAddress =
+      '';
 
   static const String nativeTokenAddress =
       '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee';

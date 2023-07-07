@@ -674,7 +674,7 @@ ThunkAction<AppState> updateEmail({
 }) {
   return (Store<AppState> store) async {
     try {
-      store.dispatch(SetEmail(email));
+      store.dispatch(SetEmail(email.toLowerCase().trim()));
       if (store.state.userState.waitingListEntryId == null) {
         final warning =
             'Cant update user email with vegi as no waiting list entry id is stored in state...';
@@ -1939,12 +1939,21 @@ Future<FuseAuthenticationStatus> _tryCreateWallet(
     );
     return FuseAuthenticationStatus.created;
   } else if (walletCreationResult.hasError) {
-    log.error(walletCreationResult.error.toString());
+    final errStr = walletCreationResult.error is DioError
+        ? 'FuseSDK failed to create a new wallet... Message: "${(walletCreationResult.error as DioError?)?.message}", Err: ${(walletCreationResult.error as DioError?)?.error}'
+        : '${walletCreationResult.error}';
+    log.error(
+      errStr,
+      error: walletCreationResult.error,
+      sentry: true,
+      sentryHint: errStr,
+    );
     await Sentry.captureException(
-      walletCreationResult.error,
+      walletCreationResult.error is DioError
+          ? (walletCreationResult.error as DioError).message
+          : walletCreationResult.error,
       stackTrace: StackTrace.current, // from catch (err, s)
-      hint:
-          'ERROR - user_actions._tryCreateWallet ${walletCreationResult.error}',
+      hint: 'ERROR - user_actions._tryCreateWallet $errStr',
     );
     store
       ..dispatch(

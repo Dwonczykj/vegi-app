@@ -1,4 +1,4 @@
-package com.vegi.vegiapp
+package com.vegiapp.vegi
 
 import androidx.annotation.NonNull
 import io.flutter.embedding.android.FlutterActivity

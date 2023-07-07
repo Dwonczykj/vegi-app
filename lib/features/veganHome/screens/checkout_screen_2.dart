@@ -159,7 +159,7 @@ class CheckoutScreenPt2 extends StatelessWidget {
                   builder: (context) {
                     return const StripePaymentConfirmedDialog(); //TODO: Replace this with MintingDialog copy
                   },
-                  barrierDismissible: true,
+                  barrierDismissible: false,
                 );
               } else if (newViewModel.stripePaymentStatus ==
                   StripePaymentStatus.paymentFailed) {

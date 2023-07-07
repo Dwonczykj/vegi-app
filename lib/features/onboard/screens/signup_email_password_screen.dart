@@ -287,15 +287,15 @@ class _SignUpWithEmailAndPasswordScreenState
                             disabled: viewmodel.signupIsInFlux,
                             onPressed: () async {
                               viewmodel.signinEmailAndPassword(
-                                email: emailController.text,
+                                email:
+                                    emailController.text.toLowerCase().trim(),
                                 password: passwordController.text,
                               );
                             },
                           ),
                           const SizedBox(height: 20),
                           GestureDetector(
-                            onTap: () =>
-                                launchUrl(VEGI_PRIVACY_URL),
+                            onTap: () => launchUrl(VEGI_PRIVACY_URL),
                             child: Text(
                               'By signing up, you agree to the vegi'
                               ' Terms & Conditions which can be found here',
@@ -370,7 +370,7 @@ class _SignUpWithEmailAndPasswordScreenState
                     await rootRouter.replace(const SignUpScreen());
                   },
                 ),
-                if(DebugHelpers.inDebugMode)
+                if (DebugHelpers.inDebugMode)
                   ListTile(
                     title: const Text(Labels.emailLinkSignonLabel),
                     onTap: () async {

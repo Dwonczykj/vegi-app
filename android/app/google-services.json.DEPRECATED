@@ -21,6 +21,48 @@
       "api_key": [
         {
           "current_key": "AIzaSyCILrC5LxZtzfazC4WaCPilQoZPRaTl9_U"
+        },
+        {
+          "current_key": "AIzaSyBqZthsJ9bY808DFzGJ8oZG1-pL4e4RfVI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "526129377-85jgbqgp1iitr23psctf7f117p85t9mm.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "526129377-bm990b988blrv79qkrmc2m964frnlin4.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.vegi.vegiapp"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:526129377:android:410bf696b2977ed170bfa0",
+        "android_client_info": {
+          "package_name": "com.vegiapp.vegi"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "526129377-e08nlnhdpsml0n03hh7k4p6dv2iba63p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCILrC5LxZtzfazC4WaCPilQoZPRaTl9_U"
+        },
+        {
+          "current_key": "AIzaSyBqZthsJ9bY808DFzGJ8oZG1-pL4e4RfVI"
         }
       ],
       "services": {

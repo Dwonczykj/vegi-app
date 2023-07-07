@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:logger/logger.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 @lazySingleton
 class LogIt {
@@ -26,7 +29,18 @@ class LogIt {
     dynamic message, {
     dynamic error,
     StackTrace? stackTrace,
+    bool sentry = false,
+    String sentryHint = '',
   }) {
+    if (sentry) {
+      unawaited(
+        Sentry.captureMessage(
+          '$message',
+          hint: sentryHint.isNotEmpty ? sentryHint : 'WARNING - $message',
+        ),
+      );
+    }
+
     if (kReleaseMode) {
       return;
     }
@@ -39,7 +53,18 @@ class LogIt {
     dynamic message, {
     dynamic error,
     StackTrace? stackTrace,
+    bool sentry = false,
+    String sentryHint = '',
   }) {
+    if (sentry) {
+      unawaited(
+        Sentry.captureMessage(
+          '$message',
+          hint: sentryHint.isNotEmpty ? sentryHint : 'WARNING - $message',
+        ),
+      );
+    }
+
     if (kReleaseMode) {
       return;
     }
@@ -52,7 +77,19 @@ class LogIt {
     dynamic message, {
     dynamic error,
     StackTrace? stackTrace,
+    bool sentry = true,
+    String sentryHint = '',
   }) {
+    if (sentry) {
+      unawaited(
+        Sentry.captureException(
+          error ?? Exception('WARNING: $message'),
+          stackTrace: stackTrace ?? StackTrace.current, // from catch (e, s)
+          hint: sentryHint.isNotEmpty ? sentryHint : 'WARNING - $message',
+        ),
+      );
+    }
+
     if (kReleaseMode) {
       return;
     }
@@ -65,7 +102,19 @@ class LogIt {
     dynamic message, {
     dynamic error,
     StackTrace? stackTrace,
+    bool sentry = true,
+    String sentryHint = '',
   }) {
+    if (sentry) {
+      unawaited(
+        Sentry.captureException(
+          error,
+          stackTrace: stackTrace ?? StackTrace.current, // from catch (e, s)
+          hint: sentryHint.isNotEmpty ? sentryHint : 'ERROR - $message',
+        ),
+      );
+    }
+
     if (kReleaseMode) {
       return;
     }

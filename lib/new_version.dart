@@ -160,7 +160,7 @@ class NewVersion {
     }
     final uri = Uri.https("itunes.apple.com", "/lookup", parameters);
     final response = await http.get(
-        uri); // ~ https://itunes.apple.com/lookup?country=GB&bundleId=com.vegi.vegiApp
+        uri); // ~ https://itunes.apple.com/lookup?country=GB&bundleId=com.vegiapp.vegi
     if (response.statusCode != 200) {
       log.error(
         'Failed to query iOS App Store',

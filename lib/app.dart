@@ -17,6 +17,7 @@ import 'package:responsive_framework/responsive_framework.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:uni_links/uni_links.dart';
 import 'package:vegan_liverpool/common/di/di.dart';
+import 'package:vegan_liverpool/common/di/env.dart';
 import 'package:vegan_liverpool/common/di/package_info.dart';
 import 'package:vegan_liverpool/common/router/route_guards.dart';
 import 'package:vegan_liverpool/common/router/vegi_debug_route_observer.dart';
@@ -312,7 +313,7 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
             store: widget.store,
             child: DismissKeyboard(
               child: MaterialApp.router(
-                debugShowCheckedModeBanner: inDebugMode,
+                debugShowCheckedModeBanner: inDebugMode && !Env.isProd,
                 locale: _locale,
                 title: Strings.appName, // only for android
                 theme: flexColorSchemeLight.toTheme,
@@ -375,7 +376,8 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
         } else {
           return MaterialApp(
             debugShowCheckedModeBanner:
-                Secrets.VEGI_EATS_BACKEND.startsWith('http://localhost'),
+                Secrets.VEGI_EATS_BACKEND.startsWith('http://localhost') &&
+                    !Env.isProd,
             home: Scaffold(
               body: DecoratedBox(
                 decoration: const BoxDecoration(

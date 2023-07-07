@@ -3,4 +3,12 @@
         "editor.defaultFormatter": "Dart-Code.dart-code",
         "editor.formatOnSave": true,
     },
+    "workbench.colorCustomizations": {
+        "titleBar.activeBackground": "#fb3538df",
+        "titleBar.inactiveBackground": "#50050b",
+        "titleBar.activeForeground": "#000",
+        "tab.activeBackground": "#ff002b59",
+        "tab.activeBorder": "#8c1cf5cb",
+        "tab.activeBorderTop": "#eeff01f6",
+    },
 }

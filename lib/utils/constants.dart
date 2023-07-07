@@ -56,7 +56,7 @@ final Token pplToken = Token(
   symbol: 'PPL',
   // imageUrl: 'https://fuselogo.s3.eu-central-1.amazonaws.com/fuse-token.png',
   decimals: 18,
-  address: Addresses.pplTokenAddress,
+  address: Addresses.gbtTokenAddress,
   isNative: false,
   timestamp: 0,
   amount: BigInt.from(0.0),
@@ -366,6 +366,10 @@ class ImagePaths {
   static const String onboardingPage2HeadingImage1 = 'plant-icon.svg';
   static const String onboardingPage3HeadingImage2 = 'local-icon.svg';
   static const String onboardingPage4HeadingImage3 = 'rewards-icon.svg';
+  static const String onboardingTextureBelowBackgroundDarkGreen =
+      'assets/images/design/onboarding_bg_dark_green.jpg';
+  static const String onboardingTextureBelowBackgroundBrightCream =
+      'assets/images/design/onboarding_bg_bright_cream.jpg';
   static const String onboardingPage1Background =
       'assets/images/design/1_intro_img.png';
   static const String onboardingPage2Background =

@@ -78,6 +78,7 @@ class _OnBoardScreenState extends State<OnBoardScreen>
         subTitle: CopyWrite.onboardingScreenSubHeading1,
         iconName: ImagePaths.onboardingPage2HeadingImage1,
         backgroundImageOverlayPath: ImagePaths.onboardingPage2Background,
+        backgroundTexturePath: ImagePaths.onboardingTextureBelowBackgroundDarkGreen,
         headingColour: themeShade1000,
         subHeadingColour: Colors.black,
       ),
@@ -86,6 +87,7 @@ class _OnBoardScreenState extends State<OnBoardScreen>
         subTitle: CopyWrite.onboardingScreenSubHeading2,
         iconName: ImagePaths.onboardingPage3HeadingImage2,
         backgroundImageOverlayPath: ImagePaths.onboardingPage3Background,
+        backgroundTexturePath: ImagePaths.onboardingTextureBelowBackgroundDarkGreen,
         headingColour: themeShade400,
         subHeadingColour: themeShade200,
       ),
@@ -94,6 +96,7 @@ class _OnBoardScreenState extends State<OnBoardScreen>
         subTitle: CopyWrite.onboardingScreenSubHeading3,
         iconName: ImagePaths.onboardingPage4HeadingImage3,
         backgroundImageOverlayPath: ImagePaths.onboardingPage4Background,
+        backgroundTexturePath: ImagePaths.onboardingTextureBelowBackgroundDarkGreen,
         headingColour: themeShade400,
         subHeadingColour: themeShade200,
       ),
@@ -121,7 +124,10 @@ class _OnBoardScreenState extends State<OnBoardScreen>
         ColorTween(begin: themeShade1100, end: themeShade1200),
       );
     final buttonsPaddingFromSideEdge = MediaQuery.of(context).size.width * 0.01;
-    const buttonsPaddingFromBottomEdge = 25.0;
+    // const buttonsPaddingFromBottomEdge = 25.0;
+    // final buttonsPaddingFromBottomEdge = MediaQuery.of(context).size.height * 0.2;
+    const buttonsPaddingFromBottomEdge = 110.0;
+    const dotSize = 11.0;
     return Scaffold(
       body: Column(
         children: [
@@ -204,8 +210,8 @@ class _OnBoardScreenState extends State<OnBoardScreen>
                                                 padding: 0.0,
                                                 type: DotBorderType.solid,
                                               ),
-                                              height: 12,
-                                              width: 12,
+                                              height: dotSize,
+                                              width: dotSize,
                                             ),
                                             activeDotDecoration: DotDecoration(
                                               color: Color.fromARGB(
@@ -222,8 +228,8 @@ class _OnBoardScreenState extends State<OnBoardScreen>
                                                 padding: 0.0,
                                                 type: DotBorderType.solid,
                                               ),
-                                              height: 12,
-                                              width: 12,
+                                              height: dotSize,
+                                              width: dotSize,
                                             ),
                                           ),
                                           // effect: const JumpingDotEffect(

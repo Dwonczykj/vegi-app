@@ -99,7 +99,7 @@ class MainScreenViewModel extends Equatable implements IAuthViewModel {
       }) {
         store.dispatch(
           SetEmail(
-            email,
+            email.toLowerCase().trim(),
           ),
         );
       },
@@ -144,7 +144,7 @@ class MainScreenViewModel extends Equatable implements IAuthViewModel {
           )
           ..dispatch(
             signinWithEmailAndPassword(
-              email: email,
+              email: email.toLowerCase().trim(),
               password: password,
             ),
           )

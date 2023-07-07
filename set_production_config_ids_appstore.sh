@@ -4,12 +4,12 @@
 
 # TODO: TEST THIS SCRIPT ON A COPY OF THE REPO WITH THE .git folder deleted so that doesnt update both folders...
 
-appIdProd="1:526129377:ios:69d1fac6f1aad59370bfa0"
+appIdProd="1:526129377:ios:b603d00494434cb770bfa0"
 appIdTest="1:526129377:ios:7fdd83bd162d99c470bfa0"
-appIdProdEncoded="app-1-526129377-ios-69d1fac6f1aad59370bfa0"
+appIdProdEncoded="app-1-526129377-ios-b603d00494434cb770bfa0"
 appIdTestEncoded="app-1-526129377-ios-7fdd83bd162d99c470bfa0"
 
-bundleIdProd="com.vegi.vegiapp"
+bundleIdProd="com.vegiapp.vegi"
 bundleIdTest="com.vegi.vegiappTest"
 
 # NOTE the -i'' (NO SPACE FOR THIS OPTION) sets the backup created to be the same file, i.e. no backup file created pre sed replace DANGER
@@ -17,7 +17,7 @@ bundleIdTest="com.vegi.vegiappTest"
 # NOTE the + command lets us run the next sed command from the find results.
 LIST=( -name AndroidManifest.xml -o -name \*.plist -o -name \*.pbxproj)
 find -L ./ios \( "${LIST[@]}" \) -exec \
-    sed -i'' -e "s|com\.vegi\.vegiappTest|com.vegi.vegiapp|ig w /dev/stdout" {} \;
+    sed -i'' -e "s|com\.vegi\.vegiappTest|com.vegiapp.vegi|ig w /dev/stdout" {} \;
 
 find -L ./ios \( "${LIST[@]}" \) -print0 | xargs -0 \
     sed -i'' -e "s|${appIdTestEncoded}|${appIdProdEncoded}|ig w /dev/stdout"
@@ -29,9 +29,6 @@ find -L ./ios \( "${LIST[@]}" \) -print0 | xargs -0 \
 # Only files that need to be replaced 
 # (can check for later timestamps using the traverse_directory_and_replace_newer function instead) 
 # will be updated, while the contents of the destination "ios" directory will remain unchanged:
-
-source_dir="service_files/prod/ios"
-destination_dir="ios"
 
 # Function to copy files while preserving the directory structure NOT_USED
 copy_files() {
@@ -106,5 +103,15 @@ traverse_directory_and_replace_newer() {
     done
 }
 
+# * first save existing test app service files to ./service_files/test/ios
+source_dir="ios"
+destination_dir="service_files/test/ios"
+traverse_directory "$source_dir" "$destination_dir"
+
+source_dir="service_files/prod/ios"
+destination_dir="ios"
+
+
 # Start traversing the source directory
 traverse_directory "$source_dir" "$destination_dir"
+

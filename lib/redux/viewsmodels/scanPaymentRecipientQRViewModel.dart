@@ -50,6 +50,10 @@ class ScanPaymentRecipientQRViewModel extends Equatable {
         required void Function(String) error,
       }) {
         try {
+          if (!qrCode.contains('{') && !qrCode.contains('[')) {
+            // not a string representing a basket in json
+            return error('You didnt scan a vegi basket!');
+          }
           final basketJson = json.decode(qrCode) as Map<String, dynamic>;
           if (basketJson.containsKey('uri') &&
               !basketJson.containsKey('items')) {

@@ -40,7 +40,6 @@ class WaitingListBetaEligibilityScreen extends StatelessWidget {
           return;
         }
       },
-
       builder: (context, viewModel) {
         const queueTextSize = 48.0;
         if (viewModel.userIsVerified) {
@@ -53,6 +52,16 @@ class WaitingListBetaEligibilityScreen extends StatelessWidget {
         }
         return Stack(
           children: [
+            Container(
+              decoration: const BoxDecoration(
+                image: DecorationImage(
+                  fit: BoxFit.cover,
+                  image: AssetImage(
+                    ImagePaths.onboardingTextureBelowBackgroundBrightCream,
+                  ),
+                ),
+              ),
+            ),
             Container(
               decoration: const BoxDecoration(
                 image: DecorationImage(
@@ -83,7 +92,6 @@ class WaitingListBetaEligibilityScreen extends StatelessWidget {
                   child: Column(
                     mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.center,
-                    
                     children: [
                       const Padding(
                         padding: EdgeInsets.symmetric(horizontal: 40),

@@ -10,6 +10,7 @@ class OnBoardingScreenGeneric extends StatelessWidget {
     required this.subTitle,
     required this.iconName,
     required this.backgroundImageOverlayPath,
+    required this.backgroundTexturePath,
     required this.headingColour,
     required this.subHeadingColour,
     Key? key,
@@ -19,12 +20,23 @@ class OnBoardingScreenGeneric extends StatelessWidget {
   final String subTitle;
   final String iconName;
   final String backgroundImageOverlayPath;
+  final String backgroundTexturePath;
   final Color headingColour;
   final Color subHeadingColour;
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
+        Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              fit: BoxFit.cover,
+              image: AssetImage(
+                backgroundTexturePath,
+              ),
+            ),
+          ),
+        ),
         Container(
           decoration: BoxDecoration(
             image: DecorationImage(
@@ -54,11 +66,16 @@ class OnBoardingScreenGeneric extends StatelessWidget {
             //   height: 75,
             // ),
             Padding(
-              padding: const EdgeInsets.only(bottom: 20, top: 20),
+              padding: const EdgeInsets.only(
+                bottom: 20,
+                top: 20,
+                left: 20,
+                right: 20,
+              ),
               child: Text(
                 title,
                 style: TextStyle(
-                  fontSize: 45,
+                  fontSize: 38,
                   color: headingColour,
                   fontFamily: Fonts.gelica,
                 ),
