@@ -22,7 +22,25 @@ class SingleSavedAddressItem extends StatelessWidget {
     return StoreConnector<AppState, DeliveryAddressViewModel>(
       converter: DeliveryAddressViewModel.fromStore,
       builder: (context, viewmodel) {
-        final DeliveryAddresses address = viewmodel.savedAddresses[index];
+        final addressDeliveredMap = Map.fromEntries(
+          viewmodel.savedAddresses.map(
+            (a) => MapEntry(
+              a.internalID,
+              a.deliversTo(viewmodel.fulfilmentPostalDistricts),
+            ),
+          ),
+        );
+        final sortedSavedAddresses = viewmodel.savedAddresses.sortInline(
+          (a, b) => (addressDeliveredMap[a.internalID] == true &&
+                  addressDeliveredMap[b.internalID] == false)
+              ? -1
+              : (addressDeliveredMap[b.internalID] == true &&
+                      addressDeliveredMap[a.internalID] == false)
+                  ? 1
+                  : 0,
+        );
+
+        final DeliveryAddresses address = sortedSavedAddresses[index];
         final isValidPostCodeForDelivery =
             address.deliversTo(viewmodel.fulfilmentPostalDistricts);
         return Padding(

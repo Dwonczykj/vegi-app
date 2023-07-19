@@ -178,14 +178,24 @@ class _SetEmailOnboardingScreenState extends State<SetEmailOnboardingScreen> {
                             onPressed: () async {
                               viewmodel.setEmail(
                                 email: emailController.text,
+                                onError: (errStr) {
+                                  log.warn(
+                                      'Unable to update email for user on vegi with error: $errStr');
+                                  if (DebugHelpers.inDebugMode) {
+                                    showErrorSnack(
+                                      context: context,
+                                      title: 'Unable to update email on vegi',
+                                      message: 'Error: $errStr',
+                                    );
+                                  }
+                                },
                               );
                               await _route(viewmodel);
                             },
                           ),
                           const SizedBox(height: 20),
                           GestureDetector(
-                            onTap: () =>
-                                launchUrl(VEGI_PRIVACY_URL),
+                            onTap: () => launchUrl(VEGI_PRIVACY_URL),
                             child: Text(
                               Labels.vegiPrivacyTnCs,
                               style: TextStyle(

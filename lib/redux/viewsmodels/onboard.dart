@@ -10,9 +10,11 @@ import 'package:vegan_liverpool/constants/analytics_events.dart';
 import 'package:vegan_liverpool/constants/enums.dart';
 import 'package:vegan_liverpool/models/app_state.dart';
 import 'package:vegan_liverpool/models/user_state.dart';
+import 'package:vegan_liverpool/redux/actions/home_page_actions.dart';
 import 'package:vegan_liverpool/redux/actions/onboarding_actions.dart';
 import 'package:vegan_liverpool/redux/actions/user_actions.dart';
 import 'package:vegan_liverpool/redux/viewsmodels/signUpErrorDetails.dart';
+import 'package:vegan_liverpool/services.dart';
 import 'package:vegan_liverpool/utils/analytics.dart';
 import 'package:vegan_liverpool/utils/constants.dart' as VegiConstants;
 
@@ -29,6 +31,7 @@ class VerifyOnboardViewModel extends Equatable {
     required this.verificationId,
     required this.firebaseCredentials,
     required this.signupIsInFlux,
+    required this.httpRequestIsInFlux,
     required this.setSignupFailed,
     required this.setLoading,
     required this.verify,
@@ -58,6 +61,7 @@ class VerifyOnboardViewModel extends Equatable {
       fuseAuthenticationStatus: store.state.userState.fuseAuthenticationStatus,
       vegiAuthenticationStatus: store.state.userState.vegiAuthenticationStatus,
       signupIsInFlux: store.state.onboardingState.signupIsInFlux,
+      httpRequestIsInFlux: store.state.homePageState.isLoadingHttpRequest,
       setSignupFailed: (error) {
         store.dispatch(
           SignupFailed(
@@ -75,11 +79,12 @@ class VerifyOnboardViewModel extends Equatable {
       verify: (
         String verificationCode,
       ) {
-        store.dispatch(
-          verifyHandler(
-            verificationCode,
-          ),
-        );
+        // store.dispatch(
+        //   verifyHandler(
+        //     verificationCode,
+        //   ),
+        // );
+        authenticator.verifySMSVerificationCode(verificationCode);
       },
       editAvatar: (
         source, {
@@ -87,7 +92,11 @@ class VerifyOnboardViewModel extends Equatable {
         void Function()? onSuccess,
         void Function(String errStr)? onError,
       }) {
-        store.dispatch(
+        store..dispatch(
+          SetIsLoadingHttpRequest(
+            isLoading: true,
+          ),
+        )..dispatch(
           updateUserAvatarCall(
             source,
             progressCallback: progressCallback,
@@ -98,14 +107,13 @@ class VerifyOnboardViewModel extends Equatable {
       },
       setDisplayName: ({required displayName}) {
         isAuthenticatedRouteGuard = true;
-        store
-          ..dispatch(SetDisplayName(displayName))
-          ..dispatch(
-            authenticate(
-                // todo confirm that this flow still works to initialise the new smartWallet
-                // () {},
-                ),
-          );
+        store.dispatch(SetDisplayName(displayName));
+        // ..dispatch(
+        //   authenticate(
+        //       // todo confirm that this flow still works to initialise the new smartWallet
+        //       // () {},
+        //       ),
+        // );
         unawaited(Analytics.track(eventName: AnalyticsEvents.fillUserName));
       },
     );
@@ -128,6 +136,7 @@ class VerifyOnboardViewModel extends Equatable {
     String code,
   ) verify;
   final bool signupIsInFlux;
+  final bool httpRequestIsInFlux;
   final dynamic Function(
     SignUpErrorDetails error,
   ) setSignupFailed;
@@ -161,6 +170,7 @@ class VerifyOnboardViewModel extends Equatable {
         biometricAuth,
         firebaseAuthenticationStatus,
         signupIsInFlux,
+        httpRequestIsInFlux,
         fuseAuthenticationStatus,
         vegiAuthenticationStatus,
       ];

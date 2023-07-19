@@ -34,7 +34,7 @@ Future<void> main() async {
     DeviceOrientation.portraitUp,
   ]);
 
-  const env = Env.activeEnv;
+  final env = Env.activeEnv;
 
   await dotenv.load(fileName: Env.envFile);
 

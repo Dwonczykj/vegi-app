@@ -83,6 +83,39 @@ For more information about setting up Analytics, visit the getting started guide
 
 Find additional configuration steps for apple IOS APN stuff [here](https://www.notion.so/gember/Firebase-Add-Firebase-to-Flutter-App-67f42bd125034d22acdcf77bc476ae59?pvs=4#6527b2e8b6bc43beb9ac4fd1bb985a2c) (*May need to contact Joey D for access*)
 
+# Testing
+First, ensure the firebase project is initialied by checking that there is a firebase.json file at root and if not by running:
+```shell
+firebase init
+```
+
+To run the app tests, you need to configure the firebase emulator and then run it on the port configured in your .env_test file using:
+```shell
+firebase emulators:start
+```
+This should show you ports and if you go to the localhost webserver on 4000, you should see:
+![https://firebase.google.com/static/codelabs/get-started-firebase-emulators-and-flutter/img/11563f4c7216de81_1920.png]
+
+
+See docs for the FirebaseAuth Emulator [here](https://firebase.google.com/codelabs/get-started-firebase-emulators-and-flutter#4)
+
+### Saving and Importing Emulator State between Sessions
+[Docs](https://firebase.google.com/codelabs/get-started-firebase-emulators-and-flutter#6)
+
+Export:
+```shell
+firebase emulators:export ./emulators_data
+```
+
+Import emulator data:
+```shell
+firebase emulators:start --import ./emulators_data
+```
+Export data automatically when closing emulators:
+```shell
+firebase emulators:start --import ./emulators_data --export-on-exit
+```
+
 ## Apple Pay Certificates & Stripe
 See docs [here](https://www.notion.so/gember/Firebase-Add-Firebase-to-Flutter-App-67f42bd125034d22acdcf77bc476ae59?pvs=4#56afaf0ec85d43b290e067394b80e6ce)
 
@@ -91,3 +124,6 @@ Firebase messaging templates i.e. [email templates](https://console.firebase.goo
 
 ## As an enterprenuer or a community manager
 Launch your community on the [Fuse Studio](https://studio.fuse.io/), then open the community dashboard. There you can configure it and *customize your wallet* app. When you done go to "White label wallet" and send an app invite link to yourself. Visit our [docs](https://docs.fuse.io/the-fuse-studio/overview) to learn about the Fuse Studio.
+
+## Google api keys:
+Google api keys need to be configures for places and distances apis. These are bundle id specific and need to be configured in the [credentials](https://developers.google.com/maps/documentation/distance-matrix/get-api-key)

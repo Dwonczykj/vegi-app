@@ -117,6 +117,19 @@
             ]
         },
         {
+            "name": "vegi (qa & emulator)",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "debug",
+            "program": "lib/main.dart",
+            "args": [
+                "--dart-define",
+                "ENV=qa",
+                "--dart-define",
+                "USE_FIREBASE_EMULATOR=true"
+            ]
+        },
+        {
             "name": "vegi - Profile",
             "request": "launch",
             "type": "dart",

@@ -30,7 +30,7 @@ final cashWalletReducers = combineReducers<CashWalletState>([
   ),
   TypedReducer<CashWalletState, AddCashTokens>(_addCashTokens),
   TypedReducer<CashWalletState, AddCashToken>(_addCashToken),
-  TypedReducer<CashWalletState, GetTokenBalanceSuccess>(
+  TypedReducer<CashWalletState, GotTokenBalanceSuccess>(
     _getTokenBalanceSuccess,
   ),
   TypedReducer<CashWalletState, ResetTokenTxs>(_resetTokensTxs),
@@ -58,7 +58,6 @@ CashWalletState _getTokenIntervalStatsSuccess(
     intervalStats: action.intervalStats,
     timeFrame: action.timeFrame,
     priceChange: action.priceChange,
-    
   );
   return state.copyWith(tokens: newOne);
 }
@@ -239,7 +238,7 @@ CashWalletState _resetTokensTxs(
 
 CashWalletState _getTokenBalanceSuccess(
   CashWalletState state,
-  GetTokenBalanceSuccess action,
+  GotTokenBalanceSuccess action,
 ) {
   final String tokenAddress = action.tokenAddress;
   final Token current = state.tokens[action.tokenAddress]!;

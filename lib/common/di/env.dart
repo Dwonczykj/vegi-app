@@ -9,19 +9,19 @@ abstract class Env {
   static bool get isProd => Env.activeEnv == Env.prod;
   static bool get isTest => Env.activeEnv == Env.test;
   static bool get isQA => Env.activeEnv == Env.qa;
-  static const activeEnv = ENV == 'development'
+  static final activeEnv = ENV == 'development'
       ? dev
       : ENV == 'qa'
           ? qa
-          : ENV == 'test'
+          : ENV == 'test' || DebugHelpers.isTest
               ? test
               : prod;
-  static const _envFile = activeEnv == dev
+  static final _envFile = activeEnv == dev
       ? '.env_dev'
       : activeEnv == qa
           ? '.env_qa'
           : activeEnv == test
-              ? '.env_dev'
+              ? '.env_test'
               : '.env';
-  static const envFile = 'environment/$_envFile';
+  static final envFile = 'environment/$_envFile';
 }

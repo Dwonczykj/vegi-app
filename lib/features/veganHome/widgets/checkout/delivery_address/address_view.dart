@@ -1,4 +1,4 @@
-import 'dart:math';
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -14,6 +14,8 @@ import 'package:vegan_liverpool/models/app_state.dart';
 import 'package:vegan_liverpool/models/restaurant/deliveryAddresses.dart';
 import 'package:vegan_liverpool/redux/viewsmodels/checkout/delivery_address_vm.dart';
 import 'package:vegan_liverpool/services/apis/places.dart';
+import 'package:vegan_liverpool/utils/constants.dart';
+import 'package:vegan_liverpool/utils/log/log.dart';
 
 class AddressView extends StatefulWidget {
   const AddressView({Key? key, this.existingAddress}) : super(key: key);
@@ -151,8 +153,10 @@ class _AddressViewState extends State<AddressView> {
                     selectionToTextTransformer: (Suggestion suggestion) {
                       return suggestion.description;
                     },
-                    loadingBuilder: (_) => const CircularProgressIndicator(
-                      color: themeShade600,
+                    loadingBuilder: (_) => const Center(
+                      child: CircularProgressIndicator(
+                        color: themeShade600,
+                      ),
                     ),
                     suggestionsCallback: (query) {
                       if (query.isNotEmpty) {
@@ -208,7 +212,8 @@ class _AddressViewState extends State<AddressView> {
                             labelText: 'Town/City',
                           ),
                           keyboardType: TextInputType.text,
-                          validator: FormBuilderValidators.required(),
+                          validator: FormBuilderValidators.required(
+                              errorText: 'Please add a city'),
                         ),
                       ),
                       SizedBox(
@@ -234,7 +239,8 @@ class _AddressViewState extends State<AddressView> {
                             labelText: 'Postal Code',
                           ),
                           keyboardType: TextInputType.text,
-                          validator: FormBuilderValidators.required(),
+                          validator: FormBuilderValidators.required(
+                              errorText: 'Please add a postal code'),
                         ),
                       ),
                     ],
@@ -248,6 +254,9 @@ class _AddressViewState extends State<AddressView> {
                         await validateAddressService();
                         final address = saveDeliveryAddress();
                         if (_isExistingAddress) {
+                          if (DebugHelpers.inDebugMode) {
+                            log.info('Editing');
+                          }
                           viewmodel.editAddress(
                             oldId: widget.existingAddress!.internalID,
                             newAddress: address,
@@ -255,20 +264,34 @@ class _AddressViewState extends State<AddressView> {
                         } else {
                           viewmodel.addAddress(newAddress: address);
                         }
+                        Navigator.pop(context);
                         if (address
                             .deliversTo(viewmodel.fulfilmentPostalDistricts)) {
-                          viewmodel.setDeliveryAddress(id: address.internalID);
+                          viewmodel.setDeliveryAddress(
+                            id: address.internalID,
+                          );
                           Navigator.pop(context);
+                          await showInfoSnack(
+                            context,
+                            title: 'Delivery address set',
+                          );
+                        } else if (!viewmodel.useLiveLocation) {
+                          await showErrorSnack(
+                            context: context,
+                            title:
+                                'Postal code [${address.postalCode}] not fulfilled',
+                            message:
+                                'Currently, this vendor only fulfils ${viewmodel.fulfilmentPostalDistricts.join(",")}',
+                          );
                         } else {
-                          if (!viewmodel.useLiveLocation) {
-                            showErrorSnack(
-                              context: context,
-                              title:
-                                  'Enable location in settings to see vendors that deliver to you.',
-                            );
-                          }
+                          await showErrorSnack(
+                            context: context,
+                            title:
+                                'Current location [${address.postalCode}] not fulfilled',
+                            message:
+                                'Currently, this vendor only fulfils addresses in ${viewmodel.fulfilmentPostalDistricts.join(",")}',
+                          );
                         }
-                        Navigator.pop(context); // Needs to come from dialog like delivery_address_selector
                       }
                     },
                     label: 'Save Address',
@@ -313,7 +336,7 @@ class _AddressViewState extends State<AddressView> {
     return DeliveryAddresses(
       internalID: _isExistingAddress
           ? widget.existingAddress!.internalID
-          : Random(DateTime.now().millisecondsSinceEpoch).nextInt(10000),
+          : math.Random(DateTime.now().millisecondsSinceEpoch).nextInt(10000),
       label: formValue['label'] as DeliveryAddressLabel,
       addressLine1: (formValue['addressLine1Internal'] as String?) ??
           formValue['addressLine1'] as String,

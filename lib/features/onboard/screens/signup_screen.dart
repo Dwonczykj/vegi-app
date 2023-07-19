@@ -98,17 +98,34 @@ class _SignUpScreenState extends State<SignUpScreen> {
       converter: MainScreenViewModel.fromStore,
       distinct: true,
       onInit: (store) {
-        if (store.state.userState.firebaseCredentials != null) {
-          onBoardStrategy.reauthenticateUser().then(
-            (reauthSucceeded) {
-              if (reauthSucceeded &&
-                  store.state.userState.walletAddress.isNotEmpty) {
-                store
-                  ..dispatch(isBetaWhitelistedAddress())
-                  ..dispatch(SignupLoading(isLoading: false));
-              }
-            },
+        // ! Remove reauthentication on signup screen for now
+        // if (store.state.userState.firebaseCredentials != null) {
+        //   onBoardStrategy.reauthenticateUser().then(
+        //     (reauthSucceeded) {
+        //       if (reauthSucceeded &&
+        //           store.state.userState.walletAddress.isNotEmpty) {
+        //         store
+        //           ..dispatch(isBetaWhitelistedAddress())
+        //           ..dispatch(SignupLoading(isLoading: false));
+        //       }
+        //     },
+        //   );
+        // }
+        final userState = store.state.userState;
+        if (userState.isoCode.isNotEmpty &&
+            userState.countryCode.isNotEmpty &&
+            userState.phoneNumberNoCountry.isNotEmpty) {
+          // setState(() {
+          //   countryCode = CountryCode(
+          //     dialCode: viewmodel.dialCode,
+          //     code: viewmodel.countryCode,
+          //   );
+          // });
+          countryCode = CountryCode(
+            dialCode: userState.countryCode,
+            code: userState.isoCode,
           );
+          phoneController.text = userState.phoneNumberNoCountry;
         }
       },
       onWillChange: (previousViewModel, newViewModel) async {
@@ -141,21 +158,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
         // await checked.runNavigationIfNeeded();
       },
       builder: (context, viewmodel) {
-        if (viewmodel.countryCode.isNotEmpty &&
-            viewmodel.dialCode.isNotEmpty &&
-            viewmodel.phoneNumberNoCountry.isNotEmpty) {
-          // setState(() {
-          //   countryCode = CountryCode(
-          //     dialCode: viewmodel.dialCode,
-          //     code: viewmodel.countryCode,
-          //   );
-          // });
-          countryCode = CountryCode(
-            dialCode: viewmodel.dialCode,
-            code: viewmodel.countryCode,
-          );
-          phoneController.text = viewmodel.phoneNumberNoCountry;
-        }
         return MyScaffold(
           automaticallyImplyLeading: false,
           resizeToAvoidBottomInset: false,
@@ -365,8 +367,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           ),
                           const SizedBox(height: 20),
                           GestureDetector(
-                            onTap: () =>
-                                launchUrl(VEGI_PRIVACY_URL),
+                            onTap: () => launchUrl(VEGI_PRIVACY_URL),
                             child: Text(
                               'By signing up, you agree to the vegi'
                               ' Terms & Conditions which can be found here',

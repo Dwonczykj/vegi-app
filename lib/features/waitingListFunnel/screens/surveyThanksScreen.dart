@@ -69,28 +69,28 @@ class _SurveyThanksScreenState extends State<SurveyThanksScreen> {
     };
   }
 
-  Future<void> Function() _signUpNewAccount(
-    BuildContext context,
-    SurveyThanksViewModel viewmodel,
-  ) {
-    return () async {
-      if (isPrimaryPreloading) {
-        return;
-      }
-      if (viewmodel.isLoggedOut) {
-        viewmodel.loginAgain();
-        if (context.router.canPop()) {
-          context.router.popUntilRoot();
-        }
-        await context.router.replace(const MainScreen());
-      } else {
-        // setState(() {
-        //   isPrimaryPreloading = true;
-        // });
-        viewmodel.initFuse();
-      }
-    };
-  }
+  // Future<void> Function() _signUpNewAccount(
+  //   BuildContext context,
+  //   SurveyThanksViewModel viewmodel,
+  // ) {
+  //   return () async {
+  //     if (isPrimaryPreloading) {
+  //       return;
+  //     }
+  //     if (viewmodel.isLoggedOut) {
+  //       viewmodel.loginAgain();
+  //       if (context.router.canPop()) {
+  //         context.router.popUntilRoot();
+  //       }
+  //       await context.router.replace(const MainScreen());
+  //     } else {
+  //       // setState(() {
+  //       //   isPrimaryPreloading = true;
+  //       // });
+  //       viewmodel.initFuse();
+  //     }
+  //   };
+  // }
 
   Future<void> Function() _restoreBackupWallet(
     BuildContext context,

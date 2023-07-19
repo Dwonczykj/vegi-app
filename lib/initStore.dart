@@ -19,6 +19,7 @@ import 'package:redux_remote_devtools/redux_remote_devtools.dart';
 
 @module
 abstract class RegisterModule {
+
   @singleton
   Future<Store<AppState>> store() async {
     final prefs = await SharedPreferences.getInstance();
@@ -35,8 +36,6 @@ abstract class RegisterModule {
       serializer: JsonSerializer<AppState>(AppState.fromJsonForPersistor),
       debug: DebugHelpers.isVerboseDebugMode,
     );
-
-    final AppState initialState = await loadState(persistor, firstLogin);
 
     final List<Middleware<AppState>> wms = [
       thunkMiddleware,
@@ -98,7 +97,14 @@ abstract class RegisterModule {
       }
 
       // getIt.registerSingleton<Store<AppState>>(store);
+    } else if (Env.isTest) {
+      store = DevToolsStore<AppState>(
+        appReducer,
+        initialState: AppState.initial(),
+        middleware: [thunkMiddleware],
+      );
     } else {
+      final AppState initialState = await loadState(persistor, firstLogin);
       store = Store<AppState>(
         appReducer,
         initialState: initialState,

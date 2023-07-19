@@ -54,6 +54,7 @@ class _NavDrawerState extends State<NavDrawer> {
                         avatarUrl: viewmodel.avatarUrl,
                         avatarSquareSize: avatarSquareSize,
                         showAdminBanner: viewmodel.isSuperAdmin,
+                        isUpdating: false,
                       ),
                     Padding(
                       padding: const EdgeInsets.all(8),
@@ -249,8 +250,7 @@ class _NavDrawerState extends State<NavDrawer> {
                         ),
                       ),
                       IconButton(
-                        onPressed: () =>
-                            launchUrl(VEGI_TIKTOK_PROFILE_URL),
+                        onPressed: () => launchUrl(VEGI_TIKTOK_PROFILE_URL),
                         icon: Icon(
                           FontAwesomeIcons.tiktok,
                           color: Colors.grey[400],

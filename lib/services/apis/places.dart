@@ -4,6 +4,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:google_api_headers/google_api_headers.dart';
 import 'package:http/http.dart';
 import 'package:injectable/injectable.dart';
+import 'package:vegan_liverpool/utils/constants.dart';
 
 class Place {
   Place({
@@ -55,9 +56,13 @@ class PlaceApiProvider {
   final Client client = Client();
 
   final String sessionToken;
-  final String apiKey = Platform.isIOS
-      ? dotenv.env['MAP_API_KEY_IOS'] ?? ''
-      : dotenv.env['MAP_API_KEY_ANDROID'] ?? '';
+  Future<String> apiKey() async => DebugHelpers.deviceIsSimulator().then(
+        (isSimulator) => isSimulator
+            ? Secrets.MAP_API_KEY_SIM
+            : Platform.isIOS
+                ? Secrets.MAP_API_KEY_IOS
+                : Secrets.MAP_API_KEY_ANDROID,
+      );
   final Future<Map<String, String>> headers =
       const GoogleApiHeaders().getHeaders();
 
@@ -80,7 +85,7 @@ class PlaceApiProvider {
         'inputtype': 'textquery',
         'language': 'en',
         'components': 'country:gb',
-        'key': apiKey,
+        'key': await apiKey(),
         'sessionToken': sessionToken
       },
     );
@@ -132,7 +137,7 @@ class PlaceApiProvider {
         'types': 'address',
         'language': 'en',
         'components': 'country:gb',
-        'key': apiKey,
+        'key': await apiKey(),
         'sessionToken': sessionToken
       },
     );
@@ -173,7 +178,7 @@ class PlaceApiProvider {
       queryParameters: {
         'place_id': placeId,
         'fields': 'address_component',
-        'key': apiKey,
+        'key': await apiKey(),
         'sessionToken': sessionToken
       },
     );

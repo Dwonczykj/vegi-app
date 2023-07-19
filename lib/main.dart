@@ -16,6 +16,7 @@ import 'package:vegan_liverpool/common/di/di.dart';
 import 'package:vegan_liverpool/common/di/env.dart';
 import 'package:vegan_liverpool/common/network/web3auth.dart';
 import 'package:vegan_liverpool/features/veganHome/widgets/shared/redux_state_viewer.dart';
+import 'package:vegan_liverpool/initFirebaseEmulator.dart';
 import 'package:vegan_liverpool/initFirebaseRemote.dart';
 import 'package:vegan_liverpool/loadAppState.dart';
 import 'package:vegan_liverpool/models/app_state.dart';
@@ -35,7 +36,7 @@ void main() async {
     DeviceOrientation.portraitUp,
   ]);
 
-  const envStr = Env.activeEnv;
+  final envStr = Env.activeEnv;
 
   // if (DebugHelpers.inDebugMode) {
   //   print('Loading secrets from ${Env.envFile} for Env: ${Env.activeEnv}');
@@ -52,12 +53,17 @@ void main() async {
 
   await initFirebaseRemote();
 
+  if (kDebugMode || USE_FIREBASE_EMULATOR) {
+    // Dont put below condition in above as above is compile time and allows all this to be left out of production apps.
+    await connectToFirebaseEmulator();
+  }
+
   await runZonedGuarded(() async {
     await SentryFlutter.init(
       (options) {
         options
           ..debug = (!kReleaseMode && DebugHelpers.isVerboseDebugMode)
-          ..dsn = dotenv.env['SENTRY_DSN']
+          ..dsn = Env.isTest ? '' : dotenv.env['SENTRY_DSN']
           ..environment = Env.activeEnv;
       },
     );

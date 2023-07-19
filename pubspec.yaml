@@ -118,6 +118,7 @@ flutter:
     - environment/.env
     - environment/.env_qa
     - environment/.env_dev
+    - environment/.env_test
     - assets/
     - assets/images/
     - assets/images/design/

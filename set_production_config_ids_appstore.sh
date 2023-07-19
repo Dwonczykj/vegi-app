@@ -9,7 +9,7 @@ appIdTest="1:526129377:ios:7fdd83bd162d99c470bfa0"
 appIdProdEncoded="app-1-526129377-ios-b603d00494434cb770bfa0"
 appIdTestEncoded="app-1-526129377-ios-7fdd83bd162d99c470bfa0"
 
-bundleIdProd="com.vegiapp.vegi"
+bundleIdProd="com.vegiapp.vegi"  # ! ~ https://console.cloud.google.com/apis/credentials/key/5d786eb9-8792-42b8-ad03-68eca2ca971a?project=vegiliverpool
 bundleIdTest="com.vegi.vegiappTest"
 
 # NOTE the -i'' (NO SPACE FOR THIS OPTION) sets the backup created to be the same file, i.e. no backup file created pre sed replace DANGER

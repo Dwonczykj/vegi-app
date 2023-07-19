@@ -42,7 +42,7 @@ class StripeService {
   final Stripe instance = Stripe.instance;
 
   void init() {
-    Stripe.publishableKey = Env.isDev && STRIPE_LIVEMODE != 'true'
+    Stripe.publishableKey = (Env.isDev || Env.isTest) && STRIPE_LIVEMODE != 'true'
         ? dotenv.env['STRIPE_API_KEY_TEST']!
         : dotenv.env['STRIPE_API_KEY_LIVE']!;
     // if (Stripe.publishableKey.contains('live')) {

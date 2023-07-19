@@ -4,6 +4,7 @@ import 'package:vegan_liverpool/models/app_state.dart';
 import 'package:vegan_liverpool/redux/actions/cart_actions.dart'
     as cart_actions;
 import 'package:vegan_liverpool/redux/actions/user_actions.dart';
+import 'package:vegan_liverpool/services.dart';
 
 class WaitinglistPositionInQueueViewModel extends Equatable {
   const WaitinglistPositionInQueueViewModel({
@@ -14,7 +15,7 @@ class WaitinglistPositionInQueueViewModel extends Equatable {
     required this.accountCreated,
     required this.isLoggedIn,
     required this.subscribeToWaitingListEmails,
-    required this.authenticateUser,
+    // required this.authenticateUser,
   });
 
   factory WaitinglistPositionInQueueViewModel.fromStore(Store<AppState> store) {
@@ -25,12 +26,9 @@ class WaitinglistPositionInQueueViewModel extends Equatable {
       userEmail: store.state.userState.email,
       accountCreated: store.state.userState.walletAddress.isNotEmpty,
       isLoggedIn: !store.state.userState.isLoggedOut,
-      authenticateUser: () {
-        if (store.state.onboardingState.signupIsInFlux) {
-          return;
-        }
-        store.dispatch(authenticate());
-      },
+      // authenticateUser: () {
+      //   authenticator.login(loginDetails: loginDetails)
+      // },
       subscribeToWaitingListEmails: ({
         required bool receiveNotifications,
       }) {
@@ -48,7 +46,7 @@ class WaitinglistPositionInQueueViewModel extends Equatable {
   final String userEmail;
   final bool accountCreated;
   final bool isLoggedIn;
-  final void Function() authenticateUser;
+  // final void Function() authenticateUser;
   final void Function({
     required bool receiveNotifications,
   }) subscribeToWaitingListEmails;

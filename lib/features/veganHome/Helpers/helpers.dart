@@ -4,6 +4,7 @@ import 'dart:math' as Math;
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:html/parser.dart';
 import 'package:intl/intl.dart';
@@ -26,6 +27,36 @@ import 'package:vegan_liverpool/services.dart';
 import 'package:vegan_liverpool/utils/config.dart' as VEGI_CONFIG;
 import 'package:vegan_liverpool/utils/constants.dart';
 import 'package:vegan_liverpool/utils/log/log.dart';
+// import 'dart:developer';
+
+// class ExampleClass {
+//   void printFunctionFileInfo() {
+//     if (!kIsWeb) {
+//       // Code specific to non-web platforms using the imported package
+//     }
+//     var frames = StackTrace.current.toString().split('\n');
+//     var filteredFrames = frames.where((frame) => !frame.contains('packages/'));
+
+//     if (filteredFrames.length >= 4) {
+//       var lastFourFrames = filteredFrames.take(4).toList().reversed;
+//       print('Last 4 lines of callstack:');
+//       for (var frame in lastFourFrames) {
+//         print(frame);
+//       }
+//     } else {
+//       print('Callstack contains less than 4 lines.');
+//     }
+
+//     var currentFrame = filteredFrames.first.split(' ');
+//     var functionName = currentFrame[1];
+//     var fileName = currentFrame[2];
+//     var className = currentFrame[3].split('.')[0];
+
+//     print('Current function: $functionName');
+//     print('Current file: $fileName');
+//     print('Current class: $className');
+//   }
+// }
 
 class BoolThenRouteResult {
   const BoolThenRouteResult({

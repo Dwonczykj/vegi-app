@@ -118,7 +118,9 @@ class _PinCodeScreenState extends State<PinCodeScreen> {
           if (viewModel.signupInFlux) {
             return LoadingScaffold;
           } else if (viewModel.notAuthenticated) {
-            viewModel.loginAgain();
+            // viewModel.loginAgain();
+            // ! commented out reauthentication above as this needs email credentials stored in shared_preferences beneath the bio_authentication to work
+            rootRouter.push(const SignUpScreen());
             return LoadingScaffold;
           }
           return Scaffold(

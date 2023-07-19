@@ -37,20 +37,12 @@ class SurveyThanksViewModel extends Equatable implements IAuthViewModel {
       accountCreated: store.state.userState.walletAddress
           .isNotEmpty, //! BUG to do with jwt token not used to init fuse wallet ->
       isLoggedOut: store.state.userState.isLoggedOut,
-      initFuse: () {
-        store.dispatch(
-          authenticate(),
-        );
-      },
+      initFuse: authenticator.initFuse,
       firebaseAuthenticationStatus:
           store.state.userState.firebaseAuthenticationStatus,
       fuseAuthenticationStatus: store.state.userState.fuseAuthenticationStatus,
       vegiAuthenticationStatus: store.state.userState.vegiAuthenticationStatus,
-      loginAgain: () {
-        store.dispatch(
-          reLoginCall(),
-        );
-      },
+      loginAgain: authenticator.reauthenticate,
       logout: () {
         store.dispatch(LogoutRequestSuccess());
       },

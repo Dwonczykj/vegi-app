@@ -15,6 +15,8 @@ abstract class IOnBoardStrategy {
 
   // final OnboardingAuthChain authLayer;
 
+  bool expectingSMSVerificationCode = false;
+
   Future<dynamic> login(
     Store<AppState> store,
     String? phoneNumber,

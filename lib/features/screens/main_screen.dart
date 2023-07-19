@@ -120,8 +120,10 @@ class _MainScreenState extends State<MainScreen> {
                 FuseAuthenticationStatus.unauthenticated ||
             vm.firebaseAuthenticationStatus ==
                 FirebaseAuthenticationStatus.unauthenticated) {
-          vm.authenticateAll();
+          vm.routeToLogin();
           // return LoadingScaffold; // ! removed as still want to show restaurants, but without being signed in
+        } else if (!vm.biometricAuthIsSet) {
+          vm.routeToLogin();
         } else {
           peeplEatsService
               .checkVegiSessionIsStillValid()

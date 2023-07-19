@@ -52,11 +52,7 @@ class SplashViewModel extends Equatable implements IAuthViewModel {
       logout: () {
         store.dispatch(LogoutRequestSuccess());
       },
-      initFuse: () {
-        store.dispatch(
-          authenticate(),
-        );
-      }, //TODO: SignUpButtons uses this which needs to not do entire auth flow, but the authenticate action should auto push the signupScreen as from signup, if user selects CreateAccount, the authenticate flow should successfully init the fuse wallet and then fail on firebase part as we should ensure the createAccount action presets the firebaseCReds to empty.
+      initFuse: authenticator.initFuse,
       resetSurveyCompleted: () {
         store.dispatch(ResetSurveyCompleted());
       },
@@ -79,7 +75,9 @@ class SplashViewModel extends Equatable implements IAuthViewModel {
   final bool accountCreated;
   final void Function() logout;
   final void Function() resetSurveyCompleted;
-  final void Function() initFuse;
+  final Future<void> Function({
+    void Function()? onWalletInitialised,
+  }) initFuse;
 
   bool get isLoggedIn => !isLoggedOut && accountDetailsExist;
   bool get accountIsWaitlisted => surveyCompleted && !isWhiteListedAccount;

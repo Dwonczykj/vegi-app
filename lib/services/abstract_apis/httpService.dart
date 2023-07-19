@@ -40,7 +40,10 @@ abstract class HttpService {
         !dontRoute &&
         authStatus != AuthenticationStatus.authenticationFailed) {
       if (rootRouter.current.name != SignUpScreen.name) {
-        log.info('Push SignUpScreen()', stackTrace: StackTrace.current,);
+        log.info(
+          'Push SignUpScreen() as authRequired for vegi but not logged in.',
+          stackTrace: StackTrace.current,
+        );
         rootRouter.push(const SignUpScreen());
       }
     }
@@ -93,12 +96,6 @@ abstract class HttpService {
   Future<void> setSessionCookie(String cookie) async {
     dio.options.headers['Cookie'] = cookie;
     authStatus = AuthenticationStatus.authenticationSucceeded;
-    (await reduxStore).dispatch(
-      SetUserAuthenticationStatus(
-        vegiStatus: VegiAuthenticationStatus.authenticated,
-        firebaseStatus: FirebaseAuthenticationStatus.authenticated,
-      ),
-    );
   }
 
   bool _checkAuthDioResponse(
@@ -414,18 +411,19 @@ abstract class HttpService {
       );
       if ((imgByteStream.length * 0.00000095367432) > fileUploadVegiMaxSizeMB) {
         final wm =
-            'Image upload (${imgByteStream.length}MB) is too large, must be under ${fileUploadVegiMaxSizeMB}MB';
-        onError(
-          wm,
-          FileUploadErrCode.imageTooLarge,
-        );
-        return Future.value(
-          Response(
-            data: errorResponseData,
-            statusCode: 500,
-            requestOptions: RequestOptions(path: path),
-          ),
-        );
+            'Image upload (${(imgByteStream.length * 0.00000095367432).toStringAsFixed(2)}MB) is too large as > ${fileUploadVegiMaxSizeMB}MB. It will be compressed on the server';
+        log.info(wm);
+        // onError(
+        //   wm,
+        //   FileUploadErrCode.imageTooLarge,
+        // );
+        // return Future.value(
+        //   Response(
+        //     data: errorResponseData,
+        //     statusCode: 500,
+        //     requestOptions: RequestOptions(path: path),
+        //   ),
+        // );
       }
     } catch (err, stack) {
       final wm = 'Unable to encode image for sending to vegi: $err';

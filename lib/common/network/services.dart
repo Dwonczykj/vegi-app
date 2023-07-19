@@ -3,6 +3,7 @@ import 'package:fuse_wallet_sdk/fuse_wallet_sdk.dart';
 import 'package:injectable/injectable.dart';
 import 'package:vegan_liverpool/common/router/route_guards.dart';
 import 'package:vegan_liverpool/common/router/routes.dart';
+import 'package:vegan_liverpool/common/router/vegi_debug_route_observer.dart';
 import 'package:vegan_liverpool/models/app_state.dart';
 import 'package:vegan_liverpool/new_version.dart';
 import 'package:vegan_liverpool/services/apis/peeplEats.dart';
@@ -12,9 +13,11 @@ import 'package:redux/redux.dart';
 @module
 abstract class ServicesModule {
   @lazySingleton
-  RootRouter get rootRouter => RootRouter(
+  RootRouter get rootRouter => DebugHelpers.inDebugMode ? RootRouterLogger(
         authGuard: AuthGuard(),
-      );
+      ) :  RootRouter(
+          authGuard: AuthGuard(),
+        );
 
   @lazySingleton
   FuseWalletSDK get fuseWalletSDK =>

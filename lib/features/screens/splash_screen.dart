@@ -32,34 +32,33 @@ class _SplashScreenState extends State<SplashScreen> {
 
   bool isRouting = false;
 
-  Future<void> _reLogin(
-    Store<AppState> store,
-  ) async {
-    store.dispatch(
-      reLoginCall(),
-    );
-  }
+  // Future<void> _reLogin(
+  //   Store<AppState> store,
+  // ) async {
+  //   await authenticator.reauthenticate();
+  // }
 
-  Future<void> _checkLoggedInToVegi() async {
-    final store = await reduxStore;
-    if (store.state.userState.firebaseSessionToken != null) {
-      await _reLogin(store);
-      log.info(
-          'Push PinCodeScreen() from ${rootRouter.current.name} on splash_screen.dart');
-      setState(() {
-        isRouting = true;
-      });
-      await rootRouter.replaceAll([const PinCodeScreen()]);
-      widget.onLoginResult?.call(true);
-    } else {
-      log.info(
-          'Push OnBoardScreen() from ${rootRouter.current.name} on splash_screen.dart');
-      setState(() {
-        isRouting = true;
-      });
-      await rootRouter.replaceAll([const OnBoardScreen()]);
-    }
-  }
+  // Future<void> _checkLoggedInToVegi() async {
+  //   final store = await reduxStore;
+  //   if (store.state.userState.firebaseSessionToken != null) {
+  //     await _reLogin(store);
+
+  //     log.info(
+  //         'Push PinCodeScreen() from ${rootRouter.current.name} on splash_screen.dart');
+  //     setState(() {
+  //       isRouting = true;
+  //     });
+  //     await rootRouter.replaceAll([const PinCodeScreen()]);
+  //     widget.onLoginResult?.call(true);
+  //   } else {
+  //     log.info(
+  //         'Push OnBoardScreen() from ${rootRouter.current.name} on splash_screen.dart');
+  //     setState(() {
+  //       isRouting = true;
+  //     });
+  //     await rootRouter.replaceAll([const OnBoardScreen()]);
+  //   }
+  // }
 
   void finishAppStart({
     required Store<AppState> store,
@@ -91,19 +90,19 @@ class _SplashScreenState extends State<SplashScreen> {
     }
   }
 
-  Future<void> _handleFuseAuthenticationSucceeded() async {
-    final store = await reduxStore;
-    final authType = store.state.userState.authType;
-    if (BiometricAuth.faceID == authType || BiometricAuth.touchID == authType) {
-      return _checkLoggedInToVegi();
-    } else if (authType == BiometricAuth.pincode) {
-      return _checkLoggedInToVegi();
-    } else {
-      throw Exception(
-        'BiometricAuth of ${authType.name} not handled',
-      );
-    }
-  }
+  // Future<void> _handleFuseAuthenticationSucceeded() async {
+  //   final store = await reduxStore;
+  //   final authType = store.state.userState.authType;
+  //   if (BiometricAuth.faceID == authType || BiometricAuth.touchID == authType) {
+  //     return _checkLoggedInToVegi();
+  //   } else if (authType == BiometricAuth.pincode) {
+  //     return _checkLoggedInToVegi();
+  //   } else {
+  //     throw Exception(
+  //       'BiometricAuth of ${authType.name} not handled',
+  //     );
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {

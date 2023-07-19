@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:vegan_liverpool/common/di/env.dart';
 import 'package:vegan_liverpool/common/di/package_info.dart';
 import 'package:vegan_liverpool/features/shared/widgets/my_scaffold.dart';
 import 'package:vegan_liverpool/utils/constants.dart';
@@ -91,8 +92,7 @@ class AboutScreen extends StatelessWidget {
                               ),
                             ),
                             IconButton(
-                              onPressed: () =>
-                                  launchUrl(VEGI_BASE_URL),
+                              onPressed: () => launchUrl(VEGI_BASE_URL),
                               icon: Icon(
                                 Icons.launch,
                                 color: Colors.grey[400],
@@ -104,7 +104,8 @@ class AboutScreen extends StatelessWidget {
                       ),
                       Text(
                         'Version ${packageInfo.version},'
-                        ' Build ${packageInfo.buildNumber}',
+                        ' Build ${packageInfo.buildNumber},'
+                        ' Env ${Env.activeEnv}',
                         style: const TextStyle(color: Colors.grey),
                       ),
                     ],

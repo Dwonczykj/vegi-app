@@ -151,11 +151,12 @@ class _ImageFromGalleryExState extends State<ImageFromGalleryEx> {
     }
     log.warn('Uploading image with size: ${getFileSizeMB(_image)} MB');
     // context.router.pop();
-    if (getFileSizeMB(_image) < fileUploadVegiMaxSizeMB) {
-      widget.handleImagePicked(_image);
-    } else {
-      showInfoSnack(context, title: 'Image not uploaded as too large!');
+    if (getFileSizeMB(_image) > fileUploadVegiMaxSizeMB) {
+      if(kDebugMode){
+        showInfoSnack(context, title: 'Image will be compressed on upload!');
+      }
     }
+    widget.handleImagePicked(_image);
   }
 
   @override

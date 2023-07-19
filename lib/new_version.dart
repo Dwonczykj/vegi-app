@@ -160,7 +160,8 @@ class NewVersion {
     }
     final uri = Uri.https("itunes.apple.com", "/lookup", parameters);
     final response = await http.get(
-        uri); // ~ https://itunes.apple.com/lookup?country=GB&bundleId=com.vegiapp.vegi
+      uri,
+    ); // ~ https://itunes.apple.com/lookup?country=GB&bundleId=com.vegiapp.vegi
     if (response.statusCode != 200) {
       log.error(
         'Failed to query iOS App Store',
@@ -171,6 +172,14 @@ class NewVersion {
     final jsonObj = json.decode(response.body) as Map<String, dynamic>;
     final results = jsonObj['results'] as List<dynamic>;
     if (results.isEmpty) {
+      if (id.toLowerCase().contains('test')) {
+        return VersionStatus._(
+          localVersion: _getCleanVersion(PackageConstants.buildVersion()),
+          storeVersion: '',
+          appStoreLink: '',
+          releaseNotes: '',
+        );
+      }
       log.warn(
         "Can't find an app in the App Store with the id: $id",
         stackTrace: StackTrace.current,

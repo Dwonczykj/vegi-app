@@ -7,6 +7,7 @@ import 'package:flutter/foundation.dart';
 import 'package:package_info/package_info.dart';
 import 'package:redux/redux.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
+import 'package:vegan_liverpool/common/di/env.dart';
 import 'package:vegan_liverpool/common/network/web3auth.dart';
 import 'package:vegan_liverpool/common/router/routes.dart';
 import 'package:vegan_liverpool/constants/analytics_events.dart';
@@ -48,6 +49,8 @@ class FirebaseStrategy implements IOnBoardStrategy {
             fuseStatus: fuseStatus,
           ),
         );
+
+  bool expectingSMSVerificationCode = false;
 
   @override
   Future<void> login(
@@ -157,6 +160,7 @@ class FirebaseStrategy implements IOnBoardStrategy {
           phoneNumber: phoneNumber,
         ),
       );
+      expectingSMSVerificationCode = true;
       await firebaseAuth.verifyPhoneNumber(
         phoneNumber: phoneNumber,
         codeAutoRetrievalTimeout: (String verificationId) {
@@ -584,9 +588,9 @@ class FirebaseStrategy implements IOnBoardStrategy {
     assert(user?.uid == currentUser.uid, 'User IDs not same.');
 
     if (store.state.userState.email.isNotEmpty &&
-        (currentUser.email == null ||
-            currentUser.email?.toLowerCase().trim() !=
-                store.state.userState.email.toLowerCase().trim())) {
+        currentUser.email != null &&
+        currentUser.email?.toLowerCase().trim() !=
+            store.state.userState.email.toLowerCase().trim()) {
       try {
         await updateEmail(
           email: store.state.userState.email.toLowerCase().trim(),
@@ -627,8 +631,10 @@ class FirebaseStrategy implements IOnBoardStrategy {
 
   @override
   bool registeredEmailIs(String email) {
-    final currentUserEmail = firebaseAuth.currentUser?.email?.toLowerCase().trim();
-    return currentUserEmail != null && currentUserEmail == email.toLowerCase().trim();
+    final currentUserEmail =
+        firebaseAuth.currentUser?.email?.toLowerCase().trim();
+    return currentUserEmail != null &&
+        currentUserEmail == email.toLowerCase().trim();
   }
 
   Future<void> _processSigninPhoneNumber(
@@ -642,6 +648,7 @@ class FirebaseStrategy implements IOnBoardStrategy {
       return;
     }
 
+    // should we move this to user_actions?
     final result = await loginToVegiWithPhone(
       store: store,
       phoneNumber: store.state.userState.phoneNumber,
@@ -700,7 +707,8 @@ class FirebaseStrategy implements IOnBoardStrategy {
   Future<void> resetPassword({
     required String email,
   }) async {
-    await firebaseAuth.sendPasswordResetEmail(email: email.toLowerCase().trim());
+    await firebaseAuth.sendPasswordResetEmail(
+        email: email.toLowerCase().trim());
   }
 
   @override
@@ -715,21 +723,32 @@ class FirebaseStrategy implements IOnBoardStrategy {
         isLoading: true,
       ),
     );
+    if (firebaseAuth.currentUser == null) {
+      log.info(
+          'Not able to update email to "$email" on firebase as no firebase user exists yet.');
+      return true;
+    }
     final existingEmail =
-        (firebaseAuth.currentUser?.email ?? email).toLowerCase().trim();
+        (firebaseAuth.currentUser?.email ?? '').toLowerCase().trim();
     try {
       // we are seeing an issue here where we already have 2 different firebase accounts set up for jdwonczyk@gmail.com and joey@vegiapp.co.uk and therefore when we try to update form jdwnoczyk to joey@vegi, we get an error as the email already has a different account registered to it.
       // we need to first check if joey@vegiapp already has a firebase account and if it does, we need to get the user to login with it first to link the account.
-      final dummySigninMethods =
-          await FirebaseAuth.instance.fetchSignInMethodsForEmail(email);
+      final dummySigninMethods = existingEmail.isNotEmpty
+          ? await FirebaseAuth.instance.fetchSignInMethodsForEmail(email)
+          : <String>[];
       if (dummySigninMethods.isNotEmpty) {
         log.warn(
             'Unable to change current user with email: $existingEmail to new email: $email because there is already another user registered to this email: $email');
         return false;
       }
-      await firebaseAuth.currentUser?.verifyBeforeUpdateEmail(
-        email,
-      ); //TODO: THis method is failling to allow us to update the users email?...
+      // !BUG this line just through as had unsuccesffuly tried to set email on previous attempt so store was out of sync with firebase...
+      if (existingEmail.isEmpty || USE_FIREBASE_EMULATOR) {
+        await firebaseAuth.currentUser?.updateEmail(email);
+      } else {
+        await firebaseAuth.currentUser?.verifyBeforeUpdateEmail(
+          email,
+        ); //TODO: THis method is failling to allow us to update the users email?...
+      }
       if (!dontComplete) {
         _complete(
           store: store,
@@ -866,36 +885,37 @@ class FirebaseStrategy implements IOnBoardStrategy {
     }
 
     if (store.state.userState.firebaseSessionToken != null) {
-      final result = await loginToVegiWithPhone(
-        store: store,
-        phoneNumber: store.state.userState.phoneNumber,
-        firebaseSessionToken: store.state.userState.firebaseSessionToken!,
-      );
-      if (result == LoggedInToVegiResult.success) {
-        _complete(
-          store: store,
-          vegiStatus: VegiAuthenticationStatus.authenticated,
-        );
-        store.dispatch(isBetaWhitelistedAddress());
-        return true;
-        // } else if (store.state.userState.firebaseAuthenticationStatus ==
-        //     FirebaseAuthenticationStatus.expired) {
-        //   final creds = store.state.userState.firebaseCredentials;
-        //   if (creds != null) {
-        //     await _reauthenticateUser(
-        //       credential: creds,
-        //     );
-        //   }
-        //   return false;
-      } else {
-        log.error('Could not login to vegi...');
-        _complete(
-          store: store,
-          firebaseStatus: FirebaseAuthenticationStatus.authenticated,
-          vegiStatus: VegiAuthenticationStatus.failed,
-        );
-        return false;
-      }
+      // final result = await loginToVegiWithPhone(
+      //   store: store,
+      //   phoneNumber: store.state.userState.phoneNumber,
+      //   firebaseSessionToken: store.state.userState.firebaseSessionToken!,
+      // );
+      // if (result == LoggedInToVegiResult.success) {
+      //   _complete(
+      //     store: store,
+      //     vegiStatus: VegiAuthenticationStatus.authenticated,
+      //   );
+      //   store.dispatch(isBetaWhitelistedAddress());
+      //   return true;
+      //   // } else if (store.state.userState.firebaseAuthenticationStatus ==
+      //   //     FirebaseAuthenticationStatus.expired) {
+      //   //   final creds = store.state.userState.firebaseCredentials;
+      //   //   if (creds != null) {
+      //   //     await _reauthenticateUser(
+      //   //       credential: creds,
+      //   //     );
+      //   //   }
+      //   //   return false;
+      // } else {
+      //   log.error('Could not login to vegi...');
+      //   _complete(
+      //     store: store,
+      //     firebaseStatus: FirebaseAuthenticationStatus.authenticated,
+      //     vegiStatus: VegiAuthenticationStatus.failed,
+      //   );
+      //   return false;
+      // }
+      return true;
     } else {
       return false;
     }
@@ -916,22 +936,43 @@ class FirebaseStrategy implements IOnBoardStrategy {
     required String firebaseSessionToken,
   }) async {
     try {
+      if (USE_FIREBASE_EMULATOR) {
+        log.warn(
+            'Will not attempt to login to vegi for now as we are using the firebase emulator and the ${Env.activeEnv} vegi backend server cannot sign verification codes. See https://github.com/firebase/firebase-tools/issues/2764');
+        store.dispatch(
+          SetUserAuthenticationStatus(
+            vegiStatus: VegiAuthenticationStatus.failed,
+          ),
+        );
+        return LoggedInToVegiResult.failed;
+      }
+      if (store.state.userState.fuseAuthenticationStatus !=
+          FuseAuthenticationStatus.authenticated) {
+        log.warn(
+            'Should not be logging into vegi as fuse is not authenticated');
+        return LoggedInToVegiResult.failed;
+      }
       store.dispatch(
         SetUserAuthenticationStatus(
           vegiStatus: VegiAuthenticationStatus.loading,
         ),
       );
       // * sets the session cookie on the service class instance.
-      final loggedIn = await peeplEatsService.loginWithPhone(
+      final vegiSession = await peeplEatsService.loginWithPhone(
         phoneNumber: phoneNumber,
         firebaseSessionToken: firebaseSessionToken,
         rememberMe: true,
       );
-      if (loggedIn.sessionCookie.isNotEmpty) {
+      final userDetails = vegiSession.user;
+      if (vegiSession.sessionCookie.isNotEmpty) {
         _complete(
           store: store,
           vegiStatus: VegiAuthenticationStatus.authenticated,
         );
+        if (store.state.userState.isLoggedOut) {
+          log.error(
+              'Should never have userState.isLoggedOut here. Please refactor');
+        }
         store.dispatch(isBetaWhitelistedAddress());
         unawaited(
           Analytics.track(
@@ -948,7 +989,7 @@ class FirebaseStrategy implements IOnBoardStrategy {
           vegiStatus: VegiAuthenticationStatus.failed,
         );
       }
-      return loggedIn.sessionCookie.isNotEmpty
+      return vegiSession.sessionCookie.isNotEmpty
           ? LoggedInToVegiResult.success
           : LoggedInToVegiResult.failedEmptySessionCookie;
     } catch (err) {
@@ -985,12 +1026,13 @@ class FirebaseStrategy implements IOnBoardStrategy {
         ),
       );
       // * sets the session cookie on the service class instance.
-      final loggedIn = await peeplEatsService.loginWithEmail(
+      final vegiSession = await peeplEatsService.loginWithEmail(
         emailAddress: email,
         firebaseSessionToken: firebaseSessionToken,
         rememberMe: true,
       );
-      if (loggedIn.sessionCookie.isNotEmpty) {
+      final userDetails = vegiSession.user;
+      if (vegiSession.sessionCookie.isNotEmpty) {
         _complete(
           store: store,
           vegiStatus: VegiAuthenticationStatus.authenticated,
@@ -1011,7 +1053,7 @@ class FirebaseStrategy implements IOnBoardStrategy {
           vegiStatus: VegiAuthenticationStatus.failed,
         );
       }
-      return loggedIn.sessionCookie.isNotEmpty
+      return vegiSession.sessionCookie.isNotEmpty
           ? LoggedInToVegiResult.success
           : LoggedInToVegiResult.failedEmptySessionCookie;
     } catch (err) {
@@ -1235,7 +1277,7 @@ class FirebaseStrategy implements IOnBoardStrategy {
     bool dontComplete = false,
   }) async {
     log
-      ..info(
+      ..error(
         'FirebaseAuth Exception caught:',
         stackTrace: s,
       )
@@ -1291,6 +1333,21 @@ class FirebaseStrategy implements IOnBoardStrategy {
       return _complete(
         store: store,
         firebaseStatus: FirebaseAuthenticationStatus.invalidCredentials,
+      );
+    } else if (e.code == 'invalid-verification-id') {
+      store.dispatch(
+        SignupFailed(
+          error: SignUpErrorDetails(
+            title: message,
+            message:
+                'The verification id ["${store.state.userState.verificationId}"] passed to verify handler is stale. $additionalMessage',
+            code: SignUpErrCode.invalidVerificationId,
+          ),
+        ),
+      );
+      return _complete(
+        store: store,
+        firebaseStatus: FirebaseAuthenticationStatus.invalidVerificationId,
       );
     } else if (e.code == 'unauthorized-domain') {
       store.dispatch(

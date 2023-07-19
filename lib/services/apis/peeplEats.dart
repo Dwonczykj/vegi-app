@@ -213,11 +213,6 @@ class PeeplEatsService extends HttpService {
           ),
         )
         ..dispatch(
-          SetUserAuthenticationStatus(
-            vegiStatus: VegiAuthenticationStatus.authenticated,
-          ),
-        )
-        ..dispatch(
           SetUserRoleOnVegi(
             userRole: userDetails.role,
             isSuperAdmin: userDetails.isSuperAdmin,
@@ -276,11 +271,6 @@ class PeeplEatsService extends HttpService {
           ),
         )
         ..dispatch(
-          SetUserAuthenticationStatus(
-            vegiStatus: VegiAuthenticationStatus.authenticated,
-          ),
-        )
-        ..dispatch(
           SetUserRoleOnVegi(
             userRole: userDetails.role,
             isSuperAdmin: userDetails.isSuperAdmin,
@@ -300,13 +290,25 @@ class PeeplEatsService extends HttpService {
     await logoutSession();
   }
 
-  // TODO: Implement - backend needs new deregister handle to deregister a user by email or phone and
-  // todocont remove all wallet address backups, firebase creds, userlines from vegi and delete the user from firebase.
-  // Future<bool> deregister({required String phoneNumber}) async {}
+  Future<bool> deleteAllUserDetails() async {
+    final store = await reduxStore;
+    final Response<dynamic> response = await dioPost(
+      VegiBackendEndpoints.deregisterUser,
+      sendWithAuthCreds: false,
+      data: {
+        'email': store.state.userState.email,
+        'phone': store.state.userState.phoneNumber,
+      },
+    );
 
-  // Future<bool> resetPassword({
-  //   required String email,
-  // }) async {}
+    if (responseHasErrorStatus(response)) {
+      log.error(
+        'Bad response returned when trying to deregister user and delete all their data: $response',
+      );
+      return false;
+    }
+    return true;
+  }
 
   Future<List<RestaurantItem>> featuredRestaurants(
     String outCode, {
@@ -326,9 +328,8 @@ class PeeplEatsService extends HttpService {
       },
     ).onError((error, stackTrace) {
       log.error(error, stackTrace: stackTrace);
-      if ((error as Map<String, dynamic>)['message']
-              .toString()
-              .startsWith('SocketException:') &&
+      if (error is DioError &&
+          (error.message?.startsWith('SocketException:') ?? false) &&
           dio.options.baseUrl.startsWith('http://localhost')) {
         log.warn(
           'If running from real_device, cant connect to localhost on running machine...',
@@ -760,10 +761,11 @@ class PeeplEatsService extends HttpService {
     final response = await dioGet<Map<String, dynamic>>(vegiRelUri);
 
     if (response.data != null &&
-        response.data is Map<String, dynamic> && 
+        response.data is Map<String, dynamic> &&
         response.data!.containsKey('order')) {
       return OrderModel.Order.fromJson(
-          response.data!['order'] as Map<String, dynamic>,);
+        response.data!['order'] as Map<String, dynamic>,
+      );
     } else {
       return null;
     }
@@ -1313,6 +1315,47 @@ class PeeplEatsService extends HttpService {
     }
   }
 
+  Future<void> updateUserDetails({
+    required String phoneNoCountry,
+    int phoneCountryCode = 44,
+    String? email,
+    String? name,
+    bool? marketingEmailContactAllowed,
+    bool? marketingPhoneContactAllowed,
+    bool? marketingPushContactAllowed,
+    void Function(String error)? onError,
+  }) async {
+    final params = <String, dynamic>{
+      'phoneNoCountry': phoneNoCountry,
+      'phoneCountryCode': phoneCountryCode,
+    };
+    if (email != null) {
+      params['email'] = email;
+    }
+    if (name != null) {
+      params['name'] = name;
+    }
+    if (marketingEmailContactAllowed != null) {
+      params['marketingEmailContactAllowed'] = marketingEmailContactAllowed;
+    }
+    if (marketingPhoneContactAllowed != null) {
+      params['marketingPhoneContactAllowed'] = marketingPhoneContactAllowed;
+    }
+    if (marketingPushContactAllowed != null) {
+      params['marketingPushContactAllowed'] = marketingPushContactAllowed;
+    }
+
+    final Response<dynamic> response = await dioPost(
+      '/api/v1/users/update-user-self',
+      data: params,
+    );
+
+    if (responseHasErrorStatus(response)) {
+      onError?.call(response.statusMessage ?? 'Unknown Error');
+      return;
+    }
+  }
+
   Future<void> getAccountIsVendor(
     String walletAddress,
     void Function(bool isVendor, int? vendorId) onSuccess,
@@ -1339,7 +1382,7 @@ class PeeplEatsService extends HttpService {
     }
   }
 
-  Future<WaitingListEntry?> updateEmailForAccount({
+  Future<WaitingListEntry?> updateEmailForWaitingListEntry({
     required String email,
     required int waitingListEntryId,
     required void Function(String error) onError,

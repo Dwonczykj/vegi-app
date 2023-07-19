@@ -8,6 +8,8 @@ import 'package:vegan_liverpool/models/authViewModel.dart';
 import 'package:vegan_liverpool/redux/actions/onboarding_actions.dart';
 import 'package:vegan_liverpool/redux/actions/user_actions.dart';
 import 'package:vegan_liverpool/redux/viewsmodels/signUpErrorDetails.dart';
+import 'package:vegan_liverpool/services.dart';
+import 'package:vegan_liverpool/utils/onboard/authentication.dart';
 import 'package:vegan_liverpool/version.dart';
 import 'package:vegan_liverpool/utils/constants.dart' as VegiConstants;
 
@@ -39,7 +41,6 @@ class MainScreenViewModel extends Equatable implements IAuthViewModel {
     required this.appUpdateNeeded,
     required this.appUpdateNextVersion,
     required this.appUpdateNotificationSeenForBuildNumber,
-    required this.authenticateAll,
     required this.routeToLogin,
     required this.setPhoneNumber,
     required this.setEmail,
@@ -96,34 +97,37 @@ class MainScreenViewModel extends Equatable implements IAuthViewModel {
       },
       setEmail: ({
         required String email,
+        required void Function(String) onError,
       }) {
         store.dispatch(
-          SetEmail(
-            email.toLowerCase().trim(),
+          updateEmail(
+            email: email,
+            onError: onError,
           ),
-        );
-      },
-      authenticateAll: () {
-        store.dispatch(
-          authenticate(),
         );
       },
       signup: ({
         required CountryCode countryCode,
         required PhoneNumber phoneNumber,
       }) {
-        store.dispatch(
-          loginHandler(
-            countryCode,
-            phoneNumber,
+        authenticator.signUp(
+          loginDetails: PhoneLoginDetails(
+            countryCode: countryCode,
+            phoneNumber: phoneNumber,
           ),
         );
+        // store.dispatch(
+        //   loginHandler(
+        //     countryCode,
+        //     phoneNumber,
+        //   ),
+        // );
       },
       setUserIsLoggedOut: () {
         store.dispatch(SetVegiSessionExpired());
       },
       routeToLogin: () {
-        store.dispatch(routeToLoginScreen());
+        authenticator.routeToLoginScreen();
       },
       setLoading: (bool isLoading) {
         store.dispatch(
@@ -136,43 +140,19 @@ class MainScreenViewModel extends Equatable implements IAuthViewModel {
         required String email,
         required String password,
       }) {
-        store
-          ..dispatch(
-            SignupLoading(
-              isLoading: true,
-            ),
-          )
-          ..dispatch(
-            signinWithEmailAndPassword(
-              email: email.toLowerCase().trim(),
-              password: password,
-            ),
-          )
-          ..dispatch(
-            SignupLoading(
-              isLoading: false,
-            ),
-          );
+        authenticator.login(
+          loginDetails: EmailLoginDetails(
+            email: email,
+            password: password,
+          ),
+        );
       },
       signInUserUsingEmailLink: ({
         required String email,
       }) {
-        store
-          ..dispatch(
-            SignupLoading(
-              isLoading: true,
-            ),
-          )
-          ..dispatch(
-            signInUserBySendingEmailLink(
-              email: email,
-            ),
-          )
-          ..dispatch(
-            SignupLoading(
-              isLoading: false,
-            ),
-          );
+        authenticator.requestEmailLinkForEmailAddress(
+          email: email,
+        );
       },
       setAppUpdateNotificationSeen: () {
         store.dispatch(updateAppNeededNotificationSeen());
@@ -213,6 +193,7 @@ class MainScreenViewModel extends Equatable implements IAuthViewModel {
   }) setPhoneNumber;
   final void Function({
     required String email,
+    required void Function(String) onError,
   }) setEmail;
   final void Function({
     required CountryCode countryCode,
@@ -220,7 +201,6 @@ class MainScreenViewModel extends Equatable implements IAuthViewModel {
   }) signup;
   final void Function() setUserIsLoggedOut;
   final void Function() routeToLogin;
-  final void Function() authenticateAll;
   final void Function(bool) setLoading;
   final void Function({
     required String email,

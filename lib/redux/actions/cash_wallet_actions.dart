@@ -94,8 +94,8 @@ class UpdateTokenPrice {
   }
 }
 
-class GetWalletDataSuccess {
-  GetWalletDataSuccess({
+class GotWalletDataSuccess {
+  GotWalletDataSuccess({
     required this.networks,
     required this.walletAddress,
     required this.walletModules,
@@ -106,14 +106,14 @@ class GetWalletDataSuccess {
 
   @override
   String toString() {
-    return 'GetWalletDataSuccess : walletAddress: $walletAddress'
+    return 'GotWalletDataSuccess : walletAddress: $walletAddress'
         ',networks: $networks, walletModules:'
         ' $walletModules';
   }
 }
 
-class GetTokenBalanceSuccess {
-  GetTokenBalanceSuccess({
+class GotTokenBalanceSuccess {
+  GotTokenBalanceSuccess({
     required this.tokenBalance,
     required this.tokenAddress,
   });
@@ -122,7 +122,7 @@ class GetTokenBalanceSuccess {
 
   @override
   String toString() {
-    return 'GetTokenBalanceSuccess : tokenAddress: '
+    return 'GotTokenBalanceSuccess : tokenAddress: '
         '$tokenAddress, tokenBalance: $tokenBalance';
   }
 }
@@ -353,7 +353,7 @@ ThunkAction<AppState> startFetchTokensBalances() {
                     onDone: (balance) {
                       if (balance.compareTo(token.amount) != 0) {
                         store.dispatch(
-                          GetTokenBalanceSuccess(
+                          GotTokenBalanceSuccess(
                             tokenBalance: balance,
                             tokenAddress: token.address,
                           ),

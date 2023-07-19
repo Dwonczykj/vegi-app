@@ -5,6 +5,27 @@ import 'package:injectable/injectable.dart';
 import 'package:logger/logger.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
+class StackLine {
+  StackLine({
+    this.className,
+    this.functionName,
+    this.fileName,
+    this.lineNumber,
+    this.characterNumber,
+  });
+
+  final String? className;
+  final String? functionName;
+  final String? fileName;
+  final String? lineNumber;
+  final String? characterNumber;
+
+  @override
+  String toString() {
+    return '$fileName [$lineNumber] (in $className.$functionName)';
+  }
+}
+
 @lazySingleton
 class LogIt {
   LogIt(this.logger);
@@ -48,6 +69,46 @@ class LogIt {
     logger.d(message, error, stackTrace);
   }
 
+  String filterStackTrace(
+    StackTrace stackTrace, {
+    RegExp? dontMatch,
+  }) {
+    final lines = stackTrace.toString().split('\n');
+    if (lines.length < 3) {
+      return 'Unable to find second most recent function call';
+    }
+
+    final regex_vegan_liverpool_only = RegExp(
+      r'([A-Za-z_]+)\.([A-Za-z_. <>]+)\s\((package:vegan_liverpool)\/([A-Za-z0-9_\/]+\/)?([A-Za-z0-9_]+\.dart):(\d+):(\d+)\)',
+    );
+    final filter_this_package = lines
+        .where(
+      (e) =>
+          regex_vegan_liverpool_only.hasMatch(e.trim()) &&
+          regex_vegan_liverpool_only.firstMatch(e.trim())?.groupCount == 7 &&
+          (dontMatch == null || dontMatch.hasMatch(e.trim()) == false),
+    )
+        .map(
+      (e) {
+        final match = regex_vegan_liverpool_only.firstMatch(e.trim());
+        return StackLine(
+          className: match?.group(1),
+          functionName: match?.group(2),
+          fileName: match?.group(5),
+          lineNumber: match?.group(6),
+          characterNumber: match?.group(7),
+        );
+      },
+    ).toList();
+
+    if (filter_this_package.isEmpty) {
+      print('No match found when filtering the stacktrace');
+      return '[Unable to parse stack trace]';
+    }
+
+    return filter_this_package.join('\n\t');
+  }
+
   /// Log a message at level [Level.info].
   void info(
     dynamic message, {
@@ -69,7 +130,17 @@ class LogIt {
       return;
     }
 
-    logger.i(message, error, stackTrace);
+    if (kDebugMode) {
+      final filteredStackTrace = filterStackTrace(
+        stackTrace ?? StackTrace.current,
+        dontMatch: RegExp(
+            r'([A-Za-z_]+)\.([A-Za-z_. <>]+)\s\((package:vegan_liverpool)\/(utils\/log\/)(log\.dart):(\d+):(\d+)\)'),
+      );
+
+      logger.i('$message - [$filteredStackTrace]', error);
+    } else {
+      logger.i(message, error, stackTrace);
+    }
   }
 
   /// Log a message at level [Level.warning].

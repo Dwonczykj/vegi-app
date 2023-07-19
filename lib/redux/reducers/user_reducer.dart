@@ -9,18 +9,25 @@ import 'package:vegan_liverpool/utils/log/log.dart';
 final userReducers = combineReducers<UserState>([
   TypedReducer<UserState, ResetAppState>(_resetApp).call,
   TypedReducer<UserState, SetAppUpdateRequired>(_setAppUpdateRequired).call,
-  TypedReducer<UserState, SetAppUpdateAcknowledged>(_setAppUpdateNotificationCheked).call,
+  TypedReducer<UserState, SetAppUpdateAcknowledged>(
+          _setAppUpdateNotificationCheked)
+      .call,
   TypedReducer<UserState, ResetSurveyCompleted>(_resetSurveyCompleted).call,
   TypedReducer<UserState, SetSubscribedToWaitingListUpdates>(
-      _setSubscribedToWaitingListUpdates).call,
+          _setSubscribedToWaitingListUpdates)
+      .call,
   TypedReducer<UserState, SetWalletConnectURI>(_setWalletConnectURI).call,
-  TypedReducer<UserState, GetWalletDataSuccess>(_getWalletDataSuccess).call,
-  TypedReducer<UserState, SetStripeCustomerDetails>(_setStripeCustomerDetails).call,
+  TypedReducer<UserState, GotWalletDataSuccess>(_getWalletDataSuccess).call,
+  TypedReducer<UserState, SetSmartWalletInMemory>(_setSmartWallet).call,
+  TypedReducer<UserState, SetStripeCustomerDetails>(_setStripeCustomerDetails)
+      .call,
   TypedReducer<UserState, ScrollToTop>(_scrollToTop).call,
   TypedReducer<UserState, ToggleUpgrade>(_toggleUpgrade).call,
-  TypedReducer<UserState, CreateLocalAccountSuccess>(_createNewWalletSuccess).call,
+  TypedReducer<UserState, CreateLocalAccountSuccess>(_createNewWalletSuccess)
+      .call,
   // TypedReducer<UserState, AddSurveyEmailSuccess>(_addSurveyEmailSuccess),
-  TypedReducer<UserState, CreateSurveyCompletedSuccess>(_completeSurveySuccess).call,
+  TypedReducer<UserState, CreateSurveyCompletedSuccess>(_completeSurveySuccess)
+      .call,
   TypedReducer<UserState, SetPhoneNumberSuccess>(_setPhoneNumber).call,
   TypedReducer<UserState, LoginRequestSuccess>(_loginSuccess).call,
   TypedReducer<UserState, LoginVerifySuccess>(_loginVerifySuccess).call,
@@ -29,9 +36,11 @@ final userReducers = combineReducers<UserState>([
   TypedReducer<UserState, SetDisplayName>(_setDisplayName).call,
   TypedReducer<UserState, SetEmail>(_setEmail).call,
   TypedReducer<UserState, SetEmailPassword>(_setEmailAndPassword).call,
-  TypedReducer<UserState, SetPreferredSignOnMethod>(_setPreferredSignonMethod).call,
+  TypedReducer<UserState, SetPreferredSignOnMethod>(_setPreferredSignonMethod)
+      .call,
   TypedReducer<UserState, SetUserAuthenticationStatus>(
-      _setUserAuthenticationStatus).call,
+          _setUserAuthenticationStatus)
+      .call,
   TypedReducer<UserState, EmailWLRegistrationSuccess>(
     _setUserEmailForRegistrationToWaitingList,
   ).call,
@@ -39,12 +48,14 @@ final userReducers = combineReducers<UserState>([
     _setSurveyQuestions,
   ).call,
   TypedReducer<UserState, SetUserAvatar>(_setUserAvatar).call,
-  TypedReducer<UserState, ReLogin>(_reLoginUser).call,
+  TypedReducer<UserState, SetReLoggedin>(_reLoginUser).call,
   TypedReducer<UserState, BackupSuccess>(_backupSuccess).call,
   TypedReducer<UserState, StoreBackupStatus>(_storeBackupStatus).call,
   TypedReducer<UserState, SetFirebaseCredentials>(_setFirebaseCredentials).call,
-  TypedReducer<UserState, SetFirebaseSessionToken>(_setFirebaseSessionToken).call,
-  TypedReducer<UserState, SetFuseWalletCredentials>(_setFuseWalletCredentials).call,
+  TypedReducer<UserState, SetFirebaseSessionToken>(_setFirebaseSessionToken)
+      .call,
+  TypedReducer<UserState, SetFuseWalletCredentials>(_setFuseWalletCredentials)
+      .call,
   TypedReducer<UserState, SetVerificationId>(_setVerificationId).call,
   TypedReducer<UserState, SetVerificationFailed>(_setVerificationFailed).call,
   TypedReducer<UserState, SetVegiSessionExpired>(_setVegiSessionExpired).call,
@@ -54,14 +65,18 @@ final userReducers = combineReducers<UserState>([
   TypedReducer<UserState, DeviceIdSuccess>(_deviceIdSuccess).call,
   TypedReducer<UserState, SetSecurityType>(_setSecurityType).call,
   TypedReducer<UserState, SetBiometricallyAuthenticated>(
-      _setBiometricallyAuthenticated).call,
+          _setBiometricallyAuthenticated)
+      .call,
   TypedReducer<UserState, WarnSendDialogShowed>(_warnSendDialogShowed).call,
   TypedReducer<UserState, UpdateCurrency>(_updateCurrency).call,
   TypedReducer<UserState, UpdateLocale>(_updateLocale).call,
-  TypedReducer<UserState, UpdateListOfDeliveryAddresses>(_addDeliveryAddress).call,
-  TypedReducer<UserState, SetShowSeedPhraseBanner>(_setShowSeedPhraseBanner).call,
+  TypedReducer<UserState, UpdateListOfDeliveryAddresses>(_addDeliveryAddress)
+      .call,
+  TypedReducer<UserState, SetShowSeedPhraseBanner>(_setShowSeedPhraseBanner)
+      .call,
   TypedReducer<UserState, SetHasSavedSeedPhrase>(_setHasSavedSeedPhrase).call,
-  TypedReducer<UserState, EnableLocationServices>(_setLocationServicesEnabled).call,
+  TypedReducer<UserState, EnableLocationServices>(_setLocationServicesEnabled)
+      .call,
   TypedReducer<UserState, SetUserVerifiedStatusSuccess>(
     _setUserVerifiedStatusSuccessResponse,
   ).call,
@@ -203,12 +218,21 @@ UserState _warnSendDialogShowed(
 
 UserState _getWalletDataSuccess(
   UserState state,
-  GetWalletDataSuccess action,
+  GotWalletDataSuccess action,
 ) {
   return state.copyWith(
     networks: action.networks,
     walletAddress: action.walletAddress,
     walletModules: action.walletModules,
+  );
+}
+
+UserState _setSmartWallet(
+  UserState state,
+  SetSmartWalletInMemory action,
+) {
+  return state.copyWith(
+    smartWallet: action.smartWallet,
   );
 }
 
@@ -237,7 +261,7 @@ UserState _storeBackupStatus(
 
 UserState _reLoginUser(
   UserState state,
-  ReLogin action,
+  SetReLoggedin action,
 ) {
   return state.copyWith(isLoggedOut: false);
 }
@@ -254,6 +278,11 @@ UserState _setUserAuthenticationStatus(
         action.fuseStatus ?? state.fuseAuthenticationStatus,
     vegiAuthenticationStatus:
         action.vegiStatus ?? state.vegiAuthenticationStatus,
+    isLoggedOut: (action.vegiStatus ?? state.vegiAuthenticationStatus) ==
+                VegiAuthenticationStatus.authenticated &&
+            state.isLoggedOut
+        ? false
+        : state.isLoggedOut,
   );
 }
 

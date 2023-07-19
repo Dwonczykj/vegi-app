@@ -1,5 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:vegan_liverpool/common/router/route_guards.dart';
+import 'package:vegan_liverpool/common/router/routes.dart';
 import 'package:vegan_liverpool/utils/log/log.dart';
 
 class VegiDebugRouteObserver extends AutoRouterObserver {
@@ -35,6 +37,81 @@ class VegiDebugRouteObserver extends AutoRouterObserver {
     log.info(
       'Tab route re-visited: ${route.name}',
       stackTrace: StackTrace.current,
+    );
+  }
+}
+
+class RootRouterLogger extends RootRouter {
+  RootRouterLogger({required AuthGuard authGuard})
+      : super(authGuard: authGuard);
+
+  @override
+  Future<T?> push<T extends Object?>(PageRouteInfo<dynamic> route,
+      {void Function(NavigationFailure)? onFailure}) {
+    final filteredStack = log.filterStackTrace(
+      StackTrace.current,
+      dontMatch: RegExp(
+          r'([A-Za-z_]+)\.([A-Za-z_. <>]+)\s\((package:vegan_liverpool)\/(common\/router\/)(vegi_debug_route_observer\.dart):(\d+):(\d+)\)'),
+    );
+    log.info(
+      'rootRouter.push: $filteredStack',
+      stackTrace: StackTrace.current,
+    );
+    return super.push(
+      route,
+      onFailure: onFailure,
+    );
+  }
+
+  @override
+  Future<bool> pop<T extends Object?>([T? result]) {
+    final filteredStack = log.filterStackTrace(
+      StackTrace.current,
+      dontMatch: RegExp(
+          r'([A-Za-z_]+)\.([A-Za-z_. <>]+)\s\((package:vegan_liverpool)\/(common\/router\/)(vegi_debug_route_observer\.dart):(\d+):(\d+)\)'),
+    );
+    log.info(
+      'rootRouter.pop: $filteredStack',
+      stackTrace: StackTrace.current,
+    );
+    return super.pop(result);
+  }
+
+  @override
+  Future<T?> replace<T extends Object?>(PageRouteInfo<dynamic> route,
+      {void Function(NavigationFailure)? onFailure}) {
+    final filteredStack = log.filterStackTrace(
+      StackTrace.current,
+      dontMatch: RegExp(
+          r'([A-Za-z_]+)\.([A-Za-z_. <>]+)\s\((package:vegan_liverpool)\/(common\/router\/)(vegi_debug_route_observer\.dart):(\d+):(\d+)\)'),
+    );
+    log.info(
+      'rootRouter.replace: $filteredStack',
+      stackTrace: StackTrace.current,
+    );
+    return super.replace(
+      route,
+      onFailure: onFailure,
+    );
+  }
+
+  @override
+  Future<void> replaceAll(
+    List<PageRouteInfo<dynamic>> routes, {
+    void Function(NavigationFailure)? onFailure,
+  }) {
+    final filteredStack = log.filterStackTrace(
+      StackTrace.current,
+      dontMatch: RegExp(
+          r'([A-Za-z_]+)\.([A-Za-z_. <>]+)\s\((package:vegan_liverpool)\/(common\/router\/)(vegi_debug_route_observer\.dart):(\d+):(\d+)\)'),
+    );
+    log.info(
+      'rootRouter.replacedAll: $filteredStack',
+      stackTrace: StackTrace.current,
+    );
+    return super.replaceAll(
+      routes,
+      onFailure: onFailure,
     );
   }
 }

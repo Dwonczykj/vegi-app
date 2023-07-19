@@ -104,13 +104,15 @@ class UserState with _$UserState {
     @JsonKey(fromJson: ethPrivateKeyFromJson, toJson: ethPrivateKeyToJson)
     @Default(null)
         EthPrivateKey? fuseWalletCredentials,
+    @Default(null)
+        SmartWallet? smartWallet,
+    @Default(FuseAuthenticationStatus.unauthenticated)
+        FuseAuthenticationStatus fuseAuthenticationStatus,
+    @Default(FirebaseAuthenticationStatus.unauthenticated)
+        FirebaseAuthenticationStatus firebaseAuthenticationStatus,
     @JsonKey(ignore: true)
     @Default(VegiAuthenticationStatus.unauthenticated)
         VegiAuthenticationStatus vegiAuthenticationStatus,
-    @Default(FirebaseAuthenticationStatus.unauthenticated)
-        FirebaseAuthenticationStatus firebaseAuthenticationStatus,
-    @Default(FuseAuthenticationStatus.unauthenticated)
-        FuseAuthenticationStatus fuseAuthenticationStatus,
     @Default(false)
         bool backup,
     @Default([])
@@ -147,14 +149,19 @@ class UserState with _$UserState {
     @Default('')
         String identifier,
     @Default(false)
-    bool appUpdateNeeded,
-    @JsonKey(fromJson: Version.fromJson, toJson: Version.toJson,)
+        bool appUpdateNeeded,
+    @JsonKey(
+      fromJson: Version.fromJson,
+      toJson: Version.toJson,
+    )
     @Default(null)
-    Version? appUpdateNextVersion,
-    @JsonKey(fromJson: Version.fromJson,
-      toJson: Version.toJson,)
+        Version? appUpdateNextVersion,
+    @JsonKey(
+      fromJson: Version.fromJson,
+      toJson: Version.toJson,
+    )
     @Default(null)
-    Version? appUpdateNotificationSeenForBuildNumber,
+        Version? appUpdateNotificationSeenForBuildNumber,
     @Default([])
         List<String> syncedContacts,
     @Default({})

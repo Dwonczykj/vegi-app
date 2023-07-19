@@ -164,6 +164,7 @@ enum VendorStatus {
 
 enum SignUpErrCode {
   invalidCredentials,
+  invalidVerificationId,
   wrongPassword,
   userNotFound,
   weakPassword,
@@ -176,6 +177,54 @@ enum SignUpErrCode {
   emailLinkExpired,
   unauthorizedDomain,
   serverError,
+  fuseWalletSDKFailedAuthentication,
+  fuseWalletSDKFailedAuthenticationAsMissingUserDetailsToAuthFuseWallet,
+  fuseWalletSDKFailedCreateLocalAccountPrivateKey,
+  fuseWalletSDKFailedCreate,
+  fuseWalletSDKFailedToAuthenticateWalletSDKWithJWTTokenAfterInitialisationAttempt,
+  fuseWalletSDKFailedFetch,
+}
+
+extension SignUpErrCodeHelpers on SignUpErrCode {
+  static SignUpErrCode? fromFuseErrCode(
+      FuseAuthenticationStatus fuseAuthenticationStatus) {
+    switch (fuseAuthenticationStatus) {
+      case FuseAuthenticationStatus.failedAuthentication:
+        return SignUpErrCode.fuseWalletSDKFailedAuthentication;
+      case FuseAuthenticationStatus
+          .failedAuthenticationAsMissingUserDetailsToAuthFuseWallet:
+        return SignUpErrCode
+            .fuseWalletSDKFailedAuthenticationAsMissingUserDetailsToAuthFuseWallet;
+      case FuseAuthenticationStatus.failedCreateLocalAccountPrivateKey:
+        return SignUpErrCode.fuseWalletSDKFailedCreateLocalAccountPrivateKey;
+      case FuseAuthenticationStatus.failedCreate:
+        return SignUpErrCode.fuseWalletSDKFailedCreate;
+      case FuseAuthenticationStatus
+          .failedToAuthenticateWalletSDKWithJWTTokenAfterInitialisationAttempt:
+        return SignUpErrCode
+            .fuseWalletSDKFailedToAuthenticateWalletSDKWithJWTTokenAfterInitialisationAttempt;
+      case FuseAuthenticationStatus.failedFetch:
+        return SignUpErrCode.fuseWalletSDKFailedFetch;
+      case FuseAuthenticationStatus.loading:
+        return null;
+      case FuseAuthenticationStatus.unauthenticated:
+        return null;
+      case FuseAuthenticationStatus.authenticated:
+        return null;
+      case FuseAuthenticationStatus.createWalletForEOA:
+        return null;
+      case FuseAuthenticationStatus.creationStarted:
+        return null;
+      case FuseAuthenticationStatus.creationSucceeded:
+        return null;
+      case FuseAuthenticationStatus.created:
+        return null;
+      case FuseAuthenticationStatus.fetched:
+        return null;
+      case FuseAuthenticationStatus.creationTransactionHash:
+        return null;
+    }
+  }
 }
 
 enum CartErrCode {
@@ -666,8 +715,9 @@ enum OrderCreationProcessStatus {
   sendOrderCallClientError,
   orderCancelled, //todo: Handle
   orderPaymentFailed,
-  orderAlreadyBeingCreated, 
-  paymentIntentCheckNotFound, unableToGetStripeCustomerIdFromCreateOrderRequest, //todo: Handle
+  orderAlreadyBeingCreated,
+  paymentIntentCheckNotFound,
+  unableToGetStripeCustomerIdFromCreateOrderRequest, //todo: Handle
 }
 
 enum StripePaymentStatus {
@@ -744,6 +794,7 @@ enum FirebaseAuthenticationStatus {
   updateEmailUsingVerificationFailed,
   userGetIdTokenFailed,
   invalidCredentials,
+  invalidVerificationId,
   beginAuthentication,
   // firebaseAuthenticationSucceededAndVegiLoginFailed,
   // firebaseAuthenticationSucceededAndVegiLoginSucceeded,
@@ -760,6 +811,7 @@ extension FirebaseAuthenticationStatusHelpers on FirebaseAuthenticationStatus {
           FirebaseAuthenticationStatus.phoneAuthFailedTooManyRequests,
           FirebaseAuthenticationStatus.invalidPhoneNumber,
           FirebaseAuthenticationStatus.invalidCredentials,
+          FirebaseAuthenticationStatus.invalidVerificationId,
           // FirebaseAuthenticationStatus.emailAlreadyInUseWithOtherAccount, // * removed as still want to see main screen in this case,
           FirebaseAuthenticationStatus.updateEmailUsingVerificationFailed,
           FirebaseAuthenticationStatus.userGetIdTokenFailed,

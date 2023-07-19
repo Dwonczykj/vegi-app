@@ -9,9 +9,12 @@ import 'package:vegan_liverpool/services.dart';
 import 'package:redux/redux.dart';
 import 'package:vegan_liverpool/utils/log/log.dart';
 
-Future<bool> authenticateSDK(Store<AppState> store) async {
-  final EthPrivateKey credentials =
-      EthPrivateKey.fromHex(store.state.userState.privateKey);
+Future<bool> authenticateSDK(
+  Store<AppState> store, {
+  required EthPrivateKey credentials,
+}) async {
+  // final EthPrivateKey credentials =
+  //     EthPrivateKey.fromHex(store.state.userState.privateKey);
   final DC<Exception, String> authRes = await fuseWalletSDK.authenticate(
     credentials,
   );

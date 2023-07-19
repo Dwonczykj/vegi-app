@@ -22,14 +22,17 @@ _$_UserState _$$_UserStateFromJson(Map<String, dynamic> json) => _$_UserState(
       fuseWalletCredentials: json['fuseWalletCredentials'] == null
           ? null
           : ethPrivateKeyFromJson(json['fuseWalletCredentials']),
-      firebaseAuthenticationStatus: $enumDecodeNullable(
-              _$FirebaseAuthenticationStatusEnumMap,
-              json['firebaseAuthenticationStatus']) ??
-          FirebaseAuthenticationStatus.unauthenticated,
+      smartWallet: json['smartWallet'] == null
+          ? null
+          : SmartWallet.fromJson(json['smartWallet'] as Map<String, dynamic>),
       fuseAuthenticationStatus: $enumDecodeNullable(
               _$FuseAuthenticationStatusEnumMap,
               json['fuseAuthenticationStatus']) ??
           FuseAuthenticationStatus.unauthenticated,
+      firebaseAuthenticationStatus: $enumDecodeNullable(
+              _$FirebaseAuthenticationStatusEnumMap,
+              json['firebaseAuthenticationStatus']) ??
+          FirebaseAuthenticationStatus.unauthenticated,
       backup: json['backup'] as bool? ?? false,
       networks: (json['networks'] as List<dynamic>?)
               ?.map((e) => e as String)
@@ -117,10 +120,11 @@ Map<String, dynamic> _$$_UserStateToJson(_$_UserState instance) =>
       'privateKey': instance.privateKey,
       'fuseWalletCredentials':
           ethPrivateKeyToJson(instance.fuseWalletCredentials),
-      'firebaseAuthenticationStatus': _$FirebaseAuthenticationStatusEnumMap[
-          instance.firebaseAuthenticationStatus]!,
+      'smartWallet': instance.smartWallet?.toJson(),
       'fuseAuthenticationStatus':
           _$FuseAuthenticationStatusEnumMap[instance.fuseAuthenticationStatus]!,
+      'firebaseAuthenticationStatus': _$FirebaseAuthenticationStatusEnumMap[
+          instance.firebaseAuthenticationStatus]!,
       'backup': instance.backup,
       'networks': instance.networks,
       'mnemonic': instance.mnemonic,
@@ -170,6 +174,29 @@ Map<String, dynamic> _$$_UserStateToJson(_$_UserState instance) =>
       'loginCounter': instance.loginCounter,
     };
 
+const _$FuseAuthenticationStatusEnumMap = {
+  FuseAuthenticationStatus.unauthenticated: 'unauthenticated',
+  FuseAuthenticationStatus.loading: 'loading',
+  FuseAuthenticationStatus.authenticated: 'authenticated',
+  FuseAuthenticationStatus.createWalletForEOA: 'createWalletForEOA',
+  FuseAuthenticationStatus.creationStarted: 'creationStarted',
+  FuseAuthenticationStatus.creationSucceeded: 'creationSucceeded',
+  FuseAuthenticationStatus.created: 'created',
+  FuseAuthenticationStatus.fetched: 'fetched',
+  FuseAuthenticationStatus.failedCreateLocalAccountPrivateKey:
+      'failedCreateLocalAccountPrivateKey',
+  FuseAuthenticationStatus.failedCreate: 'failedCreate',
+  FuseAuthenticationStatus.failedAuthentication: 'failedAuthentication',
+  FuseAuthenticationStatus
+          .failedAuthenticationAsMissingUserDetailsToAuthFuseWallet:
+      'failedAuthenticationAsMissingUserDetailsToAuthFuseWallet',
+  FuseAuthenticationStatus
+          .failedToAuthenticateWalletSDKWithJWTTokenAfterInitialisationAttempt:
+      'failedToAuthenticateWalletSDKWithJWTTokenAfterInitialisationAttempt',
+  FuseAuthenticationStatus.failedFetch: 'failedFetch',
+  FuseAuthenticationStatus.creationTransactionHash: 'creationTransactionHash',
+};
+
 const _$FirebaseAuthenticationStatusEnumMap = {
   FirebaseAuthenticationStatus.unauthenticated: 'unauthenticated',
   FirebaseAuthenticationStatus.loading: 'loading',
@@ -199,29 +226,6 @@ const _$FirebaseAuthenticationStatusEnumMap = {
   FirebaseAuthenticationStatus.userGetIdTokenFailed: 'userGetIdTokenFailed',
   FirebaseAuthenticationStatus.invalidCredentials: 'invalidCredentials',
   FirebaseAuthenticationStatus.beginAuthentication: 'beginAuthentication',
-};
-
-const _$FuseAuthenticationStatusEnumMap = {
-  FuseAuthenticationStatus.unauthenticated: 'unauthenticated',
-  FuseAuthenticationStatus.loading: 'loading',
-  FuseAuthenticationStatus.authenticated: 'authenticated',
-  FuseAuthenticationStatus.createWalletForEOA: 'createWalletForEOA',
-  FuseAuthenticationStatus.creationStarted: 'creationStarted',
-  FuseAuthenticationStatus.creationSucceeded: 'creationSucceeded',
-  FuseAuthenticationStatus.created: 'created',
-  FuseAuthenticationStatus.fetched: 'fetched',
-  FuseAuthenticationStatus.failedCreateLocalAccountPrivateKey:
-      'failedCreateLocalAccountPrivateKey',
-  FuseAuthenticationStatus.failedCreate: 'failedCreate',
-  FuseAuthenticationStatus.failedAuthentication: 'failedAuthentication',
-  FuseAuthenticationStatus
-          .failedAuthenticationAsMissingUserDetailsToAuthFuseWallet:
-      'failedAuthenticationAsMissingUserDetailsToAuthFuseWallet',
-  FuseAuthenticationStatus
-          .failedToAuthenticateWalletSDKWithJWTTokenAfterInitialisationAttempt:
-      'failedToAuthenticateWalletSDKWithJWTTokenAfterInitialisationAttempt',
-  FuseAuthenticationStatus.failedFetch: 'failedFetch',
-  FuseAuthenticationStatus.creationTransactionHash: 'creationTransactionHash',
 };
 
 const _$PreferredSignonMethodEnumMap = {

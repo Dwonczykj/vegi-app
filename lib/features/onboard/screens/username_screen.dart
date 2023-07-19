@@ -87,6 +87,8 @@ class UserNameScreen extends StatelessWidget {
                                           VegiAvatar(
                                             avatarUrl: viewmodel.avatarUrl,
                                             avatarSquareSize: avatarSquareSize,
+                                            isUpdating:
+                                                viewmodel.httpRequestIsInFlux,
                                           ),
                                           if (!viewmodel.isLoggedOut)
                                             Positioned.directional(

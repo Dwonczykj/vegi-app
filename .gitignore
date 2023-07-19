@@ -83,6 +83,7 @@
 
 
 .env_dev
+.env_test
 .env_qa
 .env
 environment

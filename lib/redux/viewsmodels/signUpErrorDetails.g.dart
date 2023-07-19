@@ -36,4 +36,16 @@ const _$SignUpErrCodeEnumMap = {
   SignUpErrCode.emailLinkExpired: 'emailLinkExpired',
   SignUpErrCode.unauthorizedDomain: 'unauthorizedDomain',
   SignUpErrCode.serverError: 'serverError',
+  SignUpErrCode.fuseWalletSDKFailedAuthentication:
+      'fuseWalletSDKFailedAuthentication',
+  SignUpErrCode
+          .fuseWalletSDKFailedAuthenticationAsMissingUserDetailsToAuthFuseWallet:
+      'fuseWalletSDKFailedAuthenticationAsMissingUserDetailsToAuthFuseWallet',
+  SignUpErrCode.fuseWalletSDKFailedCreateLocalAccountPrivateKey:
+      'fuseWalletSDKFailedCreateLocalAccountPrivateKey',
+  SignUpErrCode.fuseWalletSDKFailedCreate: 'fuseWalletSDKFailedCreate',
+  SignUpErrCode
+          .fuseWalletSDKFailedToAuthenticateWalletSDKWithJWTTokenAfterInitialisationAttempt:
+      'fuseWalletSDKFailedToAuthenticateWalletSDKWithJWTTokenAfterInitialisationAttempt',
+  SignUpErrCode.fuseWalletSDKFailedFetch: 'fuseWalletSDKFailedFetch',
 };

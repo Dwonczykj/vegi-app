@@ -25,7 +25,7 @@ class FirebaseAuthLinkViewModel extends Equatable {
     required this.signupIsInFlux,
     required this.setSignupFailed,
     required this.setLoading,
-    required this.setDisplayName,
+    // required this.setDisplayName,
     required this.firebaseAuthenticationStatus,
     required this.fuseAuthenticationStatus,
     required this.vegiAuthenticationStatus,
@@ -59,18 +59,18 @@ class FirebaseAuthLinkViewModel extends Equatable {
           ),
         );
       },
-      setDisplayName: ({required displayName}) {
-        isAuthenticatedRouteGuard = true;
-        store
-          ..dispatch(SetDisplayName(displayName))
-          ..dispatch(
-            authenticate(
-                // todo confirm that this flow still works to initialise the new smartWallet
-                // () {},
-                ),
-          );
-        unawaited(Analytics.track(eventName: AnalyticsEvents.fillUserName));
-      },
+      // setDisplayName: ({required displayName}) {
+      //   isAuthenticatedRouteGuard = true;
+      //   store
+      //     ..dispatch(SetDisplayName(displayName))
+      //     ..dispatch(
+      //       authenticate(
+      //           // todo confirm that this flow still works to initialise the new smartWallet
+      //           // () {},
+      //           ),
+      //     );
+      //   unawaited(Analytics.track(eventName: AnalyticsEvents.fillUserName));
+      // },
       handleFirebaseAuthReCaptchaWebHook: ({
         required recaptchaToken,
         required deepLinkId,
@@ -101,7 +101,7 @@ class FirebaseAuthLinkViewModel extends Equatable {
   final dynamic Function(
     bool isLoading,
   ) setLoading;
-  final void Function({required String displayName}) setDisplayName;
+  // final void Function({required String displayName}) setDisplayName;
   final Future<void> Function({
     required String? recaptchaToken,
     required String? deepLinkId,

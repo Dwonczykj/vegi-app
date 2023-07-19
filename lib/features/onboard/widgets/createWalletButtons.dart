@@ -170,23 +170,23 @@ class _CreateWalletButtonsState extends State<CreateWalletButtons> {
     };
   }
 
-  Future<void> Function() _signUpNewAccount(
-    BuildContext context,
-    SplashViewModel viewmodel,
-  ) {
-    return () async {
-      final bool? result = await showDialog<bool>(
-        context: context,
-        builder: (context) => const WarnBeforeReCreation(),
-      );
-      if (result!) {
-        setState(() {
-          isTransparentPreloading = true;
-        });
-        viewmodel.initFuse();
-      }
-    };
-  }
+  // Future<void> Function() _signUpNewAccount(
+  //   BuildContext context,
+  //   SplashViewModel viewmodel,
+  // ) {
+  //   return () async {
+  //     final bool? result = await showDialog<bool>(
+  //       context: context,
+  //       builder: (context) => const WarnBeforeReCreation(),
+  //     );
+  //     if (result!) {
+  //       setState(() {
+  //         isTransparentPreloading = true;
+  //       });
+  //       viewmodel.initFuse();
+  //     }
+  //   };
+  // }
 
   Future<void> Function() _signUpNewAccountOnWaitlist(
     BuildContext context,
@@ -228,7 +228,11 @@ class _CreateWalletButtonsState extends State<CreateWalletButtons> {
       setState(() {
         isPrimaryPreloading = true;
       });
-      viewmodel.initFuse();
+      await viewmodel.initFuse(
+        onWalletInitialised: () {
+          rootRouter.push(const SignUpScreen());
+        },
+      );
     };
   }
 

@@ -91,6 +91,8 @@ class Secrets {
   static String get CHARGE_API_KEY => dotenv.env['CHARGE_API_KEY']!;
   static String get FUSE_WALLET_SDK_PUBLIC_KEY =>
       dotenv.env['FUSE_WALLET_SDK_PK']!;
+  static String? get FUSE_WALLET_SDK_PRIVATE_CREDENTIAL_FOR_UNIT_TEST_ONLY =>
+      dotenv.env['FUSE_WALLET_SDK_PRIVATE_CREDENTIAL_FOR_UNIT_TEST_ONLY'];
   static String get FUSE_WALLET_SDK_SK => dotenv.env['FUSE_WALLET_SDK_SK']!;
   static String get FOREIGN_NETWORK_ID => dotenv.env['FOREIGN_NETWORK_ID']!;
 
@@ -98,6 +100,7 @@ class Secrets {
 
   static String get MAP_API_KEY_IOS => dotenv.env['MAP_API_KEY_IOS']!;
   static String get MAP_API_KEY_ANDROID => dotenv.env['MAP_API_KEY_ANDROID']!;
+  static String get MAP_API_KEY_SIM => dotenv.env['MAP_API_KEY_SIM']!;
 
   static String get STRIPE_PAY_URL => dotenv.env['STRIPE_PAY_URL']!;
   static String get STRIPE_API_KEY_LIVE => dotenv.env['STRIPE_API_KEY_LIVE']!;
@@ -117,8 +120,8 @@ const EMAIL_NOT_PROVIDED = 'email@notprovided.com';
 const VEGI_DOMAIN = 'vegiapp.co.uk';
 const VEGI_BASE_URL = 'https://$VEGI_DOMAIN';
 const VEGI_DYNAMIC_APP_URL = 'vegi://$VEGI_DOMAIN';
-const VEGI_PRIVACY_URL = '$VEGI_BASE_URL/privacy';
-const VEGI_CONTACT_US_URL = '$VEGI_BASE_URL/contact';
+const VEGI_PRIVACY_URL = '$VEGI_BASE_URL/terms';
+const VEGI_CONTACT_US_URL = '$VEGI_BASE_URL/contact-us';
 const VEGI_FAQs_URL = '$VEGI_BASE_URL/FAQs';
 const VEGI_INSTA_HANDLE = 'wearevegi';
 const VEGI_TIKTOK_HANDLE = '@$VEGI_INSTA_HANDLE';
@@ -446,7 +449,12 @@ const ENV = String.fromEnvironment('ENV', defaultValue: 'production');
 const STRIPE_LIVEMODE =
     String.fromEnvironment('stripe_live_mode', defaultValue: 'false');
 const USE_FIREBASE_EMULATOR =
-    String.fromEnvironment('USE_FIREBASE_EMULATOR', defaultValue: 'false');
+    bool.fromEnvironment('USE_FIREBASE_EMULATOR', defaultValue: false);
+// Uncomment the following if want to use firestore db in firebase
+// const FIRESTORE_EMULATOR_PORT =
+//     int.fromEnvironment('FIRESTORE_EMULATOR_PORT', defaultValue: 8080);
+const FIREBASE_AUTH_EMULATOR_PORT =
+    int.fromEnvironment('FIREBASE_AUTH_EMULATOR_PORT', defaultValue: 9099);
 
 const defaultDisplayName = 'Anom';
 
@@ -526,9 +534,12 @@ Future<bool> thisDeviceIsIosSimulator() async =>
     Platform.isIOS && (await thisDeviceIsSimulator());
 
 class DebugHelpers {
+  static final isTest = Platform.environment.containsKey('FLUTTER_TEST');
   static const bool inDebugMode = kDebugMode;
-  static bool isVerboseDebugMode = kDebugMode &&
-      const String.fromEnvironment('verbose', defaultValue: '').isNotEmpty;
+  static bool isVerboseDebugMode =
+      kDebugMode && const String.fromEnvironment('verbose').isNotEmpty;
+  static const packageName =
+      'vegan_liverpool'; // There is no way to get this from runtime.
   static Future<bool> deviceIsSimulator() => thisDeviceIsSimulator();
   static Future<bool> deviceIsNotSimulator() => thisDeviceIsNotSimulator();
   static Future<bool> deviceIsIosSimulator() => thisDeviceIsIosSimulator();

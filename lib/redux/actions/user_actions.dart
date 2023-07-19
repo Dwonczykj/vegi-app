@@ -43,6 +43,7 @@ import 'package:vegan_liverpool/utils/analytics.dart';
 import 'package:vegan_liverpool/utils/constants.dart';
 import 'package:vegan_liverpool/utils/json_helpers.dart';
 import 'package:vegan_liverpool/utils/log/log.dart';
+import 'package:vegan_liverpool/utils/onboard/authentication.dart';
 import 'package:vegan_liverpool/utils/onboard/firebase.dart';
 import 'package:vegan_liverpool/utils/onboard/fuseAuthUtils.dart';
 import 'package:vegan_liverpool/version.dart';
@@ -240,11 +241,11 @@ class AddSurveyEmailSuccess {
       ' email: $email';
 }
 
-class ReLogin {
-  ReLogin();
+class SetReLoggedin {
+  SetReLoggedin();
 
   @override
-  String toString() => 'ReLogin';
+  String toString() => 'SetReLoggedin';
 }
 
 class SetUserAuthenticationStatus {
@@ -534,6 +535,19 @@ class SetFuseWalletCredentials {
       'SetFuseWalletCredentials : fuseWalletCredentials: $fuseWalletCredentials';
 }
 
+class SetSmartWalletInMemory {
+  SetSmartWalletInMemory({
+    required this.smartWallet,
+  });
+
+  final SmartWallet smartWallet;
+
+  @override
+  String toString() {
+    return 'SetSmartWalletInMemory [smartWallet]:"${smartWallet.smartWalletAddress}"';
+  }
+}
+
 class SetVerificationId {
   SetVerificationId(this.verificationId);
   String verificationId;
@@ -638,10 +652,7 @@ class SetPositionInWaitingList {
   }
 }
 
-ThunkAction<AppState> loggedInToVegiSuccess({
-  required void Function(String err) onError,
-  void Function()? successHandler,
-}) {
+ThunkAction<AppState> loggedInToVegiSuccess() {
   return (Store<AppState> store) async {
     try {
       store
@@ -652,37 +663,33 @@ ThunkAction<AppState> loggedInToVegiSuccess({
           ),
         )
         ..dispatch(isBetaWhitelistedAddress());
-
-      successHandler?.call();
     } catch (e, s) {
-      log.error('ERROR - loggedInToVegiSuccess $e');
-      await Sentry.captureException(
-        e,
-        stackTrace: s,
-        hint: 'ERROR - loggedInToVegiSuccess $e',
-      );
-      onError(
+      log.error(
         'ERROR - loggedInToVegiSuccess $e',
+        sentryHint: 'ERROR - loggedInToVegiSuccess $e',
+        stackTrace: s,
       );
     }
   };
 }
 
-ThunkAction<AppState> updateEmail({
+ThunkAction<AppState> updateEmailForWaitingListEntry({
   required String email,
   required void Function(String) onError,
 }) {
   return (Store<AppState> store) async {
     try {
       store.dispatch(SetEmail(email.toLowerCase().trim()));
+
       if (store.state.userState.waitingListEntryId == null) {
         final warning =
-            'Cant update user email with vegi as no waiting list entry id is stored in state...';
+            "Can't update user email with vegi as no waiting list entry id is stored in state...";
         log.error(warning);
         onError(warning);
       }
 
-      final updatedEntry = await peeplEatsService.updateEmailForAccount(
+      final updatedEntry =
+          await peeplEatsService.updateEmailForWaitingListEntry(
         email: email,
         waitingListEntryId: store.state.userState.waitingListEntryId!,
         onError: (errStr) {
@@ -717,12 +724,39 @@ ThunkAction<AppState> updateEmail({
         }
       }
     } catch (e, s) {
-      log.error('ERROR - updateEmail $e');
-      await Sentry.captureException(
-        e,
-        stackTrace: s,
-        hint: 'ERROR - updateEmail $e',
+      log.error('ERROR - updateEmailForWaitingListEntry $e');
+      onError(
+        'ERROR - updateEmailForWaitingListEntry $e',
       );
+    }
+  };
+}
+
+ThunkAction<AppState> updateEmail({
+  required String email,
+  required void Function(String) onError,
+}) {
+  return (Store<AppState> store) async {
+    try {
+      store.dispatch(SetEmail(email.toLowerCase().trim()));
+
+      final regex = RegExp(r'\+([0-9]+)');
+      final matchFull = regex.firstMatch(store.state.userState.countryCode);
+      int countryCodeInt = 44;
+      if (matchFull != null && matchFull.groupCount == 1) {
+        countryCodeInt = int.parse(matchFull.group(1)!);
+      }
+
+      await peeplEatsService.updateUserDetails(
+        phoneNoCountry: store.state.userState.phoneNumberNoCountry,
+        phoneCountryCode: countryCodeInt,
+        email: email,
+        onError: onError,
+      );
+
+      return;
+    } catch (e, s) {
+      log.error('ERROR - updateEmail $e');
       onError(
         'ERROR - updateEmail $e',
       );
@@ -742,11 +776,9 @@ ThunkAction<AppState> fetchDeviceType() {
         ),
       );
     } catch (e, s) {
-      log.error('ERROR - fetchDeviceType e');
-      await Sentry.captureException(
-        e,
+      log.error(
+        'ERROR - fetchDeviceType e',
         stackTrace: s,
-        hint: 'ERROR - fetchDeviceType e',
       );
     }
   };
@@ -1021,6 +1053,8 @@ ThunkAction<AppState> isBetaWhitelistedAddress() {
   return (Store<AppState> store) async {
     try {
       if (store.state.userState.walletAddress.isEmpty) {
+        // TODO RC 1.5.1: 1. Investigate the potential callstacks that could see us here without wallet initialised.
+        // TODO RC 1.5.1: 2. Show UNs for functions further up in this callstack that require wallet to be initialised for functionality
         const warning =
             "User wallet not initialised! Can't check the whitelist";
         log.warn(warning, stackTrace: StackTrace.current);
@@ -1194,132 +1228,79 @@ ThunkAction<AppState> isUserWalletAddressAVendorAddress({
   };
 }
 
-ThunkAction<AppState> loginHandler(
-  CountryCode countryCode,
-  PhoneNumber phoneNumber,
-) {
-  bool _useWeb3Auth = false;
-  return (Store<AppState> store) async {
-    try {
-      store.dispatch(setDeviceId(phoneNumber.e164));
-      await Analytics.setUserId(phoneNumber.e164);
-      if (store.state.userState.firebaseCredentialIsValid) {
-        // try reauthentication first?...
-        final reauthSucceeded = await onBoardStrategy.reauthenticateUser();
-        if (reauthSucceeded) {
-          return;
-        }
-      }
-      await onBoardStrategy.login(
-        store,
-        phoneNumber.e164,
-      );
-    } catch (e, s) {
-      log.error(
-        'ERROR - Login Request',
-        error: e,
-        stackTrace: s,
-      );
-      store
-        ..dispatch(
-          SignupFailed(
-            error: SignUpErrorDetails(
-              title:
-                  e.toString().contains('blocked all requests from this device')
-                      ? 'Verification error'
-                      : 'Something went wrong',
-              message: store.state.userState.isVegiSuperAdmin
-                  ? 'Firebase error: $e'
-                  : '$e',
-            ),
-          ),
-        )
-        ..dispatch(
-          SetUserAuthenticationStatus(
-            firebaseStatus: FirebaseAuthenticationStatus.phoneAuthFailed,
-            vegiStatus: VegiAuthenticationStatus.failed,
-          ),
-        );
-      await Analytics.track(
-        eventName: AnalyticsEvents.loginWithPhone,
-        properties: {
-          AnalyticsProps.status: AnalyticsProps.failed,
-          'error': e.toString(),
-        },
-      );
-      await Sentry.captureException(
-        Exception('Error in login with phone number: $e'),
-        stackTrace: s,
-        hint: 'ERROR in Login Request',
-      );
-    }
-  };
-}
+// ThunkAction<AppState> loginHandler(
+//   CountryCode countryCode,
+//   PhoneNumber phoneNumber,
+// ) {
+//   bool _useWeb3Auth = false;
+//   return (Store<AppState> store) async {
+//     try {
+//       store.dispatch(setDevicePhoneNumberForId(phoneNumber.e164));
+//       await Analytics.setUserId(phoneNumber.e164);
+//       // TODO: Replace this with a dispatch to user_actions.authenticate and integrate test this method
+//       if (store.state.userState.firebaseCredentialIsValid) {
+//         // try reauthentication first?...
+//         final reauthSucceeded = await onBoardStrategy.reauthenticateUser();
+//         if (reauthSucceeded) {
+//           return;
+//         }
+//       }
+//       await onBoardStrategy.login(
+//         store,
+//         phoneNumber.e164,
+//       );
+//     } catch (e, s) {
+//       log.error(
+//         'ERROR - Login Request',
+//         error: e,
+//         stackTrace: s,
+//       );
+//       store
+//         ..dispatch(
+//           SignupFailed(
+//             error: SignUpErrorDetails(
+//               title:
+//                   e.toString().contains('blocked all requests from this device')
+//                       ? 'Verification error'
+//                       : 'Something went wrong',
+//               message: store.state.userState.isVegiSuperAdmin
+//                   ? 'Firebase error: $e'
+//                   : '$e',
+//             ),
+//           ),
+//         )
+//         ..dispatch(
+//           SetUserAuthenticationStatus(
+//             firebaseStatus: FirebaseAuthenticationStatus.phoneAuthFailed,
+//             vegiStatus: VegiAuthenticationStatus.failed,
+//           ),
+//         );
+//       await Analytics.track(
+//         eventName: AnalyticsEvents.loginWithPhone,
+//         properties: {
+//           AnalyticsProps.status: AnalyticsProps.failed,
+//           'error': e.toString(),
+//         },
+//       );
+//       await Sentry.captureException(
+//         Exception('Error in login with phone number: $e'),
+//         stackTrace: s,
+//         hint: 'ERROR in Login Request',
+//       );
+//     }
+//   };
+// }
 
-ThunkAction<AppState> verifyHandler(
-  String verificationCode,
-) {
-  return (Store<AppState> store) async {
-    await onBoardStrategy.verify(
-      store,
-      verificationCode,
-    );
-  };
-}
-
-ThunkAction<AppState> signinWithEmailAndPassword({
-  required String email,
-  required String password,
-}) {
-  return (Store<AppState> store) async {
-    await onBoardStrategy.signInUserWithEmailAndPassword(
-      email: email,
-      password: password,
-    );
-    store.dispatch(authenticate());
-  };
-}
-
-ThunkAction<AppState> signInUserBySendingEmailLink({
-  required String email,
-}) {
-  return (Store<AppState> store) async {
-    store.dispatch(
-      SignupLoading(
-        isLoading: true,
-      ),
-    );
-    final emailSent = await onBoardStrategy.signInUserBySendingEmailLink(
-      email: email,
-    );
-    if (emailSent) {
-      store.dispatch(
-        SignupLoading(
-          isLoading: false,
-        ),
-      );
-    } else {
-      store.dispatch(
-        SignupLoading(
-          isLoading: false,
-        ),
-      );
-    }
-  };
-}
-
-ThunkAction<AppState> verifyEmailLinkCallback({
-  required String emailAddress,
-  required String emailLink,
-}) {
-  return (Store<AppState> store) async {
-    await onBoardStrategy.signInUserFromVerificationLink(
-      email: emailAddress,
-      emailLinkFromVerificationEmail: emailLink,
-    );
-    store.dispatch(authenticate());
-  };
-}
+// ThunkAction<AppState> verifyHandler(
+//   String verificationCode,
+// ) {
+//   return (Store<AppState> store) async {
+//     await onBoardStrategy.verify(
+//       store,
+//       verificationCode,
+//     );
+//   };
+// }
 
 ThunkAction<AppState> restoreWalletCall(
   // only allow to call this from a custom route link that allows myself and verity to add our mnemonics to createa our smart wallets and remove all other recoveries locations
@@ -1332,27 +1313,27 @@ ThunkAction<AppState> restoreWalletCall(
       await Analytics.track(
         eventName: AnalyticsEvents.restoreWallet,
       );
-      final mnemonic = mnemonicWords.join(' ');
-      log
-        ..info('restore wallet')
-        ..info('compute pk');
-      final String privateKey = Mnemonic.privateKeyFromMnemonic(mnemonic);
-      //! await peeplEatsService.backupUserSK(privateKey);
-      final EthPrivateKey credentials = EthPrivateKey.fromHex(privateKey);
-      final EthereumAddress accountAddress = credentials.address;
-      log.info('accountAddress: $accountAddress');
-      store
-        ..dispatch(
-          CreateLocalAccountSuccess(
-            mnemonicWords,
-            privateKey,
-            credentials,
-            // accountAddress.toString(),
-          ),
-        )
-        ..dispatch(
-          authenticate(),
-        ); // authenticate call should still work and will ignore the priavteKey initialiastion as has already been done above here in this method
+      await authenticator.restoreFuseFromMnemonic(
+        mnemonicWords: mnemonicWords,
+      );
+      // final mnemonic = mnemonicWords.join(' ');
+      // log
+      //   ..info('restore wallet')
+      //   ..info('compute pk');
+      // final String privateKey = Mnemonic.privateKeyFromMnemonic(mnemonic);
+      // //! await peeplEatsService.backupUserSK(privateKey);
+      // final EthPrivateKey credentials = EthPrivateKey.fromHex(privateKey);
+      // final EthereumAddress accountAddress = credentials.address;
+      // log.info('accountAddress: $accountAddress');
+      // store.dispatch(
+      //   CreateLocalAccountSuccess(
+      //     mnemonicWords,
+      //     privateKey,
+      //     credentials,
+      //     // accountAddress.toString(),
+      //   ),
+      // );
+      // await authenticator.initFuse();
       successCallback();
     } catch (e, s) {
       log.error(
@@ -1370,7 +1351,7 @@ ThunkAction<AppState> restoreWalletCall(
   };
 }
 
-ThunkAction<AppState> setDeviceId(String phoneNumber) {
+ThunkAction<AppState> setDevicePhoneNumberForId(String phoneNumber) {
   return (Store<AppState> store) async {
     final String identifier = await FlutterUdid.udid;
     // mixpanel.alias(identifier, phoneNumber);
@@ -1379,781 +1360,47 @@ ThunkAction<AppState> setDeviceId(String phoneNumber) {
   };
 }
 
-/// Function to first create the single External Owner Account that can have at most
-/// ONE smart wallet linked with it.
-///
-/// Then init Firebase Credentials if needed (they cannot be serialized and not persisted, therefore needs to be done on ever recreation of persisted store)
-///
-/// Then authenticate with vegi if not already signed in with persistent sessionCookie that is still active.
-ThunkAction<AppState> authenticate({
-  PageRouteInfo<dynamic>? routeOnSuccessArg,
-  bool shouldReplaceAllRouteStack = true,
-}) {
-  return (Store<AppState> store) async {
-    PageRouteInfo<dynamic> routeOnSuccess;
-    if (store.state.userState.displayName.isEmpty) {
-      routeOnSuccess = UserNameScreen();
-    } else if (store.state.userState.authType == BiometricAuth.none) {
-      routeOnSuccess = const ChooseSecurityOption();
-    } else {
-      routeOnSuccess = routeOnSuccessArg ?? const MainScreen();
-    }
-    if (store.state.onboardingState.signupIsInFlux) {
-      log.warn(
-        'Authentication already in flux, ignoring subsequent request',
-        stackTrace: StackTrace.current,
-      );
-      return;
-    }
-    store.dispatch(SignupLoading(isLoading: true));
-
-    // * Fuse Auth & Fetch
-    try {
-      final newFuseAuthStatus = await _initFuseWallet(store);
-      if (store.state.userState.fuseAuthenticationStatus ==
-          FuseAuthenticationStatus.loading) {
-        log.warn(
-            'user_actions._initFuseWallet didnt finish, still loading...; the _initFuseWallet returned -> FuseAuthenticationStatus.[${newFuseAuthStatus.name}] and store has state: FuseAuthenticationStatus.[${store.state.userState.fuseAuthenticationStatus.name}]');
-      } else if (![
-        FuseAuthenticationStatus.authenticated,
-        FuseAuthenticationStatus.created,
-        FuseAuthenticationStatus.creationStarted,
-        FuseAuthenticationStatus.creationSucceeded,
-      ].contains(store.state.userState.fuseAuthenticationStatus)) {
-        log.warn(
-            'Fuse init pipeline did not work... the _initFuseWallet returned -> FuseAuthenticationStatus.[${newFuseAuthStatus.name}] and store has state: FuseAuthenticationStatus.[${store.state.userState.fuseAuthenticationStatus.name}]');
-      }
-
-      // // * Initial vegi valid check pre-firebase check
-      // ! Commented the below as allows us to auth the user with empty firebaseSessionToken which may break viewmodel logic later on...
-      // store.dispatch(SignupLoading(isLoading: true));
-      // final sessionIsValidPreCheck = await _checkIfVegiSessionIsValid(store);
-      // if (sessionIsValidPreCheck) {
-      //   store
-      //     ..dispatch(
-      //       SetUserAuthenticationStatus(
-      //         firebaseStatus: FirebaseAuthenticationStatus.authenticated,
-      //         vegiStatus: VegiAuthenticationStatus.authenticated,
-      //       ),
-      //     )
-      //     ..dispatch(SignupLoading(isLoading: false));
-
-      //   return;
-      // }
-
-      // * Firebase Auth
-      // reauth if not already authenticated with firebase.
-      if (store.state.userState.firebaseSessionToken?.isEmpty ?? true) {
-        if (store.state.userState.firebaseCredentialIsValid) {
-          store.dispatch(SignupLoading(isLoading: true));
-          final reauthSucceeded = await onBoardStrategy.reauthenticateUser();
-          store.dispatch(SignupLoading(isLoading: false));
-          if (!reauthSucceeded) {
-            store
-              ..dispatch(
-                SetUserAuthenticationStatus(
-                  firebaseStatus:
-                      FirebaseAuthenticationStatus.beginAuthentication,
-                ),
-              )
-              ..dispatch(SignupLoading(isLoading: false));
-            return store.dispatch(routeToLoginScreen());
-          }
-        } else {
-          // unable to reauth firebase so nav to SignUpScreen and return;
-          store
-            ..dispatch(
-              SetUserAuthenticationStatus(
-                firebaseStatus:
-                    FirebaseAuthenticationStatus.beginAuthentication,
-              ),
-            )
-            ..dispatch(SignupLoading(isLoading: false));
-          return store.dispatch(routeToLoginScreen());
-        }
-      }
-
-      // * vegi Auth
-      // use firebaseAuth SessionToken to authenticate vegi. From here we are sure that firebaseSessionToken is live.
-      store.dispatch(SignupLoading(isLoading: true));
-      final sessionIsValid = await _checkIfVegiSessionIsValid(store);
-      if (!sessionIsValid) {
-        if (store.state.userState.preferredSignonMethod ==
-            PreferredSignonMethod.phone) {
-          final vegiAuthResult = await onBoardStrategy.loginToVegiWithPhone(
-            store: store,
-            phoneNumber: store.state.userState.phoneNumber,
-            firebaseSessionToken: store.state.userState.firebaseSessionToken!,
-          );
-          if (vegiAuthResult != LoggedInToVegiResult.success) {
-            log.warn(
-                'Failed to authenticate with vegi: LoggedInToVegiResult.[${vegiAuthResult.name}]');
-            // finish by navigating to MainScreen regardless
-          }
-        } else if (store.state.userState.preferredSignonMethod ==
-            PreferredSignonMethod.phone) {
-          final vegiAuthResult = await onBoardStrategy.loginToVegiWithPhone(
-            store: store,
-            phoneNumber: store.state.userState.phoneNumber,
-            firebaseSessionToken: store.state.userState.firebaseSessionToken!,
-          );
-          if (vegiAuthResult != LoggedInToVegiResult.success) {
-            log.warn(
-                'Failed to authenticate with vegi: LoggedInToVegiResult.[${vegiAuthResult.name}]');
-            // finish by navigating to MainScreen regardless
-          }
-        } else if (store.state.userState.preferredSignonMethod ==
-            PreferredSignonMethod.emailAndPassword) {
-          final vegiAuthResult = await onBoardStrategy.loginToVegiWithEmail(
-            store: store,
-            email: store.state.userState.email,
-            firebaseSessionToken: store.state.userState.firebaseSessionToken!,
-          );
-          if (vegiAuthResult != LoggedInToVegiResult.success) {
-            log.warn(
-                'Failed to authenticate with vegi: LoggedInToVegiResult.[${vegiAuthResult.name}]');
-            // finish by navigating to MainScreen regardless
-          }
-        } else if (store.state.userState.preferredSignonMethod ==
-            PreferredSignonMethod.emailLink) {
-          final vegiAuthResult = await onBoardStrategy.loginToVegiWithEmail(
-            store: store,
-            email: store.state.userState.email,
-            firebaseSessionToken: store.state.userState.firebaseSessionToken!,
-          );
-          if (vegiAuthResult != LoggedInToVegiResult.success) {
-            log.warn(
-                'Failed to authenticate with vegi: LoggedInToVegiResult.[${vegiAuthResult.name}]');
-            // finish by navigating to MainScreen regardless
-          }
-        } else {
-          final errMessage =
-              'Unable to signin with firebaseSignOn method of: PreferredSignonMethod.[${store.state.userState.preferredSignonMethod.name}]';
-          log.error(errMessage, stackTrace: StackTrace.current);
-          await Sentry.captureException(
-            Exception(errMessage),
-            stackTrace: StackTrace.current,
-          );
-          store
-            ..dispatch(SignupLoading(isLoading: false))
-            ..dispatch(
-              SignupFailed(
-                error: SignUpErrorDetails(
-                  title: 'Sign-in failed',
-                  message: 'Please try a different sign-on method',
-                  code: SignUpErrCode.signonMethodNotImplemented,
-                ),
-              ),
-            );
-          throw Exception(errMessage);
-        }
-      }
-
-      if (store.state.userState.isLoggedOut) {
-        store.dispatch(ReLogin());
-      }
-      store.dispatch(SignupLoading(isLoading: false));
-      if (shouldReplaceAllRouteStack) {
-        await rootRouter.replaceAll([routeOnSuccess]);
-      } else {
-        await rootRouter.push(routeOnSuccess);
-      }
-      return;
-    } catch (e, s) {
-      log.error(
-        'ERROR - authenticate $e',
-        stackTrace: s,
-      );
-      await Sentry.captureException(
-        e,
-        stackTrace: s,
-        hint: 'ERROR - authenticate $e',
-      );
-      store.dispatch(SignupLoading(isLoading: false));
-    }
-  };
-}
-
-bool fuseSDKNeedsAuthenticationFirst({
-  required DC<Exception, SmartWallet> walletData,
-}) {
-  return walletData.hasError &&
-      walletData.error.toString().contains('LateInit');
-}
-
-/// Function to create the single External Owner Account that can have at most
-/// ONE smart wallet linked with it.
-Future<FuseAuthenticationStatus> _initFuseWallet(Store<AppState> store) async {
-  store.dispatch(
-    SetUserAuthenticationStatus(
-      fuseStatus: FuseAuthenticationStatus.loading,
-    ),
-  );
-
-  // * Fuse - Create PrivateKey
-  if (store.state.userState.fuseWalletCredentials == null ||
-      store.state.userState.privateKey.isEmpty) {
-    try {
-      // Generate a random Ethereum private key
-      final String mnemonic = Mnemonic.generate();
-      final String privateKey = Mnemonic.privateKeyFromMnemonic(mnemonic);
-      //! await peeplEatsService.backupUserSK(privateKey);
-      final EthPrivateKey credentials = EthPrivateKey.fromHex(privateKey);
-      final EthereumAddress accountAddress = credentials.address;
-      log.info('accountAddress: $accountAddress');
-      store.dispatch(
-        CreateLocalAccountSuccess(
-          mnemonic.split(' '),
-          privateKey,
-          credentials,
-          // accountAddress.toString(),
-        ),
-      );
-      await Analytics.track(
-        eventName: AnalyticsEvents.createWallet,
-      );
-    } catch (e, s) {
-      log.error(
-        'ERROR - createLocalAccountCall',
-        error: e,
-        stackTrace: s,
-      );
-      await Sentry.captureException(
-        Exception('Error in generate mnemonic: ${e.toString()}'),
-        stackTrace: s,
-        hint: 'ERROR while generate mnemonic',
-      );
-      store.dispatch(
-        SetUserAuthenticationStatus(
-          fuseStatus:
-              FuseAuthenticationStatus.failedCreateLocalAccountPrivateKey,
-        ),
-      );
-      return FuseAuthenticationStatus.failedCreateLocalAccountPrivateKey;
-    }
-    if (store.state.userState.privateKey.isEmpty) {
-      store.dispatch(
-        SetUserAuthenticationStatus(
-          fuseStatus:
-              FuseAuthenticationStatus.failedCreateLocalAccountPrivateKey,
-        ),
-      );
-      return FuseAuthenticationStatus.failedCreateLocalAccountPrivateKey;
-    }
-  }
-
-  // * FUSE - Fetch/Create Wallet from FuseSDK
-  try {
-    if (store.state.userState.jwtToken.isEmpty) {
-      final authSucceeded = await authenticateSDK(store);
-      if (!authSucceeded) {
-        return FuseAuthenticationStatus.failedAuthentication;
-      }
-    }
-    // Try to fetch a wallet for the EOA, if it doesn't exist create one
-    // ! BUG when fetching wallet, are we trying to fetch the wallet too quickly?
-    // ! _Exception (Exception: DioError [bad response]: The request returned an invalid status code of 500.)
-
-    final walletData = await fuseWalletSDK.fetchWallet();
-    if (walletData.hasData) {
-      final smartWallet = walletData.data!;
-      log.info(
-          'Successfully refetched smart wallet address ${smartWallet.smartWalletAddress}');
-      store
-        ..dispatch(
-          saveSmartWallet(
-            smartWallet: fuseWalletSDK.smartWallet,
-          ),
-        )
-        ..dispatch(
-          SetUserAuthenticationStatus(
-            fuseStatus: FuseAuthenticationStatus.authenticated,
-          ),
-        );
-      return FuseAuthenticationStatus.authenticated;
-    } else if (walletData.hasError) {
-      // } else if (fuseSDKNeedsAuthenticationFirst(walletData: walletData)) {
-      final exception = walletData.error!;
-      final wasLateInitJwtIssue = exception.toString().contains('LateInit');
-      if (wasLateInitJwtIssue) {
-        // * FUSE - Authenticate SDK
-        final authSucceeded = await authenticateSDK(store);
-        if (!authSucceeded) {
-          return FuseAuthenticationStatus.failedAuthentication;
-        }
-      }
-      final tryCreateWalletStatus = await _tryCreateWallet(store);
-      if (tryCreateWalletStatus == FuseAuthenticationStatus.authenticated) {
-        return tryCreateWalletStatus;
-      }
-      // Try to REfetch wallet for the EOA, if it doesn't exist create one
-
-      final walletDataReFetched = await fuseWalletSDK.fetchWallet();
-      if (walletDataReFetched.hasData) {
-        final smartWallet = walletDataReFetched.data!;
-        log.info(
-            'Successfully refetched smart wallet address ${smartWallet.smartWalletAddress}');
-        store
-          ..dispatch(
-            saveSmartWallet(
-              smartWallet: fuseWalletSDK.smartWallet,
-            ),
-          )
-          ..dispatch(
-            SetUserAuthenticationStatus(
-              fuseStatus: FuseAuthenticationStatus.authenticated,
-            ),
-          );
-      } else if (walletDataReFetched.hasError) {
-        final exception = walletDataReFetched.error!;
-        if (exception.toString().contains('LateInit')) {
-          store.dispatch(
-            SetUserAuthenticationStatus(
-              fuseStatus: FuseAuthenticationStatus
-                  .failedToAuthenticateWalletSDKWithJWTTokenAfterInitialisationAttempt,
-            ),
-          );
-          return FuseAuthenticationStatus
-              .failedToAuthenticateWalletSDKWithJWTTokenAfterInitialisationAttempt;
-        } else {
-          await _tryCreateWallet(store);
-        }
-      }
-    }
-    return store.state.userState.fuseAuthenticationStatus;
-  } catch (e, s) {
-    log.error(
-      'ERROR - fetchFuseSmartWallet',
-      error: e,
-      stackTrace: s,
-    );
-    store
-      ..dispatch(
-        SetUserAuthenticationStatus(
-          fuseStatus: FuseAuthenticationStatus.failedFetch,
-        ),
-      )
-      ..dispatch(
-        SignupLoading(
-          isLoading: false,
-        ),
-      );
-    await Sentry.captureException(
-      Exception('Error in setup wallet call: $e'),
-      stackTrace: s,
-      hint: 'ERROR - fetchFuseSmartWallet',
-    );
-    return FuseAuthenticationStatus.failedFetch;
-  }
-}
-
-Future<FuseAuthenticationStatus> _tryCreateWallet(
-  Store<AppState> store, {
-  bool forceCreateNew = false,
-}) async {
-  if (forceCreateNew != true) {
-    final walletDataReFetched = await fuseWalletSDK.fetchWallet();
-    if (walletDataReFetched.hasData) {
-      final smartWallet = walletDataReFetched.data!;
-      log.info(
-          'Successfully refetched smart wallet address ${smartWallet.smartWalletAddress} so no need to create a new wallet as requested');
-      store
-        ..dispatch(
-          saveSmartWallet(
-            smartWallet: smartWallet,
-          ),
-        )
-        ..dispatch(
-          SetUserAuthenticationStatus(
-            fuseStatus: FuseAuthenticationStatus.authenticated,
-          ),
-        );
-      return FuseAuthenticationStatus.authenticated;
-    }
-  }
-  // we move to createWallet call below
-  store.dispatch(
-    SetUserAuthenticationStatus(
-      fuseStatus: FuseAuthenticationStatus.createWalletForEOA,
-    ),
-  );
-
-  try {
-    final _smartWallet = fuseWalletSDK.smartWallet;
-    store
-      ..dispatch(
-        saveSmartWallet(
-          smartWallet: _smartWallet,
-        ),
-      )
-      ..dispatch(
-        SetUserAuthenticationStatus(
-          fuseStatus: FuseAuthenticationStatus.authenticated,
-        ),
-      );
-    return FuseAuthenticationStatus.authenticated;
-  } catch (e, s) {
-    // TODO
-    // do nothing
-  }
-
-  final walletCreationResult = await fuseWalletSDK.createWallet();
-  if (walletCreationResult.hasData) {
-    store
-      ..dispatch(
-        SetUserAuthenticationStatus(
-          fuseStatus: FuseAuthenticationStatus.created,
-        ),
-      )
-      ..dispatch(
-        SignupLoading(
-          isLoading: false,
-        ),
-      );
-    walletCreationResult.data!.listen(
-      (SmartWalletEvent event) {
-        if (event.name == 'smartWalletCreationStarted') {
-          log.info('smartWalletCreationStarted ${event.data}');
-          store.dispatch(
-            SetUserAuthenticationStatus(
-              fuseStatus: FuseAuthenticationStatus.creationStarted,
-            ),
-          );
-        } else if (event.name == 'transactionHash') {
-          log.info('transactionHash ${event.data}');
-          store.dispatch(
-            SetUserAuthenticationStatus(
-              fuseStatus: FuseAuthenticationStatus.creationTransactionHash,
-            ),
-          );
-        } else if (event.name == 'smartWalletCreationSucceeded') {
-          final smartWalletAddress =
-              event.data['smartWalletAddress'] as String?;
-          final EOA = event.data['ownerAddress'] as String?;
-          WalletModules? walletModules;
-          if (event.data.containsKey('walletModules')) {
-            walletModules = WalletModules.fromJson(
-              event.data['walletModules'] as Map<String, dynamic>,
-            );
-          }
-          List<String> networks = <String>[];
-          if (event.data.containsKey('networks')) {
-            networks =
-                List<String>.from(event.data['networks'] as Iterable<dynamic>);
-          }
-          final fuseSDKVersion = event.data['version'];
-          log.info(
-              'smartWalletCreationSucceeded with smartwalletaddress: "$smartWalletAddress"');
-
-          if (smartWalletAddress != null && walletModules != null) {
-            store
-              ..dispatch(
-                GetWalletDataSuccess(
-                  walletAddress: smartWalletAddress,
-                  networks: networks,
-                  walletModules: walletModules,
-                ),
-              )
-              ..dispatch(
-                SetUserAuthenticationStatus(
-                  fuseStatus: FuseAuthenticationStatus.authenticated,
-                ),
-              );
-            return;
-          }
-          store.dispatch(
-            SetUserAuthenticationStatus(
-              fuseStatus: FuseAuthenticationStatus.creationSucceeded,
-            ),
-          );
-
-          fuseWalletSDK.fetchWallet().then((walletDataFetchPostCreate) {
-            if (walletDataFetchPostCreate.hasData) {
-              final smartWallet = walletDataFetchPostCreate.data!;
-              log.info(
-                  'Successfully refetched smart wallet address ${smartWallet.smartWalletAddress}');
-              store
-                ..dispatch(
-                  saveSmartWallet(
-                    smartWallet: fuseWalletSDK.smartWallet,
-                  ),
-                )
-                ..dispatch(
-                  SetUserAuthenticationStatus(
-                    fuseStatus: FuseAuthenticationStatus.authenticated,
-                  ),
-                );
-            } else if (walletDataFetchPostCreate.hasError) {
-              final exception = walletDataFetchPostCreate.error!;
-              if (exception.toString().contains('LateInit')) {
-                store.dispatch(
-                  SetUserAuthenticationStatus(
-                    fuseStatus: FuseAuthenticationStatus
-                        .failedToAuthenticateWalletSDKWithJWTTokenAfterInitialisationAttempt,
-                  ),
-                );
-                return null;
-              } else {
-                // we move to createWallet call below
-                store.dispatch(
-                  SetUserAuthenticationStatus(
-                    fuseStatus: FuseAuthenticationStatus.createWalletForEOA,
-                  ),
-                );
-              }
-            }
-          });
-        } else if (event.name == 'smartWalletCreationFailed') {
-          log.error(
-            'smartWalletCreationFailed ${event.data}',
-            stackTrace: StackTrace.current,
-          );
-          Sentry.captureException(
-            event.data,
-            stackTrace: StackTrace.current, // from catch (err, s)
-            hint: 'ERROR - user_actions._tryCreateWallet in  ${event.data}',
-          );
-          store.dispatch(
-            SetUserAuthenticationStatus(
-              fuseStatus: FuseAuthenticationStatus.failedCreate,
-            ),
-          );
-        } else {
-          log.warn('No event handler for fuseWalletSDK.fetchWallet event: '
-              '"${event.name}"');
-        }
-      },
-      cancelOnError: true,
-      onError: (dynamic error) {
-        log.error(
-          error,
-          stackTrace: StackTrace.current,
-        );
-        Sentry.captureException(
-          error,
-          stackTrace: StackTrace.current, // from catch (err, s)
-          hint:
-              'ERROR - user_actions.dart.createLocalAccountCall[createWalletStream] $error',
-        );
-      },
-    );
-    return FuseAuthenticationStatus.created;
-  } else if (walletCreationResult.hasError) {
-    final errStr = walletCreationResult.error is DioError
-        ? 'FuseSDK failed to create a new wallet... Message: "${(walletCreationResult.error as DioError?)?.message}", Err: ${(walletCreationResult.error as DioError?)?.error}'
-        : '${walletCreationResult.error}';
-    log.error(
-      errStr,
-      error: walletCreationResult.error,
-      sentry: true,
-      sentryHint: errStr,
-    );
-    await Sentry.captureException(
-      walletCreationResult.error is DioError
-          ? (walletCreationResult.error as DioError).message
-          : walletCreationResult.error,
-      stackTrace: StackTrace.current, // from catch (err, s)
-      hint: 'ERROR - user_actions._tryCreateWallet $errStr',
-    );
-    store
-      ..dispatch(
-        SetUserAuthenticationStatus(
-          fuseStatus: FuseAuthenticationStatus.failedCreate,
-        ),
-      )
-      ..dispatch(
-        SignupLoading(
-          isLoading: false,
-        ),
-      );
-    return FuseAuthenticationStatus.failedCreate;
-  } else {
-    //cant get here as either of hasError or hasData on walletCreationResult will always be true.
-    return FuseAuthenticationStatus.failedCreate;
-  }
-}
-
-ThunkAction<AppState> saveSmartWallet({
-  required SmartWallet smartWallet,
-}) {
-  return (Store<AppState> store) async {
-    try {
-      store.dispatch(
-        GetWalletDataSuccess(
-          walletAddress: smartWallet.smartWalletAddress,
-          networks: smartWallet.networks,
-          walletModules: smartWallet.walletModules,
-        ),
-      );
-    } catch (e, s) {
-      log.error(
-        'ERROR - setupWalletCall',
-        error: e,
-        stackTrace: s,
-      );
-      await Sentry.captureException(
-        Exception('Error in setup wallet call: ${e.toString()}'),
-        stackTrace: s,
-        hint: 'ERROR - setupWalletCall',
-      );
-    }
-  };
-}
-
-ThunkAction<AppState> routeToLoginScreen() {
-  return (Store<AppState> store) async {
-    try {
-      if (store.state.userState.preferredSignonMethod ==
-          PreferredSignonMethod.emailAndPassword) {
-        log.info(
-            'ReplaceAll with SignUpWithEmailAndPasswordScreen() from ${rootRouter.current.name} in authenticate thunk.');
-        await rootRouter.replaceAll(
-          [const SignUpWithEmailAndPasswordScreen()],
-        );
-      } else if (store.state.userState.preferredSignonMethod ==
-          PreferredSignonMethod.emailLink) {
-        log.info(
-            'ReplaceAll with SignUpEmailLinkScreen() from ${rootRouter.current.name} in authenticate thunk.');
-        await rootRouter.replaceAll(
-          [const SignUpEmailLinkScreen()],
-        );
-      } else {
-        log.info(
-            'ReplaceAll with SignUpScreen() from ${rootRouter.current.name} in authenticate thunk.');
-        await rootRouter.replaceAll(
-          [const SignUpScreen()],
-        ); // ~ https://stackoverflow.com/a/46713257
-      }
-      return;
-    } catch (e, s) {
-      log.error('ERROR - routeToLoginScreen $e', stackTrace: s);
-      await Sentry.captureException(
-        e,
-        stackTrace: s,
-        hint: 'ERROR - routeToLoginScreen $e',
-      );
-    }
-  };
-}
-
-ThunkAction<AppState> checkIfVegiSessionIsValid() {
-  return (Store<AppState> store) async {
-    await _checkIfVegiSessionIsValid(store);
-  };
-}
-
-Future<bool> _checkIfVegiSessionIsValid(Store<AppState> store) async {
-  try {
-    store.dispatch(
-      SignupLoading(
-        isLoading: true,
-      ),
-    );
-    final sessionStillValid =
-        await peeplEatsService.checkVegiSessionIsStillValid();
-    if (sessionStillValid) {
-      store
-        ..dispatch(
-          SignupLoading(
-            isLoading: false,
-          ),
-        )
-        ..dispatch(
-          SetUserAuthenticationStatus(
-            firebaseStatus: FirebaseAuthenticationStatus.authenticated,
-            vegiStatus: VegiAuthenticationStatus.authenticated,
-          ),
-        );
-      return sessionStillValid;
-    } else {
-      store
-        ..dispatch(
-          SignupLoading(
-            isLoading: false,
-          ),
-        )
-        ..dispatch(
-          SetUserAuthenticationStatus(
-            vegiStatus: VegiAuthenticationStatus.unauthenticated,
-          ),
-        );
-      return sessionStillValid;
-    }
-  } on Exception catch (error, s) {
-    store.dispatch(
-      SetUserAuthenticationStatus(
-        firebaseStatus:
-            FirebaseAuthenticationStatus.phoneAuthReauthenticationFailed,
-      ),
-    );
-    await Analytics.track(
-      eventName: AnalyticsEvents.verify,
-      properties: {
-        AnalyticsProps.status: AnalyticsProps.failed,
-        'error': error.toString(),
-      },
-    );
-    await Sentry.captureException(
-      Exception(
-          'Error in reauthenticate user [${onBoardStrategy.strategy.name}]: $error'),
-      stackTrace: s,
-      hint: 'Error while phone number verification',
-    );
-  }
-  return false;
-}
-
-ThunkAction<AppState> reAuthenticateOnBoarding() {
-  return (Store<AppState> store) async {
-    try {
-      final sessionStillValid =
-          await peeplEatsService.checkVegiSessionIsStillValid();
-      if (sessionStillValid) {
-        store.dispatch(
-          SetUserAuthenticationStatus(
-            firebaseStatus: FirebaseAuthenticationStatus.authenticated,
-            vegiStatus: VegiAuthenticationStatus.authenticated,
-          ),
-        );
-        return;
-      }
-      if (store.state.userState.firebaseCredentialIsValid) {
-        // try reauthentication first?...
-        final reauthSucceeded = await onBoardStrategy.reauthenticateUser();
-      }
-    } on Exception catch (error, s) {
-      store.dispatch(
-        SetUserAuthenticationStatus(
-          firebaseStatus:
-              FirebaseAuthenticationStatus.phoneAuthReauthenticationFailed,
-        ),
-      );
-      await Analytics.track(
-        eventName: AnalyticsEvents.verify,
-        properties: {
-          AnalyticsProps.status: AnalyticsProps.failed,
-          'error': error.toString(),
-        },
-      );
-      await Sentry.captureException(
-        Exception(
-            'Error in reauthenticate user [${onBoardStrategy.strategy.name}]: $error'),
-        stackTrace: s,
-        hint: 'Error while phone number verification',
-      );
-    }
-  };
-}
-
-ThunkAction<AppState> reLoginCall() {
-  return (Store<AppState> store) async {
-    store
-      ..dispatch(ReLogin())
-      ..dispatch(
-        authenticate(),
-      );
-  };
-}
+// ThunkAction<AppState> reAuthenticateOnBoarding() {
+//   return (Store<AppState> store) async {
+//     try {
+//       final sessionStillValid =
+//           await peeplEatsService.checkVegiSessionIsStillValid();
+//       if (sessionStillValid) {
+//         store.dispatch(
+//           SetUserAuthenticationStatus(
+//             firebaseStatus: FirebaseAuthenticationStatus.authenticated,
+//             vegiStatus: VegiAuthenticationStatus.authenticated,
+//           ),
+//         );
+//         return;
+//       }
+//       if (store.state.userState.firebaseCredentialIsValid) {
+//         // try reauthentication first?...
+//         final reauthSucceeded = await onBoardStrategy.reauthenticateUser();
+//       }
+//     } on Exception catch (error, s) {
+//       store.dispatch(
+//         SetUserAuthenticationStatus(
+//           firebaseStatus:
+//               FirebaseAuthenticationStatus.phoneAuthReauthenticationFailed,
+//         ),
+//       );
+//       await Analytics.track(
+//         eventName: AnalyticsEvents.verify,
+//         properties: {
+//           AnalyticsProps.status: AnalyticsProps.failed,
+//           'error': error.toString(),
+//         },
+//       );
+//       await Sentry.captureException(
+//         Exception(
+//             'Error in reauthenticate user [${onBoardStrategy.strategy.name}]: $error'),
+//         stackTrace: s,
+//         hint: 'Error while phone number verification',
+//       );
+//     }
+//   };
+// }
 
 ThunkAction<AppState> identifyCall({String? wallet}) {
   return (Store<AppState> store) async {
@@ -2198,10 +1445,6 @@ void updateFirebaseCurrentUser(
     log.warn(
       'WARNING - updateFirebaseCurrentUser called when no user signed in...',
       stackTrace: StackTrace.current,
-    );
-    await Sentry.captureMessage(
-      'WARNING - updateFirebaseCurrentUser called when no user signed in...'
-      'with stackTrace: ${StackTrace.current}',
     );
   }
 }
@@ -2266,18 +1509,24 @@ ThunkAction<AppState> setRandomUserAvatarIfNone() {
 ThunkAction<AppState> setRandomUserAvatar() {
   return (Store<AppState> store) async {
     try {
+      store.dispatch(
+        SetIsLoadingHttpRequest(
+          isLoading: true,
+        ),
+      );
       updateFirebaseCurrentUser(({required User firebaseUser}) async {
         final imageUrl = await peeplEatsService.setRandomAvatar(
-          accountId: store.state.userState.vegiAccountId!.round(),
+          accountId: store.state.userState.vegiAccountId!,
           onError: (error) async {
             log.error(
               'ERROR - peeplEatsService.setRandomAvatar',
               error: error,
               stackTrace: StackTrace.current,
             );
-            await Sentry.captureException(
-              Exception('ERROR - peeplEatsService.setRandomAvatar'),
-              stackTrace: StackTrace.current,
+            store.dispatch(
+              SetIsLoadingHttpRequest(
+                isLoading: false,
+              ),
             );
           },
         );
@@ -2285,18 +1534,22 @@ ThunkAction<AppState> setRandomUserAvatar() {
           await firebaseUser.updatePhotoURL(imageUrl);
           store.dispatch(SetUserAvatar(imageUrl));
         }
+        store.dispatch(
+          SetIsLoadingHttpRequest(
+            isLoading: false,
+          ),
+        );
       });
     } catch (e, s) {
+      store.dispatch(
+        SetIsLoadingHttpRequest(
+          isLoading: false,
+        ),
+      );
       log.error(
         'ERROR - getRandomUserAvatar',
         error: e,
         stackTrace: s,
-      );
-      await Sentry.captureException(
-        Exception(
-            'Error in update user profile image [getRandomUserAvatar]: ${e.toString()}'),
-        stackTrace: s,
-        hint: 'Error in update user profile image',
       );
       store
         ..dispatch(SetUserAvatar(''))
@@ -2320,9 +1573,10 @@ ThunkAction<AppState> updateUserAvatarCall(
     if (store.state.userState.vegiAccountId == null) {
       log.error(
           'No Account is set on vegi for user. Please login and retrieve account details first.');
-      await Sentry.captureException(
-        'No Account is set on vegi for user. Please login and retrieve account details first.',
-        stackTrace: StackTrace.current,
+      store.dispatch(
+        SetIsLoadingHttpRequest(
+          isLoading: false,
+        ),
       );
       return;
     }
@@ -2354,17 +1608,24 @@ ThunkAction<AppState> updateUserAvatarCall(
                 error: error,
                 stackTrace: StackTrace.current,
               );
-              await Sentry.captureException(
-                Exception('ERROR - peeplEatsService.uploadImageForUserAvatar'),
-                stackTrace: StackTrace.current,
-              );
               onError?.call(error);
+              store.dispatch(
+                SetIsLoadingHttpRequest(
+                  isLoading: false,
+                ),
+              );
             },
             onReceiveProgress: progressCallback,
           );
           if (imageUrl != null) {
             await firebaseUser.updatePhotoURL(imageUrl);
-            store.dispatch(SetUserAvatar(imageUrl));
+            store
+              ..dispatch(SetUserAvatar(imageUrl))
+              ..dispatch(
+                SetIsLoadingHttpRequest(
+                  isLoading: false,
+                ),
+              );
             onSuccess?.call();
           }
         });
@@ -2374,12 +1635,18 @@ ThunkAction<AppState> updateUserAvatarCall(
           error: e,
           stackTrace: s,
         );
-        await Sentry.captureException(
-          Exception('Error in update user profile image: ${e.toString()}'),
-          stackTrace: s,
-          hint: 'Error in update user profile image',
+        store.dispatch(
+          SetIsLoadingHttpRequest(
+            isLoading: false,
+          ),
         );
       }
+    } else {
+      store.dispatch(
+        SetIsLoadingHttpRequest(
+          isLoading: false,
+        ),
+      );
     }
   };
 }

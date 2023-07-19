@@ -28,28 +28,28 @@ class WaitingListBetaEligibilityScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return StoreConnector<AppState, WaitinglistPositionInQueueViewModel>(
       converter: WaitinglistPositionInQueueViewModel.fromStore,
-      onInit: (store) {
-        if (store.state.userState.userIsVerified) {
-          if (store.state.userState.isLoggedOut) {
-            store.dispatch(
-              authenticate(),
-            );
-          } else {
-            rootRouter.replaceAll([const MainScreen()]);
-          }
-          return;
-        }
-      },
+      // onInit: (store) {
+      //   if (store.state.userState.userIsVerified) {
+      //     if (store.state.userState.isLoggedOut) {
+      //       store.dispatch(
+      //         authenticate(),
+      //       );
+      //     } else {
+      //       rootRouter.replaceAll([const MainScreen()]);
+      //     }
+      //     return;
+      //   }
+      // },
       builder: (context, viewModel) {
         const queueTextSize = 48.0;
-        if (viewModel.userIsVerified) {
-          if (!viewModel.isLoggedIn) {
-            viewModel.authenticateUser();
-          } else {
-            rootRouter.replaceAll([const MainScreen()]);
-          }
-          return const Center(child: CircularProgressIndicator());
-        }
+        // if (viewModel.userIsVerified) {
+        //   if (!viewModel.isLoggedIn) {
+        //     viewModel.authenticateUser();
+        //   } else {
+        //     rootRouter.replaceAll([const MainScreen()]);
+        //   }
+        //   return const Center(child: CircularProgressIndicator());
+        // }
         return Stack(
           children: [
             Container(

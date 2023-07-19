@@ -95,11 +95,7 @@ class LockScreenViewModel extends Equatable implements IAuthViewModel {
         );
         return result == LoggedInToVegiResult.success;
       },
-      loginAgain: () {
-        store.dispatch(
-          reLoginCall(),
-        );
-      },
+      loginAgain: authenticator.reauthenticate,
       notAuthenticated: store.state.userState.isLoggedOut ||
           store.state.userState.fuseAuthenticationStatus !=
               FuseAuthenticationStatus.authenticated ||

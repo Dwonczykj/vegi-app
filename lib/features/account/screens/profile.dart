@@ -126,6 +126,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                                       viewmodel.avatarUrl,
                                                   avatarSquareSize:
                                                       avatarSquareSize,
+                                                  
+                                                  isUpdating: viewmodel
+                                                      .httpRequestIsInFlux,
                                                 ),
                                                 if (viewmodel.isLoggedIn)
                                                   Positioned.directional(
@@ -619,7 +622,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   },
                 ),
                 ListTile(
-                  title: Text(I10n.of(context).gallery),
+                  // title: Text(I10n.of(context).gallery),
+                  title: const Text('Camera roll'),
                   onTap: () {
                     callback(ImageSource.gallery);
                     Navigator.pop(context);

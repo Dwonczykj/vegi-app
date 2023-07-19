@@ -18,6 +18,7 @@ class ProfileViewModel extends Equatable {
     required this.firebaseAuthenticationStatus,
     required this.fuseAuthenticationStatus,
     required this.vegiAuthenticationStatus,
+    required this.httpRequestIsInFlux,
     required this.isSuperAdmin,
     required this.seedPhrase,
     required this.editAvatar,
@@ -42,6 +43,7 @@ class ProfileViewModel extends Equatable {
           store.state.userState.firebaseAuthenticationStatus,
       fuseAuthenticationStatus: store.state.userState.fuseAuthenticationStatus,
       vegiAuthenticationStatus: store.state.userState.vegiAuthenticationStatus,
+      httpRequestIsInFlux: store.state.homePageState.isLoadingHttpRequest,
       isSuperAdmin: store.state.userState.isVegiSuperAdmin,
       useLiveLocation: store.state.userState.useLiveLocation,
       isLoggedIn: !store.state.userState.isLoggedOut,
@@ -56,21 +58,27 @@ class ProfileViewModel extends Equatable {
         void Function()? onSuccess,
         void Function(String errStr)? onError,
       }) {
-        store.dispatch(
-          updateUserAvatarCall(
-            source,
-            progressCallback: progressCallback,
-            onSuccess: onSuccess,
-            onError: onError,
-          ),
-        );
+        store
+          ..dispatch(
+            SetIsLoadingHttpRequest(
+              isLoading: true,
+            ),
+          )
+          ..dispatch(
+            updateUserAvatarCall(
+              source,
+              progressCallback: progressCallback,
+              onSuccess: onSuccess,
+              onError: onError,
+            ),
+          );
       },
       updateDisplayName: (displayName) {
         store.dispatch(updateDisplayNameCall(displayName));
       },
       updateUserEmail: (email, onError) {
         store.dispatch(
-          updateEmail(
+          updateEmailForWaitingListEntry(
             email: email,
             onError: onError,
           ),
@@ -95,6 +103,7 @@ class ProfileViewModel extends Equatable {
   final FirebaseAuthenticationStatus firebaseAuthenticationStatus;
   final FuseAuthenticationStatus fuseAuthenticationStatus;
   final VegiAuthenticationStatus vegiAuthenticationStatus;
+  final bool httpRequestIsInFlux;
   final bool firebaseCredentialIsValid;
   final bool isSuperAdmin;
   final String walletAddress;
@@ -124,6 +133,7 @@ class ProfileViewModel extends Equatable {
         phone,
         email,
         biometricAuthType,
+        httpRequestIsInFlux,
         firebaseCredentialIsValid,
         firebaseAuthenticationStatus,
         vegiAuthenticationStatus,

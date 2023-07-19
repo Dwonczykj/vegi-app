@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'dart:ui' as ui;
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
@@ -12,11 +13,13 @@ class VegiAvatar extends StatelessWidget {
     required this.avatarUrl,
     this.avatarSquareSize = 50.0,
     this.showAdminBanner = false,
+    this.isUpdating = false,
   }) : super(key: key);
 
   final String avatarUrl;
   final double avatarSquareSize;
   final bool showAdminBanner;
+  final bool isUpdating;
 
   @override
   Widget build(BuildContext context) {
@@ -64,6 +67,20 @@ class VegiAvatar extends StatelessWidget {
                 ),
               ),
             ),
+          if (isUpdating)
+            // Center(child: CircularProgressIndicator()),
+            Positioned.fill(
+              child: BackdropFilter(
+                filter: ui.ImageFilter.blur(
+                  sigmaX: 1.0,
+                  sigmaY: 1.0,
+                ),
+                child: Center(
+                  child:
+                      CircularProgressIndicator(), // replace your loading widget
+                ),
+              ),
+            )
         ],
       ),
     );
