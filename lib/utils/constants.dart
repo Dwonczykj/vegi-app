@@ -10,6 +10,8 @@ import 'package:vegan_liverpool/common/di/env.dart';
 import 'package:vegan_liverpool/common/di/package_info.dart';
 import 'package:vegan_liverpool/constants/addresses.dart';
 import 'package:vegan_liverpool/constants/enums.dart';
+import 'package:vegan_liverpool/constants/theme.dart';
+import 'package:vegan_liverpool/features/screens/webview_screen.dart';
 import 'package:vegan_liverpool/features/shared/widgets/my_scaffold.dart';
 import 'package:vegan_liverpool/features/veganHome/Helpers/extensions.dart';
 import 'package:vegan_liverpool/features/veganHome/Helpers/helpers.dart';
@@ -18,6 +20,7 @@ import 'package:vegan_liverpool/models/actions/actions.dart';
 import 'package:vegan_liverpool/models/tokens/token.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:vegan_liverpool/utils/url.dart';
 
 const LoadingScaffold = MyScaffold(
   title: '',
@@ -243,8 +246,49 @@ class Messages {
   static const onboardingThankyouForRegistering =
       'Thank you for registering with vegi 💚';
 
-  static const vegiPrivacyTnCs = 'By signing up, you agree to the vegi'
-      ' Terms & Conditions which can be found here';
+  static const _vegiPrivacyTnCs = 'By signing up, you agree to the vegi'
+      ' Terms & Conditions';
+  static InkWell vegiPrivacyTnCsAnchorLink(BuildContext context) => InkWell(
+        focusColor: Theme.of(context).canvasColor,
+        highlightColor: Theme.of(context).canvasColor,
+        // onTap: () => showModalBottomSheet<Widget>(
+        //   context: context,
+        //   builder: (_) => const WebViewScreen(
+        //     url: VEGI_PRIVACY_URL,
+        //     title: 'Legal',
+        //   ),
+        // ),
+        onTap: () => launchUrl(VEGI_PRIVACY_URL),
+        child: const Text.rich(
+          TextSpan(
+            text: _vegiPrivacyTnCs,
+            style: TextStyle(
+              color: themeShade800,
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+            ),
+            children: [
+              TextSpan(
+                text: ' which can be found ',
+              ),
+              TextSpan(
+                text: 'here ⬇️',
+                style: TextStyle(
+                  color: themeShade800,
+                  fontWeight: FontWeight.w600,
+                  decoration: TextDecoration.underline,
+                ),
+              ),
+            ],
+          ),
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 20,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      );
 
   static const String emailRegisteredThankYou = 'Thank you for registering';
   static const String failedToRegisterEmailToWaitingList =
@@ -363,6 +407,9 @@ class ImagePaths {
   static const String firbebaseLogo = 'assets/images/firebase-logo.svg';
   static const String pplAvatar35width = 'assets/images/avatar-ppl-red.png';
   static const String vegiBeanManNSEW = 'assets/images/beanman-nsew.png';
+  static const String anomAvatar = 'assets/images/anom.png';
+  static const String avatarPlaceholder = 'assets/images/username.svg';
+  static const String pincode = 'assets/images/pincode.svg';
 
   static const String usernamePlaceholder = 'assets/images/username.svg';
 
@@ -448,8 +495,10 @@ class Labels {
 const ENV = String.fromEnvironment('ENV', defaultValue: 'production');
 const STRIPE_LIVEMODE =
     String.fromEnvironment('stripe_live_mode', defaultValue: 'false');
-const USE_FIREBASE_EMULATOR =
-    bool.fromEnvironment('USE_FIREBASE_EMULATOR', defaultValue: false);
+const USE_FIREBASE_EMULATOR = bool.fromEnvironment(
+  'USE_FIREBASE_EMULATOR',
+  defaultValue: false,
+);
 // Uncomment the following if want to use firestore db in firebase
 // const FIRESTORE_EMULATOR_PORT =
 //     int.fromEnvironment('FIRESTORE_EMULATOR_PORT', defaultValue: 8080);

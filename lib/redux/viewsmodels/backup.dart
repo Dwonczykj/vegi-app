@@ -1,5 +1,7 @@
+import 'package:country_code_picker/country_code_picker.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:phone_number/phone_number.dart';
 import 'package:redux/redux.dart';
 import 'package:vegan_liverpool/constants/enums.dart';
 import 'package:vegan_liverpool/features/shared/widgets/snackbars.dart';
@@ -10,6 +12,7 @@ import 'package:vegan_liverpool/redux/actions/user_actions.dart';
 import 'package:vegan_liverpool/services.dart';
 import 'package:vegan_liverpool/utils/constants.dart';
 import 'package:vegan_liverpool/utils/log/log.dart';
+import 'package:vegan_liverpool/utils/onboard/authentication.dart';
 import 'package:vegan_liverpool/utils/onboard/firebase.dart';
 
 import '../../common/router/routes.gr.dart';
@@ -67,7 +70,7 @@ class LockScreenViewModel extends Equatable implements IAuthViewModel {
       fuseAuthenticationStatus: store.state.userState.fuseAuthenticationStatus,
       vegiAuthenticationStatus: store.state.userState.vegiAuthenticationStatus,
       setBiometricallyAuthenticated: (
-          {required bool isBiometricallyAuthenticated}) {
+          {required bool isBiometricallyAuthenticated,}) {
         store.dispatch(
           SetBiometricallyAuthenticated(
             isBiometricallyAuthenticated: isBiometricallyAuthenticated,
@@ -76,24 +79,33 @@ class LockScreenViewModel extends Equatable implements IAuthViewModel {
       },
       loginToVegi: () async {
         if (store.state.userState.firebaseSessionToken == null) {
-          return false;
+          return;
         }
         store.dispatch(
           SignupLoading(
             isLoading: true,
           ),
         );
-        final result = await onBoardStrategy.loginToVegiWithPhone(
-          store: store,
-          phoneNumber: store.state.userState.phoneNumber,
-          firebaseSessionToken: store.state.userState.firebaseSessionToken!,
-        );
-        store.dispatch(
-          SignupLoading(
-            isLoading: false,
-          ),
-        );
-        return result == LoggedInToVegiResult.success;
+        try {
+          await authenticator.login(
+            loginDetails: PhoneLoginDetails(
+              countryCode: CountryCode(
+                dialCode: store.state.userState.countryCode,
+                code: store.state.userState.isoCode,
+              ),
+              phoneNumber: await PhoneNumberUtil().parse(
+                store.state.userState.phoneNumberNoCountry,
+                regionCode: store.state.userState.isoCode,
+              ),
+            ),
+          );
+        } on Exception catch (e, s) {
+          log.error(
+            'Failed to login to vegi from backup with error: $e',
+            error: e,
+            stackTrace: s,
+          );
+        }
       },
       loginAgain: authenticator.reauthenticate,
       notAuthenticated: store.state.userState.hasNotOnboarded ||
@@ -110,7 +122,7 @@ class LockScreenViewModel extends Equatable implements IAuthViewModel {
   final bool notAuthenticated;
   final BiometricAuth biometricAuth;
   final bool biometricallyAuthenticated;
-  final Future<bool> Function() loginToVegi;
+  final Future<void> Function() loginToVegi;
   final void Function() loginAgain;
   final void Function({required bool isBiometricallyAuthenticated})
       setBiometricallyAuthenticated;

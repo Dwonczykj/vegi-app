@@ -8,7 +8,9 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:phone_number/phone_number.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:vegan_liverpool/common/router/routes.gr.dart';
+import 'package:vegan_liverpool/common/router/routes.dart' as routes;
 import 'package:vegan_liverpool/constants/enums.dart';
+import 'package:vegan_liverpool/constants/theme.dart';
 import 'package:vegan_liverpool/features/onboard/dialogs/signup.dart';
 import 'package:vegan_liverpool/features/shared/widgets/my_scaffold.dart';
 import 'package:vegan_liverpool/features/shared/widgets/primary_button.dart';
@@ -48,6 +50,8 @@ class _SignUpWithEmailAndPasswordScreenState
   final passwordController = TextEditingController(text: '');
   final _formKey = GlobalKey<FormState>();
 
+  bool isRouting = false;
+  bool finishedRouting = false;
   bool isPreloading = false;
 
   @override
@@ -56,6 +60,44 @@ class _SignUpWithEmailAndPasswordScreenState
     passwordController.dispose();
     fullNameController.dispose();
     super.dispose();
+  }
+
+  Future<void> _route(MainScreenViewModel viewModel) async {
+    final success = viewModel.firebaseAuthenticationStatus ==
+            FirebaseAuthenticationStatus.authenticated &&
+        viewModel.vegiAuthenticationStatus ==
+            VegiAuthenticationStatus.authenticated;
+
+    if (isRouting ||
+        finishedRouting ||
+        rootRouter.current.name !=
+            routes.SignUpWithEmailAndPasswordScreen().routeName) {
+      return;
+    }
+    if (success) {
+      setState(() {
+        finishedRouting = true;
+      });
+      final store = await reduxStore;
+      //TODO: Add PhoneOnboarding Screen
+      if (store.state.userState.phoneNumber.isEmpty) {
+        // await rootRouter.push(
+        //   const SetPhoneOnboardingScreen(),
+        // );
+        const msg = 'Users cannot login using email and password if have not '
+            'already registered their phone number.\n Please register using phone number';
+        log.error(msg);
+        showErrorSnack(
+          context: context,
+          title: 'Whoops',
+          message: msg,
+        );
+      } else {
+        await rootRouter.push(
+          UserNameScreen(),
+        );
+      }
+    }
   }
 
   @override
@@ -78,11 +120,6 @@ class _SignUpWithEmailAndPasswordScreenState
         }
       },
       onWillChange: (previousViewModel, newViewModel) async {
-        // final checked = checkAuth(
-        //   oldViewModel: previousViewModel,
-        //   newViewModel: newViewModel,
-        //   routerContext: context,
-        // );
         if (newViewModel.signupError != previousViewModel?.signupError &&
             newViewModel.signupError != null) {
           await showErrorSnack(
@@ -96,20 +133,17 @@ class _SignUpWithEmailAndPasswordScreenState
               bottom: 120,
             ),
           );
-          log.error(newViewModel.signupError!.toString());
-          await Sentry.captureException(
-            newViewModel.signupError!.toString(),
-            stackTrace: StackTrace.current, // from catch (e, s)
-            hint:
-                'ERROR - signup_screen.parsePhoneNumber $newViewModel.signupError',
-          );
+          log.error(newViewModel.signupError!.toString(),
+              sentryHint: 'Error signup email and password: ');
           if (newViewModel.signupError!.code != null) {
             final errCode = newViewModel.signupError!.code!;
             if (errCode == SignUpErrCode.userNotFound) {
               setState(() {});
             }
+            // return;
           }
         }
+        await _route(newViewModel);
         // await checked.runNavigationIfNeeded();
       },
       builder: (context, viewmodel) {
@@ -294,17 +328,18 @@ class _SignUpWithEmailAndPasswordScreenState
                             },
                           ),
                           const SizedBox(height: 20),
-                          GestureDetector(
-                            onTap: () => launchUrl(VEGI_PRIVACY_URL),
-                            child: Text(
-                              'By signing up, you agree to the vegi'
-                              ' Terms & Conditions which can be found here',
-                              style: TextStyle(
-                                color: Colors.grey[500],
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
+                          // GestureDetector(
+                          //   onTap: () => launchUrl(VEGI_PRIVACY_URL),
+                          //   child: Text(
+                          //     'By signing up, you agree to the vegi'
+                          //     ' Terms & Conditions which can be found here',
+                          //     style: TextStyle(
+                          //       color: Colors.grey[500],
+                          //     ),
+                          //     textAlign: TextAlign.center,
+                          //   ),
+                          // ),
+                          Messages.vegiPrivacyTnCsAnchorLink(context),
                         ],
                       ),
                     ),
@@ -313,17 +348,43 @@ class _SignUpWithEmailAndPasswordScreenState
               ),
               const SizedBox(height: 20),
               GestureDetector(
-                onTap: () => _showAlternativeSignonPicker(context),
-                child: Text(
-                  'Alternative sign-in methods',
+                onTap: () => peeplEatsService
+                    .requestPasswordResetForEmail(
+                      email: emailController.text.trim().toLowerCase(),
+                    )
+                    .then(
+                      (emailResetLink) => emailResetLink != null
+                          ? launchUrl(emailResetLink)
+                          : showInfoSnack(
+                              context,
+                              title:
+                                  'Email not able to reset for this email. Please use phone auth to register.',
+                            ),
+                    ),
+                child: const Text(
+                  'Reset password',
                   style: TextStyle(
-                    color: Colors.blue[500],
+                    color: themeLightShade1200,
                     fontStyle: FontStyle.italic,
                     fontWeight: FontWeight.normal,
                   ),
                   textAlign: TextAlign.center,
                 ),
               ),
+              const SizedBox(height: 20),
+              if (DebugHelpers.inDebugMode)
+                GestureDetector(
+                  onTap: () => _showAlternativeSignonPicker(context),
+                  child: Text(
+                    'Alternative sign-in methods',
+                    style: TextStyle(
+                      color: Colors.blue[500],
+                      fontStyle: FontStyle.italic,
+                      fontWeight: FontWeight.normal,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
             ],
           ),
         );
@@ -370,13 +431,13 @@ class _SignUpWithEmailAndPasswordScreenState
                     await rootRouter.replace(const SignUpScreen());
                   },
                 ),
-                if (DebugHelpers.inDebugMode)
-                  ListTile(
-                    title: const Text(Labels.emailLinkSignonLabel),
-                    onTap: () async {
-                      await rootRouter.replace(const SignUpEmailLinkScreen());
-                    },
-                  ),
+                // if (DebugHelpers.inDebugMode)
+                //   ListTile(
+                //     title: const Text(Labels.emailLinkSignonLabel),
+                //     onTap: () async {
+                //       await rootRouter.replace(const SignUpEmailLinkScreen());
+                //     },
+                //   ),
                 // ListTile(
                 //   title: const Text(Labels.googleSignonLabel),
                 //   onTap: () async {

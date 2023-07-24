@@ -295,6 +295,22 @@ class PeeplEatsService extends HttpService {
     await logoutSession();
   }
 
+  Future<String?> requestPasswordResetForEmail({
+    required String email,
+  }) async {
+    final response = await dioPost<dynamic>(
+      VegiBackendEndpoints.resetPassword,
+      sendWithAuthCreds: false,
+      data: {
+        'emailAddress': email,
+      },
+    );
+    if (response.data == null || response.statusCode != 200) {
+      return null;
+    }
+    return '${response.data}';
+  }
+
   Future<bool> deleteAllUserDetails() async {
     final store = await reduxStore;
     final Response<dynamic> response = await dioPost(
@@ -1342,7 +1358,7 @@ class PeeplEatsService extends HttpService {
 
   Future<void> updateUserDetails({
     required String phoneNoCountry,
-    int phoneCountryCode = 44,
+    int phoneCountryCode = 44, 
     String? email,
     String? name,
     bool? marketingEmailContactAllowed,

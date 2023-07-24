@@ -61,10 +61,14 @@ class _NavDrawerState extends State<NavDrawer> {
                     //   ),
                     const VegiAvatar(
                       isEditable: false,
-                      avatarSquareSize: 40,
+                      avatarSquareSize: avatarSquareSize,
                     ),
                     Padding(
-                      padding: const EdgeInsets.all(8),
+                      padding: const EdgeInsets.only(
+                        left: 8,
+                        right: 8,
+                        top: 8,
+                      ),
                       child: Text(
                         'Hi ${viewmodel.firstName()}!',
                         style: const TextStyle(
@@ -100,25 +104,25 @@ class _NavDrawerState extends State<NavDrawer> {
                             //   ),
                             // ),
                             // const Spacer(),
-                            Text.rich(
-                              TextSpan(
-                                text: viewmodel.pplBalance,
-                                children: [
-                                  TextSpan(
-                                    text: ' ${Currency.PPL.name}',
-                                    style: TextStyle(
-                                      color: Colors.grey[700],
-                                      fontSize: 14,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              style: const TextStyle(
-                                color: Colors.black,
-                                fontSize: 20,
-                                fontWeight: FontWeight.w600,
-                              ),
-                            ),
+                            // Text.rich(
+                            //   TextSpan(
+                            //     text: viewmodel.pplBalance,
+                            //     children: [
+                            //       TextSpan(
+                            //         text: ' ${Currency.PPL.name}',
+                            //         style: TextStyle(
+                            //           color: Colors.grey[700],
+                            //           fontSize: 14,
+                            //         ),
+                            //       ),
+                            //     ],
+                            //   ),
+                            //   style: const TextStyle(
+                            //     color: Colors.black,
+                            //     fontSize: 20,
+                            //     fontWeight: FontWeight.w600,
+                            //   ),
+                            // ),
                           ],
                         ),
                       ),

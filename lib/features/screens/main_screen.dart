@@ -98,26 +98,21 @@ class _MainScreenState extends State<MainScreen> {
         if (vm.signupIsInFlux) {
           return LoadingScaffold;
         }
-        if (!vm.isOnboarded) {
+        if (vm.hasNotOnboarded || !vm.biometricAuthIsSet) {
           log.info(
-              'Push OnBoardScreen() from ${rootRouter.current.name} as not logged in');
-          // TODO: This condition needs more as comes in here after we submit our UserNameScreen....
+              'Push OnBoardScreen() from ${rootRouter.current.name} as not onboarded');
           rootRouter.replaceAll([const OnBoardScreen()]);
           return LoadingScaffold;
         }
         if (!vm.isLoggedIn) {
+          log.info(
+            'Push SignUpScreen() from ${rootRouter.current.name} as was not logged in',
+            sentry: false,
+          );
           vm.routeToLogin();
         }
         if (!vm.userIsVerified && VegiConstants.showWaitingListFunnel) {
           return const WaitingListFunnelScreen();
-        } else if (vm.fuseAuthenticationStatus ==
-                FuseAuthenticationStatus.unauthenticated ||
-            vm.firebaseAuthenticationStatus ==
-                FirebaseAuthenticationStatus.unauthenticated) {
-          vm.routeToLogin();
-          // return LoadingScaffold; // ! removed as still want to show restaurants, but without being signed in
-        } else if (!vm.biometricAuthIsSet) {
-          vm.routeToLogin();
         } else {
           peeplEatsService
               .checkVegiSessionIsStillValid()

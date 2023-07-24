@@ -366,17 +366,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             },
                           ),
                           const SizedBox(height: 20),
-                          GestureDetector(
-                            onTap: () => launchUrl(VEGI_PRIVACY_URL),
-                            child: Text(
-                              'By signing up, you agree to the vegi'
-                              ' Terms & Conditions which can be found here',
-                              style: TextStyle(
-                                color: Colors.grey[500],
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
+                          // GestureDetector(
+                          //   onTap: () => launchUrl(VEGI_PRIVACY_URL),
+                          //   child: Text(
+                          //     'By signing up, you agree to the vegi'
+                          //     ' Terms & Conditions which can be found here',
+                          //     style: TextStyle(
+                          //       color: Colors.grey[500],
+                          //     ),
+                          //     textAlign: TextAlign.center,
+                          //   ),
+                          // ),
+                          Messages.vegiPrivacyTnCsAnchorLink(context),
                         ],
                       ),
                     ),
@@ -384,18 +385,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ],
               ),
               const SizedBox(height: 20),
-              GestureDetector(
-                onTap: () => _showAlternativeSignonPicker(context, viewmodel),
-                child: Text(
-                  'Alternative sign-in methods',
-                  style: TextStyle(
-                    color: Colors.blue[500],
-                    fontStyle: FontStyle.italic,
-                    fontWeight: FontWeight.normal,
+              if (DebugHelpers.inDebugMode)
+                GestureDetector(
+                  onTap: () => _showAlternativeSignonPicker(context, viewmodel),
+                  child: Text(
+                    'Alternative sign-in methods',
+                    style: TextStyle(
+                      color: Colors.blue[500],
+                      fontStyle: FontStyle.italic,
+                      fontWeight: FontWeight.normal,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
-                  textAlign: TextAlign.center,
                 ),
-              ),
             ],
           ),
         );
@@ -499,13 +501,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           .replace(const SignUpWithEmailAndPasswordScreen());
                     },
                   ),
-                  if (DebugHelpers.inDebugMode)
-                    ListTile(
-                      title: const Text(Labels.emailLinkSignonLabel),
-                      onTap: () async {
-                        await rootRouter.replace(const SignUpEmailLinkScreen());
-                      },
-                    ),
+                  // if (DebugHelpers.inDebugMode)
+                  //   ListTile(
+                  //     title: const Text(Labels.emailLinkSignonLabel),
+                  //     onTap: () async {
+                  //       await rootRouter.replace(const SignUpEmailLinkScreen());
+                  //     },
+                  //   ),
                 ],
                 ListTile(
                   title: Text(Labels.signupButtonLabelLogout(context)),

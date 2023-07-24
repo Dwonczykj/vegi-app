@@ -12,6 +12,7 @@ import 'package:vegan_liverpool/constants/analytics_events.dart';
 import 'package:vegan_liverpool/constants/analytics_props.dart';
 import 'package:vegan_liverpool/constants/enums.dart';
 import 'package:vegan_liverpool/models/app_state.dart';
+import 'package:vegan_liverpool/redux/actions/cart_actions.dart';
 import 'package:vegan_liverpool/redux/actions/cash_wallet_actions.dart';
 import 'package:vegan_liverpool/redux/actions/onboarding_actions.dart';
 import 'package:vegan_liverpool/redux/actions/user_actions.dart';
@@ -263,7 +264,7 @@ class Authentication {
           isLoading: false,
         ),
       );
-      return false;
+      return true;
       // return _signupWithEmailDetails(
       //   email: loginDetails.email,
       // );
@@ -390,9 +391,6 @@ class Authentication {
       }
     }
 
-    if (store.state.userState.hasNotOnboarded) {
-      store.dispatch(SetReLoggedin());
-    }
     store.dispatch(SignupLoading(isLoading: false));
   }
 
@@ -430,6 +428,66 @@ class Authentication {
         ),
       ),
       funcName: 'login',
+    );
+  }
+
+  Future<void> verifySMSVerificationCode(
+    String verificationCode,
+  ) async {
+    logFunctionCall(
+      () {},
+      funcName: 'verifySMSVerificationCode',
+    );
+    final store = await reduxStore;
+    final userCredential = await onBoardStrategy.verify(
+      store,
+      verificationCode,
+    );
+    if (userCredential == null) {
+      await _captureAuthenticationError(
+        title: 'Invalid firebase credentials',
+        message: 'Error with getIdToken for a firebase user',
+        methodName: 'verifySMSVerificationCode',
+        signUpErrCode: SignUpErrCode.invalidCredentials,
+      );
+      return;
+    }
+
+    late final User? user;
+    late final String? firebaseSessionToken;
+    try {
+      user = userCredential.user;
+      firebaseSessionToken = await user?.getIdToken();
+    } on FirebaseAuthException catch (e, s) {
+      await _captureAuthenticationError(
+        title: 'Invalid firebase credentials',
+        message: 'Error with getIdToken for a firebase user',
+        methodName: '_loginToVegiWithEmail',
+        e: e,
+        s: s,
+        signUpErrCode: SignUpErrCode.invalidCredentials,
+      );
+      return;
+    } on Exception catch (e, s) {
+      await _captureAuthenticationError(
+        title: 'Invalid firebase credentials',
+        message: 'Error with getIdToken for a firebase user: $e',
+        methodName: '_loginToVegiWithEmail',
+        e: e,
+        s: s,
+        signUpErrCode: SignUpErrCode.invalidCredentials,
+      );
+      return;
+    }
+    await _loginToVegiWithPhone(
+      store: store,
+      phoneNumber: store.state.userState.phoneNumber,
+      firebaseSessionToken: firebaseSessionToken!,
+    );
+    store.dispatch(
+      SignupLoading(
+        isLoading: false,
+      ),
     );
   }
 
@@ -825,21 +883,6 @@ class Authentication {
     }
   }
 
-  Future<void> verifySMSVerificationCode(
-    String verificationCode,
-  ) async {
-    logFunctionCall(
-      () {},
-      funcName: 'verifySMSVerificationCode',
-    );
-    final store = await reduxStore;
-    await onBoardStrategy.verify(
-      store,
-      verificationCode,
-    );
-    // todo: add loginToVegiCall
-  }
-
   // @override
   Future<LoggedInToVegiResult> _loginToVegiWithPhone({
     required Store<AppState> store,
@@ -866,6 +909,11 @@ class Authentication {
       if (vegiSession.sessionCookie.isNotEmpty) {
         _complete(
           vegiStatus: VegiAuthenticationStatus.authenticated,
+        );
+        store.dispatch(
+          SignupFailed(
+            error: null,
+          ),
         );
         store.dispatch(isBetaWhitelistedAddress());
         unawaited(
@@ -933,6 +981,11 @@ class Authentication {
         _complete(
           vegiStatus: VegiAuthenticationStatus.authenticated,
         );
+        store.dispatch(
+          SignupFailed(
+            error: null,
+          ),
+        );
         store.dispatch(isBetaWhitelistedAddress());
         unawaited(
           Analytics.track(
@@ -988,120 +1041,116 @@ class Authentication {
           ),
         );
 
-  Future<void> _loginToVegi({
-    PageRouteInfo<dynamic>? routeOnSuccessArg,
-    bool shouldReplaceAllRouteStack = true,
-  }) async {
-    logFunctionCall(
-      () {},
-      funcName: '_loginToVegi',
-    );
-    final store = await reduxStore;
-    PageRouteInfo<dynamic> routeOnSuccess;
-    if (store.state.userState.displayName.isEmpty) {
-      routeOnSuccess = UserNameScreen();
-    } else if (store.state.userState.authType == BiometricAuth.none) {
-      routeOnSuccess = const ChooseSecurityOption();
-    } else {
-      routeOnSuccess = routeOnSuccessArg ?? const MainScreen();
-    }
-    if (store.state.onboardingState.signupIsInFlux) {
-      log.warn(
-        'Authentication already in flux, ignoring subsequent request',
-        stackTrace: StackTrace.current,
-      );
-      return;
-    }
-    store.dispatch(SignupLoading(isLoading: true));
+  // Future<void> _loginToVegi({
+  //   PageRouteInfo<dynamic>? routeOnSuccessArg,
+  //   bool shouldReplaceAllRouteStack = true,
+  // }) async {
+  //   logFunctionCall(
+  //     () {},
+  //     funcName: '_loginToVegi',
+  //   );
+  //   final store = await reduxStore;
+  //   PageRouteInfo<dynamic> routeOnSuccess;
+  //   if (store.state.userState.displayName.isEmpty) {
+  //     routeOnSuccess = UserNameScreen();
+  //   } else if (store.state.userState.authType == BiometricAuth.none) {
+  //     routeOnSuccess = const ChooseSecurityOption();
+  //   } else {
+  //     routeOnSuccess = routeOnSuccessArg ?? const MainScreen();
+  //   }
+  //   if (store.state.onboardingState.signupIsInFlux) {
+  //     log.warn(
+  //       'Authentication already in flux, ignoring subsequent request',
+  //       stackTrace: StackTrace.current,
+  //     );
+  //     return;
+  //   }
+  //   store.dispatch(SignupLoading(isLoading: true));
 
-    try {
-      final sessionIsValid = await _checkIfVegiSessionIsValid(store);
-      if (!sessionIsValid) {
-        if (store.state.userState.preferredSignonMethod ==
-            PreferredSignonMethod.phone) {
-          final vegiAuthResult = await _loginToVegiWithPhone(
-            store: store,
-            phoneNumber: store.state.userState.phoneNumber,
-            firebaseSessionToken: store.state.userState.firebaseSessionToken!,
-          );
-          if (vegiAuthResult != LoggedInToVegiResult.success) {
-            log.warn(
-                'Failed to authenticate with vegi: LoggedInToVegiResult.[${vegiAuthResult.name}]');
-            // finish by navigating to MainScreen regardless
-          }
-        } else if (store.state.userState.preferredSignonMethod ==
-            PreferredSignonMethod.phone) {
-          final vegiAuthResult = await _loginToVegiWithPhone(
-            store: store,
-            phoneNumber: store.state.userState.phoneNumber,
-            firebaseSessionToken: store.state.userState.firebaseSessionToken!,
-          );
-          if (vegiAuthResult != LoggedInToVegiResult.success) {
-            log.warn(
-                'Failed to authenticate with vegi: LoggedInToVegiResult.[${vegiAuthResult.name}]');
-            // finish by navigating to MainScreen regardless
-          }
-        } else if (store.state.userState.preferredSignonMethod ==
-            PreferredSignonMethod.emailAndPassword) {
-          final vegiAuthResult = await _loginToVegiWithEmail(
-            store: store,
-            email: store.state.userState.email,
-            firebaseSessionToken: store.state.userState.firebaseSessionToken!,
-          );
-          if (vegiAuthResult != LoggedInToVegiResult.success) {
-            log.warn(
-                'Failed to authenticate with vegi: LoggedInToVegiResult.[${vegiAuthResult.name}]');
-            // finish by navigating to MainScreen regardless
-          }
-        } else if (store.state.userState.preferredSignonMethod ==
-            PreferredSignonMethod.emailLink) {
-          final vegiAuthResult = await _loginToVegiWithEmail(
-            store: store,
-            email: store.state.userState.email,
-            firebaseSessionToken: store.state.userState.firebaseSessionToken!,
-          );
-          if (vegiAuthResult != LoggedInToVegiResult.success) {
-            log.warn(
-                'Failed to authenticate with vegi: LoggedInToVegiResult.[${vegiAuthResult.name}]');
-            // finish by navigating to MainScreen regardless
-          }
-        } else {
-          final errMessage =
-              'Unable to signin with firebaseSignOn method of: PreferredSignonMethod.[${store.state.userState.preferredSignonMethod.name}]';
-          log.error(errMessage, stackTrace: StackTrace.current);
-          store
-            ..dispatch(SignupLoading(isLoading: false))
-            ..dispatch(
-              SignupFailed(
-                error: SignUpErrorDetails(
-                  title: 'Sign-in failed',
-                  message: 'Please try a different sign-on method',
-                  code: SignUpErrCode.signonMethodNotImplemented,
-                ),
-              ),
-            );
-          throw Exception(errMessage);
-        }
-      }
-
-      if (store.state.userState.hasNotOnboarded) {
-        store.dispatch(SetReLoggedin());
-      }
-      store.dispatch(SignupLoading(isLoading: false));
-      if (shouldReplaceAllRouteStack) {
-        await rootRouter.replaceAll([routeOnSuccess]);
-      } else {
-        await rootRouter.push(routeOnSuccess);
-      }
-      return;
-    } catch (e, s) {
-      log.error(
-        'ERROR - authenticate $e',
-        stackTrace: s,
-      );
-      store.dispatch(SignupLoading(isLoading: false));
-    }
-  }
+  //   try {
+  //     final sessionIsValid = await _checkIfVegiSessionIsValid(store);
+  //     if (!sessionIsValid) {
+  //       if (store.state.userState.preferredSignonMethod ==
+  //           PreferredSignonMethod.phone) {
+  //         final vegiAuthResult = await _loginToVegiWithPhone(
+  //           store: store,
+  //           phoneNumber: store.state.userState.phoneNumber,
+  //           firebaseSessionToken: store.state.userState.firebaseSessionToken!,
+  //         );
+  //         if (vegiAuthResult != LoggedInToVegiResult.success) {
+  //           log.warn(
+  //               'Failed to authenticate with vegi: LoggedInToVegiResult.[${vegiAuthResult.name}]');
+  //           // finish by navigating to MainScreen regardless
+  //         }
+  //       } else if (store.state.userState.preferredSignonMethod ==
+  //           PreferredSignonMethod.phone) {
+  //         final vegiAuthResult = await _loginToVegiWithPhone(
+  //           store: store,
+  //           phoneNumber: store.state.userState.phoneNumber,
+  //           firebaseSessionToken: store.state.userState.firebaseSessionToken!,
+  //         );
+  //         if (vegiAuthResult != LoggedInToVegiResult.success) {
+  //           log.warn(
+  //               'Failed to authenticate with vegi: LoggedInToVegiResult.[${vegiAuthResult.name}]');
+  //           // finish by navigating to MainScreen regardless
+  //         }
+  //       } else if (store.state.userState.preferredSignonMethod ==
+  //           PreferredSignonMethod.emailAndPassword) {
+  //         final vegiAuthResult = await _loginToVegiWithEmail(
+  //           store: store,
+  //           email: store.state.userState.email,
+  //           firebaseSessionToken: store.state.userState.firebaseSessionToken!,
+  //         );
+  //         if (vegiAuthResult != LoggedInToVegiResult.success) {
+  //           log.warn(
+  //               'Failed to authenticate with vegi: LoggedInToVegiResult.[${vegiAuthResult.name}]');
+  //           // finish by navigating to MainScreen regardless
+  //         }
+  //       } else if (store.state.userState.preferredSignonMethod ==
+  //           PreferredSignonMethod.emailLink) {
+  //         final vegiAuthResult = await _loginToVegiWithEmail(
+  //           store: store,
+  //           email: store.state.userState.email,
+  //           firebaseSessionToken: store.state.userState.firebaseSessionToken!,
+  //         );
+  //         if (vegiAuthResult != LoggedInToVegiResult.success) {
+  //           log.warn(
+  //               'Failed to authenticate with vegi: LoggedInToVegiResult.[${vegiAuthResult.name}]');
+  //           // finish by navigating to MainScreen regardless
+  //         }
+  //       } else {
+  //         final errMessage =
+  //             'Unable to signin with firebaseSignOn method of: PreferredSignonMethod.[${store.state.userState.preferredSignonMethod.name}]';
+  //         log.error(errMessage, stackTrace: StackTrace.current);
+  //         store
+  //           ..dispatch(SignupLoading(isLoading: false))
+  //           ..dispatch(
+  //             SignupFailed(
+  //               error: SignUpErrorDetails(
+  //                 title: 'Sign-in failed',
+  //                 message: 'Please try a different sign-on method',
+  //                 code: SignUpErrCode.signonMethodNotImplemented,
+  //               ),
+  //             ),
+  //           );
+  //         throw Exception(errMessage);
+  //       }
+  //     }
+  //     store.dispatch(SignupLoading(isLoading: false));
+  //     if (shouldReplaceAllRouteStack) {
+  //       await rootRouter.replaceAll([routeOnSuccess]);
+  //     } else {
+  //       await rootRouter.push(routeOnSuccess);
+  //     }
+  //     return;
+  //   } catch (e, s) {
+  //     log.error(
+  //       'ERROR - authenticate $e',
+  //       stackTrace: s,
+  //     );
+  //     store.dispatch(SignupLoading(isLoading: false));
+  //   }
+  // }
 
   /// Function to first create the single External Owner Account that can have at most
   /// ONE smart wallet linked with it.
@@ -1109,93 +1158,93 @@ class Authentication {
   /// Then init Firebase Credentials if needed (they cannot be serialized and not persisted, therefore needs to be done on ever recreation of persisted store)
   ///
   /// Then authenticate with vegi if not already signed in with persistent sessionCookie that is still active.
-  Future<void> _authenticate({
-    PageRouteInfo<dynamic>? routeOnSuccessArg,
-    bool shouldReplaceAllRouteStack = true,
-  }) async {
-    logFunctionCall(
-      () {},
-      funcName: '_authenticate',
-    );
-    final store = await reduxStore;
-    PageRouteInfo<dynamic> routeOnSuccess;
-    if (store.state.userState.displayName.isEmpty) {
-      routeOnSuccess = UserNameScreen();
-    } else if (store.state.userState.authType == BiometricAuth.none) {
-      routeOnSuccess = const ChooseSecurityOption();
-    } else {
-      routeOnSuccess = routeOnSuccessArg ?? const MainScreen();
-    }
-    if (store.state.onboardingState.signupIsInFlux) {
-      log.warn(
-        'Authentication already in flux, ignoring subsequent request',
-        stackTrace: StackTrace.current,
-      );
-      return;
-    }
-    store.dispatch(SignupLoading(isLoading: true));
+  // Future<void> _authenticate({
+  //   PageRouteInfo<dynamic>? routeOnSuccessArg,
+  //   bool shouldReplaceAllRouteStack = true,
+  // }) async {
+  //   logFunctionCall(
+  //     () {},
+  //     funcName: '_authenticate',
+  //   );
+  //   final store = await reduxStore;
+  //   PageRouteInfo<dynamic> routeOnSuccess;
+  //   if (store.state.userState.displayName.isEmpty) {
+  //     routeOnSuccess = UserNameScreen();
+  //   } else if (store.state.userState.authType == BiometricAuth.none) {
+  //     routeOnSuccess = const ChooseSecurityOption();
+  //   } else {
+  //     routeOnSuccess = routeOnSuccessArg ?? const MainScreen();
+  //   }
+  //   if (store.state.onboardingState.signupIsInFlux) {
+  //     log.warn(
+  //       'Authentication already in flux, ignoring subsequent request',
+  //       stackTrace: StackTrace.current,
+  //     );
+  //     return;
+  //   }
+  //   store.dispatch(SignupLoading(isLoading: true));
 
-    // * Fuse Auth & Fetch
-    try {
-      await initFuse();
-    } on Exception catch (e, s) {
-      log.error(
-        'Failed to login to Fuse SDK with error: $e',
-        stackTrace: s,
-      );
-      store.dispatch(SignupLoading(isLoading: false));
-      return;
-    }
+  //   // * Fuse Auth & Fetch
+  //   try {
+  //     await initFuse();
+  //   } on Exception catch (e, s) {
+  //     log.error(
+  //       'Failed to login to Fuse SDK with error: $e',
+  //       stackTrace: s,
+  //     );
+  //     store.dispatch(SignupLoading(isLoading: false));
+  //     return;
+  //   }
 
-    try {
-      // * Firebase Auth Router / Reauthentication
-      // reauth if not already authenticated with firebase / navigate to sign+up screen if no credentials present
-      if (store.state.userState.firebaseSessionToken?.isEmpty ?? true) {
-        // TODO: Ensure that the onboarding.verify function sets this
-        if (store.state.userState.firebaseCredentialIsValid) {
-          store.dispatch(SignupLoading(isLoading: true));
-          final reauthSucceeded = await onBoardStrategy.reauthenticateUser();
-          store.dispatch(SignupLoading(isLoading: false));
-          if (!reauthSucceeded) {
-            store
-              ..dispatch(
-                SetUserAuthenticationStatus(
-                  firebaseStatus:
-                      FirebaseAuthenticationStatus.beginAuthentication,
-                ),
-              )
-              ..dispatch(SignupLoading(isLoading: false));
-            return routeToLoginScreen();
-          }
-        } else {
-          // unable to reauth firebase so nav to SignUpScreen and return;
-          store
-            ..dispatch(
-              SetUserAuthenticationStatus(
-                firebaseStatus:
-                    FirebaseAuthenticationStatus.beginAuthentication,
-              ),
-            )
-            ..dispatch(SignupLoading(isLoading: false));
-          return routeToLoginScreen();
-        }
-      }
-    } catch (e, s) {
-      log.error(
-        'Failed to authenticate with firebase from Authentication._authenticate',
-        stackTrace: s,
-      );
-      store.dispatch(SignupLoading(isLoading: false));
-      return;
-    }
+  //   try {
+  //     // * Firebase Auth Router / Reauthentication
+  //     // reauth if not already authenticated with firebase / navigate to sign+up screen if no credentials present
+  //     if (store.state.userState.firebaseSessionToken?.isEmpty ?? true) {
+  //       // TODO: Ensure that the onboarding.verify function sets this
+  //       if (store.state.userState.firebaseCredentialIsValid) {
+  //         store.dispatch(SignupLoading(isLoading: true));
+  //         final reauthSucceeded = await onBoardStrategy.reauthenticateUser();
+  //         store.dispatch(SignupLoading(isLoading: false));
+  //         if (!reauthSucceeded) {
+  //           store
+  //             ..dispatch(
+  //               SetUserAuthenticationStatus(
+  //                 firebaseStatus:
+  //                     FirebaseAuthenticationStatus.beginAuthentication,
+  //               ),
+  //             )
+  //             ..dispatch(SignupLoading(isLoading: false));
+  //           return routeToLoginScreen();
+  //         }
+  //       } else {
+  //         // unable to reauth firebase so nav to SignUpScreen and return;
+  //         store
+  //           ..dispatch(
+  //             SetUserAuthenticationStatus(
+  //               firebaseStatus:
+  //                   FirebaseAuthenticationStatus.beginAuthentication,
+  //             ),
+  //           )
+  //           ..dispatch(SignupLoading(isLoading: false));
+  //         return routeToLoginScreen();
+  //       }
+  //     }
+  //   } catch (e, s) {
+  //     log.error(
+  //       'Failed to authenticate with firebase from Authentication._authenticate',
+  //       stackTrace: s,
+  //     );
+  //     store.dispatch(SignupLoading(isLoading: false));
+  //     return;
+  //   }
 
-    // * vegi Auth
-    // use firebaseAuth SessionToken to authenticate vegi. From here we are sure that firebaseSessionToken is live.
-    await _loginToVegi(
-      routeOnSuccessArg: routeOnSuccessArg,
-      shouldReplaceAllRouteStack: shouldReplaceAllRouteStack,
-    );
-  }
+  //   // * vegi Auth
+  //   // use firebaseAuth SessionToken to authenticate vegi. From here we are sure that firebaseSessionToken is live.
+  //   await _loginToVegi(
+  //     routeOnSuccessArg: routeOnSuccessArg,
+  //     shouldReplaceAllRouteStack: shouldReplaceAllRouteStack,
+  //   );
+  // }
 
   /// Function to create the single External Owner Account that can have at most
   /// ONE smart wallet linked with it.
@@ -1312,6 +1361,11 @@ class Authentication {
       ..dispatch(
         SetUserAuthenticationStatus(
           fuseStatus: FuseAuthenticationStatus.authenticated,
+        ),
+      )
+      ..dispatch(
+        SignupFailed(
+          error: null,
         ),
       )
       ..dispatch(
@@ -1841,6 +1895,10 @@ class Authentication {
             SetUserAuthenticationStatus(
               firebaseStatus: FirebaseAuthenticationStatus.authenticated,
               vegiStatus: VegiAuthenticationStatus.authenticated,
+            ),
+          )..dispatch(
+            SignupFailed(
+              error: null,
             ),
           );
         return sessionStillValid;

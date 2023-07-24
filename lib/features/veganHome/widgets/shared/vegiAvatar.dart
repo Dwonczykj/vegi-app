@@ -111,7 +111,7 @@ class VegiAvatar extends StatelessWidget {
             );
           } else {
             return CircleAvatar(
-              backgroundImage: AssetImage('assets/images/anom.png'),
+              backgroundImage: const AssetImage(ImagePaths.anomAvatar),
               // radius: 23,
               radius: avatarSquareSize / 2.0 + (avatarSquareSize * 0.1),
             );
@@ -252,13 +252,13 @@ class VegiAvatar extends StatelessWidget {
                       padding: const EdgeInsets.only(left: 20),
                       child: isEditable
                           ? SvgPicture.asset(
-                              'assets/images/username.svg',
+                              ImagePaths.avatarPlaceholder,
                               width: 95,
                               height: avatarSquareSize,
                             )
                           : CircleAvatar(
                               backgroundImage:
-                                  const AssetImage('assets/images/anom.png'),
+                                  const AssetImage(ImagePaths.anomAvatar),
                               // radius: 23,
                               radius: avatarSquareSize / 2.0 +
                                   (avatarSquareSize * 0.1),

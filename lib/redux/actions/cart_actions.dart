@@ -742,7 +742,9 @@ ThunkAction<AppState> subscribeToWaitingListEmails({
 }) {
   return (Store<AppState> store) async {
     try {
+      email = email.trim().toLowerCase();
       store.dispatch(SetCartIsLoading(isLoading: true));
+      // TODO: Check that this toggles the markeitng prefs toggle in User table
       final entry = await peeplEatsService.subscribeToWaitingListEmails(
         email: email,
         receiveUpdates: receiveUpdates,

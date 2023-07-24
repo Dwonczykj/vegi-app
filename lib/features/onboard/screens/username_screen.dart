@@ -129,20 +129,25 @@ class UserNameScreen extends StatelessWidget {
     );
   }
 
-  void _nextOnBoardingScreen(
+  Future<void> _nextOnBoardingScreen(
     VerifyOnboardViewModel viewModel,
     BuildContext context,
-  ) {
+  ) async {
     if (viewModel.email.isEmpty) {
-      rootRouter.push(
+      await rootRouter.push(
         RegisterEmailOnBoardingScreen(
           onSubmitEmail: () {},
         ),
       );
     } else if (!viewModel.biometricAuthIsSet) {
-      rootRouter.push(const ChooseSecurityOption());
+      await rootRouter.push(const ChooseSecurityOption());
     } else {
-      rootRouter.replaceAll([const MainScreen()]);
+      (await reduxStore).dispatch(
+        SetCompletedOnboardingSuccess(
+          onboardingCompleted: true,
+        ),
+      );
+      await rootRouter.replaceAll([const MainScreen()]);
     }
   }
 

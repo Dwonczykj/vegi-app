@@ -108,7 +108,12 @@ class _SetUpPinCodeScreenState extends State<SetUpPinCodeScreen> {
                                 biometricAuth: BiometricAuth.pincode,
                               ),
                             )
-                            ..dispatch(SetPincodeSuccess(pin));
+                            ..dispatch(SetPincodeSuccess(pin))
+                            ..dispatch(
+                              SetCompletedOnboardingSuccess(
+                                onboardingCompleted: true,
+                              ),
+                            );
                           widget.onSuccess();
                         } else {
                           setState(() {

@@ -96,7 +96,7 @@ class _PinCodeScreenState extends State<PinCodeScreen> {
                   FirebaseAuthenticationStatus.authenticated &&
               newViewModel.vegiAuthenticationStatus !=
                   VegiAuthenticationStatus.authenticated) {
-            final reauthenticationSucceeded = await newViewModel.loginToVegi();
+            await newViewModel.loginToVegi();
           }
         }
         if (newViewModel.fuseAuthenticationStatus !=

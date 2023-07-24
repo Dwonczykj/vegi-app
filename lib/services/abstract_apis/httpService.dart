@@ -57,7 +57,6 @@ abstract class HttpService {
       dio.options.headers.remove('Cookie');
     }
     authStatus = AuthenticationStatus.expired;
-    (await reduxStore).dispatch(SetVegiSessionExpired());
   }
 
   Future<bool> isCookieExpired() async {
@@ -80,7 +79,11 @@ abstract class HttpService {
         'vegi session has expired',
         stackTrace: StackTrace.current,
       );
-      (await reduxStore).dispatch(SetVegiSessionExpired());
+      (await reduxStore).dispatch(
+        SetUserAuthenticationStatus(
+          vegiStatus: VegiAuthenticationStatus.unauthenticated,
+        ),
+      );
     }
     return cookieHasExpired;
   }

@@ -19,7 +19,7 @@ class SignupFailed {
     required this.error,
   });
 
-  final SignUpErrorDetails error;
+  final SignUpErrorDetails? error;
 
   @override
   String toString() {

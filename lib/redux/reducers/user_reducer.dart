@@ -33,6 +33,9 @@ final userReducers = combineReducers<UserState>([
   TypedReducer<UserState, SetJWTSuccess>(_setJWTSuccess).call,
   TypedReducer<UserState, LogoutRequestSuccess>(_logoutSuccess).call,
   TypedReducer<UserState, SetPincodeSuccess>(_setPincode).call,
+  TypedReducer<UserState, SetCompletedOnboardingSuccess>(
+          _setCompletedOnboarding)
+      .call,
   TypedReducer<UserState, SetDisplayName>(_setDisplayName).call,
   TypedReducer<UserState, SetEmail>(_setEmail).call,
   TypedReducer<UserState, SetEmailPassword>(_setEmailAndPassword).call,
@@ -58,7 +61,8 @@ final userReducers = combineReducers<UserState>([
       .call,
   TypedReducer<UserState, SetVerificationId>(_setVerificationId).call,
   TypedReducer<UserState, SetVerificationFailed>(_setVerificationFailed).call,
-  TypedReducer<UserState, SetVegiSessionExpired>(_setVegiSessionExpired).call,
+  TypedReducer<UserState, SetFirebaseSessionExpired>(_setVegiSessionExpired)
+      .call,
   TypedReducer<UserState, SetVegiSessionCookie>(_setVegiSessionCookie).call,
   TypedReducer<UserState, SetVegiUserId>(_setVegiUserId).call,
   TypedReducer<UserState, SetVegiSessionCookie>(_setVegiSessionCookie).call,
@@ -360,7 +364,7 @@ UserState _setVerificationFailed(
 
 UserState _setVegiSessionExpired(
   UserState state,
-  SetVegiSessionExpired action,
+  SetFirebaseSessionExpired action,
 ) {
   log.info('$action');
   return state.copyWith(
@@ -508,6 +512,15 @@ UserState _setPincode(
 ) {
   return state.copyWith(
     pincode: action.pincode,
+  );
+}
+
+UserState _setCompletedOnboarding(
+  UserState state,
+  SetCompletedOnboardingSuccess action,
+) {
+  return state.copyWith(
+    hasNotOnboarded: !action.onboardingCompleted,
   );
 }
 

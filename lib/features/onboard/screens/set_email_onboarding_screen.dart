@@ -1,9 +1,11 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:vegan_liverpool/common/router/routes.gr.dart';
 import 'package:vegan_liverpool/common/router/routes.gr.dart' as routes;
 import 'package:vegan_liverpool/constants/enums.dart';
+import 'package:vegan_liverpool/constants/theme.dart';
 import 'package:vegan_liverpool/features/onboard/dialogs/signup.dart';
 import 'package:vegan_liverpool/features/shared/widgets/my_scaffold.dart';
 import 'package:vegan_liverpool/features/shared/widgets/primary_button.dart';
@@ -30,6 +32,7 @@ class SetEmailOnboardingScreen extends StatefulWidget {
 class _SetEmailOnboardingScreenState extends State<SetEmailOnboardingScreen> {
   final fullNameController = TextEditingController(text: '');
   final emailController = TextEditingController(text: '');
+  bool notifyMeWhenLaunch = true;
   final _formKey = GlobalKey<FormState>();
   bool isRouting = false;
 
@@ -204,6 +207,68 @@ class _SetEmailOnboardingScreenState extends State<SetEmailOnboardingScreen> {
                               textAlign: TextAlign.center,
                             ),
                           ),
+                          const SizedBox(height: 20),
+                          ColoredBox(
+                            color: Colors.transparent,
+                            child: CupertinoFormRow(
+                              prefix: Row(
+                                children: <Widget>[
+                                  Icon(
+                                    // Wifi icon is updated based on switch value.
+                                    notifyMeWhenLaunch
+                                        ? Icons.notification_add
+                                        : Icons.notifications_off,
+                                    color: notifyMeWhenLaunch
+                                        ? CupertinoColors.systemGreen
+                                        : CupertinoColors.systemGrey,
+                                  ),
+                                  const SizedBox(width: 10),
+                                  Text(
+                                    notifyMeWhenLaunch
+                                        ? Labels.notifyMeWhenYouRelease
+                                        : Labels.dontNotifyMeWhenYouRelease,
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.w700,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              helper: Text(
+                                notifyMeWhenLaunch
+                                    ? Messages.willEmailOnceLive
+                                    : '',
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                ),
+                              ),
+                              child: CupertinoSwitch(
+                                // This bool value toggles the switch.
+                                value: notifyMeWhenLaunch,
+                                thumbColor: notifyMeWhenLaunch
+                                    ? themeShade600
+                                    : themeShade600.withOpacity(0.5),
+                                trackColor: notifyMeWhenLaunch
+                                    ? CupertinoColors.systemGrey
+                                        .withOpacity(0.95)
+                                    : CupertinoColors.systemGrey
+                                        .withOpacity(0.15),
+                                activeColor: themeShade650.withOpacity(0.50),
+                                onChanged: (bool? value) {
+                                  // This is called when the user toggles the switch
+                                  if (value == null) {
+                                    return;
+                                  }
+                                  setState(() {
+                                    notifyMeWhenLaunch = value;
+                                  });
+                                  viewmodel.subscribeToEmailToNotifications(
+                                    email: emailController.text,
+                                    receiveNotifications: value,
+                                  );
+                                },
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -255,58 +320,4 @@ class _SetEmailOnboardingScreenState extends State<SetEmailOnboardingScreen> {
       return '';
     }
   }
-
-  void _showAlternativeSignonPicker(
-    BuildContext context,
-  ) =>
-      showModalBottomSheet<Widget>(
-        useRootNavigator: true,
-        context: context,
-        builder: (context) => BottomSheet(
-          onClosing: () {},
-          builder: (context) => Container(
-            padding: const EdgeInsets.symmetric(vertical: 16),
-            decoration: BoxDecoration(
-              color: Theme.of(context).canvasColor,
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(16),
-                topRight: Radius.circular(16),
-              ),
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                ListTile(
-                  title: const Text(Labels.phoneSignonLabel),
-                  onTap: () async {
-                    // Navigator.pop(context);
-                    await rootRouter.replace(const SignUpScreen());
-                  },
-                ),
-                ListTile(
-                  title: const Text(Labels.emailAndPasswordSignonLabel),
-                  onTap: () async {
-                    await rootRouter
-                        .replace(const SignUpWithEmailAndPasswordScreen());
-                  },
-                ),
-                // ListTile(
-                //   title: const Text(Labels.googleSignonLabel),
-                //   onTap: () async {
-                //     // Navigator.pop(context);
-                //     await onBoardStrategy.signInWithGoogle();
-                //   },
-                // ),
-                // ListTile(
-                //   title: const Text(Labels.appleSignonLabel),
-                //   onTap: () async {
-                //     // Navigator.pop(context);
-                //     await onBoardStrategy.signInWithApple();
-                //   },
-                // ),
-              ],
-            ),
-          ),
-        ),
-      );
 }

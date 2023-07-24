@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:simple_animations/simple_animations.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:vegan_liverpool/common/router/routes.dart';
 import 'package:vegan_liverpool/constants/CustomPainterWidgets/customButton1.dart';
 import 'package:vegan_liverpool/constants/CustomPainterWidgets/customButton2.dart';
 import 'package:vegan_liverpool/constants/theme.dart';
@@ -8,6 +9,7 @@ import 'package:vegan_liverpool/features/onboard/widgets/firstOnboardingPage.dar
 import 'package:vegan_liverpool/features/onboard/widgets/on_boarding_page.dart';
 import 'package:vegan_liverpool/features/onboard/widgets/sign_up_buttons.dart';
 import 'package:vegan_liverpool/features/waitingListFunnel/screens/waitingListBetaEligibilityScreen.dart';
+import 'package:vegan_liverpool/services.dart';
 import 'package:vegan_liverpool/utils/constants.dart';
 
 class OnBoardScreen extends StatefulWidget {
@@ -39,34 +41,6 @@ class _OnBoardScreenState extends State<OnBoardScreen>
     super.dispose();
   }
 
-  void gotoPage(int page) {
-    _pageController.animateToPage(
-      page,
-      duration: _kDuration,
-      curve: _kCurve,
-    );
-  }
-
-  void nextPage() {
-    if (_pageController.page!.toInt() == 4) {
-      return;
-    }
-    _pageController.nextPage(
-      duration: const Duration(seconds: 1),
-      curve: Curves.fastLinearToSlowEaseIn,
-    );
-  }
-
-  void previousPage() {
-    if (_pageController.page!.toInt() == 0) {
-      return;
-    }
-    _pageController.previousPage(
-      duration: const Duration(seconds: 1),
-      curve: Curves.fastLinearToSlowEaseIn,
-    );
-  }
-
   final tween = MovieTween();
 
   @override
@@ -78,7 +52,8 @@ class _OnBoardScreenState extends State<OnBoardScreen>
         subTitle: CopyWrite.onboardingScreenSubHeading1,
         iconName: ImagePaths.onboardingPage2HeadingImage1,
         backgroundImageOverlayPath: ImagePaths.onboardingPage2Background,
-        backgroundTexturePath: ImagePaths.onboardingTextureBelowBackgroundDarkGreen,
+        backgroundTexturePath:
+            ImagePaths.onboardingTextureBelowBackgroundDarkGreen,
         headingColour: themeShade1000,
         subHeadingColour: Colors.black,
       ),
@@ -87,7 +62,8 @@ class _OnBoardScreenState extends State<OnBoardScreen>
         subTitle: CopyWrite.onboardingScreenSubHeading2,
         iconName: ImagePaths.onboardingPage3HeadingImage2,
         backgroundImageOverlayPath: ImagePaths.onboardingPage3Background,
-        backgroundTexturePath: ImagePaths.onboardingTextureBelowBackgroundDarkGreen,
+        backgroundTexturePath:
+            ImagePaths.onboardingTextureBelowBackgroundDarkGreen,
         headingColour: themeShade400,
         subHeadingColour: themeShade200,
       ),
@@ -96,13 +72,47 @@ class _OnBoardScreenState extends State<OnBoardScreen>
         subTitle: CopyWrite.onboardingScreenSubHeading3,
         iconName: ImagePaths.onboardingPage4HeadingImage3,
         backgroundImageOverlayPath: ImagePaths.onboardingPage4Background,
-        backgroundTexturePath: ImagePaths.onboardingTextureBelowBackgroundDarkGreen,
+        backgroundTexturePath:
+            ImagePaths.onboardingTextureBelowBackgroundDarkGreen,
         headingColour: themeShade400,
         subHeadingColour: themeShade200,
       ),
       // const SignUpButtons()
-      const WaitingListBetaEligibilityScreen(),
+      // const WaitingListBetaEligibilityScreen(),
     ];
+
+    void gotoPage(int page) {
+      _pageController.animateToPage(
+        page,
+        duration: _kDuration,
+        curve: _kCurve,
+      );
+    }
+
+    void nextPage() {
+      if (_pageController.positions.isNotEmpty &&
+          _pageController.page == (welcomeScreens.length - 1)) {
+        rootRouter.push(const SignUpScreen());
+      }
+
+      if (_pageController.page!.toInt() == 4) {
+        return;
+      }
+      _pageController.nextPage(
+        duration: const Duration(seconds: 1),
+        curve: Curves.fastLinearToSlowEaseIn,
+      );
+    }
+
+    void previousPage() {
+      if (_pageController.page!.toInt() == 0) {
+        return;
+      }
+      _pageController.previousPage(
+        duration: const Duration(seconds: 1),
+        curve: Curves.fastLinearToSlowEaseIn,
+      );
+    }
 
     final _tween = MovieTween()
       ..scene(begin: Duration.zero, duration: const Duration(seconds: 1)).tween(
@@ -147,17 +157,17 @@ class _OnBoardScreenState extends State<OnBoardScreen>
                         child: Stack(
                           children: <Widget>[
                             PageView.builder(
-                              onPageChanged: (page) {
-                                if (page == (welcomeScreens.length - 1)) {
-                                  setState(() {
-                                    _bottomRowOpacity = 0;
-                                  });
-                                } else {
-                                  setState(() {
-                                    _bottomRowOpacity = 1;
-                                  });
-                                }
-                              },
+                              // onPageChanged: (page) {
+                              //   if (page == (welcomeScreens.length - 1)) {
+                              //     setState(() {
+                              //       _bottomRowOpacity = 0;
+                              //     });
+                              //   } else {
+                              //     setState(() {
+                              //       _bottomRowOpacity = 1;
+                              //     });
+                              //   }
+                              // },
                               physics: const NeverScrollableScrollPhysics(),
                               itemCount: welcomeScreens.length,
                               controller: _pageController,
@@ -265,10 +275,10 @@ class _OnBoardScreenState extends State<OnBoardScreen>
                                       context,
                                       isPointingRight: true,
                                       onTap: nextPage,
-                                      hide: _pageController
-                                              .positions.isNotEmpty &&
-                                          _pageController.page ==
-                                              welcomeScreens.length,
+                                      // hide: _pageController
+                                      //         .positions.isNotEmpty &&
+                                      //     _pageController.page ==
+                                      //         welcomeScreens.length,
                                     ),
                                   ],
                                 ),

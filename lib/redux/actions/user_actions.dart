@@ -381,6 +381,19 @@ class SetPincodeSuccess {
   String toString() => 'SetPincodeSuccess : pincode: $pincode';
 }
 
+class SetCompletedOnboardingSuccess {
+  SetCompletedOnboardingSuccess({
+    required this.onboardingCompleted,
+  });
+
+  final bool onboardingCompleted;
+
+  @override
+  String toString() {
+    return 'SetCompletedOnboardingSuccess : onboardingCompleted:"$onboardingCompleted"';
+  }
+}
+
 class SetDisplayName {
   SetDisplayName(this.displayName);
   String displayName;
@@ -571,8 +584,8 @@ class SetVerificationFailed {
   }
 }
 
-class SetVegiSessionExpired {
-  SetVegiSessionExpired();
+class SetFirebaseSessionExpired {
+  SetFirebaseSessionExpired();
 
   @override
   String toString() {
@@ -679,6 +692,11 @@ ThunkAction<AppState> loggedInToVegiSuccess() {
           SetUserAuthenticationStatus(
             vegiStatus: VegiAuthenticationStatus.authenticated,
             firebaseStatus: FirebaseAuthenticationStatus.authenticated,
+          ),
+        )
+        ..dispatch(
+          SignupFailed(
+            error: null,
           ),
         )
         ..dispatch(isBetaWhitelistedAddress());

@@ -13,6 +13,7 @@ import 'package:vegan_liverpool/models/app_state.dart';
 import 'package:vegan_liverpool/redux/viewsmodels/security.dart';
 import 'package:vegan_liverpool/utils/analytics.dart';
 import 'package:vegan_liverpool/utils/biometric_local_auth.dart';
+import 'package:vegan_liverpool/utils/constants.dart';
 
 class ChooseSecurityOption extends StatefulWidget {
   const ChooseSecurityOption({Key? key}) : super(key: key);
@@ -229,7 +230,7 @@ class _ChooseSecurityOptionState extends State<ChooseSecurityOption> {
                                         child: Row(
                                           children: [
                                             SvgPicture.asset(
-                                              'assets/images/pincode.svg',
+                                              ImagePaths.pincode,
                                               color: Theme.of(context)
                                                   .colorScheme
                                                   .onSurface,

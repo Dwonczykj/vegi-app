@@ -21,7 +21,7 @@ abstract class IOnBoardStrategy {
     Store<AppState> store,
     String? phoneNumber,
   );
-  Future<dynamic> verify(
+  Future<UserCredential?> verify(
     Store<AppState> store,
     String verificationCode,
   );
@@ -31,16 +31,16 @@ abstract class IOnBoardStrategy {
   });
   Future<bool> reauthenticateUser();
   Future<bool> updateEmail({required String email});
-  Future<LoggedInToVegiResult> loginToVegiWithPhone({
-    required Store<AppState> store,
-    required String phoneNumber,
-    required String firebaseSessionToken,
-  });
-  Future<LoggedInToVegiResult> loginToVegiWithEmail({
-    required Store<AppState> store,
-    required String email,
-    required String firebaseSessionToken,
-  });
+  // Future<LoggedInToVegiResult> loginToVegiWithPhone({
+  //   required Store<AppState> store,
+  //   required String phoneNumber,
+  //   required String firebaseSessionToken,
+  // });
+  // Future<LoggedInToVegiResult> loginToVegiWithEmail({
+  //   required Store<AppState> store,
+  //   required String email,
+  //   required String firebaseSessionToken,
+  // });
 
   Future<UserCredential?> signInUserWithEmailAndPassword({
     required String email,

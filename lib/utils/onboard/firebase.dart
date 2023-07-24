@@ -188,7 +188,7 @@ class FirebaseStrategy implements IOnBoardStrategy {
   }
 
   @override
-  Future<void> verify(
+  Future<UserCredential?> verify(
     Store<AppState> store,
     String verificationCode,
   ) async {
@@ -210,7 +210,7 @@ class FirebaseStrategy implements IOnBoardStrategy {
         smsCode: verificationCode,
       );
     } on FirebaseAuthException catch (e, s) {
-      return _catchFirebaseException(
+      await _catchFirebaseException(
         e,
         s,
         additionalMessage:
@@ -218,8 +218,9 @@ class FirebaseStrategy implements IOnBoardStrategy {
         firebaseStatusIfNotHandled:
             FirebaseAuthenticationStatus.phoneAuthVerificationFailed,
       );
+      return null;
     } on Exception catch (e, s) {
-      return _catchUnknownException(
+      await _catchUnknownException(
         e,
         s,
         additionalMessage:
@@ -227,14 +228,13 @@ class FirebaseStrategy implements IOnBoardStrategy {
         firebaseStatusIfNotHandled:
             FirebaseAuthenticationStatus.phoneAuthVerificationFailed,
       );
+      return null;
     }
 
-    await _completeVerification(
+    return _completeVerification(
       store,
       credentials,
     );
-
-    return;
   }
 
   @override
@@ -654,25 +654,27 @@ class FirebaseStrategy implements IOnBoardStrategy {
     }
 
     // should we move this to user_actions?
-    final result = await loginToVegiWithPhone(
-      store: store,
-      phoneNumber: store.state.userState.phoneNumber,
-      firebaseSessionToken: firebaseSessionToken,
-    );
-    if (result != LoggedInToVegiResult.success) {
-      _complete(
-        store: store,
-        firebaseStatus: result == LoggedInToVegiResult.firebaseTokenExpired
-            ? FirebaseAuthenticationStatus.expired
-            : FirebaseAuthenticationStatus.authenticated,
-        vegiStatus: VegiAuthenticationStatus.failed,
-      );
-    }
-    store.dispatch(
-      SignupLoading(
-        isLoading: false,
-      ),
-    );
+    //TODO: GET rid of this code and in authenticator, call loginToVegiWithPhone code
+    // Use same code as in Authentication._signInFirebaseRequestVerificationCodeStep2
+    // final result = await loginToVegiWithPhone(
+    //   store: store,
+    //   phoneNumber: store.state.userState.phoneNumber,
+    //   firebaseSessionToken: firebaseSessionToken,
+    // );
+    // if (result != LoggedInToVegiResult.success) {
+    //   _complete(
+    //     store: store,
+    //     firebaseStatus: result == LoggedInToVegiResult.firebaseTokenExpired
+    //         ? FirebaseAuthenticationStatus.expired
+    //         : FirebaseAuthenticationStatus.authenticated,
+    //     vegiStatus: VegiAuthenticationStatus.failed,
+    //   );
+    // }
+    // store.dispatch(
+    //   SignupLoading(
+    //     isLoading: false,
+    //   ),
+    // );
     return;
   }
 
@@ -687,20 +689,20 @@ class FirebaseStrategy implements IOnBoardStrategy {
       return;
     }
 
-    final result = await loginToVegiWithEmail(
-      store: store,
-      email: store.state.userState.email.toLowerCase().trim(),
-      firebaseSessionToken: firebaseSessionToken,
-    );
-    if (result != LoggedInToVegiResult.success) {
-      _complete(
-        store: store,
-        firebaseStatus: result == LoggedInToVegiResult.firebaseTokenExpired
-            ? FirebaseAuthenticationStatus.expired
-            : FirebaseAuthenticationStatus.authenticated,
-        vegiStatus: VegiAuthenticationStatus.failed,
-      );
-    }
+    // final result = await loginToVegiWithEmail(
+    //   store: store,
+    //   email: store.state.userState.email.toLowerCase().trim(),
+    //   firebaseSessionToken: firebaseSessionToken,
+    // );
+    // if (result != LoggedInToVegiResult.success) {
+    //   _complete(
+    //     store: store,
+    //     firebaseStatus: result == LoggedInToVegiResult.firebaseTokenExpired
+    //         ? FirebaseAuthenticationStatus.expired
+    //         : FirebaseAuthenticationStatus.authenticated,
+    //     vegiStatus: VegiAuthenticationStatus.failed,
+    //   );
+    // }
     store.dispatch(
       SignupLoading(
         isLoading: false,
@@ -974,6 +976,11 @@ class FirebaseStrategy implements IOnBoardStrategy {
           store: store,
           vegiStatus: VegiAuthenticationStatus.authenticated,
         );
+        store.dispatch(
+          SignupFailed(
+            error: null,
+          ),
+        );
         if (store.state.userState.hasNotOnboarded) {
           log.error(
               'Should never have userState.hasNotOnboarded here. Please refactor');
@@ -1018,69 +1025,69 @@ class FirebaseStrategy implements IOnBoardStrategy {
     }
   }
 
-  @override
-  Future<LoggedInToVegiResult> loginToVegiWithEmail({
-    required Store<AppState> store,
-    required String email,
-    required String firebaseSessionToken,
-  }) async {
-    try {
-      store.dispatch(
-        SetUserAuthenticationStatus(
-          vegiStatus: VegiAuthenticationStatus.loading,
-        ),
-      );
-      // * sets the session cookie on the service class instance.
-      final vegiSession = await peeplEatsService.loginWithEmail(
-        emailAddress: email,
-        firebaseSessionToken: firebaseSessionToken,
-        rememberMe: true,
-      );
-      final userDetails = vegiSession.user;
-      if (vegiSession.sessionCookie.isNotEmpty) {
-        _complete(
-          store: store,
-          vegiStatus: VegiAuthenticationStatus.authenticated,
-        );
-        store.dispatch(isBetaWhitelistedAddress());
-        unawaited(
-          Analytics.track(
-            eventName: AnalyticsEvents.loginWithPhone,
-            properties: {
-              AnalyticsProps.status: AnalyticsProps.success,
-            },
-          ),
-        );
-      } else {
-        log.error('Could not login to vegi...');
-        _complete(
-          store: store,
-          vegiStatus: VegiAuthenticationStatus.failed,
-        );
-      }
-      return vegiSession.sessionCookie.isNotEmpty
-          ? LoggedInToVegiResult.success
-          : LoggedInToVegiResult.failedEmptySessionCookie;
-    } catch (err) {
-      _complete(
-        store: store,
-        firebaseStatus: FirebaseAuthenticationStatus.authenticated,
-        vegiStatus: VegiAuthenticationStatus.failed,
-      );
-      log
-        ..error(
-          err,
-          stackTrace: StackTrace.current,
-        )
-        ..error(err.toString());
-      store.dispatch(
-        SetFirebaseSessionToken(
-          firebaseSessionToken: null,
-        ),
-      );
-      return LoggedInToVegiResult.failed;
-    }
-  }
+  // @override
+  // Future<LoggedInToVegiResult> loginToVegiWithEmail({
+  //   required Store<AppState> store,
+  //   required String email,
+  //   required String firebaseSessionToken,
+  // }) async {
+  //   try {
+  //     store.dispatch(
+  //       SetUserAuthenticationStatus(
+  //         vegiStatus: VegiAuthenticationStatus.loading,
+  //       ),
+  //     );
+  //     // * sets the session cookie on the service class instance.
+  //     final vegiSession = await peeplEatsService.loginWithEmail(
+  //       emailAddress: email,
+  //       firebaseSessionToken: firebaseSessionToken,
+  //       rememberMe: true,
+  //     );
+  //     final userDetails = vegiSession.user;
+  //     if (vegiSession.sessionCookie.isNotEmpty) {
+  //       _complete(
+  //         store: store,
+  //         vegiStatus: VegiAuthenticationStatus.authenticated,
+  //       );
+  //       store.dispatch(isBetaWhitelistedAddress());
+  //       unawaited(
+  //         Analytics.track(
+  //           eventName: AnalyticsEvents.loginWithPhone,
+  //           properties: {
+  //             AnalyticsProps.status: AnalyticsProps.success,
+  //           },
+  //         ),
+  //       );
+  //     } else {
+  //       log.error('Could not login to vegi...');
+  //       _complete(
+  //         store: store,
+  //         vegiStatus: VegiAuthenticationStatus.failed,
+  //       );
+  //     }
+  //     return vegiSession.sessionCookie.isNotEmpty
+  //         ? LoggedInToVegiResult.success
+  //         : LoggedInToVegiResult.failedEmptySessionCookie;
+  //   } catch (err) {
+  //     _complete(
+  //       store: store,
+  //       firebaseStatus: FirebaseAuthenticationStatus.authenticated,
+  //       vegiStatus: VegiAuthenticationStatus.failed,
+  //     );
+  //     log
+  //       ..error(
+  //         err,
+  //         stackTrace: StackTrace.current,
+  //       )
+  //       ..error(err.toString());
+  //     store.dispatch(
+  //       SetFirebaseSessionToken(
+  //         firebaseSessionToken: null,
+  //       ),
+  //     );
+  //     return LoggedInToVegiResult.failed;
+  //   }
+  // }
 
   @override
   Future<UserCredential?> signInUserFromVerificationLink({

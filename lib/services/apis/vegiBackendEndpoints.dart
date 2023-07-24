@@ -5,6 +5,7 @@ class VegiBackendEndpoints {
   static const loginWithPhone = 'api/v1/admin/login-with-firebase';
   static const loginWithEmail = 'api/v1/admin/login-with-password';
   static const logout = 'api/v1/admin/logout';
+  static const resetPassword = 'api/v1/admin/reset-password';
   static const isLoggedIn = 'api/v1/admin/logged-in';
   static const deregisterUser = 'api/v1/admin/deregister-user';
   static const deleteVegiAccountEntry = 'api/v1/admin/delete-account-entry';

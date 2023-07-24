@@ -11,6 +11,7 @@ import 'package:vegan_liverpool/features/shared/widgets/primary_button.dart';
 import 'package:vegan_liverpool/models/app_state.dart';
 import 'package:vegan_liverpool/redux/actions/user_actions.dart';
 import 'package:vegan_liverpool/utils/analytics.dart';
+import 'package:vegan_liverpool/utils/constants.dart';
 
 class LogoutConfirmationDialog extends StatefulWidget {
   const LogoutConfirmationDialog({Key? key}) : super(key: key);
@@ -24,7 +25,9 @@ class _LogoutConfirmationDialogState extends State<LogoutConfirmationDialog>
     with SingleTickerProviderStateMixin {
   late AnimationController controller;
   late Animation<double> scaleAnimation;
-  Duration theDuration = const Duration(seconds: 30);
+  Duration theDuration = const Duration(
+    seconds: DebugHelpers.inDebugMode ? 4 : 30,
+  );
   late Timer countdownTimer;
   late DateTime timerFrom;
   DateTime get timerTo => timerFrom.add(theDuration);

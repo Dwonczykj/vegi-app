@@ -5,10 +5,12 @@ import 'package:redux/redux.dart';
 import 'package:vegan_liverpool/constants/enums.dart';
 import 'package:vegan_liverpool/models/app_state.dart';
 import 'package:vegan_liverpool/models/authViewModel.dart';
+import 'package:vegan_liverpool/redux/actions/cart_actions.dart';
 import 'package:vegan_liverpool/redux/actions/onboarding_actions.dart';
 import 'package:vegan_liverpool/redux/actions/user_actions.dart';
 import 'package:vegan_liverpool/redux/viewsmodels/signUpErrorDetails.dart';
 import 'package:vegan_liverpool/services.dart';
+import 'package:vegan_liverpool/utils/log/log.dart';
 import 'package:vegan_liverpool/utils/onboard/authentication.dart';
 import 'package:vegan_liverpool/version.dart';
 import 'package:vegan_liverpool/utils/constants.dart' as VegiConstants;
@@ -17,7 +19,6 @@ class MainScreenViewModel extends Equatable implements IAuthViewModel {
   const MainScreenViewModel({
     required this.walletAddress,
     required this.userIsVerified,
-    required this.isOnboarded,
     required this.loggedInToVegi,
     required this.hasLoggedInBefore,
     required this.surveyCompleted,
@@ -48,6 +49,7 @@ class MainScreenViewModel extends Equatable implements IAuthViewModel {
     required this.signup,
     required this.setUserSessionExpired,
     required this.setLoading,
+    required this.subscribeToEmailToNotifications,
     required this.signinEmailAndPassword,
     required this.signInUserUsingEmailLink,
     required this.setAppUpdateNotificationSeen,
@@ -58,7 +60,8 @@ class MainScreenViewModel extends Equatable implements IAuthViewModel {
       walletAddress:
           store.state.userState.walletAddress, //.replaceFirst('x', 'f'),
       userIsVerified: store.state.userState.userIsVerified,
-      isOnboarded: !store.state.userState.hasNotOnboarded,
+      hasNotOnboarded: store.state.userState.hasNotOnboarded ||
+          store.state.userState.jwtToken == '',
       loggedInToVegi: store.state.userState.isLoggedInToVegi,
       hasLoggedInBefore: store.state.userState.hasLoggedInBefore,
       surveyCompleted: store.state.userState.surveyCompleted,
@@ -72,8 +75,6 @@ class MainScreenViewModel extends Equatable implements IAuthViewModel {
       email: store.state.userState.email,
       password: store.state.userState.password,
       displayName: store.state.userState.displayName,
-      hasNotOnboarded: store.state.userState.hasNotOnboarded ||
-          store.state.userState.jwtToken == '',
       accountDetailsExist: store.state.userState.accountDetailsExist,
       isLoggedInToVegi: store.state.userState.isLoggedInToVegi,
       biometricAuth: store.state.userState.authType,
@@ -126,7 +127,7 @@ class MainScreenViewModel extends Equatable implements IAuthViewModel {
         // );
       },
       setUserSessionExpired: () {
-        store.dispatch(SetVegiSessionExpired());
+        store.dispatch(SetFirebaseSessionExpired());
       },
       routeToLogin: () {
         authenticator.routeToLoginScreen();
@@ -141,30 +142,41 @@ class MainScreenViewModel extends Equatable implements IAuthViewModel {
       signinEmailAndPassword: ({
         required String email,
         required String password,
-      }) {
-        authenticator.login(
+      }) async {
+        await authenticator.login(
           loginDetails: EmailLoginDetails(
             email: email,
             password: password,
           ),
         );
       },
-      signInUserUsingEmailLink: ({
-        required String email,
-      }) {
-        authenticator.requestEmailLinkForEmailAddress(
-          email: email,
-        );
-      },
+      signInUserUsingEmailLink: authenticator.requestEmailLinkForEmailAddress,
       setAppUpdateNotificationSeen: () {
         store.dispatch(updateAppNeededNotificationSeen());
+      },
+      subscribeToEmailToNotifications: ({
+        required String email,
+        required bool receiveNotifications,
+      }) {
+        if (email.toLowerCase().trim() != store.state.userState.email) {
+          log.warn(
+            'Cannot subscribeToEmailToNotifications as email on set email onboarding screen not same as email in userstate.',
+            sentry: true,
+          );
+          return;
+        }
+        store.dispatch(
+          subscribeToWaitingListEmails(
+            email: email,
+            receiveUpdates: receiveNotifications,
+          ),
+        );
       },
     );
   }
 
   final String walletAddress;
   final bool userIsVerified;
-  final bool isOnboarded;
   final bool loggedInToVegi;
   final bool hasLoggedInBefore;
   final bool surveyCompleted;
@@ -190,6 +202,10 @@ class MainScreenViewModel extends Equatable implements IAuthViewModel {
   final Version? appUpdateNextVersion;
   final Version? appUpdateNotificationSeenForBuildNumber;
 
+  final void Function({
+    required String email,
+    required bool receiveNotifications,
+  }) subscribeToEmailToNotifications;
   final void Function({
     required CountryCode countryCode,
     required PhoneNumber phoneNumber,
@@ -238,7 +254,6 @@ class MainScreenViewModel extends Equatable implements IAuthViewModel {
   List<Object?> get props => [
         walletAddress,
         userIsVerified,
-        isOnboarded,
         loggedInToVegi,
         hasLoggedInBefore,
         surveyCompleted,
