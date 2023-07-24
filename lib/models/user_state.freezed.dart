@@ -25,7 +25,7 @@ mixin _$UserState {
   WalletModules? get walletModules => throw _privateConstructorUsedError;
   DateTime? get installedAt => throw _privateConstructorUsedError;
   bool? get isContactsSynced => throw _privateConstructorUsedError;
-  bool get isLoggedOut => throw _privateConstructorUsedError;
+  bool get hasNotOnboarded => throw _privateConstructorUsedError;
   bool get scrollToTop => throw _privateConstructorUsedError;
 
   /// * The wallet address is a smart contract wallet which actually conducts payments, holds balances, etc.
@@ -68,6 +68,7 @@ mixin _$UserState {
   String get jwtToken => throw _privateConstructorUsedError;
   String get displayName => throw _privateConstructorUsedError;
   String get avatarUrl => throw _privateConstructorUsedError;
+  String get avatarTempFilePath => throw _privateConstructorUsedError;
   PreferredSignonMethod get preferredSignonMethod =>
       throw _privateConstructorUsedError;
   String get email => throw _privateConstructorUsedError;
@@ -117,6 +118,7 @@ mixin _$UserState {
   bool get isVendor => throw _privateConstructorUsedError;
   String? get stripeCustomerId => throw _privateConstructorUsedError;
   int? get vegiAccountId => throw _privateConstructorUsedError;
+  int? get vegiUserId => throw _privateConstructorUsedError;
   bool get isVegiSuperAdmin => throw _privateConstructorUsedError;
   VegiRole get userVegiRole => throw _privateConstructorUsedError;
   int? get positionInWaitingList => throw _privateConstructorUsedError;
@@ -141,7 +143,7 @@ abstract class $UserStateCopyWith<$Res> {
       WalletModules? walletModules,
       DateTime? installedAt,
       bool? isContactsSynced,
-      bool isLoggedOut,
+      bool hasNotOnboarded,
       bool scrollToTop,
       String walletAddress,
       String privateKey,
@@ -164,6 +166,7 @@ abstract class $UserStateCopyWith<$Res> {
       String jwtToken,
       String displayName,
       String avatarUrl,
+      String avatarTempFilePath,
       PreferredSignonMethod preferredSignonMethod,
       String email,
       String? password,
@@ -209,6 +212,7 @@ abstract class $UserStateCopyWith<$Res> {
       bool isVendor,
       String? stripeCustomerId,
       int? vegiAccountId,
+      int? vegiUserId,
       bool isVegiSuperAdmin,
       VegiRole userVegiRole,
       int? positionInWaitingList,
@@ -237,7 +241,7 @@ class _$UserStateCopyWithImpl<$Res, $Val extends UserState>
     Object? walletModules = freezed,
     Object? installedAt = freezed,
     Object? isContactsSynced = freezed,
-    Object? isLoggedOut = null,
+    Object? hasNotOnboarded = null,
     Object? scrollToTop = null,
     Object? walletAddress = null,
     Object? privateKey = null,
@@ -258,6 +262,7 @@ class _$UserStateCopyWithImpl<$Res, $Val extends UserState>
     Object? jwtToken = null,
     Object? displayName = null,
     Object? avatarUrl = null,
+    Object? avatarTempFilePath = null,
     Object? preferredSignonMethod = null,
     Object? email = null,
     Object? password = freezed,
@@ -292,6 +297,7 @@ class _$UserStateCopyWithImpl<$Res, $Val extends UserState>
     Object? isVendor = null,
     Object? stripeCustomerId = freezed,
     Object? vegiAccountId = freezed,
+    Object? vegiUserId = freezed,
     Object? isVegiSuperAdmin = null,
     Object? userVegiRole = null,
     Object? positionInWaitingList = freezed,
@@ -316,9 +322,9 @@ class _$UserStateCopyWithImpl<$Res, $Val extends UserState>
           ? _value.isContactsSynced
           : isContactsSynced // ignore: cast_nullable_to_non_nullable
               as bool?,
-      isLoggedOut: null == isLoggedOut
-          ? _value.isLoggedOut
-          : isLoggedOut // ignore: cast_nullable_to_non_nullable
+      hasNotOnboarded: null == hasNotOnboarded
+          ? _value.hasNotOnboarded
+          : hasNotOnboarded // ignore: cast_nullable_to_non_nullable
               as bool,
       scrollToTop: null == scrollToTop
           ? _value.scrollToTop
@@ -399,6 +405,10 @@ class _$UserStateCopyWithImpl<$Res, $Val extends UserState>
       avatarUrl: null == avatarUrl
           ? _value.avatarUrl
           : avatarUrl // ignore: cast_nullable_to_non_nullable
+              as String,
+      avatarTempFilePath: null == avatarTempFilePath
+          ? _value.avatarTempFilePath
+          : avatarTempFilePath // ignore: cast_nullable_to_non_nullable
               as String,
       preferredSignonMethod: null == preferredSignonMethod
           ? _value.preferredSignonMethod
@@ -536,6 +546,10 @@ class _$UserStateCopyWithImpl<$Res, $Val extends UserState>
       vegiAccountId: freezed == vegiAccountId
           ? _value.vegiAccountId
           : vegiAccountId // ignore: cast_nullable_to_non_nullable
+              as int?,
+      vegiUserId: freezed == vegiUserId
+          ? _value.vegiUserId
+          : vegiUserId // ignore: cast_nullable_to_non_nullable
               as int?,
       isVegiSuperAdmin: null == isVegiSuperAdmin
           ? _value.isVegiSuperAdmin
@@ -602,7 +616,7 @@ abstract class _$$_UserStateCopyWith<$Res> implements $UserStateCopyWith<$Res> {
       WalletModules? walletModules,
       DateTime? installedAt,
       bool? isContactsSynced,
-      bool isLoggedOut,
+      bool hasNotOnboarded,
       bool scrollToTop,
       String walletAddress,
       String privateKey,
@@ -625,6 +639,7 @@ abstract class _$$_UserStateCopyWith<$Res> implements $UserStateCopyWith<$Res> {
       String jwtToken,
       String displayName,
       String avatarUrl,
+      String avatarTempFilePath,
       PreferredSignonMethod preferredSignonMethod,
       String email,
       String? password,
@@ -670,6 +685,7 @@ abstract class _$$_UserStateCopyWith<$Res> implements $UserStateCopyWith<$Res> {
       bool isVendor,
       String? stripeCustomerId,
       int? vegiAccountId,
+      int? vegiUserId,
       bool isVegiSuperAdmin,
       VegiRole userVegiRole,
       int? positionInWaitingList,
@@ -698,7 +714,7 @@ class __$$_UserStateCopyWithImpl<$Res>
     Object? walletModules = freezed,
     Object? installedAt = freezed,
     Object? isContactsSynced = freezed,
-    Object? isLoggedOut = null,
+    Object? hasNotOnboarded = null,
     Object? scrollToTop = null,
     Object? walletAddress = null,
     Object? privateKey = null,
@@ -719,6 +735,7 @@ class __$$_UserStateCopyWithImpl<$Res>
     Object? jwtToken = null,
     Object? displayName = null,
     Object? avatarUrl = null,
+    Object? avatarTempFilePath = null,
     Object? preferredSignonMethod = null,
     Object? email = null,
     Object? password = freezed,
@@ -753,6 +770,7 @@ class __$$_UserStateCopyWithImpl<$Res>
     Object? isVendor = null,
     Object? stripeCustomerId = freezed,
     Object? vegiAccountId = freezed,
+    Object? vegiUserId = freezed,
     Object? isVegiSuperAdmin = null,
     Object? userVegiRole = null,
     Object? positionInWaitingList = freezed,
@@ -777,9 +795,9 @@ class __$$_UserStateCopyWithImpl<$Res>
           ? _value.isContactsSynced
           : isContactsSynced // ignore: cast_nullable_to_non_nullable
               as bool?,
-      isLoggedOut: null == isLoggedOut
-          ? _value.isLoggedOut
-          : isLoggedOut // ignore: cast_nullable_to_non_nullable
+      hasNotOnboarded: null == hasNotOnboarded
+          ? _value.hasNotOnboarded
+          : hasNotOnboarded // ignore: cast_nullable_to_non_nullable
               as bool,
       scrollToTop: null == scrollToTop
           ? _value.scrollToTop
@@ -860,6 +878,10 @@ class __$$_UserStateCopyWithImpl<$Res>
       avatarUrl: null == avatarUrl
           ? _value.avatarUrl
           : avatarUrl // ignore: cast_nullable_to_non_nullable
+              as String,
+      avatarTempFilePath: null == avatarTempFilePath
+          ? _value.avatarTempFilePath
+          : avatarTempFilePath // ignore: cast_nullable_to_non_nullable
               as String,
       preferredSignonMethod: null == preferredSignonMethod
           ? _value.preferredSignonMethod
@@ -998,6 +1020,10 @@ class __$$_UserStateCopyWithImpl<$Res>
           ? _value.vegiAccountId
           : vegiAccountId // ignore: cast_nullable_to_non_nullable
               as int?,
+      vegiUserId: freezed == vegiUserId
+          ? _value.vegiUserId
+          : vegiUserId // ignore: cast_nullable_to_non_nullable
+              as int?,
       isVegiSuperAdmin: null == isVegiSuperAdmin
           ? _value.isVegiSuperAdmin
           : isVegiSuperAdmin // ignore: cast_nullable_to_non_nullable
@@ -1036,7 +1062,7 @@ class _$_UserState extends _UserState with DiagnosticableTreeMixin {
       this.walletModules,
       this.installedAt,
       this.isContactsSynced,
-      this.isLoggedOut = true,
+      this.hasNotOnboarded = true,
       this.scrollToTop = false,
       this.walletAddress = '',
       this.privateKey = '',
@@ -1060,6 +1086,7 @@ class _$_UserState extends _UserState with DiagnosticableTreeMixin {
       this.jwtToken = '',
       this.displayName = VegiConstants.defaultDisplayName,
       this.avatarUrl = '',
+      this.avatarTempFilePath = '',
       this.preferredSignonMethod = PreferredSignonMethod.phone,
       this.email = '',
       this.password = null,
@@ -1105,6 +1132,7 @@ class _$_UserState extends _UserState with DiagnosticableTreeMixin {
       this.isVendor = false,
       this.stripeCustomerId = null,
       this.vegiAccountId = null,
+      this.vegiUserId = null,
       this.isVegiSuperAdmin = false,
       this.userVegiRole = VegiRole.consumer,
       this.positionInWaitingList = null,
@@ -1127,7 +1155,7 @@ class _$_UserState extends _UserState with DiagnosticableTreeMixin {
   final bool? isContactsSynced;
   @override
   @JsonKey()
-  final bool isLoggedOut;
+  final bool hasNotOnboarded;
   @override
   @JsonKey()
   final bool scrollToTop;
@@ -1204,6 +1232,9 @@ class _$_UserState extends _UserState with DiagnosticableTreeMixin {
   @override
   @JsonKey()
   final String avatarUrl;
+  @override
+  @JsonKey()
+  final String avatarTempFilePath;
   @override
   @JsonKey()
   final PreferredSignonMethod preferredSignonMethod;
@@ -1307,6 +1338,9 @@ class _$_UserState extends _UserState with DiagnosticableTreeMixin {
   final int? vegiAccountId;
   @override
   @JsonKey()
+  final int? vegiUserId;
+  @override
+  @JsonKey()
   final bool isVegiSuperAdmin;
   @override
   @JsonKey()
@@ -1326,7 +1360,7 @@ class _$_UserState extends _UserState with DiagnosticableTreeMixin {
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'UserState(wcURI: $wcURI, walletModules: $walletModules, installedAt: $installedAt, isContactsSynced: $isContactsSynced, isLoggedOut: $isLoggedOut, scrollToTop: $scrollToTop, walletAddress: $walletAddress, privateKey: $privateKey, fuseWalletCredentials: $fuseWalletCredentials, smartWallet: $smartWallet, fuseAuthenticationStatus: $fuseAuthenticationStatus, firebaseAuthenticationStatus: $firebaseAuthenticationStatus, vegiAuthenticationStatus: $vegiAuthenticationStatus, backup: $backup, networks: $networks, mnemonic: $mnemonic, pincode: $pincode, countryCode: $countryCode, phoneNumber: $phoneNumber, phoneNumberNoCountry: $phoneNumberNoCountry, warnSendDialogShowed: $warnSendDialogShowed, isoCode: $isoCode, jwtToken: $jwtToken, displayName: $displayName, avatarUrl: $avatarUrl, preferredSignonMethod: $preferredSignonMethod, email: $email, password: $password, verificationId: $verificationId, verificationPassed: $verificationPassed, identifier: $identifier, appUpdateNeeded: $appUpdateNeeded, appUpdateNextVersion: $appUpdateNextVersion, appUpdateNotificationSeenForBuildNumber: $appUpdateNotificationSeenForBuildNumber, syncedContacts: $syncedContacts, reverseContacts: $reverseContacts, currency: $currency, hasUpgrade: $hasUpgrade, authType: $authType, biometricallyAuthenticated: $biometricallyAuthenticated, locale: $locale, firebaseCredentials: $firebaseCredentials, firebaseSessionToken: $firebaseSessionToken, vegiSessionCookie: $vegiSessionCookie, listOfDeliveryAddresses: $listOfDeliveryAddresses, hasSavedSeedPhrase: $hasSavedSeedPhrase, useLiveLocation: $useLiveLocation, userIsVerified: $userIsVerified, userLocation: $userLocation, isUsingSimulator: $isUsingSimulator, isUsingIosSimulator: $isUsingIosSimulator, initialLoginDateTime: $initialLoginDateTime, showSeedPhraseBanner: $showSeedPhraseBanner, surveyQuestions: $surveyQuestions, surveyCompleted: $surveyCompleted, surveyEmailUsed: $surveyEmailUsed, isVendor: $isVendor, stripeCustomerId: $stripeCustomerId, vegiAccountId: $vegiAccountId, isVegiSuperAdmin: $isVegiSuperAdmin, userVegiRole: $userVegiRole, positionInWaitingList: $positionInWaitingList, subscribedToWaitingListUpdates: $subscribedToWaitingListUpdates, waitingListEntryId: $waitingListEntryId, loginCounter: $loginCounter)';
+    return 'UserState(wcURI: $wcURI, walletModules: $walletModules, installedAt: $installedAt, isContactsSynced: $isContactsSynced, hasNotOnboarded: $hasNotOnboarded, scrollToTop: $scrollToTop, walletAddress: $walletAddress, privateKey: $privateKey, fuseWalletCredentials: $fuseWalletCredentials, smartWallet: $smartWallet, fuseAuthenticationStatus: $fuseAuthenticationStatus, firebaseAuthenticationStatus: $firebaseAuthenticationStatus, vegiAuthenticationStatus: $vegiAuthenticationStatus, backup: $backup, networks: $networks, mnemonic: $mnemonic, pincode: $pincode, countryCode: $countryCode, phoneNumber: $phoneNumber, phoneNumberNoCountry: $phoneNumberNoCountry, warnSendDialogShowed: $warnSendDialogShowed, isoCode: $isoCode, jwtToken: $jwtToken, displayName: $displayName, avatarUrl: $avatarUrl, avatarTempFilePath: $avatarTempFilePath, preferredSignonMethod: $preferredSignonMethod, email: $email, password: $password, verificationId: $verificationId, verificationPassed: $verificationPassed, identifier: $identifier, appUpdateNeeded: $appUpdateNeeded, appUpdateNextVersion: $appUpdateNextVersion, appUpdateNotificationSeenForBuildNumber: $appUpdateNotificationSeenForBuildNumber, syncedContacts: $syncedContacts, reverseContacts: $reverseContacts, currency: $currency, hasUpgrade: $hasUpgrade, authType: $authType, biometricallyAuthenticated: $biometricallyAuthenticated, locale: $locale, firebaseCredentials: $firebaseCredentials, firebaseSessionToken: $firebaseSessionToken, vegiSessionCookie: $vegiSessionCookie, listOfDeliveryAddresses: $listOfDeliveryAddresses, hasSavedSeedPhrase: $hasSavedSeedPhrase, useLiveLocation: $useLiveLocation, userIsVerified: $userIsVerified, userLocation: $userLocation, isUsingSimulator: $isUsingSimulator, isUsingIosSimulator: $isUsingIosSimulator, initialLoginDateTime: $initialLoginDateTime, showSeedPhraseBanner: $showSeedPhraseBanner, surveyQuestions: $surveyQuestions, surveyCompleted: $surveyCompleted, surveyEmailUsed: $surveyEmailUsed, isVendor: $isVendor, stripeCustomerId: $stripeCustomerId, vegiAccountId: $vegiAccountId, vegiUserId: $vegiUserId, isVegiSuperAdmin: $isVegiSuperAdmin, userVegiRole: $userVegiRole, positionInWaitingList: $positionInWaitingList, subscribedToWaitingListUpdates: $subscribedToWaitingListUpdates, waitingListEntryId: $waitingListEntryId, loginCounter: $loginCounter)';
   }
 
   @override
@@ -1338,7 +1372,7 @@ class _$_UserState extends _UserState with DiagnosticableTreeMixin {
       ..add(DiagnosticsProperty('walletModules', walletModules))
       ..add(DiagnosticsProperty('installedAt', installedAt))
       ..add(DiagnosticsProperty('isContactsSynced', isContactsSynced))
-      ..add(DiagnosticsProperty('isLoggedOut', isLoggedOut))
+      ..add(DiagnosticsProperty('hasNotOnboarded', hasNotOnboarded))
       ..add(DiagnosticsProperty('scrollToTop', scrollToTop))
       ..add(DiagnosticsProperty('walletAddress', walletAddress))
       ..add(DiagnosticsProperty('privateKey', privateKey))
@@ -1362,6 +1396,7 @@ class _$_UserState extends _UserState with DiagnosticableTreeMixin {
       ..add(DiagnosticsProperty('jwtToken', jwtToken))
       ..add(DiagnosticsProperty('displayName', displayName))
       ..add(DiagnosticsProperty('avatarUrl', avatarUrl))
+      ..add(DiagnosticsProperty('avatarTempFilePath', avatarTempFilePath))
       ..add(DiagnosticsProperty('preferredSignonMethod', preferredSignonMethod))
       ..add(DiagnosticsProperty('email', email))
       ..add(DiagnosticsProperty('password', password))
@@ -1399,6 +1434,7 @@ class _$_UserState extends _UserState with DiagnosticableTreeMixin {
       ..add(DiagnosticsProperty('isVendor', isVendor))
       ..add(DiagnosticsProperty('stripeCustomerId', stripeCustomerId))
       ..add(DiagnosticsProperty('vegiAccountId', vegiAccountId))
+      ..add(DiagnosticsProperty('vegiUserId', vegiUserId))
       ..add(DiagnosticsProperty('isVegiSuperAdmin', isVegiSuperAdmin))
       ..add(DiagnosticsProperty('userVegiRole', userVegiRole))
       ..add(DiagnosticsProperty('positionInWaitingList', positionInWaitingList))
@@ -1420,8 +1456,8 @@ class _$_UserState extends _UserState with DiagnosticableTreeMixin {
                 other.installedAt == installedAt) &&
             (identical(other.isContactsSynced, isContactsSynced) ||
                 other.isContactsSynced == isContactsSynced) &&
-            (identical(other.isLoggedOut, isLoggedOut) ||
-                other.isLoggedOut == isLoggedOut) &&
+            (identical(other.hasNotOnboarded, hasNotOnboarded) ||
+                other.hasNotOnboarded == hasNotOnboarded) &&
             (identical(other.scrollToTop, scrollToTop) ||
                 other.scrollToTop == scrollToTop) &&
             (identical(other.walletAddress, walletAddress) ||
@@ -1458,6 +1494,8 @@ class _$_UserState extends _UserState with DiagnosticableTreeMixin {
                 other.displayName == displayName) &&
             (identical(other.avatarUrl, avatarUrl) ||
                 other.avatarUrl == avatarUrl) &&
+            (identical(other.avatarTempFilePath, avatarTempFilePath) ||
+                other.avatarTempFilePath == avatarTempFilePath) &&
             (identical(other.preferredSignonMethod, preferredSignonMethod) ||
                 other.preferredSignonMethod == preferredSignonMethod) &&
             (identical(other.email, email) || other.email == email) &&
@@ -1474,8 +1512,7 @@ class _$_UserState extends _UserState with DiagnosticableTreeMixin {
             (identical(other.appUpdateNextVersion, appUpdateNextVersion) ||
                 other.appUpdateNextVersion == appUpdateNextVersion) &&
             (identical(other.appUpdateNotificationSeenForBuildNumber, appUpdateNotificationSeenForBuildNumber) ||
-                other.appUpdateNotificationSeenForBuildNumber ==
-                    appUpdateNotificationSeenForBuildNumber) &&
+                other.appUpdateNotificationSeenForBuildNumber == appUpdateNotificationSeenForBuildNumber) &&
             const DeepCollectionEquality().equals(other.syncedContacts, syncedContacts) &&
             const DeepCollectionEquality().equals(other.reverseContacts, reverseContacts) &&
             (identical(other.currency, currency) || other.currency == currency) &&
@@ -1501,6 +1538,7 @@ class _$_UserState extends _UserState with DiagnosticableTreeMixin {
             (identical(other.isVendor, isVendor) || other.isVendor == isVendor) &&
             (identical(other.stripeCustomerId, stripeCustomerId) || other.stripeCustomerId == stripeCustomerId) &&
             (identical(other.vegiAccountId, vegiAccountId) || other.vegiAccountId == vegiAccountId) &&
+            (identical(other.vegiUserId, vegiUserId) || other.vegiUserId == vegiUserId) &&
             (identical(other.isVegiSuperAdmin, isVegiSuperAdmin) || other.isVegiSuperAdmin == isVegiSuperAdmin) &&
             (identical(other.userVegiRole, userVegiRole) || other.userVegiRole == userVegiRole) &&
             (identical(other.positionInWaitingList, positionInWaitingList) || other.positionInWaitingList == positionInWaitingList) &&
@@ -1517,7 +1555,7 @@ class _$_UserState extends _UserState with DiagnosticableTreeMixin {
         walletModules,
         installedAt,
         isContactsSynced,
-        isLoggedOut,
+        hasNotOnboarded,
         scrollToTop,
         walletAddress,
         privateKey,
@@ -1538,6 +1576,7 @@ class _$_UserState extends _UserState with DiagnosticableTreeMixin {
         jwtToken,
         displayName,
         avatarUrl,
+        avatarTempFilePath,
         preferredSignonMethod,
         email,
         password,
@@ -1572,6 +1611,7 @@ class _$_UserState extends _UserState with DiagnosticableTreeMixin {
         isVendor,
         stripeCustomerId,
         vegiAccountId,
+        vegiUserId,
         isVegiSuperAdmin,
         userVegiRole,
         positionInWaitingList,
@@ -1601,7 +1641,7 @@ abstract class _UserState extends UserState {
       final WalletModules? walletModules,
       final DateTime? installedAt,
       final bool? isContactsSynced,
-      final bool isLoggedOut,
+      final bool hasNotOnboarded,
       final bool scrollToTop,
       final String walletAddress,
       final String privateKey,
@@ -1624,6 +1664,7 @@ abstract class _UserState extends UserState {
       final String jwtToken,
       final String displayName,
       final String avatarUrl,
+      final String avatarTempFilePath,
       final PreferredSignonMethod preferredSignonMethod,
       final String email,
       final String? password,
@@ -1669,6 +1710,7 @@ abstract class _UserState extends UserState {
       final bool isVendor,
       final String? stripeCustomerId,
       final int? vegiAccountId,
+      final int? vegiUserId,
       final bool isVegiSuperAdmin,
       final VegiRole userVegiRole,
       final int? positionInWaitingList,
@@ -1690,7 +1732,7 @@ abstract class _UserState extends UserState {
   @override
   bool? get isContactsSynced;
   @override
-  bool get isLoggedOut;
+  bool get hasNotOnboarded;
   @override
   bool get scrollToTop;
   @override
@@ -1749,6 +1791,8 @@ abstract class _UserState extends UserState {
   String get displayName;
   @override
   String get avatarUrl;
+  @override
+  String get avatarTempFilePath;
   @override
   PreferredSignonMethod get preferredSignonMethod;
   @override
@@ -1828,6 +1872,8 @@ abstract class _UserState extends UserState {
   String? get stripeCustomerId;
   @override
   int? get vegiAccountId;
+  @override
+  int? get vegiUserId;
   @override
   bool get isVegiSuperAdmin;
   @override

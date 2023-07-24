@@ -36,7 +36,7 @@ class SplashViewModel extends Equatable implements IAuthViewModel {
     return SplashViewModel(
       privateKey: store.state.userState.privateKey,
       jwtToken: store.state.userState.jwtToken,
-      isLoggedOut: store.state.userState.isLoggedOut ||
+      isLoggedOut: store.state.userState.hasNotOnboarded ||
           store.state.userState.jwtToken == '',
       accountDetailsExist: store.state.userState.accountDetailsExist,
       isWhiteListedAccount: store.state.userState.userIsVerified,
@@ -50,7 +50,7 @@ class SplashViewModel extends Equatable implements IAuthViewModel {
       accountCreated: store.state.userState.walletAddress
           .isNotEmpty, //! BUG to do with jwt token not used to init fuse wallet ->
       logout: () {
-        store.dispatch(LogoutRequestSuccess());
+        store.dispatch(logoutRequest());
       },
       initFuse: authenticator.initFuse,
       resetSurveyCompleted: () {

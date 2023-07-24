@@ -30,7 +30,7 @@ class WaitingListBetaEligibilityScreen extends StatelessWidget {
       converter: WaitinglistPositionInQueueViewModel.fromStore,
       // onInit: (store) {
       //   if (store.state.userState.userIsVerified) {
-      //     if (store.state.userState.isLoggedOut) {
+      //     if (store.state.userState.hasNotOnboarded) {
       //       store.dispatch(
       //         authenticate(),
       //       );

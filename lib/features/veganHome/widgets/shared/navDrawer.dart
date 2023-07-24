@@ -12,8 +12,10 @@ import 'package:vegan_liverpool/constants/analytics_events.dart';
 import 'package:vegan_liverpool/constants/enums.dart';
 import 'package:vegan_liverpool/constants/theme.dart';
 import 'package:vegan_liverpool/features/veganHome/widgets/menu/suggestProductDialog.dart';
+import 'package:vegan_liverpool/features/veganHome/widgets/shared/deleteAccountDialog.dart';
 import 'package:vegan_liverpool/features/veganHome/widgets/shared/helpDialog.dart';
 import 'package:vegan_liverpool/features/veganHome/widgets/shared/logoutDialog.dart';
+import 'package:vegan_liverpool/features/veganHome/widgets/shared/userAvatar.dart';
 import 'package:vegan_liverpool/features/veganHome/widgets/shared/vegiAvatar.dart';
 import 'package:vegan_liverpool/models/app_state.dart';
 import 'package:vegan_liverpool/redux/viewsmodels/drawer.dart';
@@ -44,18 +46,23 @@ class _NavDrawerState extends State<NavDrawer> {
                 ),
                 child: Column(
                   children: [
-                    if (viewmodel.avatarUrl == '')
-                      const CircleAvatar(
-                        backgroundImage: AssetImage('assets/images/anom.png'),
-                        radius: avatarSquareSize / 2.0,
-                      )
-                    else
-                      VegiAvatar(
-                        avatarUrl: viewmodel.avatarUrl,
-                        avatarSquareSize: avatarSquareSize,
-                        showAdminBanner: viewmodel.isSuperAdmin,
-                        isUpdating: false,
-                      ),
+                    // if (viewmodel.avatarUrl == '')
+                    //   const CircleAvatar(
+                    //     backgroundImage: AssetImage('assets/images/anom.png'),
+                    //     radius:
+                    //         avatarSquareSize / 2.0 + (avatarSquareSize * 0.1),
+                    //   )
+                    // else
+                    //   UserAvatar(
+                    //     avatarUrl: viewmodel.avatarUrl,
+                    //     avatarSquareSize: avatarSquareSize,
+                    //     showAdminBanner: viewmodel.isSuperAdmin,
+                    //     isUpdating: false,
+                    //   ),
+                    const VegiAvatar(
+                      isEditable: false,
+                      avatarSquareSize: 40,
+                    ),
                     Padding(
                       padding: const EdgeInsets.all(8),
                       child: Text(
@@ -207,6 +214,14 @@ class _NavDrawerState extends State<NavDrawer> {
                     onTap: () => showDialog<Widget>(
                       context: context,
                       builder: (context) => const LogoutDialog(),
+                    ),
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.delete_forever),
+                    title: const Text('Delete Account'),
+                    onTap: () => showDialog<Widget>(
+                      context: context,
+                      builder: (context) => const DeleteAccountDialog(),
                     ),
                   ),
                   if (kDebugMode)

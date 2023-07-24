@@ -21,7 +21,7 @@ Future<bool> authenticateSDK(
   if (authRes.hasData) {
     final jwt = authRes.data!;
     store
-      ..dispatch(LoginVerifySuccess(jwt))
+      ..dispatch(SetJWTSuccess(jwt))
       ..dispatch(
         SetUserAuthenticationStatus(
           fuseStatus: FuseAuthenticationStatus.created,

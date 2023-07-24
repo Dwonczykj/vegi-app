@@ -62,15 +62,6 @@ class _MainScreenState extends State<MainScreen> {
               ),
             );
         startFirebaseNotifs(store);
-        // Remove below auth as already done in builder...
-        // if (!store.state.userState.isLoggedOut) {
-        //   store.dispatch(
-        //     authenticate(),
-        //   );
-        //   // ..dispatch(
-        //   //   enablePushNotifications(store.state.userState.walletAddress),
-        //   // )
-        // }
       },
       distinct: true,
       onWillChange: (previousViewModel, newViewModel) async {
@@ -107,12 +98,15 @@ class _MainScreenState extends State<MainScreen> {
         if (vm.signupIsInFlux) {
           return LoadingScaffold;
         }
-        if (!vm.loggedIn) {
+        if (!vm.isOnboarded) {
           log.info(
               'Push OnBoardScreen() from ${rootRouter.current.name} as not logged in');
           // TODO: This condition needs more as comes in here after we submit our UserNameScreen....
           rootRouter.replaceAll([const OnBoardScreen()]);
           return LoadingScaffold;
+        }
+        if (!vm.isLoggedIn) {
+          vm.routeToLogin();
         }
         if (!vm.userIsVerified && VegiConstants.showWaitingListFunnel) {
           return const WaitingListFunnelScreen();
@@ -129,7 +123,7 @@ class _MainScreenState extends State<MainScreen> {
               .checkVegiSessionIsStillValid()
               .then((sessionStillValid) {
             if (!sessionStillValid) {
-              vm.setUserIsLoggedOut();
+              vm.setUserSessionExpired();
               log.info(
                   'Push SignUpScreen() from ${rootRouter.current.name} as vegi session has expired');
               // rootRouter.replaceAll([const SignUpScreen()]);

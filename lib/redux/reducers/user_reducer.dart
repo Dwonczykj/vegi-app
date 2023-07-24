@@ -30,7 +30,7 @@ final userReducers = combineReducers<UserState>([
       .call,
   TypedReducer<UserState, SetPhoneNumberSuccess>(_setPhoneNumber).call,
   TypedReducer<UserState, LoginRequestSuccess>(_loginSuccess).call,
-  TypedReducer<UserState, LoginVerifySuccess>(_loginVerifySuccess).call,
+  TypedReducer<UserState, SetJWTSuccess>(_setJWTSuccess).call,
   TypedReducer<UserState, LogoutRequestSuccess>(_logoutSuccess).call,
   TypedReducer<UserState, SetPincodeSuccess>(_setPincode).call,
   TypedReducer<UserState, SetDisplayName>(_setDisplayName).call,
@@ -48,7 +48,7 @@ final userReducers = combineReducers<UserState>([
     _setSurveyQuestions,
   ).call,
   TypedReducer<UserState, SetUserAvatar>(_setUserAvatar).call,
-  TypedReducer<UserState, SetReLoggedin>(_reLoginUser).call,
+  TypedReducer<UserState, SetTempUserAvatar>(_setTempUserAvatar).call,
   TypedReducer<UserState, BackupSuccess>(_backupSuccess).call,
   TypedReducer<UserState, StoreBackupStatus>(_storeBackupStatus).call,
   TypedReducer<UserState, SetFirebaseCredentials>(_setFirebaseCredentials).call,
@@ -59,6 +59,8 @@ final userReducers = combineReducers<UserState>([
   TypedReducer<UserState, SetVerificationId>(_setVerificationId).call,
   TypedReducer<UserState, SetVerificationFailed>(_setVerificationFailed).call,
   TypedReducer<UserState, SetVegiSessionExpired>(_setVegiSessionExpired).call,
+  TypedReducer<UserState, SetVegiSessionCookie>(_setVegiSessionCookie).call,
+  TypedReducer<UserState, SetVegiUserId>(_setVegiUserId).call,
   TypedReducer<UserState, SetVegiSessionCookie>(_setVegiSessionCookie).call,
   TypedReducer<UserState, SetPhoneNumber>(_setPhoneNumberRaw).call,
   TypedReducer<UserState, JustInstalled>(_justInstalled).call,
@@ -259,13 +261,6 @@ UserState _storeBackupStatus(
   return state.copyWith(backup: action.isSmartWalletBackedUp);
 }
 
-UserState _reLoginUser(
-  UserState state,
-  SetReLoggedin action,
-) {
-  return state.copyWith(isLoggedOut: false);
-}
-
 UserState _setUserAuthenticationStatus(
   UserState state,
   SetUserAuthenticationStatus action,
@@ -278,11 +273,11 @@ UserState _setUserAuthenticationStatus(
         action.fuseStatus ?? state.fuseAuthenticationStatus,
     vegiAuthenticationStatus:
         action.vegiStatus ?? state.vegiAuthenticationStatus,
-    isLoggedOut: (action.vegiStatus ?? state.vegiAuthenticationStatus) ==
-                VegiAuthenticationStatus.authenticated &&
-            state.isLoggedOut
-        ? false
-        : state.isLoggedOut,
+    // isLoggedOut: (action.vegiStatus ?? state.vegiAuthenticationStatus) ==
+    //             VegiAuthenticationStatus.authenticated &&
+    //         state.isLoggedOut
+    //     ? false
+    //     : state.isLoggedOut,
   );
 }
 
@@ -383,6 +378,16 @@ UserState _setVegiSessionCookie(
   );
 }
 
+UserState _setVegiUserId(
+  UserState state,
+  SetVegiUserId action,
+) {
+  log.info('$action');
+  return state.copyWith(
+    vegiUserId: action.id,
+  );
+}
+
 UserState _setPhoneNumberRaw(
   UserState state,
   SetPhoneNumber action,
@@ -392,12 +397,11 @@ UserState _setPhoneNumberRaw(
   );
 }
 
-UserState _loginVerifySuccess(
+UserState _setJWTSuccess(
   UserState state,
-  LoginVerifySuccess action,
+  SetJWTSuccess action,
 ) {
   return state.copyWith(
-    isLoggedOut: false,
     jwtToken: action.jwtToken,
   );
 }
@@ -408,7 +412,6 @@ UserState _logoutSuccess(
 ) {
   log.info('LogoutRequestSuccess ACTION: $action');
   return state.copyWith(
-    isLoggedOut: true,
     biometricallyAuthenticated: false,
     firebaseSessionToken: null,
     fuseAuthenticationStatus: FuseAuthenticationStatus.unauthenticated,
@@ -420,6 +423,7 @@ UserState _logoutSuccess(
     privateKey: '',
     userIsVerified: false,
     password: '',
+    // vegiUserId: null,
     // email: '',
     // phoneNumber: '',
     displayName: '',
@@ -482,7 +486,20 @@ UserState _setUserAvatar(
   UserState state,
   SetUserAvatar action,
 ) {
-  return state.copyWith(avatarUrl: action.avatarUrl);
+  return state.copyWith(
+    avatarUrl: action.avatarUrl,
+    avatarTempFilePath: '',
+  );
+}
+
+UserState _setTempUserAvatar(
+  UserState state,
+  SetTempUserAvatar action,
+) {
+  return state.copyWith(
+    avatarTempFilePath: action.tempAvatarFile.path,
+    avatarUrl: '',
+  );
 }
 
 UserState _setPincode(
@@ -491,7 +508,6 @@ UserState _setPincode(
 ) {
   return state.copyWith(
     pincode: action.pincode,
-    isLoggedOut: false,
   );
 }
 
@@ -501,7 +517,6 @@ UserState _setSecurityType(
 ) {
   return state.copyWith(
     authType: action.biometricAuth,
-    isLoggedOut: false,
   );
 }
 

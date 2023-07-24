@@ -183,6 +183,11 @@ class FirebaseStrategy implements IOnBoardStrategy {
   }
 
   @override
+  Future<void> signout() async {
+    return firebaseAuth.signOut();
+  }
+
+  @override
   Future<void> verify(
     Store<AppState> store,
     String verificationCode,
@@ -969,9 +974,9 @@ class FirebaseStrategy implements IOnBoardStrategy {
           store: store,
           vegiStatus: VegiAuthenticationStatus.authenticated,
         );
-        if (store.state.userState.isLoggedOut) {
+        if (store.state.userState.hasNotOnboarded) {
           log.error(
-              'Should never have userState.isLoggedOut here. Please refactor');
+              'Should never have userState.hasNotOnboarded here. Please refactor');
         }
         store.dispatch(isBetaWhitelistedAddress());
         unawaited(

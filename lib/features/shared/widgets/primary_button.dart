@@ -11,6 +11,7 @@ class PrimaryButton extends StatelessWidget {
     this.height = 50.0,
     this.preload = false,
     this.disabled = false,
+    this.buttonColor,
   }) : super(key: key);
   final GestureTapCallback onPressed;
   final String label;
@@ -19,6 +20,7 @@ class PrimaryButton extends StatelessWidget {
   final bool preload;
   final bool disabled;
   final double fontSize;
+  final Color? buttonColor;
 
   @override
   Widget build(BuildContext context) {
@@ -26,19 +28,22 @@ class PrimaryButton extends StatelessWidget {
       width: width,
       height: height,
       decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: disabled
-              ? [
-                  Theme.of(context).colorScheme.secondary,
-                  Theme.of(context).colorScheme.secondary
-                ]
-              : [
-                  Theme.of(context).colorScheme.primary,
-                  Theme.of(context).colorScheme.primary,
-                ],
-        ),
+        gradient: buttonColor == null
+            ? LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: disabled
+                    ? [
+                        Theme.of(context).colorScheme.secondary,
+                        Theme.of(context).colorScheme.secondary
+                      ]
+                    : [
+                        Theme.of(context).colorScheme.primary,
+                        Theme.of(context).colorScheme.primary,
+                      ],
+              )
+            : null,
+        color: buttonColor != null ? buttonColor : null,
         borderRadius: const BorderRadius.all(Radius.circular(11)),
       ),
       child: Material(

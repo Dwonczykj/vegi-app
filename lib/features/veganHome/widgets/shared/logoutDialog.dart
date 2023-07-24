@@ -51,7 +51,7 @@ class _LogoutDialogState extends State<LogoutDialog>
       converter: (store) {
         logout = () {
           if (store.state.userState.hasSavedSeedPhrase) {
-            store.dispatch(LogoutRequestSuccess());
+            store.dispatch(logoutRequest());
             context.router.replace(const OnBoardScreen());
             Analytics.track(eventName: AnalyticsEvents.logout);
           }

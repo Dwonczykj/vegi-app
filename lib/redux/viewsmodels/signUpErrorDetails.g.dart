@@ -24,6 +24,7 @@ Map<String, dynamic> _$$_SignUpErrorDetailsToJson(
 
 const _$SignUpErrCodeEnumMap = {
   SignUpErrCode.invalidCredentials: 'invalidCredentials',
+  SignUpErrCode.invalidVerificationId: 'invalidVerificationId',
   SignUpErrCode.wrongPassword: 'wrongPassword',
   SignUpErrCode.userNotFound: 'userNotFound',
   SignUpErrCode.weakPassword: 'weakPassword',

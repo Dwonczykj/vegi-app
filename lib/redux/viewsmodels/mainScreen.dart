@@ -17,7 +17,7 @@ class MainScreenViewModel extends Equatable implements IAuthViewModel {
   const MainScreenViewModel({
     required this.walletAddress,
     required this.userIsVerified,
-    required this.loggedIn,
+    required this.isOnboarded,
     required this.loggedInToVegi,
     required this.hasLoggedInBefore,
     required this.surveyCompleted,
@@ -29,8 +29,9 @@ class MainScreenViewModel extends Equatable implements IAuthViewModel {
     required this.email,
     required this.password,
     required this.displayName,
-    required this.isLoggedOut,
+    required this.hasNotOnboarded,
     required this.accountDetailsExist,
+    required this.isLoggedInToVegi,
     required this.biometricAuth,
     required this.firebaseSessionToken,
     required this.signupIsInFlux,
@@ -45,7 +46,7 @@ class MainScreenViewModel extends Equatable implements IAuthViewModel {
     required this.setPhoneNumber,
     required this.setEmail,
     required this.signup,
-    required this.setUserIsLoggedOut,
+    required this.setUserSessionExpired,
     required this.setLoading,
     required this.signinEmailAndPassword,
     required this.signInUserUsingEmailLink,
@@ -57,7 +58,7 @@ class MainScreenViewModel extends Equatable implements IAuthViewModel {
       walletAddress:
           store.state.userState.walletAddress, //.replaceFirst('x', 'f'),
       userIsVerified: store.state.userState.userIsVerified,
-      loggedIn: !store.state.userState.isLoggedOut,
+      isOnboarded: !store.state.userState.hasNotOnboarded,
       loggedInToVegi: store.state.userState.isLoggedInToVegi,
       hasLoggedInBefore: store.state.userState.hasLoggedInBefore,
       surveyCompleted: store.state.userState.surveyCompleted,
@@ -71,9 +72,10 @@ class MainScreenViewModel extends Equatable implements IAuthViewModel {
       email: store.state.userState.email,
       password: store.state.userState.password,
       displayName: store.state.userState.displayName,
-      isLoggedOut: store.state.userState.isLoggedOut ||
+      hasNotOnboarded: store.state.userState.hasNotOnboarded ||
           store.state.userState.jwtToken == '',
       accountDetailsExist: store.state.userState.accountDetailsExist,
+      isLoggedInToVegi: store.state.userState.isLoggedInToVegi,
       biometricAuth: store.state.userState.authType,
       signupError: store.state.onboardingState.signupError,
       firebaseAuthenticationStatus:
@@ -123,7 +125,7 @@ class MainScreenViewModel extends Equatable implements IAuthViewModel {
         //   ),
         // );
       },
-      setUserIsLoggedOut: () {
+      setUserSessionExpired: () {
         store.dispatch(SetVegiSessionExpired());
       },
       routeToLogin: () {
@@ -162,7 +164,7 @@ class MainScreenViewModel extends Equatable implements IAuthViewModel {
 
   final String walletAddress;
   final bool userIsVerified;
-  final bool loggedIn;
+  final bool isOnboarded;
   final bool loggedInToVegi;
   final bool hasLoggedInBefore;
   final bool surveyCompleted;
@@ -174,8 +176,9 @@ class MainScreenViewModel extends Equatable implements IAuthViewModel {
   final String email;
   final String? password;
   final String displayName;
-  final bool isLoggedOut;
+  final bool hasNotOnboarded;
   final bool accountDetailsExist;
+  final bool isLoggedInToVegi;
   final BiometricAuth biometricAuth;
   final String? firebaseSessionToken;
   final FirebaseAuthenticationStatus firebaseAuthenticationStatus;
@@ -199,7 +202,7 @@ class MainScreenViewModel extends Equatable implements IAuthViewModel {
     required CountryCode countryCode,
     required PhoneNumber phoneNumber,
   }) signup;
-  final void Function() setUserIsLoggedOut;
+  final void Function() setUserSessionExpired;
   final void Function() routeToLogin;
   final void Function(bool) setLoading;
   final void Function({
@@ -228,13 +231,14 @@ class MainScreenViewModel extends Equatable implements IAuthViewModel {
 
   bool get emailIsSet => email.isNotEmpty;
 
-  bool get isLoggedIn => !isLoggedOut && accountDetailsExist;
+  bool get isLoggedIn =>
+      !hasNotOnboarded && accountDetailsExist && isLoggedInToVegi;
 
   @override
   List<Object?> get props => [
         walletAddress,
         userIsVerified,
-        loggedIn,
+        isOnboarded,
         loggedInToVegi,
         hasLoggedInBefore,
         surveyCompleted,
@@ -244,8 +248,9 @@ class MainScreenViewModel extends Equatable implements IAuthViewModel {
         email,
         password,
         displayName,
-        isLoggedOut,
+        hasNotOnboarded,
         accountDetailsExist,
+        isLoggedInToVegi,
         biometricAuth,
         firebaseSessionToken ?? '',
         signupIsInFlux,

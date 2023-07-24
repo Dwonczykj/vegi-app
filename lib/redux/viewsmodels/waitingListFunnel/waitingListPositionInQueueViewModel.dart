@@ -25,7 +25,7 @@ class WaitinglistPositionInQueueViewModel extends Equatable {
       positionInQueue: store.state.userState.positionInWaitingList,
       userEmail: store.state.userState.email,
       accountCreated: store.state.userState.walletAddress.isNotEmpty,
-      isLoggedIn: !store.state.userState.isLoggedOut,
+      isLoggedIn: !store.state.userState.hasNotOnboarded,
       // authenticateUser: () {
       //   authenticator.login(loginDetails: loginDetails)
       // },

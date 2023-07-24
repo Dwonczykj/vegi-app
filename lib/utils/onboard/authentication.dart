@@ -63,21 +63,41 @@ class EmailVerificationLinkDetails implements iVerificationCodeDetails {
   final String linkId;
 }
 
+T logFunctionCall<T>(
+  T funcCalled, {
+  required String funcName,
+  String className = 'Authentication',
+  String logMessage = '',
+}) {
+  log.info(
+    '$funcName called in $className class. $logMessage',
+    stackTrace: StackTrace.current,
+    sentry: true,
+  );
+  return funcCalled;
+}
+
 class Authentication {
   Future<void> initFuse({
     void Function()? onWalletInitialised,
   }) =>
-      _loginToFuse(
-        onWalletInitialised: onWalletInitialised,
+      logFunctionCall(
+        _loginToFuse(
+          onWalletInitialised: onWalletInitialised,
+        ),
+        funcName: 'initFuse',
       );
 
   Future<void> restoreFuseFromMnemonic({
     required List<String> mnemonicWords,
     void Function()? onWalletInitialised,
   }) =>
-      _loginToFuse(
-        onWalletInitialised: onWalletInitialised,
-        useMnemonicWords: mnemonicWords,
+      logFunctionCall(
+        _loginToFuse(
+          onWalletInitialised: onWalletInitialised,
+          useMnemonicWords: mnemonicWords,
+        ),
+        funcName: 'restoreFuseFromMnemonic',
       );
 
   Future<void> signUp({
@@ -85,10 +105,13 @@ class Authentication {
     required PhoneLoginDetails loginDetails,
   }) async {
     // TODO Change signup to require email and register password, then add a phone number and verify code
-    await _loginToFuse(
-      onWalletInitialised: () => _signUpFirebaseRequestVerificationCodeStep2(
-        loginDetails: loginDetails,
+    logFunctionCall(
+      await _loginToFuse(
+        onWalletInitialised: () => _signUpFirebaseRequestVerificationCodeStep2(
+          loginDetails: loginDetails,
+        ),
       ),
+      funcName: 'signUp',
     );
   }
 
@@ -96,6 +119,10 @@ class Authentication {
     // required iLoginDetails loginDetails,
     required PhoneLoginDetails loginDetails,
   }) async {
+    logFunctionCall(
+      () {},
+      funcName: '_signUpFirebaseRequestVerificationCodeStep2',
+    );
     if (loginDetails is PhoneLoginDetails) {
       return _requestSMSCodeForPhoneNumber(
         countryCode: loginDetails.countryCode,
@@ -172,6 +199,10 @@ class Authentication {
   Future<bool> _signInFirebaseRequestVerificationCodeStep2({
     required iLoginDetails loginDetails,
   }) async {
+    logFunctionCall(
+      () {},
+      funcName: '_signInFirebaseRequestVerificationCodeStep2',
+    );
     if (loginDetails is PhoneLoginDetails) {
       return _requestSMSCodeForPhoneNumber(
         countryCode: loginDetails.countryCode,
@@ -243,6 +274,10 @@ class Authentication {
   }
 
   Future<bool> _signupFirebaseTryReauthenticate() async {
+    logFunctionCall(
+      () {},
+      funcName: '_signupFirebaseTryReauthenticate',
+    );
     final store = await reduxStore;
     if (store.state.userState.firebaseCredentialIsValid) {
       store.dispatch(SignupLoading(isLoading: true));
@@ -275,6 +310,10 @@ class Authentication {
   }
 
   Future<void> _signupVegiTryReauthenticate() async {
+    logFunctionCall(
+      () {},
+      funcName: '_signupVegiTryReauthenticate',
+    );
     final store = await reduxStore;
     // use firebaseAuth SessionToken to authenticate vegi. From here we are sure that firebaseSessionToken is live.
     store.dispatch(SignupLoading(isLoading: true));
@@ -351,13 +390,17 @@ class Authentication {
       }
     }
 
-    if (store.state.userState.isLoggedOut) {
+    if (store.state.userState.hasNotOnboarded) {
       store.dispatch(SetReLoggedin());
     }
     store.dispatch(SignupLoading(isLoading: false));
   }
 
   Future<void> reauthenticate() async {
+    logFunctionCall(
+      () {},
+      funcName: 'reauthenticate',
+    );
     final store = await reduxStore;
     // check fuse
     // * Fuse part
@@ -380,16 +423,23 @@ class Authentication {
     required iLoginDetails loginDetails,
   }) async {
     // TODO Change signup to require email and register password, then add a phone number and verify code
-    await _loginToFuse(
-      onWalletInitialised: () => _signInFirebaseRequestVerificationCodeStep2(
-        loginDetails: loginDetails,
+    logFunctionCall(
+      await _loginToFuse(
+        onWalletInitialised: () => _signInFirebaseRequestVerificationCodeStep2(
+          loginDetails: loginDetails,
+        ),
       ),
+      funcName: 'login',
     );
   }
 
   Future<bool> verify({
     required iVerificationCodeDetails verificationCodeDetails,
   }) async {
+    logFunctionCall(
+      () {},
+      funcName: 'verify',
+    );
     final store = await reduxStore;
     // check fuse authenticated even though should only be calling this function if it is
     if (store.state.userState.fuseAuthenticationStatus !=
@@ -421,6 +471,10 @@ class Authentication {
     required String emailAddress,
     required String emailLink,
   }) async {
+    logFunctionCall(
+      () {},
+      funcName: 'verifyEmailLinkCallback',
+    );
     final store = await reduxStore;
     final userCredential = await onBoardStrategy.signInUserFromVerificationLink(
       email: emailAddress,
@@ -476,7 +530,7 @@ class Authentication {
   Future<bool> isLoggedIn() async {
     final store = await reduxStore;
     final us = store.state.userState;
-    return !store.state.userState.isLoggedOut &&
+    return !store.state.userState.hasNotOnboarded &&
         us.fuseAuthenticationStatus == FuseAuthenticationStatus.authenticated &&
         us.firebaseAuthenticationStatus ==
             FirebaseAuthenticationStatus.authenticated &&
@@ -486,8 +540,30 @@ class Authentication {
   Future<void> logout({
     bool bypassSeedPhraseCheck = false,
   }) async {
+    logFunctionCall(
+      () {},
+      funcName: 'logout',
+    );
     final store = await reduxStore;
     if (store.state.userState.hasSavedSeedPhrase || bypassSeedPhraseCheck) {
+      try {
+        await onBoardStrategy.signout();
+      } on Exception catch (e, s) {
+        log.error(
+          e,
+          stackTrace: s,
+          sentryHint: 'Error signing out of firebase from authenticator',
+        );
+      }
+      try {
+        await peeplEatsService.logOut();
+      } on Exception catch (e, s) {
+        log.error(
+          e,
+          stackTrace: s,
+          sentryHint: 'Error signing out of vegi from authenticator',
+        );
+      }
       store.dispatch(LogoutRequestSuccess());
       await rootRouter.replace(const OnBoardScreen());
       await Analytics.track(eventName: AnalyticsEvents.logout);
@@ -499,7 +575,13 @@ class Authentication {
   }
 
   Future<void> deregisterUser() async {
+    logFunctionCall(
+      () {},
+      funcName: 'deregisterUser',
+    );
+    // no need to save seed phrase in this option as user wants all details to be deleted.
     await peeplEatsService.deleteAllUserDetails();
+    await peeplEatsService.deleteWalletAddressDetailsFromAccountsList();
     await logout();
   }
 
@@ -542,6 +624,10 @@ class Authentication {
     void Function()? onWalletInitialised,
     List<String>? useMnemonicWords,
   }) async {
+    logFunctionCall(
+      () {},
+      funcName: '_loginToFuse',
+    );
     final store = await reduxStore;
     if (store.state.userState.fuseAuthenticationStatus ==
         FuseAuthenticationStatus.authenticated) {
@@ -597,6 +683,10 @@ class Authentication {
     required String email,
     required String password,
   }) async {
+    logFunctionCall(
+      () {},
+      funcName: '_signInToOnboardingProviderWithEmail',
+    );
     // final store = await reduxStore;
     return onBoardStrategy.signInUserWithEmailAndPassword(
       email: email,
@@ -608,6 +698,10 @@ class Authentication {
   Future<bool> requestEmailLinkForEmailAddress({
     required String email,
   }) async {
+    logFunctionCall(
+      () {},
+      funcName: 'requestEmailLinkForEmailAddress',
+    );
     final store = await reduxStore;
     store.dispatch(
       SignupLoading(
@@ -637,6 +731,10 @@ class Authentication {
     required CountryCode countryCode,
     required PhoneNumber phoneNumber,
   }) async {
+    logFunctionCall(
+      () {},
+      funcName: '_requestSMSCodeForPhoneNumber',
+    );
     bool _useWeb3Auth = false;
     final store = await reduxStore;
     try {
@@ -730,6 +828,10 @@ class Authentication {
   Future<void> verifySMSVerificationCode(
     String verificationCode,
   ) async {
+    logFunctionCall(
+      () {},
+      funcName: 'verifySMSVerificationCode',
+    );
     final store = await reduxStore;
     await onBoardStrategy.verify(
       store,
@@ -744,6 +846,10 @@ class Authentication {
     required String phoneNumber,
     required String firebaseSessionToken,
   }) async {
+    logFunctionCall(
+      () {},
+      funcName: '_loginToVegiWithPhone',
+    );
     try {
       store.dispatch(
         SetUserAuthenticationStatus(
@@ -805,6 +911,10 @@ class Authentication {
     required String email,
     required String firebaseSessionToken,
   }) async {
+    logFunctionCall(
+      () {},
+      funcName: '_loginToVegiWithEmail',
+    );
     try {
       store.dispatch(
         SetUserAuthenticationStatus(
@@ -882,6 +992,10 @@ class Authentication {
     PageRouteInfo<dynamic>? routeOnSuccessArg,
     bool shouldReplaceAllRouteStack = true,
   }) async {
+    logFunctionCall(
+      () {},
+      funcName: '_loginToVegi',
+    );
     final store = await reduxStore;
     PageRouteInfo<dynamic> routeOnSuccess;
     if (store.state.userState.displayName.isEmpty) {
@@ -970,7 +1084,7 @@ class Authentication {
         }
       }
 
-      if (store.state.userState.isLoggedOut) {
+      if (store.state.userState.hasNotOnboarded) {
         store.dispatch(SetReLoggedin());
       }
       store.dispatch(SignupLoading(isLoading: false));
@@ -999,6 +1113,10 @@ class Authentication {
     PageRouteInfo<dynamic>? routeOnSuccessArg,
     bool shouldReplaceAllRouteStack = true,
   }) async {
+    logFunctionCall(
+      () {},
+      funcName: '_authenticate',
+    );
     final store = await reduxStore;
     PageRouteInfo<dynamic> routeOnSuccess;
     if (store.state.userState.displayName.isEmpty) {
@@ -1086,6 +1204,10 @@ class Authentication {
     void Function()? onWalletInitialised,
     List<String>? useMnemonicWords,
   }) async {
+    logFunctionCall(
+      () {},
+      funcName: '_initFuseWallet',
+    );
     store
       ..dispatch(
         SetUserAuthenticationStatus(
@@ -1170,7 +1292,11 @@ class Authentication {
   //       walletData.error.toString().contains('LateInit');
   // }
 
-  void _emitWallet(SmartWallet userWallet) async {
+  Future<void> _emitWallet(SmartWallet userWallet) async {
+    logFunctionCall(
+      () {},
+      funcName: '_emitWallet',
+    );
     final store = await reduxStore;
     store
       ..dispatch(
@@ -1292,13 +1418,19 @@ class Authentication {
   Future<void> _fetchCreateWallet({
     void Function()? onWalletInitialised,
   }) async {
+    logFunctionCall(
+      () {},
+      funcName: '_fetchCreateWallet',
+    );
     final store = await reduxStore;
     // Try to fetch a wallet for the EOA, if it doesn't exist create one
     final walletData = await fuseWalletSDK.fetchWallet();
     walletData.pick(
       onData: (SmartWallet smartWallet) async {
         log.info(
-            'fuseWalletSDK.fetchWallet succeeded with Smart wallet address "${smartWallet.smartWalletAddress}"');
+          'fuseWalletSDK.fetchWallet succeeded with Smart wallet address "${smartWallet.smartWalletAddress}"',
+          sentry: true,
+        );
         // set the smart wallet on the store on an ignore propetrty of the state (i.e. not serialized, just memory & set fuse auth to true)
         // then write a helper method next that listens for exactly that store update with signature (newStore, oldStore?) that can be called by each viewmodel...
         _emitWallet(smartWallet);
@@ -1309,7 +1441,9 @@ class Authentication {
             // ..error(
             //     'fuseWalletSDK.fetchWallet failed to fetch fuse smart wallet with error: "$exception"')
             .info(
-                'Authenticator._fetchCreateWallet trying to create a new fuse smart wallet as failed to fetch...');
+          'Authenticator._fetchCreateWallet trying to create a new fuse smart wallet as failed to fetch...',
+          sentry: true,
+        );
         store
           ..dispatch(
             SetUserAuthenticationStatus(
@@ -1334,14 +1468,20 @@ class Authentication {
             (SmartWalletEvent event) {
               switch (event.name) {
                 case "smartWalletCreationStarted":
-                  log.info('smartWalletCreationStarted');
+                  log.info(
+                    'smartWalletCreationStarted',
+                    sentry: true,
+                  );
                   break;
                 case "transactionHash":
                   log.info(
                       'smartWallet.Create.transactionHash "${event.data}"');
                   break;
                 case "smartWalletCreationSucceeded":
-                  log.info('smartWalletCreationSucceeded ${event.data}');
+                  log.info(
+                    'smartWalletCreationSucceeded ${event.data}',
+                    sentry: true,
+                  );
                   _emitWallet(SmartWallet.fromJson(event.data));
                   onWalletInitialised?.call();
                   break;
@@ -1387,12 +1527,18 @@ class Authentication {
     Store<AppState> store, {
     bool forceCreateNew = false,
   }) async {
+    logFunctionCall(
+      () {},
+      funcName: '_tryCreateWallet',
+    );
     if (forceCreateNew != true) {
       final walletDataReFetched = await fuseWalletSDK.fetchWallet();
       if (walletDataReFetched.hasData) {
         final smartWallet = walletDataReFetched.data!;
         log.info(
-            'Successfully refetched smart wallet address ${smartWallet.smartWalletAddress} so no need to create a new wallet as requested');
+          'Successfully refetched smart wallet address ${smartWallet.smartWalletAddress} so no need to create a new wallet as requested',
+          sentry: true,
+        );
         store
           ..dispatch(
             saveSmartWallet(
@@ -1410,6 +1556,7 @@ class Authentication {
       log.info(
         'Failed to fetch wallet from fuseWalletSDK so will attempt to create a new wallet',
         stackTrace: StackTrace.current,
+        sentry: true,
       );
     }
     // we move to createWallet call below
@@ -1461,7 +1608,10 @@ class Authentication {
               ),
             );
           } else if (event.name == 'transactionHash') {
-            log.info('transactionHash ${event.data}');
+            log.info(
+              'transactionHash ${event.data}',
+              sentry: true,
+            );
             store.dispatch(
               SetUserAuthenticationStatus(
                 fuseStatus: FuseAuthenticationStatus.creationTransactionHash,
@@ -1484,7 +1634,9 @@ class Authentication {
             }
             final fuseSDKVersion = event.data['version'];
             log.info(
-                'smartWalletCreationSucceeded with smartwalletaddress: "$smartWalletAddress"');
+              'smartWalletCreationSucceeded with smartwalletaddress: "$smartWalletAddress"',
+              sentry: true,
+            );
 
             if (smartWalletAddress != null && walletModules != null) {
               store
@@ -1512,7 +1664,9 @@ class Authentication {
               if (walletDataFetchPostCreate.hasData) {
                 final smartWallet = walletDataFetchPostCreate.data!;
                 log.info(
-                    'Successfully refetched smart wallet address ${smartWallet.smartWalletAddress}');
+                  'Successfully refetched smart wallet address ${smartWallet.smartWalletAddress}',
+                  sentry: true,
+                );
                 store
                   ..dispatch(
                     saveSmartWallet(
@@ -1601,6 +1755,10 @@ class Authentication {
   Future<void> saveSmartWallet({
     required SmartWallet smartWallet,
   }) async {
+    logFunctionCall(
+      () {},
+      funcName: 'saveSmartWallet',
+    );
     final store = await reduxStore;
     try {
       store.dispatch(
@@ -1620,6 +1778,10 @@ class Authentication {
   }
 
   Future<void> routeToLoginScreen() async {
+    logFunctionCall(
+      () {},
+      funcName: 'routeToLoginScreen',
+    );
     final store = await reduxStore;
     try {
       if (store.state.userState.preferredSignonMethod ==
@@ -1656,6 +1818,10 @@ class Authentication {
   // }
 
   Future<bool> _checkIfVegiSessionIsValid(Store<AppState> store) async {
+    logFunctionCall(
+      () {},
+      funcName: '_checkIfVegiSessionIsValid',
+    );
     try {
       store.dispatch(
         SignupLoading(

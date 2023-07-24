@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:dio/dio.dart';
@@ -12,9 +14,11 @@ import 'package:vegan_liverpool/common/router/routes.gr.dart';
 import 'package:vegan_liverpool/constants/analytics_events.dart';
 import 'package:vegan_liverpool/constants/theme.dart';
 import 'package:vegan_liverpool/features/shared/widgets/my_scaffold.dart';
+import 'package:vegan_liverpool/features/shared/widgets/primary_button.dart';
 import 'package:vegan_liverpool/features/shared/widgets/snackbars.dart';
 import 'package:vegan_liverpool/features/veganHome/Helpers/extensions.dart';
 import 'package:vegan_liverpool/features/veganHome/widgets/checkout/delivery_address/delivery_address_selector_button.dart';
+import 'package:vegan_liverpool/features/veganHome/widgets/shared/deleteAccountDialog.dart';
 import 'package:vegan_liverpool/features/veganHome/widgets/shared/vegiAvatar.dart';
 import 'package:vegan_liverpool/generated/l10n.dart';
 import 'package:vegan_liverpool/models/app_state.dart';
@@ -36,6 +40,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
   String? displayName;
   String? userEmail;
   num? imageUploadPercent = 100;
+  File? _image;
+  final picker = ImagePicker();
+
+  Future<void> pickImage(ImageSource imageSource) async {
+    final pickedFile = await picker.pickImage(source: imageSource);
+
+    setState(() {
+      if (pickedFile != null) {
+        _image = File(pickedFile.path);
+      } else {
+        _image = null;
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -86,83 +104,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           padding: const EdgeInsets.all(16),
                           child: Column(
                             children: [
-                              GestureDetector(
-                                onTap: () => viewmodel.isLoggedIn
-                                    ? _showSourceImagePicker(
-                                        context,
-                                        (source) => viewmodel.editAvatar(
-                                          source,
-                                          onError: (errStr) async {
-                                            await showErrorSnack(
-                                                context: context,
-                                                title: Messages.operationFailed,
-                                                message: '$errStr');
-                                          },
-                                        ),
-                                      )
-                                    : null,
-                                child: viewmodel.avatarUrl == ''
-                                    ? Padding(
-                                        padding:
-                                            const EdgeInsets.only(left: 20),
-                                        child: SvgPicture.asset(
-                                          'assets/images/username.svg',
-                                          width: 95,
-                                          height: avatarSquareSize,
-                                        ),
-                                      )
-                                    : SizedBox(
-                                        height: avatarSquareSize,
-                                        width: avatarSquareSize,
-                                        child: ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(50),
-                                          child: ColoredBox(
-                                            color: Colors.grey.shade400,
-                                            child: Stack(
-                                              children: [
-                                                VegiAvatar(
-                                                  avatarUrl:
-                                                      viewmodel.avatarUrl,
-                                                  avatarSquareSize:
-                                                      avatarSquareSize,
-                                                  
-                                                  isUpdating: viewmodel
-                                                      .httpRequestIsInFlux,
-                                                ),
-                                                if (viewmodel.isLoggedIn)
-                                                  Positioned.directional(
-                                                    textDirection:
-                                                        TextDirection.ltr,
-                                                    bottom: 0,
-                                                    start: 0,
-                                                    end: 0,
-                                                    child: Container(
-                                                      padding: const EdgeInsets
-                                                          .symmetric(
-                                                        vertical: 3,
-                                                      ),
-                                                      alignment:
-                                                          Alignment.center,
-                                                      color: Theme.of(context)
-                                                          .colorScheme
-                                                          .onSurface,
-                                                      child: Text(
-                                                        I10n.of(context).edit,
-                                                        style: TextStyle(
-                                                          color:
-                                                              Theme.of(context)
-                                                                  .canvasColor,
-                                                          fontSize: 9,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  )
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ),
+                              const VegiAvatar(
+                                isEditable: true,
+                                avatarSquareSize: avatarSquareSize,
                               ),
                               const SizedBox(height: 5),
                               Text(
@@ -449,7 +393,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ],
                           ),
                         ),
-
                         const Divider(),
                         _buildGroup(
                           'Seed Phrase',
@@ -558,7 +501,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         const SizedBox(
                           height: 20,
                         ),
-                        //PrimaryButton(onPressed: () {}, label: 'Delete Account')
+                        PrimaryButton(
+                          label: 'Delete Account',
+                          onPressed: () => showDialog<Widget>(
+                            context: context,
+                            builder: (context) => const DeleteAccountDialog(),
+                          ),
+                          buttonColor: Color.fromARGB(255, 144, 0, 0),
+                        ),
                       ],
                     )
                   ],

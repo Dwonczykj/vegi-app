@@ -57,7 +57,7 @@ class LockScreenViewModel extends Equatable implements IAuthViewModel {
   factory LockScreenViewModel.fromStore(Store<AppState> store) {
     return LockScreenViewModel(
       pincode: store.state.userState.pincode,
-      loggedIn: !store.state.userState.isLoggedOut,
+      loggedIn: !store.state.userState.hasNotOnboarded,
       signupInFlux: store.state.onboardingState.signupIsInFlux,
       biometricAuth: store.state.userState.authType,
       biometricallyAuthenticated:
@@ -96,7 +96,7 @@ class LockScreenViewModel extends Equatable implements IAuthViewModel {
         return result == LoggedInToVegiResult.success;
       },
       loginAgain: authenticator.reauthenticate,
-      notAuthenticated: store.state.userState.isLoggedOut ||
+      notAuthenticated: store.state.userState.hasNotOnboarded ||
           store.state.userState.fuseAuthenticationStatus !=
               FuseAuthenticationStatus.authenticated ||
           store.state.userState.firebaseAuthenticationStatus !=

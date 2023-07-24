@@ -7,6 +7,7 @@ class VegiBackendEndpoints {
   static const logout = 'api/v1/admin/logout';
   static const isLoggedIn = 'api/v1/admin/logged-in';
   static const deregisterUser = 'api/v1/admin/deregister-user';
+  static const deleteVegiAccountEntry = 'api/v1/admin/delete-account-entry';
   static String featuredRestaurants(String outCode) =>
       'api/v1/vendors?outcode=$outCode';
   static String fetchSingleRestaurant(int restaurantID) =>

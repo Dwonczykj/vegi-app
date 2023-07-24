@@ -1,5 +1,4 @@
-import 'dart:ffi';
-import 'dart:convert';
+import 'dart:io';
 
 import 'package:enum_to_string/enum_to_string.dart';
 import 'package:firebase_auth_platform_interface/firebase_auth_platform_interface.dart';
@@ -8,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:fuse_wallet_sdk/fuse_wallet_sdk.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:vegan_liverpool/constants/enums.dart';
 import 'package:vegan_liverpool/features/veganHome/Helpers/helpers.dart';
@@ -78,7 +78,7 @@ class UserState with _$UserState {
     DateTime? installedAt,
     bool? isContactsSynced,
     @Default(true)
-        bool isLoggedOut,
+        bool hasNotOnboarded,
     @Default(false)
         bool scrollToTop,
 
@@ -137,6 +137,8 @@ class UserState with _$UserState {
         String displayName,
     @Default('')
         String avatarUrl,
+    @Default('')
+        String avatarTempFilePath,
     @Default(PreferredSignonMethod.phone)
         PreferredSignonMethod preferredSignonMethod,
     @Default('')
@@ -224,6 +226,8 @@ class UserState with _$UserState {
         String? stripeCustomerId,
     @Default(null)
         int? vegiAccountId,
+    @Default(null)
+        int? vegiUserId,
     @Default(false)
         bool isVegiSuperAdmin,
     @Default(VegiRole.consumer)
@@ -246,7 +250,7 @@ class UserState with _$UserState {
         syncedContacts: [],
         reverseContacts: <String, String>{},
         displayName: VegiConstants.defaultDisplayName,
-        isLoggedOut: true,
+        hasNotOnboarded: true,
         authType: BiometricAuth.none,
         currency: 'gbp',
         useLiveLocation: false,
@@ -267,8 +271,10 @@ class UserState with _$UserState {
       );
 
   String get accountAddress => fuseWalletCredentials?.address.toString() ?? '';
+
   bool get accountDetailsExist =>
       accountAddress.isNotEmpty && walletAddress.isNotEmpty;
+
   bool get firebaseCredentialIsValid =>
       firebaseCredentials != null &&
       (firebaseCredentials is PhoneAuthCredential
@@ -276,9 +282,14 @@ class UserState with _$UserState {
           : true);
 
   bool get isLoggedInToVegi =>
+      fuseAuthenticationStatus == FuseAuthenticationStatus.authenticated &&
       firebaseAuthenticationStatus ==
           FirebaseAuthenticationStatus.authenticated &&
       vegiAuthenticationStatus == VegiAuthenticationStatus.authenticated;
+
+  bool get isLoggedIn => isLoggedInToVegi;
+
+  bool get hasOnboarded => !hasNotOnboarded;
 
   bool get hasLoggedInBefore =>
       authType != BiometricAuth.none || vegiAccountId != null;

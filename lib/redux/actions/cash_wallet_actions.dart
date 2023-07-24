@@ -329,7 +329,7 @@ ThunkAction<AppState> startFetchTokensBalances() {
       Timer.periodic(
         const Duration(seconds: Variables.intervalSeconds),
         (Timer timer) async {
-          final bool isLoggedOut = store.state.userState.isLoggedOut;
+          final bool isLoggedOut = !store.state.userState.isLoggedIn;
           if (isLoggedOut) {
             log.info('Stop fetching token balances as logged out.');
             store.dispatch(SetIsFetchingBalances(isFetching: false));

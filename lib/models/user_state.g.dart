@@ -15,7 +15,7 @@ _$_UserState _$$_UserStateFromJson(Map<String, dynamic> json) => _$_UserState(
           ? null
           : DateTime.parse(json['installedAt'] as String),
       isContactsSynced: json['isContactsSynced'] as bool?,
-      isLoggedOut: json['isLoggedOut'] as bool? ?? true,
+      hasNotOnboarded: json['hasNotOnboarded'] as bool? ?? true,
       scrollToTop: json['scrollToTop'] as bool? ?? false,
       walletAddress: json['walletAddress'] as String? ?? '',
       privateKey: json['privateKey'] as String? ?? '',
@@ -52,6 +52,7 @@ _$_UserState _$$_UserStateFromJson(Map<String, dynamic> json) => _$_UserState(
       displayName:
           json['displayName'] as String? ?? VegiConstants.defaultDisplayName,
       avatarUrl: json['avatarUrl'] as String? ?? '',
+      avatarTempFilePath: json['avatarTempFilePath'] as String? ?? '',
       preferredSignonMethod: $enumDecodeNullable(
               _$PreferredSignonMethodEnumMap, json['preferredSignonMethod']) ??
           PreferredSignonMethod.phone,
@@ -98,6 +99,7 @@ _$_UserState _$$_UserStateFromJson(Map<String, dynamic> json) => _$_UserState(
       isVendor: json['isVendor'] as bool? ?? false,
       stripeCustomerId: json['stripeCustomerId'] as String? ?? null,
       vegiAccountId: json['vegiAccountId'] as int? ?? null,
+      vegiUserId: json['vegiUserId'] as int? ?? null,
       isVegiSuperAdmin: json['isVegiSuperAdmin'] as bool? ?? false,
       userVegiRole:
           $enumDecodeNullable(_$VegiRoleEnumMap, json['userVegiRole']) ??
@@ -114,7 +116,7 @@ Map<String, dynamic> _$$_UserStateToJson(_$_UserState instance) =>
       'walletModules': instance.walletModules?.toJson(),
       'installedAt': instance.installedAt?.toIso8601String(),
       'isContactsSynced': instance.isContactsSynced,
-      'isLoggedOut': instance.isLoggedOut,
+      'hasNotOnboarded': instance.hasNotOnboarded,
       'scrollToTop': instance.scrollToTop,
       'walletAddress': instance.walletAddress,
       'privateKey': instance.privateKey,
@@ -137,6 +139,7 @@ Map<String, dynamic> _$$_UserStateToJson(_$_UserState instance) =>
       'jwtToken': instance.jwtToken,
       'displayName': instance.displayName,
       'avatarUrl': instance.avatarUrl,
+      'avatarTempFilePath': instance.avatarTempFilePath,
       'preferredSignonMethod':
           _$PreferredSignonMethodEnumMap[instance.preferredSignonMethod]!,
       'email': instance.email,
@@ -166,6 +169,7 @@ Map<String, dynamic> _$$_UserStateToJson(_$_UserState instance) =>
       'isVendor': instance.isVendor,
       'stripeCustomerId': instance.stripeCustomerId,
       'vegiAccountId': instance.vegiAccountId,
+      'vegiUserId': instance.vegiUserId,
       'isVegiSuperAdmin': instance.isVegiSuperAdmin,
       'userVegiRole': _$VegiRoleEnumMap[instance.userVegiRole]!,
       'positionInWaitingList': instance.positionInWaitingList,
@@ -225,6 +229,7 @@ const _$FirebaseAuthenticationStatusEnumMap = {
       'updateEmailUsingVerificationFailed',
   FirebaseAuthenticationStatus.userGetIdTokenFailed: 'userGetIdTokenFailed',
   FirebaseAuthenticationStatus.invalidCredentials: 'invalidCredentials',
+  FirebaseAuthenticationStatus.invalidVerificationId: 'invalidVerificationId',
   FirebaseAuthenticationStatus.beginAuthentication: 'beginAuthentication',
 };
 

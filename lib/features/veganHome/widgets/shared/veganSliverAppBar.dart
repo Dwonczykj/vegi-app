@@ -7,6 +7,7 @@ import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:vegan_liverpool/constants/analytics_events.dart';
 import 'package:vegan_liverpool/constants/theme.dart';
 import 'package:vegan_liverpool/features/veganHome/widgets/shared/helpDialog.dart';
+import 'package:vegan_liverpool/features/veganHome/widgets/shared/userAvatar.dart';
 import 'package:vegan_liverpool/features/veganHome/widgets/shared/vegiAvatar.dart';
 import 'package:vegan_liverpool/models/app_state.dart';
 import 'package:vegan_liverpool/models/restaurant/restaurantItem.dart';
@@ -204,18 +205,19 @@ class _VeganSliverAppBarState extends State<VeganSliverAppBar> {
                           },
                           child: Stack(
                             children: [
-                              if (viewmodel.avatarUrl == '')
-                                const CircleAvatar(
-                                  backgroundImage:
-                                      AssetImage('assets/images/anom.png'),
-                                  radius: 23,
-                                )
-                              else
-                                VegiAvatar(
-                                  avatarUrl: viewmodel.avatarUrl,
-                                  avatarSquareSize: 40,
-                                  showAdminBanner: viewmodel.userIsVegiAdmin,
-                                ),
+                              const VegiAvatar(isEditable: false, avatarSquareSize: 40,),
+                              // if (viewmodel.avatarUrl == '')
+                              //   const CircleAvatar(
+                              //     backgroundImage:
+                              //         AssetImage('assets/images/anom.png'),
+                              //     radius: 23,
+                              //   )
+                              // else
+                              //   UserAvatar(
+                              //     avatarUrl: viewmodel.avatarUrl,
+                              //     avatarSquareSize: 40,
+                              //     showAdminBanner: viewmodel.userIsVegiAdmin,
+                              //   ),
                               if (viewmodel.listOfScheduledOrders.isNotEmpty)
                                 Positioned(
                                   right: 0,

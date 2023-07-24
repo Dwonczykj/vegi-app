@@ -51,6 +51,11 @@ import 'package:vegan_liverpool/utils/onboard/authentication.dart' as _i3;
 import 'package:vegan_liverpool/utils/onboard/Istrategy.dart' as _i13;
 import 'package:vegan_liverpool/utils/stripe.dart' as _i29;
 
+const String _dev = 'dev';
+const String _qa = 'qa';
+const String _production = 'production';
+const String _test = 'test';
+
 extension GetItInjectableX on _i1.GetIt {
   // initializes the registration of main-scope dependencies inside of GetIt
   Future<_i1.GetIt> init({
@@ -81,6 +86,12 @@ extension GetItInjectableX on _i1.GetIt {
         () => firebaseInjectableModule.firebaseAnalytics);
     await gh.factoryAsync<_i8.FirebaseApp>(
       () => firebaseInjectableModule.firebaseApp,
+      registerFor: {
+        _dev,
+        _qa,
+        _production,
+        _test,
+      },
       preResolve: true,
     );
     gh.lazySingleton<_i9.FirebaseAuth>(

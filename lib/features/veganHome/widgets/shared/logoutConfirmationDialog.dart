@@ -68,7 +68,7 @@ class _LogoutConfirmationDialogState extends State<LogoutConfirmationDialog>
       final seconds = timerTo.difference(DateTime.now()).inSeconds;
       if (seconds < 0) {
         countdownTimer.cancel();
-        store.dispatch(LogoutRequestSuccess());
+        store.dispatch(logoutRequest());
         context.router.replace(const OnBoardScreen());
         Analytics.track(eventName: AnalyticsEvents.logout);
       }

@@ -213,6 +213,11 @@ class PeeplEatsService extends HttpService {
           ),
         )
         ..dispatch(
+          SetVegiUserId(
+            id: userDetails.id,
+          ),
+        )
+        ..dispatch(
           SetUserRoleOnVegi(
             userRole: userDetails.role,
             isSuperAdmin: userDetails.isSuperAdmin,
@@ -296,8 +301,28 @@ class PeeplEatsService extends HttpService {
       VegiBackendEndpoints.deregisterUser,
       sendWithAuthCreds: false,
       data: {
+        'id': store.state.userState.vegiUserId,
         'email': store.state.userState.email,
         'phone': store.state.userState.phoneNumber,
+      },
+    );
+
+    if (responseHasErrorStatus(response)) {
+      log.error(
+        'Bad response returned when trying to deregister user and delete all their data: $response',
+      );
+      return false;
+    }
+    return true;
+  }
+
+  Future<bool> deleteWalletAddressDetailsFromAccountsList() async {
+    final store = await reduxStore;
+    final Response<dynamic> response = await dioPost(
+      VegiBackendEndpoints.deleteVegiAccountEntry,
+      sendWithAuthCreds: false,
+      data: {
+        'walletAddress': store.state.userState.walletAddress,
       },
     );
 

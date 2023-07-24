@@ -23,6 +23,7 @@ class ProfileViewModel extends Equatable {
     required this.seedPhrase,
     required this.editAvatar,
     required this.avatarUrl,
+    required this.avatarTempFilePath,
     required this.updateDisplayName,
     required this.updateUserEmail,
     required this.useLocationServices,
@@ -46,9 +47,10 @@ class ProfileViewModel extends Equatable {
       httpRequestIsInFlux: store.state.homePageState.isLoadingHttpRequest,
       isSuperAdmin: store.state.userState.isVegiSuperAdmin,
       useLiveLocation: store.state.userState.useLiveLocation,
-      isLoggedIn: !store.state.userState.isLoggedOut,
+      isLoggedIn: !store.state.userState.hasNotOnboarded,
       phone: store.state.userState.phoneNumber,
       avatarUrl: store.state.userState.avatarUrl,
+      avatarTempFilePath: store.state.userState.avatarTempFilePath,
       seedPhrase: store.state.userState.mnemonic,
       walletAddress: store.state.userState.walletAddress,
       isVerified: store.state.userState.userIsVerified,
@@ -108,6 +110,7 @@ class ProfileViewModel extends Equatable {
   final bool isSuperAdmin;
   final String walletAddress;
   final String avatarUrl;
+  final String avatarTempFilePath;
   final String displayName;
   final bool useLiveLocation;
   final bool isLoggedIn;
@@ -141,6 +144,7 @@ class ProfileViewModel extends Equatable {
         isSuperAdmin,
         displayName,
         avatarUrl,
+        avatarTempFilePath,
         useLiveLocation,
         isLoggedIn,
       ];

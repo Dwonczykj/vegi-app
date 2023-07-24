@@ -51,75 +51,9 @@ class UserNameScreen extends StatelessWidget {
                     ),
                     child: Column(
                       children: <Widget>[
-                        GestureDetector(
-                          onTap: () => !viewmodel.isLoggedOut
-                              ? _showSourceImagePicker(
-                                  context,
-                                  (source) => viewmodel.editAvatar(
-                                    source,
-                                    onError: (errStr) async {
-                                      await showErrorSnack(
-                                          context: context,
-                                          title: Messages.operationFailed,
-                                          message: '$errStr');
-                                    },
-                                  ),
-                                )
-                              : null,
-                          child: viewmodel.avatarUrl == ''
-                              ? Padding(
-                                  padding: const EdgeInsets.only(left: 20),
-                                  child: SvgPicture.asset(
-                                    ImagePaths.usernamePlaceholder,
-                                    width: 95,
-                                    height: avatarSquareSize,
-                                  ),
-                                )
-                              : SizedBox(
-                                  height: avatarSquareSize,
-                                  width: avatarSquareSize,
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(50),
-                                    child: ColoredBox(
-                                      color: Colors.grey.shade400,
-                                      child: Stack(
-                                        children: [
-                                          VegiAvatar(
-                                            avatarUrl: viewmodel.avatarUrl,
-                                            avatarSquareSize: avatarSquareSize,
-                                            isUpdating:
-                                                viewmodel.httpRequestIsInFlux,
-                                          ),
-                                          if (!viewmodel.isLoggedOut)
-                                            Positioned.directional(
-                                              textDirection: TextDirection.ltr,
-                                              bottom: 0,
-                                              start: 0,
-                                              end: 0,
-                                              child: Container(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                  vertical: 3,
-                                                ),
-                                                alignment: Alignment.center,
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .onSurface,
-                                                child: Text(
-                                                  I10n.of(context).edit,
-                                                  style: TextStyle(
-                                                    color: Theme.of(context)
-                                                        .canvasColor,
-                                                    fontSize: 9,
-                                                  ),
-                                                ),
-                                              ),
-                                            )
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
+                        const VegiAvatar(
+                          isEditable: true,
+                          avatarSquareSize: avatarSquareSize,
                         ),
                         const SizedBox(height: 20),
                         Text(

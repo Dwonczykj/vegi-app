@@ -32,34 +32,6 @@ class _SplashScreenState extends State<SplashScreen> {
 
   bool isRouting = false;
 
-  // Future<void> _reLogin(
-  //   Store<AppState> store,
-  // ) async {
-  //   await authenticator.reauthenticate();
-  // }
-
-  // Future<void> _checkLoggedInToVegi() async {
-  //   final store = await reduxStore;
-  //   if (store.state.userState.firebaseSessionToken != null) {
-  //     await _reLogin(store);
-
-  //     log.info(
-  //         'Push PinCodeScreen() from ${rootRouter.current.name} on splash_screen.dart');
-  //     setState(() {
-  //       isRouting = true;
-  //     });
-  //     await rootRouter.replaceAll([const PinCodeScreen()]);
-  //     widget.onLoginResult?.call(true);
-  //   } else {
-  //     log.info(
-  //         'Push OnBoardScreen() from ${rootRouter.current.name} on splash_screen.dart');
-  //     setState(() {
-  //       isRouting = true;
-  //     });
-  //     await rootRouter.replaceAll([const OnBoardScreen()]);
-  //   }
-  // }
-
   void finishAppStart({
     required Store<AppState> store,
   }) {
@@ -110,7 +82,7 @@ class _SplashScreenState extends State<SplashScreen> {
       onInit: (store) {
         final String privateKey = store.state.userState.privateKey;
         final String jwtToken = store.state.userState.jwtToken;
-        final bool isLoggedOut = store.state.userState.isLoggedOut;
+        final bool isLoggedOut = store.state.userState.hasNotOnboarded || !store.state.userState.isLoggedIn;
         if (privateKey.isEmpty || jwtToken.isEmpty || isLoggedOut) {
           log.info(
               'Push OnBoardScreen() from ${rootRouter.current.name} at splash_screen.dart');

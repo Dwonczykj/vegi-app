@@ -241,13 +241,6 @@ class AddSurveyEmailSuccess {
       ' email: $email';
 }
 
-class SetReLoggedin {
-  SetReLoggedin();
-
-  @override
-  String toString() => 'SetReLoggedin';
-}
-
 class SetUserAuthenticationStatus {
   SetUserAuthenticationStatus({
     this.firebaseStatus,
@@ -372,8 +365,8 @@ class LogoutRequestSuccess {
   String toString() => 'LogoutRequestSuccess';
 }
 
-class LoginVerifySuccess {
-  LoginVerifySuccess(this.jwtToken);
+class SetJWTSuccess {
+  SetJWTSuccess(this.jwtToken);
   final String jwtToken;
 
   @override
@@ -444,6 +437,19 @@ class SetUserAvatar {
 
   @override
   String toString() => 'SetUserAvatar : avatarUrl: $avatarUrl';
+}
+
+class SetTempUserAvatar {
+  SetTempUserAvatar({
+    required this.tempAvatarFile,
+  });
+
+  final XFile tempAvatarFile;
+
+  @override
+  String toString() {
+    return 'SetTempUserAvatar : tempAvatarFile:"$tempAvatarFile"';
+  }
 }
 
 class SetUserVerifiedStatusSuccess {
@@ -587,6 +593,19 @@ class SetVegiSessionCookie {
   }
 }
 
+class SetVegiUserId {
+  SetVegiUserId({
+    required this.id,
+  });
+
+  final int id;
+
+  @override
+  String toString() {
+    return 'SetVegiUserId : id:"$id"';
+  }
+}
+
 class SetPhoneNumber {
   SetPhoneNumber({required this.phoneNumber});
 
@@ -669,6 +688,17 @@ ThunkAction<AppState> loggedInToVegiSuccess() {
         sentryHint: 'ERROR - loggedInToVegiSuccess $e',
         stackTrace: s,
       );
+    }
+  };
+}
+
+ThunkAction<AppState> logoutRequest() {
+  return (Store<AppState> store) async {
+    try {
+      await authenticator.logout(bypassSeedPhraseCheck: true);
+      store.dispatch(LogoutRequestSuccess());
+    } catch (e, s) {
+      log.error('ERROR - logout $e', stackTrace: s);
     }
   };
 }
@@ -1563,6 +1593,21 @@ ThunkAction<AppState> setRandomUserAvatar() {
   };
 }
 
+ThunkAction<AppState> deleteUser() {
+  return (Store<AppState> store) async {
+    try {
+      await authenticator.deregisterUser();
+    } catch (e, s) {
+      log.error('ERROR - deleteUser $e', stackTrace: s);
+      await Sentry.captureException(
+        e,
+        stackTrace: s,
+        hint: 'ERROR - deleteUser $e',
+      );
+    }
+  };
+}
+
 ThunkAction<AppState> updateUserAvatarCall(
   ImageSource source, {
   ProgressCallback? progressCallback,
@@ -1597,6 +1642,11 @@ ThunkAction<AppState> updateUserAvatarCall(
       log.error(e, stackTrace: s);
     }
     if (file != null) {
+      store.dispatch(
+        SetTempUserAvatar(
+          tempAvatarFile: file,
+        ),
+      );
       try {
         updateFirebaseCurrentUser(({required User firebaseUser}) async {
           final imageUrl = await peeplEatsService.uploadImageForUserAvatar(

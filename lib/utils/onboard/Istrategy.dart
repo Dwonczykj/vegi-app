@@ -60,6 +60,7 @@ abstract class IOnBoardStrategy {
   });
   Future<UserCredential?> signInWithGoogle();
   Future<UserCredential?> signInWithApple();
+  Future<void> signout();
 }
 
 class OnBoardStrategyFactory {

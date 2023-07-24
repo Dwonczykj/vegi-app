@@ -50,7 +50,8 @@ class VerifyOnboardViewModel extends Equatable {
       displayName: store.state.userState.displayName,
       email: store.state.userState.email,
       avatarUrl: store.state.userState.avatarUrl,
-      isLoggedOut: store.state.userState.isLoggedOut ||
+      isLoggedOut: store.state.userState.hasNotOnboarded ||
+          !store.state.userState.isLoggedIn ||
           store.state.userState.jwtToken == '',
       accountDetailsExist: store.state.userState.accountDetailsExist,
       verificationId: store.state.userState.verificationId,
@@ -92,18 +93,20 @@ class VerifyOnboardViewModel extends Equatable {
         void Function()? onSuccess,
         void Function(String errStr)? onError,
       }) {
-        store..dispatch(
-          SetIsLoadingHttpRequest(
-            isLoading: true,
-          ),
-        )..dispatch(
-          updateUserAvatarCall(
-            source,
-            progressCallback: progressCallback,
-            onSuccess: onSuccess,
-            onError: onError,
-          ),
-        );
+        store
+          ..dispatch(
+            SetIsLoadingHttpRequest(
+              isLoading: true,
+            ),
+          )
+          ..dispatch(
+            updateUserAvatarCall(
+              source,
+              progressCallback: progressCallback,
+              onSuccess: onSuccess,
+              onError: onError,
+            ),
+          );
       },
       setDisplayName: ({required displayName}) {
         isAuthenticatedRouteGuard = true;

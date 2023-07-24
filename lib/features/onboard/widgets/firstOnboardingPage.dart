@@ -48,7 +48,7 @@ class _FirstOnboardingPageState extends State<FirstOnboardingPage> {
   Widget build(BuildContext context) {
     return StoreConnector<AppState, SplashViewModel>(
       converter: SplashViewModel.fromStore,
-      // onInit: (store) => store.state.userState.isLoggedOut
+      // onInit: (store) => store.state.userState.hasNotOnboarded
       //     ? null
       //     : store.dispatch(
       //         initFuseWallet(),

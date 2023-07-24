@@ -73,15 +73,34 @@ class LogIt {
     StackTrace stackTrace, {
     RegExp? dontMatch,
   }) {
+    final filterThisPackage = _filterStackTrace(
+      stackTrace,
+      dontMatch: dontMatch,
+    );
+    
+    if (filterThisPackage.isEmpty) {
+      return '[Unable to parse stack trace]';
+    }
+
+    return filterThisPackage.join('\n\t');
+  }
+
+  List<StackLine> _filterStackTrace(
+    StackTrace stackTrace, {
+    RegExp? dontMatch,
+    int? returnLine,
+    int? removeFirstNLines,
+  }) {
     final lines = stackTrace.toString().split('\n');
-    if (lines.length < 3) {
-      return 'Unable to find second most recent function call';
+    if (removeFirstNLines != null && lines.length < removeFirstNLines) {
+      print('Unable to remove first $removeFirstNLines most recent function call');
+      return [];
     }
 
     final regex_vegan_liverpool_only = RegExp(
       r'([A-Za-z_]+)\.([A-Za-z_. <>]+)\s\((package:vegan_liverpool)\/([A-Za-z0-9_\/]+\/)?([A-Za-z0-9_]+\.dart):(\d+):(\d+)\)',
     );
-    final filter_this_package = lines
+    final filterThisPackage = lines
         .where(
       (e) =>
           regex_vegan_liverpool_only.hasMatch(e.trim()) &&
@@ -101,12 +120,7 @@ class LogIt {
       },
     ).toList();
 
-    if (filter_this_package.isEmpty) {
-      print('No match found when filtering the stacktrace');
-      return '[Unable to parse stack trace]';
-    }
-
-    return filter_this_package.join('\n\t');
+    return filterThisPackage;
   }
 
   /// Log a message at level [Level.info].
