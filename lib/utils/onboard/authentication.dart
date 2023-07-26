@@ -110,6 +110,12 @@ class Authentication {
     // required iLoginDetails loginDetails,
     required PhoneLoginDetails loginDetails,
   }) async {
+    (await reduxStore).dispatch(
+      SetUserAuthenticationStatus(
+        firebaseStatus: FirebaseAuthenticationStatus.unauthenticated,
+        vegiStatus: VegiAuthenticationStatus.unauthenticated,
+      ),
+    );
     // TODO Change signup to require email and register password, then add a phone number and verify code
     logFunctionCall(
       // await _loginToFuse(
@@ -160,6 +166,12 @@ class Authentication {
   Future<void> login({
     required iLoginDetails loginDetails,
   }) async {
+    (await reduxStore).dispatch(
+      SetUserAuthenticationStatus(
+        firebaseStatus: FirebaseAuthenticationStatus.unauthenticated,
+        vegiStatus: VegiAuthenticationStatus.unauthenticated,
+      ),
+    );
     // TODO Change signup to require email and register password, then add a phone number and verify code
     logFunctionCall(
       // await _loginToFuse(
@@ -230,10 +242,13 @@ class Authentication {
       );
       return;
     }
+    log.info(
+      'Successfully authenticated with firebase',
+      sentry: true,
+    );
     final firebaseSessionToken = await _getFirebaseSessionToken(
       userCredential: userCredential,
     );
-
     await _loginToVegiWithPhone(
       store: store,
       phoneNumber: store.state.userState.phoneNumber,
@@ -374,7 +389,9 @@ class Authentication {
       // await rootRouter.replaceAll([const OnBoardScreen()]);
       return;
     }
-    await rootRouter.pop();
+    if (rootRouter.current.name.toLowerCase().contains('dialog')) {
+      await rootRouter.pop();
+    }
     await rootRouter.push(const ShowUserMnemonic());
     return;
   }
@@ -1900,20 +1917,26 @@ class Authentication {
       if (store.state.userState.preferredSignonMethod ==
           PreferredSignonMethod.emailAndPassword) {
         log.info(
-            'ReplaceAll with SignUpWithEmailAndPasswordScreen() from ${rootRouter.current.name} in authenticate thunk.');
+          'ReplaceAll with SignUpWithEmailAndPasswordScreen() from ${rootRouter.current.name} in authenticate thunk.',
+          sentry: true,
+        );
         await rootRouter.replaceAll(
           [const SignUpWithEmailAndPasswordScreen()],
         );
       } else if (store.state.userState.preferredSignonMethod ==
           PreferredSignonMethod.emailLink) {
         log.info(
-            'ReplaceAll with SignUpEmailLinkScreen() from ${rootRouter.current.name} in authenticate thunk.');
+          'ReplaceAll with SignUpEmailLinkScreen() from ${rootRouter.current.name} in authenticate thunk.',
+          sentry: true,
+        );
         await rootRouter.replaceAll(
           [const SignUpEmailLinkScreen()],
         );
       } else {
         log.info(
-            'ReplaceAll with SignUpScreen() from ${rootRouter.current.name} in authenticate thunk.');
+          'ReplaceAll with SignUpScreen() from ${rootRouter.current.name} in authenticate thunk.',
+          sentry: true,
+        );
         await rootRouter.replaceAll(
           [const SignUpScreen()],
         ); // ~ https://stackoverflow.com/a/46713257

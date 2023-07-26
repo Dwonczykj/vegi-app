@@ -285,6 +285,12 @@ class UserState with _$UserState {
 
   bool get isLoggedIn => isLoggedInToVegi;
 
+  bool get authIsLoading => 
+      fuseAuthenticationStatus == FuseAuthenticationStatus.loading ||
+      firebaseAuthenticationStatus ==
+          FirebaseAuthenticationStatus.loading ||
+      vegiAuthenticationStatus == VegiAuthenticationStatus.loading;
+
   String get authState =>
       'vegi:[$vegiAuthenticationStatus],firebase:[$firebaseAuthenticationStatus],fuse:[$fuseAuthenticationStatus]';
 

@@ -34,6 +34,7 @@ class _MainScreenState extends State<MainScreen> {
   late TabsRouter _tabsRouter;
 
   bool isRouting = false;
+  bool _loaded = false;
 
   @override
   void initState() {
@@ -95,36 +96,49 @@ class _MainScreenState extends State<MainScreen> {
       },
       converter: MainScreenViewModel.fromStore,
       builder: (context, vm) {
-        if (vm.signupIsInFlux) {
+        final store = StoreProvider.of<AppState>(context);
+        if (vm.signupIsInFlux || store.state.userState.authIsLoading) {
           return LoadingScaffold;
         }
-        if (vm.hasNotOnboarded || !vm.biometricAuthIsSet) {
+        if (vm.hasNotOnboarded) {
           log.info(
-              'Push OnBoardScreen() from ${rootRouter.current.name} as not onboarded');
+            'Push OnBoardScreen() from ${rootRouter.current.name} as not onboarded',
+            sentry: true,
+          );
           rootRouter.replaceAll([const OnBoardScreen()]);
           return LoadingScaffold;
         }
-        if (!vm.isLoggedIn) {
+        if (!store.state.userState.isLoggedIn) {
           log.info(
             'Push SignUpScreen() from ${rootRouter.current.name} as was not logged in',
             sentry: true,
           );
           vm.routeToLogin();
+          return LoadingScaffold;
         }
         if (!vm.userIsVerified && VegiConstants.showWaitingListFunnel) {
           return const WaitingListFunnelScreen();
-        } else {
+        } else if (!_loaded) {
           peeplEatsService
               .checkVegiSessionIsStillValid()
               .then((sessionStillValid) {
             if (!sessionStillValid) {
               vm.setUserSessionExpired();
               log.info(
-                  'Push SignUpScreen() from ${rootRouter.current.name} as vegi session has expired');
+                'Push SignUpScreen() from ${rootRouter.current.name} as vegi session has expired',
+                sentry: true,
+              );
               // rootRouter.replaceAll([const SignUpScreen()]);
               vm.routeToLogin();
+            } else {
+              setState(() {
+                _loaded = true;
+              });
             }
           });
+        }
+        if (!_loaded) {
+          return LoadingScaffold;
         }
         return WillPopScope(
           onWillPop: () {

@@ -71,7 +71,7 @@ class MainScreenViewModel extends Equatable implements IAuthViewModel {
       countryCode: store.state.userState.isoCode, // the country code (IT,AF..)
       dialCode: store.state.userState.countryCode, // the dial code (+39,+93..)
       firebaseSessionToken: store.state.userState.firebaseSessionToken,
-      signupIsInFlux: store.state.onboardingState.signupIsInFlux,
+      signupIsInFlux: store.state.onboardingState.signupIsInFlux || peeplEatsService.authenticating,
       email: store.state.userState.email,
       password: store.state.userState.password,
       displayName: store.state.userState.displayName,

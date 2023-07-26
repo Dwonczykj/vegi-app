@@ -39,16 +39,12 @@ class _VerifyPhoneNumberState extends State<VerifyPhoneNumber> {
   }
 
   Future<void> _route(VerifyOnboardViewModel viewModel) async {
-    final success = viewModel.firebaseAuthenticationStatus ==
-            FirebaseAuthenticationStatus.authenticated &&
-        viewModel.vegiAuthenticationStatus ==
-            VegiAuthenticationStatus.authenticated;
-    if (viewModel.vegiAuthenticationStatus == VegiAuthenticationStatus.failed) {
-      log.error('vegi login failed. Investigate why...');
-    }
+    final success = viewModel
+        .isLoggedIn; // ! needs to be the same condition as on mainscreen
     if (isRouting ||
         finishedRouting ||
-        rootRouter.current.name != routes.VerifyPhoneNumber().routeName) {
+        rootRouter.current.name != routes.VerifyPhoneNumber().routeName ||
+        !success) {
       return;
     }
     if (success) {

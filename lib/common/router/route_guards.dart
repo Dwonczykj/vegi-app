@@ -15,6 +15,7 @@ class AuthGuard extends AutoRouteGuard {
         log.info(
           'AuthGuard caught: navigating back to splash screen from ${router.current.name} when trying to navigate to ${resolver.route.name}',
           stackTrace: StackTrace.current,
+          sentry: true,
         );
       }
       router.push(

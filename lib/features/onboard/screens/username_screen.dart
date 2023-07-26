@@ -189,10 +189,23 @@ class UserNameScreen extends StatelessWidget {
                 ListTile(
                   title: const Text('Refresh'),
                   onTap: () async {
-                    (await reduxStore).dispatch(
-                      setRandomUserAvatar(),
-                    );
-                    Navigator.pop(context);
+                    final vegiAccountId = StoreProvider.of<AppState>(context)
+                        .state
+                        .userState
+                        .vegiAccountId;
+                    if (vegiAccountId != null) {
+                      (await reduxStore).dispatch(
+                        setRandomUserAvatar(vegiAccountId: vegiAccountId),
+                      );
+                      Navigator.pop(context);
+                    } else {
+                      Navigator.pop(context);
+                      await showErrorSnack(
+                        context: context,
+                        title:
+                            'Lost connection to vegi, please try again later.',
+                      );
+                    }
                   },
                 ),
               ],

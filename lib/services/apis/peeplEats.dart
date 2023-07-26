@@ -65,6 +65,10 @@ class PeeplEatsService extends HttpService {
     );
   }
 
+  bool _authenticating = false;
+
+  bool get authenticating => _authenticating;
+
   String? _getResponseExitName(Response<dynamic> response) =>
       response.headers.value('X-Exit');
 
@@ -194,6 +198,7 @@ class PeeplEatsService extends HttpService {
       // }
       await deleteSessionCookie();
     }
+    _authenticating = true;
     final Response<dynamic> response = await dioPost(
       VegiBackendEndpoints.loginWithPhone,
       sendWithAuthCreds: false,
@@ -206,12 +211,15 @@ class PeeplEatsService extends HttpService {
 
     // Capture session cookie to send with requests from nowon in a VegiSession object that we save to the singleton instance of the peeplEats service?...
     if (responseHasErrorStatus(response)) {
+      _authenticating = false;
       throw Exception(
         'Bad response returned when trying to loginWithPhone: $response',
       );
     } else if (response.headers.value('set-cookie') == null) {
+      _authenticating = false;
       log.error(
         'No set-cookie returned in response headers when trying to loginWithPhone with:\n\t responseHeaders: ${response.headers} & response: $response',
+        sentry: true,
       );
     }
 
@@ -246,6 +254,11 @@ class PeeplEatsService extends HttpService {
         );
       }
     }
+    _authenticating = false;
+    log.info(
+      'Successfully logged in to vegi with phone',
+      sentry: true,
+    );
     return VegiSession(
       sessionCookie: cookie ?? '',
       user: userDetails,
@@ -276,10 +289,12 @@ class PeeplEatsService extends HttpService {
 
     // Capture session cookie to send with requests from nowon in a VegiSession object that we save to the singleton instance of the peeplEats service?...
     if (responseHasErrorStatus(response)) {
+      _authenticating = false;
       throw Exception(
         'Bad response returned when trying to loginWithEmail: $response',
       );
     } else if (response.headers.value('set-cookie') == null) {
+      _authenticating = false;
       throw Exception(
         'No set-cookie returned in response headers when trying to loginWithPhone: $response',
       );
@@ -314,6 +329,11 @@ class PeeplEatsService extends HttpService {
         );
       }
     }
+    _authenticating = false;
+    log.info(
+      'Successfully logged in to vegi with email',
+      sentry: true,
+    );
     return VegiSession(
       sessionCookie: cookie ?? '',
       user: userDetails,
@@ -329,6 +349,16 @@ class PeeplEatsService extends HttpService {
 
   Future<void> isLoggedIn() async {
     if (onboardingAuthRoutesOrder.contains(rootRouter.current.name)) {
+      log.warn(
+        'vegi backend service isLoggedIn request as currently in onbaording auth screens for now.',
+        sentry: true,
+      );
+      return;
+    } else if (_authenticating) {
+      log.warn(
+        'vegi backend service is already authenticating, not calling isLoggedIn for now.',
+        sentry: true,
+      );
       return;
     }
     await checkVegiSessionIsStillValid(

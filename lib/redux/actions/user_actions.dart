@@ -1167,7 +1167,7 @@ ThunkAction<AppState> isBetaWhitelistedAddress() {
           ..dispatch(SetUserVegiAccountIdSuccess(vegiAccount.id));
         if (vegiAccount.imageUrl.isEmpty) {
           store.dispatch(
-            setRandomUserAvatar(),
+            setRandomUserAvatar(vegiAccountId: vegiAccount.id),
           );
         }
       }
@@ -1582,8 +1582,14 @@ ThunkAction<AppState> setRandomUserAvatarIfNone() {
         },
       );
 
-      if (vegiAccount != null && vegiAccount.imageUrl.isEmpty) {
-        store.dispatch(setRandomUserAvatar());
+      if (vegiAccount != null &&
+          vegiAccount.imageUrl.isEmpty &&
+          vegiAccount.id > 0) {
+        store.dispatch(
+          setRandomUserAvatar(
+            vegiAccountId: vegiAccount.id,
+          ),
+        );
       }
 
       store.dispatch(SetIsLoadingHttpRequest(isLoading: false));
@@ -1599,7 +1605,9 @@ ThunkAction<AppState> setRandomUserAvatarIfNone() {
   };
 }
 
-ThunkAction<AppState> setRandomUserAvatar() {
+ThunkAction<AppState> setRandomUserAvatar({
+  required int vegiAccountId,
+}) {
   return (Store<AppState> store) async {
     try {
       store.dispatch(
@@ -1609,7 +1617,7 @@ ThunkAction<AppState> setRandomUserAvatar() {
       );
       updateFirebaseCurrentUser(({required User firebaseUser}) async {
         final imageUrl = await peeplEatsService.setRandomAvatar(
-          accountId: store.state.userState.vegiAccountId!,
+          accountId: vegiAccountId,
           onError: (error) async {
             log.error(
               'ERROR - peeplEatsService.setRandomAvatar',
