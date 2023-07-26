@@ -247,8 +247,7 @@ class MainScreenViewModel extends Equatable implements IAuthViewModel {
 
   bool get emailIsSet => email.isNotEmpty;
 
-  bool get isLoggedIn =>
-      !hasNotOnboarded && accountDetailsExist && isLoggedInToVegi;
+  bool get isLoggedIn => isLoggedInToVegi;
 
   @override
   List<Object?> get props => [

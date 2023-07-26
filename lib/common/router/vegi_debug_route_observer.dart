@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:vegan_liverpool/common/router/route_guards.dart';
 import 'package:vegan_liverpool/common/router/routes.dart';
+import 'package:vegan_liverpool/features/veganHome/Helpers/extensions.dart';
 import 'package:vegan_liverpool/utils/log/log.dart';
 
 class VegiDebugRouteObserver extends AutoRouterObserver {
@@ -18,7 +19,7 @@ class VegiDebugRouteObserver extends AutoRouterObserver {
   @override
   void didPop(Route<dynamic> route, Route<dynamic>? previousRoute) {
     log.info(
-      'New route popped: ${route.settings.name} from ${previousRoute?.settings.name}',
+      'New route popped: ${route.settings.name} to ${previousRoute?.settings.name}',
       stackTrace: StackTrace.current,
     );
   }
@@ -48,14 +49,18 @@ class RootRouterLogger extends RootRouter {
   @override
   Future<T?> push<T extends Object?>(PageRouteInfo<dynamic> route,
       {void Function(NavigationFailure)? onFailure}) {
-    final filteredStack = log.filterStackTrace(
-      StackTrace.current,
+    final filteredStack = StackTrace.current.filterCallStack(
       dontMatch: RegExp(
-          r'([A-Za-z_]+)\.([A-Za-z_. <>]+)\s\((package:vegan_liverpool)\/(common\/router\/)(vegi_debug_route_observer\.dart):(\d+):(\d+)\)'),
+        r'([A-Za-z_]+)\.([A-Za-z_. <>]+)\s\((package:vegan_liverpool)\/(common\/router\/)(vegi_debug_route_observer\.dart):(\d+):(\d+)\)',
+      ),
+      removeLinesContaining: [
+        'vegi_debug_route_observer.dart',
+        'log_it.dart',
+      ],
     );
     log.info(
-      'rootRouter.push: $filteredStack',
-      stackTrace: StackTrace.current,
+      '🚀 rootRouter.push: ${route.routeName} from ${current.route.name}: ${filteredStack.pretty()}',
+      stackTraceLines: filteredStack,
     );
     return super.push(
       route,
@@ -71,7 +76,7 @@ class RootRouterLogger extends RootRouter {
           r'([A-Za-z_]+)\.([A-Za-z_. <>]+)\s\((package:vegan_liverpool)\/(common\/router\/)(vegi_debug_route_observer\.dart):(\d+):(\d+)\)'),
     );
     log.info(
-      'rootRouter.pop: $filteredStack',
+      '🚀 rootRouter.pop from ${current.route.name}: $filteredStack',
       stackTrace: StackTrace.current,
     );
     return super.pop(result);
@@ -86,7 +91,7 @@ class RootRouterLogger extends RootRouter {
           r'([A-Za-z_]+)\.([A-Za-z_. <>]+)\s\((package:vegan_liverpool)\/(common\/router\/)(vegi_debug_route_observer\.dart):(\d+):(\d+)\)'),
     );
     log.info(
-      'rootRouter.replace: $filteredStack',
+      '🚀 rootRouter.replace: ${route.routeName} from ${current.route.name}: $filteredStack',
       stackTrace: StackTrace.current,
     );
     return super.replace(
@@ -106,7 +111,9 @@ class RootRouterLogger extends RootRouter {
           r'([A-Za-z_]+)\.([A-Za-z_. <>]+)\s\((package:vegan_liverpool)\/(common\/router\/)(vegi_debug_route_observer\.dart):(\d+):(\d+)\)'),
     );
     log.info(
-      'rootRouter.replacedAll: $filteredStack',
+      '🚀 rootRouter.replacedAll with [${routes.map(
+            (e) => e.routeName,
+          ).join(",")}] from ${current.route.name}: $filteredStack',
       stackTrace: StackTrace.current,
     );
     return super.replaceAll(

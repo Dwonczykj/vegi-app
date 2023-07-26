@@ -5,6 +5,21 @@ import 'package:logger/logger.dart';
 abstract class LoggerDi {
   @lazySingleton
   Logger get logger => Logger(
-        printer: PrettyPrinter(),
+      // ~ https://pub.dev/documentation/logger/latest/index.html
+        printer: PrettyPrinter(
+          noBoxingByDefault: true,
+          excludeBox: {
+            Level.info: true,
+          },
+          methodCount: 0, // Number of method calls to be displayed
+          errorMethodCount:
+              12, // Number of method calls if stacktrace is provided
+          lineLength: 80, // Width of the output
+          colors: false, // Colorful log messages
+          printEmojis: true, // Print an emoji for each log message
+          printTime: true, // Should each log print contain a timestamp
+        ),
+        // filter: DevelopmentFilter,
+        // output: ConsoleOutput
       );
 }

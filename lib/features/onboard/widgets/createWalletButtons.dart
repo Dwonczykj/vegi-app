@@ -188,34 +188,34 @@ class _CreateWalletButtonsState extends State<CreateWalletButtons> {
   //   };
   // }
 
-  Future<void> Function() _signUpNewAccountOnWaitlist(
-    BuildContext context,
-    SplashViewModel viewmodel,
-  ) {
-    return () async {
-      // if (viewmodel.surveyCompleted) {
-      //   if (context.router.canPop()) {
-      //     context.router.popUntilRoot();
-      //   }
-      //   await context.router.replace(
-      //     WaitingListFunnelScreen(
-      //       surveyCompleted: true,
-      //     ),
-      //   );
-      // } else {
-      //   await context.router.replace(
-      //     WaitingListFunnelScreen(
-      //       surveyCompleted: false,
-      //     ),
-      //   );
-      // }
-      if (showWaitingListFunnel) {
-        await rootRouter.replace(const WaitingListFunnelScreen());
-      } else {
-        await rootRouter.replace(const MainScreen());
-      }
-    };
-  }
+  // Future<void> Function() _signUpNewAccountOnWaitlist(
+  //   BuildContext context,
+  //   SplashViewModel viewmodel,
+  // ) {
+  //   return () async {
+  //     // if (viewmodel.surveyCompleted) {
+  //     //   if (context.router.canPop()) {
+  //     //     context.router.popUntilRoot();
+  //     //   }
+  //     //   await context.router.replace(
+  //     //     WaitingListFunnelScreen(
+  //     //       surveyCompleted: true,
+  //     //     ),
+  //     //   );
+  //     // } else {
+  //     //   await context.router.replace(
+  //     //     WaitingListFunnelScreen(
+  //     //       surveyCompleted: false,
+  //     //     ),
+  //     //   );
+  //     // }
+  //     if (showWaitingListFunnel) {
+  //       await rootRouter.replace(const WaitingListFunnelScreen());
+  //     } else {
+  //       await rootRouter.replace(const MainScreen());
+  //     }
+  //   };
+  // }
 
   Future<void> Function() _createAccount(
     BuildContext context,
@@ -228,34 +228,36 @@ class _CreateWalletButtonsState extends State<CreateWalletButtons> {
       setState(() {
         isPrimaryPreloading = true;
       });
-      await viewmodel.initFuse(
-        onWalletInitialised: () {
-          rootRouter.push(const SignUpScreen());
-        },
-      );
+      await rootRouter.push(const SignUpScreen());
+      // removing below as moving fuseAuth to end of auth flow.
+      // await viewmodel.initFuse(
+      //   onWalletInitialised: () {
+      //     rootRouter.push(const SignUpScreen());
+      //   },
+      // );
     };
   }
 
-  Future<void> Function() _resetSurvey(
-    BuildContext context,
-    SplashViewModel viewmodel,
-  ) {
-    return () async {
-      viewmodel.resetSurveyCompleted();
-      await rootRouter.replace(
-        const WaitingListFunnelScreen(),
-      );
-    };
-  }
+  // Future<void> Function() _resetSurvey(
+  //   BuildContext context,
+  //   SplashViewModel viewmodel,
+  // ) {
+  //   return () async {
+  //     viewmodel.resetSurveyCompleted();
+  //     await rootRouter.replace(
+  //       const WaitingListFunnelScreen(),
+  //     );
+  //   };
+  // }
 
-  Future<void> Function() _reLogin(
-    BuildContext context,
-    SplashViewModel viewmodel,
-  ) {
-    return () async {
-      viewmodel.initFuse();
-    };
-  }
+  // Future<void> Function() _reLogin(
+  //   BuildContext context,
+  //   SplashViewModel viewmodel,
+  // ) {
+  //   return () async {
+  //     viewmodel.initFuse();
+  //   };
+  // }
 
   Future<void> Function() _logout(
     BuildContext context,

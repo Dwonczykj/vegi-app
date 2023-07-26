@@ -55,6 +55,7 @@ class LockScreenViewModel extends Equatable implements IAuthViewModel {
     required this.fuseAuthenticationStatus,
     required this.vegiAuthenticationStatus,
     required this.notAuthenticated,
+    required this.notOnboarded,
   });
 
   factory LockScreenViewModel.fromStore(Store<AppState> store) {
@@ -69,8 +70,9 @@ class LockScreenViewModel extends Equatable implements IAuthViewModel {
           store.state.userState.firebaseAuthenticationStatus,
       fuseAuthenticationStatus: store.state.userState.fuseAuthenticationStatus,
       vegiAuthenticationStatus: store.state.userState.vegiAuthenticationStatus,
-      setBiometricallyAuthenticated: (
-          {required bool isBiometricallyAuthenticated,}) {
+      setBiometricallyAuthenticated: ({
+        required bool isBiometricallyAuthenticated,
+      }) {
         store.dispatch(
           SetBiometricallyAuthenticated(
             isBiometricallyAuthenticated: isBiometricallyAuthenticated,
@@ -108,11 +110,8 @@ class LockScreenViewModel extends Equatable implements IAuthViewModel {
         }
       },
       loginAgain: authenticator.reauthenticate,
-      notAuthenticated: store.state.userState.hasNotOnboarded ||
-          store.state.userState.fuseAuthenticationStatus !=
-              FuseAuthenticationStatus.authenticated ||
-          store.state.userState.firebaseAuthenticationStatus !=
-              FirebaseAuthenticationStatus.authenticated,
+      notOnboarded: store.state.userState.hasNotOnboarded,
+      notAuthenticated: !store.state.userState.isLoggedIn,
     );
   }
 
@@ -120,6 +119,7 @@ class LockScreenViewModel extends Equatable implements IAuthViewModel {
   final bool loggedIn;
   final bool signupInFlux;
   final bool notAuthenticated;
+  final bool notOnboarded;
   final BiometricAuth biometricAuth;
   final bool biometricallyAuthenticated;
   final Future<void> Function() loginToVegi;
@@ -135,6 +135,8 @@ class LockScreenViewModel extends Equatable implements IAuthViewModel {
         pincode,
         loggedIn,
         signupInFlux,
+        notOnboarded,
+        notAuthenticated,
         biometricallyAuthenticated,
         biometricAuth,
         firebaseAuthenticationStatus,

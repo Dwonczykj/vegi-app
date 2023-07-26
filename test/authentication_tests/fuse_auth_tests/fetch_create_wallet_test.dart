@@ -15,7 +15,7 @@ import 'package:vegan_liverpool/utils/log/log.dart';
 import 'package:vegan_liverpool/utils/log/log_it.dart';
 import 'package:vegan_liverpool/utils/onboard/fuseAuthUtils.dart';
 
-import 'initStore_for_test.dart';
+import '../../initStore_for_test.dart';
 
 void main() async {
   group('Authentication Integration Test', () {
@@ -117,7 +117,11 @@ void main() async {
 
       final exceptionOrStream = await fuseWalletSDK.createWallet();
 
-      expect(exceptionOrStream.hasError, false);
+      expect(
+        exceptionOrStream.hasError,
+        false,
+        reason: 'fuseSDK create wallet errored: ${exceptionOrStream.error}',
+      );
 
       if (exceptionOrStream.hasError) {
         final defaultCreateWalletException =
@@ -166,9 +170,18 @@ void main() async {
         ]),
       );
 
+      log.info(
+        'New smart wallet created in fuse SDK with walletAddress: "${fuseWalletSDK.smartWallet.smartWalletAddress}" and accountAddress: "${fuseWalletSDK.smartWallet.ownerAddress}"',
+      );
+
       final exceptionOrStreamFromFetchAgain = await fuseWalletSDK.fetchWallet();
 
-      expect(exceptionOrStreamFromFetchAgain.hasError, false);
+      expect(
+        exceptionOrStreamFromFetchAgain.hasError,
+        false,
+        reason:
+            'fetchWallet returned an error: ${exceptionOrStreamFromFetchAgain.error}',
+      );
 
       expect(
         smartWalletEventNameStream,
@@ -192,16 +205,34 @@ void main() async {
     });
 
     test(
-        'Check fuse fetch works when use sdk already registered to private credentials that has created a wallet',
+        'Check fuseSDK can fetch existing wallet when init fuseSDK already using same private credentials that has already created a wallet',
         () async {
       final privateKey =
           Secrets.FUSE_WALLET_SDK_PRIVATE_CREDENTIAL_FOR_UNIT_TEST_ONLY!;
       final fuseWalletSDK = await _initFuseWithCreds(privateKey);
       final walletData = await fuseWalletSDK.fetchWallet();
-      expect(walletData.hasError, false);
+      expect(
+        walletData.hasError,
+        false,
+        reason: 'WalletData has error: ${walletData.error}',
+      );
       expect(walletData.hasData, true);
       return;
     });
+
+    test(
+      'Check that fuseSDK gets the walletAddress: "0xODFG" '
+      'every time when sdk is initialised with accountAddress: "0xASDFASDF" and privateKey: "***********"',
+      () async {
+        final privateKey =
+            Secrets.FUSE_WALLET_SDK_PRIVATE_CREDENTIAL_FOR_UNIT_TEST_ONLY!;
+        final fuseWalletSDK = await _initFuseWithCreds(privateKey);
+        final walletData = await fuseWalletSDK.fetchWallet();
+        expect(walletData.hasError, false);
+        expect(walletData.hasData, true);
+        return;
+      },
+    );
 
     test('_fetchCreateWallet', () async {
       final fuseWalletSDK = await _initFuseForTestsUsingNewMnemonic();

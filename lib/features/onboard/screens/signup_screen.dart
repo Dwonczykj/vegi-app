@@ -87,8 +87,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
           });
         }
       }
-    } catch (e) {
-      print('Failed to deduce sim country code: ${e.toString()}');
+    } catch (e, s) {
+      log.error(
+        'Failed to deduce sim country code: $e',
+        stackTrace: s,
+      );
     }
   }
 
@@ -426,16 +429,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
         phoneController.text,
         regionCode: countryCode.code,
       );
-    } on Exception catch (e) {
+    } on Exception catch (e, s) {
       // setState(() {
       //   isPreloading = false;
       // });
       viewmodel.setLoading(false);
-
-      await Sentry.captureException(
+      log.error(
         e,
-        stackTrace: StackTrace.current, // from catch (e, s)
-        hint: 'ERROR - fetchProductOptions $e',
+        stackTrace: s,
       );
       return e;
     }

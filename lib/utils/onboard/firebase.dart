@@ -2,9 +2,12 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:math';
 
+import 'package:auto_route/src/route/page_route_info.dart';
+import 'package:country_code_picker/country_code_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:package_info/package_info.dart';
+import 'package:phone_number/phone_number.dart';
 import 'package:redux/redux.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:vegan_liverpool/common/di/env.dart';
@@ -53,10 +56,11 @@ class FirebaseStrategy implements IOnBoardStrategy {
   bool expectingSMSVerificationCode = false;
 
   @override
-  Future<void> login(
-    Store<AppState> store,
-    String? phoneNumber,
-  ) async {
+  Future<void> login({
+    required CountryCode countryCode,
+    required PhoneNumber phoneNumber,
+  }) async {
+    final store = await reduxStore;
     store
       ..dispatch(
         SignupLoading(
@@ -88,7 +92,7 @@ class FirebaseStrategy implements IOnBoardStrategy {
 
     /// * This handler will only be called on Android devices which support automatic SMS code resolution.
     /// ~ https://firebase.google.com/docs/auth/flutter/phone-auth#verificationcompleted
-    Future<void> verificationCompleted(
+    Future<void> automaticPlayAPIVerificationCompleted(
       AuthCredential credentials,
     ) async {
       await _completeVerification(
@@ -154,32 +158,33 @@ class FirebaseStrategy implements IOnBoardStrategy {
     // );
 
     // if(confirmationResult.confirm(verificationCode))
-    if (phoneNumber != null) {
-      store.dispatch(
-        SetPhoneNumber(
-          phoneNumber: phoneNumber,
-        ),
-      );
-      expectingSMSVerificationCode = true;
-      await firebaseAuth.verifyPhoneNumber(
+    store.dispatch(
+      SetPhoneNumberSuccess(
+        countryCode: countryCode,
         phoneNumber: phoneNumber,
-        codeAutoRetrievalTimeout: (String verificationId) {
-          return _complete(
-            store: store,
-            firebaseStatus: FirebaseAuthenticationStatus.phoneAuthTimedOut,
-          );
-        },
-        codeSent: codeSent,
-        verificationCompleted:
-            verificationCompleted, // * This handler will only be called on Android devices which support automatic SMS code resolution.
-        verificationFailed: verificationFailed,
-      );
-    } else {
-      return _complete(
-        store: store,
-        firebaseStatus: FirebaseAuthenticationStatus.invalidPhoneNumber,
-      );
-    }
+      ),
+    );
+    expectingSMSVerificationCode = true;
+    await firebaseAuth.verifyPhoneNumber(
+      phoneNumber: phoneNumber.e164,
+      codeSent: codeSent,
+      verificationFailed: verificationFailed,
+      verificationCompleted:
+          automaticPlayAPIVerificationCompleted, // * This handler will only be called on Android devices which support automatic SMS code resolution.
+      codeAutoRetrievalTimeout: (String verificationId) {
+        return _complete(
+          store: store,
+          firebaseStatus: FirebaseAuthenticationStatus.phoneAuthTimedOut,
+        );
+      },
+    );
+    // if (phoneNumber != null) {
+    // } else {
+    //   // return _complete(
+    //   //   store: store,
+    //   //   firebaseStatus: FirebaseAuthenticationStatus.invalidPhoneNumber,
+    //   // );
+    // }
   }
 
   @override
@@ -1530,6 +1535,41 @@ class FirebaseStrategy implements IOnBoardStrategy {
       store: store,
       firebaseStatus: firebaseStatusIfNotHandled,
     );
+  }
+
+  @override
+  Future<void> nextOnboardingPage({PageRouteInfo? currentRoute}) async {
+    final store = await reduxStore;
+    log.info(
+      'Onboarding strategy to next onboarding page from ${currentRoute?.routeName ?? rootRouter.current.name}',
+      sentry: false,
+    );
+    
+    final currentRouteInd = onboardingRoutesOrder
+        .indexOf(currentRoute?.routeName ?? rootRouter.current.name);
+    if (!store.state.userState.isLoggedIn &&
+        onboardingAuthRoutesOrder
+                .contains(currentRoute?.routeName ?? rootRouter.current.name) ==
+            false) {
+      await rootRouter.replaceAll([const SignUpScreen()]);
+    }
+    if (store.state.userState.email.trim().isEmpty &&
+        currentRouteInd <
+            onboardingRoutesOrder.indexOf(SetEmailOnboardingScreen.name)) {
+      await rootRouter.push(const SetEmailOnboardingScreen());
+    } else if (store.state.userState.displayName.isEmpty &&
+        currentRouteInd < onboardingRoutesOrder.indexOf(UserNameScreen.name)) {
+      await rootRouter.push(UserNameScreen());
+    } else if (store.state.userState.authType == BiometricAuth.none &&
+        currentRouteInd <
+            onboardingRoutesOrder.indexOf(ChooseSecurityOption.name)) {
+      await rootRouter.push(const ChooseSecurityOption());
+    } else if (!store.state.userState.biometricallyAuthenticated &&
+        currentRouteInd < onboardingRoutesOrder.indexOf(PinCodeScreen.name)) {
+      await rootRouter.push(const PinCodeScreen());
+    } else {
+      await rootRouter.push(const MainScreen());
+    }
   }
 }
 

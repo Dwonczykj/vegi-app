@@ -92,10 +92,14 @@ class _SignUpWithEmailAndPasswordScreenState
           title: 'Whoops',
           message: msg,
         );
+      } else if (store.state.userState.displayName.isEmpty) {
+        await rootRouter.push(UserNameScreen());
+      } else if (store.state.userState.authType == BiometricAuth.none) {
+        await rootRouter.push(const ChooseSecurityOption());
+      } else if (!store.state.userState.biometricallyAuthenticated) {
+        await rootRouter.push(const PinCodeScreen());
       } else {
-        await rootRouter.push(
-          UserNameScreen(),
-        );
+        await rootRouter.push(const MainScreen());
       }
     }
   }

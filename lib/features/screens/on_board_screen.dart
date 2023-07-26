@@ -9,8 +9,10 @@ import 'package:vegan_liverpool/features/onboard/widgets/firstOnboardingPage.dar
 import 'package:vegan_liverpool/features/onboard/widgets/on_boarding_page.dart';
 import 'package:vegan_liverpool/features/onboard/widgets/sign_up_buttons.dart';
 import 'package:vegan_liverpool/features/waitingListFunnel/screens/waitingListBetaEligibilityScreen.dart';
+import 'package:vegan_liverpool/redux/actions/user_actions.dart';
 import 'package:vegan_liverpool/services.dart';
 import 'package:vegan_liverpool/utils/constants.dart';
+import 'package:vegan_liverpool/utils/log/log.dart';
 
 class OnBoardScreen extends StatefulWidget {
   const OnBoardScreen({Key? key}) : super(key: key);
@@ -92,7 +94,31 @@ class _OnBoardScreenState extends State<OnBoardScreen>
     void nextPage() {
       if (_pageController.positions.isNotEmpty &&
           _pageController.page == (welcomeScreens.length - 1)) {
-        rootRouter.push(const SignUpScreen());
+        authenticator.appIsAuthenticated().then(
+          (isAuthenticated) {
+            if (isAuthenticated) {
+              reduxStore.then((store) {
+                store.dispatch(getUserDetails());
+                if (store.state.userState.hasOnboarded) {
+                  log.info(
+                      '🚀 Push PinCodeScreen from on_board_screen as already  completed onboarding and userState.isLoggedIn');
+                  rootRouter.push(const PinCodeScreen());
+                } else {
+                  log.info(
+                      '🚀 Push next onboarding flow screen from on_board_screen as need to complete onboarding flow though userState.isLoggedIn');
+                  // authenticated but never completed onboarding so complete onboarding flow.
+                  onBoardStrategy.nextOnboardingPage();
+                }
+              });
+            } else {
+              rootRouter.push(const SignUpScreen());
+              reduxStore.then((store) {
+                log.info(
+                    'Navigate to SignUpScreen from on_board_screen because user has authState: ${store.state.userState.authState}');
+              });
+            }
+          },
+        );
       }
 
       if (_pageController.page!.toInt() == 4) {

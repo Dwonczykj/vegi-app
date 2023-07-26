@@ -110,7 +110,7 @@ class VerifyOnboardViewModel extends Equatable {
       },
       setDisplayName: ({required displayName}) {
         isAuthenticatedRouteGuard = true;
-        store.dispatch(SetDisplayName(displayName));
+        store.dispatch(updateDisplayNameCall(displayName));
         // ..dispatch(
         //   authenticate(
         //       // todo confirm that this flow still works to initialise the new smartWallet

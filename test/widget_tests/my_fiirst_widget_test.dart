@@ -23,13 +23,14 @@ import 'package:redux_thunk/redux_thunk.dart';
 void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
+    // todo: instead we should use main_test init code
     FlutterSecureStorage storage = new FlutterSecureStorage();
     final Persistor<AppState> persistor = Persistor<AppState>(
       storage: SecureStorage(storage = storage),
       serializer: JsonSerializer<AppState>((json) => AppState.fromJson(json)),
       debug: kDebugMode,
     );
-    AppState initialState = await loadState(persistor, false);
+    final initialState = await loadState(persistor, false);
     final List<Middleware<AppState>> wms = [
       thunkMiddleware,
       persistor.createMiddleware(),

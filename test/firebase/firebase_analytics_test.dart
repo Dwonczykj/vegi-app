@@ -36,29 +36,44 @@ import 'firebase_test_mock.dart';
 void main() {
   setupFirebaseAnalyticsMocks();
 
+  FirebaseApp? firebaseApp;
   FirebaseAnalytics? analytics;
+  FirebaseMessaging? firebaseMessaging;
+  FirebaseRemoteConfig? firebaseRemoteConfig;
 
   group('$FirebaseAnalytics', () {
-    setUpAll(() async {
-      await Firebase.initializeApp();
-      analytics = FirebaseAnalytics.instance;
-      await FirebaseMessaging.instance;
-      await FirebaseRemoteConfig.instance;
-    });
+    FirebaseAuth? auth;
+    String? verificationId;
 
-    setUp(() async {
+    setUpAll(() async {
+      firebaseApp = await Firebase.initializeApp();
+      analytics = FirebaseAnalytics.instance;
+      firebaseMessaging = FirebaseMessaging.instance;
+      firebaseRemoteConfig = FirebaseRemoteConfig.instance;
+      auth = FirebaseAuth.instance;
       // await configureDependencies(environment: Env.test);
       final dependency_injection = GetIt.instance;
       dependency_injection.registerFactory<LogIt>(() => LogIt(Logger()));
+      return firebaseApp;
+    });
+
+    setUp(() async {
       methodCallLog.clear();
     });
 
     tearDown(methodCallLog.clear);
 
+    group('init firebase', () {
+      test('firebase app is not null', () async {
+        expect(firebaseApp, isNotNull);
+        return;
+      });
+    });
+
     group('Emulator', () {
       test('connect to emulator', () async {
         await connectToFirebaseEmulator();
-        expect(FirebaseAuth.instance.app != null, true);
+        expect(FirebaseAuth.instance.app, isNotNull);
       });
     });
 

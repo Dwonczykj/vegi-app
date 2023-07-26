@@ -77,8 +77,6 @@ class UserState with _$UserState {
     WalletModules? walletModules,
     DateTime? installedAt,
     bool? isContactsSynced,
-    @Default(true)
-        bool hasNotOnboarded,
     @Default(false)
         bool scrollToTop,
 
@@ -110,7 +108,6 @@ class UserState with _$UserState {
         FuseAuthenticationStatus fuseAuthenticationStatus,
     @Default(FirebaseAuthenticationStatus.unauthenticated)
         FirebaseAuthenticationStatus firebaseAuthenticationStatus,
-    @JsonKey(ignore: true)
     @Default(VegiAuthenticationStatus.unauthenticated)
         VegiAuthenticationStatus vegiAuthenticationStatus,
     @Default(false)
@@ -250,7 +247,6 @@ class UserState with _$UserState {
         syncedContacts: [],
         reverseContacts: <String, String>{},
         displayName: VegiConstants.defaultDisplayName,
-        hasNotOnboarded: true,
         authType: BiometricAuth.none,
         currency: 'gbp',
         useLiveLocation: false,
@@ -289,7 +285,11 @@ class UserState with _$UserState {
 
   bool get isLoggedIn => isLoggedInToVegi;
 
-  bool get hasOnboarded => !hasNotOnboarded;
+  String get authState =>
+      'vegi:[$vegiAuthenticationStatus],firebase:[$firebaseAuthenticationStatus],fuse:[$fuseAuthenticationStatus]';
+
+  bool get hasOnboarded => displayName.isNotEmpty && email.isNotEmpty && authType != BiometricAuth.none;
+  bool get hasNotOnboarded => !hasOnboarded;
 
   bool get hasLoggedInBefore =>
       authType != BiometricAuth.none || vegiAccountId != null;

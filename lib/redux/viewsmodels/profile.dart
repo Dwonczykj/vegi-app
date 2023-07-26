@@ -3,9 +3,11 @@ import 'package:equatable/equatable.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:redux/redux.dart';
 import 'package:vegan_liverpool/constants/enums.dart';
+import 'package:vegan_liverpool/models/admin/vegiConfigDTO.dart';
 import 'package:vegan_liverpool/models/app_state.dart';
 import 'package:vegan_liverpool/redux/actions/home_page_actions.dart';
 import 'package:vegan_liverpool/redux/actions/user_actions.dart';
+import 'package:vegan_liverpool/services.dart';
 
 class ProfileViewModel extends Equatable {
   const ProfileViewModel({
@@ -28,6 +30,7 @@ class ProfileViewModel extends Equatable {
     required this.updateUserEmail,
     required this.useLocationServices,
     required this.refreshVendors,
+    required this.getConfigDetails,
     required this.useLiveLocation,
     required this.isLoggedIn,
     required this.isVerified,
@@ -80,7 +83,8 @@ class ProfileViewModel extends Equatable {
       },
       updateUserEmail: (email, onError) {
         store.dispatch(
-          updateEmailForWaitingListEntry(
+          // updateEmailForWaitingListEntry(
+          updateEmail(
             email: email,
             onError: onError,
           ),
@@ -96,6 +100,8 @@ class ProfileViewModel extends Equatable {
               : fetchFeaturedRestaurantsByPostCode(),
         );
       },
+      getConfigDetails: () async =>
+          await peeplEatsService.getVegiConfigDetails(),
     );
   }
 
@@ -123,6 +129,7 @@ class ProfileViewModel extends Equatable {
   ) updateUserEmail;
   final void Function(bool enabled) useLocationServices;
   final void Function() refreshVendors;
+  final Future<VegiConfigDTO?> Function() getConfigDetails;
   final void Function(
     ImageSource source, {
     ProgressCallback? progressCallback,

@@ -3,8 +3,84 @@ import 'package:collection/collection.dart';
 import 'package:tuple/tuple.dart';
 import 'package:vegan_liverpool/constants/enums.dart';
 import 'package:vegan_liverpool/features/veganHome/Helpers/helpers.dart';
+import 'package:vegan_liverpool/features/veganHome/Helpers/stackLine.dart';
 import 'package:vegan_liverpool/models/payments/money.dart';
 import 'package:vegan_liverpool/utils/log/log.dart';
+import 'dart:math' as math;
+
+String filterStackTrace(
+  StackTrace stackTrace, {
+  RegExp? dontMatch,
+}) {
+  final filterThisPackage = _filterStackTrace(
+    stackTrace,
+    dontMatch: dontMatch,
+  );
+
+  if (filterThisPackage.isEmpty) {
+    return '[Unable to parse stack trace]';
+  }
+
+  return filterThisPackage.pretty();
+}
+
+List<StackLine> _filterStackTrace(
+  StackTrace stackTrace, {
+  RegExp? dontMatch,
+  int? returnLine,
+  List<Pattern> removeLinesContaining = const <String>[],
+  int? removeFirstNLines,
+}) {
+  final lines = stackTrace.toString().split('\n');
+  if (removeFirstNLines != null && lines.length < removeFirstNLines) {
+    print(
+        'Unable to remove first $removeFirstNLines most recent function call');
+    return [];
+  }
+
+  final regex_vegan_liverpool_only = RegExp(
+    r'([A-Za-z_]+)\.([A-Za-z_. <>]+)\s\((package:vegan_liverpool)\/([A-Za-z0-9_\/]+\/)?([A-Za-z0-9_]+\.dart):(\d+):(\d+)\)',
+  );
+  final filterThisPackage = lines
+      .where(
+    (e) =>
+        regex_vegan_liverpool_only.hasMatch(e.trim()) &&
+        regex_vegan_liverpool_only.firstMatch(e.trim())?.groupCount == 7 &&
+        (dontMatch == null || dontMatch.hasMatch(e.trim()) == false) &&
+        !removeLinesContaining.any((element) => e.contains(element)),
+  )
+      .map(
+    (e) {
+      final match = regex_vegan_liverpool_only.firstMatch(e.trim());
+      return StackLine(
+        className: match?.group(1),
+        functionName: match?.group(2),
+        fileName: match?.group(5),
+        lineNumber: match?.group(6),
+        characterNumber: match?.group(7),
+      );
+    },
+  ).toList();
+
+  return filterThisPackage;
+}
+
+extension StackTraceFilter on StackTrace {
+  List<StackLine> filterCallStack({
+    int? ignoreLastNCalls,
+    RegExp? dontMatch,
+    List<Pattern> removeLinesContaining = const <String>[],
+    int? returnLine,
+  }) {
+    return _filterStackTrace(
+      this,
+      removeFirstNLines: ignoreLastNCalls,
+      removeLinesContaining: removeLinesContaining,
+      returnLine: returnLine,
+      dontMatch: dontMatch,
+    );
+  }
+}
 
 extension CapitalizeString on String {
   String capitalize() {
@@ -202,6 +278,10 @@ extension ListHelpers<T> on List<T> {
   List<T> sortInline(int Function(T a, T b) convert) {
     return sorted((a, b) => convert(a, b));
   }
+
+  String pretty([bool includeParensIfEmpty = true]) => isEmpty
+      ? (includeParensIfEmpty ? '[]' : '')
+      : '[\n\t${join(',\n\t')},\n]';
 
   T? get firstOrNull => isEmpty ? null : first;
 }

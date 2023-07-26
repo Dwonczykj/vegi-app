@@ -4,32 +4,14 @@ import 'package:flutter/foundation.dart';
 import 'package:injectable/injectable.dart';
 import 'package:logger/logger.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
-
-class StackLine {
-  StackLine({
-    this.className,
-    this.functionName,
-    this.fileName,
-    this.lineNumber,
-    this.characterNumber,
-  });
-
-  final String? className;
-  final String? functionName;
-  final String? fileName;
-  final String? lineNumber;
-  final String? characterNumber;
-
-  @override
-  String toString() {
-    return '$fileName [$lineNumber] (in $className.$functionName)';
-  }
-}
+import 'package:vegan_liverpool/features/veganHome/Helpers/extensions.dart';
+import 'package:vegan_liverpool/features/veganHome/Helpers/stackLine.dart';
 
 @lazySingleton
 class LogIt {
   LogIt(this.logger);
 
+  // ~ lib/common/di/logger_di.dart:7
   final Logger logger;
 
   /// Log a message at level [Level.verbose].
@@ -77,7 +59,7 @@ class LogIt {
       stackTrace,
       dontMatch: dontMatch,
     );
-    
+
     if (filterThisPackage.isEmpty) {
       return '[Unable to parse stack trace]';
     }
@@ -93,7 +75,8 @@ class LogIt {
   }) {
     final lines = stackTrace.toString().split('\n');
     if (removeFirstNLines != null && lines.length < removeFirstNLines) {
-      print('Unable to remove first $removeFirstNLines most recent function call');
+      print(
+          'Unable to remove first $removeFirstNLines most recent function call');
       return [];
     }
 
@@ -128,13 +111,26 @@ class LogIt {
     dynamic message, {
     dynamic error,
     StackTrace? stackTrace,
+    List<StackLine> stackTraceLines = const <StackLine>[],
     bool sentry = false,
     String sentryHint = '',
   }) {
+    final filteredStackTrace = stackTraceLines.isEmpty
+        ? (stackTrace ?? StackTrace.current).filterCallStack(
+            dontMatch: RegExp(
+              r'([A-Za-z_]+)\.([A-Za-z_. <>]+)\s\((package:vegan_liverpool)\/(utils\/log\/)(log\.dart):(\d+):(\d+)\)',
+            ),
+            removeLinesContaining: [
+              'log_it.dart',
+              'vegi_debug_route_observer.dart',
+            ],
+          )
+        : stackTraceLines;
+
     if (sentry) {
       unawaited(
         Sentry.captureMessage(
-          '$message',
+          '$message with stack: ${filteredStackTrace.pretty(false)}',
           hint: sentryHint.isNotEmpty ? sentryHint : 'WARNING - $message',
         ),
       );
@@ -145,13 +141,10 @@ class LogIt {
     }
 
     if (kDebugMode) {
-      final filteredStackTrace = filterStackTrace(
-        stackTrace ?? StackTrace.current,
-        dontMatch: RegExp(
-            r'([A-Za-z_]+)\.([A-Za-z_. <>]+)\s\((package:vegan_liverpool)\/(utils\/log\/)(log\.dart):(\d+):(\d+)\)'),
+      logger.i(
+        '$message - ${filteredStackTrace.pretty(false)}',
+        error,
       );
-
-      logger.i('$message - [$filteredStackTrace]', error);
     } else {
       logger.i(message, error, stackTrace);
     }

@@ -25,6 +25,7 @@ final userReducers = combineReducers<UserState>([
   TypedReducer<UserState, ToggleUpgrade>(_toggleUpgrade).call,
   TypedReducer<UserState, CreateLocalAccountSuccess>(_createNewWalletSuccess)
       .call,
+  TypedReducer<UserState, ResetFuseCredentials>(_resetFuseCredentials).call,
   // TypedReducer<UserState, AddSurveyEmailSuccess>(_addSurveyEmailSuccess),
   TypedReducer<UserState, CreateSurveyCompletedSuccess>(_completeSurveySuccess)
       .call,
@@ -66,7 +67,6 @@ final userReducers = combineReducers<UserState>([
   TypedReducer<UserState, SetVegiSessionCookie>(_setVegiSessionCookie).call,
   TypedReducer<UserState, SetVegiUserId>(_setVegiUserId).call,
   TypedReducer<UserState, SetVegiSessionCookie>(_setVegiSessionCookie).call,
-  TypedReducer<UserState, SetPhoneNumber>(_setPhoneNumberRaw).call,
   TypedReducer<UserState, JustInstalled>(_justInstalled).call,
   TypedReducer<UserState, DeviceIdSuccess>(_deviceIdSuccess).call,
   TypedReducer<UserState, SetSecurityType>(_setSecurityType).call,
@@ -270,6 +270,21 @@ UserState _setUserAuthenticationStatus(
   SetUserAuthenticationStatus action,
 ) {
   log.info('$action');
+  if (action.fuseStatus != null &&
+      state.fuseAuthenticationStatus ==
+          FuseAuthenticationStatus.authenticated) {
+    log.info('AUTH CHANGE: FUSE -> ${action.fuseStatus}');
+  }
+  if (action.firebaseStatus != null &&
+      state.firebaseAuthenticationStatus ==
+          FirebaseAuthenticationStatus.authenticated) {
+    log.info('AUTH CHANGE: FIREBASE -> ${action.firebaseStatus}');
+  }
+  if (action.vegiStatus != null &&
+      state.vegiAuthenticationStatus ==
+          VegiAuthenticationStatus.authenticated) {
+    log.info('AUTH CHANGE: VEGI -> ${action.vegiStatus}');
+  }
   return state.copyWith(
     firebaseAuthenticationStatus:
         action.firebaseStatus ?? state.firebaseAuthenticationStatus,
@@ -293,6 +308,18 @@ UserState _createNewWalletSuccess(
     mnemonic: action.mnemonic,
     privateKey: action.privateKey,
     fuseWalletCredentials: action.fuseWalletCredentials,
+    // accountAddress: action.accountAddress,
+  );
+}
+
+UserState _resetFuseCredentials(
+  UserState state,
+  ResetFuseCredentials action,
+) {
+  return state.copyWith(
+    privateKey: action.privateKeyForPhone ?? '',
+    fuseAuthenticationStatus: FuseAuthenticationStatus.unauthenticated,
+    fuseWalletCredentials: null,
     // accountAddress: action.accountAddress,
   );
 }
@@ -389,15 +416,6 @@ UserState _setVegiUserId(
   log.info('$action');
   return state.copyWith(
     vegiUserId: action.id,
-  );
-}
-
-UserState _setPhoneNumberRaw(
-  UserState state,
-  SetPhoneNumber action,
-) {
-  return state.copyWith(
-    phoneNumber: action.phoneNumber,
   );
 }
 
@@ -519,9 +537,7 @@ UserState _setCompletedOnboarding(
   UserState state,
   SetCompletedOnboardingSuccess action,
 ) {
-  return state.copyWith(
-    hasNotOnboarded: !action.onboardingCompleted,
-  );
+  return state;
 }
 
 UserState _setSecurityType(

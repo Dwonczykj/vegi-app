@@ -107,7 +107,7 @@ class _MainScreenState extends State<MainScreen> {
         if (!vm.isLoggedIn) {
           log.info(
             'Push SignUpScreen() from ${rootRouter.current.name} as was not logged in',
-            sentry: false,
+            sentry: true,
           );
           vm.routeToLogin();
         }

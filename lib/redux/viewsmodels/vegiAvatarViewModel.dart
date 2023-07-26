@@ -21,8 +21,8 @@ class VegiAvatarViewModel extends Equatable {
       avatarUrl: store.state.userState.avatarUrl,
       avatarTempFilePath: store.state.userState.avatarTempFilePath,
       httpRequestIsInFlux: store.state.homePageState.isLoadingHttpRequest,
-      isLoggedIn: !store.state.userState.hasNotOnboarded,
-      userIsVegiAdmin: !store.state.userState.isVegiSuperAdmin,
+      isLoggedIn: store.state.userState.isLoggedIn,
+      userIsVegiAdmin: store.state.userState.isVegiSuperAdmin,
       editAvatar: (
         source, {
         ProgressCallback? progressCallback,

@@ -1,8 +1,13 @@
+import 'package:auto_route/auto_route.dart';
+import 'package:country_code_picker/country_code_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:phone_number/phone_number.dart';
 import 'package:redux/redux.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
+import 'package:vegan_liverpool/common/router/routes.gr.dart';
 import 'package:vegan_liverpool/constants/enums.dart';
 import 'package:vegan_liverpool/models/app_state.dart';
+import 'package:vegan_liverpool/services.dart';
 import 'package:vegan_liverpool/utils/onboard/firebase.dart';
 
 abstract class IOnBoardStrategy {
@@ -17,10 +22,10 @@ abstract class IOnBoardStrategy {
 
   bool expectingSMSVerificationCode = false;
 
-  Future<dynamic> login(
-    Store<AppState> store,
-    String? phoneNumber,
-  );
+  Future<dynamic> login({
+    required CountryCode countryCode,
+    required PhoneNumber phoneNumber,
+  });
   Future<UserCredential?> verify(
     Store<AppState> store,
     String verificationCode,
@@ -61,6 +66,10 @@ abstract class IOnBoardStrategy {
   Future<UserCredential?> signInWithGoogle();
   Future<UserCredential?> signInWithApple();
   Future<void> signout();
+
+  Future<void> nextOnboardingPage({
+    PageRouteInfo<dynamic>? currentRoute,
+  });
 }
 
 class OnBoardStrategyFactory {

@@ -40,7 +40,9 @@ class _VerifyPhoneNumberState extends State<VerifyPhoneNumber> {
 
   Future<void> _route(VerifyOnboardViewModel viewModel) async {
     final success = viewModel.firebaseAuthenticationStatus ==
-        FirebaseAuthenticationStatus.authenticated;
+            FirebaseAuthenticationStatus.authenticated &&
+        viewModel.vegiAuthenticationStatus ==
+            VegiAuthenticationStatus.authenticated;
     if (viewModel.vegiAuthenticationStatus == VegiAuthenticationStatus.failed) {
       log.error('vegi login failed. Investigate why...');
     }
@@ -53,9 +55,19 @@ class _VerifyPhoneNumberState extends State<VerifyPhoneNumber> {
       setState(() {
         finishedRouting = true;
       });
-      await rootRouter.push(
-        const SetEmailOnboardingScreen(),
-      );
+      // final store = await reduxStore;
+      // if (store.state.userState.email.trim().isEmpty) {
+      //   await rootRouter.push(const SetEmailOnboardingScreen());
+      // } else if (store.state.userState.displayName.isEmpty) {
+      //   await rootRouter.push(UserNameScreen());
+      // } else if (store.state.userState.authType == BiometricAuth.none) {
+      //   await rootRouter.push(const ChooseSecurityOption());
+      // } else if (!store.state.userState.biometricallyAuthenticated) {
+      //   await rootRouter.push(const PinCodeScreen());
+      // } else {
+      //   await rootRouter.push(const MainScreen());
+      // }
+      await onBoardStrategy.nextOnboardingPage();
     }
   }
 

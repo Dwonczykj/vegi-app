@@ -121,6 +121,7 @@ class _DeleteAccountDialogState extends State<DeleteAccountDialog>
                   fontSize: 20,
                   fontWeight: FontWeight.w600,
                 ),
+                textAlign: TextAlign.center,
               ),
               const SizedBox(height: 20),
               const Text(
@@ -133,6 +134,7 @@ class _DeleteAccountDialogState extends State<DeleteAccountDialog>
               const SizedBox(height: 20),
               PrimaryButton(
                 onPressed: () async {
+                  Navigator.pop(context);
                   (await reduxStore).dispatch(deleteUser());
                 },
                 label: 'Delete my account',

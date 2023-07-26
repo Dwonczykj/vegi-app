@@ -15,7 +15,6 @@ _$_UserState _$$_UserStateFromJson(Map<String, dynamic> json) => _$_UserState(
           ? null
           : DateTime.parse(json['installedAt'] as String),
       isContactsSynced: json['isContactsSynced'] as bool?,
-      hasNotOnboarded: json['hasNotOnboarded'] as bool? ?? true,
       scrollToTop: json['scrollToTop'] as bool? ?? false,
       walletAddress: json['walletAddress'] as String? ?? '',
       privateKey: json['privateKey'] as String? ?? '',
@@ -33,6 +32,10 @@ _$_UserState _$$_UserStateFromJson(Map<String, dynamic> json) => _$_UserState(
               _$FirebaseAuthenticationStatusEnumMap,
               json['firebaseAuthenticationStatus']) ??
           FirebaseAuthenticationStatus.unauthenticated,
+      vegiAuthenticationStatus: $enumDecodeNullable(
+              _$VegiAuthenticationStatusEnumMap,
+              json['vegiAuthenticationStatus']) ??
+          VegiAuthenticationStatus.unauthenticated,
       backup: json['backup'] as bool? ?? false,
       networks: (json['networks'] as List<dynamic>?)
               ?.map((e) => e as String)
@@ -116,7 +119,6 @@ Map<String, dynamic> _$$_UserStateToJson(_$_UserState instance) =>
       'walletModules': instance.walletModules?.toJson(),
       'installedAt': instance.installedAt?.toIso8601String(),
       'isContactsSynced': instance.isContactsSynced,
-      'hasNotOnboarded': instance.hasNotOnboarded,
       'scrollToTop': instance.scrollToTop,
       'walletAddress': instance.walletAddress,
       'privateKey': instance.privateKey,
@@ -127,6 +129,8 @@ Map<String, dynamic> _$$_UserStateToJson(_$_UserState instance) =>
           _$FuseAuthenticationStatusEnumMap[instance.fuseAuthenticationStatus]!,
       'firebaseAuthenticationStatus': _$FirebaseAuthenticationStatusEnumMap[
           instance.firebaseAuthenticationStatus]!,
+      'vegiAuthenticationStatus':
+          _$VegiAuthenticationStatusEnumMap[instance.vegiAuthenticationStatus]!,
       'backup': instance.backup,
       'networks': instance.networks,
       'mnemonic': instance.mnemonic,
@@ -231,6 +235,13 @@ const _$FirebaseAuthenticationStatusEnumMap = {
   FirebaseAuthenticationStatus.invalidCredentials: 'invalidCredentials',
   FirebaseAuthenticationStatus.invalidVerificationId: 'invalidVerificationId',
   FirebaseAuthenticationStatus.beginAuthentication: 'beginAuthentication',
+};
+
+const _$VegiAuthenticationStatusEnumMap = {
+  VegiAuthenticationStatus.unauthenticated: 'unauthenticated',
+  VegiAuthenticationStatus.loading: 'loading',
+  VegiAuthenticationStatus.authenticated: 'authenticated',
+  VegiAuthenticationStatus.failed: 'failed',
 };
 
 const _$PreferredSignonMethodEnumMap = {

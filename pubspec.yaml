@@ -15,15 +15,15 @@ dependencies:
   confetti: ^0.7.0
   country_code_picker: ^3.0.0 #Sign up screen
   decimal: ^2.3.0
-  device_info_plus: ^8.1.0
+  device_info_plus: ^9.0.2
   dio: ^5.1.1
   enum_to_string: ^2.0.1
   equatable: ^2.0.5
   expandable_sliver_list: ^4.1.1
-  firebase_analytics: ^10.4.2
-  firebase_auth: ^4.1.4
-  firebase_core: ^2.3.0
-  firebase_messaging: ^14.1.2
+  firebase_analytics: ^10.4.4
+  firebase_auth: ^4.7.1
+  firebase_core: ^2.15.0
+  firebase_messaging: ^14.6.5
   flex_color_scheme: ^7.0.0
   flutter_blue_plus: ^1.4.0
   flutter_dotenv: ^5.0.0
@@ -66,7 +66,7 @@ dependencies:
   responsive_framework: ^0.2.0
   sentry_flutter: ^6.12.2
   shared_preferences: ^2.1.0
-  shimmer: ^2.0.0
+  shimmer: ^3.0.0
   simple_animations: ^5.0.0+2
   smooth_page_indicator: ^1.0.0+2
   tuple: ^2.0.1
@@ -85,7 +85,7 @@ dependencies:
   flutter_barcode_scanner: ^2.0.0
   qr_flutter: ^4.0.0
   uni_links: ^0.5.1
-  fuse_wallet_sdk: ^0.0.17
+  fuse_wallet_sdk: ^0.1.0+1
   google_sign_in: ^6.1.0
   firebase_remote_config: ^4.2.2
   screen_capture_event: ^1.1.1
@@ -102,7 +102,9 @@ dependency_overrides:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  auto_route_generator: ^5.0.2
+  integration_test:
+    sdk: flutter
+  auto_route_generator: ^5.0.2 # update required
   build_runner: ^2.1.8
   dependency_validator: ^3.1.0
   flutter_launcher_icons: ^0.12.0
@@ -113,6 +115,7 @@ dev_dependencies:
   network_info_plus: ^4.0.0
   redux_remote_devtools: ^3.0.0
   very_good_analysis: ^4.0.0+1
+  mockito: ^5.0.0
 flutter:
   assets:
     - environment/.env

@@ -25,6 +25,7 @@ import 'package:vegan_liverpool/common/router/routes.dart';
 import 'package:vegan_liverpool/constants/analytics_events.dart';
 import 'package:vegan_liverpool/constants/analytics_props.dart';
 import 'package:vegan_liverpool/constants/enums.dart';
+import 'package:vegan_liverpool/features/veganHome/Helpers/extensions.dart';
 import 'package:vegan_liverpool/models/admin/surveyQuestion.dart';
 import 'package:vegan_liverpool/models/admin/postVegiResponse.dart';
 import 'package:vegan_liverpool/models/app_state.dart';
@@ -217,6 +218,19 @@ class CreateLocalAccountSuccess {
   String toString() => 'CreateLocalAccountSuccess';
 }
 
+class ResetFuseCredentials {
+  ResetFuseCredentials({
+    required this.privateKeyForPhone,
+  });
+
+  final String? privateKeyForPhone;
+
+  @override
+  String toString() {
+    return 'ResetFuseCredentials: privateKey:"$privateKeyForPhone"';
+  }
+}
+
 class CreateSurveyCompletedSuccess {
   CreateSurveyCompletedSuccess(
     this.completed,
@@ -246,7 +260,15 @@ class SetUserAuthenticationStatus {
     this.firebaseStatus,
     this.vegiStatus,
     this.fuseStatus,
-  });
+  }) {
+    log.info(
+      '$this',
+      sentry: true,
+      stackTraceLines: StackTrace.current.filterCallStack(
+        ignoreLastNCalls: 1,
+      ),
+    );
+  }
 
   final FirebaseAuthenticationStatus? firebaseStatus;
   final VegiAuthenticationStatus? vegiStatus;
@@ -255,9 +277,9 @@ class SetUserAuthenticationStatus {
   @override
   String toString() {
     return 'SetUserAuthenticationStatus ACTION: '
-        '${fuseStatus == null ? '' : 'FuseAuthenticationStatus.[${fuseStatus!.name}]'}, '
-        '${firebaseStatus == null ? '' : 'FirebaseAuthenticationStatus.[${firebaseStatus!.name}]'}, '
-        '${vegiStatus == null ? '' : 'VegiAuthenticationStatus.[${vegiStatus!.name}]'}';
+        '${fuseStatus == null ? '' : 'Fuse.[${fuseStatus!.name}]'}, '
+        '${firebaseStatus == null ? '' : 'Firebase.[${firebaseStatus!.name}]'}, '
+        '${vegiStatus == null ? '' : 'Vegi.[${vegiStatus!.name}]'}';
   }
 }
 
@@ -619,15 +641,6 @@ class SetVegiUserId {
   }
 }
 
-class SetPhoneNumber {
-  SetPhoneNumber({required this.phoneNumber});
-
-  String phoneNumber;
-
-  @override
-  String toString() => 'SetPhoneNumber : phoneNumber: $phoneNumber';
-}
-
 class JustInstalled {
   JustInstalled(this.installedAt);
   final DateTime installedAt;
@@ -723,7 +736,7 @@ ThunkAction<AppState> logoutRequest() {
 
 ThunkAction<AppState> updateEmailForWaitingListEntry({
   required String email,
-  required void Function(String) onError,
+  void Function(String)? onError,
 }) {
   return (Store<AppState> store) async {
     try {
@@ -733,56 +746,58 @@ ThunkAction<AppState> updateEmailForWaitingListEntry({
         final warning =
             "Can't update user email with vegi as no waiting list entry id is stored in state...";
         log.error(warning);
-        onError(warning);
-      }
-
-      final updatedEntry =
-          await peeplEatsService.updateEmailForWaitingListEntry(
-        email: email,
-        waitingListEntryId: store.state.userState.waitingListEntryId!,
-        onError: (errStr) {
-          log.error(errStr);
-          Analytics.track(
-            eventName: AnalyticsEvents.emailWLUpdateEmail,
-            properties: {
-              AnalyticsProps.status: AnalyticsProps.failed,
-              'error': errStr,
-            },
-          );
-          onError?.call(errStr);
-        },
-      );
-
-      if (updatedEntry != null) {
-        store
-          ..dispatch(
-            EmailWLRegistrationSuccess(
-              entry: updatedEntry,
-            ),
-          )
-          ..dispatch(
-            SetSubscribedToWaitingListUpdates(
-              updatedEntry: updatedEntry,
-            ),
-          );
-        if (updatedEntry.email.toLowerCase() == email.toLowerCase()) {
-          await onBoardStrategy.updateEmail(
-            email: email,
-          );
+        // onError(warning);
+      } else {
+        final updatedEntry =
+            await peeplEatsService.updateEmailForWaitingListEntry(
+          email: email,
+          waitingListEntryId: store.state.userState.waitingListEntryId!,
+          onError: (errStr) {
+            log.error(errStr);
+            Analytics.track(
+              eventName: AnalyticsEvents.emailWLUpdateEmail,
+              properties: {
+                AnalyticsProps.status: AnalyticsProps.failed,
+                'error': errStr,
+              },
+            );
+            onError?.call(errStr);
+          },
+        );
+        if (updatedEntry != null) {
+          store
+            ..dispatch(
+              EmailWLRegistrationSuccess(
+                entry: updatedEntry,
+              ),
+            )
+            ..dispatch(
+              SetSubscribedToWaitingListUpdates(
+                updatedEntry: updatedEntry,
+              ),
+            );
+          if (updatedEntry.email.toLowerCase() == email.toLowerCase()) {
+            await onBoardStrategy.updateEmail(
+              email: email,
+            );
+          }
         }
       }
     } catch (e, s) {
-      log.error('ERROR - updateEmailForWaitingListEntry $e');
-      onError(
+      log.error(
         'ERROR - updateEmailForWaitingListEntry $e',
+        stackTrace: s,
       );
+      // onError(
+      //   'ERROR - updateEmailForWaitingListEntry $e',
+      // );
     }
   };
 }
 
 ThunkAction<AppState> updateEmail({
   required String email,
-  required void Function(String) onError,
+  void Function(String)? onError,
 }) {
   return (Store<AppState> store) async {
     try {
@@ -795,19 +810,31 @@ ThunkAction<AppState> updateEmail({
         countryCodeInt = int.parse(matchFull.group(1)!);
       }
 
-      await peeplEatsService.updateUserDetails(
+      final errMsg = await peeplEatsService.updateUserDetails(
         phoneNoCountry: store.state.userState.phoneNumberNoCountry,
         phoneCountryCode: countryCodeInt,
         email: email,
-        onError: onError,
+        // onError: onError,
       );
+      if (errMsg != null) {
+        // onError?.call(errMsg);
+        log.info(
+          errMsg,
+          sentry: true,
+        );
+        onError?.call(
+            'Unable to update users email as another user has that email. Please check if you have previously registered with a different number.');
+      }
 
       return;
     } catch (e, s) {
-      log.error('ERROR - updateEmail $e');
-      onError(
+      log.error(
         'ERROR - updateEmail $e',
+        stackTrace: s,
       );
+      // onError?.call(
+      //   'ERROR - updateEmail $e',
+      // );
     }
   };
 }
@@ -1189,12 +1216,23 @@ ThunkAction<AppState> getUserDetails() {
         },
       );
       if (vegiUser != null) {
-        store.dispatch(
-          SetUserRoleOnVegi(
-            userRole: vegiUser.role,
-            isSuperAdmin: vegiUser.isSuperAdmin,
-          ),
-        );
+        store
+          ..dispatch(
+            SetUserRoleOnVegi(
+              userRole: vegiUser.role,
+              isSuperAdmin: vegiUser.isSuperAdmin,
+            ),
+          )
+          ..dispatch(
+            SetEmail(
+              vegiUser.email ?? store.state.userState.email,
+            ),
+          )
+          ..dispatch(
+            SetDisplayName(
+              vegiUser.name,
+            ),
+          );
       }
     } catch (e, s) {
       log.error('ERROR - getUserDetails $e');
@@ -1502,6 +1540,18 @@ ThunkAction<AppState> updateDisplayNameCall(String displayName) {
     try {
       updateFirebaseCurrentUser(({required User firebaseUser}) async {
         await firebaseUser.updateDisplayName(displayName);
+        final errMsg = await peeplEatsService.updateUserDetails(
+          phoneNoCountry: store.state.userState.phoneNumberNoCountry,
+          phoneCountryCode:
+              int.tryParse(store.state.userState.countryCode) ?? 44,
+          name: displayName,
+        );
+        if (errMsg != null) {
+          log.info(
+            errMsg,
+            sentry: true,
+          );
+        }
         store.dispatch(SetDisplayName(displayName));
       });
     } catch (e, s) {
@@ -1509,11 +1559,6 @@ ThunkAction<AppState> updateDisplayNameCall(String displayName) {
         'ERROR - updateDisplayNameCall',
         error: e,
         stackTrace: s,
-      );
-      await Sentry.captureException(
-        Exception('Error in update user profile name: ${e.toString()}'),
-        stackTrace: s,
-        hint: 'Error in update user profile name',
       );
     }
   };
@@ -1614,6 +1659,11 @@ ThunkAction<AppState> setRandomUserAvatar() {
 ThunkAction<AppState> deleteUser() {
   return (Store<AppState> store) async {
     try {
+      store.dispatch(
+        SignupLoading(
+          isLoading: true,
+        ),
+      );
       await authenticator.deregisterUser();
     } catch (e, s) {
       log.error('ERROR - deleteUser $e', stackTrace: s);
@@ -1623,6 +1673,11 @@ ThunkAction<AppState> deleteUser() {
         hint: 'ERROR - deleteUser $e',
       );
     }
+    store.dispatch(
+      SignupLoading(
+        isLoading: false,
+      ),
+    );
   };
 }
 

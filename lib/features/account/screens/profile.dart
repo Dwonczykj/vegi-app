@@ -21,6 +21,7 @@ import 'package:vegan_liverpool/features/veganHome/widgets/checkout/delivery_add
 import 'package:vegan_liverpool/features/veganHome/widgets/shared/deleteAccountDialog.dart';
 import 'package:vegan_liverpool/features/veganHome/widgets/shared/vegiAvatar.dart';
 import 'package:vegan_liverpool/generated/l10n.dart';
+import 'package:vegan_liverpool/models/admin/vegiConfigDTO.dart';
 import 'package:vegan_liverpool/models/app_state.dart';
 import 'package:vegan_liverpool/redux/actions/user_actions.dart';
 import 'package:vegan_liverpool/redux/viewsmodels/profile.dart';
@@ -240,9 +241,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               ),
                             ),
                           ),
-                          Divider(),
+                          const Divider(),
                           _buildGroup(
-                            I10n.of(context).phoneNumber,
+                            '${I10n.of(context).phoneNumber}${viewmodel.isSuperAdmin ? "[belongs to admin]" : ""}',
                             Text(
                               viewmodel.phone,
                               style: const TextStyle(
@@ -251,7 +252,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               ),
                             ),
                           ),
-                          Divider(),
+                          const Divider(),
                           ListTile(
                             // leading: const Icon(Icons.lock),
                             title: const Text('Security'),
@@ -441,12 +442,55 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ],
                           ),
                         ),
-                        if (viewmodel.isSuperAdmin) ...[
-                          Divider(),
+                        if (viewmodel.isSuperAdmin ||
+                            DebugHelpers.inDebugMode) ...[
+                          FutureBuilder<VegiConfigDTO?>(
+                            future: viewmodel.getConfigDetails(),
+                            builder: (context, snapshot) {
+                              if (!snapshot.hasData) {
+                                return Container();
+                              }
+                              return Column(
+                                children: [
+                                  const Divider(),
+                                  ListTile(
+                                    title: const Text('Database'),
+                                    subtitle: Text(
+                                      snapshot.hasData
+                                          ? snapshot.data!.databaseUrl
+                                          : '',
+                                      style: const TextStyle(
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                                    onTap: () {
+                                      // todo: implement refresh call
+                                    },
+                                  ),
+                                  const Divider(),
+                                  ListTile(
+                                    title: const Text('vegi environment'),
+                                    subtitle: Text(
+                                      snapshot.hasData
+                                          ? snapshot.data!.environment
+                                          : '',
+                                      style: const TextStyle(
+                                        color: Colors.grey,
+                                      ),
+                                    ),
+                                    onTap: () {
+                                      // todo: implement refresh call
+                                    },
+                                  ),
+                                ],
+                              );
+                            },
+                          ),
+                          const Divider(),
                           ListTile(
                             // leading: const Icon(Icons.lock),
                             title: const Text('firebase'),
-                            trailing: Icon(FontAwesomeIcons.google),
+                            trailing: const Icon(FontAwesomeIcons.google),
                             subtitle: Text(
                               viewmodel.firebaseAuthenticationStatus.name
                                   .capitalizeWords(),
@@ -458,7 +502,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               // todo: implement refresh call
                             },
                           ),
-                          Divider(),
+                          const Divider(),
                           ListTile(
                             // leading: const Icon(Icons.lock),
                             title: const Text('vegi'),
@@ -477,7 +521,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               // todo: implement refresh call
                             },
                           ),
-                          Divider(),
+                          const Divider(),
                           ListTile(
                             // leading: const Icon(Icons.lock),
                             title: const Text('Fuse'),
@@ -507,7 +551,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             context: context,
                             builder: (context) => const DeleteAccountDialog(),
                           ),
-                          buttonColor: Color.fromARGB(255, 144, 0, 0),
+                          buttonColor: const Color.fromARGB(255, 144, 0, 0),
                         ),
                       ],
                     )

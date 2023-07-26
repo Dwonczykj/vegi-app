@@ -20,8 +20,13 @@ class DetailsCardViewModel extends Equatable {
       email: store.state.userState.email,
       updateDetails: ({required email, required name}) {
         store
-          ..dispatch(SetDisplayName(name))
-          ..dispatch(SetEmail(email.toLowerCase().trim()));
+          ..dispatch(updateDisplayNameCall(name))
+          ..dispatch(
+            updateEmail(
+              email: email.toLowerCase().trim(),
+              onError: (p0) {},
+            ),
+          );
       },
     );
   }

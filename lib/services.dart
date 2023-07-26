@@ -16,6 +16,7 @@ import 'package:vegan_liverpool/services/apis/peeplPay2.dart';
 import 'package:vegan_liverpool/services/apis/stripePay2.dart';
 import 'package:vegan_liverpool/utils/onboard/Istrategy.dart';
 import 'package:vegan_liverpool/utils/onboard/authentication.dart';
+import 'package:vegan_liverpool/utils/onboard/firebase.dart';
 import 'package:vegan_liverpool/utils/stripe.dart';
 import 'package:redux/redux.dart';
 
@@ -46,6 +47,8 @@ final FirebaseRemoteConfig firebaseRemoteConfig = getIt<FirebaseRemoteConfig>();
 final PhoneNumberUtil phoneNumberUtil = getIt<PhoneNumberUtil>();
 
 final IOnBoardStrategy onBoardStrategy = getIt<IOnBoardStrategy>();
+
+final FirebaseStrategy firebaseOnboarding = getIt<FirebaseStrategy>();
 
 final Authentication authenticator = getIt<Authentication>();
 

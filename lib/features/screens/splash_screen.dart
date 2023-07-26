@@ -36,45 +36,27 @@ class _SplashScreenState extends State<SplashScreen> {
     required Store<AppState> store,
   }) {
     final UserState userState = store.state.userState;
-    if (userState.authType != BiometricAuth.none) {
-      rootRouter.push(const PinCodeScreen());
-      store
-        // ..dispatch(
-        //   authenticate(
-        //       // onSuccess: () async {
-        //       //   if (BiometricAuth.faceID == userState.authType ||
-        //       //       BiometricAuth.touchID == userState.authType) {
-        //       //     await _checkLoggedInToVegi(store: store);
-        //       //   } else if (userState.authType == BiometricAuth.pincode) {
-        //       //     await _checkLoggedInToVegi(store: store);
-        //       //   } else {
-        //       //     throw Exception(
-        //       //       'BiometricAuth of ${userState.authType.name} not handled',
-        //       //     );
-        //       //   }
-        //       // },
-        //       ),
-        // )
-        ..dispatch(identifyCall());
-    } else {
-      log.info('Push OnBoardScreen() from ${rootRouter.current.name}');
-      context.router.replaceAll([const OnBoardScreen()]);
-    }
+    authenticator.appIsAuthenticated().then(
+      (isAuthenticated) {
+        if (isAuthenticated && userState.authType != BiometricAuth.none) {
+          rootRouter.push(const PinCodeScreen());
+          reduxStore.then((store) {
+            log.info(
+              'User is already authenticated so push the PinCodeScreen and check user details on vegi backend',
+            );
+            store.dispatch(getUserDetails());
+          });
+        } else {
+          rootRouter.push(const OnBoardScreen());
+          reduxStore.then((store) {
+            log.info(
+              'Navigate to OnBoardScreen from splash_screen because user has authState: ${store.state.userState.authState} and biometricAuth: [${userState.authType}]',
+            );
+          });
+        }
+      },
+    );
   }
-
-  // Future<void> _handleFuseAuthenticationSucceeded() async {
-  //   final store = await reduxStore;
-  //   final authType = store.state.userState.authType;
-  //   if (BiometricAuth.faceID == authType || BiometricAuth.touchID == authType) {
-  //     return _checkLoggedInToVegi();
-  //   } else if (authType == BiometricAuth.pincode) {
-  //     return _checkLoggedInToVegi();
-  //   } else {
-  //     throw Exception(
-  //       'BiometricAuth of ${authType.name} not handled',
-  //     );
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -82,7 +64,8 @@ class _SplashScreenState extends State<SplashScreen> {
       onInit: (store) {
         final String privateKey = store.state.userState.privateKey;
         final String jwtToken = store.state.userState.jwtToken;
-        final bool isLoggedOut = store.state.userState.hasNotOnboarded || !store.state.userState.isLoggedIn;
+        final bool isLoggedOut = store.state.userState.hasNotOnboarded ||
+            !store.state.userState.isLoggedIn;
         if (privateKey.isEmpty || jwtToken.isEmpty || isLoggedOut) {
           log.info(
               'Push OnBoardScreen() from ${rootRouter.current.name} at splash_screen.dart');

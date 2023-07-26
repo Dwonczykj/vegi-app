@@ -18,6 +18,7 @@ linter:
     omit_local_variable_types: false
     library_prefixes: false
     flutter_style_todos: false
+    lines_longer_than_80_chars: false
 
 analyzer:
   exclude:
@@ -29,3 +30,6 @@ analyzer:
   errors:
     todo: ignore
     invalid_annotation_target: ignore
+    unused_import: false
+    file_names: false
+    directives_ordering: ignore

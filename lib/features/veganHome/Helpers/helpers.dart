@@ -3,11 +3,14 @@ import 'dart:io';
 import 'dart:math' as Math;
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:carrier_info/carrier_info.dart';
+import 'package:country_code_picker/country_code_picker.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:html/parser.dart';
 import 'package:intl/intl.dart';
+import 'package:phone_number/phone_number.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:vegan_liverpool/common/router/routes.gr.dart';
 import 'package:vegan_liverpool/constants/enums.dart';
@@ -23,6 +26,7 @@ import 'package:vegan_liverpool/models/restaurant/restaurantMenuItem.dart';
 import 'package:vegan_liverpool/models/restaurant/time_slot.dart';
 import 'package:vegan_liverpool/redux/actions/cart_actions.dart';
 import 'package:vegan_liverpool/redux/actions/menu_item_actions.dart';
+import 'package:vegan_liverpool/redux/actions/user_actions.dart';
 import 'package:vegan_liverpool/services.dart';
 import 'package:vegan_liverpool/utils/config.dart' as VEGI_CONFIG;
 import 'package:vegan_liverpool/utils/constants.dart';
@@ -760,4 +764,82 @@ List<T> Function(dynamic) fromSailsListOfObjectJson<T>(
   }
 
   return fn;
+}
+
+Future<SetPhoneNumberSuccess?> getPhoneDetails({
+  required String countryCode,
+  required String phoneNoCountry,
+}) async {
+  CountryCode? countryCode;
+  PhoneNumber? phoneNumber;
+  try {
+    String? isoCode;
+    if (Platform.isAndroid) {
+      final androidInfo = await CarrierInfo.getAndroidInfo();
+      if ((androidInfo?.telephonyInfo.length ?? 0) >= 1) {
+        isoCode = androidInfo?.telephonyInfo[0].isoCountryCode;
+      }
+    }
+    if (Platform.isIOS) {
+      final iosInfo = await CarrierInfo.getIosInfo();
+      if (iosInfo.carrierData.length >= 1) {
+        isoCode = iosInfo.carrierData[0].isoCountryCode;
+      }
+    }
+    final currentCountryCode = isoCode;
+    if (currentCountryCode != null) {
+      final Map<String, String> localeData = codes.firstWhere(
+        (Map<String, String> code) =>
+            code['code'].toString().toLowerCase() ==
+            currentCountryCode.toLowerCase(),
+      );
+      if (localeData.containsKey('dial_code') &&
+          localeData.containsKey('code')) {
+        countryCode = CountryCode(
+          dialCode: localeData['dial_code'],
+          code: localeData['code'],
+        );
+      }
+    }
+  } catch (e, s) {
+    log.error(
+      'Failed to deduce sim country code: $e',
+      stackTrace: s,
+    );
+    return null;
+  }
+
+  final String _phoneNumber = '${countryCode!.dialCode}$phoneNoCountry';
+
+  try {
+    phoneNumber = await phoneNumberUtil.parse(
+      _phoneNumber,
+    );
+  } catch (e) {
+    // do nothing and try again....
+  }
+  if (phoneNumber != null) {
+    return SetPhoneNumberSuccess(
+      countryCode: countryCode,
+      phoneNumber: phoneNumber,
+    );
+  }
+
+  try {
+    phoneNumber ??= await PhoneNumberUtil().parse(
+      phoneNoCountry,
+      regionCode: countryCode.code,
+    );
+  } on Exception catch (e, s) {
+    log.error(
+      'Failed to parse phoneNumber "$phoneNoCountry": $e',
+      stackTrace: s,
+    );
+    return null;
+  }
+  
+  return SetPhoneNumberSuccess(
+    countryCode: countryCode,
+    phoneNumber: phoneNumber,
+  );
 }

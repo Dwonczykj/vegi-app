@@ -25,7 +25,6 @@ mixin _$UserState {
   WalletModules? get walletModules => throw _privateConstructorUsedError;
   DateTime? get installedAt => throw _privateConstructorUsedError;
   bool? get isContactsSynced => throw _privateConstructorUsedError;
-  bool get hasNotOnboarded => throw _privateConstructorUsedError;
   bool get scrollToTop => throw _privateConstructorUsedError;
 
   /// * The wallet address is a smart contract wallet which actually conducts payments, holds balances, etc.
@@ -53,7 +52,6 @@ mixin _$UserState {
       throw _privateConstructorUsedError;
   FirebaseAuthenticationStatus get firebaseAuthenticationStatus =>
       throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
   VegiAuthenticationStatus get vegiAuthenticationStatus =>
       throw _privateConstructorUsedError;
   bool get backup => throw _privateConstructorUsedError;
@@ -143,7 +141,6 @@ abstract class $UserStateCopyWith<$Res> {
       WalletModules? walletModules,
       DateTime? installedAt,
       bool? isContactsSynced,
-      bool hasNotOnboarded,
       bool scrollToTop,
       String walletAddress,
       String privateKey,
@@ -152,8 +149,7 @@ abstract class $UserStateCopyWith<$Res> {
       SmartWallet? smartWallet,
       FuseAuthenticationStatus fuseAuthenticationStatus,
       FirebaseAuthenticationStatus firebaseAuthenticationStatus,
-      @JsonKey(ignore: true)
-          VegiAuthenticationStatus vegiAuthenticationStatus,
+      VegiAuthenticationStatus vegiAuthenticationStatus,
       bool backup,
       List<String> networks,
       List<String> mnemonic,
@@ -241,7 +237,6 @@ class _$UserStateCopyWithImpl<$Res, $Val extends UserState>
     Object? walletModules = freezed,
     Object? installedAt = freezed,
     Object? isContactsSynced = freezed,
-    Object? hasNotOnboarded = null,
     Object? scrollToTop = null,
     Object? walletAddress = null,
     Object? privateKey = null,
@@ -322,10 +317,6 @@ class _$UserStateCopyWithImpl<$Res, $Val extends UserState>
           ? _value.isContactsSynced
           : isContactsSynced // ignore: cast_nullable_to_non_nullable
               as bool?,
-      hasNotOnboarded: null == hasNotOnboarded
-          ? _value.hasNotOnboarded
-          : hasNotOnboarded // ignore: cast_nullable_to_non_nullable
-              as bool,
       scrollToTop: null == scrollToTop
           ? _value.scrollToTop
           : scrollToTop // ignore: cast_nullable_to_non_nullable
@@ -616,7 +607,6 @@ abstract class _$$_UserStateCopyWith<$Res> implements $UserStateCopyWith<$Res> {
       WalletModules? walletModules,
       DateTime? installedAt,
       bool? isContactsSynced,
-      bool hasNotOnboarded,
       bool scrollToTop,
       String walletAddress,
       String privateKey,
@@ -625,8 +615,7 @@ abstract class _$$_UserStateCopyWith<$Res> implements $UserStateCopyWith<$Res> {
       SmartWallet? smartWallet,
       FuseAuthenticationStatus fuseAuthenticationStatus,
       FirebaseAuthenticationStatus firebaseAuthenticationStatus,
-      @JsonKey(ignore: true)
-          VegiAuthenticationStatus vegiAuthenticationStatus,
+      VegiAuthenticationStatus vegiAuthenticationStatus,
       bool backup,
       List<String> networks,
       List<String> mnemonic,
@@ -714,7 +703,6 @@ class __$$_UserStateCopyWithImpl<$Res>
     Object? walletModules = freezed,
     Object? installedAt = freezed,
     Object? isContactsSynced = freezed,
-    Object? hasNotOnboarded = null,
     Object? scrollToTop = null,
     Object? walletAddress = null,
     Object? privateKey = null,
@@ -795,10 +783,6 @@ class __$$_UserStateCopyWithImpl<$Res>
           ? _value.isContactsSynced
           : isContactsSynced // ignore: cast_nullable_to_non_nullable
               as bool?,
-      hasNotOnboarded: null == hasNotOnboarded
-          ? _value.hasNotOnboarded
-          : hasNotOnboarded // ignore: cast_nullable_to_non_nullable
-              as bool,
       scrollToTop: null == scrollToTop
           ? _value.scrollToTop
           : scrollToTop // ignore: cast_nullable_to_non_nullable
@@ -1062,7 +1046,6 @@ class _$_UserState extends _UserState with DiagnosticableTreeMixin {
       this.walletModules,
       this.installedAt,
       this.isContactsSynced,
-      this.hasNotOnboarded = true,
       this.scrollToTop = false,
       this.walletAddress = '',
       this.privateKey = '',
@@ -1072,8 +1055,7 @@ class _$_UserState extends _UserState with DiagnosticableTreeMixin {
       this.fuseAuthenticationStatus = FuseAuthenticationStatus.unauthenticated,
       this.firebaseAuthenticationStatus =
           FirebaseAuthenticationStatus.unauthenticated,
-      @JsonKey(ignore: true)
-          this.vegiAuthenticationStatus = VegiAuthenticationStatus.unauthenticated,
+      this.vegiAuthenticationStatus = VegiAuthenticationStatus.unauthenticated,
       this.backup = false,
       this.networks = const [],
       this.mnemonic = const [],
@@ -1155,9 +1137,6 @@ class _$_UserState extends _UserState with DiagnosticableTreeMixin {
   final bool? isContactsSynced;
   @override
   @JsonKey()
-  final bool hasNotOnboarded;
-  @override
-  @JsonKey()
   final bool scrollToTop;
 
   /// * The wallet address is a smart contract wallet which actually conducts payments, holds balances, etc.
@@ -1194,7 +1173,7 @@ class _$_UserState extends _UserState with DiagnosticableTreeMixin {
   @JsonKey()
   final FirebaseAuthenticationStatus firebaseAuthenticationStatus;
   @override
-  @JsonKey(ignore: true)
+  @JsonKey()
   final VegiAuthenticationStatus vegiAuthenticationStatus;
   @override
   @JsonKey()
@@ -1360,7 +1339,7 @@ class _$_UserState extends _UserState with DiagnosticableTreeMixin {
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'UserState(wcURI: $wcURI, walletModules: $walletModules, installedAt: $installedAt, isContactsSynced: $isContactsSynced, hasNotOnboarded: $hasNotOnboarded, scrollToTop: $scrollToTop, walletAddress: $walletAddress, privateKey: $privateKey, fuseWalletCredentials: $fuseWalletCredentials, smartWallet: $smartWallet, fuseAuthenticationStatus: $fuseAuthenticationStatus, firebaseAuthenticationStatus: $firebaseAuthenticationStatus, vegiAuthenticationStatus: $vegiAuthenticationStatus, backup: $backup, networks: $networks, mnemonic: $mnemonic, pincode: $pincode, countryCode: $countryCode, phoneNumber: $phoneNumber, phoneNumberNoCountry: $phoneNumberNoCountry, warnSendDialogShowed: $warnSendDialogShowed, isoCode: $isoCode, jwtToken: $jwtToken, displayName: $displayName, avatarUrl: $avatarUrl, avatarTempFilePath: $avatarTempFilePath, preferredSignonMethod: $preferredSignonMethod, email: $email, password: $password, verificationId: $verificationId, verificationPassed: $verificationPassed, identifier: $identifier, appUpdateNeeded: $appUpdateNeeded, appUpdateNextVersion: $appUpdateNextVersion, appUpdateNotificationSeenForBuildNumber: $appUpdateNotificationSeenForBuildNumber, syncedContacts: $syncedContacts, reverseContacts: $reverseContacts, currency: $currency, hasUpgrade: $hasUpgrade, authType: $authType, biometricallyAuthenticated: $biometricallyAuthenticated, locale: $locale, firebaseCredentials: $firebaseCredentials, firebaseSessionToken: $firebaseSessionToken, vegiSessionCookie: $vegiSessionCookie, listOfDeliveryAddresses: $listOfDeliveryAddresses, hasSavedSeedPhrase: $hasSavedSeedPhrase, useLiveLocation: $useLiveLocation, userIsVerified: $userIsVerified, userLocation: $userLocation, isUsingSimulator: $isUsingSimulator, isUsingIosSimulator: $isUsingIosSimulator, initialLoginDateTime: $initialLoginDateTime, showSeedPhraseBanner: $showSeedPhraseBanner, surveyQuestions: $surveyQuestions, surveyCompleted: $surveyCompleted, surveyEmailUsed: $surveyEmailUsed, isVendor: $isVendor, stripeCustomerId: $stripeCustomerId, vegiAccountId: $vegiAccountId, vegiUserId: $vegiUserId, isVegiSuperAdmin: $isVegiSuperAdmin, userVegiRole: $userVegiRole, positionInWaitingList: $positionInWaitingList, subscribedToWaitingListUpdates: $subscribedToWaitingListUpdates, waitingListEntryId: $waitingListEntryId, loginCounter: $loginCounter)';
+    return 'UserState(wcURI: $wcURI, walletModules: $walletModules, installedAt: $installedAt, isContactsSynced: $isContactsSynced, scrollToTop: $scrollToTop, walletAddress: $walletAddress, privateKey: $privateKey, fuseWalletCredentials: $fuseWalletCredentials, smartWallet: $smartWallet, fuseAuthenticationStatus: $fuseAuthenticationStatus, firebaseAuthenticationStatus: $firebaseAuthenticationStatus, vegiAuthenticationStatus: $vegiAuthenticationStatus, backup: $backup, networks: $networks, mnemonic: $mnemonic, pincode: $pincode, countryCode: $countryCode, phoneNumber: $phoneNumber, phoneNumberNoCountry: $phoneNumberNoCountry, warnSendDialogShowed: $warnSendDialogShowed, isoCode: $isoCode, jwtToken: $jwtToken, displayName: $displayName, avatarUrl: $avatarUrl, avatarTempFilePath: $avatarTempFilePath, preferredSignonMethod: $preferredSignonMethod, email: $email, password: $password, verificationId: $verificationId, verificationPassed: $verificationPassed, identifier: $identifier, appUpdateNeeded: $appUpdateNeeded, appUpdateNextVersion: $appUpdateNextVersion, appUpdateNotificationSeenForBuildNumber: $appUpdateNotificationSeenForBuildNumber, syncedContacts: $syncedContacts, reverseContacts: $reverseContacts, currency: $currency, hasUpgrade: $hasUpgrade, authType: $authType, biometricallyAuthenticated: $biometricallyAuthenticated, locale: $locale, firebaseCredentials: $firebaseCredentials, firebaseSessionToken: $firebaseSessionToken, vegiSessionCookie: $vegiSessionCookie, listOfDeliveryAddresses: $listOfDeliveryAddresses, hasSavedSeedPhrase: $hasSavedSeedPhrase, useLiveLocation: $useLiveLocation, userIsVerified: $userIsVerified, userLocation: $userLocation, isUsingSimulator: $isUsingSimulator, isUsingIosSimulator: $isUsingIosSimulator, initialLoginDateTime: $initialLoginDateTime, showSeedPhraseBanner: $showSeedPhraseBanner, surveyQuestions: $surveyQuestions, surveyCompleted: $surveyCompleted, surveyEmailUsed: $surveyEmailUsed, isVendor: $isVendor, stripeCustomerId: $stripeCustomerId, vegiAccountId: $vegiAccountId, vegiUserId: $vegiUserId, isVegiSuperAdmin: $isVegiSuperAdmin, userVegiRole: $userVegiRole, positionInWaitingList: $positionInWaitingList, subscribedToWaitingListUpdates: $subscribedToWaitingListUpdates, waitingListEntryId: $waitingListEntryId, loginCounter: $loginCounter)';
   }
 
   @override
@@ -1372,7 +1351,6 @@ class _$_UserState extends _UserState with DiagnosticableTreeMixin {
       ..add(DiagnosticsProperty('walletModules', walletModules))
       ..add(DiagnosticsProperty('installedAt', installedAt))
       ..add(DiagnosticsProperty('isContactsSynced', isContactsSynced))
-      ..add(DiagnosticsProperty('hasNotOnboarded', hasNotOnboarded))
       ..add(DiagnosticsProperty('scrollToTop', scrollToTop))
       ..add(DiagnosticsProperty('walletAddress', walletAddress))
       ..add(DiagnosticsProperty('privateKey', privateKey))
@@ -1456,8 +1434,6 @@ class _$_UserState extends _UserState with DiagnosticableTreeMixin {
                 other.installedAt == installedAt) &&
             (identical(other.isContactsSynced, isContactsSynced) ||
                 other.isContactsSynced == isContactsSynced) &&
-            (identical(other.hasNotOnboarded, hasNotOnboarded) ||
-                other.hasNotOnboarded == hasNotOnboarded) &&
             (identical(other.scrollToTop, scrollToTop) ||
                 other.scrollToTop == scrollToTop) &&
             (identical(other.walletAddress, walletAddress) ||
@@ -1555,7 +1531,6 @@ class _$_UserState extends _UserState with DiagnosticableTreeMixin {
         walletModules,
         installedAt,
         isContactsSynced,
-        hasNotOnboarded,
         scrollToTop,
         walletAddress,
         privateKey,
@@ -1641,7 +1616,6 @@ abstract class _UserState extends UserState {
       final WalletModules? walletModules,
       final DateTime? installedAt,
       final bool? isContactsSynced,
-      final bool hasNotOnboarded,
       final bool scrollToTop,
       final String walletAddress,
       final String privateKey,
@@ -1650,8 +1624,7 @@ abstract class _UserState extends UserState {
       final SmartWallet? smartWallet,
       final FuseAuthenticationStatus fuseAuthenticationStatus,
       final FirebaseAuthenticationStatus firebaseAuthenticationStatus,
-      @JsonKey(ignore: true)
-          final VegiAuthenticationStatus vegiAuthenticationStatus,
+      final VegiAuthenticationStatus vegiAuthenticationStatus,
       final bool backup,
       final List<String> networks,
       final List<String> mnemonic,
@@ -1732,8 +1705,6 @@ abstract class _UserState extends UserState {
   @override
   bool? get isContactsSynced;
   @override
-  bool get hasNotOnboarded;
-  @override
   bool get scrollToTop;
   @override
 
@@ -1765,7 +1736,6 @@ abstract class _UserState extends UserState {
   @override
   FirebaseAuthenticationStatus get firebaseAuthenticationStatus;
   @override
-  @JsonKey(ignore: true)
   VegiAuthenticationStatus get vegiAuthenticationStatus;
   @override
   bool get backup;

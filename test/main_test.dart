@@ -37,7 +37,7 @@ abstract class Env {
   static const envFile = 'environment/$_envFile';
 }
 
-Future<void> main_test() async {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   await SystemChrome.setPreferredOrientations([

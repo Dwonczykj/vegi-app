@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:vegan_liverpool/common/router/routes.dart';
+import 'package:vegan_liverpool/common/router/routes.dart' as routes;
 import 'package:vegan_liverpool/constants/analytics_events.dart';
 import 'package:vegan_liverpool/constants/enums.dart';
 import 'package:vegan_liverpool/constants/theme.dart';
@@ -52,11 +53,23 @@ class _PinCodeScreenState extends State<PinCodeScreen> {
     if (biometricallyAuthenticated) {
       return;
     }
+    final store = await reduxStore;
+    if (store.state.userState.isLoggedIn == false ||
+        store.state.userState.hasOnboarded == false) {
+      if (store.state.userState.isLoggedIn) {
+        await onBoardStrategy.nextOnboardingPage(
+            currentRoute: const routes.PinCodeScreen());
+      } else {
+        await rootRouter.replaceAll([const SignUpScreen()]);
+      }
+      return;
+    }
     if (userAuth != BiometricAuth.pincode && userAuth != BiometricAuth.none) {
       final BiometricAuth type = await BiometricUtils.getAvailableBiometrics();
       final String biometric = BiometricUtils.getBiometricString(
         type,
       );
+
       await BiometricUtils.showDefaultPopupCheckBiometricAuth(
         message: 'Please use $biometric to unlock!',
         callback: (bool result) {
@@ -117,6 +130,7 @@ class _PinCodeScreenState extends State<PinCodeScreen> {
         builder: (context, AsyncSnapshot<void> snapshot) {
           if (viewModel.signupInFlux) {
             return LoadingScaffold;
+          } else if (viewModel.notOnboarded) {
           } else if (viewModel.notAuthenticated) {
             // viewModel.loginAgain();
             // ! commented out reauthentication above as this needs email credentials stored in shared_preferences beneath the bio_authentication to work

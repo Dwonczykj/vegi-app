@@ -8,20 +8,23 @@ import 'package:vegan_liverpool/services.dart';
 import 'package:vegan_liverpool/utils/log/log.dart';
 import 'package:vegan_liverpool/utils/onboard/authentication.dart';
 
-import 'main_test.dart';
+import 'main_test.dart' as main_test;
 
 void main() {
   group('Authentication Integration Test', () {
     late Authentication authenticatorTestInstance;
 
-    setUp(() async {
-      await main_test();
+    // Ensure Firebase is initialized before running tests
+    setUpAll(() async {
+      TestWidgetsFlutterBinding.ensureInitialized();
+      await main_test.main();
       authenticatorTestInstance = Authentication();
     });
 
-    test('Init Fuse & Fetch/Create Wallet', () async {
-      final store =
-          await reduxStore; //TODO How to mock redux store for flutter_test ask ?
+    testWidgets('Init Fuse & Fetch/Create Wallet', (WidgetTester tester) async {
+      // Your test code using Firebase services
+      // For example, Firestore queries, Authentication, etc.
+      final store = await reduxStore;
       await authenticatorTestInstance.initFuse(
         // this code will not be waited for as runs once stream receives an event...
         onWalletInitialised: () {
@@ -66,6 +69,7 @@ void main() {
         () async {
       final mockStore =
           await reduxStore; //TODO How to mock redux store for flutter_test ask ?
+      expect(true, isFalse);
     });
 
     // test('Login Test', () async {

@@ -7,12 +7,15 @@ import 'package:http_parser/http_parser.dart';
 import 'package:injectable/injectable.dart';
 import 'package:mime/mime.dart';
 import 'package:uuid/uuid.dart';
+import 'package:vegan_liverpool/common/router/routes.gr.dart';
 import 'package:vegan_liverpool/constants/enums.dart';
 import 'package:vegan_liverpool/features/veganHome/Helpers/extensions.dart';
+import 'package:vegan_liverpool/features/veganHome/Helpers/helpers.dart';
 import 'package:vegan_liverpool/models/admin/surveyQuestion.dart';
 import 'package:vegan_liverpool/models/admin/uploadProductSuggestionImageResponse.dart';
 import 'package:vegan_liverpool/models/admin/postVegiResponse.dart';
 import 'package:vegan_liverpool/models/admin/vegiAccount.dart';
+import 'package:vegan_liverpool/models/admin/vegiConfigDTO.dart';
 import 'package:vegan_liverpool/models/admin/vegiSession.dart';
 import 'package:vegan_liverpool/models/app_state.dart';
 import 'package:vegan_liverpool/models/cart/createOrderForDelivery.dart';
@@ -52,6 +55,14 @@ class PeeplEatsService extends HttpService {
   PeeplEatsService(Dio dio) : super(dio, Secrets.VEGI_EATS_BACKEND) {
     dio.options.baseUrl = Secrets.VEGI_EATS_BACKEND;
     dio.options.headers = Map.from({'Content-Type': 'application/json'});
+    reduxStore.then(
+      (store) {
+        final cookie = store.state.userState.vegiSessionCookie;
+        if (cookie != null && cookie.isNotEmpty) {
+          setSessionCookie(cookie);
+        }
+      },
+    );
   }
 
   String? _getResponseExitName(Response<dynamic> response) =>
@@ -146,6 +157,10 @@ class PeeplEatsService extends HttpService {
 
       final validSession = response.data!['authenticated'] as bool;
 
+      log.info(
+        'admin/logged-in -> authenticated = $validSession',
+        sentry: true,
+      );
       if (!validSession) {
         sessionIsStaleCallback?.call();
       }
@@ -223,6 +238,13 @@ class PeeplEatsService extends HttpService {
             isSuperAdmin: userDetails.isSuperAdmin,
           ),
         );
+      if (userDetails.email != null) {
+        (await reduxStore).dispatch(
+          SetEmail(
+            userDetails.email!,
+          ),
+        );
+      }
     }
     return VegiSession(
       sessionCookie: cookie ?? '',
@@ -281,6 +303,16 @@ class PeeplEatsService extends HttpService {
             isSuperAdmin: userDetails.isSuperAdmin,
           ),
         );
+      if (userDetails.phoneNoCountry.isNotEmpty &&
+          userDetails.phoneCountryCode != 0) {
+        final phoneDetails = await getPhoneDetails(
+          countryCode: '+${userDetails.phoneCountryCode}',
+          phoneNoCountry: userDetails.phoneNoCountry,
+        );
+        (await reduxStore).dispatch(
+          phoneDetails,
+        );
+      }
     }
     return VegiSession(
       sessionCookie: cookie ?? '',
@@ -293,6 +325,47 @@ class PeeplEatsService extends HttpService {
       VegiBackendEndpoints.logout,
     );
     await logoutSession();
+  }
+
+  Future<void> isLoggedIn() async {
+    if (onboardingAuthRoutesOrder.contains(rootRouter.current.name)) {
+      return;
+    }
+    await checkVegiSessionIsStillValid(
+      sessionIsStaleCallback: () async {
+        final store = await reduxStore;
+        store.dispatch(
+          SetUserAuthenticationStatus(
+            vegiStatus: VegiAuthenticationStatus.unauthenticated,
+          ),
+        );
+        await rootRouter.replaceAll([const SignUpScreen()]);
+      },
+    );
+  }
+
+  Future<VegiConfigDTO?> getVegiConfigDetails() async {
+    try {
+      final Response<dynamic> response = await dioGet(
+        '/api/v1/admin/get-config-details',
+        sendWithAuthCreds: true,
+      );
+      if (responseHasErrorStatus(response)) {
+        log.error(response.statusMessage ?? 'Unknown Error');
+        return null;
+      } else {
+        final result =
+            VegiConfigDTO.fromJson(response.data as Map<String, dynamic>);
+        return result;
+      }
+    } on Exception catch (e) {
+      if (e is DioError) {
+        if (e.response != null && e.response!.statusCode == 404) {
+          return null;
+        }
+      }
+      rethrow;
+    }
   }
 
   Future<String?> requestPasswordResetForEmail({
@@ -313,6 +386,10 @@ class PeeplEatsService extends HttpService {
 
   Future<bool> deleteAllUserDetails() async {
     final store = await reduxStore;
+    log.info(
+      'Delete all user details from vegi backend',
+      sentry: true,
+    );
     final Response<dynamic> response = await dioPost(
       VegiBackendEndpoints.deregisterUser,
       sendWithAuthCreds: false,
@@ -324,16 +401,31 @@ class PeeplEatsService extends HttpService {
     );
 
     if (responseHasErrorStatus(response)) {
+      if (response.statusCode! == 302) {
+        log.info(
+          'peeplEatsService.deleteAllUserDetails received a redirect response',
+          sentry: true,
+        );
+        return true;
+      }
       log.error(
         'Bad response returned when trying to deregister user and delete all their data: $response',
       );
       return false;
     }
+    log.info(
+      'Deleted all user details from vegi backend successfully',
+      sentry: true,
+    );
     return true;
   }
 
   Future<bool> deleteWalletAddressDetailsFromAccountsList() async {
     final store = await reduxStore;
+    log.info(
+      'Deleted all wallet credentials from vegi backend successfully',
+      sentry: true,
+    );
     final Response<dynamic> response = await dioPost(
       VegiBackendEndpoints.deleteVegiAccountEntry,
       sendWithAuthCreds: false,
@@ -348,6 +440,10 @@ class PeeplEatsService extends HttpService {
       );
       return false;
     }
+    log.info(
+      'Deleted all wallet credentials from vegi backend successfully',
+      sentry: true,
+    );
     return true;
   }
 
@@ -743,7 +839,7 @@ class PeeplEatsService extends HttpService {
     required String searchQuery,
   }) async {
     final Response<dynamic> response =
-        await dio.get('api/v1/vendors/$restaurantID?search=$searchQuery');
+        await dioGet('api/v1/vendors/$restaurantID?search=$searchQuery');
 
     final List<Map<String, dynamic>> results =
         List.from(response.data['vendor']['products'] as Iterable<dynamic>);
@@ -1178,7 +1274,7 @@ class PeeplEatsService extends HttpService {
 
   Future<int> checkDiscountCode(String discountCode) async {
     final Response<dynamic> response =
-        await dio.get('api/v1/discounts/check-discount-code/$discountCode?');
+        await dioGet('api/v1/discounts/check-discount-code/$discountCode?');
 
     final Map<dynamic, dynamic> results = response.data['discount'] as Map;
 
@@ -1226,7 +1322,7 @@ class PeeplEatsService extends HttpService {
     required String vendorID,
     required String dateRequired,
   }) async {
-    final Response<dynamic> response = await dio.get(
+    final Response<dynamic> response = await dioGet(
       'api/v1/vendors/get-fulfilment-slots?vendor=$vendorID&date=$dateRequired',
     );
 
@@ -1269,7 +1365,7 @@ class PeeplEatsService extends HttpService {
   Future<Map<String, TimeSlot?>> getNextAvaliableSlot({
     required String vendorID,
   }) async {
-    final Response<dynamic> response = await dio.get(
+    final Response<dynamic> response = await dioGet(
       'api/v1/vendors/get-next-fulfilment-slot?vendor=$vendorID',
     );
 
@@ -1356,15 +1452,15 @@ class PeeplEatsService extends HttpService {
     }
   }
 
-  Future<void> updateUserDetails({
+  Future<String?> updateUserDetails({
     required String phoneNoCountry,
-    int phoneCountryCode = 44, 
+    int phoneCountryCode = 44,
     String? email,
     String? name,
     bool? marketingEmailContactAllowed,
     bool? marketingPhoneContactAllowed,
     bool? marketingPushContactAllowed,
-    void Function(String error)? onError,
+    // void Function(String error)? onError,
   }) async {
     final params = <String, dynamic>{
       'phoneNoCountry': phoneNoCountry,
@@ -1389,12 +1485,20 @@ class PeeplEatsService extends HttpService {
     final Response<dynamic> response = await dioPost(
       '/api/v1/users/update-user-self',
       data: params,
+      // allowStatusCodes: [
+      //   400,
+      // ],
+      allowErrorMessage: RegExp(
+          "Unable to update user\[[0-9]+\]'s email as another user\[[0-9]+\] already has email"),
     );
 
     if (responseHasErrorStatus(response)) {
-      onError?.call(response.statusMessage ?? 'Unknown Error');
-      return;
+      // onError?.call(response.statusMessage ?? 'Unknown Error');
+      return response.statusMessage ?? 'Unknown Error';
+    } else if (response.extra.containsKey('errorMessage')) {
+      return response.extra['errorMessage'] as String;
     }
+    return null;
   }
 
   Future<void> getAccountIsVendor(
@@ -1561,7 +1665,7 @@ class PeeplEatsService extends HttpService {
     void Function() onSuccess,
     void Function(String error) onError,
   ) async {
-    final Response<dynamic> response = await dio.post(
+    final Response<dynamic> response = await dioPost(
       'api/v1/admin/submit-survey-response',
       data: {
         'emailAddress': email,
@@ -1580,7 +1684,7 @@ class PeeplEatsService extends HttpService {
   }
 
   Future<List<SurveyQuestion>> getSurveyQuestions() async {
-    final Response<dynamic> response = await dio.get(
+    final Response<dynamic> response = await dioGet(
       'api/v1/admin/get-survey-questions',
     );
 
@@ -1684,7 +1788,7 @@ class PeeplEatsService extends HttpService {
 
   Future<OrderStatus> checkOrderStatus(String orderID) async {
     final Response<dynamic> response =
-        await dio.get('api/v1/orders/get-order-status?orderId=$orderID');
+        await dioGet('api/v1/orders/get-order-status?orderId=$orderID');
 
     final Map<String, dynamic> orderStatus =
         response.data as Map<String, dynamic>;

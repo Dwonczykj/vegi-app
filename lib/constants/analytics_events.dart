@@ -6,6 +6,7 @@ class AnalyticsEvents {
   //Auth
   static const String login = 'login';
   static const String logout = 'logout';
+  static const String deleteAccountSuccess = 'delete_account_success';
 
   //Onboarding
   static const String createWallet = 'create_wallet'; //

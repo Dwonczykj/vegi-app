@@ -11,7 +11,9 @@ import 'package:vegan_liverpool/common/router/routes.gr.dart';
 import 'package:vegan_liverpool/constants/analytics_events.dart';
 import 'package:vegan_liverpool/constants/analytics_props.dart';
 import 'package:vegan_liverpool/constants/enums.dart';
+import 'package:vegan_liverpool/features/veganHome/Helpers/extensions.dart';
 import 'package:vegan_liverpool/models/app_state.dart';
+import 'package:vegan_liverpool/redux/actions/auth_actions.dart';
 import 'package:vegan_liverpool/redux/actions/cart_actions.dart';
 import 'package:vegan_liverpool/redux/actions/cash_wallet_actions.dart';
 import 'package:vegan_liverpool/redux/actions/onboarding_actions.dart';
@@ -79,6 +81,9 @@ T logFunctionCall<T>(
 }
 
 class Authentication {
+  Future<bool> appIsAuthenticated() async =>
+      (await reduxStore).state.userState.isLoggedIn;
+
   Future<void> initFuse({
     void Function()? onWalletInitialised,
   }) =>
@@ -107,13 +112,317 @@ class Authentication {
   }) async {
     // TODO Change signup to require email and register password, then add a phone number and verify code
     logFunctionCall(
-      await _loginToFuse(
-        onWalletInitialised: () => _signUpFirebaseRequestVerificationCodeStep2(
-          loginDetails: loginDetails,
-        ),
+      // await _loginToFuse(
+      // onWalletInitialised: () =>
+      await _signUpFirebaseRequestVerificationCodeStep2(
+        loginDetails: loginDetails,
       ),
+      // ),
       funcName: 'signUp',
     );
+  }
+
+  Future<void> reauthenticate() async {
+    logFunctionCall(
+      () {},
+      funcName: 'reauthenticate',
+    );
+    final store = await reduxStore;
+    final firebaseReauthenticationSucceeded =
+        await _signupFirebaseTryReauthenticate();
+    if (firebaseReauthenticationSucceeded) {
+      // * vegi Auth
+      await _signupVegiTryReauthenticate();
+    }
+    if (store.state.userState.vegiAuthenticationStatus !=
+        VegiAuthenticationStatus.authenticated) {
+      log.error(
+          'Unable to call authentcator.reauthenticate and authentiate vegi. So stopping auth flow here');
+      return;
+    }
+    // check fuse
+    // * Fuse part
+    await _loginToFuse(
+        // onWalletInitialised: () async {
+        //   // * Firebase part
+        //   final firebaseReauthenticationSucceeded =
+        //       await _signupFirebaseTryReauthenticate();
+        //   if (firebaseReauthenticationSucceeded) {
+        //     // * vegi Auth
+        //     await _signupVegiTryReauthenticate();
+        //   }
+        // },
+        );
+  }
+
+  /// to be called from loginHandler on Sign_up_screen via MainScreenViewModel
+  /// & for reauthentication calls
+  Future<void> login({
+    required iLoginDetails loginDetails,
+  }) async {
+    // TODO Change signup to require email and register password, then add a phone number and verify code
+    logFunctionCall(
+      // await _loginToFuse(
+      //   onWalletInitialised: () => _signInFirebaseRequestVerificationCodeStep2(
+      //     loginDetails: loginDetails,
+      //   ),
+      // ),
+      //TODO: configure all callbacks from thsi point on?
+      await _signInFirebaseRequestVerificationCodeStep2(
+        loginDetails: loginDetails,
+      ),
+      funcName: 'login',
+    );
+  }
+
+  // Future<bool> verify({
+  //   required iVerificationCodeDetails verificationCodeDetails,
+  // }) async {
+  //   logFunctionCall(
+  //     () {},
+  //     funcName: 'verify',
+  //   );
+  //   final store = await reduxStore;
+  //   // check fuse authenticated even though should only be calling this function if it is
+  //   if (store.state.userState.fuseAuthenticationStatus !=
+  //       FuseAuthenticationStatus.authenticated) {}
+
+  //   // call onboarding.verify
+  //   if (verificationCodeDetails is SMSVerificationCodeDetails) {
+  //     // check phone number has already been sent and set on in memeory firebase onboarding class instance
+  //     if (!onBoardStrategy.expectingSMSVerificationCode) {
+  //       log.warn(
+  //           'Onboarding service is not expecting an SMS Verification code! We will try to verify anyways with code: ${verificationCodeDetails.verificationCode}');
+  //     }
+  //     await firebaseOnboarding.verify(
+  //       store,
+  //       verificationCodeDetails.verificationCode,
+  //     );
+  //     return true;
+  //   } else if (verificationCodeDetails is EmailVerificationLinkDetails) {
+  //     log.error('Verification emails not implemented yet!');
+  //     return false;
+  //   } else {
+  //     log.error(
+  //         'Unknown verification code type passed [$verificationCodeDetails]!');
+  //     return false;
+  //   }
+  // }
+
+  Future<void> verifySMSVerificationCode(
+    String verificationCode,
+  ) async {
+    logFunctionCall(
+      () {},
+      funcName: 'verifySMSVerificationCode',
+    );
+    final store = await reduxStore;
+    final userCredential = await firebaseOnboarding.verify(
+      store,
+      verificationCode,
+    );
+    if (userCredential == null) {
+      await _captureAuthenticationError(
+        title: 'Invalid firebase credentials',
+        message: 'Error with getIdToken for a firebase user',
+        methodName: 'verifySMSVerificationCode',
+        signUpErrCode: SignUpErrCode.invalidCredentials,
+      );
+      return;
+    }
+    final firebaseSessionToken = await _getFirebaseSessionToken(
+      userCredential: userCredential,
+    );
+
+    await _loginToVegiWithPhone(
+      store: store,
+      phoneNumber: store.state.userState.phoneNumber,
+      firebaseSessionToken: firebaseSessionToken!,
+    );
+    store.dispatch(
+      SignupLoading(
+        isLoading: false,
+      ),
+    );
+    if (store.state.userState.vegiAuthenticationStatus ==
+        VegiAuthenticationStatus.authenticated) {
+      await initFuse();
+    } else {
+      log.error(
+        'Unable to initFuse at end of authenticator.verifySMSVericationCode as failed to auth vegi with status: [${store.state.userState.vegiAuthenticationStatus}] and firebaseStatus: ["${store.state.userState.firebaseAuthenticationStatus}"]',
+      );
+    }
+  }
+
+  Future<String?> _getFirebaseSessionToken({
+    required UserCredential userCredential,
+  }) async {
+    late final User? user;
+    late final String? firebaseSessionToken;
+    try {
+      user = userCredential.user;
+      firebaseSessionToken = await user?.getIdToken();
+    } on FirebaseAuthException catch (e, s) {
+      await _captureAuthenticationError(
+        title: 'Invalid firebase credentials',
+        message: 'Error with getIdToken for a firebase user',
+        methodName: '_loginToVegiWithEmail',
+        e: e,
+        s: s,
+        signUpErrCode: SignUpErrCode.invalidCredentials,
+      );
+    } on Exception catch (e, s) {
+      await _captureAuthenticationError(
+        title: 'Invalid firebase credentials',
+        message: 'Error with getIdToken for a firebase user: $e',
+        methodName: '_loginToVegiWithEmail',
+        e: e,
+        s: s,
+        signUpErrCode: SignUpErrCode.invalidCredentials,
+      );
+    }
+    return firebaseSessionToken;
+  }
+
+  Future<bool> verifyEmailLinkCallback({
+    required String emailAddress,
+    required String emailLink,
+  }) async {
+    logFunctionCall(
+      () {},
+      funcName: 'verifyEmailLinkCallback',
+    );
+    final store = await reduxStore;
+    final userCredential = await onBoardStrategy.signInUserFromVerificationLink(
+      email: emailAddress,
+      emailLinkFromVerificationEmail: emailLink,
+    );
+    if (userCredential == null) {
+      await _captureAuthenticationError(
+        message: 'Failed to authenticate onboarding via email',
+        methodName: 'login',
+      );
+      return false;
+    }
+    //vegi login
+    final firebaseSessionToken =
+        await _getFirebaseSessionToken(userCredential: userCredential);
+    await _loginToVegiWithEmail(
+      store: store,
+      email: emailAddress,
+      firebaseSessionToken: firebaseSessionToken!,
+    );
+    store.dispatch(
+      SignupLoading(
+        isLoading: false,
+      ),
+    );
+    // * login to fuse
+    if (store.state.userState.vegiAuthenticationStatus ==
+        VegiAuthenticationStatus.authenticated) {
+      await initFuse();
+    } else {
+      log.error(
+        'Unable to initFuse at end of authenticator.verifySMSVericationCode as failed to auth vegi with status: [${store.state.userState.vegiAuthenticationStatus}] and firebaseStatus: ["${store.state.userState.firebaseAuthenticationStatus}"]',
+      );
+      return false;
+    }
+    return true;
+  }
+
+  Future<bool> isLoggedIn() async {
+    final store = await reduxStore;
+    final us = store.state.userState;
+    return !store.state.userState.hasNotOnboarded &&
+        us.fuseAuthenticationStatus == FuseAuthenticationStatus.authenticated &&
+        us.firebaseAuthenticationStatus ==
+            FirebaseAuthenticationStatus.authenticated &&
+        us.vegiAuthenticationStatus == VegiAuthenticationStatus.authenticated;
+  }
+
+  Future<void> logout({
+    bool bypassSeedPhraseCheck = false,
+  }) async {
+    logFunctionCall(
+      () {},
+      funcName: 'logout',
+    );
+    final store = await reduxStore;
+    if (store.state.userState.hasSavedSeedPhrase || bypassSeedPhraseCheck) {
+      try {
+        await firebaseOnboarding.signout();
+      } on Exception catch (e, s) {
+        log.error(
+          e,
+          stackTrace: s,
+          sentryHint: 'Error signing out of firebase from authenticator',
+        );
+      }
+      try {
+        await peeplEatsService.logOut();
+      } on Exception catch (e, s) {
+        log.error(
+          e,
+          stackTrace: s,
+          sentryHint: 'Error signing out of vegi from authenticator',
+        );
+      }
+      await Analytics.track(eventName: AnalyticsEvents.logout);
+      store.dispatch(LogoutRequestSuccess());
+      await Analytics.track(eventName: AnalyticsEvents.deleteAccountSuccess);
+      await rootRouter.replaceAll([const ResetApp()]);
+      // await rootRouter.replaceAll([const OnBoardScreen()]);
+      return;
+    }
+    await rootRouter.pop();
+    await rootRouter.push(const ShowUserMnemonic());
+    return;
+  }
+
+  Future<void> deregisterUser() async {
+    logFunctionCall(
+      () {},
+      funcName: 'deregisterUser',
+    );
+    // no need to save seed phrase in this option as user wants all details to be deleted.
+    await peeplEatsService.deleteAllUserDetails();
+    await peeplEatsService.deleteWalletAddressDetailsFromAccountsList();
+    await logout(
+      bypassSeedPhraseCheck: true,
+    );
+  }
+
+  /// Wrapper function around the firebase.signInUserBySendingEmailLink method
+  Future<bool> requestEmailLinkForEmailAddress({
+    required String email,
+  }) async {
+    logFunctionCall(
+      () {},
+      funcName: 'requestEmailLinkForEmailAddress',
+    );
+    final store = await reduxStore;
+    store.dispatch(
+      SignupLoading(
+        isLoading: true,
+      ),
+    );
+    final emailSent = await onBoardStrategy.signInUserBySendingEmailLink(
+      email: email,
+    );
+    if (emailSent) {
+      store.dispatch(
+        SignupLoading(
+          isLoading: false,
+        ),
+      );
+    } else {
+      store.dispatch(
+        SignupLoading(
+          isLoading: false,
+        ),
+      );
+    }
+    return true;
   }
 
   Future<bool> _signUpFirebaseRequestVerificationCodeStep2({
@@ -228,32 +537,8 @@ class Authentication {
         return false;
       }
       //vegi login
-      late final User? user;
-      late final String? firebaseSessionToken;
-      try {
-        user = userCredential.user;
-        firebaseSessionToken = await user?.getIdToken();
-      } on FirebaseAuthException catch (e, s) {
-        await _captureAuthenticationError(
-          title: 'Invalid firebase credentials',
-          message: 'Error with getIdToken for a firebase user',
-          methodName: '_loginToVegiWithEmail',
-          e: e,
-          s: s,
-          signUpErrCode: SignUpErrCode.invalidCredentials,
-        );
-        return false;
-      } on Exception catch (e, s) {
-        await _captureAuthenticationError(
-          title: 'Invalid firebase credentials',
-          message: 'Error with getIdToken for a firebase user: $e',
-          methodName: '_loginToVegiWithEmail',
-          e: e,
-          s: s,
-          signUpErrCode: SignUpErrCode.invalidCredentials,
-        );
-        return false;
-      }
+      final firebaseSessionToken =
+          await _getFirebaseSessionToken(userCredential: userCredential);
       await _loginToVegiWithEmail(
         store: store,
         email: loginDetails.email,
@@ -264,10 +549,17 @@ class Authentication {
           isLoading: false,
         ),
       );
+      // * login to fuse
+      if (store.state.userState.vegiAuthenticationStatus ==
+          VegiAuthenticationStatus.authenticated) {
+        await initFuse();
+      } else {
+        log.error(
+          'Unable to initFuse at end of authenticator.verifySMSVericationCode as failed to auth vegi with status: [${store.state.userState.vegiAuthenticationStatus}] and firebaseStatus: ["${store.state.userState.firebaseAuthenticationStatus}"]',
+        );
+        return false;
+      }
       return true;
-      // return _signupWithEmailDetails(
-      //   email: loginDetails.email,
-      // );
     } else {
       log.error('Unknown loginDetails passed');
       return false;
@@ -394,255 +686,6 @@ class Authentication {
     store.dispatch(SignupLoading(isLoading: false));
   }
 
-  Future<void> reauthenticate() async {
-    logFunctionCall(
-      () {},
-      funcName: 'reauthenticate',
-    );
-    final store = await reduxStore;
-    // check fuse
-    // * Fuse part
-    await _loginToFuse(
-      onWalletInitialised: () async {
-        // * Firebase part
-        final firebaseReauthenticationSucceeded =
-            await _signupFirebaseTryReauthenticate();
-        if (firebaseReauthenticationSucceeded) {
-          // * vegi Auth
-          await _signupVegiTryReauthenticate();
-        }
-      },
-    );
-  }
-
-  /// to be called from loginHandler on Sign_up_screen via MainScreenViewModel
-  /// & for reauthentication calls
-  Future<void> login({
-    required iLoginDetails loginDetails,
-  }) async {
-    // TODO Change signup to require email and register password, then add a phone number and verify code
-    logFunctionCall(
-      await _loginToFuse(
-        onWalletInitialised: () => _signInFirebaseRequestVerificationCodeStep2(
-          loginDetails: loginDetails,
-        ),
-      ),
-      funcName: 'login',
-    );
-  }
-
-  Future<void> verifySMSVerificationCode(
-    String verificationCode,
-  ) async {
-    logFunctionCall(
-      () {},
-      funcName: 'verifySMSVerificationCode',
-    );
-    final store = await reduxStore;
-    final userCredential = await onBoardStrategy.verify(
-      store,
-      verificationCode,
-    );
-    if (userCredential == null) {
-      await _captureAuthenticationError(
-        title: 'Invalid firebase credentials',
-        message: 'Error with getIdToken for a firebase user',
-        methodName: 'verifySMSVerificationCode',
-        signUpErrCode: SignUpErrCode.invalidCredentials,
-      );
-      return;
-    }
-
-    late final User? user;
-    late final String? firebaseSessionToken;
-    try {
-      user = userCredential.user;
-      firebaseSessionToken = await user?.getIdToken();
-    } on FirebaseAuthException catch (e, s) {
-      await _captureAuthenticationError(
-        title: 'Invalid firebase credentials',
-        message: 'Error with getIdToken for a firebase user',
-        methodName: '_loginToVegiWithEmail',
-        e: e,
-        s: s,
-        signUpErrCode: SignUpErrCode.invalidCredentials,
-      );
-      return;
-    } on Exception catch (e, s) {
-      await _captureAuthenticationError(
-        title: 'Invalid firebase credentials',
-        message: 'Error with getIdToken for a firebase user: $e',
-        methodName: '_loginToVegiWithEmail',
-        e: e,
-        s: s,
-        signUpErrCode: SignUpErrCode.invalidCredentials,
-      );
-      return;
-    }
-    await _loginToVegiWithPhone(
-      store: store,
-      phoneNumber: store.state.userState.phoneNumber,
-      firebaseSessionToken: firebaseSessionToken!,
-    );
-    store.dispatch(
-      SignupLoading(
-        isLoading: false,
-      ),
-    );
-  }
-
-  Future<bool> verify({
-    required iVerificationCodeDetails verificationCodeDetails,
-  }) async {
-    logFunctionCall(
-      () {},
-      funcName: 'verify',
-    );
-    final store = await reduxStore;
-    // check fuse authenticated even though should only be calling this function if it is
-    if (store.state.userState.fuseAuthenticationStatus !=
-        FuseAuthenticationStatus.authenticated) {}
-
-    // call onboarding.verify
-    if (verificationCodeDetails is SMSVerificationCodeDetails) {
-      // check phone number has already been sent and set on in memeory firebase onboarding class instance
-      if (!onBoardStrategy.expectingSMSVerificationCode) {
-        log.warn(
-            'Onboarding service is not expecting an SMS Verification code! We will try to verify anyways with code: ${verificationCodeDetails.verificationCode}');
-      }
-      await onBoardStrategy.verify(
-        store,
-        verificationCodeDetails.verificationCode,
-      );
-      return true;
-    } else if (verificationCodeDetails is EmailVerificationLinkDetails) {
-      log.error('Verification emails not implemented yet!');
-      return false;
-    } else {
-      log.error(
-          'Unknown verification code type passed [$verificationCodeDetails]!');
-      return false;
-    }
-  }
-
-  Future<bool> verifyEmailLinkCallback({
-    required String emailAddress,
-    required String emailLink,
-  }) async {
-    logFunctionCall(
-      () {},
-      funcName: 'verifyEmailLinkCallback',
-    );
-    final store = await reduxStore;
-    final userCredential = await onBoardStrategy.signInUserFromVerificationLink(
-      email: emailAddress,
-      emailLinkFromVerificationEmail: emailLink,
-    );
-    if (userCredential == null) {
-      await _captureAuthenticationError(
-        message: 'Failed to authenticate onboarding via email',
-        methodName: 'login',
-      );
-      return false;
-    }
-    //vegi login
-    late final User? user;
-    late final String? firebaseSessionToken;
-    try {
-      user = userCredential.user;
-      firebaseSessionToken = await user?.getIdToken();
-    } on FirebaseAuthException catch (e, s) {
-      await _captureAuthenticationError(
-        title: 'Invalid firebase credentials',
-        message: 'Error with getIdToken for a firebase user',
-        methodName: '_loginToVegiWithEmail',
-        e: e,
-        s: s,
-        signUpErrCode: SignUpErrCode.invalidCredentials,
-      );
-      return false;
-    } on Exception catch (e, s) {
-      await _captureAuthenticationError(
-        title: 'Invalid firebase credentials',
-        message: 'Error with getIdToken for a firebase user: $e',
-        methodName: '_loginToVegiWithEmail',
-        e: e,
-        s: s,
-        signUpErrCode: SignUpErrCode.invalidCredentials,
-      );
-      return false;
-    }
-    await _loginToVegiWithEmail(
-      store: store,
-      email: emailAddress,
-      firebaseSessionToken: firebaseSessionToken!,
-    );
-    store.dispatch(
-      SignupLoading(
-        isLoading: false,
-      ),
-    );
-    return true;
-  }
-
-  Future<bool> isLoggedIn() async {
-    final store = await reduxStore;
-    final us = store.state.userState;
-    return !store.state.userState.hasNotOnboarded &&
-        us.fuseAuthenticationStatus == FuseAuthenticationStatus.authenticated &&
-        us.firebaseAuthenticationStatus ==
-            FirebaseAuthenticationStatus.authenticated &&
-        us.vegiAuthenticationStatus == VegiAuthenticationStatus.authenticated;
-  }
-
-  Future<void> logout({
-    bool bypassSeedPhraseCheck = false,
-  }) async {
-    logFunctionCall(
-      () {},
-      funcName: 'logout',
-    );
-    final store = await reduxStore;
-    if (store.state.userState.hasSavedSeedPhrase || bypassSeedPhraseCheck) {
-      try {
-        await onBoardStrategy.signout();
-      } on Exception catch (e, s) {
-        log.error(
-          e,
-          stackTrace: s,
-          sentryHint: 'Error signing out of firebase from authenticator',
-        );
-      }
-      try {
-        await peeplEatsService.logOut();
-      } on Exception catch (e, s) {
-        log.error(
-          e,
-          stackTrace: s,
-          sentryHint: 'Error signing out of vegi from authenticator',
-        );
-      }
-      store.dispatch(LogoutRequestSuccess());
-      await rootRouter.replace(const OnBoardScreen());
-      await Analytics.track(eventName: AnalyticsEvents.logout);
-      return;
-    }
-    await rootRouter.pop();
-    await rootRouter.push(const ShowUserMnemonic());
-    return;
-  }
-
-  Future<void> deregisterUser() async {
-    logFunctionCall(
-      () {},
-      funcName: 'deregisterUser',
-    );
-    // no need to save seed phrase in this option as user wants all details to be deleted.
-    await peeplEatsService.deleteAllUserDetails();
-    await peeplEatsService.deleteWalletAddressDetailsFromAccountsList();
-    await logout();
-  }
-
   Future<void> _captureAuthenticationError({
     required String message,
     required String methodName,
@@ -678,6 +721,18 @@ class Authentication {
       );
   }
 
+  Future<String?> _getFusePrivateKeyForPhoneInStore() async {
+    final store = await reduxStore;
+    final phoneNumber =
+        '${store.state.userState.countryCode}${store.state.userState.phoneNumberNoCountry}';
+    if (store.state.authState.phoneNumberToPrivateKeyMap
+        .containsKey(phoneNumber)) {
+      return store.state.authState.phoneNumberToPrivateKeyMap[phoneNumber];
+    } else {
+      return null;
+    }
+  }
+
   Future<void> _loginToFuse({
     void Function()? onWalletInitialised,
     List<String>? useMnemonicWords,
@@ -687,8 +742,17 @@ class Authentication {
       funcName: '_loginToFuse',
     );
     final store = await reduxStore;
+    final privateKeyForPhone = await _getFusePrivateKeyForPhoneInStore();
+    if (privateKeyForPhone != store.state.userState.privateKey) {
+      store.dispatch(
+        ResetFuseCredentials(
+          privateKeyForPhone: privateKeyForPhone,
+        ),
+      );
+    }
     if (store.state.userState.fuseAuthenticationStatus ==
-        FuseAuthenticationStatus.authenticated) {
+            FuseAuthenticationStatus.authenticated &&
+        privateKeyForPhone != null) {
       // return true;
       onWalletInitialised?.call();
       return;
@@ -697,6 +761,7 @@ class Authentication {
       store,
       onWalletInitialised: onWalletInitialised,
       useMnemonicWords: useMnemonicWords,
+      privateKey: privateKeyForPhone,
     );
   }
   // Future<bool> _loginToFuse({
@@ -752,39 +817,6 @@ class Authentication {
     );
   }
 
-  /// Wrapper function around the firebase.signInUserBySendingEmailLink method
-  Future<bool> requestEmailLinkForEmailAddress({
-    required String email,
-  }) async {
-    logFunctionCall(
-      () {},
-      funcName: 'requestEmailLinkForEmailAddress',
-    );
-    final store = await reduxStore;
-    store.dispatch(
-      SignupLoading(
-        isLoading: true,
-      ),
-    );
-    final emailSent = await onBoardStrategy.signInUserBySendingEmailLink(
-      email: email,
-    );
-    if (emailSent) {
-      store.dispatch(
-        SignupLoading(
-          isLoading: false,
-        ),
-      );
-    } else {
-      store.dispatch(
-        SignupLoading(
-          isLoading: false,
-        ),
-      );
-    }
-    return true;
-  }
-
   Future<bool> _requestSMSCodeForPhoneNumber({
     required CountryCode countryCode,
     required PhoneNumber phoneNumber,
@@ -798,12 +830,11 @@ class Authentication {
     try {
       store.dispatch(setDevicePhoneNumberForId(phoneNumber.e164));
       await Analytics.setUserId(phoneNumber.e164);
-      // TODO: Replace this with a dispatch to this._authenticate and integrate test this method
-      // return _authenticate()
       // * Firebase login -> will route to verify_screen
-      await onBoardStrategy.login(
-        store,
-        phoneNumber.e164,
+      await firebaseOnboarding.login(
+        countryCode: countryCode,
+        phoneNumber: phoneNumber,
+        // phoneNumber.e164,
       );
       return true;
       // if (store.state.userState.firebaseCredentialIsValid) {
@@ -818,7 +849,7 @@ class Authentication {
       //         firebaseSessionToken: store.state.userState.firebaseSessionToken!,
       //       );
       //       if (result == LoggedInToVegiResult.success) {
-      //         _complete(
+      //         await _complete(
       //           vegiStatus: VegiAuthenticationStatus.authenticated,
       //         );
       //         store.dispatch(isBetaWhitelistedAddress());
@@ -829,7 +860,7 @@ class Authentication {
       //         return true;
       //       } else {
       //         log.error('Could not login to vegi...');
-      //         _complete(
+      //         await _complete(
       //           firebaseStatus: FirebaseAuthenticationStatus.authenticated,
       //           vegiStatus: VegiAuthenticationStatus.failed,
       //         );
@@ -907,15 +938,24 @@ class Authentication {
       );
       final userDetails = vegiSession.user;
       if (vegiSession.sessionCookie.isNotEmpty) {
-        _complete(
+        await _complete(
           vegiStatus: VegiAuthenticationStatus.authenticated,
         );
-        store.dispatch(
-          SignupFailed(
-            error: null,
-          ),
-        );
-        store.dispatch(isBetaWhitelistedAddress());
+        if (store.state.userState.vegiAuthenticationStatus !=
+            VegiAuthenticationStatus.authenticated) {
+          log.wtf(
+            'vegi should be authenticated, not [${store.state.userState.vegiAuthenticationStatus}]. What the fuck has happened: stackTrace: ${StackTrace.current.filterCallStack().pretty()}',
+          );
+        }
+        store
+          ..dispatch(
+            SignupFailed(
+              error: null,
+            ),
+          )
+          ..dispatch(
+            isBetaWhitelistedAddress(),
+          );
         unawaited(
           Analytics.track(
             eventName: AnalyticsEvents.loginWithPhone,
@@ -926,7 +966,7 @@ class Authentication {
         );
       } else {
         log.error('Could not login to vegi...');
-        _complete(
+        await _complete(
           vegiStatus: VegiAuthenticationStatus.failed,
         );
       }
@@ -934,7 +974,7 @@ class Authentication {
           ? LoggedInToVegiResult.success
           : LoggedInToVegiResult.failedEmptySessionCookie;
     } catch (err) {
-      _complete(
+      await _complete(
         firebaseStatus: FirebaseAuthenticationStatus.authenticated,
         vegiStatus: VegiAuthenticationStatus.failed,
       );
@@ -978,7 +1018,7 @@ class Authentication {
       );
       final userDetails = vegiSession.user;
       if (vegiSession.sessionCookie.isNotEmpty) {
-        _complete(
+        await _complete(
           vegiStatus: VegiAuthenticationStatus.authenticated,
         );
         store.dispatch(
@@ -997,7 +1037,7 @@ class Authentication {
         );
       } else {
         log.error('Could not login to vegi...');
-        _complete(
+        await _complete(
           vegiStatus: VegiAuthenticationStatus.failed,
         );
       }
@@ -1005,7 +1045,7 @@ class Authentication {
           ? LoggedInToVegiResult.success
           : LoggedInToVegiResult.failedEmptySessionCookie;
     } catch (err) {
-      _complete(
+      await _complete(
         firebaseStatus: FirebaseAuthenticationStatus.authenticated,
         vegiStatus: VegiAuthenticationStatus.failed,
       );
@@ -1024,7 +1064,7 @@ class Authentication {
     }
   }
 
-  void _complete({
+  Future<void> _complete({
     FirebaseAuthenticationStatus? firebaseStatus,
     VegiAuthenticationStatus? vegiStatus,
     FuseAuthenticationStatus? fuseStatus,
@@ -1250,6 +1290,7 @@ class Authentication {
   /// ONE smart wallet linked with it.
   Future<void> _initFuseWallet(
     Store<AppState> store, {
+    required String? privateKey,
     void Function()? onWalletInitialised,
     List<String>? useMnemonicWords,
   }) async {
@@ -1266,27 +1307,45 @@ class Authentication {
       ..dispatch(SignupLoading(isLoading: true));
     late final EthPrivateKey credentials;
     // * Fuse - Create PrivateKey
-    if (store.state.userState.privateKey.isEmpty) {
+    if (privateKey == null || privateKey.isEmpty) {
+      log.info(
+        'Creating a new FuseSDK private key for phoneNumber: ${store.state.userState.phoneNumber}',
+        sentry: true,
+      );
       final String mnemonic = useMnemonicWords != null
           ? useMnemonicWords.join(' ')
           : Mnemonic.generate();
-      final privateKey = Mnemonic.privateKeyFromMnemonic(mnemonic);
+      final newPrivateKey = Mnemonic.privateKeyFromMnemonic(mnemonic);
       //! await peeplEatsService.backupUserSK(privateKey);
-      credentials = EthPrivateKey.fromHex(privateKey);
+      credentials = EthPrivateKey.fromHex(newPrivateKey);
       final EthereumAddress accountAddress = credentials.address;
-      store.dispatch(
-        CreateLocalAccountSuccess(
-          mnemonic.split(' '),
-          privateKey,
-          credentials,
-          // accountAddress.toString(),
-        ),
+      store
+        ..dispatch(
+          CreateLocalAccountSuccess(
+            mnemonic.split(' '),
+            newPrivateKey,
+            credentials,
+            // accountAddress.toString(),
+          ),
+        )
+        ..dispatch(
+          RegisterNewFusePrivateKey(
+            fusePrivateKey: newPrivateKey,
+            phoneNumberCountryCode: store.state.userState.countryCode,
+            phoneNumberNoCountry: store.state.userState.phoneNumber,
+          ),
+        );
+      log.info(
+        'Created a new FuseSDK private key for phoneNumber: ${store.state.userState.phoneNumber} succesfully',
+        sentry: true,
       );
       await Analytics.track(
         eventName: AnalyticsEvents.createWallet,
       );
     } else {
-      credentials = EthPrivateKey.fromHex(store.state.userState.privateKey);
+      log.info(
+          'reauthenticating fuseSDK using existing private key stored against phoneNumber: ${store.state.userState.phoneNumber}');
+      credentials = EthPrivateKey.fromHex(privateKey);
     }
 
     final authSucceeded = await authenticateSDK(
@@ -1517,61 +1576,61 @@ class Authentication {
             stackTrace: StackTrace.current,
           );
         } else if (exceptionOrStream.hasData) {
-          final smartWalletEventStream = exceptionOrStream.data!;
-          smartWalletEventStream.listen(
-            (SmartWalletEvent event) {
-              switch (event.name) {
-                case "smartWalletCreationStarted":
-                  log.info(
-                    'smartWalletCreationStarted',
-                    sentry: true,
-                  );
-                  break;
-                case "transactionHash":
-                  log.info(
-                      'smartWallet.Create.transactionHash "${event.data}"');
-                  break;
-                case "smartWalletCreationSucceeded":
-                  log.info(
-                    'smartWalletCreationSucceeded ${event.data}',
-                    sentry: true,
-                  );
-                  _emitWallet(SmartWallet.fromJson(event.data));
-                  onWalletInitialised?.call();
-                  break;
-                case "smartWalletCreationFailed":
-                  log.error(
-                      'fuseWalletSDK.createWallet transaction stream failed on chain with error ${event.data}');
-                  store
-                    ..dispatch(
-                      SetUserAuthenticationStatus(
-                        fuseStatus: FuseAuthenticationStatus.failedCreate,
-                      ),
-                    )
-                    ..dispatch(
-                      SignupLoading(
-                        isLoading: false,
-                      ),
+          final smartWalletEventStream = exceptionOrStream.data!
+            ..listen(
+              (SmartWalletEvent event) {
+                switch (event.name) {
+                  case "smartWalletCreationStarted":
+                    log.info(
+                      'smartWalletCreationStarted',
+                      sentry: true,
                     );
-                  break;
-              }
-            },
-            onError: (error) {
-              log.error(
-                  'Authentication._fetchCreateWallet fuseWalletSDK.createWallet Error occurred: $error');
-              store
-                ..dispatch(
-                  SetUserAuthenticationStatus(
-                    fuseStatus: FuseAuthenticationStatus.failedCreate,
-                  ),
-                )
-                ..dispatch(
-                  SignupLoading(
-                    isLoading: false,
-                  ),
-                );
-            },
-          );
+                    break;
+                  case "transactionHash":
+                    log.info(
+                        'smartWallet.Create.transactionHash "${event.data}"');
+                    break;
+                  case "smartWalletCreationSucceeded":
+                    log.info(
+                      'smartWalletCreationSucceeded ${event.data}',
+                      sentry: true,
+                    );
+                    _emitWallet(SmartWallet.fromJson(event.data));
+                    onWalletInitialised?.call();
+                    break;
+                  case "smartWalletCreationFailed":
+                    log.error(
+                        'fuseWalletSDK.createWallet transaction stream failed on chain with error ${event.data}');
+                    store
+                      ..dispatch(
+                        SetUserAuthenticationStatus(
+                          fuseStatus: FuseAuthenticationStatus.failedCreate,
+                        ),
+                      )
+                      ..dispatch(
+                        SignupLoading(
+                          isLoading: false,
+                        ),
+                      );
+                    break;
+                }
+              },
+              onError: (error) {
+                log.error(
+                    'Authentication._fetchCreateWallet fuseWalletSDK.createWallet Error occurred: $error');
+                store
+                  ..dispatch(
+                    SetUserAuthenticationStatus(
+                      fuseStatus: FuseAuthenticationStatus.failedCreate,
+                    ),
+                  )
+                  ..dispatch(
+                    SignupLoading(
+                      isLoading: false,
+                    ),
+                  );
+              },
+            );
         }
       },
     );
@@ -1896,7 +1955,8 @@ class Authentication {
               firebaseStatus: FirebaseAuthenticationStatus.authenticated,
               vegiStatus: VegiAuthenticationStatus.authenticated,
             ),
-          )..dispatch(
+          )
+          ..dispatch(
             SignupFailed(
               error: null,
             ),

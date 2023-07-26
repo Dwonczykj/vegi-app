@@ -8,6 +8,7 @@ import 'package:package_info/package_info.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import 'package:vegan_liverpool/common/di/env.dart';
 import 'package:vegan_liverpool/common/di/package_info.dart';
+import 'package:vegan_liverpool/common/router/routes.gr.dart';
 import 'package:vegan_liverpool/constants/addresses.dart';
 import 'package:vegan_liverpool/constants/enums.dart';
 import 'package:vegan_liverpool/constants/theme.dart';
@@ -21,6 +22,19 @@ import 'package:vegan_liverpool/models/tokens/token.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:vegan_liverpool/utils/url.dart';
+
+const onboardingAuthRoutesOrder = [
+  SignUpScreen.name,
+  SignUpWithEmailAndPasswordScreen.name,
+  VerifyPhoneNumber.name,
+];
+const onboardingRoutesOrder = [
+  ...onboardingAuthRoutesOrder,
+  SetEmailOnboardingScreen.name,
+  UserNameScreen.name,
+  ChooseSecurityOption.name,
+  MainScreen.name,
+];
 
 const LoadingScaffold = MyScaffold(
   title: '',

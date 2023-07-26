@@ -27,7 +27,10 @@ abstract class HttpService {
     this.dio.options.baseUrl = baseUrl.endsWith('/')
         ? baseUrl.substring(0, baseUrl.length - 1)
         : baseUrl;
-    this.dio.options.headers = Map.from({'Content-Type': 'application/json'});
+    this.dio.options.headers = Map.from({
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+    });
   }
 
   bool _checkAuthRequestIsSatisfied(
@@ -128,7 +131,10 @@ abstract class HttpService {
   }) {
     _checkAuthRequestIsSatisfied(sendWithAuthCreds, dontRoute: dontRoute);
     if (!path.startsWith('/')) path = '/' + path;
-    log.info('GET: "${dio.options.baseUrl}$path"');
+    log.info(
+      'GET: "${dio.options.baseUrl}$path"',
+      sentry: true,
+    );
     try {
       return dio.get<T>(
         path,
@@ -138,6 +144,8 @@ abstract class HttpService {
         onReceiveProgress: onReceiveProgress,
       );
     } on DioError catch (dioErr) {
+      log.warn(
+          'Got an error GET response from "${dioErr.response?.realUri}" with error: "${dioErr.response?.data}"');
       if (dioErr.response != null &&
           allowStatusCodes.contains(dioErr.response!.statusCode)) {
         return Future.value(
@@ -146,6 +154,7 @@ abstract class HttpService {
             extra: {
               'message':
                   'GET: "${dio.options.baseUrl}$path" returned expected error response with code: [${dioErr.response!.statusCode}]',
+              'errorMessage': dioErr.response?.data,
             },
             statusCode: 200,
             requestOptions: RequestOptions(path: '${dio.options.baseUrl}$path'),
@@ -163,6 +172,7 @@ abstract class HttpService {
             'error': dioErr,
             'message':
                 'GET: "${dio.options.baseUrl}$path" threw -> "${dioErr.message}"',
+            'errorMessage': dioErr.response?.data,
           },
           statusCode: dioErr.response?.statusCode,
           requestOptions: RequestOptions(path: '${dio.options.baseUrl}$path'),
@@ -197,85 +207,173 @@ abstract class HttpService {
     void Function(int, int)? onReceiveProgress,
     bool dontRoute = false,
     bool sendWithAuthCreds = false,
-  }) {
+    List<int> allowStatusCodes = const <int>[],
+    Pattern? allowErrorMessage,
+  }) async {
     log.info(
-        'POST: "${dio.options.baseUrl.substring(0, dio.options.baseUrl.length - 1)}${path}"');
+      'POST: "${dio.options.baseUrl.substring(0, dio.options.baseUrl.length - 1)}${path}"',
+      sentry: true,
+    );
     _checkAuthRequestIsSatisfied(sendWithAuthCreds, dontRoute: dontRoute);
     if (!path.startsWith('/')) path = '/' + path;
-    return dio.post<T>(
-      path,
-      data: data,
-      queryParameters: queryParameters,
-      options: options,
-      cancelToken: cancelToken,
-      onSendProgress: onSendProgress,
-      onReceiveProgress: onReceiveProgress,
-    )..onError((error, stackTrace) {
+    Response<T> response;
+    try {
+      response = await dio.post<T>(
+        path,
+        data: data,
+        queryParameters: queryParameters,
+        options: options,
+        cancelToken: cancelToken,
+        onSendProgress: onSendProgress,
+        onReceiveProgress: onReceiveProgress,
+      );
+      return response;
+    } on DioError catch (error, stackTrace) {
+      if (error.toString().contains('Connection reset by peer') ||
+          error.response?.data.toString() == 'Unauthorized') {
+        deleteSessionCookie(); //todo: return a 401...
+        // rootRouter.push(const SignUpScreen());
         log.error(
             'Ran into error trying to POST to "${dio.options.baseUrl}${path.substring(1)}"');
         log.error(error, stackTrace: stackTrace);
-        if (error.toString().contains('Connection reset by peer')) {
-          deleteSessionCookie(); //todo: return a 401...
-          // rootRouter.push(const SignUpScreen());
-          return Response(
+        return Response(
+          data: errorResponseData,
+          extra: {
+            'error': null,
+            'message': 'Stale session cookie possible caused by server reboot',
+          },
+          statusCode: 401,
+          requestOptions: RequestOptions(path: '${dio.options.baseUrl}${path}'),
+        );
+      }
+      if (error.response != null &&
+          (allowStatusCodes.contains(error.response?.statusCode) ||
+              (allowErrorMessage != null &&
+                  '${error.response?.data}'.contains(allowErrorMessage)))) {
+        return Response(
+          data: null,
+          extra: (error.response?.extra ?? {})
+            ..addAll(
+              {
+                'message':
+                    'POST: "${dio.options.baseUrl}$path" expected response with code: [${error.response!.statusCode}]',
+                'errorMessage': error.response?.data,
+              },
+            ),
+          statusCode: 200,
+          requestOptions: RequestOptions(path: '${dio.options.baseUrl}$path'),
+        );
+      }
+      log.error(
+          'Ran into error trying to POST to "${dio.options.baseUrl}${path.substring(1)}"');
+      log.error(error, stackTrace: stackTrace);
+      if (error.response?.statusCode == 403 ||
+          error.response?.statusCode == 401) {
+        peeplEatsService.isLoggedIn();
+      }
+      log.warn(
+          'Got an error POST response from "${error.response?.realUri}" with error: "${error.response?.data}"');
+
+      if (!_checkAuthDioResponse(error, dontRoute: dontRoute)) {
+        return Response(
+          data: errorResponseData,
+          extra: {
+            'error': error.error,
+            'message': error.message,
+            'errorMessage': error.response?.data,
+            'dioResponse': error.response,
+            'dioErrorType': error.type,
+            'data': error.response?.data,
+          },
+          isRedirect: error.response?.isRedirect ?? false,
+          redirects: error.response?.redirects ?? [],
+          headers: error.response?.headers,
+          statusCode: error.response?.statusCode ?? 500,
+          requestOptions: error.requestOptions,
+        );
+      } else {
+        return Future.value(
+          Response(
             data: errorResponseData,
             extra: {
               'error': null,
               'message':
                   'Stale session cookie possible caused by server reboot',
+              'errorMessage': error.response?.data,
             },
             statusCode: 401,
             requestOptions:
                 RequestOptions(path: '${dio.options.baseUrl}${path}'),
-          );
-        }
-        if (error is Map<String, dynamic> &&
-            error['message'].toString().startsWith('SocketException:') &&
-            dio.options.baseUrl.startsWith('http://localhost')) {
-          log.warn(
-            'If running from real_device, cant connect to localhost on running machine...',
-          );
-        } else if (error is DioError) {
-          if (!_checkAuthDioResponse(error, dontRoute: dontRoute)) {
-            return Response(
-              data: errorResponseData,
-              extra: {
-                'error': error.error,
-                'message': error.message,
-                'dioResponse': error.response,
-                'dioErrorType': error.type,
-                'data': error.response?.data,
-              },
-              isRedirect: error.response?.isRedirect ?? false,
-              redirects: error.response?.redirects ?? [],
-              headers: error.response?.headers,
-              statusCode: error.response?.statusCode ?? 500,
-              requestOptions: error.requestOptions,
-            );
-          } else {
-            return Response(
-              data: errorResponseData,
-              extra: {
-                'error': null,
-                'message':
-                    'Stale session cookie possible caused by server reboot',
-              },
-              statusCode: 401,
-              requestOptions:
-                  RequestOptions(path: '${dio.options.baseUrl}${path}'),
-            );
-          }
-        }
+          ),
+        );
+      }
+    } on Exception catch (error, stackTrace) {
+      if (error.toString().contains('Connection reset by peer') ||
+          (error is DioError &&
+              error.response?.data.toString() == 'Unauthorized')) {
+        deleteSessionCookie(); //todo: return a 401...
+        // rootRouter.push(const SignUpScreen());
+        log.error(
+            'Ran into error trying to POST to "${dio.options.baseUrl}${path.substring(1)}"');
+        log.error(error, stackTrace: stackTrace);
         return Response(
           data: errorResponseData,
           extra: {
             'error': null,
-            'message': '',
+            'message': 'Stale session cookie possible caused by server reboot',
           },
-          statusCode: 500,
-          requestOptions: RequestOptions(path: ''),
+          statusCode: 401,
+          requestOptions: RequestOptions(path: '${dio.options.baseUrl}${path}'),
         );
-      });
+      }
+      return Response(
+        data: errorResponseData,
+        extra: {
+          'error': null,
+          'message': '',
+        },
+        statusCode: 500,
+        requestOptions: RequestOptions(path: ''),
+      );
+    } catch (error, stackTrace) {
+      if (error.toString().contains('Connection reset by peer') ||
+          (error is DioError &&
+              error.response?.data.toString() == 'Unauthorized')) {
+        deleteSessionCookie(); //todo: return a 401...
+        // rootRouter.push(const SignUpScreen());
+        log.error(
+            'Ran into error trying to POST to "${dio.options.baseUrl}${path.substring(1)}"');
+        log.error(error, stackTrace: stackTrace);
+        return Response(
+          data: errorResponseData,
+          extra: {
+            'error': null,
+            'message': 'Stale session cookie possible caused by server reboot',
+          },
+          statusCode: 401,
+          requestOptions: RequestOptions(path: '${dio.options.baseUrl}${path}'),
+        );
+      }
+      if (error is Map<String, dynamic> &&
+          error['message'].toString().startsWith('SocketException:') &&
+          dio.options.baseUrl.startsWith('http://localhost')) {
+        log.error(
+            'Ran into error trying to POST to "${dio.options.baseUrl}${path.substring(1)}"');
+        log.error(error, stackTrace: stackTrace);
+        log.warn(
+          'If running from real_device, cant connect to localhost on running machine...',
+        );
+      }
+      return Response(
+        data: errorResponseData,
+        extra: {
+          'error': null,
+          'message': '',
+        },
+        statusCode: 500,
+        requestOptions: RequestOptions(path: ''),
+      );
+    }
   }
 
   Future<Response<T>> dioPutFile<T>(
@@ -306,7 +404,10 @@ abstract class HttpService {
     if (!path.startsWith('/')) {
       path = '/$path';
     }
-    log.info('PUT: "${dio.options.baseUrl}${path}"');
+    log.info(
+      'PUT: "${dio.options.baseUrl}${path}"',
+      sentry: true,
+    );
     return dio.put<T>(
       path,
       data: Stream.fromIterable(image.map((e) => [e])),
@@ -329,6 +430,7 @@ abstract class HttpService {
               extra: {
                 'error': error.error,
                 'message': error.message,
+                'errorMessage': error.response?.data,
                 'dioResponse': error.response,
                 'dioErrorType': error.type,
                 'data': error.response?.data,
@@ -346,6 +448,7 @@ abstract class HttpService {
                 'error': null,
                 'message':
                     'Stale session cookie possible caused by server reboot',
+                'errorMessage': error.response?.data,
               },
               statusCode: 401,
               requestOptions:
@@ -487,6 +590,7 @@ abstract class HttpService {
               extra: {
                 'error': error.error,
                 'message': error.message,
+                'errorMessage': error.response?.data,
                 'dioResponse': error.response,
                 'dioErrorType': error.type,
                 'data': error.response?.data,
@@ -504,6 +608,7 @@ abstract class HttpService {
                 'error': null,
                 'message':
                     'Stale session cookie possible caused by server reboot',
+                'errorMessage': error.response?.data,
               },
               statusCode: 401,
               requestOptions:
