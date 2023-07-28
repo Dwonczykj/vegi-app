@@ -17,6 +17,7 @@ import 'package:vegan_liverpool/constants/analytics_events.dart';
 import 'package:vegan_liverpool/constants/analytics_props.dart';
 import 'package:vegan_liverpool/constants/enums.dart';
 import 'package:vegan_liverpool/features/veganHome/Helpers/extensions.dart';
+import 'package:vegan_liverpool/features/veganHome/Helpers/helpers.dart';
 import 'package:vegan_liverpool/models/app_state.dart';
 import 'package:vegan_liverpool/redux/actions/onboarding_actions.dart';
 import 'package:vegan_liverpool/redux/actions/user_actions.dart';
@@ -41,17 +42,13 @@ class FirebaseStrategy implements IOnBoardStrategy {
     VegiAuthenticationStatus? vegiStatus,
     FuseAuthenticationStatus? fuseStatus,
   }) =>
-      store
-        ..dispatch(
-          SignupLoading(isLoading: false),
-        )
-        ..dispatch(
-          SetUserAuthenticationStatus(
-            firebaseStatus: firebaseStatus,
-            vegiStatus: vegiStatus,
-            fuseStatus: fuseStatus,
-          ),
-        );
+      store.dispatch(
+        SetUserAuthenticationStatus(
+          firebaseStatus: firebaseStatus,
+          vegiStatus: vegiStatus,
+          fuseStatus: fuseStatus,
+        ),
+      );
 
   bool expectingSMSVerificationCode = false;
 
@@ -59,14 +56,14 @@ class FirebaseStrategy implements IOnBoardStrategy {
   Future<void> login({
     required CountryCode countryCode,
     required PhoneNumber phoneNumber,
+    required void Function() onCompleteFlow,
   }) async {
+    logFunctionCall(
+      className: 'FirebaseStrategy',
+      funcName: 'login',
+    );
     final store = await reduxStore;
     store
-      ..dispatch(
-        SignupLoading(
-          isLoading: true,
-        ),
-      )
       ..dispatch(
         SetPreferredSignOnMethod(
           preferredSignonMethod: PreferredSignonMethod.phone,
@@ -85,8 +82,8 @@ class FirebaseStrategy implements IOnBoardStrategy {
       log.info('PhoneCodeSent verificationId: $verificationId');
       store
         ..dispatch(SetFirebaseCredentials(null))
-        ..dispatch(SignupLoading(isLoading: false))
         ..dispatch(SetVerificationId(verificationId));
+      onCompleteFlow();
       rootRouter.push(VerifyPhoneNumber(verificationId: verificationId));
     }
 
@@ -95,17 +92,27 @@ class FirebaseStrategy implements IOnBoardStrategy {
     Future<void> automaticPlayAPIVerificationCompleted(
       AuthCredential credentials,
     ) async {
-      await _completeVerification(
+      onCompleteFlow();
+      final userCredential =
+          await _completeVerificationAndSigninToFirebaseWithCred(
         store,
         credentials,
       );
+      if (userCredential != null) {
+        await authenticator.authVegiAndFuseWithFbUserCred(userCredential);
+      } else {
+        store.dispatch(SignupLoading(isLoading: false));
+      }
     }
 
     Future<void> verificationFailed(FirebaseAuthException authException) async {
-      log
-        ..info('Phone number verification failed.')
-        ..info('Code: ${authException.code}.')
-        ..info('Message: ${authException.message}');
+      log.error(
+        'Phone number verification failed: with '
+        'Code: ${authException.code} and'
+        'Message: ${authException.message}',
+        error: authException,
+        stackTrace: authException.stackTrace,
+      );
 
       unawaited(
         Analytics.track(
@@ -116,15 +123,10 @@ class FirebaseStrategy implements IOnBoardStrategy {
           },
         ),
       );
-      await Sentry.captureException(
-        authException,
-        stackTrace: StackTrace.current, // from catch (e, s)
-        hint: 'ERROR - verificationFailed ${authException.message}',
-      );
 
       if (authException.code == 'too-many-requests') {
         store.dispatch(
-          SignupFailed(
+          SignUpFailed(
             error: SignUpErrorDetails(
               title: 'Authentication Issue',
               message:
@@ -132,6 +134,7 @@ class FirebaseStrategy implements IOnBoardStrategy {
             ),
           ),
         );
+        onCompleteFlow();
         return _complete(
           store: store,
           firebaseStatus:
@@ -139,13 +142,15 @@ class FirebaseStrategy implements IOnBoardStrategy {
         );
       }
       store.dispatch(
-        SignupFailed(
+        SignUpFailed(
           error: SignUpErrorDetails(
             title: 'Authentication Issue',
             message: authException.message ?? '',
           ),
         ),
       );
+
+      onCompleteFlow();
       return _complete(
         store: store,
         firebaseStatus:
@@ -164,6 +169,15 @@ class FirebaseStrategy implements IOnBoardStrategy {
         phoneNumber: phoneNumber,
       ),
     );
+    if (!Env.isProd &&
+        kDebugMode &&
+        phoneNumber.e164 ==
+            '${Secrets.testPhoneNumberCountryCode}${Secrets.testPhoneNumber}') {
+      log.warn(
+        'Faking send auth code from firebase login call using test details',
+      );
+      return codeSent('');
+    }
     expectingSMSVerificationCode = true;
     await firebaseAuth.verifyPhoneNumber(
       phoneNumber: phoneNumber.e164,
@@ -172,23 +186,21 @@ class FirebaseStrategy implements IOnBoardStrategy {
       verificationCompleted:
           automaticPlayAPIVerificationCompleted, // * This handler will only be called on Android devices which support automatic SMS code resolution.
       codeAutoRetrievalTimeout: (String verificationId) {
+        onCompleteFlow();
         return _complete(
           store: store,
           firebaseStatus: FirebaseAuthenticationStatus.phoneAuthTimedOut,
         );
       },
     );
-    // if (phoneNumber != null) {
-    // } else {
-    //   // return _complete(
-    //   //   store: store,
-    //   //   firebaseStatus: FirebaseAuthenticationStatus.invalidPhoneNumber,
-    //   // );
-    // }
   }
 
   @override
   Future<void> signout() async {
+    logFunctionCall(
+      className: 'FirebaseStrategy',
+      funcName: 'signout',
+    );
     return firebaseAuth.signOut();
   }
 
@@ -197,15 +209,15 @@ class FirebaseStrategy implements IOnBoardStrategy {
     Store<AppState> store,
     String verificationCode,
   ) async {
-    store
-      ..dispatch(
-        SignupLoading(isLoading: true),
-      )
-      ..dispatch(
-        SetUserAuthenticationStatus(
-          firebaseStatus: FirebaseAuthenticationStatus.loading,
-        ),
-      );
+    logFunctionCall(
+      className: 'FirebaseStrategy',
+      funcName: 'verify',
+    );
+    store.dispatch(
+      SetUserAuthenticationStatus(
+        firebaseStatus: FirebaseAuthenticationStatus.loading,
+      ),
+    );
     AuthCredential? credentials;
     try {
       credentials = store.state.userState.firebaseCredentials;
@@ -219,7 +231,7 @@ class FirebaseStrategy implements IOnBoardStrategy {
         e,
         s,
         additionalMessage:
-            'Error fetching phone auth credentials from phone verification id and smsCode tfa pair',
+            'Error creating phone auth credentials from phone verification id and smsCode tfa pair',
         firebaseStatusIfNotHandled:
             FirebaseAuthenticationStatus.phoneAuthVerificationFailed,
       );
@@ -229,14 +241,14 @@ class FirebaseStrategy implements IOnBoardStrategy {
         e,
         s,
         additionalMessage:
-            'Error fetching phone auth credentials from phone verification id and smsCode tfa pair',
+            'Error creating phone auth credentials from phone verification id and smsCode tfa pair',
         firebaseStatusIfNotHandled:
             FirebaseAuthenticationStatus.phoneAuthVerificationFailed,
       );
       return null;
     }
 
-    return _completeVerification(
+    return _completeVerificationAndSigninToFirebaseWithCred(
       store,
       credentials,
     );
@@ -248,11 +260,6 @@ class FirebaseStrategy implements IOnBoardStrategy {
     required String password,
   }) async {
     final store = await reduxStore;
-    store.dispatch(
-      SignupLoading(
-        isLoading: true,
-      ),
-    );
     try {
       final credential =
           await FirebaseAuth.instance.createUserWithEmailAndPassword(
@@ -282,17 +289,11 @@ class FirebaseStrategy implements IOnBoardStrategy {
     required String password,
   }) async {
     final store = await reduxStore;
-    store
-      ..dispatch(
-        SignupLoading(
-          isLoading: true,
-        ),
-      )
-      ..dispatch(
-        SetPreferredSignOnMethod(
-          preferredSignonMethod: PreferredSignonMethod.emailAndPassword,
-        ),
-      );
+    store.dispatch(
+      SetPreferredSignOnMethod(
+        preferredSignonMethod: PreferredSignonMethod.emailAndPassword,
+      ),
+    );
     try {
       final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: email,
@@ -320,17 +321,11 @@ class FirebaseStrategy implements IOnBoardStrategy {
     required String email,
   }) async {
     final store = await reduxStore;
-    store
-      ..dispatch(
-        SignupLoading(
-          isLoading: true,
-        ),
-      )
-      ..dispatch(
-        SetPreferredSignOnMethod(
-          preferredSignonMethod: PreferredSignonMethod.emailLink,
-        ),
-      );
+    store.dispatch(
+      SetPreferredSignOnMethod(
+        preferredSignonMethod: PreferredSignonMethod.emailLink,
+      ),
+    );
     try {
       await FirebaseAuth.instance.sendSignInLinkToEmail(
         email: email,
@@ -351,17 +346,11 @@ class FirebaseStrategy implements IOnBoardStrategy {
   @override
   Future<UserCredential?> signInWithGoogle() async {
     final store = await reduxStore;
-    store
-      ..dispatch(
-        SignupLoading(
-          isLoading: true,
-        ),
-      )
-      ..dispatch(
-        SetPreferredSignOnMethod(
-          preferredSignonMethod: PreferredSignonMethod.google,
-        ),
-      );
+    store.dispatch(
+      SetPreferredSignOnMethod(
+        preferredSignonMethod: PreferredSignonMethod.google,
+      ),
+    );
     try {
       if (kIsWeb) {
         final googleProvider = GoogleAuthProvider()
@@ -393,7 +382,7 @@ class FirebaseStrategy implements IOnBoardStrategy {
         idToken: googleAuth?.idToken,
       );
 
-      return _completeVerification(
+      return _completeVerificationAndSigninToFirebaseWithCred(
         store,
         credential,
       );
@@ -417,17 +406,11 @@ class FirebaseStrategy implements IOnBoardStrategy {
   @override
   Future<UserCredential?> signInWithApple() async {
     final store = await reduxStore;
-    store
-      ..dispatch(
-        SignupLoading(
-          isLoading: true,
-        ),
-      )
-      ..dispatch(
-        SetPreferredSignOnMethod(
-          preferredSignonMethod: PreferredSignonMethod.apple,
-        ),
-      );
+    store.dispatch(
+      SetPreferredSignOnMethod(
+        preferredSignonMethod: PreferredSignonMethod.apple,
+      ),
+    );
     try {
       final appleProvider = AppleAuthProvider();
       late final UserCredential userCredential;
@@ -457,7 +440,7 @@ class FirebaseStrategy implements IOnBoardStrategy {
     }
   }
 
-  Future<UserCredential?> _completeVerification(
+  Future<UserCredential?> _completeVerificationAndSigninToFirebaseWithCred(
     Store<AppState> store,
     AuthCredential credentials,
   ) async {
@@ -514,6 +497,10 @@ class FirebaseStrategy implements IOnBoardStrategy {
       return null;
     }
     await _processSigninPhoneNumber(store, userCredential);
+    log.info(
+      'Successfully authenticated with firebase',
+      sentry: true,
+    );
     return userCredential;
   }
 
@@ -535,11 +522,6 @@ class FirebaseStrategy implements IOnBoardStrategy {
         firebaseStatusIfNotHandled:
             FirebaseAuthenticationStatus.userGetIdTokenFailed,
       );
-      store.dispatch(
-        SignupLoading(
-          isLoading: false,
-        ),
-      );
       return null;
     } on Exception catch (e, s) {
       await _catchUnknownException(
@@ -548,11 +530,6 @@ class FirebaseStrategy implements IOnBoardStrategy {
         additionalMessage: 'Error with getIdToken for a firebase user',
         firebaseStatusIfNotHandled:
             FirebaseAuthenticationStatus.userGetIdTokenFailed,
-      );
-      store.dispatch(
-        SignupLoading(
-          isLoading: false,
-        ),
       );
       return null;
     }
@@ -571,11 +548,6 @@ class FirebaseStrategy implements IOnBoardStrategy {
         store: store,
         firebaseStatus:
             FirebaseAuthenticationStatus.phoneAuthVerificationFailed,
-      );
-      store.dispatch(
-        SignupLoading(
-          isLoading: false,
-        ),
       );
       return null;
     } else {
@@ -627,11 +599,6 @@ class FirebaseStrategy implements IOnBoardStrategy {
               'Error updating user email with verifyBeforeUpdateEmail()',
           firebaseStatusIfNotHandled:
               FirebaseAuthenticationStatus.updateEmailUsingVerificationFailed,
-        );
-        store.dispatch(
-          SignupLoading(
-            isLoading: false,
-          ),
         );
         return firebaseSessionToken;
       }
@@ -691,28 +658,12 @@ class FirebaseStrategy implements IOnBoardStrategy {
         await _processFirebaseSignin(store, userCredential);
 
     if (firebaseSessionToken == null) {
+      log.warn(
+        'Firebase unable to get sessionToken from email and password userCredential',
+        sentry: true,
+      );
       return;
     }
-
-    // final result = await loginToVegiWithEmail(
-    //   store: store,
-    //   email: store.state.userState.email.toLowerCase().trim(),
-    //   firebaseSessionToken: firebaseSessionToken,
-    // );
-    // if (result != LoggedInToVegiResult.success) {
-    //   _complete(
-    //     store: store,
-    //     firebaseStatus: result == LoggedInToVegiResult.firebaseTokenExpired
-    //         ? FirebaseAuthenticationStatus.expired
-    //         : FirebaseAuthenticationStatus.authenticated,
-    //     vegiStatus: VegiAuthenticationStatus.failed,
-    //   );
-    // }
-    store.dispatch(
-      SignupLoading(
-        isLoading: false,
-      ),
-    );
     return;
   }
 
@@ -730,11 +681,6 @@ class FirebaseStrategy implements IOnBoardStrategy {
   }) async {
     email = email.toLowerCase().trim();
     final store = await reduxStore;
-    store.dispatch(
-      SignupLoading(
-        isLoading: true,
-      ),
-    );
     if (firebaseAuth.currentUser == null) {
       log.info(
           'Not able to update email to "$email" on firebase as no firebase user exists yet.');
@@ -774,7 +720,7 @@ class FirebaseStrategy implements IOnBoardStrategy {
             'Unable to change current user with email: $existingEmail to new email: $email because there is already another user registered to this email: $email');
         if (!dontComplete) {
           store.dispatch(
-            SignupFailed(
+            SignUpFailed(
               error: SignUpErrorDetails(
                 message:
                     'Email registered to this account is $existingEmail and can\'t be updated to $email as another account already exists with that email.',
@@ -982,7 +928,7 @@ class FirebaseStrategy implements IOnBoardStrategy {
           vegiStatus: VegiAuthenticationStatus.authenticated,
         );
         store.dispatch(
-          SignupFailed(
+          SignUpFailed(
             error: null,
           ),
         );
@@ -990,7 +936,10 @@ class FirebaseStrategy implements IOnBoardStrategy {
           log.error(
               'Should never have userState.hasNotOnboarded here. Please refactor');
         }
-        store.dispatch(isBetaWhitelistedAddress());
+        if (store.state.userState.isLoggedIn &&
+            store.state.userState.vegiAccountId != null) {
+          store.dispatch(isBetaWhitelistedAddress());
+        }
         unawaited(
           Analytics.track(
             eventName: AnalyticsEvents.loginWithPhone,
@@ -1100,7 +1049,6 @@ class FirebaseStrategy implements IOnBoardStrategy {
     required String emailLinkFromVerificationEmail,
   }) async {
     final store = await reduxStore;
-    store.dispatch(SignupLoading(isLoading: true));
     try {
       final userCredential = await firebaseAuth.signInWithEmailLink(
         email: email,
@@ -1110,11 +1058,9 @@ class FirebaseStrategy implements IOnBoardStrategy {
       _complete(store: store);
       return userCredential;
     } catch (err, s) {
-      log.error(err);
-      await Sentry.captureException(
+      log.error(
         err,
-        stackTrace: s, // from catch (err, s)
-        hint: 'ERROR - firebaseStrat.signInUserFromVerificationLink $err',
+        stackTrace: s,
       );
       return null;
     }
@@ -1127,7 +1073,6 @@ class FirebaseStrategy implements IOnBoardStrategy {
     bool dontComplete = false,
   }) async {
     final store = await reduxStore;
-    store.dispatch(SignupLoading(isLoading: true));
     try {
       final userCredential = await firebaseAuth.signInWithEmailLink(
         email: email,
@@ -1136,12 +1081,9 @@ class FirebaseStrategy implements IOnBoardStrategy {
       // Link the pending credential with the existing account
       await userCredential.user?.linkWithCredential(pendingCredential);
     } catch (err, s) {
-      log.error(err);
-      await Sentry.captureException(
+      log.error(
         err,
-        stackTrace: s, // from catch (err, s)
-        hint:
-            'ERROR - firebaseStrat.emailLinkCallbackFromVerificationEmail $err',
+        stackTrace: s,
       );
     }
 
@@ -1192,14 +1134,12 @@ class FirebaseStrategy implements IOnBoardStrategy {
 
       if (email != null && pendingCredential != null) {
         // store conflicting account details for callbacks later on such as in email_link.
-        store
-          ..dispatch(SignupLoading(isLoading: true))
-          ..dispatch(
-            SetConflictingFirebaseCredentials(
-              conflictingEmail: email,
-              conflictingCredentials: pendingCredential,
-            ),
-          );
+        store.dispatch(
+          SetConflictingFirebaseCredentials(
+            conflictingEmail: email,
+            conflictingCredentials: pendingCredential,
+          ),
+        );
 
         // Fetch a list of what sign-in methods exist for the conflicting user
         final userSignInMethods =
@@ -1311,7 +1251,7 @@ class FirebaseStrategy implements IOnBoardStrategy {
 
     if (e.code == 'invalid-credential') {
       store.dispatch(
-        SignupFailed(
+        SignUpFailed(
           error: SignUpErrorDetails(
             title: message,
             message: additionalMessage ?? '',
@@ -1325,7 +1265,7 @@ class FirebaseStrategy implements IOnBoardStrategy {
       );
     } else if (e.code == 'invalid-email') {
       store.dispatch(
-        SignupFailed(
+        SignUpFailed(
           error: SignUpErrorDetails(
             title: message,
             message: additionalMessage ?? '',
@@ -1339,7 +1279,7 @@ class FirebaseStrategy implements IOnBoardStrategy {
       );
     } else if (e.code == 'expired-action-code') {
       store.dispatch(
-        SignupFailed(
+        SignUpFailed(
           error: SignUpErrorDetails(
             title: message,
             message: additionalMessage ?? '',
@@ -1353,7 +1293,7 @@ class FirebaseStrategy implements IOnBoardStrategy {
       );
     } else if (e.code == 'invalid-verification-id') {
       store.dispatch(
-        SignupFailed(
+        SignUpFailed(
           error: SignUpErrorDetails(
             title: message,
             message:
@@ -1368,7 +1308,7 @@ class FirebaseStrategy implements IOnBoardStrategy {
       );
     } else if (e.code == 'unauthorized-domain') {
       store.dispatch(
-        SignupFailed(
+        SignUpFailed(
           error: SignUpErrorDetails(
             title: message,
             message: e.message ?? '',
@@ -1382,7 +1322,7 @@ class FirebaseStrategy implements IOnBoardStrategy {
       );
     } else if (e.code == 'user-disable') {
       store.dispatch(
-        SignupFailed(
+        SignUpFailed(
           error: SignUpErrorDetails(
             title: message,
             message: additionalMessage ?? '',
@@ -1411,7 +1351,7 @@ class FirebaseStrategy implements IOnBoardStrategy {
         hint: 'ERROR - firebase.verify.updateEmailWithVerify: $e',
       );
       store.dispatch(
-        SignupFailed(
+        SignUpFailed(
           error: SignUpErrorDetails(
             title: 'Email already in use',
             message: 'The account already exists for that email.',
@@ -1422,7 +1362,7 @@ class FirebaseStrategy implements IOnBoardStrategy {
       return _linkAccountWithDifferentEmail(e: e);
     } else if (e.code == 'session-expired') {
       store.dispatch(
-        SignupFailed(
+        SignUpFailed(
           error: SignUpErrorDetails(
             title: message,
             message: additionalMessage ?? '',
@@ -1440,7 +1380,7 @@ class FirebaseStrategy implements IOnBoardStrategy {
         stackTrace: s,
       );
       store.dispatch(
-        SignupFailed(
+        SignUpFailed(
           error: SignUpErrorDetails(
             title: message,
             message: additionalMessage ?? '',
@@ -1454,7 +1394,7 @@ class FirebaseStrategy implements IOnBoardStrategy {
         stackTrace: s,
       );
       store.dispatch(
-        SignupFailed(
+        SignUpFailed(
           error: SignUpErrorDetails(
             title: 'Wrong password',
             message: 'Wrong password provided',
@@ -1468,7 +1408,7 @@ class FirebaseStrategy implements IOnBoardStrategy {
         stackTrace: s,
       );
       store.dispatch(
-        SignupFailed(
+        SignUpFailed(
           error: SignUpErrorDetails(
             title: 'Weak password',
             message: 'The password provided is too weak.',
@@ -1483,7 +1423,7 @@ class FirebaseStrategy implements IOnBoardStrategy {
       );
       print(e);
       store.dispatch(
-        SignupFailed(
+        SignUpFailed(
           error: SignUpErrorDetails(
             title: 'Internal firebase error',
             message: e.message ?? message,
@@ -1497,7 +1437,7 @@ class FirebaseStrategy implements IOnBoardStrategy {
         stackTrace: s,
       );
       store.dispatch(
-        SignupFailed(
+        SignUpFailed(
           error: SignUpErrorDetails(
             title: 'Firebase signin error',
             message: message,
@@ -1542,9 +1482,9 @@ class FirebaseStrategy implements IOnBoardStrategy {
     final store = await reduxStore;
     log.info(
       'Onboarding strategy to next onboarding page from ${currentRoute?.routeName ?? rootRouter.current.name}',
-      sentry: false,
+      sentry: true,
     );
-    
+
     final currentRouteInd = onboardingRoutesOrder
         .indexOf(currentRoute?.routeName ?? rootRouter.current.name);
     if (!store.state.userState.isLoggedIn &&

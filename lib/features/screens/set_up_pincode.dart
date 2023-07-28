@@ -110,6 +110,11 @@ class _SetUpPinCodeScreenState extends State<SetUpPinCodeScreen> {
                             )
                             ..dispatch(SetPincodeSuccess(pin))
                             ..dispatch(
+                              SetBiometricallyAuthenticated(
+                                isBiometricallyAuthenticated: true,
+                              ),
+                            )
+                            ..dispatch(
                               SetCompletedOnboardingSuccess(
                                 onboardingCompleted: true,
                               ),

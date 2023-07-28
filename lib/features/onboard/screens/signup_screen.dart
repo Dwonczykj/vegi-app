@@ -108,8 +108,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         //       if (reauthSucceeded &&
         //           store.state.userState.walletAddress.isNotEmpty) {
         //         store
-        //           ..dispatch(isBetaWhitelistedAddress())
-        //           ..dispatch(SignupLoading(isLoading: false));
+        //           .dispatch(isBetaWhitelistedAddress());
         //       }
         //     },
         //   );
@@ -412,6 +411,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
     required MainScreenViewModel viewmodel,
   }) async {
     viewmodel.setLoading(true);
+    // // * short circuit for test phone details
+    // if(countryCode.dialCode == Secrets.testPhoneNumberCountryCode && phoneController.text == Secrets.testPhoneNumber){
+    //   viewmodel.setPhoneNumber(
+    //     countryCode: countryCode,
+    //     phoneNumber: Secrets.testPhoneNumber,
+    //   );
+
+    //   viewmodel.signup(
+    //     countryCode: countryCode,
+    //     phoneNumber: Secrets.testPhoneNumber,
+    //   );
+    //   return null;
+    // }
     final String phoneNumber = '${countryCode.dialCode}${phoneController.text}';
     // setState(() {
     //   isPreloading = true;

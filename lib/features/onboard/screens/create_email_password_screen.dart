@@ -62,20 +62,19 @@ class _CreateWithEmailAndPasswordScreenState
     return StoreConnector<AppState, MainScreenViewModel>(
       converter: MainScreenViewModel.fromStore,
       distinct: true,
-      onInit: (store) {
-        if (store.state.userState.firebaseCredentials != null) {
-          onBoardStrategy.reauthenticateUser().then(
-            (reauthSucceeded) {
-              if (reauthSucceeded &&
-                  store.state.userState.walletAddress.isNotEmpty) {
-                store
-                  ..dispatch(isBetaWhitelistedAddress())
-                  ..dispatch(SignupLoading(isLoading: false));
-              }
-            },
-          );
-        }
-      },
+      // onInit: (store) {
+      //   if (store.state.userState.firebaseCredentials != null) {
+      //     onBoardStrategy.reauthenticateUser().then(
+      //       (reauthSucceeded) {
+      //         if (reauthSucceeded &&
+      //             store.state.userState.walletAddress.isNotEmpty) {
+      //           store
+      //             .dispatch(isBetaWhitelistedAddress());
+      //         }
+      //       },
+      //     );
+      //   }
+      // },
       onWillChange: (previousViewModel, newViewModel) async {
         // final checked = checkAuth(
         //   oldViewModel: previousViewModel,
@@ -95,17 +94,12 @@ class _CreateWithEmailAndPasswordScreenState
               bottom: 120,
             ),
           );
-          log.error(newViewModel.signupError!.toString());
-          await Sentry.captureException(
-            newViewModel.signupError!.toString(),
-            stackTrace: StackTrace.current, // from catch (e, s)
-            hint:
-                'ERROR - signup_screen.parsePhoneNumber $newViewModel.signupError',
-          );
+          log.error(newViewModel.signupError!.toString(), stackTrace: StackTrace.current,);
+          
           if (newViewModel.signupError!.code != null) {
             final errCode = newViewModel.signupError!.code!;
             if (errCode == SignUpErrCode.userNotFound) {
-              setState(() {});
+              //TODO: setState(() {});
             }
           }
         }

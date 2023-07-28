@@ -269,7 +269,11 @@ UserState _setUserAuthenticationStatus(
   UserState state,
   SetUserAuthenticationStatus action,
 ) {
-  log.info('$action');
+  log.info(
+    'AUTH CHG: (${state.authStateEmj}) + (${action.updates()})',
+    sentry: true,
+    stackTrace: StackTrace.current,
+  );
   if (action.fuseStatus != null &&
       state.fuseAuthenticationStatus ==
           FuseAuthenticationStatus.authenticated) {

@@ -51,8 +51,7 @@ class _SignUpEmailLinkScreenState extends State<SignUpEmailLinkScreen> {
               if (reauthSucceeded &&
                   store.state.userState.walletAddress.isNotEmpty) {
                 store
-                  ..dispatch(isBetaWhitelistedAddress())
-                  ..dispatch(SignupLoading(isLoading: false));
+                  .dispatch(isBetaWhitelistedAddress());
               }
             },
           );

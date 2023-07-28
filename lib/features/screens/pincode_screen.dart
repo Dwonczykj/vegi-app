@@ -100,25 +100,32 @@ class _PinCodeScreenState extends State<PinCodeScreen> {
       converter: LockScreenViewModel.fromStore,
       distinct: true,
       onWillChange: (previousViewModel, newViewModel) async {
-        if (newViewModel.firebaseAuthenticationStatus !=
-            (previousViewModel?.firebaseAuthenticationStatus ??
-                FirebaseAuthenticationStatus.unauthenticated)) {
-          log.info(
-              'Update to user authentication: ${newViewModel.firebaseAuthenticationStatus.name}');
-          if (newViewModel.firebaseAuthenticationStatus ==
-                  FirebaseAuthenticationStatus.authenticated &&
-              newViewModel.vegiAuthenticationStatus !=
-                  VegiAuthenticationStatus.authenticated) {
-            await newViewModel.loginToVegi();
-          }
+        if(newViewModel.biometricallyAuthenticated){
+          await rootRouter.replace(const MainScreen());
         }
-        if (newViewModel.fuseAuthenticationStatus !=
-            (previousViewModel?.fuseAuthenticationStatus ??
-                FuseAuthenticationStatus.unauthenticated)) {
-          log.info(
-              'Update to fuseAuthenticationStatus: ${newViewModel.fuseAuthenticationStatus.name}');
-          // await showInfoSnack(context, title: 'title')
-        }
+        // if (newViewModel.firebaseAuthenticationStatus !=
+        //     (previousViewModel?.firebaseAuthenticationStatus ??
+        //         FirebaseAuthenticationStatus.unauthenticated)) {
+        //   log.info(
+        //       'Update to user authentication: ${newViewModel.firebaseAuthenticationStatus.name}');
+        //   if (newViewModel.firebaseAuthenticationStatus ==
+        //           FirebaseAuthenticationStatus.authenticated &&
+        //       newViewModel.vegiAuthenticationStatus !=
+        //           VegiAuthenticationStatus.authenticated) {
+        //     await newViewModel.loginToVegi();
+        //   }
+        //   final store = StoreProvider.of<AppState>(context);
+        //   // if(store.state.userState.isLoggedIn){
+
+        //   // }
+        // }
+        // if (newViewModel.fuseAuthenticationStatus !=
+        //     (previousViewModel?.fuseAuthenticationStatus ??
+        //         FuseAuthenticationStatus.unauthenticated)) {
+        //   log.info(
+        //       'Update to fuseAuthenticationStatus: ${newViewModel.fuseAuthenticationStatus.name}');
+        //   // await showInfoSnack(context, title: 'title')
+        // }
       },
       builder: (_, viewModel) => FutureBuilder<void>(
         future: _checkBiometricAuth(

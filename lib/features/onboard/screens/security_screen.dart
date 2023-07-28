@@ -11,9 +11,11 @@ import 'package:vegan_liverpool/features/shared/widgets/my_scaffold.dart';
 import 'package:vegan_liverpool/generated/l10n.dart';
 import 'package:vegan_liverpool/models/app_state.dart';
 import 'package:vegan_liverpool/redux/viewsmodels/security.dart';
+import 'package:vegan_liverpool/services.dart';
 import 'package:vegan_liverpool/utils/analytics.dart';
 import 'package:vegan_liverpool/utils/biometric_local_auth.dart';
 import 'package:vegan_liverpool/utils/constants.dart';
+import 'package:vegan_liverpool/utils/log/log.dart';
 
 class ChooseSecurityOption extends StatefulWidget {
   const ChooseSecurityOption({Key? key}) : super(key: key);
@@ -178,7 +180,8 @@ class _ChooseSecurityOptionState extends State<ChooseSecurityOption> {
                                               'Please use $biometric to unlock!',
                                           callback: (bool result) {
                                             if (result) {
-                                              viewModel.setBiometricallyAuthenticated(
+                                              viewModel
+                                                  .setBiometricallyAuthenticated(
                                                 isBiometricallyAuthenticated:
                                                     true,
                                               );
@@ -194,8 +197,12 @@ class _ChooseSecurityOptionState extends State<ChooseSecurityOption> {
                                               viewModel.setSecurityType(
                                                 snapshot.requireData,
                                               );
-                                              context.router
-                                                  .replace(const MainScreen());
+                                              log.info(
+                                                'rootRouter.replaceAll with MainScreen from BiometricUtils.showDefaultPopupCheckBiometricAuth popup on completion',
+                                                sentry: true,
+                                              );
+                                              rootRouter.replaceAll(
+                                                  [const MainScreen()],);
                                               Analytics.track(
                                                 eventName: AnalyticsEvents
                                                     .onboardingCompleted,
@@ -256,14 +263,27 @@ class _ChooseSecurityOptionState extends State<ChooseSecurityOption> {
                                               AnalyticsEvents.securityScreen,
                                           properties: {'auth_type': 'pincode'},
                                         );
+                                        log.info(
+                                          'Navigator.push construct inline MaterialPageRoute for SetUpPinCodeScreen component to set a pincode',
+                                          sentry: true,
+                                        );
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute<SetUpPinCodeScreen>(
                                             builder: (context) =>
                                                 SetUpPinCodeScreen(
                                               onSuccess: () {
-                                                context.router
-                                                    .push(const MainScreen());
+                                                log.info(
+                                                  'rootRouter.replaceAll with MainScreen from SetUpPinCodeScreen [inline route within ChooseSecurityOption]',
+                                                  sentry: true,
+                                                );
+                                                viewModel
+                                                    .setBiometricallyAuthenticated(
+                                                  isBiometricallyAuthenticated:
+                                                      true,
+                                                );
+                                                rootRouter.replaceAll(
+                                                    [const MainScreen()],);
                                               },
                                             ),
                                           ),

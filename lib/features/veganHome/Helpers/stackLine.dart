@@ -15,6 +15,6 @@ class StackLine {
 
   @override
   String toString() {
-    return '$fileName [$lineNumber] (in $className.$functionName)';
+    return '$fileName [$lineNumber] (in $className.${functionName?.replaceAll('<anonymous closure>', '#')})';
   }
 }

@@ -27,7 +27,7 @@ class SecurityViewModel extends Equatable {
         store.dispatch(SetSecurityType(biometricAuth: biometricAuth));
       },
       setBiometricallyAuthenticated: (
-          {required bool isBiometricallyAuthenticated}) {
+          {required bool isBiometricallyAuthenticated,}) {
         store.dispatch(
           SetBiometricallyAuthenticated(
             isBiometricallyAuthenticated: isBiometricallyAuthenticated,

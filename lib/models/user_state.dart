@@ -241,25 +241,32 @@ class UserState with _$UserState {
 
   const UserState._();
 
-  factory UserState.initial() => UserState(
-        networks: [],
-        mnemonic: [],
-        syncedContacts: [],
-        reverseContacts: <String, String>{},
-        displayName: VegiConstants.defaultDisplayName,
-        authType: BiometricAuth.none,
-        currency: 'gbp',
-        useLiveLocation: false,
-        biometricallyAuthenticated: false,
-        listOfDeliveryAddresses: [],
-        surveyQuestions: [],
-        surveyCompleted: false,
-        surveyEmailUsed: '',
-        isVendor: false,
-        isUsingSimulator: false,
-        isUsingIosSimulator: false,
-        loginCounter: 0,
-      );
+  factory UserState.initial() {
+    log.info(
+      'UserState.initial() called',
+      stackTrace: StackTrace.current,
+      sentry: true,
+    );
+    return UserState(
+      networks: [],
+      mnemonic: [],
+      syncedContacts: [],
+      reverseContacts: <String, String>{},
+      displayName: VegiConstants.defaultDisplayName,
+      authType: BiometricAuth.none,
+      currency: 'gbp',
+      useLiveLocation: false,
+      biometricallyAuthenticated: false,
+      listOfDeliveryAddresses: [],
+      surveyQuestions: [],
+      surveyCompleted: false,
+      surveyEmailUsed: '',
+      isVendor: false,
+      isUsingSimulator: false,
+      isUsingIosSimulator: false,
+      loginCounter: 0,
+    );
+  }
 
   factory UserState.fromJson(Map<String, dynamic> json) =>
       tryCatchRethrowInline(
@@ -285,16 +292,21 @@ class UserState with _$UserState {
 
   bool get isLoggedIn => isLoggedInToVegi;
 
-  bool get authIsLoading => 
+  bool get authIsLoading =>
       fuseAuthenticationStatus == FuseAuthenticationStatus.loading ||
-      firebaseAuthenticationStatus ==
-          FirebaseAuthenticationStatus.loading ||
+      firebaseAuthenticationStatus == FirebaseAuthenticationStatus.loading ||
       vegiAuthenticationStatus == VegiAuthenticationStatus.loading;
 
   String get authState =>
       'vegi:[$vegiAuthenticationStatus],firebase:[$firebaseAuthenticationStatus],fuse:[$fuseAuthenticationStatus]';
 
-  bool get hasOnboarded => displayName.isNotEmpty && email.isNotEmpty && authType != BiometricAuth.none;
+  String get authStateEmj =>
+      '🔥->${authEnumToEmoji(firebaseAuthenticationStatus)}, 🥑->${authEnumToEmoji(vegiAuthenticationStatus)}, 👾->${authEnumToEmoji(fuseAuthenticationStatus)}';
+
+  bool get hasOnboarded =>
+      displayName.isNotEmpty &&
+      email.isNotEmpty &&
+      authType != BiometricAuth.none;
   bool get hasNotOnboarded => !hasOnboarded;
 
   bool get hasLoggedInBefore =>

@@ -10,6 +10,7 @@ import 'package:vegan_liverpool/features/onboard/dialogs/signup.dart';
 import 'package:vegan_liverpool/features/shared/widgets/my_scaffold.dart';
 import 'package:vegan_liverpool/features/shared/widgets/primary_button.dart';
 import 'package:vegan_liverpool/features/shared/widgets/snackbars.dart';
+import 'package:vegan_liverpool/features/veganHome/Helpers/helpers.dart';
 import 'package:vegan_liverpool/generated/l10n.dart';
 import 'package:vegan_liverpool/models/app_state.dart';
 import 'package:vegan_liverpool/redux/actions/onboarding_actions.dart';
@@ -193,7 +194,7 @@ class _SetEmailOnboardingScreenState extends State<SetEmailOnboardingScreen> {
                                   }
                                 },
                               );
-                              await _route(viewmodel);
+                              // await _route(viewmodel);
                             },
                           ),
                           const SizedBox(height: 20),
@@ -282,32 +283,19 @@ class _SetEmailOnboardingScreenState extends State<SetEmailOnboardingScreen> {
     );
   }
 
-  Future<void> _route(MainScreenViewModel viewModel) async {
-    if (isRouting ||
-        rootRouter.current.name !=
-            routes.SetEmailOnboardingScreen().routeName) {
-      return;
-    }
-    if (!viewModel.displayNameIsSet) {
-      log.info('Push UserNameScreen() from ${rootRouter.current.name}');
-      setState(() {
-        isRouting = true;
-      });
-      await rootRouter.push(UserNameScreen());
-    } else if (!viewModel.biometricAuthIsSet) {
-      log.info('Push ChooseSecurityOption() from ${rootRouter.current.name}');
-      setState(() {
-        isRouting = true;
-      });
-      await rootRouter.push(const ChooseSecurityOption());
-    } else {
-      log.info('Push MainScreen() from ${rootRouter.current.name}');
-      setState(() {
-        isRouting = true;
-      });
-      await rootRouter.replaceAll([const MainScreen()]);
-    }
-  }
+  // Future<void> _route(MainScreenViewModel viewModel) async {
+  //   if (isRouting ||
+  //       rootRouter.current.name !=
+  //           routes.SetEmailOnboardingScreen().routeName) {
+  //     return;
+  //   }
+  //   logFunctionCall(
+  //     () {},
+  //     className: '_SetEmailOnboardingState',
+  //     funcName: '_route',
+  //   );
+  //   await onBoardStrategy.nextOnboardingPage();
+  // }
 
   String _createErrorMessage(SignUpErrorDetails? errorDetails) {
     if (errorDetails == null || errorDetails.code == null) {

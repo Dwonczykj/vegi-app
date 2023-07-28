@@ -65,7 +65,7 @@ class VerifyOnboardViewModel extends Equatable {
       httpRequestIsInFlux: store.state.homePageState.isLoadingHttpRequest,
       setSignupFailed: (error) {
         store.dispatch(
-          SignupFailed(
+          SignUpFailed(
             error: error,
           ),
         );

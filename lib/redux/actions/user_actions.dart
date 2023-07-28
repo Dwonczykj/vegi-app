@@ -281,6 +281,23 @@ class SetUserAuthenticationStatus {
         '${firebaseStatus == null ? '' : 'Firebase.[${firebaseStatus!.name}]'}, '
         '${vegiStatus == null ? '' : 'Vegi.[${vegiStatus!.name}]'}';
   }
+
+  String updates() {
+    String updateStr = '';
+    if (vegiStatus != null) {
+      final add = '🥑: ${vegiStatus!.name}';
+      updateStr = updateStr.isEmpty ? add : '$updateStr, $add';
+    }
+    if (firebaseStatus != null) {
+      final add = '🔥: ${firebaseStatus!.name}';
+      updateStr = updateStr.isEmpty ? add : '$updateStr, $add';
+    }
+    if (fuseStatus != null) {
+      final add = '👾: ${fuseStatus!.name}';
+      updateStr = updateStr.isEmpty ? add : '$updateStr, $add';
+    }
+    return updateStr;
+  }
 }
 
 // class AuthenticateFuseWalletSDKFailure {
@@ -708,11 +725,10 @@ ThunkAction<AppState> loggedInToVegiSuccess() {
           ),
         )
         ..dispatch(
-          SignupFailed(
+          SignUpFailed(
             error: null,
           ),
-        )
-        ..dispatch(isBetaWhitelistedAddress());
+        );
     } catch (e, s) {
       log.error(
         'ERROR - loggedInToVegiSuccess $e',
@@ -1181,19 +1197,6 @@ ThunkAction<AppState> isBetaWhitelistedAddress() {
         'ERROR - isBetaWhitelistedAddress Request',
         error: e,
         stackTrace: s,
-      );
-      // onError?.call(e.toString());
-      await Analytics.track(
-        eventName: AnalyticsEvents.submitSurveyResponse,
-        properties: {
-          AnalyticsProps.status: AnalyticsProps.failed,
-          'error': e.toString(),
-        },
-      );
-      await Sentry.captureException(
-        Exception('Error in isBetaWhitelistedAddress: ${e.toString()}'),
-        stackTrace: s,
-        hint: 'ERROR in isBetaWhitelistedAddress',
       );
     }
   };
@@ -1667,25 +1670,10 @@ ThunkAction<AppState> setRandomUserAvatar({
 ThunkAction<AppState> deleteUser() {
   return (Store<AppState> store) async {
     try {
-      store.dispatch(
-        SignupLoading(
-          isLoading: true,
-        ),
-      );
       await authenticator.deregisterUser();
     } catch (e, s) {
       log.error('ERROR - deleteUser $e', stackTrace: s);
-      await Sentry.captureException(
-        e,
-        stackTrace: s,
-        hint: 'ERROR - deleteUser $e',
-      );
     }
-    store.dispatch(
-      SignupLoading(
-        isLoading: false,
-      ),
-    );
   };
 }
 

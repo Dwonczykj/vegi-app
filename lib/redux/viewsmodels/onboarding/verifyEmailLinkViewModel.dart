@@ -47,12 +47,15 @@ class VerifyEmailLinkViewModel extends Equatable {
           final pendingCredential =
               store.state.onboardingState.conflictingCredentials;
           if (email == null || pendingCredential == null) {
-            store.dispatch(SignupFailed(
+            store.dispatch(
+              SignUpFailed(
                 error: SignUpErrorDetails(
-              title: Messages.signInFailed,
-              message: Messages.signInFailedEmailLinkMessage,
-              code: SignUpErrCode.invalidEmail,
-            ),),);
+                  title: Messages.signInFailed,
+                  message: Messages.signInFailedEmailLinkMessage,
+                  code: SignUpErrCode.invalidEmail,
+                ),
+              ),
+            );
             return;
           } else {
             await firebaseOnBoardStrategy

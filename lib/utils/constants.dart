@@ -130,6 +130,11 @@ class Secrets {
   static String get amazonS3Bucket => dotenv.env['amazonS3Bucket']!;
   static String get amazonS3Secret => dotenv.env['amazonS3Secret']!;
   static String get amazonS3AccessKey => dotenv.env['amazonS3AccessKey']!;
+  
+  static String get testPhoneNumber => DebugHelpers.inDebugMode && !Env.isProd ? dotenv.env['testPhoneNumber']! : 'TEST_PHONE_NUMBER_NOT_IN_DEBUG';
+  static String get testPhoneNumberCountryCode => DebugHelpers.inDebugMode && !Env.isProd ? dotenv.env['testPhoneNumberCountryCode']! : 'TEST_PHONE_NUMBER_COUNTRY_CODE_NOT_IN_DEBUG';
+  static String get testFirebaseSMSVerificationCode => DebugHelpers.inDebugMode && !Env.isProd ? dotenv.env['testFirebaseSMSVerificationCode']! : 'TEST_FIREBASE_SMS_VERIFICATION_CODE_NOT_IN_DEBUG';
+  static String get testFirebaseSessionToken => DebugHelpers.inDebugMode && !Env.isProd ? dotenv.env['testFirebaseSessionToken']! : 'TEST_FIREBASE_SESSION_TOKEN_NOT_IN_DEBUG';
 }
 
 const EMAIL_NOT_PROVIDED = 'email@notprovided.com';

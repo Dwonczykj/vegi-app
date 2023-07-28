@@ -83,11 +83,6 @@ class LockScreenViewModel extends Equatable implements IAuthViewModel {
         if (store.state.userState.firebaseSessionToken == null) {
           return;
         }
-        store.dispatch(
-          SignupLoading(
-            isLoading: true,
-          ),
-        );
         try {
           await authenticator.login(
             loginDetails: PhoneLoginDetails(

@@ -1,10 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:vegan_liverpool/redux/viewsmodels/signUpErrorDetails.dart';
+import 'package:vegan_liverpool/utils/log/log.dart';
 
 class SignupLoading {
   SignupLoading({
     required this.isLoading,
-  });
+  }) {
+    log.info('SignupLoading redux action -> [$isLoading]');
+  }
 
   final bool isLoading;
 
@@ -14,16 +17,33 @@ class SignupLoading {
   }
 }
 
-class SignupFailed {
-  SignupFailed({
+class SignUpLoadingMessage {
+  SignUpLoadingMessage({
+    required this.message,
+  }) {
+    log.info('SignUpLoadingMessage redux action -> [$message]');
+  }
+
+  final String message;
+
+  @override
+  String toString() {
+    return 'SignUpLoadingMessage : message:"$message"';
+  }
+}
+
+class SignUpFailed {
+  SignUpFailed({
     required this.error,
-  });
+  }) {
+    log.warn('SignUpFailed redux action -> [$error]');
+  }
 
   final SignUpErrorDetails? error;
 
   @override
   String toString() {
-    return 'SignupFailed : error:"$error"';
+    return 'SignUpFailed : error:"$error"';
   }
 }
 

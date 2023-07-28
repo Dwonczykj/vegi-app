@@ -12,6 +12,7 @@ import 'package:vegan_liverpool/features/shared/widgets/snackbars.dart';
 import 'package:vegan_liverpool/features/veganHome/Helpers/helpers.dart';
 import 'package:vegan_liverpool/generated/l10n.dart';
 import 'package:vegan_liverpool/models/app_state.dart';
+import 'package:vegan_liverpool/redux/actions/onboarding_actions.dart';
 import 'package:vegan_liverpool/redux/viewsmodels/onboard.dart';
 import 'package:vegan_liverpool/services.dart';
 import 'package:vegan_liverpool/utils/log/log.dart';
@@ -38,34 +39,41 @@ class _VerifyPhoneNumberState extends State<VerifyPhoneNumber> {
     super.initState();
   }
 
-  Future<void> _route(VerifyOnboardViewModel viewModel) async {
-    final success = viewModel
-        .isLoggedIn; // ! needs to be the same condition as on mainscreen
-    if (isRouting ||
-        finishedRouting ||
-        rootRouter.current.name != routes.VerifyPhoneNumber().routeName ||
-        !success) {
-      return;
-    }
-    if (success) {
-      setState(() {
-        finishedRouting = true;
-      });
-      // final store = await reduxStore;
-      // if (store.state.userState.email.trim().isEmpty) {
-      //   await rootRouter.push(const SetEmailOnboardingScreen());
-      // } else if (store.state.userState.displayName.isEmpty) {
-      //   await rootRouter.push(UserNameScreen());
-      // } else if (store.state.userState.authType == BiometricAuth.none) {
-      //   await rootRouter.push(const ChooseSecurityOption());
-      // } else if (!store.state.userState.biometricallyAuthenticated) {
-      //   await rootRouter.push(const PinCodeScreen());
-      // } else {
-      //   await rootRouter.push(const MainScreen());
-      // }
-      await onBoardStrategy.nextOnboardingPage();
-    }
-  }
+  // Future<void> _route(VerifyOnboardViewModel viewModel) async {
+  //   final success = viewModel
+  //       .isLoggedIn; // ! needs to be the same condition as on mainscreen
+  //   logFunctionCall(
+  //     () {},
+  //     className: '_VerifyPhoneNumberState',
+  //     funcName: '_route',
+  //     logMessage: 'routing with success = [$success]',
+  //   );
+
+  //   if (isRouting ||
+  //       finishedRouting ||
+  //       rootRouter.current.name != routes.VerifyPhoneNumber().routeName ||
+  //       !success) {
+  //     return;
+  //   }
+  //   if (success) {
+  //     setState(() {
+  //       finishedRouting = true;
+  //     });
+  //     // final store = await reduxStore;
+  //     // if (store.state.userState.email.trim().isEmpty) {
+  //     //   await rootRouter.push(const SetEmailOnboardingScreen());
+  //     // } else if (store.state.userState.displayName.isEmpty) {
+  //     //   await rootRouter.push(UserNameScreen());
+  //     // } else if (store.state.userState.authType == BiometricAuth.none) {
+  //     //   await rootRouter.push(const ChooseSecurityOption());
+  //     // } else if (!store.state.userState.biometricallyAuthenticated) {
+  //     //   await rootRouter.push(const PinCodeScreen());
+  //     // } else {
+  //     //   await rootRouter.push(const MainScreen());
+  //     // }
+  //     await onBoardStrategy.nextOnboardingPage();
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -85,7 +93,7 @@ class _VerifyPhoneNumberState extends State<VerifyPhoneNumber> {
             //   isPreloading = true;
             // });
             delayed(
-              10000,
+              15000,
               () {
                 viewModel.setLoading(false);
               },
@@ -95,9 +103,9 @@ class _VerifyPhoneNumberState extends State<VerifyPhoneNumber> {
             );
           }
         },
-        onWillChange: (oldViewModel, newViewModel) {
-          _route(newViewModel);
-        },
+        // onWillChange: (oldViewModel, newViewModel) {
+        //   _route(newViewModel);
+        // },
         builder: (_, viewModel) {
           return Column(
             children: [
@@ -231,9 +239,18 @@ class _VerifyPhoneNumberState extends State<VerifyPhoneNumber> {
       //   isPreloading = true;
       // });
       delayed(
-        10000,
-        () {
-          viewModel.setLoading(false);
+        15000,
+        () async {
+          await showErrorSnack(
+            context: context,
+            title: 'SMS Verfication',
+            message: 'SMS verification taking too long,',
+          );
+          await reduxStore.then(
+            (store) {
+              store.dispatch(SignupLoading(isLoading: false));
+            },
+          );
         },
         () => viewModel.verify(
           codeController.text,

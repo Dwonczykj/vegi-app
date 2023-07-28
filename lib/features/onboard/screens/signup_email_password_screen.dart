@@ -62,67 +62,69 @@ class _SignUpWithEmailAndPasswordScreenState
     super.dispose();
   }
 
-  Future<void> _route(MainScreenViewModel viewModel) async {
-    final success = viewModel.firebaseAuthenticationStatus ==
-            FirebaseAuthenticationStatus.authenticated &&
-        viewModel.vegiAuthenticationStatus ==
-            VegiAuthenticationStatus.authenticated;
-
-    if (isRouting ||
-        finishedRouting ||
-        rootRouter.current.name !=
-            routes.SignUpWithEmailAndPasswordScreen().routeName) {
-      return;
-    }
-    if (success) {
-      setState(() {
-        finishedRouting = true;
-      });
-      final store = await reduxStore;
-      //TODO: Add PhoneOnboarding Screen
-      if (store.state.userState.phoneNumber.isEmpty) {
-        // await rootRouter.push(
-        //   const SetPhoneOnboardingScreen(),
-        // );
-        const msg = 'Users cannot login using email and password if have not '
-            'already registered their phone number.\n Please register using phone number';
-        log.error(msg);
-        showErrorSnack(
-          context: context,
-          title: 'Whoops',
-          message: msg,
-        );
-      } else if (store.state.userState.displayName.isEmpty) {
-        await rootRouter.push(UserNameScreen());
-      } else if (store.state.userState.authType == BiometricAuth.none) {
-        await rootRouter.push(const ChooseSecurityOption());
-      } else if (!store.state.userState.biometricallyAuthenticated) {
-        await rootRouter.push(const PinCodeScreen());
-      } else {
-        await rootRouter.push(const MainScreen());
-      }
-    }
-  }
+  // Future<void> _route(MainScreenViewModel viewModel) async {
+  //   final success = viewModel.isLoggedIn;
+  //   logFunctionCall(
+  //     () {},
+  //     className: '_SignUpWithEmailAndPasswordScreenState',
+  //     funcName: '_route',
+  //     logMessage: 'routing with success = [$success]',
+  //   );
+  //   if (isRouting ||
+  //       finishedRouting ||
+  //       rootRouter.current.name !=
+  //           routes.SignUpWithEmailAndPasswordScreen().routeName) {
+  //     return;
+  //   }
+  //   if (success) {
+  //     setState(() {
+  //       finishedRouting = true;
+  //     });
+  //     final store = await reduxStore;
+  //     //TODO: Add PhoneOnboarding Screen
+  //     if (store.state.userState.phoneNumber.isEmpty) {
+  //       // await rootRouter.push(
+  //       //   const SetPhoneOnboardingScreen(),
+  //       // );
+  //       const msg = 'Users cannot login using email and password if have not '
+  //           'already registered their phone number.\n Please register using phone number';
+  //       log.error(msg);
+  //       showErrorSnack(
+  //         context: context,
+  //         title: 'Whoops',
+  //         message: msg,
+  //       );
+  //     } else if (store.state.userState.displayName.isEmpty) {
+  //       await rootRouter.push(UserNameScreen());
+  //     } else if (store.state.userState.authType == BiometricAuth.none) {
+  //       await rootRouter.push(const ChooseSecurityOption());
+  //     } else if (!store.state.userState.biometricallyAuthenticated) {
+  //       await rootRouter.push(const PinCodeScreen());
+  //     } else {
+  //       await rootRouter.push(const MainScreen());
+  //     }
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, MainScreenViewModel>(
       converter: MainScreenViewModel.fromStore,
       distinct: true,
-      onInit: (store) {
-        if (store.state.userState.firebaseCredentials != null) {
-          onBoardStrategy.reauthenticateUser().then(
-            (reauthSucceeded) {
-              if (reauthSucceeded &&
-                  store.state.userState.walletAddress.isNotEmpty) {
-                store
-                  ..dispatch(isBetaWhitelistedAddress())
-                  ..dispatch(SignupLoading(isLoading: false));
-              }
-            },
-          );
-        }
-      },
+      // onInit: (store) {
+      //   if (store.state.userState.firebaseCredentials != null) {
+      //     onBoardStrategy.reauthenticateUser().then(
+      //       (reauthSucceeded) {
+      //         if (reauthSucceeded &&
+      //             store.state.userState.walletAddress.isNotEmpty) {
+      //           store
+      //             ..dispatch(isBetaWhitelistedAddress())
+      //             ..dispatch(SignupLoading(isLoading: false));
+      //         }
+      //       },
+      //     );
+      //   }
+      // },
       onWillChange: (previousViewModel, newViewModel) async {
         if (newViewModel.signupError != previousViewModel?.signupError &&
             newViewModel.signupError != null) {
@@ -147,7 +149,7 @@ class _SignUpWithEmailAndPasswordScreenState
             // return;
           }
         }
-        await _route(newViewModel);
+        // await _route(newViewModel);
         // await checked.runNavigationIfNeeded();
       },
       builder: (context, viewmodel) {

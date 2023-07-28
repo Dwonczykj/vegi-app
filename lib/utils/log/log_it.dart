@@ -6,6 +6,7 @@ import 'package:logger/logger.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:vegan_liverpool/features/veganHome/Helpers/extensions.dart';
 import 'package:vegan_liverpool/features/veganHome/Helpers/stackLine.dart';
+import 'package:vegan_liverpool/services.dart';
 
 @lazySingleton
 class LogIt {
@@ -128,12 +129,16 @@ class LogIt {
         : stackTraceLines;
 
     if (sentry) {
-      unawaited(
-        Sentry.captureMessage(
-          '$message with stack: ${filteredStackTrace.pretty(false)}',
+      reduxStore.then((store) async {
+        await Sentry.configureScope(
+          (scope) =>
+              scope.setContexts('user_state', store.state.userState.toJson()),
+        );
+        await Sentry.captureMessage(
+          '$message [${DateTime.now()}] with stack: ${filteredStackTrace.pretty(false)}',
           hint: sentryHint.isNotEmpty ? sentryHint : 'WARNING - $message',
-        ),
-      );
+        );
+      });
     }
 
     if (kReleaseMode) {
@@ -159,13 +164,19 @@ class LogIt {
     String sentryHint = '',
   }) {
     if (sentry) {
-      unawaited(
-        Sentry.captureException(
+      reduxStore.then((store) async {
+        await Sentry.configureScope(
+          (scope) =>
+              scope.setContexts('user_state', store.state.userState.toJson()),
+        );
+        await Sentry.captureException(
           error ?? Exception('WARNING: $message'),
           stackTrace: stackTrace ?? StackTrace.current, // from catch (e, s)
-          hint: sentryHint.isNotEmpty ? sentryHint : 'WARNING - $message',
-        ),
-      );
+          hint: sentryHint.isNotEmpty
+              ? sentryHint
+              : 'WARNING - $message [${DateTime.now()}]',
+        );
+      });
     }
 
     if (kReleaseMode) {
@@ -184,13 +195,19 @@ class LogIt {
     String sentryHint = '',
   }) {
     if (sentry) {
-      unawaited(
-        Sentry.captureException(
+      reduxStore.then((store) async {
+        await Sentry.configureScope(
+          (scope) =>
+              scope.setContexts('user_state', store.state.userState.toJson()),
+        );
+        await Sentry.captureException(
           error,
           stackTrace: stackTrace ?? StackTrace.current, // from catch (e, s)
-          hint: sentryHint.isNotEmpty ? sentryHint : 'ERROR - $message',
-        ),
-      );
+          hint: sentryHint.isNotEmpty
+              ? sentryHint
+              : 'ERROR - $message [${DateTime.now()}]',
+        );
+      });
     }
 
     if (kReleaseMode) {

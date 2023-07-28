@@ -25,11 +25,15 @@ abstract class IOnBoardStrategy {
   Future<dynamic> login({
     required CountryCode countryCode,
     required PhoneNumber phoneNumber,
+    required void Function() onCompleteFlow,
   });
+
   Future<UserCredential?> verify(
     Store<AppState> store,
     String verificationCode,
+    // {required void Function() onCompleteFlow,}
   );
+
   Future<void> verifyRecaptchaToken({
     String? recaptchaToken,
     String? deepLinkId,

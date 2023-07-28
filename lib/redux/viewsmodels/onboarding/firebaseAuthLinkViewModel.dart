@@ -18,6 +18,7 @@ class FirebaseAuthLinkViewModel extends Equatable {
   const FirebaseAuthLinkViewModel({
     required this.userIsVerified,
     required this.displayName,
+    required this.isLoggedIn,
     required this.email,
     required this.verificationId,
     required this.firebaseCredentials,
@@ -35,6 +36,7 @@ class FirebaseAuthLinkViewModel extends Equatable {
   factory FirebaseAuthLinkViewModel.fromStore(Store<AppState> store) {
     return FirebaseAuthLinkViewModel(
       userIsVerified: store.state.userState.userIsVerified,
+      isLoggedIn: store.state.userState.isLoggedIn,
       displayName: store.state.userState.displayName,
       email: store.state.userState.email,
       verificationId: store.state.userState.verificationId,
@@ -47,7 +49,7 @@ class FirebaseAuthLinkViewModel extends Equatable {
       signupIsInFlux: store.state.onboardingState.signupIsInFlux,
       setSignupFailed: (error) {
         store.dispatch(
-          SignupFailed(
+          SignUpFailed(
             error: error,
           ),
         );
@@ -86,6 +88,7 @@ class FirebaseAuthLinkViewModel extends Equatable {
   }
 
   final bool userIsVerified;
+  final bool isLoggedIn;
   final String displayName;
   final String email;
   final String? verificationId;
@@ -117,6 +120,7 @@ class FirebaseAuthLinkViewModel extends Equatable {
   @override
   List<Object?> get props => [
         userIsVerified,
+        isLoggedIn,
         displayName,
         email,
         verificationId,

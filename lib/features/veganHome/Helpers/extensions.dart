@@ -27,7 +27,6 @@ String filterStackTrace(
 List<StackLine> _filterStackTrace(
   StackTrace stackTrace, {
   RegExp? dontMatch,
-  int? returnLine,
   List<Pattern> removeLinesContaining = const <String>[],
   int? removeFirstNLines,
 }) {
@@ -70,15 +69,23 @@ extension StackTraceFilter on StackTrace {
     int? ignoreLastNCalls,
     RegExp? dontMatch,
     List<Pattern> removeLinesContaining = const <String>[],
-    int? returnLine,
   }) {
     return _filterStackTrace(
       this,
       removeFirstNLines: ignoreLastNCalls,
       removeLinesContaining: removeLinesContaining,
-      returnLine: returnLine,
       dontMatch: dontMatch,
     );
+  }
+
+  /*
+  * lineNumber is the line in the stack to get, first line would be 1
+  */
+  StackLine getStackLine({required int lineNumber}) {
+    final _lineNumberBaseZero = math.max(lineNumber.abs(), 1) - 1;
+    return _filterStackTrace(
+      this,
+    )[_lineNumberBaseZero];
   }
 }
 

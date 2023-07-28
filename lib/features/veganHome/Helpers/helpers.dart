@@ -145,12 +145,12 @@ BoolThenRouteResult checkAuth<T extends IAuthViewModel>({
 
 Future<T> delayed<T>(
   int delayMillis,
-  T Function() callback,
+  FutureOr<T> Function() callback,
   dynamic Function() execNow,
 ) {
   execNow();
   return Future.delayed(
-    const Duration(milliseconds: 500),
+    Duration(milliseconds: delayMillis),
     callback,
   );
 }
@@ -837,9 +837,60 @@ Future<SetPhoneNumberSuccess?> getPhoneDetails({
     );
     return null;
   }
-  
+
   return SetPhoneNumberSuccess(
     countryCode: countryCode,
     phoneNumber: phoneNumber,
   );
+}
+
+String authEnumToEmoji(Enum value) {
+  if (value.name == VegiAuthenticationStatus.authenticated.name) {
+    return '✅';
+  } else if (value.name == VegiAuthenticationStatus.failed.name) {
+    return '❌';
+  } else if (value.name == VegiAuthenticationStatus.unauthenticated.name) {
+    return '🔒';
+  } else if (value.name == VegiAuthenticationStatus.loading.name) {
+    return '⏳';
+  } else if (value.name.toLowerCase().contains('failed')) {
+    return '🚨';
+  } else {
+    return value.name;
+  }
+}
+
+/// The `logFunctionCall` function logs the name of a function and the class it belongs to, along with
+/// an optional message, and returns the result of the function.
+///
+/// Args:
+///   funcResult (FutureOr<T>): The result of the function call, which can be a Future or a value of
+/// type T.
+///   funcName (String): The `funcName` parameter is a string that represents the name of the function
+/// being called.
+///   className (String): The `className` parameter is used to specify the name of the class where the
+/// function is being called from.
+///   logMessage (String): The `logMessage` parameter is a string that represents an additional message
+/// to be included in the log statement. It is optional and has a default value of an empty string.
+///
+/// Returns:
+///   a `FutureOr<T>?` object.
+FutureOr<T>? logFunctionCall<T>({
+  FutureOr<T>? funcResult,
+  String? funcName,
+  String? className,
+  String logMessage = '',
+}) {
+  final className_ = className ??
+      StackTrace.current.getStackLine(lineNumber: 2).className ??
+      '';
+  final funcName_ = funcName ??
+      StackTrace.current.getStackLine(lineNumber: 2).functionName ??
+      '';
+  log.info(
+    '$funcName_ called in $className_ class. $logMessage',
+    stackTrace: StackTrace.current,
+    sentry: true,
+  );
+  return funcResult;
 }

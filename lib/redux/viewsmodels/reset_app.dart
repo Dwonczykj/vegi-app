@@ -6,6 +6,8 @@ import 'package:vegan_liverpool/common/router/routes.gr.dart';
 import 'package:vegan_liverpool/models/app_state.dart';
 import 'package:vegan_liverpool/redux/actions/user_actions.dart';
 import 'package:vegan_liverpool/services.dart';
+import 'package:vegan_liverpool/utils/constants.dart';
+import 'package:vegan_liverpool/utils/log/log.dart';
 
 class ResetApp extends StatelessWidget {
   const ResetApp({Key? key}) : super(key: key);
@@ -15,13 +17,31 @@ class ResetApp extends StatelessWidget {
     return StoreConnector(
       converter: ResetAppViewModel.fromStore,
       onInit: (store) {
-        store.dispatch(
-          ResetAppState(),
-        );
-        rootRouter.replaceAll([SplashScreen()]);
+        try {
+          store.dispatch(
+            ResetAppState(),
+          );
+        } on Exception catch (e, s) {
+          log.error(
+            'Unable to reset app FATAL - Causing app crash: $e',
+            error: e,
+            sentry: true,
+            stackTrace: s,
+          );
+        }
+        try {
+          rootRouter.replaceAll([SplashScreen()]);
+        } on Exception catch (e, s) {
+          log.error(
+            'Unable to reset app FATAL - Causing app crash: $e',
+            error: e,
+            sentry: true,
+            stackTrace: s,
+          );
+        }
       },
       builder: (context, viewModel) {
-        return const Placeholder();
+        return LoadingScaffold;
       },
     );
   }

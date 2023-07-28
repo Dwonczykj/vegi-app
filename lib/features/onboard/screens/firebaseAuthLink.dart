@@ -13,6 +13,7 @@ import 'package:vegan_liverpool/features/shared/widgets/arrowButton.dart';
 import 'package:vegan_liverpool/features/shared/widgets/my_scaffold.dart';
 import 'package:vegan_liverpool/features/shared/widgets/snackbars.dart';
 import 'package:vegan_liverpool/features/veganHome/Helpers/extensions.dart';
+import 'package:vegan_liverpool/features/veganHome/Helpers/helpers.dart';
 import 'package:vegan_liverpool/features/veganHome/widgets/shared/emptyStatePage.dart';
 import 'package:vegan_liverpool/models/app_state.dart';
 import 'package:vegan_liverpool/redux/actions/onboarding_actions.dart';
@@ -67,8 +68,12 @@ class FirebaseAuthLinkPage extends StatelessWidget {
   }
 
   Future<void> _route(FirebaseAuthLinkViewModel viewModel) async {
-    final success = viewModel.firebaseAuthenticationStatus ==
-        FirebaseAuthenticationStatus.authenticated;
+    final success = viewModel.isLoggedIn;
+    logFunctionCall(
+      className: 'FirebaseAuthLinkPage',
+      funcName: '_route',
+      logMessage: 'routing with success = [$success]',
+    );
     if (viewModel.vegiAuthenticationStatus == VegiAuthenticationStatus.failed) {
       log.error('vegi login failed. Investigate why...');
     }
@@ -77,46 +82,7 @@ class FirebaseAuthLinkPage extends StatelessWidget {
       return;
     }
     if (success) {
-      if (!viewModel.displayNameIsSet) {
-        log.info(
-            'Push UserNameScreen() from firebaseAuthLinkPage as no displayNameIsSet');
-        store.dispatch(SignupLoading(isLoading: true));
-        await rootRouter.push(UserNameScreen()).then(
-          (value) {
-            store.dispatch(SignupLoading(isLoading: false));
-          },
-        );
-      } else if (viewModel.email.isEmpty) {
-        log.info(
-            'Push RegisterEmailOnBoardingScreen() from firebaseAuthLinkPage as email.isEmpty');
-        store.dispatch(SignupLoading(isLoading: true)).then(
-          (value) {
-            store.dispatch(SignupLoading(isLoading: false));
-          },
-        );
-        await rootRouter.push(
-          RegisterEmailOnBoardingScreen(
-            onSubmitEmail: () {},
-          ),
-        );
-      } else if (!viewModel.biometricAuthIsSet) {
-        log.info(
-            'Push ChooseSecurityOption() from firebaseAuthLinkPage as no biometricAuthIsSet');
-        store.dispatch(SignupLoading(isLoading: true));
-        await rootRouter.push(const ChooseSecurityOption()).then(
-          (value) {
-            store.dispatch(SignupLoading(isLoading: false));
-          },
-        );
-      } else {
-        log.info('Push MainScreen() from firebaseAuthLinkPage');
-        store.dispatch(SignupLoading(isLoading: true));
-        await rootRouter.push(const MainScreen()).then(
-          (value) {
-            store.dispatch(SignupLoading(isLoading: false));
-          },
-        );
-      }
+      await onBoardStrategy.nextOnboardingPage();
     }
   }
 }

@@ -37,7 +37,7 @@ Future<bool> authenticateSDK(
         ),
       )
       ..dispatch(
-        SignupFailed(
+        SignUpFailed(
           error: SignUpErrorDetails(
             title: 'Fuse authentication failed',
             message: 'Error occurred in authenticate: ${authRes.error}',
