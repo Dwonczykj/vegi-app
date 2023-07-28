@@ -151,7 +151,6 @@ class ScanPaymentRecipientQRViewModel extends Equatable {
           Sentry.captureException(
             e,
             stackTrace: s, // from catch (e, s)
-            hint: 'ERROR - decodeQRCode $e',
           );
           error('ERROR - decodeQRCode $e');
         }

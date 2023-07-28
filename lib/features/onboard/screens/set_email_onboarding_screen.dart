@@ -74,8 +74,6 @@ class _SetEmailOnboardingScreenState extends State<SetEmailOnboardingScreen> {
           await Sentry.captureException(
             newViewModel.signupError!.toString(),
             stackTrace: StackTrace.current, // from catch (e, s)
-            hint:
-                'ERROR - signup_screen.parsePhoneNumber $newViewModel.signupError',
           );
           if (newViewModel.signupError!.code != null) {
             final errCode = newViewModel.signupError!.code!;
@@ -170,7 +168,7 @@ class _SetEmailOnboardingScreenState extends State<SetEmailOnboardingScreen> {
                             const SizedBox(height: 10),
                             Text(
                               errMessage,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 color: Colors.red,
                               ),
                             ),

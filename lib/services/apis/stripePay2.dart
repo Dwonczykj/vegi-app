@@ -62,7 +62,6 @@ class StripePayService {
       await Sentry.captureException(
         e,
         stackTrace: s,
-        hint: 'Error: startPaymentIntentCheck ${e.toString()}',
       );
       return null;
     }
@@ -103,7 +102,6 @@ class StripePayService {
       await Sentry.captureException(
         e,
         stackTrace: s,
-        hint: 'Error createStripePaymentIntent $e',
       );
       return null;
     }

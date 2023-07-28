@@ -394,11 +394,6 @@ class FirebaseStrategy implements IOnBoardStrategy {
         e,
         stackTrace: s,
       );
-      await Sentry.captureException(
-        e,
-        stackTrace: s, // from catch (err, s)
-        hint: 'ERROR - firebase.dart.signInWithGoogle $e',
-      );
       return null;
     }
   }
@@ -431,11 +426,6 @@ class FirebaseStrategy implements IOnBoardStrategy {
         e,
         stackTrace: s,
       );
-      await Sentry.captureException(
-        e,
-        stackTrace: s, // from catch (err, s)
-        hint: 'ERROR - firebase.dart.signInWithApple $e',
-      );
       return null;
     }
   }
@@ -451,18 +441,14 @@ class FirebaseStrategy implements IOnBoardStrategy {
         credentials,
       );
     } on FirebaseAuthException catch (e, s) {
-      log.error(e, stackTrace: s);
+      log.error(Exception('Error in verify phone number: ${e.toString()}'),
+          stackTrace: s);
       await Analytics.track(
         eventName: AnalyticsEvents.verify,
         properties: {
           AnalyticsProps.status: AnalyticsProps.failed,
           'error': e.toString(),
         },
-      );
-      await Sentry.captureException(
-        Exception('Error in verify phone number: ${e.toString()}'),
-        stackTrace: s,
-        hint: 'Error while phone number verification',
       );
       await _catchFirebaseException(
         e,
@@ -480,11 +466,6 @@ class FirebaseStrategy implements IOnBoardStrategy {
           AnalyticsProps.status: AnalyticsProps.failed,
           'error': e.toString(),
         },
-      );
-      await Sentry.captureException(
-        Exception('Error in verify phone number: $e'),
-        stackTrace: s,
-        hint: 'Error while phone number verification',
       );
       await _catchUnknownException(
         e,
@@ -1164,11 +1145,6 @@ class FirebaseStrategy implements IOnBoardStrategy {
               e,
               stackTrace: s,
             );
-            await Sentry.captureException(
-              e,
-              stackTrace: StackTrace.current, // from catch (err, s)
-              hint: 'ERROR - firebaseStrategy.linkAccountWithDifferentEmail $e',
-            );
           }
         }
         // if (userSignInMethods.first == 'password') {
@@ -1344,12 +1320,6 @@ class FirebaseStrategy implements IOnBoardStrategy {
       log.error(
         'RESEARCH HOW TO TRY AND LINK 2 differing firebase accounts for email: "${e.email}" using link:\n https://firebase.google.com/docs/auth/flutter/errors#handling_account-exists-with-different-credential_errors',
       );
-
-      await Sentry.captureException(
-        e,
-        stackTrace: StackTrace.current, // from catch (err, s)
-        hint: 'ERROR - firebase.verify.updateEmailWithVerify: $e',
-      );
       store.dispatch(
         SignUpFailed(
           error: SignUpErrorDetails(
@@ -1507,8 +1477,14 @@ class FirebaseStrategy implements IOnBoardStrategy {
     } else if (!store.state.userState.biometricallyAuthenticated &&
         currentRouteInd < onboardingRoutesOrder.indexOf(PinCodeScreen.name)) {
       await rootRouter.push(const PinCodeScreen());
-    } else {
+    } else if (store.state.userState.hasOnboarded) {
       await rootRouter.push(const MainScreen());
+    } else {
+      log.info(
+        'No onboarding action as not onboarded yet',
+        sentry: true,
+        stackTrace: StackTrace.current,
+      );
     }
   }
 }

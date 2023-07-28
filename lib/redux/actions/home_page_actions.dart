@@ -201,7 +201,6 @@ ThunkAction<AppState> fetchFeaturedRestaurantsByPostCode({
       await Sentry.captureException(
         e,
         stackTrace: s,
-        hint: 'ERROR - fetchFeaturedRestaurantsByPostCode $e',
       );
       store.dispatch(
         SetIsLoadingHomePage(isLoading: false),
@@ -247,7 +246,6 @@ ThunkAction<AppState> fetchRestaurantById({
       await Sentry.captureException(
         e,
         stackTrace: s,
-        hint: 'ERROR - fetchRestaurantById $e',
       );
       if (error != null) {
         error('ERROR - fetchRestaurantById $e');
@@ -315,7 +313,6 @@ ThunkAction<AppState> fetchRestaurantMenuItemProductDetailsForItems({
       await Sentry.captureException(
         e,
         stackTrace: s,
-        hint: 'ERROR - fetchRestaurantMenuItemProductDetailsForItems $e',
       );
       if (error != null) {
         return error(
@@ -396,7 +393,6 @@ ThunkAction<AppState> fetchFeaturedRestaurantsByUserLocation({
       await Sentry.captureException(
         e,
         stackTrace: s,
-        hint: 'ERROR - fetchFeaturedRestaurantsByUserLocation $e',
       );
       store.dispatch(
         SetIsLoadingHomePage(isLoading: false),
@@ -439,12 +435,11 @@ ThunkAction<AppState> fetchMenuItemsForFeaturedRestaurants({
       await Sentry.captureException(
         e,
         stackTrace: s,
-        hint: 'ERROR - fetchMenuItemsForFeaturedRestaurants $e',
       );
-      
-        store.dispatch(
-          SetIsLoadingHttpRequest(isLoading: false),
-        );
+
+      store.dispatch(
+        SetIsLoadingHttpRequest(isLoading: false),
+      );
     }
   };
 }
@@ -488,7 +483,6 @@ ThunkAction<AppState> fetchMenuItemsForRestaurant({
       await Sentry.captureException(
         e,
         stackTrace: s,
-        hint: 'ERROR - fetchMenuItemsForRestaurant $e',
       );
       store.dispatch(
         SetIsLoadingHttpRequest(isLoading: false),
@@ -528,7 +522,6 @@ ThunkAction<AppState> fetchMenuItemProductOptionsForRestaurant() {
       await Sentry.captureException(
         e,
         stackTrace: s,
-        hint: 'ERROR - fetchMenuItemsForRestaurant $e',
       );
       store.dispatch(
         SetIsLoadingHomePage(isLoading: false),
@@ -590,7 +583,6 @@ ThunkAction<AppState> setGlobalSearchQuery(
       await Sentry.captureException(
         e,
         stackTrace: s,
-        hint: 'ERROR - setGlobalSearchQuery $e',
       );
       store.dispatch(
         SetIsLoadingHomePage(isLoading: false),
@@ -684,7 +676,6 @@ ThunkAction<AppState> setMenuSearchQuery({required String searchQuery}) {
       await Sentry.captureException(
         e,
         stackTrace: s,
-        hint: 'ERROR - setGlobalSearchQuery $e',
       );
       store.dispatch(
         SetIsLoadingHomePage(isLoading: false),
@@ -714,7 +705,6 @@ ThunkAction<AppState> fetchPostalCodes({
       await Sentry.captureException(
         e,
         stackTrace: s,
-        hint: 'ERROR - fetchPostalCodes $e',
       );
       store.dispatch(
         SetIsLoadingHomePage(isLoading: false),
@@ -744,7 +734,6 @@ ThunkAction<AppState> fetchHomePageData() {
       await Sentry.captureException(
         e,
         stackTrace: s,
-        hint: 'ERROR - fetchHomePageData $e',
       );
       store.dispatch(
         SetIsLoadingHomePage(isLoading: false),

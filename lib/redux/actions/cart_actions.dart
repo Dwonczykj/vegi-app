@@ -549,7 +549,6 @@ ThunkAction<AppState> getTimeSlots({required DateTime newDate}) {
       await Sentry.captureException(
         e,
         stackTrace: s,
-        hint: 'ERROR - getFullfillmentMethods $e',
       );
     }
   };
@@ -588,7 +587,6 @@ ThunkAction<AppState> getNextAvaliableSlot() {
       await Sentry.captureException(
         e,
         stackTrace: s,
-        hint: 'ERROR - getNextAvaliableSlot $e',
       );
     }
   };
@@ -621,7 +619,6 @@ ThunkAction<AppState> getEligibleOrderDates() {
       await Sentry.captureException(
         e,
         stackTrace: s,
-        hint: 'ERROR - getEligibleOrderDates $e',
       );
     }
   };
@@ -638,7 +635,6 @@ ThunkAction<AppState> updateCartTip(Money newTip) {
       await Sentry.captureException(
         e,
         stackTrace: s,
-        hint: 'ERROR - updateCartTip $e',
       );
     }
   };
@@ -717,7 +713,6 @@ ThunkAction<AppState> registerEmailWaitingListHandler({
       await Sentry.captureException(
         Exception('Error in Email Registration: ${e.toString()}'),
         stackTrace: s,
-        hint: 'ERROR in Email Registration',
       );
     }
     store.dispatch(
@@ -783,7 +778,6 @@ ThunkAction<AppState> subscribeToWaitingListEmails({
       await Sentry.captureException(
         e,
         stackTrace: s,
-        hint: 'ERROR - subsribeToWaitingListEmails $e',
       );
     }
   };
@@ -845,7 +839,6 @@ ThunkAction<AppState> validateFixedVoucherCode({
       await Sentry.captureException(
         e,
         stackTrace: s,
-        hint: 'ERROR - validateFixedVoucherCode $e',
       );
     }
   };
@@ -868,7 +861,6 @@ ThunkAction<AppState> spendVoucherPot({
       await Sentry.captureException(
         e,
         stackTrace: s,
-        hint: 'ERROR - spendVoucherPot $e',
       );
     }
   };
@@ -901,7 +893,6 @@ ThunkAction<AppState> updateCartDiscount({
       await Sentry.captureException(
         e,
         stackTrace: s,
-        hint: 'ERROR - updateCartDiscount $e',
       );
     }
   };
@@ -922,7 +913,6 @@ ThunkAction<AppState> updateSelectedTimeSlot({
       await Sentry.captureException(
         e,
         stackTrace: s,
-        hint: 'ERROR - updateCartDiscount $e',
       );
     }
   };
@@ -939,7 +929,6 @@ ThunkAction<AppState> removeCartDiscount() {
       await Sentry.captureException(
         e,
         stackTrace: s,
-        hint: 'ERROR - removeCartDiscount $e',
       );
     }
   };
@@ -965,7 +954,6 @@ ThunkAction<AppState> removeCartAppliedVoucher({
       await Sentry.captureException(
         e,
         stackTrace: s,
-        hint: 'ERROR - removeCartDiscount $e',
       );
     }
   };
@@ -985,7 +973,6 @@ ThunkAction<AppState> updateCartItems(List<CartItem> itemsToAdd) {
       await Sentry.captureException(
         e,
         stackTrace: s,
-        hint: 'ERROR - updateCartItems $e',
       );
     }
   };
@@ -1007,7 +994,6 @@ ThunkAction<AppState> selectProductOptionForCartItem({
       await Sentry.captureException(
         e,
         stackTrace: s,
-        hint: 'ERROR - selectProductOptionForCartItem $e',
       );
     }
   };
@@ -1027,7 +1013,6 @@ ThunkAction<AppState> loadBasketToCart(
       await Sentry.captureException(
         e,
         stackTrace: s,
-        hint: 'ERROR - loadBasketToCart $e',
       );
       errorHandler(
         'ERROR - loadBasketToCart $e',
@@ -1062,7 +1047,6 @@ ThunkAction<AppState> loadBasketUriToCart(
       await Sentry.captureException(
         e,
         stackTrace: s,
-        hint: 'ERROR - loadBasketUriToCart $e',
       );
       errorHandler(
         'ERROR - loadBasketUriToCart $e',
@@ -1222,7 +1206,6 @@ ThunkAction<AppState> scanRestaurantMenuItemQRCode(
       await Sentry.captureException(
         e,
         stackTrace: s,
-        hint: 'ERROR - scanRestaurantMenuItemQRCode $e',
       );
       if (e is DioError && e.response != null) {
         if (e.response!.statusCode == 404) {
@@ -1259,7 +1242,6 @@ ThunkAction<AppState> addAdditionalInformationToProductSuggestion(
       await Sentry.captureException(
         e,
         stackTrace: s,
-        hint: 'ERROR - addAdditionalInformationToProductSuggestion e',
       );
       errorHandler(
         'ERROR - addAdditionalInformationToProductSuggestion e',
@@ -1292,7 +1274,6 @@ ThunkAction<AppState> addProductQRCodeToProductSuggestion(
       await Sentry.captureException(
         e,
         stackTrace: s,
-        hint: 'ERROR - addProductQRCodeToProductSuggestion e',
       );
       errorHandler(
         'ERROR - addProductQRCodeToProductSuggestion e',
@@ -1332,7 +1313,6 @@ ThunkAction<AppState> addProductNameToProductSuggestion(
       await Sentry.captureException(
         e,
         stackTrace: s,
-        hint: 'ERROR - addProductNameToProductSuggestion e',
       );
       errorHandler(
         'ERROR - addProductNameToProductSuggestion e',
@@ -1354,7 +1334,7 @@ ThunkAction<AppState> addProductNameToProductSuggestion(
 //       await Sentry.captureException(
 //         e,
 //         stackTrace: s,
-//         hint: 'ERROR - createNewProductSuggestion e',
+//
 //       );
 //       errorHandler(
 //         'ERROR - createNewProductSuggestion e',
@@ -1399,7 +1379,6 @@ ThunkAction<AppState> addImageToProductSuggestion(
         log.error('ERROR - addImageToProductSuggestion failed to upload image');
         await Sentry.captureException(
           e,
-          hint: 'ERROR - addImageToProductSuggestion failed to upload image',
         );
         errorHandler(
           'ERROR - addImageToProductSuggestion e',
@@ -1410,7 +1389,6 @@ ThunkAction<AppState> addImageToProductSuggestion(
       await Sentry.captureException(
         e,
         stackTrace: s,
-        hint: 'ERROR - addImageToProductSuggestion $e',
       );
       errorHandler(
         'ERROR - addImageToProductSuggestion $e',
@@ -1443,7 +1421,6 @@ ThunkAction<AppState> uploadProductSuggestion(
       await Sentry.captureException(
         e,
         stackTrace: s,
-        hint: 'ERROR - uploadProductSuggestion e',
       );
       errorHandler(
         'ERROR - uploadProductSuggestion e',
@@ -1476,7 +1453,6 @@ ThunkAction<AppState> addDuplicateCartItem(int itemId) {
       await Sentry.captureException(
         e,
         stackTrace: s,
-        hint: 'ERROR - addDuplicateCartItem $e',
       );
     }
   };
@@ -1501,7 +1477,6 @@ ThunkAction<AppState> removeCartItem(int itemId) {
       await Sentry.captureException(
         e,
         stackTrace: s,
-        hint: 'ERROR - removeCartItem $e',
       );
     }
   };
@@ -1624,7 +1599,6 @@ ThunkAction<AppState> startOrderCreationProcess({
       await Sentry.captureException(
         e,
         stackTrace: s,
-        hint: 'ERROR - checkCartForErrors $e',
       );
     }
   };
@@ -1648,7 +1622,6 @@ ThunkAction<AppState> prepareOrderObjectForDelivery({
       await Sentry.captureException(
         e,
         stackTrace: s,
-        hint: 'ERROR - prepareOrderObjectForDelivery $e',
       );
     }
   };
@@ -1672,7 +1645,6 @@ ThunkAction<AppState> prepareOrderObjectForCollection({
       await Sentry.captureException(
         e,
         stackTrace: s,
-        hint: 'ERROR - prepareOrderObjectForCollection $e',
       );
     }
   };
@@ -1696,7 +1668,6 @@ ThunkAction<AppState> prepareOrderObjectForInStorePayment({
       await Sentry.captureException(
         e,
         stackTrace: s,
-        hint: 'ERROR - prepareOrderObjectForInStorePayment $e',
       );
     }
   };
@@ -1876,11 +1847,6 @@ ThunkAction<AppState> sendOrderObject<T extends CreateOrderForFulfilment>({
         stackTrace: s,
       );
       if (e.response != null) {
-        await Sentry.captureException(
-          e,
-          hint: 'DioError - sendOrderObject - '
-              'Internal Server Error',
-        );
         store.dispatch(
           OrderCreationProcessStatusUpdate(
             status: OrderCreationProcessStatus.sendOrderCallServerError,
@@ -1915,7 +1881,6 @@ ThunkAction<AppState> sendOrderObject<T extends CreateOrderForFulfilment>({
       await Sentry.captureException(
         e,
         stackTrace: s,
-        hint: 'ERROR - sendOrderObject $e',
       );
     }
   };
@@ -1942,7 +1907,6 @@ ThunkAction<AppState> cancelOrder({
       await Sentry.captureException(
         e,
         stackTrace: s,
-        hint: 'ERROR - cancelOrder $e',
       );
     }
   };
@@ -1966,7 +1930,6 @@ ThunkAction<AppState> startPaymentProcess({
           await Sentry.captureException(
             Exception(e),
             stackTrace: StackTrace.current, // from catch (e, s)
-            hint: 'ERROR - startPeeplPayProcess $e',
           );
           store
             ..dispatch(SetPaymentButtonFlag(false))
@@ -1993,7 +1956,6 @@ ThunkAction<AppState> startPaymentProcess({
           await Sentry.captureException(
             Exception(e),
             stackTrace: StackTrace.current, // from catch (e, s)
-            hint: 'ERROR - startPaymentProcess $e',
           );
           store
             ..dispatch(SetPaymentButtonFlag(false))
@@ -2083,7 +2045,6 @@ ThunkAction<AppState> startPaymentProcess({
           await Sentry.captureException(
             Exception(e),
             stackTrace: StackTrace.current, // from catch (e, s)
-            hint: 'ERROR - startPaymentProcess[PaymentMethod.stripeToFuse] $e',
           );
           store
             ..dispatch(SetPaymentButtonFlag(false))
@@ -2110,7 +2071,6 @@ ThunkAction<AppState> startPaymentProcess({
           await Sentry.captureException(
             Exception(e),
             stackTrace: StackTrace.current, // from catch (e, s)
-            hint: 'ERROR - startPeeplPayProcess $e',
           );
           store
             ..dispatch(SetPaymentButtonFlag(false))
@@ -2205,7 +2165,6 @@ ThunkAction<AppState> startPaymentProcess({
           await Sentry.captureException(
             Exception(e),
             stackTrace: StackTrace.current, // from catch (e, s)
-            hint: 'ERROR - startPaymentProcess[PaymentMethod.applePay] $e',
           );
           store
             ..dispatch(SetPaymentButtonFlag(false))
@@ -2315,8 +2274,6 @@ ThunkAction<AppState> startPaymentProcess({
           await Sentry.captureException(
             Exception(e),
             stackTrace: StackTrace.current, // from catch (e, s)
-            hint:
-                'ERROR - startPaymentProcess[PaymentMethod.applePayToFuse] $e',
           );
           store
             ..dispatch(SetPaymentButtonFlag(false))
@@ -2443,7 +2400,6 @@ ThunkAction<AppState> startPaymentProcess({
       await Sentry.captureException(
         e,
         stackTrace: s,
-        hint: 'ERROR - sendOrderObject $e',
       );
     }
   };
@@ -2461,7 +2417,6 @@ ThunkAction<AppState> startPeeplPayProcess() {
         await Sentry.captureException(
           Exception(e),
           stackTrace: StackTrace.current, // from catch (e, s)
-          hint: 'ERROR - startPeeplPayProcess $e',
         );
       } else if (store.state.userState.stripeCustomerId == null) {
         final e = 'stripe customer id not set on state... Cannot start payment';
@@ -2472,7 +2427,6 @@ ThunkAction<AppState> startPeeplPayProcess() {
         await Sentry.captureException(
           Exception(e),
           stackTrace: StackTrace.current, // from catch (e, s)
-          hint: 'ERROR - startPeeplPayProcess $e',
         );
       }
 
@@ -2531,7 +2485,6 @@ ThunkAction<AppState> startPeeplPayProcess() {
       await Sentry.captureException(
         e,
         stackTrace: s,
-        hint: 'ERROR - sendOrderObject $e',
       );
     }
   };
@@ -2692,7 +2645,6 @@ ThunkAction<AppState> startTokenPaymentToRestaurant() {
       await Sentry.captureException(
         e,
         stackTrace: s,
-        hint: 'ERROR - startTokenPaymentToRestaurant $e',
       );
     }
   };
@@ -2763,7 +2715,6 @@ ThunkAction<AppState> startPaymentConfirmationCheck() {
           await Sentry.captureException(
             e,
             stackTrace: s,
-            hint: 'ERROR - startPaymentConfirmationCheck $e',
           );
         }
       },
@@ -2787,7 +2738,6 @@ ThunkAction<AppState> subscribeToOrderUpdates() {
       await Sentry.captureException(
         err,
         stackTrace: StackTrace.current, // from catch (err, s)
-        hint: 'ERROR - cart_actions.dart.subscribeToOrderUpdates $err',
       );
       return;
     }
@@ -2864,7 +2814,7 @@ ThunkAction<AppState> subscribeToOrderUpdates() {
     //       await Sentry.captureException(
     //         e,
     //         stackTrace: s,
-    //         hint: 'ERROR - startPaymentConfirmationCheck $e',
+    //
     //       );
     //     }
     //   },
@@ -2905,7 +2855,6 @@ ThunkAction<AppState> setRestaurantDetails({
       await Sentry.captureException(
         e,
         stackTrace: s,
-        hint: 'ERROR - setRestaurantDetails $e',
       );
     }
   };
@@ -2926,7 +2875,6 @@ ThunkAction<AppState> updateInstructions({
       await Sentry.captureException(
         e,
         stackTrace: s,
-        hint: 'ERROR - updateInstructions $e',
       );
     }
   };
@@ -2941,7 +2889,6 @@ ThunkAction<AppState> removeInstructions() {
       await Sentry.captureException(
         e,
         stackTrace: s,
-        hint: 'ERROR - removeInstructions $e',
       );
     }
   };
@@ -2961,7 +2908,6 @@ ThunkAction<AppState> setDeliveryAddress({
       await Sentry.captureException(
         e,
         stackTrace: s,
-        hint: 'ERROR - setDeliveryAddress $e',
       );
     }
   };

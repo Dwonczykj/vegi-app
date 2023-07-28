@@ -76,7 +76,6 @@ ThunkAction<AppState> updateOrderPaymentStatus({
       await Sentry.captureException(
         e,
         stackTrace: s,
-        hint: 'ERROR - updateOrderPaymentStatus $e',
       );
       errorHandler(
         'ERROR - updateOrderPaymentStatus $e',
@@ -189,7 +188,6 @@ ThunkAction<AppState> fetchAllOrdersForWallet(
       await Sentry.captureException(
         e,
         stackTrace: s,
-        hint: 'ERROR - fetchAllOrdersForWallet $e',
       );
       errorHandler(
         'ERROR - fetchAllOrdersForWallet $e',

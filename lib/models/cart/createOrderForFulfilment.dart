@@ -36,7 +36,6 @@ abstract class CreateOrderForFulfilment {
       Sentry.captureException(
         e,
         stackTrace: s, // from catch (e, s)
-        hint: 'ERROR Deserialization - CreateOrderForFulfilment.fromJson $e',
       );
       return null;
     }
@@ -74,7 +73,6 @@ abstract class CreateOrderForFulfilment {
       Sentry.captureException(
         e,
         stackTrace: s, // from catch (e, s)
-        hint: 'ERROR Deserialization - CreateOrderForFulfilment.fromJson $e',
       );
       return null;
     }

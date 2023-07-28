@@ -20,11 +20,6 @@ class Version implements Comparable<Version> {
           e,
           stackTrace: StackTrace.current,
         );
-        Sentry.captureException(
-          e,
-          stackTrace: StackTrace.current, // from catch (err, s)
-          hint: 'ERROR - version.dart.fnName $e',
-        );
         return null;
       }
     }

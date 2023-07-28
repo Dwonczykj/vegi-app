@@ -199,8 +199,6 @@ class _SearchProductsAppBarState extends State<SearchProductsAppBar> {
                                         await Sentry.captureException(
                                           e,
                                           stackTrace: s,
-                                          hint:
-                                              'ERROR - query menu items from search bar: $e',
                                         );
                                         return [];
                                       }

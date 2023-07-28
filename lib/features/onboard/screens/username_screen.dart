@@ -133,22 +133,7 @@ class UserNameScreen extends StatelessWidget {
     VerifyOnboardViewModel viewModel,
     BuildContext context,
   ) async {
-    if (viewModel.email.isEmpty) {
-      await rootRouter.push(
-        RegisterEmailOnBoardingScreen(
-          onSubmitEmail: () {},
-        ),
-      );
-    } else if (!viewModel.biometricAuthIsSet) {
-      await rootRouter.push(const ChooseSecurityOption());
-    } else {
-      (await reduxStore).dispatch(
-        SetCompletedOnboardingSuccess(
-          onboardingCompleted: true,
-        ),
-      );
-      await rootRouter.replaceAll([const MainScreen()]);
-    }
+    await onBoardStrategy.nextOnboardingPage();
   }
 
   void _showSourceImagePicker(

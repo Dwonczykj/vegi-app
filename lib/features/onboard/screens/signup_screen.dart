@@ -153,8 +153,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
           await Sentry.captureException(
             newViewModel.signupError!.toString(),
             stackTrace: StackTrace.current, // from catch (e, s)
-            hint:
-                'ERROR - signup_screen.parsePhoneNumber $newViewModel.signupError',
           );
         }
         // await checked.runNavigationIfNeeded();
@@ -346,6 +344,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             label: I10n.of(context).next_button,
                             preload: viewmodel.signupIsInFlux,
                             disabled: viewmodel.signupIsInFlux,
+                            onPressedDisabled: () =>
+                                StoreProvider.of<AppState>(context)
+                                    .dispatch(SignupLoading(isLoading: false)),
                             onPressed: () {
                               parsePhoneNumber(
                                 viewmodel: viewmodel,

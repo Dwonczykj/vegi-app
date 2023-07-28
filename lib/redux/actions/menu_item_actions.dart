@@ -89,7 +89,6 @@ ThunkAction<AppState> fetchProductOptions(String itemID) {
       await Sentry.captureException(
         e,
         stackTrace: s,
-        hint: 'ERROR - fetchProductOptions $e',
       );
     }
   };
@@ -116,7 +115,6 @@ ThunkAction<AppState> updateComputeQuantity({required bool isAdd}) {
       await Sentry.captureException(
         e,
         stackTrace: s,
-        hint: 'ERROR - updateQuantity $e',
       );
     }
   };
@@ -149,7 +147,6 @@ ThunkAction<AppState> calculateItemTotalPrice() {
       await Sentry.captureException(
         e,
         stackTrace: s,
-        hint: 'ERROR - calculateItemTotalPrice $e',
       );
     }
   };
@@ -179,7 +176,6 @@ ThunkAction<AppState> setUpMenuItemStructures(RestaurantMenuItem? menuItem) {
       await Sentry.captureException(
         e,
         stackTrace: s,
-        hint: 'ERROR - setUpMenuItemStructures $e',
       );
     }
   };

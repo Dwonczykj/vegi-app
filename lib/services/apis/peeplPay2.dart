@@ -34,7 +34,6 @@ class PeeplPayService {
       await Sentry.captureException(
         'PaymentIntent check not found for paymentIntentId: "$paymentIntentID"',
         stackTrace: StackTrace.current, // from catch (err, s)
-        hint: 'ERROR - peeplPay2.dart.checkOrderValidity',
       );
       return null;
     }

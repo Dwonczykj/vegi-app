@@ -170,8 +170,6 @@ class _SearchVendorsAppBarState extends State<SearchVendorsAppBar> {
                                         await Sentry.captureException(
                                           e,
                                           stackTrace: s,
-                                          hint:
-                                              'ERROR - query vendors items from search bar: $e',
                                         );
                                         return [];
                                       }

@@ -264,7 +264,7 @@ class FetchNewPage {
 //       await Sentry.captureException(
 //         Exception('ERROR - Enable push notifications: $e'),
 //         stackTrace: s,
-//         hint: 'ERROR - Enable push notifications',
+//
 //       );
 //     }
 //   };
@@ -310,7 +310,6 @@ ThunkAction<AppState> getTokensListForSmartWallet(
       await Sentry.captureException(
         e,
         stackTrace: s,
-        hint: 'ERROR - getTokensListForSmartWallet $e',
       );
       onError(
         'ERROR - getTokensListForSmartWallet $e',
@@ -381,7 +380,6 @@ ThunkAction<AppState> startFetchTokensBalances() {
                 await Sentry.captureException(
                   Exception('Error fetch tokens balances - $e'),
                   stackTrace: s,
-                  hint: 'Error fetch tokens balances',
                 );
               }
             } else {

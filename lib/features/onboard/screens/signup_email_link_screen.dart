@@ -50,8 +50,7 @@ class _SignUpEmailLinkScreenState extends State<SignUpEmailLinkScreen> {
             (reauthSucceeded) {
               if (reauthSucceeded &&
                   store.state.userState.walletAddress.isNotEmpty) {
-                store
-                  .dispatch(isBetaWhitelistedAddress());
+                store.dispatch(isBetaWhitelistedAddress());
               }
             },
           );
@@ -80,8 +79,6 @@ class _SignUpEmailLinkScreenState extends State<SignUpEmailLinkScreen> {
           await Sentry.captureException(
             newViewModel.signupError!.toString(),
             stackTrace: StackTrace.current, // from catch (e, s)
-            hint:
-                'ERROR - signup_screen.parsePhoneNumber $newViewModel.signupError',
           );
           if (newViewModel.signupError!.code != null) {
             final errCode = newViewModel.signupError!.code!;
@@ -214,6 +211,9 @@ class _SignUpEmailLinkScreenState extends State<SignUpEmailLinkScreen> {
                           PrimaryButton(
                             label: I10n.of(context).next_button,
                             preload: viewmodel.signupIsInFlux,
+                            onPressedDisabled: () =>
+                                StoreProvider.of<AppState>(context)
+                                    .dispatch(SignupLoading(isLoading: false)),
                             disabled: viewmodel.signupIsInFlux,
                             onPressed: () async {
                               viewmodel.signInUserUsingEmailLink(
@@ -223,8 +223,7 @@ class _SignUpEmailLinkScreenState extends State<SignUpEmailLinkScreen> {
                           ),
                           const SizedBox(height: 20),
                           GestureDetector(
-                            onTap: () =>
-                                launchUrl(VEGI_PRIVACY_URL),
+                            onTap: () => launchUrl(VEGI_PRIVACY_URL),
                             child: Text(
                               'By signing up, you agree to the vegi'
                               ' Terms & Conditions which can be found here',

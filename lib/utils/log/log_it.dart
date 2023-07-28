@@ -20,12 +20,48 @@ class LogIt {
     dynamic message, {
     dynamic error,
     StackTrace? stackTrace,
+    List<StackLine> stackTraceLines = const <StackLine>[],
+    bool sentry = false,
+    String sentryHint = '',
   }) {
+    final filteredStackTrace = stackTraceLines.isEmpty
+        ? (stackTrace ?? StackTrace.current).filterCallStack(
+            dontMatch: RegExp(
+              r'([A-Za-z_]+)\.([A-Za-z_. <>]+)\s\((package:vegan_liverpool)\/(utils\/log\/)(log\.dart):(\d+):(\d+)\)',
+            ),
+            removeLinesContaining: [
+              'log_it.dart',
+              'vegi_debug_route_observer.dart',
+            ],
+          )
+        : stackTraceLines;
+
+    if (sentry) {
+      reduxStore.then((store) async {
+        await Sentry.configureScope(
+          (scope) => scope
+            ..setContexts('user_state', store.state.userState.toJson())
+            ..setContexts('message', message)
+            ..setContexts(
+                'filteredStack',
+                filteredStackTrace.isNotEmpty
+                    ? filteredStackTrace.pretty()
+                    : (stackTrace ?? StackTrace.current)
+                        .filterCallStack()
+                        .pretty())
+            ..setContexts('timestamp', '${DateTime.now()}'),
+        );
+        await Sentry.captureMessage(
+          '$message [${DateTime.now()}]',
+        );
+      });
+    }
+
     if (kReleaseMode) {
       return;
     }
 
-    logger.v(message, error, stackTrace);
+    logger.v(message, error, stackTrace ?? StackTrace.current);
   }
 
   /// Log a message at level [Level.debug].
@@ -33,23 +69,48 @@ class LogIt {
     dynamic message, {
     dynamic error,
     StackTrace? stackTrace,
+    List<StackLine> stackTraceLines = const <StackLine>[],
     bool sentry = false,
     String sentryHint = '',
   }) {
+    final filteredStackTrace = stackTraceLines.isEmpty
+        ? (stackTrace ?? StackTrace.current).filterCallStack(
+            dontMatch: RegExp(
+              r'([A-Za-z_]+)\.([A-Za-z_. <>]+)\s\((package:vegan_liverpool)\/(utils\/log\/)(log\.dart):(\d+):(\d+)\)',
+            ),
+            removeLinesContaining: [
+              'log_it.dart',
+              'vegi_debug_route_observer.dart',
+            ],
+          )
+        : stackTraceLines;
+
     if (sentry) {
-      unawaited(
-        Sentry.captureMessage(
-          '$message',
-          hint: sentryHint.isNotEmpty ? sentryHint : 'WARNING - $message',
-        ),
-      );
+      reduxStore.then((store) async {
+        await Sentry.configureScope(
+          (scope) => scope
+            ..setContexts('user_state', store.state.userState.toJson())
+            ..setContexts('message', message)
+            ..setContexts(
+                'filteredStack',
+                filteredStackTrace.isNotEmpty
+                    ? filteredStackTrace.pretty()
+                    : (stackTrace ?? StackTrace.current)
+                        .filterCallStack()
+                        .pretty())
+            ..setContexts('timestamp', '${DateTime.now()}'),
+        );
+        await Sentry.captureMessage(
+          '$message [${DateTime.now()}]',
+        );
+      });
     }
 
     if (kReleaseMode) {
       return;
     }
 
-    logger.d(message, error, stackTrace);
+    logger.d(message, error, stackTrace ?? StackTrace.current);
   }
 
   String filterStackTrace(
@@ -131,12 +192,20 @@ class LogIt {
     if (sentry) {
       reduxStore.then((store) async {
         await Sentry.configureScope(
-          (scope) =>
-              scope.setContexts('user_state', store.state.userState.toJson()),
+          (scope) => scope
+            ..setContexts('user_state', store.state.userState.toJson())
+            ..setContexts('message', message)
+            ..setContexts(
+                'filteredStack',
+                filteredStackTrace.isNotEmpty
+                    ? filteredStackTrace.pretty()
+                    : (stackTrace ?? StackTrace.current)
+                        .filterCallStack()
+                        .pretty())
+            ..setContexts('timestamp', '${DateTime.now()}'),
         );
         await Sentry.captureMessage(
-          '$message [${DateTime.now()}] with stack: ${filteredStackTrace.pretty(false)}',
-          hint: sentryHint.isNotEmpty ? sentryHint : 'WARNING - $message',
+          '$message [${DateTime.now()}]',
         );
       });
     }
@@ -151,7 +220,7 @@ class LogIt {
         error,
       );
     } else {
-      logger.i(message, error, stackTrace);
+      logger.i(message, error, stackTrace ?? StackTrace.current);
     }
   }
 
@@ -160,21 +229,39 @@ class LogIt {
     dynamic message, {
     dynamic error,
     StackTrace? stackTrace,
+    List<StackLine> stackTraceLines = const <StackLine>[],
     bool sentry = true,
     String sentryHint = '',
   }) {
+    final filteredStackTrace = stackTraceLines.isEmpty
+        ? (stackTrace ?? StackTrace.current).filterCallStack(
+            dontMatch: RegExp(
+              r'([A-Za-z_]+)\.([A-Za-z_. <>]+)\s\((package:vegan_liverpool)\/(utils\/log\/)(log\.dart):(\d+):(\d+)\)',
+            ),
+            removeLinesContaining: [
+              'log_it.dart',
+              'vegi_debug_route_observer.dart',
+            ],
+          )
+        : stackTraceLines;
     if (sentry) {
       reduxStore.then((store) async {
-        await Sentry.configureScope(
-          (scope) =>
-              scope.setContexts('user_state', store.state.userState.toJson()),
+       await Sentry.configureScope(
+          (scope) => scope
+            ..setContexts('user_state', store.state.userState.toJson())
+            ..setContexts('message', message)
+            ..setContexts(
+                'filteredStack',
+                filteredStackTrace.isNotEmpty
+                    ? filteredStackTrace.pretty()
+                    : (stackTrace ?? StackTrace.current)
+                        .filterCallStack()
+                        .pretty())
+            ..setContexts('timestamp', '${DateTime.now()}'),
         );
         await Sentry.captureException(
-          error ?? Exception('WARNING: $message'),
-          stackTrace: stackTrace ?? StackTrace.current, // from catch (e, s)
-          hint: sentryHint.isNotEmpty
-              ? sentryHint
-              : 'WARNING - $message [${DateTime.now()}]',
+          error,
+          stackTrace: stackTrace ?? StackTrace.current,
         );
       });
     }
@@ -183,7 +270,7 @@ class LogIt {
       return;
     }
 
-    logger.w(message, error, stackTrace);
+    logger.w(message, error, stackTrace ?? StackTrace.current);
   }
 
   /// Log a message at level [Level.error].
@@ -191,21 +278,40 @@ class LogIt {
     dynamic message, {
     dynamic error,
     StackTrace? stackTrace,
+    List<StackLine> stackTraceLines = const <StackLine>[],
     bool sentry = true,
     String sentryHint = '',
   }) {
+    final filteredStackTrace = stackTraceLines.isEmpty
+        ? (stackTrace ?? StackTrace.current).filterCallStack(
+            dontMatch: RegExp(
+              r'([A-Za-z_]+)\.([A-Za-z_. <>]+)\s\((package:vegan_liverpool)\/(utils\/log\/)(log\.dart):(\d+):(\d+)\)',
+            ),
+            removeLinesContaining: [
+              'log_it.dart',
+              'vegi_debug_route_observer.dart',
+            ],
+          )
+        : stackTraceLines;
     if (sentry) {
       reduxStore.then((store) async {
         await Sentry.configureScope(
           (scope) =>
-              scope.setContexts('user_state', store.state.userState.toJson()),
+              scope
+            ..setContexts('user_state', store.state.userState.toJson())
+            ..setContexts('message', message)
+            ..setContexts(
+                'filteredStack',
+                filteredStackTrace.isNotEmpty
+                    ? filteredStackTrace.pretty()
+                    : (stackTrace ?? StackTrace.current)
+                        .filterCallStack()
+                        .pretty())
+            ..setContexts('timestamp', '${DateTime.now()}'),
         );
         await Sentry.captureException(
           error,
-          stackTrace: stackTrace ?? StackTrace.current, // from catch (e, s)
-          hint: sentryHint.isNotEmpty
-              ? sentryHint
-              : 'ERROR - $message [${DateTime.now()}]',
+          stackTrace: stackTrace ?? StackTrace.current,
         );
       });
     }
@@ -214,7 +320,7 @@ class LogIt {
       return;
     }
 
-    logger.e(message, error, stackTrace);
+    logger.e(message, error, stackTrace ?? StackTrace.current);
   }
 
   /// Log a message at level [Level.wtf].
@@ -227,6 +333,6 @@ class LogIt {
       return;
     }
 
-    logger.wtf(message, error, stackTrace);
+    logger.wtf(message, error, stackTrace ?? StackTrace.current);
   }
 }

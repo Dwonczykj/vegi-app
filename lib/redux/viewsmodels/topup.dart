@@ -20,38 +20,36 @@ class TopUpViewModel extends Equatable {
 
   factory TopUpViewModel.fromStore(Store<AppState> store) {
     return TopUpViewModel(
-      recipientWalletAddress: store.state.userState.walletAddress,
-      senderWalletAddress: store.state.userState.walletAddress,
-      orderId: num.parse(store.state.cartState.orderID),
-      accountId: store.state.userState.vegiAccountId,
-      topUpAmount: store.state.cartState.cartTotal.value == 0
-          ? 25 // Default of £25 when no cart state (i.e. just topping up for future.)
-          : store.state.cartState.cartTotal.inGBPValue,
-      handleApplePay: (int amountPence) async {
-        if (store.state.userState.vegiAccountId == null) {
-          final e =
-              'vegi AccountId not set on state... Cannot start payment';
-          log.error(e);
-          await Sentry.captureException(
-            Exception(e),
-            stackTrace: StackTrace.current, // from catch (e, s)
-            hint: 'ERROR - startPeeplPayProcess $e',
+        recipientWalletAddress: store.state.userState.walletAddress,
+        senderWalletAddress: store.state.userState.walletAddress,
+        orderId: num.parse(store.state.cartState.orderID),
+        accountId: store.state.userState.vegiAccountId,
+        topUpAmount: store.state.cartState.cartTotal.value == 0
+            ? 25 // Default of £25 when no cart state (i.e. just topping up for future.)
+            : store.state.cartState.cartTotal.inGBPValue,
+        handleApplePay: (int amountPence) async {
+          if (store.state.userState.vegiAccountId == null) {
+            final e = 'vegi AccountId not set on state... Cannot start payment';
+            log.error(e);
+            await Sentry.captureException(
+              Exception(e),
+              stackTrace: StackTrace.current, // from catch (e, s)
+            );
+          }
+          await stripeService.handleApplePay(
+            recipientWalletAddress: store.state.userState.walletAddress,
+            senderWalletAddress: store.state.userState.walletAddress,
+            orderId: num.parse(store.state.cartState.orderID),
+            accountId: store.state.userState.vegiAccountId!,
+            stripeCustomerId: store.state.userState.stripeCustomerId,
+            paymentIntentClientSecret:
+                store.state.cartState.paymentIntentClientSecret,
+            amount: Money(currency: Currency.GBP, value: amountPence / 100),
+            store: store, //move to viewmodel
+            shouldPushToHome: true,
+            productName: Labels.stripeVegiProductName,
           );
-        }
-        await stripeService.handleApplePay(
-          recipientWalletAddress: store.state.userState.walletAddress,
-          senderWalletAddress: store.state.userState.walletAddress,
-          orderId: num.parse(store.state.cartState.orderID),
-          accountId: store.state.userState.vegiAccountId!,
-          stripeCustomerId: store.state.userState.stripeCustomerId,
-          paymentIntentClientSecret: store.state.cartState.paymentIntentClientSecret,
-          amount: Money(currency: Currency.GBP, value: amountPence / 100),
-          store: store, //move to viewmodel
-          shouldPushToHome: true,
-          productName: Labels.stripeVegiProductName,
-        );
-      }
-    );
+        });
   }
 
   final String recipientWalletAddress;

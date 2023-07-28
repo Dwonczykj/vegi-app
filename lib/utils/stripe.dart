@@ -42,15 +42,16 @@ class StripeService {
   final Stripe instance = Stripe.instance;
 
   void init() {
-    Stripe.publishableKey = (Env.isDev || Env.isTest) && STRIPE_LIVEMODE != 'true'
-        ? dotenv.env['STRIPE_API_KEY_TEST']!
-        : dotenv.env['STRIPE_API_KEY_LIVE']!;
+    Stripe.publishableKey =
+        (Env.isDev || Env.isTest) && STRIPE_LIVEMODE != 'true'
+            ? dotenv.env['STRIPE_API_KEY_TEST']!
+            : dotenv.env['STRIPE_API_KEY_LIVE']!;
     // if (Stripe.publishableKey.contains('live')) {
     //   final e = Exception('Stripe Instance not ready for production usage.');
     //   Sentry.captureException(
     //     e,
     //     stackTrace: StackTrace.current,
-    //     hint: 'ERROR - fetchProductOptions $e',
+    //
     //   );
     //   throw e;
     // }
@@ -163,8 +164,6 @@ class StripeService {
         await Sentry.captureException(
           'Stripe Payment ${e.error.code} with StripeErrorType.[${e.error.type}] because of stripe error code StripeErrorCode.[${e.error.stripeErrorCode}]: ${e.error.localizedMessage};',
           stackTrace: s,
-          hint:
-              'ERROR - Stripe Exception: Stripe Payment ${e.error.code} with StripeErrorType.[${e.error.type}]: ${e.error.localizedMessage}; with error code StripeErrorCode.[${e.error.stripeErrorCode}]',
         );
         store
           ..dispatch(SetPaymentButtonFlag(false))
@@ -256,8 +255,6 @@ class StripeService {
         await Sentry.captureException(
           'Stripe Payment ${e.error.code} with StripeErrorType.[${e.error.type}] because of stripe error code StripeErrorCode.[${e.error.stripeErrorCode}]: ${e.error.localizedMessage};',
           stackTrace: s,
-          hint:
-              'ERROR - Stripe Exception: Stripe Payment ${e.error.code} with StripeErrorType.[${e.error.type}]: ${e.error.localizedMessage}; with error code StripeErrorCode.[${e.error.stripeErrorCode}]',
         );
         store
           ..dispatch(SetPaymentButtonFlag(false))
@@ -401,7 +398,6 @@ class StripeService {
       await Sentry.captureException(
         e,
         stackTrace: s,
-        hint: 'ERROR - Stripe Exception: $e',
       );
       store.dispatch(
         StripePaymentStatusUpdate(
@@ -445,7 +441,6 @@ class StripeService {
         await Sentry.captureException(
           'Failed to fetch paymentIntent[${store.state.cartState.paymentIntentID}] from vegi server using paymentIntent client secret that was created on the order',
           stackTrace: StackTrace.current, // from catch (err, s)
-          hint: 'ERROR - stripe.dart.handleStripeCardPayment',
         );
         store
           ..dispatch(SetPaymentButtonFlag(false))
@@ -526,8 +521,6 @@ class StripeService {
         await Sentry.captureException(
           'Stripe Payment ${e.error.code} with StripeErrorType.[${e.error.type}] because of stripe error code StripeErrorCode.[${e.error.stripeErrorCode}]: ${e.error.localizedMessage};',
           stackTrace: s,
-          hint:
-              'ERROR - Stripe Exception: Stripe Payment ${e.error.code} with StripeErrorType.[${e.error.type}]: ${e.error.localizedMessage}; with error code StripeErrorCode.[${e.error.stripeErrorCode}]',
         );
         store
           ..dispatch(SetPaymentButtonFlag(false))
@@ -583,7 +576,6 @@ class StripeService {
       await Sentry.captureException(
         e,
         stackTrace: s,
-        hint: 'ERROR - Stripe Exception: $e',
       );
       store.dispatch(
         StripePaymentStatusUpdate(

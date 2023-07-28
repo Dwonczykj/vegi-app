@@ -179,8 +179,6 @@ class _SuggestionPhotoScreenState extends State<SuggestionPhotoScreen>
                                   await Sentry.captureException(
                                     Exception(errMessage),
                                     // stackTrace: s, // from catch (e, s)
-                                    hint:
-                                        'ERROR (upload Image from Gallery) - $errMessage',
                                   );
                                 },
                               );
@@ -213,8 +211,6 @@ class _SuggestionPhotoScreenState extends State<SuggestionPhotoScreen>
                                   await Sentry.captureException(
                                     Exception(errMessage),
                                     // stackTrace: s, // from catch (e, s)
-                                    hint:
-                                        'ERROR (upload Image from Camera) - $errMessage',
                                   );
                                 },
                               );

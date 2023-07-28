@@ -432,12 +432,7 @@ Future<UpdateComputedCartValues?> computeTotalsFromCart({
       cartTotalDiscountComputed,
     );
   } catch (e, s) {
-    log.error('ERROR - computeCartTotals $e');
-    Sentry.captureException(
-      e,
-      stackTrace: s,
-      hint: 'ERROR - computeCartTotals $e',
-    );
+    log.error('ERROR - computeCartTotals $e', stackTrace: s,);
     return null;
   }
 }

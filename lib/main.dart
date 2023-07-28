@@ -11,6 +11,7 @@ import 'package:redux_logging/redux_logging.dart';
 import 'package:redux_persist/redux_persist.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
+import 'package:sentry_logging/sentry_logging.dart';
 import 'package:vegan_liverpool/app.dart';
 import 'package:vegan_liverpool/common/di/di.dart';
 import 'package:vegan_liverpool/common/di/env.dart';
@@ -63,7 +64,9 @@ void main() async {
       (options) {
         options
           ..debug = (!kReleaseMode && DebugHelpers.isVerboseDebugMode)
+          // ..debug = true
           ..dsn = Env.isTest ? '' : dotenv.env['SENTRY_DSN']
+          ..addIntegration(LoggingIntegration())
           ..environment = Env.activeEnv;
       },
     );

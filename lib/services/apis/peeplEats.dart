@@ -199,70 +199,82 @@ class PeeplEatsService extends HttpService {
       await deleteSessionCookie();
     }
     _authenticating = true;
-    final Response<dynamic> response = await dioPost(
-      VegiBackendEndpoints.loginWithPhone,
-      sendWithAuthCreds: false,
-      data: {
-        'phoneNumber': phoneNumber,
-        'firebaseSessionToken': firebaseSessionToken,
-        'rememberMe': rememberMe
-      },
-    );
-
-    // Capture session cookie to send with requests from nowon in a VegiSession object that we save to the singleton instance of the peeplEats service?...
-    if (responseHasErrorStatus(response)) {
-      _authenticating = false;
-      throw Exception(
-        'Bad response returned when trying to loginWithPhone: $response',
+    try {
+      final Response<dynamic> response = await dioPost(
+        VegiBackendEndpoints.loginWithPhone,
+        sendWithAuthCreds: false,
+        data: {
+          'phoneNumber': phoneNumber,
+          'firebaseSessionToken': firebaseSessionToken,
+          'rememberMe': rememberMe
+        },
       );
-    } else if (response.headers.value('set-cookie') == null) {
-      _authenticating = false;
-      log.error(
-        'No set-cookie returned in response headers when trying to loginWithPhone with:\n\t responseHeaders: ${response.headers} & response: $response',
-        sentry: true,
-      );
-    }
 
-    final userDetails =
-        UserDTO.fromJson(response.data['user'] as Map<String, dynamic>);
-
-    final cookie = response.headers.value('set-cookie');
-    if (cookie != null) {
-      await setSessionCookie(cookie);
-      (await reduxStore)
-        ..dispatch(
-          SetVegiSessionCookie(
-            cookie: cookie,
-          ),
-        )
-        ..dispatch(
-          SetVegiUserId(
-            id: userDetails.id,
-          ),
-        )
-        ..dispatch(
-          SetUserRoleOnVegi(
-            userRole: userDetails.role,
-            isSuperAdmin: userDetails.isSuperAdmin,
-          ),
+      // Capture session cookie to send with requests from nowon in a VegiSession object that we save to the singleton instance of the peeplEats service?...
+      if (responseHasErrorStatus(response)) {
+        _authenticating = false;
+        throw Exception(
+          'Bad response returned when trying to loginWithPhone: $response',
         );
-      if (userDetails.email != null) {
-        (await reduxStore).dispatch(
-          SetEmail(
-            userDetails.email!,
-          ),
+      } else if (response.headers.value('set-cookie') == null) {
+        _authenticating = false;
+        log.error(
+          'No set-cookie returned in response headers when trying to loginWithPhone with:\n\t responseHeaders: ${response.headers} & response: $response',
+          sentry: true,
         );
       }
+
+      final userDetails =
+          UserDTO.fromJson(response.data['user'] as Map<String, dynamic>);
+
+      final cookie = response.headers.value('set-cookie');
+      if (cookie != null) {
+        await setSessionCookie(cookie);
+        (await reduxStore)
+          ..dispatch(
+            SetVegiSessionCookie(
+              cookie: cookie,
+            ),
+          )
+          ..dispatch(
+            SetVegiUserId(
+              id: userDetails.id,
+            ),
+          )
+          ..dispatch(
+            SetUserRoleOnVegi(
+              userRole: userDetails.role,
+              isSuperAdmin: userDetails.isSuperAdmin,
+            ),
+          );
+        if (userDetails.email != null) {
+          (await reduxStore).dispatch(
+            SetEmail(
+              userDetails.email!,
+            ),
+          );
+        }
+      }
+      _authenticating = false;
+      log.info(
+        'Successfully logged in to vegi with phone',
+        sentry: true,
+      );
+      return VegiSession(
+        sessionCookie: cookie ?? '',
+        user: userDetails,
+      );
+    } on Exception catch (e, s) {
+      _authenticating = false;
+      log.error(
+        e,
+        stackTrace: s,
+      );
+      return VegiSession(
+        sessionCookie: '',
+        user: null,
+      );
     }
-    _authenticating = false;
-    log.info(
-      'Successfully logged in to vegi with phone',
-      sentry: true,
-    );
-    return VegiSession(
-      sessionCookie: cookie ?? '',
-      user: userDetails,
-    );
   }
 
   Future<VegiSession> loginWithEmail({

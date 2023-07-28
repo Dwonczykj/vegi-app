@@ -202,8 +202,6 @@ class _RestaurantMenuAppBarState extends State<RestaurantMenuAppBar> {
                                   await Sentry.captureException(
                                     e,
                                     stackTrace: s,
-                                    hint:
-                                        'ERROR - query menu items from search bar: $e',
                                   );
                                   return [];
                                 }

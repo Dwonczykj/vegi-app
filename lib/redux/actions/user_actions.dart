@@ -906,11 +906,6 @@ ThunkAction<AppState> checkForUpdatesAppStore() {
         err,
         stackTrace: s,
       );
-      await Sentry.captureException(
-        err,
-        stackTrace: s, // from catch (err, s)
-        hint: 'ERROR - user_actions.dart.checkForUpdatesAppStore $err',
-      );
     }
   };
 }
@@ -959,11 +954,6 @@ ThunkAction<AppState> checkForUpdatesFirebaseRemoteConfig() {
           e,
           stackTrace: StackTrace.current,
         );
-      await Sentry.captureException(
-        e,
-        stackTrace: StackTrace.current, // from catch (err, s)
-        hint: 'ERROR - app.dart.checkUpdates $e',
-      );
       updateNeededUsingFirebaseConfig = false;
       store.dispatch(
         SetAppUpdateRequired(
@@ -989,11 +979,6 @@ ThunkAction<AppState> updateAppNeededNotificationSeen() {
       );
     } catch (e, s) {
       log.error('ERROR - updateAppNeededNotificationSeen $e', stackTrace: s);
-      await Sentry.captureException(
-        e,
-        stackTrace: s,
-        hint: 'ERROR - updateAppNeededNotificationSeen $e',
-      );
     }
   };
 }
@@ -1015,11 +1000,9 @@ ThunkAction<AppState> fetchPositionInWaitingListQueue({
 
       successHandler?.call();
     } catch (e, s) {
-      log.error('ERROR - fetchPositionInWaitingListQueue $e');
-      await Sentry.captureException(
-        e,
+      log.error(
+        'ERROR - fetchPositionInWaitingListQueue $e',
         stackTrace: s,
-        hint: 'ERROR - fetchPositionInWaitingListQueue $e',
       );
       errorHandler(
         'ERROR - fetchPositionInWaitingListQueue $e',
@@ -1041,7 +1024,7 @@ ThunkAction<AppState> fetchPositionInWaitingListQueue({
 //       await Sentry.captureException(
 //         e,
 //         stackTrace: s,
-//         hint: 'ERROR - checkIfSmartWalletIsBackedUpToVegi $e',
+//
 //       );
 //       errorHandler(
 //         'ERROR - checkIfSmartWalletIsBackedUpToVegi $e',
@@ -1068,11 +1051,6 @@ ThunkAction<AppState> fetchSurveyQuestions() {
           AnalyticsProps.status: AnalyticsProps.failed,
           'error': e.toString(),
         },
-      );
-      await Sentry.captureException(
-        Exception('Error in fetchSurveyQuestions: ${e.toString()}'),
-        stackTrace: s,
-        hint: 'ERROR in fetchSurveyQuestions',
       );
     }
   };
@@ -1130,11 +1108,6 @@ ThunkAction<AppState> submitSurveyResponse(
           AnalyticsProps.status: AnalyticsProps.failed,
           'error': e.toString(),
         },
-      );
-      await Sentry.captureException(
-        Exception('Error in submitSurveyResponse: ${e.toString()}'),
-        stackTrace: s,
-        hint: 'ERROR in submitSurveyResponse',
       );
     }
   };
@@ -1238,11 +1211,9 @@ ThunkAction<AppState> getUserDetails() {
           );
       }
     } catch (e, s) {
-      log.error('ERROR - getUserDetails $e');
-      await Sentry.captureException(
-        e,
+      log.error(
+        'ERROR - getUserDetails $e',
         stackTrace: s,
-        hint: 'ERROR - getUserDetails $e',
       );
     }
   };
@@ -1308,11 +1279,6 @@ ThunkAction<AppState> isUserWalletAddressAVendorAddress({
           'error': e.toString(),
         },
       );
-      await Sentry.captureException(
-        Exception('Error in isUserWalletAddressAVendorAddress: $e'),
-        stackTrace: s,
-        hint: 'ERROR in isUserWalletAddressAVendorAddress',
-      );
     }
   };
 }
@@ -1374,7 +1340,7 @@ ThunkAction<AppState> isUserWalletAddressAVendorAddress({
 //       await Sentry.captureException(
 //         Exception('Error in login with phone number: $e'),
 //         stackTrace: s,
-//         hint: 'ERROR in Login Request',
+//
 //       );
 //     }
 //   };
@@ -1431,11 +1397,6 @@ ThunkAction<AppState> restoreWalletCall(
         stackTrace: s,
       );
       failureCallback();
-      await Sentry.captureException(
-        Exception('Error in restore mnemonic: ${e.toString()}'),
-        stackTrace: s,
-        hint: 'ERROR in restore wallet',
-      );
     }
   };
 }
@@ -1485,7 +1446,7 @@ ThunkAction<AppState> setDevicePhoneNumberForId(String phoneNumber) {
 //         Exception(
 //             'Error in reauthenticate user [${onBoardStrategy.strategy.name}]: $error'),
 //         stackTrace: s,
-//         hint: 'Error while phone number verification',
+//
 //       );
 //     }
 //   };
@@ -1541,6 +1502,9 @@ void updateFirebaseCurrentUser(
 ThunkAction<AppState> updateDisplayNameCall(String displayName) {
   return (Store<AppState> store) async {
     try {
+      // * Do this first to avoid app breaking as load mainscreen before username is set, same for email
+      store.dispatch(SetDisplayName(displayName));
+
       updateFirebaseCurrentUser(({required User firebaseUser}) async {
         await firebaseUser.updateDisplayName(displayName);
         final errMsg = await peeplEatsService.updateUserDetails(
@@ -1555,7 +1519,6 @@ ThunkAction<AppState> updateDisplayNameCall(String displayName) {
             sentry: true,
           );
         }
-        store.dispatch(SetDisplayName(displayName));
       });
     } catch (e, s) {
       log.error(
@@ -1598,11 +1561,6 @@ ThunkAction<AppState> setRandomUserAvatarIfNone() {
       store.dispatch(SetIsLoadingHttpRequest(isLoading: false));
     } catch (e, s) {
       log.error('ERROR - setRandomUserAvatarIfNone $e', stackTrace: s);
-      await Sentry.captureException(
-        e,
-        stackTrace: s,
-        hint: 'ERROR - setRandomUserAvatarIfNone $e',
-      );
       store.dispatch(SetIsLoadingHttpRequest(isLoading: false));
     }
   };
@@ -1786,11 +1744,6 @@ ThunkAction<AppState> addDeliveryAddress({
         error: e,
         stackTrace: s,
       );
-      Sentry.captureException(
-        Exception('ERROR - addDeliveryAddress: ${e.toString()}'),
-        stackTrace: s,
-        hint: 'ERROR - addDeliveryAddress',
-      );
     }
   };
 }
@@ -1810,11 +1763,6 @@ ThunkAction<AppState> removeDeliveryAddress({
         'ERROR - removeDeliveryAddress',
         error: e,
         stackTrace: s,
-      );
-      Sentry.captureException(
-        Exception('ERROR - removeDeliveryAddress: ${e.toString()}'),
-        stackTrace: s,
-        hint: 'ERROR - removeDeliveryAddress',
       );
     }
   };
@@ -1841,11 +1789,6 @@ ThunkAction<AppState> updateDeliveryAddress({
         'ERROR - updateDeliveryAddress',
         error: e,
         stackTrace: s,
-      );
-      Sentry.captureException(
-        Exception('ERROR - updateDeliveryAddress: ${e.toString()}'),
-        stackTrace: s,
-        hint: 'ERROR - updateDeliveryAddress',
       );
     }
   };

@@ -325,6 +325,9 @@ class _SignUpWithEmailAndPasswordScreenState
                             label: I10n.of(context).next_button,
                             preload: viewmodel.signupIsInFlux,
                             disabled: viewmodel.signupIsInFlux,
+                            onPressedDisabled: () =>
+                                StoreProvider.of<AppState>(context)
+                                    .dispatch(SignupLoading(isLoading: false)),
                             onPressed: () async {
                               viewmodel.signinEmailAndPassword(
                                 email:

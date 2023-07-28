@@ -6,6 +6,7 @@ class PrimaryButton extends StatelessWidget {
     Key? key,
     this.fontSize = 20,
     required this.onPressed,
+    this.onPressedDisabled,
     required this.label,
     this.width = 255.0,
     this.height = 50.0,
@@ -14,6 +15,7 @@ class PrimaryButton extends StatelessWidget {
     this.buttonColor,
   }) : super(key: key);
   final GestureTapCallback onPressed;
+  final GestureTapCallback? onPressedDisabled;
   final String label;
   final double width;
   final double height;
@@ -49,7 +51,7 @@ class PrimaryButton extends StatelessWidget {
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          onTap: disabled ? () {} : onPressed,
+          onTap: disabled ? onPressedDisabled?.call : onPressed,
           borderRadius: const BorderRadius.all(Radius.circular(30)),
           highlightColor:
               Theme.of(context).scaffoldBackgroundColor.withOpacity(0.3),

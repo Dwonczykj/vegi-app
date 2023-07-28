@@ -316,12 +316,11 @@ class UserState with _$UserState {
     if (fuseWalletCredentials == null) {
       final e = Exception(
           'No user credentials available for current user: "$displayName"');
-      log.error(e);
-      Sentry.captureException(
+      log.error(
         e,
         stackTrace: StackTrace.current,
-        hint: 'ERROR - fuseWalletCredentials should not be null',
       );
+
       throw e;
     }
     return fuseWalletCredentials!;

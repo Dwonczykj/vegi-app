@@ -23,7 +23,8 @@ class StripePayService {
 
       final Map<String, dynamic> result = response.data as Map<String, dynamic>;
 
-      log.info('Payment Intent Result $result',
+      log.info(
+        'Payment Intent Result $result',
         stackTrace: StackTrace.current,
       );
 
@@ -33,7 +34,6 @@ class StripePayService {
       await Sentry.captureException(
         e,
         stackTrace: s,
-        hint: 'Error: startPaymentIntentCheck ${e.toString()}',
       );
       return {};
     }
@@ -60,7 +60,6 @@ class StripePayService {
       await Sentry.captureException(
         e,
         stackTrace: s,
-        hint: 'Error createStripePaymentIntent ${e.toString()}',
       );
       return e.toString();
     }

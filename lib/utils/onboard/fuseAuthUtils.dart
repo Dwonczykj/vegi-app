@@ -55,11 +55,6 @@ Future<bool> authenticateSDK(
     final errMsg =
         'Bad AuthRes from Fuse Authentication did not contain either data or an error';
     log.error(errMsg, stackTrace: s);
-    await Sentry.captureException(
-      errMsg,
-      stackTrace: s, // from catch (err, s)
-      hint: 'ERROR - fuaseAuthUtils.authenticateSDK $errMsg',
-    );
     return false;
   }
 }

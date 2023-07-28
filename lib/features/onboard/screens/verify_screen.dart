@@ -192,6 +192,9 @@ class _VerifyPhoneNumberState extends State<VerifyPhoneNumber> {
                         width: MediaQuery.of(context).size.width * .9,
                         preload: viewModel.signupIsInFlux,
                         disabled: viewModel.signupIsInFlux,
+                        onPressedDisabled: () =>
+                            StoreProvider.of<AppState>(context)
+                                .dispatch(SignupLoading(isLoading: false)),
                         onPressed: () {
                           _verifyCode(viewModel, context);
                         },
@@ -241,16 +244,15 @@ class _VerifyPhoneNumberState extends State<VerifyPhoneNumber> {
       delayed(
         15000,
         () async {
-          await showErrorSnack(
-            context: context,
-            title: 'SMS Verfication',
-            message: 'SMS verification taking too long,',
-          );
-          await reduxStore.then(
-            (store) {
-              store.dispatch(SignupLoading(isLoading: false));
-            },
-          );
+          final store = StoreProvider.of<AppState>(context);
+          if (store.state.onboardingState.signupIsInFlux) {
+            await showErrorSnack(
+              context: context,
+              title: 'SMS Verfication',
+              message: 'SMS verification taking too long,',
+            );
+            store.dispatch(SignupLoading(isLoading: false));
+          }
         },
         () => viewModel.verify(
           codeController.text,

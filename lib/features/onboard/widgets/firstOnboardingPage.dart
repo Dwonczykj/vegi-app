@@ -30,9 +30,11 @@ class _FirstOnboardingPageState extends State<FirstOnboardingPage> {
   @override
   void initState() {
     Future.delayed(const Duration(seconds: 1), () {
-      setState(() {
-        _opacity = 1.0;
-      });
+      if (mounted) {
+        setState(() {
+          _opacity = 1.0;
+        });
+      }
     });
     // Future.delayed(const Duration(seconds: 1), () {
     //   setState(() {
