@@ -186,6 +186,7 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
               //     _latestLink.replaceAll(RegExp(r'vegi://vegiApp.dev'), '');
               // log.info('Deep-linking to relative route: ${relativeLink}');
               if (_latestLink.startsWith('vegi')) {
+                log.info('🔗 Push named link: $_latestLink');
                 rootRouter.pushNamed(
                   _latestLink,
                 );
@@ -208,10 +209,13 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
     // Attach a second listener to the stream
     linkStream.listen(
       (String? link) {
-        print('got link: $link');
+        log.info('🔗 router received link request: $link');
       },
       onError: (Object? err) {
-        print('got err: $err');
+        log.error(
+          'got err: $err',
+          stackTrace: StackTrace.current,
+        );
       },
     );
 

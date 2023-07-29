@@ -1449,6 +1449,7 @@ class FirebaseStrategy implements IOnBoardStrategy {
 
   @override
   Future<void> nextOnboardingPage({PageRouteInfo? currentRoute}) async {
+    logFunctionCall<dynamic>();
     final store = await reduxStore;
     log.info(
       'Onboarding strategy to next onboarding page from ${currentRoute?.routeName ?? rootRouter.current.name}',
@@ -1461,23 +1462,47 @@ class FirebaseStrategy implements IOnBoardStrategy {
         onboardingAuthRoutesOrder
                 .contains(currentRoute?.routeName ?? rootRouter.current.name) ==
             false) {
+      log.info(
+        'nextOnboardingPage push ${SignUpScreen.name} as not logged in',
+        sentry: true,
+      );
       await rootRouter.replaceAll([const SignUpScreen()]);
     }
     if (store.state.userState.email.trim().isEmpty &&
         currentRouteInd <
             onboardingRoutesOrder.indexOf(SetEmailOnboardingScreen.name)) {
+      log.info(
+        'nextOnboardingPage push ${SetEmailOnboardingScreen.name} as email is empty and $currentRouteInd < ${onboardingRoutesOrder.indexOf(SetEmailOnboardingScreen.name)}',
+        sentry: true,
+      );
       await rootRouter.push(const SetEmailOnboardingScreen());
     } else if (store.state.userState.displayName.isEmpty &&
         currentRouteInd < onboardingRoutesOrder.indexOf(UserNameScreen.name)) {
+      log.info(
+        'nextOnboardingPage push ${UserNameScreen.name} as username is empty and $currentRouteInd < ${onboardingRoutesOrder.indexOf(UserNameScreen.name)}',
+        sentry: true,
+      );
       await rootRouter.push(UserNameScreen());
     } else if (store.state.userState.authType == BiometricAuth.none &&
         currentRouteInd <
             onboardingRoutesOrder.indexOf(ChooseSecurityOption.name)) {
+      log.info(
+        'nextOnboardingPage push ${ChooseSecurityOption.name} as biometric auth is none and $currentRouteInd < ${onboardingRoutesOrder.indexOf(ChooseSecurityOption.name)}',
+        sentry: true,
+      );
       await rootRouter.push(const ChooseSecurityOption());
     } else if (!store.state.userState.biometricallyAuthenticated &&
         currentRouteInd < onboardingRoutesOrder.indexOf(PinCodeScreen.name)) {
+      log.info(
+        'nextOnboardingPage push ${PinCodeScreen.name} as not biometrically authenticated is empty and $currentRouteInd < ${onboardingRoutesOrder.indexOf(PinCodeScreen.name)}',
+        sentry: true,
+      );
       await rootRouter.push(const PinCodeScreen());
     } else if (store.state.userState.hasOnboarded) {
+      log.info(
+        'nextOnboardingPage push ${MainScreen.name} as has onboarded',
+        sentry: true,
+      );
       await rootRouter.push(const MainScreen());
     } else {
       log.info(

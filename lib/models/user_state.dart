@@ -14,6 +14,7 @@ import 'package:vegan_liverpool/features/veganHome/Helpers/helpers.dart';
 import 'package:vegan_liverpool/models/admin/surveyQuestion.dart';
 import 'package:vegan_liverpool/models/restaurant/deliveryAddresses.dart';
 import 'package:vegan_liverpool/utils/constants.dart' as VegiConstants;
+import 'package:vegan_liverpool/utils/constants.dart';
 import 'package:vegan_liverpool/utils/log/log.dart';
 import 'package:vegan_liverpool/version.dart';
 
@@ -275,6 +276,8 @@ class UserState with _$UserState {
 
   String get accountAddress => fuseWalletCredentials?.address.toString() ?? '';
 
+  String get phoneNumberE164 => '$countryCode$phoneNumberNoCountry';
+
   bool get accountDetailsExist =>
       accountAddress.isNotEmpty && walletAddress.isNotEmpty;
 
@@ -302,6 +305,10 @@ class UserState with _$UserState {
 
   String get authStateEmj =>
       '🔥->${authEnumToEmoji(firebaseAuthenticationStatus)}, 🥑->${authEnumToEmoji(vegiAuthenticationStatus)}, 👾->${authEnumToEmoji(fuseAuthenticationStatus)}';
+
+  bool get usingTestCredentials =>
+      countryCode == Secrets.testPhoneNumberCountryCode &&
+      phoneNumberNoCountry == Secrets.testPhoneNumber && firebaseSessionToken == Secrets.testFirebaseSessionToken;
 
   bool get hasOnboarded =>
       displayName.isNotEmpty &&

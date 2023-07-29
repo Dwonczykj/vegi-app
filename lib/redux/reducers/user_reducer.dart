@@ -1,5 +1,6 @@
 import 'package:redux/redux.dart';
 import 'package:vegan_liverpool/constants/enums.dart';
+import 'package:vegan_liverpool/features/veganHome/Helpers/helpers.dart';
 import 'package:vegan_liverpool/models/user_state.dart';
 import 'package:vegan_liverpool/redux/actions/cart_actions.dart';
 import 'package:vegan_liverpool/redux/actions/cash_wallet_actions.dart';
@@ -270,7 +271,8 @@ UserState _setUserAuthenticationStatus(
   SetUserAuthenticationStatus action,
 ) {
   log.info(
-    'AUTH CHG: (${state.authStateEmj}) + (${action.updates()})',
+    'AUTH CHG: (${state.authStateEmj}) + (${action.updates()}) -> '
+    '🔥->${authEnumToEmoji(action.firebaseStatus ?? state.firebaseAuthenticationStatus)}, 🥑->${authEnumToEmoji(action.vegiStatus ?? state.vegiAuthenticationStatus)}, 👾->${authEnumToEmoji(action.fuseStatus ?? state.fuseAuthenticationStatus)}',
     sentry: true,
     stackTrace: StackTrace.current,
   );
@@ -457,20 +459,20 @@ UserState _logoutSuccess(
     firebaseCredentials: null,
     // accountAddress: '',
     hasSavedSeedPhrase: false,
-    mnemonic: [
-      '',
-      '',
-      '',
-      '',
-      '',
-      '',
-      '',
-      '',
-      '',
-      '',
-      '',
-      '',
-    ],
+    // mnemonic: [
+    //   '',
+    //   '',
+    //   '',
+    //   '',
+    //   '',
+    //   '',
+    //   '',
+    //   '',
+    //   '',
+    //   '',
+    //   '',
+    //   '',
+    // ],
     // preferredSignonMethod: PreferredSignonMethod.phone,
   );
 }

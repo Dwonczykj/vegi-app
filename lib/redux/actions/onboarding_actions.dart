@@ -36,7 +36,9 @@ class SignUpFailed {
   SignUpFailed({
     required this.error,
   }) {
-    log.warn('SignUpFailed redux action -> [$error]');
+    if (error != null) {
+      log.warn('SignUpFailed redux action -> [$error]');
+    }
   }
 
   final SignUpErrorDetails? error;

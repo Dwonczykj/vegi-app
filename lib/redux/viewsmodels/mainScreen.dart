@@ -102,11 +102,13 @@ class MainScreenViewModel extends Equatable implements IAuthViewModel {
       setEmail: ({
         required String email,
         required void Function(String) onError,
-      }) {
+        Future<void> Function()? onComplete,
+      }) async {
         store.dispatch(
           updateEmail(
             email: email,
             onError: onError,
+            onComplete: onComplete,
           ),
         );
       },
@@ -211,9 +213,10 @@ class MainScreenViewModel extends Equatable implements IAuthViewModel {
     required CountryCode countryCode,
     required PhoneNumber phoneNumber,
   }) setPhoneNumber;
-  final void Function({
+  final Future<void> Function({
     required String email,
     required void Function(String) onError,
+    Future<void> Function()? onComplete,
   }) setEmail;
   final void Function({
     required CountryCode countryCode,

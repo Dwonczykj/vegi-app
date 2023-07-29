@@ -37,7 +37,7 @@ class UserNameScreen extends StatelessWidget {
       body: StoreConnector<AppState, VerifyOnboardViewModel>(
         distinct: true,
         converter: VerifyOnboardViewModel.fromStore,
-        onInit: (store) => store.dispatch(setRandomUserAvatarIfNone()),
+        // onInit: (store) => store.dispatch(setRandomUserAvatarIfNone()),
         builder: (_, viewmodel) {
           return Column(
             children: [

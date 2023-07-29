@@ -1482,6 +1482,9 @@ class PeeplEatsService extends HttpService {
         return null;
       } else {
         final result = UserDTO.fromJson(response.data as Map<String, dynamic>);
+        if(DebugHelpers.inDebugMode){
+          log.info(result);
+        }
         return result;
       }
     } on Exception catch (e) {

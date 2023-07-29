@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:simple_animations/simple_animations.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -93,7 +94,8 @@ class _OnBoardScreenState extends State<OnBoardScreen>
 
     void nextPage() {
       if (_pageController.positions.isNotEmpty &&
-          _pageController.page == (welcomeScreens.length - 1)) {
+          _pageController.page != null &&
+          _pageController.page! > (welcomeScreens.length - 2)) {
         authenticator.appIsAuthenticated().then(
           (isAuthenticated) {
             if (isAuthenticated) {
@@ -107,7 +109,10 @@ class _OnBoardScreenState extends State<OnBoardScreen>
                   log.info(
                       '🚀 Push next onboarding flow screen from on_board_screen as need to complete onboarding flow though userState.isLoggedIn');
                   // authenticated but never completed onboarding so complete onboarding flow.
-                  onBoardStrategy.nextOnboardingPage();
+                  store.dispatch(getUserDetails(
+                    onComplete: onBoardStrategy.nextOnboardingPage,
+                    onFailed: onBoardStrategy.nextOnboardingPage,
+                  ));
                 }
               });
             } else {
@@ -119,6 +124,11 @@ class _OnBoardScreenState extends State<OnBoardScreen>
             }
           },
         );
+      } else {
+        // if (kDebugMode) {
+        //   print(_pageController.positions);
+        //   print(_pageController.page);
+        // }
       }
 
       if (_pageController.page!.toInt() == 4) {

@@ -61,6 +61,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     return StoreConnector<AppState, ProfileViewModel>(
       distinct: true,
       converter: ProfileViewModel.fromStore,
+      onInit: (store) => store.dispatch(setRandomUserAvatarIfNone()),
       onDispose: (store) {
         if (displayName != null) {
           if (store.state.userState.displayName != displayName) {
@@ -559,7 +560,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                         PrimaryButton(
                           label: 'Restore Wallet',
-                          onPressed: () => rootRouter.push(const RestoreFromBackupScreen()),
+                          onPressed: () =>
+                              rootRouter.push(const RestoreFromBackupScreen()),
                           buttonColor: themeLightShade800,
                         ),
                       ],

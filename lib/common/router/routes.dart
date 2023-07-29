@@ -35,6 +35,7 @@ import 'package:vegan_liverpool/features/waitingListFunnel/screens/surveyThanksS
 import 'package:vegan_liverpool/features/waitingListFunnel/screens/waitingListFunnel.dart';
 import 'package:vegan_liverpool/features/waitingListFunnel/screens/waitingListPositionInQueuePage.dart';
 import 'package:vegan_liverpool/features/waitingListFunnel/screens/waitingListSurveyQuestions.dart';
+import 'package:vegan_liverpool/redux/viewsmodels/logoutApp.dart';
 import 'package:vegan_liverpool/redux/viewsmodels/reset_app.dart';
 
 export 'routes.gr.dart';
@@ -44,6 +45,7 @@ export 'routes.gr.dart';
   routes: <AutoRoute>[
     AutoRoute(page: SplashScreen, initial: true),
     AutoRoute(page: ResetApp),
+    AutoRoute(page: LogoutApp),
     AutoRoute(page: ChooseSecurityOption),
     AutoRoute(page: VerifyEmailLinkPage),
     AutoRoute(

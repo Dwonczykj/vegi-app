@@ -30,6 +30,7 @@ import 'package:vegan_liverpool/models/admin/surveyQuestion.dart';
 import 'package:vegan_liverpool/models/admin/postVegiResponse.dart';
 import 'package:vegan_liverpool/models/app_state.dart';
 import 'package:vegan_liverpool/models/restaurant/deliveryAddresses.dart';
+import 'package:vegan_liverpool/models/restaurant/userDTO.dart';
 import 'package:vegan_liverpool/models/user_state.dart';
 import 'package:vegan_liverpool/models/waitingListFunnel/waitingListEntry.dart';
 import 'package:vegan_liverpool/redux/actions/cart_actions.dart';
@@ -814,10 +815,14 @@ ThunkAction<AppState> updateEmailForWaitingListEntry({
 ThunkAction<AppState> updateEmail({
   required String email,
   void Function(String)? onError,
+  Future<void> Function()? onComplete,
 }) {
   return (Store<AppState> store) async {
     try {
-      store.dispatch(SetEmail(email.toLowerCase().trim()));
+      store
+        ..dispatch(SignUpLoadingMessage(message: 'Updating Email...'))
+        ..dispatch(SignupLoading(isLoading: true))
+        ..dispatch(SetEmail(email.toLowerCase().trim()));
 
       final regex = RegExp(r'\+([0-9]+)');
       final matchFull = regex.firstMatch(store.state.userState.countryCode);
@@ -841,7 +846,10 @@ ThunkAction<AppState> updateEmail({
         onError?.call(
             'Unable to update users email as another user has that email. Please check if you have previously registered with a different number.');
       }
-
+      store
+        ..dispatch(SignUpLoadingMessage(message: ''))
+        ..dispatch(SignupLoading(isLoading: false));
+      await onComplete?.call();
       return;
     } catch (e, s) {
       log.error(
@@ -1175,7 +1183,10 @@ ThunkAction<AppState> isBetaWhitelistedAddress() {
   };
 }
 
-ThunkAction<AppState> getUserDetails() {
+ThunkAction<AppState> getUserDetails({
+  void Function()? onComplete,
+  void Function()? onFailed,
+}) {
   return (Store<AppState> store) async {
     try {
       final vegiUser = await peeplEatsService.getUserDetails(
@@ -1209,13 +1220,41 @@ ThunkAction<AppState> getUserDetails() {
               vegiUser.name,
             ),
           );
+        onComplete?.call();
+      } else {
+        onFailed?.call();
       }
     } catch (e, s) {
       log.error(
         'ERROR - getUserDetails $e',
         stackTrace: s,
       );
+      onFailed?.call();
     }
+  };
+}
+
+ThunkAction<AppState> setUserDetails({
+  required UserDTO vegiUser,
+}) {
+  return (Store<AppState> store) async {
+    store
+      ..dispatch(
+        SetUserRoleOnVegi(
+          userRole: vegiUser.role,
+          isSuperAdmin: vegiUser.isSuperAdmin,
+        ),
+      )
+      ..dispatch(
+        SetEmail(
+          vegiUser.email ?? store.state.userState.email,
+        ),
+      )
+      ..dispatch(
+        SetDisplayName(
+          vegiUser.name,
+        ),
+      );
   };
 }
 
@@ -1481,21 +1520,29 @@ ThunkAction<AppState> identifyCall({String? wallet}) {
   };
 }
 
-void updateFirebaseCurrentUser(
-  void Function({
+Future<void> updateFirebaseCurrentUser(
+  Future<void> Function({
     required User firebaseUser,
   })
       userUpdateCallback,
 ) async {
   if (FirebaseAuth.instance.currentUser != null) {
-    userUpdateCallback(
+    await userUpdateCallback(
       firebaseUser: FirebaseAuth.instance.currentUser!,
     );
   } else {
-    log.warn(
-      'WARNING - updateFirebaseCurrentUser called when no user signed in...',
-      stackTrace: StackTrace.current,
-    );
+    final store = await reduxStore;
+    if (store.state.userState.usingTestCredentials) {
+      log.warn(
+        'WARNING EXPECTED - updateFirebaseCurrentUser called when no user signed in to firebase AS USING TEST CREDENTIALS...',
+        stackTrace: StackTrace.current,
+      );
+    } else {
+      log.warn(
+        'WARNING - updateFirebaseCurrentUser called when no user signed in to firebase...',
+        stackTrace: StackTrace.current,
+      );
+    }
   }
 }
 
@@ -1504,21 +1551,19 @@ ThunkAction<AppState> updateDisplayNameCall(String displayName) {
     try {
       // * Do this first to avoid app breaking as load mainscreen before username is set, same for email
       store.dispatch(SetDisplayName(displayName));
-
-      updateFirebaseCurrentUser(({required User firebaseUser}) async {
-        await firebaseUser.updateDisplayName(displayName);
-        final errMsg = await peeplEatsService.updateUserDetails(
-          phoneNoCountry: store.state.userState.phoneNumberNoCountry,
-          phoneCountryCode:
-              int.tryParse(store.state.userState.countryCode) ?? 44,
-          name: displayName,
+      final errMsg = await peeplEatsService.updateUserDetails(
+        phoneNoCountry: store.state.userState.phoneNumberNoCountry,
+        phoneCountryCode: int.tryParse(store.state.userState.countryCode) ?? 44,
+        name: displayName,
+      );
+      if (errMsg != null) {
+        log.warn(
+          errMsg,
+          sentry: true,
         );
-        if (errMsg != null) {
-          log.info(
-            errMsg,
-            sentry: true,
-          );
-        }
+      }
+      await updateFirebaseCurrentUser(({required User firebaseUser}) async {
+        await firebaseUser.updateDisplayName(displayName);
       });
     } catch (e, s) {
       log.error(
@@ -1556,6 +1601,11 @@ ThunkAction<AppState> setRandomUserAvatarIfNone() {
             vegiAccountId: vegiAccount.id,
           ),
         );
+      } else if (vegiAccount != null &&
+          vegiAccount.imageUrl.isNotEmpty &&
+          vegiAccount.id > 0 &&
+          store.state.userState.avatarUrl.isEmpty) {
+        store.dispatch(SetUserAvatar(vegiAccount.imageUrl));
       }
 
       store.dispatch(SetIsLoadingHttpRequest(isLoading: false));
@@ -1576,25 +1626,25 @@ ThunkAction<AppState> setRandomUserAvatar({
           isLoading: true,
         ),
       );
-      updateFirebaseCurrentUser(({required User firebaseUser}) async {
-        final imageUrl = await peeplEatsService.setRandomAvatar(
-          accountId: vegiAccountId,
-          onError: (error) async {
-            log.error(
-              'ERROR - peeplEatsService.setRandomAvatar',
-              error: error,
-              stackTrace: StackTrace.current,
-            );
-            store.dispatch(
-              SetIsLoadingHttpRequest(
-                isLoading: false,
-              ),
-            );
-          },
-        );
+      final imageUrl = await peeplEatsService.setRandomAvatar(
+        accountId: vegiAccountId,
+        onError: (error) async {
+          log.error(
+            'ERROR - peeplEatsService.setRandomAvatar',
+            error: error,
+            stackTrace: StackTrace.current,
+          );
+          store.dispatch(
+            SetIsLoadingHttpRequest(
+              isLoading: false,
+            ),
+          );
+        },
+      );
+      store.dispatch(SetUserAvatar(imageUrl));
+      await updateFirebaseCurrentUser(({required User firebaseUser}) async {
         if (imageUrl.isNotEmpty) {
           await firebaseUser.updatePhotoURL(imageUrl);
-          store.dispatch(SetUserAvatar(imageUrl));
         }
         store.dispatch(
           SetIsLoadingHttpRequest(
@@ -1675,7 +1725,7 @@ ThunkAction<AppState> updateUserAvatarCall(
         ),
       );
       try {
-        updateFirebaseCurrentUser(({required User firebaseUser}) async {
+        await updateFirebaseCurrentUser(({required User firebaseUser}) async {
           final imageUrl = await peeplEatsService.uploadImageForUserAvatar(
             image: File(file!.path),
             accountId: store.state.userState.vegiAccountId!.round(),

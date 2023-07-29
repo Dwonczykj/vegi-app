@@ -178,8 +178,11 @@ class _SetEmailOnboardingScreenState extends State<SetEmailOnboardingScreen> {
                             preload: viewmodel.signupIsInFlux,
                             disabled: viewmodel.signupIsInFlux,
                             onPressed: () async {
-                              viewmodel.setEmail(
+                              await viewmodel.setEmail(
                                 email: emailController.text,
+                                onComplete: () async {
+                                  // await onBoardStrategy.nextOnboardingPage();
+                                },
                                 onError: (errStr) {
                                   log.warn(
                                       'Unable to update email for user on vegi with error: $errStr');
@@ -192,6 +195,7 @@ class _SetEmailOnboardingScreenState extends State<SetEmailOnboardingScreen> {
                                   }
                                 },
                               );
+                              await onBoardStrategy.nextOnboardingPage();
                               // await _route(viewmodel);
                             },
                           ),
