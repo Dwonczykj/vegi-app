@@ -316,11 +316,15 @@ class _SignUpWithEmailAndPasswordScreenState
                             const SizedBox(height: 10),
                             Text(
                               errMessage,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 color: Colors.red,
                               ),
                             ),
                           ],
+                          const SizedBox(height: 40),
+                          Center(
+                            child: Text(viewmodel.signupStatusMessage),
+                          ),
                           PrimaryButton(
                             label: I10n.of(context).next_button,
                             preload: viewmodel.signupIsInFlux,

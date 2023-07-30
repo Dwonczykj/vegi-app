@@ -22,6 +22,7 @@ import 'package:vegan_liverpool/models/app_state.dart';
 import 'package:vegan_liverpool/redux/actions/onboarding_actions.dart';
 import 'package:vegan_liverpool/redux/actions/user_actions.dart';
 import 'package:vegan_liverpool/redux/viewsmodels/mainScreen.dart';
+import 'package:vegan_liverpool/redux/viewsmodels/signUpErrorDetails.dart';
 import 'package:vegan_liverpool/services.dart';
 import 'package:vegan_liverpool/utils/constants.dart';
 import 'package:vegan_liverpool/utils/log/log.dart';
@@ -158,6 +159,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         // await checked.runNavigationIfNeeded();
       },
       builder: (context, viewmodel) {
+        final errMessage = _createErrorMessage(viewmodel.signupError);
         return MyScaffold(
           automaticallyImplyLeading: false,
           resizeToAvoidBottomInset: false,
@@ -338,6 +340,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 )
                               ],
                             ),
+                          ),
+                          const SizedBox(height: 40),
+                          if (errMessage.isNotEmpty) ...[
+                            const SizedBox(height: 10),
+                            Text(
+                              errMessage,
+                              style: const TextStyle(
+                                color: Colors.red,
+                              ),
+                            ),
+                          ],
+                          Center(
+                            child: Text(viewmodel.signupStatusMessage),
                           ),
                           const SizedBox(height: 40),
                           PrimaryButton(
@@ -541,5 +556,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
       context: context,
       builder: (context) => const LogoutDialog(),
     );
+  }
+}
+
+
+String _createErrorMessage(SignUpErrorDetails? errorDetails) {
+  if (errorDetails == null || errorDetails.code == null) {
+    return '';
+  } else if (errorDetails.code! == SignUpErrCode.userNotFound) {
+    return 'No user found for that email. Please signup with phone number to add an email address.';
+  } else if (errorDetails.code! == SignUpErrCode.wrongPassword) {
+    return 'Incorrect password';
+  } else {
+    return '';
   }
 }

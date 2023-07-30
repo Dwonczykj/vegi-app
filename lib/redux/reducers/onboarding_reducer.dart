@@ -5,6 +5,7 @@ import 'package:vegan_liverpool/redux/actions/onboarding_actions.dart';
 final onboardingReducer = combineReducers<OnboardingState>([
   TypedReducer<OnboardingState, SignupLoading>(_setLoginLoading).call,
   TypedReducer<OnboardingState, SignUpFailed>(_setLoginError).call,
+  TypedReducer<OnboardingState, SignUpLoadingMessage>(_setLoginStatusMessageError).call,
   TypedReducer<OnboardingState, SetConflictingFirebaseCredentials>(
     _setConflictingFirebaseCredentials,
   ).call,
@@ -25,6 +26,15 @@ OnboardingState _setLoginError(
 ) {
   return state.copyWith(
     signupError: action.error,
+  );
+}
+
+OnboardingState _setLoginStatusMessageError(
+  OnboardingState state,
+  SignUpLoadingMessage action,
+) {
+  return state.copyWith(
+    signupStatusMessage: action.message,
   );
 }
 

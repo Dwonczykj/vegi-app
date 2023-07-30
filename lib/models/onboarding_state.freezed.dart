@@ -25,6 +25,8 @@ mixin _$OnboardingState {
   @JsonKey(ignore: true)
   SignUpErrorDetails? get signupError => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
+  String get signupStatusMessage => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
   AuthCredential? get conflictingCredentials =>
       throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -45,6 +47,7 @@ abstract class $OnboardingStateCopyWith<$Res> {
   $Res call(
       {@JsonKey(ignore: true) bool signupIsInFlux,
       @JsonKey(ignore: true) SignUpErrorDetails? signupError,
+      @JsonKey(ignore: true) String signupStatusMessage,
       @JsonKey(ignore: true) AuthCredential? conflictingCredentials,
       @JsonKey(ignore: true) String? conflictingEmail});
 
@@ -66,6 +69,7 @@ class _$OnboardingStateCopyWithImpl<$Res, $Val extends OnboardingState>
   $Res call({
     Object? signupIsInFlux = null,
     Object? signupError = freezed,
+    Object? signupStatusMessage = null,
     Object? conflictingCredentials = freezed,
     Object? conflictingEmail = freezed,
   }) {
@@ -78,6 +82,10 @@ class _$OnboardingStateCopyWithImpl<$Res, $Val extends OnboardingState>
           ? _value.signupError
           : signupError // ignore: cast_nullable_to_non_nullable
               as SignUpErrorDetails?,
+      signupStatusMessage: null == signupStatusMessage
+          ? _value.signupStatusMessage
+          : signupStatusMessage // ignore: cast_nullable_to_non_nullable
+              as String,
       conflictingCredentials: freezed == conflictingCredentials
           ? _value.conflictingCredentials
           : conflictingCredentials // ignore: cast_nullable_to_non_nullable
@@ -113,6 +121,7 @@ abstract class _$$_OnboardingStateCopyWith<$Res>
   $Res call(
       {@JsonKey(ignore: true) bool signupIsInFlux,
       @JsonKey(ignore: true) SignUpErrorDetails? signupError,
+      @JsonKey(ignore: true) String signupStatusMessage,
       @JsonKey(ignore: true) AuthCredential? conflictingCredentials,
       @JsonKey(ignore: true) String? conflictingEmail});
 
@@ -133,6 +142,7 @@ class __$$_OnboardingStateCopyWithImpl<$Res>
   $Res call({
     Object? signupIsInFlux = null,
     Object? signupError = freezed,
+    Object? signupStatusMessage = null,
     Object? conflictingCredentials = freezed,
     Object? conflictingEmail = freezed,
   }) {
@@ -145,6 +155,10 @@ class __$$_OnboardingStateCopyWithImpl<$Res>
           ? _value.signupError
           : signupError // ignore: cast_nullable_to_non_nullable
               as SignUpErrorDetails?,
+      signupStatusMessage: null == signupStatusMessage
+          ? _value.signupStatusMessage
+          : signupStatusMessage // ignore: cast_nullable_to_non_nullable
+              as String,
       conflictingCredentials: freezed == conflictingCredentials
           ? _value.conflictingCredentials
           : conflictingCredentials // ignore: cast_nullable_to_non_nullable
@@ -164,6 +178,7 @@ class _$_OnboardingState extends _OnboardingState {
   _$_OnboardingState(
       {@JsonKey(ignore: true) this.signupIsInFlux = false,
       @JsonKey(ignore: true) this.signupError = null,
+      @JsonKey(ignore: true) this.signupStatusMessage = '',
       @JsonKey(ignore: true) this.conflictingCredentials,
       @JsonKey(ignore: true) this.conflictingEmail})
       : super._();
@@ -179,6 +194,9 @@ class _$_OnboardingState extends _OnboardingState {
   final SignUpErrorDetails? signupError;
   @override
   @JsonKey(ignore: true)
+  final String signupStatusMessage;
+  @override
+  @JsonKey(ignore: true)
   final AuthCredential? conflictingCredentials;
   @override
   @JsonKey(ignore: true)
@@ -186,7 +204,7 @@ class _$_OnboardingState extends _OnboardingState {
 
   @override
   String toString() {
-    return 'OnboardingState(signupIsInFlux: $signupIsInFlux, signupError: $signupError, conflictingCredentials: $conflictingCredentials, conflictingEmail: $conflictingEmail)';
+    return 'OnboardingState(signupIsInFlux: $signupIsInFlux, signupError: $signupError, signupStatusMessage: $signupStatusMessage, conflictingCredentials: $conflictingCredentials, conflictingEmail: $conflictingEmail)';
   }
 
   @override
@@ -198,6 +216,8 @@ class _$_OnboardingState extends _OnboardingState {
                 other.signupIsInFlux == signupIsInFlux) &&
             (identical(other.signupError, signupError) ||
                 other.signupError == signupError) &&
+            (identical(other.signupStatusMessage, signupStatusMessage) ||
+                other.signupStatusMessage == signupStatusMessage) &&
             (identical(other.conflictingCredentials, conflictingCredentials) ||
                 other.conflictingCredentials == conflictingCredentials) &&
             (identical(other.conflictingEmail, conflictingEmail) ||
@@ -207,7 +227,7 @@ class _$_OnboardingState extends _OnboardingState {
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, signupIsInFlux, signupError,
-      conflictingCredentials, conflictingEmail);
+      signupStatusMessage, conflictingCredentials, conflictingEmail);
 
   @JsonKey(ignore: true)
   @override
@@ -227,6 +247,7 @@ abstract class _OnboardingState extends OnboardingState {
   factory _OnboardingState(
           {@JsonKey(ignore: true) final bool signupIsInFlux,
           @JsonKey(ignore: true) final SignUpErrorDetails? signupError,
+          @JsonKey(ignore: true) final String signupStatusMessage,
           @JsonKey(ignore: true) final AuthCredential? conflictingCredentials,
           @JsonKey(ignore: true) final String? conflictingEmail}) =
       _$_OnboardingState;
@@ -241,6 +262,9 @@ abstract class _OnboardingState extends OnboardingState {
   @override
   @JsonKey(ignore: true)
   SignUpErrorDetails? get signupError;
+  @override
+  @JsonKey(ignore: true)
+  String get signupStatusMessage;
   @override
   @JsonKey(ignore: true)
   AuthCredential? get conflictingCredentials;

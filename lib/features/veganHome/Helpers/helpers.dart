@@ -432,7 +432,10 @@ Future<UpdateComputedCartValues?> computeTotalsFromCart({
       cartTotalDiscountComputed,
     );
   } catch (e, s) {
-    log.error('ERROR - computeCartTotals $e', stackTrace: s,);
+    log.error(
+      'ERROR - computeCartTotals $e',
+      stackTrace: s,
+    );
     return null;
   }
 }
@@ -876,16 +879,24 @@ FutureOr<T>? logFunctionCall<T>({
   String? className,
   String logMessage = '',
 }) {
-  final className_ = className ??
-      StackTrace.current.getStackLine(lineNumber: 2).className ??
-      '';
-  final funcName_ = funcName ??
-      StackTrace.current.getStackLine(lineNumber: 2).functionName ??
-      '';
-  log.info(
-    '$funcName_ called in $className_ class. $logMessage',
-    stackTrace: StackTrace.current,
-    sentry: true,
-  );
+  try {
+    final className_ = className ??
+        StackTrace.current.getStackLine(lineNumber: 2)?.className ??
+        '';
+    final funcName_ = funcName ??
+        StackTrace.current.getStackLine(lineNumber: 2)?.functionName ??
+        '';
+    log.info(
+      '$funcName_ called in $className_ class. $logMessage',
+      stackTrace: StackTrace.current,
+      sentry: true,
+    );
+  } on Exception catch (error, stack) {
+    log.error(
+      'Unable to logFunctionCall as StackTrace info does not exist: $error',
+      error: error,
+      stackTrace: stack,
+    );
+  }
   return funcResult;
 }

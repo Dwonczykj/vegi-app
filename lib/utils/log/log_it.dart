@@ -6,11 +6,20 @@ import 'package:logger/logger.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:vegan_liverpool/features/veganHome/Helpers/extensions.dart';
 import 'package:vegan_liverpool/features/veganHome/Helpers/stackLine.dart';
+import 'package:vegan_liverpool/models/app_state.dart';
+import 'package:vegan_liverpool/redux/actions/app_log_actions.dart';
 import 'package:vegan_liverpool/services.dart';
+import 'package:redux/redux.dart';
 
 @lazySingleton
 class LogIt {
   LogIt(this.logger);
+
+  Store<AppState>? store;
+
+  Future<void> connectReduxLogs() async {
+    store = await reduxStore;
+  }
 
   // ~ lib/common/di/logger_di.dart:7
   final Logger logger;
@@ -37,29 +46,36 @@ class LogIt {
         : stackTraceLines;
 
     if (sentry) {
-      reduxStore.then((store) async {
-        await Sentry.configureScope(
-          (scope) => scope
-            ..setContexts('user_state', store.state.userState.toJson())
-            ..setContexts('message', message)
-            ..setContexts(
-                'filteredStack',
-                filteredStackTrace.isNotEmpty
-                    ? filteredStackTrace.pretty()
-                    : (stackTrace ?? StackTrace.current)
-                        .filterCallStack()
-                        .pretty())
-            ..setContexts('timestamp', '${DateTime.now()}'),
-        );
-        await Sentry.captureMessage(
-          '$message [${DateTime.now()}]',
-        );
-      });
+      // reduxStore.then((store) async {
+      //   await Sentry.configureScope(
+      //     (scope) => scope
+      //       ..setContexts('user_state', store.state.userState.toJson())
+      //       ..setContexts('message', message)
+      //       ..setContexts(
+      //           'filteredStack',
+      //           filteredStackTrace.isNotEmpty
+      //               ? filteredStackTrace.pretty()
+      //               : (stackTrace ?? StackTrace.current)
+      //                   .filterCallStack()
+      //                   .pretty())
+      //       ..setContexts('timestamp', '${DateTime.now()}'),
+      //   );
+      // });
+      Sentry.captureMessage(
+        '$message [${DateTime.now()}]',
+      );
     }
 
     if (kReleaseMode) {
       return;
     }
+
+    store!.dispatch(
+      AddAppLog(
+        message: message.toString(),
+        additionalInfo: {},
+      ),
+    );
 
     logger.v(message, error, stackTrace ?? StackTrace.current);
   }
@@ -86,86 +102,38 @@ class LogIt {
         : stackTraceLines;
 
     if (sentry) {
-      reduxStore.then((store) async {
-        await Sentry.configureScope(
-          (scope) => scope
-            ..setContexts('user_state', store.state.userState.toJson())
-            ..setContexts('message', message)
-            ..setContexts(
-                'filteredStack',
-                filteredStackTrace.isNotEmpty
-                    ? filteredStackTrace.pretty()
-                    : (stackTrace ?? StackTrace.current)
-                        .filterCallStack()
-                        .pretty())
-            ..setContexts('timestamp', '${DateTime.now()}'),
-        );
-        await Sentry.captureMessage(
-          '$message [${DateTime.now()}]',
-        );
-      });
+      // reduxStore.then((store) async {
+      //   await Sentry.configureScope(
+      //     (scope) => scope
+      //       ..setContexts('user_state', store.state.userState.toJson())
+      //       ..setContexts('message', message)
+      //       ..setContexts(
+      //           'filteredStack',
+      //           filteredStackTrace.isNotEmpty
+      //               ? filteredStackTrace.pretty()
+      //               : (stackTrace ?? StackTrace.current)
+      //                   .filterCallStack()
+      //                   .pretty())
+      //       ..setContexts('timestamp', '${DateTime.now()}'),
+      //   );
+      // });
+      Sentry.captureMessage(
+        '$message [${DateTime.now()}]',
+      );
     }
 
     if (kReleaseMode) {
       return;
     }
 
+    store!.dispatch(
+      AddAppLog(
+        message: message.toString(),
+        additionalInfo: {},
+      ),
+    );
+
     logger.d(message, error, stackTrace ?? StackTrace.current);
-  }
-
-  String filterStackTrace(
-    StackTrace stackTrace, {
-    RegExp? dontMatch,
-  }) {
-    final filterThisPackage = _filterStackTrace(
-      stackTrace,
-      dontMatch: dontMatch,
-    );
-
-    if (filterThisPackage.isEmpty) {
-      return '[Unable to parse stack trace]';
-    }
-
-    return filterThisPackage.join('\n\t');
-  }
-
-  List<StackLine> _filterStackTrace(
-    StackTrace stackTrace, {
-    RegExp? dontMatch,
-    int? returnLine,
-    int? removeFirstNLines,
-  }) {
-    final lines = stackTrace.toString().split('\n');
-    if (removeFirstNLines != null && lines.length < removeFirstNLines) {
-      print(
-          'Unable to remove first $removeFirstNLines most recent function call');
-      return [];
-    }
-
-    final regex_vegan_liverpool_only = RegExp(
-      r'([A-Za-z_]+)\.([A-Za-z_. <>]+)\s\((package:vegan_liverpool)\/([A-Za-z0-9_\/]+\/)?([A-Za-z0-9_]+\.dart):(\d+):(\d+)\)',
-    );
-    final filterThisPackage = lines
-        .where(
-      (e) =>
-          regex_vegan_liverpool_only.hasMatch(e.trim()) &&
-          regex_vegan_liverpool_only.firstMatch(e.trim())?.groupCount == 7 &&
-          (dontMatch == null || dontMatch.hasMatch(e.trim()) == false),
-    )
-        .map(
-      (e) {
-        final match = regex_vegan_liverpool_only.firstMatch(e.trim());
-        return StackLine(
-          className: match?.group(1),
-          functionName: match?.group(2),
-          fileName: match?.group(5),
-          lineNumber: match?.group(6),
-          characterNumber: match?.group(7),
-        );
-      },
-    ).toList();
-
-    return filterThisPackage;
   }
 
   /// Log a message at level [Level.info].
@@ -190,29 +158,99 @@ class LogIt {
         : stackTraceLines;
 
     if (sentry) {
-      reduxStore.then((store) async {
-        await Sentry.configureScope(
-          (scope) => scope
-            ..setContexts('user_state', store.state.userState.toJson())
-            ..setContexts('message', message)
-            ..setContexts(
-                'filteredStack',
-                filteredStackTrace.isNotEmpty
-                    ? filteredStackTrace.pretty()
-                    : (stackTrace ?? StackTrace.current)
-                        .filterCallStack()
-                        .pretty())
-            ..setContexts('timestamp', '${DateTime.now()}'),
-        );
-        await Sentry.captureMessage(
-          '$message [${DateTime.now()}]',
-        );
-      });
+      // reduxStore.then((store) async {
+      //   await Sentry.configureScope(
+      //     (scope) => scope
+      //       ..setContexts('user_state', store.state.userState.toJson())
+      //       ..setContexts('message', message)
+      //       ..setContexts(
+      //           'filteredStack',
+      //           filteredStackTrace.isNotEmpty
+      //               ? filteredStackTrace.pretty()
+      //               : (stackTrace ?? StackTrace.current)
+      //                   .filterCallStack()
+      //                   .pretty())
+      //       ..setContexts('timestamp', '${DateTime.now()}'),
+      //   );
+      //   await Sentry.captureMessage(
+      //     '* $message [${DateTime.now()}]',
+      //   );
+      // });
+      Sentry.captureMessage(
+        '$message [${DateTime.now()}]',
+      );
     }
 
     if (kReleaseMode) {
       return;
     }
+
+    store!.dispatch(
+      AddAppLog(
+        message: message.toString(),
+        additionalInfo: {},
+      ),
+    );
+
+    if (kDebugMode) {
+      logger.i(
+        '$message - ${filteredStackTrace.pretty(false)}',
+        error,
+      );
+    } else {
+      logger.i(message, error, stackTrace ?? StackTrace.current);
+    }
+  }
+
+  Future<void> infoAsync(
+    dynamic message, {
+    dynamic error,
+    StackTrace? stackTrace,
+    List<StackLine> stackTraceLines = const <StackLine>[],
+    bool sentry = false,
+    String sentryHint = '',
+  }) async {
+    final filteredStackTrace = stackTraceLines.isEmpty
+        ? (stackTrace ?? StackTrace.current).filterCallStack(
+            dontMatch: RegExp(
+              r'([A-Za-z_]+)\.([A-Za-z_. <>]+)\s\((package:vegan_liverpool)\/(utils\/log\/)(log\.dart):(\d+):(\d+)\)',
+            ),
+            removeLinesContaining: [
+              'log_it.dart',
+              'vegi_debug_route_observer.dart',
+            ],
+          )
+        : stackTraceLines;
+    if (sentry) {
+      // final store = await reduxStore;
+      await Sentry.captureMessage(
+        '* $message [${DateTime.now()}]',
+        // withScope: (p0) async {
+        //   await p0
+        //     ..setContexts('user_state', store.state.userState.toJson())
+        //     ..setContexts('message', message)
+        //     ..setContexts(
+        //         'filteredStack',
+        //         filteredStackTrace.isNotEmpty
+        //             ? filteredStackTrace.pretty()
+        //             : (stackTrace ?? StackTrace.current)
+        //                 .filterCallStack()
+        //                 .pretty())
+        //     ..setContexts('timestamp', '${DateTime.now()}');
+        // },
+      );
+    }
+
+    if (kReleaseMode) {
+      return;
+    }
+
+    store!.dispatch(
+      AddAppLog(
+        message: '🔵 $message',
+        additionalInfo: {},
+      ),
+    );
 
     if (kDebugMode) {
       logger.i(
@@ -245,30 +283,37 @@ class LogIt {
           )
         : stackTraceLines;
     if (sentry) {
-      reduxStore.then((store) async {
-       await Sentry.configureScope(
-          (scope) => scope
-            ..setContexts('user_state', store.state.userState.toJson())
-            ..setContexts('message', message)
-            ..setContexts(
-                'filteredStack',
-                filteredStackTrace.isNotEmpty
-                    ? filteredStackTrace.pretty()
-                    : (stackTrace ?? StackTrace.current)
-                        .filterCallStack()
-                        .pretty())
-            ..setContexts('timestamp', '${DateTime.now()}'),
-        );
-        await Sentry.captureException(
-          error,
-          stackTrace: stackTrace ?? StackTrace.current,
-        );
-      });
+      Sentry.captureException(
+        error,
+        stackTrace: stackTrace ?? StackTrace.current,
+      );
+      // reduxStore.then((store) async {
+      //   await Sentry.configureScope(
+      //     (scope) => scope
+      //       ..setContexts('user_state', store.state.userState.toJson())
+      //       ..setContexts('message', message)
+      //       ..setContexts(
+      //           'filteredStack',
+      //           filteredStackTrace.isNotEmpty
+      //               ? filteredStackTrace.pretty()
+      //               : (stackTrace ?? StackTrace.current)
+      //                   .filterCallStack()
+      //                   .pretty())
+      //       ..setContexts('timestamp', '${DateTime.now()}'),
+      //   );
+      // });
     }
 
     if (kReleaseMode) {
       return;
     }
+
+    store!.dispatch(
+      AddAppLog(
+        message: '⚠️ $message',
+        additionalInfo: {},
+      ),
+    );
 
     logger.w(message, error, stackTrace ?? StackTrace.current);
   }
@@ -294,31 +339,37 @@ class LogIt {
           )
         : stackTraceLines;
     if (sentry) {
-      reduxStore.then((store) async {
-        await Sentry.configureScope(
-          (scope) =>
-              scope
-            ..setContexts('user_state', store.state.userState.toJson())
-            ..setContexts('message', message)
-            ..setContexts(
-                'filteredStack',
-                filteredStackTrace.isNotEmpty
-                    ? filteredStackTrace.pretty()
-                    : (stackTrace ?? StackTrace.current)
-                        .filterCallStack()
-                        .pretty())
-            ..setContexts('timestamp', '${DateTime.now()}'),
-        );
-        await Sentry.captureException(
-          error,
-          stackTrace: stackTrace ?? StackTrace.current,
-        );
-      });
+      Sentry.captureException(
+        error,
+        stackTrace: stackTrace ?? StackTrace.current,
+      );
+      // reduxStore.then((store) async {
+      //   await Sentry.configureScope(
+      //     (scope) => scope
+      //       ..setContexts('user_state', store.state.userState.toJson())
+      //       ..setContexts('message', message)
+      //       ..setContexts(
+      //           'filteredStack',
+      //           filteredStackTrace.isNotEmpty
+      //               ? filteredStackTrace.pretty()
+      //               : (stackTrace ?? StackTrace.current)
+      //                   .filterCallStack()
+      //                   .pretty())
+      //       ..setContexts('timestamp', '${DateTime.now()}'),
+      //   );
+      // });
     }
 
     if (kReleaseMode) {
       return;
     }
+
+    store!.dispatch(
+      AddAppLog(
+        message: '❌ $message',
+        additionalInfo: {},
+      ),
+    );
 
     logger.e(message, error, stackTrace ?? StackTrace.current);
   }
@@ -332,6 +383,13 @@ class LogIt {
     if (kReleaseMode) {
       return;
     }
+
+    store!.dispatch(
+      AddAppLog(
+        message: '🚨 $message',
+        additionalInfo: {},
+      ),
+    );
 
     logger.wtf(message, error, stackTrace ?? StackTrace.current);
   }

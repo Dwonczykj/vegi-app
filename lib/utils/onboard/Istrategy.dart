@@ -74,6 +74,8 @@ abstract class IOnBoardStrategy {
   Future<void> nextOnboardingPage({
     PageRouteInfo<dynamic>? currentRoute,
   });
+
+  bool get onOnboarding;
 }
 
 class OnBoardStrategyFactory {

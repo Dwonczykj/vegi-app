@@ -33,6 +33,8 @@ class VerifyOnboardViewModel extends Equatable {
     required this.signupIsInFlux,
     required this.httpRequestIsInFlux,
     required this.setSignupFailed,
+    required this.signupError,
+    required this.signupStatusMessage,
     required this.setLoading,
     required this.verify,
     required this.setDisplayName,
@@ -63,6 +65,8 @@ class VerifyOnboardViewModel extends Equatable {
       vegiAuthenticationStatus: store.state.userState.vegiAuthenticationStatus,
       signupIsInFlux: store.state.onboardingState.signupIsInFlux,
       httpRequestIsInFlux: store.state.homePageState.isLoadingHttpRequest,
+      signupError: store.state.onboardingState.signupError,
+      signupStatusMessage: store.state.onboardingState.signupStatusMessage,
       setSignupFailed: (error) {
         store.dispatch(
           SignUpFailed(
@@ -124,6 +128,8 @@ class VerifyOnboardViewModel extends Equatable {
 
   final String countryCode;
   final String phoneNumber;
+  final SignUpErrorDetails? signupError;
+  final String signupStatusMessage;
   final String displayName;
   final String email;
   final String avatarUrl;
@@ -171,6 +177,8 @@ class VerifyOnboardViewModel extends Equatable {
         email,
         avatarUrl,
         biometricAuth,
+        signupError,
+        signupStatusMessage,
         firebaseAuthenticationStatus,
         signupIsInFlux,
         httpRequestIsInFlux,

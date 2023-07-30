@@ -17,6 +17,7 @@ class OnboardingState with _$OnboardingState {
   factory OnboardingState({
     @JsonKey(ignore: true) @Default(false) bool signupIsInFlux,
     @JsonKey(ignore: true) @Default(null) SignUpErrorDetails? signupError,
+    @JsonKey(ignore: true) @Default('') String signupStatusMessage,
     @JsonKey(ignore: true) AuthCredential? conflictingCredentials,
     @JsonKey(ignore: true) String? conflictingEmail,
   }) = _OnboardingState;
@@ -30,6 +31,7 @@ class OnboardingState with _$OnboardingState {
 
   factory OnboardingState.initial() => OnboardingState(
         signupIsInFlux: false,
+        signupStatusMessage: '',
       );
 }
 

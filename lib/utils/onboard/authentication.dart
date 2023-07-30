@@ -1209,7 +1209,7 @@ class Authentication {
       ..dispatch(SignupLoading(isLoading: false))
       ..dispatch(setRandomUserAvatarIfNone());
 
-    await onBoardStrategy.nextOnboardingPage();
+    await firebaseOnboarding.nextOnboardingPage();
   }
 
   Future<void> _oldFetchCreateWallet() async {

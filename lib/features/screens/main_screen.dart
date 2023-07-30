@@ -108,12 +108,13 @@ class _MainScreenState extends State<MainScreen> {
           rootRouter.replaceAll([const OnBoardScreen()]);
           return LoadingScaffold;
         }
-        if (!store.state.userState.isLoggedIn) {
+        if (!store.state.userState.isLoggedIn &&
+            !onBoardStrategy.onOnboarding) {
           log.info(
             'Push SignUpScreen() from ${rootRouter.current.name} as was not logged in',
             sentry: true,
           );
-          vm.routeToLogin();
+          authenticator.routeToLoginScreen();
           return LoadingScaffold;
         }
         if (!vm.userIsVerified && VegiConstants.showWaitingListFunnel) {
@@ -129,7 +130,7 @@ class _MainScreenState extends State<MainScreen> {
                 sentry: true,
               );
               // rootRouter.replaceAll([const SignUpScreen()]);
-              vm.routeToLogin();
+              authenticator.routeToLoginScreen();
             } else {
               setState(() {
                 _loaded = true;

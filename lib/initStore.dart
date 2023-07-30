@@ -19,7 +19,6 @@ import 'package:redux_remote_devtools/redux_remote_devtools.dart';
 
 @module
 abstract class RegisterModule {
-
   @singleton
   Future<Store<AppState>> store() async {
     final prefs = await SharedPreferences.getInstance();
@@ -36,10 +35,11 @@ abstract class RegisterModule {
       serializer: JsonSerializer<AppState>(AppState.fromJsonForPersistor),
       debug: DebugHelpers.isVerboseDebugMode,
     );
-
+    // Note: The LoggingMiddleware needs be the LAST middleware in the list.
     final List<Middleware<AppState>> wms = [
       thunkMiddleware,
       persistor.createMiddleware(),
+      LoggingMiddleware.printer().call,
     ];
 
     late final Store<AppState> store;

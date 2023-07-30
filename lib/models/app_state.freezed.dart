@@ -22,6 +22,8 @@ AppState _$AppStateFromJson(Map<String, dynamic> json) {
 mixin _$AppState {
   @AuthStateConverter()
   AuthState get authState => throw _privateConstructorUsedError;
+  @AppLogStateConverter()
+  AppLogState get appLogState => throw _privateConstructorUsedError;
   @UserStateConverter()
   UserState get userState => throw _privateConstructorUsedError;
   @CashWalletStateConverter()
@@ -50,6 +52,7 @@ abstract class $AppStateCopyWith<$Res> {
   @useResult
   $Res call(
       {@AuthStateConverter() AuthState authState,
+      @AppLogStateConverter() AppLogState appLogState,
       @UserStateConverter() UserState userState,
       @CashWalletStateConverter() CashWalletState cashWalletState,
       @HomePageStateConverter() HomePageState homePageState,
@@ -59,6 +62,7 @@ abstract class $AppStateCopyWith<$Res> {
       @OnboardingStateConverter() OnboardingState onboardingState});
 
   $AuthStateCopyWith<$Res> get authState;
+  $AppLogStateCopyWith<$Res> get appLogState;
   $UserStateCopyWith<$Res> get userState;
   $CashWalletStateCopyWith<$Res> get cashWalletState;
   $HomePageStateCopyWith<$Res> get homePageState;
@@ -82,6 +86,7 @@ class _$AppStateCopyWithImpl<$Res, $Val extends AppState>
   @override
   $Res call({
     Object? authState = null,
+    Object? appLogState = null,
     Object? userState = null,
     Object? cashWalletState = null,
     Object? homePageState = null,
@@ -95,6 +100,10 @@ class _$AppStateCopyWithImpl<$Res, $Val extends AppState>
           ? _value.authState
           : authState // ignore: cast_nullable_to_non_nullable
               as AuthState,
+      appLogState: null == appLogState
+          ? _value.appLogState
+          : appLogState // ignore: cast_nullable_to_non_nullable
+              as AppLogState,
       userState: null == userState
           ? _value.userState
           : userState // ignore: cast_nullable_to_non_nullable
@@ -131,6 +140,14 @@ class _$AppStateCopyWithImpl<$Res, $Val extends AppState>
   $AuthStateCopyWith<$Res> get authState {
     return $AuthStateCopyWith<$Res>(_value.authState, (value) {
       return _then(_value.copyWith(authState: value) as $Val);
+    });
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $AppLogStateCopyWith<$Res> get appLogState {
+    return $AppLogStateCopyWith<$Res>(_value.appLogState, (value) {
+      return _then(_value.copyWith(appLogState: value) as $Val);
     });
   }
 
@@ -200,6 +217,7 @@ abstract class _$$_AppStateCopyWith<$Res> implements $AppStateCopyWith<$Res> {
   @useResult
   $Res call(
       {@AuthStateConverter() AuthState authState,
+      @AppLogStateConverter() AppLogState appLogState,
       @UserStateConverter() UserState userState,
       @CashWalletStateConverter() CashWalletState cashWalletState,
       @HomePageStateConverter() HomePageState homePageState,
@@ -210,6 +228,8 @@ abstract class _$$_AppStateCopyWith<$Res> implements $AppStateCopyWith<$Res> {
 
   @override
   $AuthStateCopyWith<$Res> get authState;
+  @override
+  $AppLogStateCopyWith<$Res> get appLogState;
   @override
   $UserStateCopyWith<$Res> get userState;
   @override
@@ -238,6 +258,7 @@ class __$$_AppStateCopyWithImpl<$Res>
   @override
   $Res call({
     Object? authState = null,
+    Object? appLogState = null,
     Object? userState = null,
     Object? cashWalletState = null,
     Object? homePageState = null,
@@ -251,6 +272,10 @@ class __$$_AppStateCopyWithImpl<$Res>
           ? _value.authState
           : authState // ignore: cast_nullable_to_non_nullable
               as AuthState,
+      appLogState: null == appLogState
+          ? _value.appLogState
+          : appLogState // ignore: cast_nullable_to_non_nullable
+              as AppLogState,
       userState: null == userState
           ? _value.userState
           : userState // ignore: cast_nullable_to_non_nullable
@@ -289,6 +314,7 @@ class __$$_AppStateCopyWithImpl<$Res>
 class _$_AppState extends _AppState with DiagnosticableTreeMixin {
   _$_AppState(
       {@AuthStateConverter() required this.authState,
+      @AppLogStateConverter() required this.appLogState,
       @UserStateConverter() required this.userState,
       @CashWalletStateConverter() required this.cashWalletState,
       @HomePageStateConverter() required this.homePageState,
@@ -304,6 +330,9 @@ class _$_AppState extends _AppState with DiagnosticableTreeMixin {
   @override
   @AuthStateConverter()
   final AuthState authState;
+  @override
+  @AppLogStateConverter()
+  final AppLogState appLogState;
   @override
   @UserStateConverter()
   final UserState userState;
@@ -328,7 +357,7 @@ class _$_AppState extends _AppState with DiagnosticableTreeMixin {
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'AppState(authState: $authState, userState: $userState, cashWalletState: $cashWalletState, homePageState: $homePageState, cartState: $cartState, menuItemState: $menuItemState, pastOrderState: $pastOrderState, onboardingState: $onboardingState)';
+    return 'AppState(authState: $authState, appLogState: $appLogState, userState: $userState, cashWalletState: $cashWalletState, homePageState: $homePageState, cartState: $cartState, menuItemState: $menuItemState, pastOrderState: $pastOrderState, onboardingState: $onboardingState)';
   }
 
   @override
@@ -337,6 +366,7 @@ class _$_AppState extends _AppState with DiagnosticableTreeMixin {
     properties
       ..add(DiagnosticsProperty('type', 'AppState'))
       ..add(DiagnosticsProperty('authState', authState))
+      ..add(DiagnosticsProperty('appLogState', appLogState))
       ..add(DiagnosticsProperty('userState', userState))
       ..add(DiagnosticsProperty('cashWalletState', cashWalletState))
       ..add(DiagnosticsProperty('homePageState', homePageState))
@@ -353,6 +383,8 @@ class _$_AppState extends _AppState with DiagnosticableTreeMixin {
             other is _$_AppState &&
             (identical(other.authState, authState) ||
                 other.authState == authState) &&
+            (identical(other.appLogState, appLogState) ||
+                other.appLogState == appLogState) &&
             (identical(other.userState, userState) ||
                 other.userState == userState) &&
             (identical(other.cashWalletState, cashWalletState) ||
@@ -374,6 +406,7 @@ class _$_AppState extends _AppState with DiagnosticableTreeMixin {
   int get hashCode => Object.hash(
       runtimeType,
       authState,
+      appLogState,
       userState,
       cashWalletState,
       homePageState,
@@ -400,6 +433,8 @@ abstract class _AppState extends AppState {
   factory _AppState(
       {@AuthStateConverter()
           required final AuthState authState,
+      @AppLogStateConverter()
+          required final AppLogState appLogState,
       @UserStateConverter()
           required final UserState userState,
       @CashWalletStateConverter()
@@ -421,6 +456,9 @@ abstract class _AppState extends AppState {
   @override
   @AuthStateConverter()
   AuthState get authState;
+  @override
+  @AppLogStateConverter()
+  AppLogState get appLogState;
   @override
   @UserStateConverter()
   UserState get userState;

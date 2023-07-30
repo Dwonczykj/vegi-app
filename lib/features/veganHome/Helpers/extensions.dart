@@ -81,11 +81,11 @@ extension StackTraceFilter on StackTrace {
   /*
   * lineNumber is the line in the stack to get, first line would be 1
   */
-  StackLine getStackLine({required int lineNumber}) {
-    final _lineNumberBaseZero = math.max(lineNumber.abs(), 1) - 1;
+  StackLine? getStackLine({required int lineNumber}) {
+    final lineNumberBaseZero = math.max(lineNumber.abs(), 1) - 1;
     return _filterStackTrace(
       this,
-    )[_lineNumberBaseZero];
+    ).elementAtSafe(lineNumberBaseZero);
   }
 }
 
@@ -193,6 +193,14 @@ extension DateTimeHelpers on DateTime {
     return formatter.format(this);
   }
 
+  String get formatToHHmmss {
+    final DateFormat formatter = DateFormat(
+      'HH:mm:ss',
+    ); // ~ https://pub.dev/documentation/intl/latest/intl/DateFormat-class.html
+
+    return formatter.format(this);
+  }
+
   static DateTime get nowDateOnly {
     final DateFormat formatter = DateFormat('yyyy-MM-dd');
 
@@ -291,6 +299,10 @@ extension ListHelpers<T> on List<T> {
       : '[\n\t${join(',\n\t')},\n]';
 
   T? get firstOrNull => isEmpty ? null : first;
+
+  List<T> lastN(int N) => sublist(length - math.min(N.abs(), length), length);
+
+  T? elementAtSafe(int i) => length > i.abs() ? elementAt(i) : null;
 }
 
 extension MapHelpers on Map<String, dynamic> {

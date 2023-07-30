@@ -37,6 +37,7 @@ class MainScreenViewModel extends Equatable implements IAuthViewModel {
     required this.firebaseSessionToken,
     required this.signupIsInFlux,
     required this.signupError,
+    required this.signupStatusMessage,
     required this.firebaseAuthenticationStatus,
     required this.fuseAuthenticationStatus,
     required this.vegiAuthenticationStatus,
@@ -59,6 +60,7 @@ class MainScreenViewModel extends Equatable implements IAuthViewModel {
     return MainScreenViewModel(
       walletAddress:
           store.state.userState.walletAddress, //.replaceFirst('x', 'f'),
+      signupStatusMessage: store.state.onboardingState.signupStatusMessage,
       userIsVerified: store.state.userState.userIsVerified,
       hasNotOnboarded: store.state.userState.hasNotOnboarded ||
           store.state.userState.jwtToken == '',
@@ -132,8 +134,8 @@ class MainScreenViewModel extends Equatable implements IAuthViewModel {
       setUserSessionExpired: () {
         store.dispatch(SetFirebaseSessionExpired());
       },
-      routeToLogin: () {
-        authenticator.routeToLoginScreen();
+      routeToLogin: () async {
+        await authenticator.routeToLoginScreen();
       },
       setLoading: (bool isLoading) {
         store.dispatch(
@@ -204,6 +206,7 @@ class MainScreenViewModel extends Equatable implements IAuthViewModel {
   final bool appUpdateNeeded;
   final Version? appUpdateNextVersion;
   final Version? appUpdateNotificationSeenForBuildNumber;
+  final String signupStatusMessage;
 
   final void Function({
     required String email,
@@ -273,6 +276,7 @@ class MainScreenViewModel extends Equatable implements IAuthViewModel {
         firebaseSessionToken ?? '',
         signupIsInFlux,
         signupError,
+        signupStatusMessage,
         firebaseAuthenticationStatus,
         fuseAuthenticationStatus,
         vegiAuthenticationStatus,

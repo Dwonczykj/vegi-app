@@ -9,7 +9,7 @@ class VegiDebugRouteObserver extends AutoRouterObserver {
   /// Called when the current route has been pushed.
   @override
   void didPush(Route<dynamic> route, Route<dynamic>? previousRoute) {
-    log.info(
+    log.verbose(
       'New route pushed: ${route.settings.name} from ${previousRoute?.settings.name}',
       stackTrace: StackTrace.current,
     );
@@ -18,7 +18,7 @@ class VegiDebugRouteObserver extends AutoRouterObserver {
   /// Called when the current route has been popped off.
   @override
   void didPop(Route<dynamic> route, Route<dynamic>? previousRoute) {
-    log.info(
+    log.verbose(
       'New route popped: ${route.settings.name} to ${previousRoute?.settings.name}',
       stackTrace: StackTrace.current,
     );
@@ -27,7 +27,7 @@ class VegiDebugRouteObserver extends AutoRouterObserver {
   // only override to observer tab routes
   @override
   void didInitTabRoute(TabPageRoute route, TabPageRoute? previousRoute) {
-    log.info(
+    log.verbose(
       'Tab route visited: ${route.name}',
       stackTrace: StackTrace.current,
     );
@@ -35,7 +35,7 @@ class VegiDebugRouteObserver extends AutoRouterObserver {
 
   @override
   void didChangeTabRoute(TabPageRoute route, TabPageRoute previousRoute) {
-    log.info(
+    log.verbose(
       'Tab route re-visited: ${route.name}',
       stackTrace: StackTrace.current,
     );
@@ -70,8 +70,7 @@ class RootRouterLogger extends RootRouter {
 
   @override
   Future<bool> pop<T extends Object?>([T? result]) {
-    final filteredStack = log.filterStackTrace(
-      StackTrace.current,
+    final filteredStack = StackTrace.current.filterCallStack(
       dontMatch: RegExp(
           r'([A-Za-z_]+)\.([A-Za-z_. <>]+)\s\((package:vegan_liverpool)\/(common\/router\/)(vegi_debug_route_observer\.dart):(\d+):(\d+)\)'),
     );
@@ -85,8 +84,7 @@ class RootRouterLogger extends RootRouter {
   @override
   Future<T?> replace<T extends Object?>(PageRouteInfo<dynamic> route,
       {void Function(NavigationFailure)? onFailure}) {
-    final filteredStack = log.filterStackTrace(
-      StackTrace.current,
+    final filteredStack = StackTrace.current.filterCallStack(
       dontMatch: RegExp(
           r'([A-Za-z_]+)\.([A-Za-z_. <>]+)\s\((package:vegan_liverpool)\/(common\/router\/)(vegi_debug_route_observer\.dart):(\d+):(\d+)\)'),
     );
@@ -105,8 +103,7 @@ class RootRouterLogger extends RootRouter {
     List<PageRouteInfo<dynamic>> routes, {
     void Function(NavigationFailure)? onFailure,
   }) {
-    final filteredStack = log.filterStackTrace(
-      StackTrace.current,
+    final filteredStack = StackTrace.current.filterCallStack(
       dontMatch: RegExp(
           r'([A-Za-z_]+)\.([A-Za-z_. <>]+)\s\((package:vegan_liverpool)\/(common\/router\/)(vegi_debug_route_observer\.dart):(\d+):(\d+)\)'),
     );

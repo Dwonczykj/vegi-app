@@ -1,4 +1,5 @@
 import 'package:vegan_liverpool/models/app_state.dart';
+import 'package:vegan_liverpool/redux/reducers/app_log_reducer.dart';
 import 'package:vegan_liverpool/redux/reducers/auth_reducer.dart';
 import 'package:vegan_liverpool/redux/reducers/cart_state_reducers.dart';
 import 'package:vegan_liverpool/redux/reducers/cash_wallet_reducer.dart';
@@ -11,6 +12,7 @@ import 'package:vegan_liverpool/redux/reducers/user_reducer.dart';
 AppState appReducer(AppState state, dynamic action) {
   return AppState(
     authState: authReducer(state.authState, action),
+    appLogState: appLogReducer(state.appLogState, action),
     userState: userReducers(state.userState, action),
     cashWalletState: cashWalletReducers(state.cashWalletState, action),
     homePageState: homePageReducers(state.homePageState, action),

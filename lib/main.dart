@@ -66,10 +66,12 @@ void main() async {
           ..debug = (!kReleaseMode && DebugHelpers.isVerboseDebugMode)
           // ..debug = true
           ..dsn = Env.isTest ? '' : dotenv.env['SENTRY_DSN']
-          ..addIntegration(LoggingIntegration())
+          // ..addIntegration(LoggingIntegration())
           ..environment = Env.activeEnv;
       },
     );
+
+    await log.connectReduxLogs();
 
     //Pass the store to the Main App which injects it into the entire tree.
     if (Env.isDev) {

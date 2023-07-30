@@ -14,6 +14,7 @@ import 'package:vegan_liverpool/generated/l10n.dart';
 import 'package:vegan_liverpool/models/app_state.dart';
 import 'package:vegan_liverpool/redux/actions/onboarding_actions.dart';
 import 'package:vegan_liverpool/redux/viewsmodels/onboard.dart';
+import 'package:vegan_liverpool/redux/viewsmodels/signUpErrorDetails.dart';
 import 'package:vegan_liverpool/services.dart';
 import 'package:vegan_liverpool/utils/log/log.dart';
 
@@ -107,6 +108,7 @@ class _VerifyPhoneNumberState extends State<VerifyPhoneNumber> {
         //   _route(newViewModel);
         // },
         builder: (_, viewModel) {
+          final errMessage = _createErrorMessage(viewModel.signupError);
           return Column(
             children: [
               Padding(
@@ -186,6 +188,19 @@ class _VerifyPhoneNumberState extends State<VerifyPhoneNumber> {
                       ),
                     ),
                     const SizedBox(height: 30),
+                    if (errMessage.isNotEmpty) ...[
+                      const SizedBox(height: 10),
+                      Text(
+                        errMessage,
+                        style: const TextStyle(
+                          color: Colors.red,
+                        ),
+                      ),
+                    ],
+                    Center(
+                      child: Text(viewModel.signupStatusMessage),
+                    ),
+                    const SizedBox(height: 40),
                     Center(
                       child: PrimaryButton(
                         label: I10n.of(context).next_button,
@@ -259,5 +274,17 @@ class _VerifyPhoneNumberState extends State<VerifyPhoneNumber> {
         ),
       );
     }
+  }
+}
+
+String _createErrorMessage(SignUpErrorDetails? errorDetails) {
+  if (errorDetails == null || errorDetails.code == null) {
+    return '';
+  } else if (errorDetails.code! == SignUpErrCode.userNotFound) {
+    return 'No user found for that email. Please signup with phone number to add an email address.';
+  } else if (errorDetails.code! == SignUpErrCode.wrongPassword) {
+    return 'Incorrect password';
+  } else {
+    return '';
   }
 }

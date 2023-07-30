@@ -18,6 +18,7 @@ import 'package:vegan_liverpool/features/onboard/screens/username_screen.dart';
 import 'package:vegan_liverpool/features/onboard/screens/verifyEmailLink.dart';
 import 'package:vegan_liverpool/features/onboard/screens/verify_screen.dart';
 import 'package:vegan_liverpool/features/onboard/screens/verify_user_mnemonic.dart';
+import 'package:vegan_liverpool/features/screens/app_log_list_view.dart';
 import 'package:vegan_liverpool/features/screens/main_screen.dart';
 import 'package:vegan_liverpool/features/screens/on_board_screen.dart';
 import 'package:vegan_liverpool/features/screens/pincode_screen.dart';
@@ -46,6 +47,7 @@ export 'routes.gr.dart';
     AutoRoute(page: SplashScreen, initial: true),
     AutoRoute(page: ResetApp),
     AutoRoute(page: LogoutApp),
+    AutoRoute(page: AppLogListView),
     AutoRoute(page: ChooseSecurityOption),
     AutoRoute(page: VerifyEmailLinkPage),
     AutoRoute(

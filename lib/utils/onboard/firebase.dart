@@ -1447,9 +1447,15 @@ class FirebaseStrategy implements IOnBoardStrategy {
     );
   }
 
+  bool get onOnboarding =>
+      onboardingAuthRoutesOrder.contains(rootRouter.current.name);
+
   @override
   Future<void> nextOnboardingPage({PageRouteInfo? currentRoute}) async {
-    logFunctionCall<dynamic>();
+    logFunctionCall<dynamic>(
+      className: 'FirebaseStrategy',
+      funcName: 'nextOnboardingPage',
+    );
     final store = await reduxStore;
     log.info(
       'Onboarding strategy to next onboarding page from ${currentRoute?.routeName ?? rootRouter.current.name}',
