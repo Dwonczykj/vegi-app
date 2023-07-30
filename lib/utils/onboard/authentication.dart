@@ -249,9 +249,7 @@ class Authentication {
     final store = await reduxStore;
     store.dispatch(SignupLoading(isLoading: true));
     // * TEST MODE ONLY
-    if (DebugHelpers.inDebugMode &&
-        kDebugMode &&
-        verificationCode == Secrets.testFirebaseSMSVerificationCode) {
+    if (verificationCode == Secrets.testFirebaseSMSVerificationCode) {
       log.warn(
         'Faking accept test auth code from firebase authenticator.verifySMSVerificationCode call using test details',
       );

@@ -66,16 +66,16 @@ class LogIt {
       );
     }
 
-    if (kReleaseMode) {
-      return;
-    }
-
     store!.dispatch(
       AddAppLog(
         message: message.toString(),
         additionalInfo: {},
       ),
     );
+
+    if (kReleaseMode) {
+      return;
+    }
 
     logger.v(message, error, stackTrace ?? StackTrace.current);
   }
@@ -122,16 +122,16 @@ class LogIt {
       );
     }
 
-    if (kReleaseMode) {
-      return;
-    }
-
     store!.dispatch(
       AddAppLog(
         message: message.toString(),
         additionalInfo: {},
       ),
     );
+
+    if (kReleaseMode) {
+      return;
+    }
 
     logger.d(message, error, stackTrace ?? StackTrace.current);
   }
@@ -181,16 +181,16 @@ class LogIt {
       );
     }
 
-    if (kReleaseMode) {
-      return;
-    }
-
     store!.dispatch(
       AddAppLog(
-        message: message.toString(),
+        message: '🔵 $message',
         additionalInfo: {},
       ),
     );
+
+    if (kReleaseMode) {
+      return;
+    }
 
     if (kDebugMode) {
       logger.i(
@@ -241,16 +241,16 @@ class LogIt {
       );
     }
 
-    if (kReleaseMode) {
-      return;
-    }
-
     store!.dispatch(
       AddAppLog(
         message: '🔵 $message',
         additionalInfo: {},
       ),
     );
+
+    if (kReleaseMode) {
+      return;
+    }
 
     if (kDebugMode) {
       logger.i(
@@ -304,16 +304,16 @@ class LogIt {
       // });
     }
 
-    if (kReleaseMode) {
-      return;
-    }
-
     store!.dispatch(
       AddAppLog(
         message: '⚠️ $message',
         additionalInfo: {},
       ),
     );
+
+    if (kReleaseMode) {
+      return;
+    }
 
     logger.w(message, error, stackTrace ?? StackTrace.current);
   }
@@ -360,16 +360,16 @@ class LogIt {
       // });
     }
 
-    if (kReleaseMode) {
-      return;
-    }
-
     store!.dispatch(
       AddAppLog(
         message: '❌ $message',
         additionalInfo: {},
       ),
     );
+
+    if (kReleaseMode) {
+      return;
+    }
 
     logger.e(message, error, stackTrace ?? StackTrace.current);
   }
@@ -380,16 +380,16 @@ class LogIt {
     dynamic error,
     StackTrace? stackTrace,
   }) {
-    if (kReleaseMode) {
-      return;
-    }
-
     store!.dispatch(
       AddAppLog(
         message: '🚨 $message',
         additionalInfo: {},
       ),
     );
+
+    if (kReleaseMode) {
+      return;
+    }
 
     logger.wtf(message, error, stackTrace ?? StackTrace.current);
   }
