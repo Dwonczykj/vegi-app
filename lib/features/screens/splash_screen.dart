@@ -32,29 +32,28 @@ class _SplashScreenState extends State<SplashScreen> {
 
   bool isRouting = false;
 
-  void finishAppStart({
+  void finishAppStart(
+    BuildContext context, {
     required Store<AppState> store,
   }) {
+    log.info('finishAppStart() called from SplashScreen');
     final UserState userState = store.state.userState;
-    authenticator.appIsAuthenticated().then(
-      (isAuthenticated) {
-        if (isAuthenticated && userState.authType != BiometricAuth.none) {
-          rootRouter.push(const PinCodeScreen());
-          log.info(
-            'User is already authenticated so push the PinCodeScreen and check user details on vegi backend',
-            sentry: true,
-          );
-          reduxStore.then((store) {
-            store.dispatch(getUserDetails());
-          });
-        } else {
-          rootRouter.push(const OnBoardScreen());
-          log.info(
-            'Navigate to OnBoardScreen from splash_screen because user has authState: ${store.state.userState.authState} and biometricAuth: [${userState.authType}]', sentry: true,
-          );
-        }
-      },
-    );
+    if (userState.isLoggedIn && userState.authType != BiometricAuth.none) {
+      context.router.push(const PinCodeScreen());
+      log.info(
+        'User is already authenticated so push the PinCodeScreen and check user details on vegi backend',
+        sentry: true,
+      );
+      store
+          // ..dispatch(getUserDetails())
+          .dispatch(getVegiWalletAccountDetails());
+    } else {
+      context.router.push(const OnBoardScreen());
+      log.info(
+        'Navigate to OnBoardScreen from splash_screen because user has authState: ${store.state.userState.authState} and biometricAuth: [${userState.authType}]',
+        sentry: true,
+      );
+    }
   }
 
   @override
@@ -72,6 +71,7 @@ class _SplashScreenState extends State<SplashScreen> {
           widget.onLoginResult?.call(false);
         } else {
           finishAppStart(
+            context,
             store: store,
           );
         }

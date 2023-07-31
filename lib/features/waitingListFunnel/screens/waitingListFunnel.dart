@@ -134,7 +134,7 @@ class _WaitingListFunnelScreenState extends State<WaitingListFunnelScreen>
                           converter: WaitingListFunnelViewModel.fromStore,
                           onInit: (store) => store
                             ..dispatch(fetchSurveyQuestions())
-                            ..dispatch(isBetaWhitelistedAddress()),
+                            ..dispatch(getVegiWalletAccountDetails()),
                           builder: (context, vm) {
                             final welcomeScreens =
                                 getWelcomeScreens(context, vm);

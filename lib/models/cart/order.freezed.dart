@@ -39,6 +39,7 @@ mixin _$Order {
   @JsonEnum()
   @JsonKey(unknownEnumValue: OrderPaidStatus.unpaid)
   OrderPaidStatus get paymentStatus => throw _privateConstructorUsedError;
+  bool get paymentAttempted => throw _privateConstructorUsedError;
   String get paymentIntentId => throw _privateConstructorUsedError;
   String? get firebaseRegistrationToken => throw _privateConstructorUsedError;
   String? get deliveryName => throw _privateConstructorUsedError;
@@ -120,6 +121,7 @@ abstract class $OrderCopyWith<$Res> {
       @JsonEnum()
       @JsonKey(unknownEnumValue: OrderPaidStatus.unpaid)
           OrderPaidStatus paymentStatus,
+      bool paymentAttempted,
       String paymentIntentId,
       String? firebaseRegistrationToken,
       String? deliveryName,
@@ -199,6 +201,7 @@ class _$OrderCopyWithImpl<$Res, $Val extends Order>
     Object? paidDateTime = freezed,
     Object? refundDateTime = freezed,
     Object? paymentStatus = null,
+    Object? paymentAttempted = null,
     Object? paymentIntentId = null,
     Object? firebaseRegistrationToken = freezed,
     Object? deliveryName = freezed,
@@ -273,6 +276,10 @@ class _$OrderCopyWithImpl<$Res, $Val extends Order>
           ? _value.paymentStatus
           : paymentStatus // ignore: cast_nullable_to_non_nullable
               as OrderPaidStatus,
+      paymentAttempted: null == paymentAttempted
+          ? _value.paymentAttempted
+          : paymentAttempted // ignore: cast_nullable_to_non_nullable
+              as bool,
       paymentIntentId: null == paymentIntentId
           ? _value.paymentIntentId
           : paymentIntentId // ignore: cast_nullable_to_non_nullable
@@ -505,6 +512,7 @@ abstract class _$$_OrderCopyWith<$Res> implements $OrderCopyWith<$Res> {
       @JsonEnum()
       @JsonKey(unknownEnumValue: OrderPaidStatus.unpaid)
           OrderPaidStatus paymentStatus,
+      bool paymentAttempted,
       String paymentIntentId,
       String? firebaseRegistrationToken,
       String? deliveryName,
@@ -584,6 +592,7 @@ class __$$_OrderCopyWithImpl<$Res> extends _$OrderCopyWithImpl<$Res, _$_Order>
     Object? paidDateTime = freezed,
     Object? refundDateTime = freezed,
     Object? paymentStatus = null,
+    Object? paymentAttempted = null,
     Object? paymentIntentId = null,
     Object? firebaseRegistrationToken = freezed,
     Object? deliveryName = freezed,
@@ -658,6 +667,10 @@ class __$$_OrderCopyWithImpl<$Res> extends _$OrderCopyWithImpl<$Res, _$_Order>
           ? _value.paymentStatus
           : paymentStatus // ignore: cast_nullable_to_non_nullable
               as OrderPaidStatus,
+      paymentAttempted: null == paymentAttempted
+          ? _value.paymentAttempted
+          : paymentAttempted // ignore: cast_nullable_to_non_nullable
+              as bool,
       paymentIntentId: null == paymentIntentId
           ? _value.paymentIntentId
           : paymentIntentId // ignore: cast_nullable_to_non_nullable
@@ -840,6 +853,7 @@ class _$_Order extends _Order {
       @JsonEnum()
       @JsonKey(unknownEnumValue: OrderPaidStatus.unpaid)
           required this.paymentStatus,
+      this.paymentAttempted = false,
       required this.paymentIntentId,
       required this.firebaseRegistrationToken,
       required this.deliveryName,
@@ -924,6 +938,9 @@ class _$_Order extends _Order {
   @JsonEnum()
   @JsonKey(unknownEnumValue: OrderPaidStatus.unpaid)
   final OrderPaidStatus paymentStatus;
+  @override
+  @JsonKey()
+  final bool paymentAttempted;
   @override
   final String paymentIntentId;
   @override
@@ -1023,7 +1040,7 @@ class _$_Order extends _Order {
 
   @override
   String toString() {
-    return 'Order(id: $id, total: $total, subtotal: $subtotal, currency: $currency, orderedDateTime: $orderedDateTime, paidDateTime: $paidDateTime, refundDateTime: $refundDateTime, paymentStatus: $paymentStatus, paymentIntentId: $paymentIntentId, firebaseRegistrationToken: $firebaseRegistrationToken, deliveryName: $deliveryName, deliveryEmail: $deliveryEmail, deliveryPhoneNumber: $deliveryPhoneNumber, deliveryAddressLineOne: $deliveryAddressLineOne, deliveryAddressLineTwo: $deliveryAddressLineTwo, deliveryAddressCity: $deliveryAddressCity, deliveryAddressCountry: $deliveryAddressCountry, deliveryAddressCounty: $deliveryAddressCounty, deliveryAddressPostCode: $deliveryAddressPostCode, deliveryAddressLatitude: $deliveryAddressLatitude, deliveryAddressLongitude: $deliveryAddressLongitude, deliveryAddressInstructions: $deliveryAddressInstructions, deliveryId: $deliveryId, deliveryPartnerAccepted: $deliveryPartnerAccepted, deliveryPartnerConfirmed: $deliveryPartnerConfirmed, customerWalletAddress: $customerWalletAddress, publicId: $publicId, restaurantAcceptanceStatus: $restaurantAcceptanceStatus, orderAcceptanceStatus: $orderAcceptanceStatus, tipAmount: $tipAmount, rewardsIssued: $rewardsIssued, sentToDeliveryPartner: $sentToDeliveryPartner, completedFlag: $completedFlag, completedOrderFeedback: $completedOrderFeedback, deliveryPunctuality: $deliveryPunctuality, orderCondition: $orderCondition, fulfilmentSlotFrom: $fulfilmentSlotFrom, fulfilmentSlotTo: $fulfilmentSlotTo, fulfilmentMethod: $fulfilmentMethod, vendor: $vendor, deliveryPartner: $deliveryPartner, discounts: $discounts, items: $items, parentOrder: $parentOrder, unfulfilledItems: $unfulfilledItems, transactions: $transactions, fulfilmentCharge: $fulfilmentCharge, platformFee: $platformFee)';
+    return 'Order(id: $id, total: $total, subtotal: $subtotal, currency: $currency, orderedDateTime: $orderedDateTime, paidDateTime: $paidDateTime, refundDateTime: $refundDateTime, paymentStatus: $paymentStatus, paymentAttempted: $paymentAttempted, paymentIntentId: $paymentIntentId, firebaseRegistrationToken: $firebaseRegistrationToken, deliveryName: $deliveryName, deliveryEmail: $deliveryEmail, deliveryPhoneNumber: $deliveryPhoneNumber, deliveryAddressLineOne: $deliveryAddressLineOne, deliveryAddressLineTwo: $deliveryAddressLineTwo, deliveryAddressCity: $deliveryAddressCity, deliveryAddressCountry: $deliveryAddressCountry, deliveryAddressCounty: $deliveryAddressCounty, deliveryAddressPostCode: $deliveryAddressPostCode, deliveryAddressLatitude: $deliveryAddressLatitude, deliveryAddressLongitude: $deliveryAddressLongitude, deliveryAddressInstructions: $deliveryAddressInstructions, deliveryId: $deliveryId, deliveryPartnerAccepted: $deliveryPartnerAccepted, deliveryPartnerConfirmed: $deliveryPartnerConfirmed, customerWalletAddress: $customerWalletAddress, publicId: $publicId, restaurantAcceptanceStatus: $restaurantAcceptanceStatus, orderAcceptanceStatus: $orderAcceptanceStatus, tipAmount: $tipAmount, rewardsIssued: $rewardsIssued, sentToDeliveryPartner: $sentToDeliveryPartner, completedFlag: $completedFlag, completedOrderFeedback: $completedOrderFeedback, deliveryPunctuality: $deliveryPunctuality, orderCondition: $orderCondition, fulfilmentSlotFrom: $fulfilmentSlotFrom, fulfilmentSlotTo: $fulfilmentSlotTo, fulfilmentMethod: $fulfilmentMethod, vendor: $vendor, deliveryPartner: $deliveryPartner, discounts: $discounts, items: $items, parentOrder: $parentOrder, unfulfilledItems: $unfulfilledItems, transactions: $transactions, fulfilmentCharge: $fulfilmentCharge, platformFee: $platformFee)';
   }
 
   @override
@@ -1045,6 +1062,8 @@ class _$_Order extends _Order {
                 other.refundDateTime == refundDateTime) &&
             (identical(other.paymentStatus, paymentStatus) ||
                 other.paymentStatus == paymentStatus) &&
+            (identical(other.paymentAttempted, paymentAttempted) ||
+                other.paymentAttempted == paymentAttempted) &&
             (identical(other.paymentIntentId, paymentIntentId) ||
                 other.paymentIntentId == paymentIntentId) &&
             (identical(other.firebaseRegistrationToken, firebaseRegistrationToken) ||
@@ -1123,6 +1142,7 @@ class _$_Order extends _Order {
         paidDateTime,
         refundDateTime,
         paymentStatus,
+        paymentAttempted,
         paymentIntentId,
         firebaseRegistrationToken,
         deliveryName,
@@ -1194,6 +1214,7 @@ abstract class _Order extends Order {
       @JsonEnum()
       @JsonKey(unknownEnumValue: OrderPaidStatus.unpaid)
           required final OrderPaidStatus paymentStatus,
+      final bool paymentAttempted,
       required final String paymentIntentId,
       required final String? firebaseRegistrationToken,
       required final String? deliveryName,
@@ -1276,6 +1297,8 @@ abstract class _Order extends Order {
   @JsonEnum()
   @JsonKey(unknownEnumValue: OrderPaidStatus.unpaid)
   OrderPaidStatus get paymentStatus;
+  @override
+  bool get paymentAttempted;
   @override
   String get paymentIntentId;
   @override

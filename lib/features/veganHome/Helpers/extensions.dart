@@ -26,7 +26,7 @@ String filterStackTrace(
 
 List<StackLine> _filterStackTrace(
   StackTrace stackTrace, {
-  RegExp? dontMatch,
+  Pattern? dontMatch,
   List<Pattern> removeLinesContaining = const <String>[],
   int? removeFirstNLines,
 }) {
@@ -45,7 +45,9 @@ List<StackLine> _filterStackTrace(
     (e) =>
         regex_vegan_liverpool_only.hasMatch(e.trim()) &&
         regex_vegan_liverpool_only.firstMatch(e.trim())?.groupCount == 7 &&
-        (dontMatch == null || dontMatch.hasMatch(e.trim()) == false) &&
+        (dontMatch == null ||
+            (dontMatch is RegExp && dontMatch.hasMatch(e.trim()) == false) ||
+            (dontMatch is String && (e.trim().contains(dontMatch)) == false)) &&
         !removeLinesContaining.any((element) => e.contains(element)),
   )
       .map(
@@ -57,6 +59,7 @@ List<StackLine> _filterStackTrace(
         fileName: match?.group(5),
         lineNumber: match?.group(6),
         characterNumber: match?.group(7),
+        stackTraceString: e,
       );
     },
   ).toList();
@@ -67,7 +70,7 @@ List<StackLine> _filterStackTrace(
 extension StackTraceFilter on StackTrace {
   List<StackLine> filterCallStack({
     int? ignoreLastNCalls,
-    RegExp? dontMatch,
+    Pattern? dontMatch,
     List<Pattern> removeLinesContaining = const <String>[],
   }) {
     return _filterStackTrace(
@@ -75,6 +78,20 @@ extension StackTraceFilter on StackTrace {
       removeFirstNLines: ignoreLastNCalls,
       removeLinesContaining: removeLinesContaining,
       dontMatch: dontMatch,
+    );
+  }
+
+  StackTrace ignore(Pattern ignoreLinesContaining) {
+    return StackTraceFilter.fromStackLines(
+        filterCallStack(dontMatch: ignoreLinesContaining),);
+  }
+
+  static StackTrace fromStackLines(List<StackLine> stackLines) {
+    if (stackLines.isEmpty) {
+      return StackTrace.empty;
+    }
+    return StackTrace.fromString(
+      stackLines.map((s) => s.stackTraceString).join('\n'),
     );
   }
 

@@ -36,8 +36,8 @@ class CreateOrderForInStorePayment extends CreateOrderForFulfilment
   factory CreateOrderForInStorePayment.fromStore(Store<AppState> store) {
     return CreateOrderForInStorePayment(
       items: store.state.cartState.cartItems,
-      total: store.state.cartState.cartTotal.inGBPxValue,
-      currency: store.state.cartState.cartCurrency,
+      total: store.state.cartState.cartTotal.value,
+      currency: store.state.cartState.cartTotal.currency,
       tipAmount: store.state.cartState.selectedTipAmount.inGBPxValue.round(),
       marketingOptIn: false,
       discountCodes: store.state.cartState.discountCode.isEmpty
@@ -45,12 +45,12 @@ class CreateOrderForInStorePayment extends CreateOrderForFulfilment
               .map((voucher) => voucher.code)
               .toList()
           : [
-        store.state.cartState
-            .discountCode, // TODO: Apply discount vouchers here somehow?
-        ...store.state.cartState.appliedVouchers
-            .map((voucher) => voucher.code)
-            .toList(),
-      ],
+              store.state.cartState
+                  .discountCode, // TODO: Apply discount vouchers here somehow?
+              ...store.state.cartState.appliedVouchers
+                  .map((voucher) => voucher.code)
+                  .toList(),
+            ],
       vendor: store.state.cartState.restaurantID,
       walletAddress: store.state.userState.walletAddress,
       publicId: '',

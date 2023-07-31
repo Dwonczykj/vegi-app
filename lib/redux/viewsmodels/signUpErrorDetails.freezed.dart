@@ -22,6 +22,8 @@ SignUpErrorDetails _$SignUpErrorDetailsFromJson(Map<String, dynamic> json) {
 mixin _$SignUpErrorDetails {
   String get title => throw _privateConstructorUsedError;
   String get message => throw _privateConstructorUsedError;
+  @JsonKey(fromJson: stackTraceFromString, toJson: stackTraceToString)
+  StackTrace? get stackTrace => throw _privateConstructorUsedError;
   SignUpErrCode? get code => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -36,7 +38,12 @@ abstract class $SignUpErrorDetailsCopyWith<$Res> {
           SignUpErrorDetails value, $Res Function(SignUpErrorDetails) then) =
       _$SignUpErrorDetailsCopyWithImpl<$Res, SignUpErrorDetails>;
   @useResult
-  $Res call({String title, String message, SignUpErrCode? code});
+  $Res call(
+      {String title,
+      String message,
+      @JsonKey(fromJson: stackTraceFromString, toJson: stackTraceToString)
+          StackTrace? stackTrace,
+      SignUpErrCode? code});
 }
 
 /// @nodoc
@@ -54,6 +61,7 @@ class _$SignUpErrorDetailsCopyWithImpl<$Res, $Val extends SignUpErrorDetails>
   $Res call({
     Object? title = null,
     Object? message = null,
+    Object? stackTrace = freezed,
     Object? code = freezed,
   }) {
     return _then(_value.copyWith(
@@ -65,6 +73,10 @@ class _$SignUpErrorDetailsCopyWithImpl<$Res, $Val extends SignUpErrorDetails>
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
               as String,
+      stackTrace: freezed == stackTrace
+          ? _value.stackTrace
+          : stackTrace // ignore: cast_nullable_to_non_nullable
+              as StackTrace?,
       code: freezed == code
           ? _value.code
           : code // ignore: cast_nullable_to_non_nullable
@@ -81,7 +93,12 @@ abstract class _$$_SignUpErrorDetailsCopyWith<$Res>
       __$$_SignUpErrorDetailsCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String title, String message, SignUpErrCode? code});
+  $Res call(
+      {String title,
+      String message,
+      @JsonKey(fromJson: stackTraceFromString, toJson: stackTraceToString)
+          StackTrace? stackTrace,
+      SignUpErrCode? code});
 }
 
 /// @nodoc
@@ -97,6 +114,7 @@ class __$$_SignUpErrorDetailsCopyWithImpl<$Res>
   $Res call({
     Object? title = null,
     Object? message = null,
+    Object? stackTrace = freezed,
     Object? code = freezed,
   }) {
     return _then(_$_SignUpErrorDetails(
@@ -108,6 +126,10 @@ class __$$_SignUpErrorDetailsCopyWithImpl<$Res>
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
               as String,
+      stackTrace: freezed == stackTrace
+          ? _value.stackTrace
+          : stackTrace // ignore: cast_nullable_to_non_nullable
+              as StackTrace?,
       code: freezed == code
           ? _value.code
           : code // ignore: cast_nullable_to_non_nullable
@@ -120,7 +142,12 @@ class __$$_SignUpErrorDetailsCopyWithImpl<$Res>
 
 @JsonSerializable()
 class _$_SignUpErrorDetails extends _SignUpErrorDetails {
-  _$_SignUpErrorDetails({required this.title, required this.message, this.code})
+  _$_SignUpErrorDetails(
+      {required this.title,
+      required this.message,
+      @JsonKey(fromJson: stackTraceFromString, toJson: stackTraceToString)
+          this.stackTrace,
+      this.code})
       : super._();
 
   factory _$_SignUpErrorDetails.fromJson(Map<String, dynamic> json) =>
@@ -130,6 +157,9 @@ class _$_SignUpErrorDetails extends _SignUpErrorDetails {
   final String title;
   @override
   final String message;
+  @override
+  @JsonKey(fromJson: stackTraceFromString, toJson: stackTraceToString)
+  final StackTrace? stackTrace;
   @override
   final SignUpErrCode? code;
 
@@ -152,6 +182,8 @@ abstract class _SignUpErrorDetails extends SignUpErrorDetails {
   factory _SignUpErrorDetails(
       {required final String title,
       required final String message,
+      @JsonKey(fromJson: stackTraceFromString, toJson: stackTraceToString)
+          final StackTrace? stackTrace,
       final SignUpErrCode? code}) = _$_SignUpErrorDetails;
   _SignUpErrorDetails._() : super._();
 
@@ -162,6 +194,9 @@ abstract class _SignUpErrorDetails extends SignUpErrorDetails {
   String get title;
   @override
   String get message;
+  @override
+  @JsonKey(fromJson: stackTraceFromString, toJson: stackTraceToString)
+  StackTrace? get stackTrace;
   @override
   SignUpErrCode? get code;
   @override

@@ -271,8 +271,8 @@ UserState _setUserAuthenticationStatus(
   SetUserAuthenticationStatus action,
 ) {
   log.info(
-    'AUTH CHG: (${state.authStateEmj}) + (${action.updates()}) -> '
-    '🔥->${authEnumToEmoji(action.firebaseStatus ?? state.firebaseAuthenticationStatus)}, 🥑->${authEnumToEmoji(action.vegiStatus ?? state.vegiAuthenticationStatus)}, 👾->${authEnumToEmoji(action.fuseStatus ?? state.fuseAuthenticationStatus)}',
+    'AUTH CHG: (${state.authStateEmj}) + (${action.updates()}) => '
+    '(🔥->${authEnumToEmoji(action.firebaseStatus ?? state.firebaseAuthenticationStatus)}, 🥑->${authEnumToEmoji(action.vegiStatus ?? state.vegiAuthenticationStatus)}, 👾->${authEnumToEmoji(action.fuseStatus ?? state.fuseAuthenticationStatus)})',
     sentry: true,
     stackTrace: StackTrace.current,
   );

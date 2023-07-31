@@ -49,7 +49,7 @@ class _CreateWalletButtonsState extends State<CreateWalletButtons> {
       onInit: (store) {
         store.dispatch(fetchSurveyQuestions());
         if (store.state.userState.accountDetailsExist) {
-          store.dispatch(isBetaWhitelistedAddress());
+          store.dispatch(getVegiWalletAccountDetails());
           // ..dispatch(ReLogin());
         }
       },

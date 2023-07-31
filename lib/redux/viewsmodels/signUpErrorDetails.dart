@@ -14,12 +14,18 @@ List<SignUpErrorDetails> fromJsonSignUpErrorDetailsList(dynamic json) =>
 SignUpErrorDetails? fromJsonSignUpErrorDetails(dynamic json) =>
     fromSailsObjectJson<SignUpErrorDetails>(SignUpErrorDetails.fromJson)(json);
 
+StackTrace? stackTraceFromString(dynamic json) =>
+    StackTrace.fromString(json.toString());
+String stackTraceToString(StackTrace? current) => current?.toString() ?? '';
+
 @Freezed()
 class SignUpErrorDetails extends Equatable with _$SignUpErrorDetails {
   @JsonSerializable()
   factory SignUpErrorDetails({
     required String title,
     required String message,
+    @JsonKey(fromJson: stackTraceFromString, toJson: stackTraceToString)
+        StackTrace? stackTrace,
     SignUpErrCode? code,
   }) = _SignUpErrorDetails;
 

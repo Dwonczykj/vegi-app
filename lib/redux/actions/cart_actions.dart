@@ -1508,13 +1508,14 @@ ThunkAction<AppState> startOrderCreationProcess({
   return (Store<AppState> store) async {
     try {
       final cartState = store.state.cartState;
-      OrderCreationProcessStatus _sentryUpdatePipe(
+      OrderCreationProcessStatus sentryUpdatePipe(
         OrderCreationProcessStatus status,
       ) {
         final message =
             'OrderCreationProcessStatus changed to "${status.name}"';
-        Sentry.captureMessage(
+        log.info(
           message,
+          sentry: true,
         );
         return status;
       }
@@ -1522,7 +1523,7 @@ ThunkAction<AppState> startOrderCreationProcess({
       if (store.state.homePageState.isLoadingHttpRequest) {
         store.dispatch(
           OrderCreationProcessStatusUpdate(
-            status: _sentryUpdatePipe(
+            status: sentryUpdatePipe(
               OrderCreationProcessStatus.orderAlreadyBeingCreated,
             ),
           ),
@@ -1532,7 +1533,7 @@ ThunkAction<AppState> startOrderCreationProcess({
       if (cartState.selectedTimeSlot == null) {
         store.dispatch(
           OrderCreationProcessStatusUpdate(
-            status: _sentryUpdatePipe(
+            status: sentryUpdatePipe(
               OrderCreationProcessStatus.needToSelectATimeSlot,
             ),
           ),
@@ -1542,7 +1543,7 @@ ThunkAction<AppState> startOrderCreationProcess({
       if (cartState.selectedDeliveryAddress == null && cartState.isDelivery) {
         store.dispatch(
           OrderCreationProcessStatusUpdate(
-            status: _sentryUpdatePipe(
+            status: sentryUpdatePipe(
               OrderCreationProcessStatus.needToSelectADeliveryAddress,
             ),
           ),
@@ -1553,7 +1554,7 @@ ThunkAction<AppState> startOrderCreationProcess({
           cartState.cartSubTotal.inGBPxValue) {
         store.dispatch(
           OrderCreationProcessStatusUpdate(
-            status: _sentryUpdatePipe(
+            status: sentryUpdatePipe(
               OrderCreationProcessStatus.orderIsBelowVendorMinimumOrder,
             ),
           ),
@@ -1618,9 +1619,8 @@ ThunkAction<AppState> prepareOrderObjectForDelivery({
         ),
       );
     } catch (e, s) {
-      log.error('ERROR - prepareOrderObjectForDelivery $e');
-      await Sentry.captureException(
-        e,
+      log.error(
+        'ERROR - prepareOrderObjectForDelivery $e',
         stackTrace: s,
       );
     }
@@ -1888,7 +1888,6 @@ ThunkAction<AppState> sendOrderObject<T extends CreateOrderForFulfilment>({
 
 ThunkAction<AppState> cancelOrder({
   required int orderId,
-  required int accountId,
   required String senderWalletAddress,
 }) {
   return (Store<AppState> store) async {
@@ -1896,16 +1895,11 @@ ThunkAction<AppState> cancelOrder({
       store.dispatch(CancelOrder(orderId: orderId));
       final cancelledOrderSuccess = await peeplEatsService.cancelOrder(
         orderId: orderId,
-        accountId: accountId,
         senderWalletAddress: senderWalletAddress,
       );
     } catch (e, s) {
       log.error(
         'ERROR - cancelOrder $e',
-        stackTrace: s,
-      );
-      await Sentry.captureException(
-        e,
         stackTrace: s,
       );
     }
@@ -1927,10 +1921,7 @@ ThunkAction<AppState> startPaymentProcess({
         if (store.state.userState.vegiAccountId == null) {
           final e = 'vegi AccountId not set on state... Cannot start payment';
           log.error(e, stackTrace: StackTrace.current);
-          await Sentry.captureException(
-            Exception(e),
-            stackTrace: StackTrace.current, // from catch (e, s)
-          );
+
           store
             ..dispatch(SetPaymentButtonFlag(false))
             ..dispatch(
@@ -1941,7 +1932,6 @@ ThunkAction<AppState> startPaymentProcess({
             ..dispatch(
               cancelOrder(
                 orderId: int.parse(store.state.cartState.orderID),
-                accountId: store.state.userState.vegiAccountId!,
                 senderWalletAddress: store.state.userState.walletAddress,
               ),
             );
@@ -1967,7 +1957,6 @@ ThunkAction<AppState> startPaymentProcess({
             ..dispatch(
               cancelOrder(
                 orderId: int.parse(store.state.cartState.orderID),
-                accountId: store.state.userState.vegiAccountId!,
                 senderWalletAddress: store.state.userState.walletAddress,
               ),
             );
@@ -1987,7 +1976,6 @@ ThunkAction<AppState> startPaymentProcess({
             ..dispatch(
               cancelOrder(
                 orderId: int.parse(store.state.cartState.orderID),
-                accountId: store.state.userState.vegiAccountId!,
                 senderWalletAddress: store.state.userState.walletAddress,
               ),
             );
@@ -2056,7 +2044,6 @@ ThunkAction<AppState> startPaymentProcess({
             ..dispatch(
               cancelOrder(
                 orderId: int.parse(store.state.cartState.orderID),
-                accountId: store.state.userState.vegiAccountId!,
                 senderWalletAddress: store.state.userState.walletAddress,
               ),
             );
@@ -2082,7 +2069,6 @@ ThunkAction<AppState> startPaymentProcess({
             ..dispatch(
               cancelOrder(
                 orderId: int.parse(store.state.cartState.orderID),
-                accountId: store.state.userState.vegiAccountId!,
                 senderWalletAddress: store.state.userState.walletAddress,
               ),
             );
@@ -2114,7 +2100,6 @@ ThunkAction<AppState> startPaymentProcess({
                 ..dispatch(
                   cancelOrder(
                     orderId: int.parse(store.state.cartState.orderID),
-                    accountId: store.state.userState.vegiAccountId!,
                     senderWalletAddress: store.state.userState.walletAddress,
                   ),
                 )
@@ -2176,7 +2161,6 @@ ThunkAction<AppState> startPaymentProcess({
             ..dispatch(
               cancelOrder(
                 orderId: int.parse(store.state.cartState.orderID),
-                accountId: store.state.userState.vegiAccountId!,
                 senderWalletAddress: store.state.userState.walletAddress,
               ),
             );
@@ -2195,7 +2179,6 @@ ThunkAction<AppState> startPaymentProcess({
             ..dispatch(
               cancelOrder(
                 orderId: int.parse(store.state.cartState.orderID),
-                accountId: store.state.userState.vegiAccountId!,
                 senderWalletAddress: store.state.userState.walletAddress,
               ),
             );
@@ -2228,7 +2211,6 @@ ThunkAction<AppState> startPaymentProcess({
                 ..dispatch(
                   cancelOrder(
                     orderId: int.parse(store.state.cartState.orderID),
-                    accountId: store.state.userState.vegiAccountId!,
                     senderWalletAddress: store.state.userState.walletAddress,
                   ),
                 )
@@ -2285,7 +2267,6 @@ ThunkAction<AppState> startPaymentProcess({
             ..dispatch(
               cancelOrder(
                 orderId: int.parse(store.state.cartState.orderID),
-                accountId: store.state.userState.vegiAccountId!,
                 senderWalletAddress: store.state.userState.walletAddress,
               ),
             );
@@ -2304,7 +2285,6 @@ ThunkAction<AppState> startPaymentProcess({
             ..dispatch(
               cancelOrder(
                 orderId: int.parse(store.state.cartState.orderID),
-                accountId: store.state.userState.vegiAccountId!,
                 senderWalletAddress: store.state.userState.walletAddress,
               ),
             );
@@ -2332,7 +2312,6 @@ ThunkAction<AppState> startPaymentProcess({
                 ..dispatch(
                   cancelOrder(
                     orderId: int.parse(store.state.cartState.orderID),
-                    accountId: store.state.userState.vegiAccountId!,
                     senderWalletAddress: store.state.userState.walletAddress,
                   ),
                 );
@@ -2389,7 +2368,6 @@ ThunkAction<AppState> startPaymentProcess({
         ..dispatch(
           cancelOrder(
             orderId: int.parse(store.state.cartState.orderID),
-            accountId: store.state.userState.vegiAccountId!,
             senderWalletAddress: store.state.userState.walletAddress,
           ),
         );

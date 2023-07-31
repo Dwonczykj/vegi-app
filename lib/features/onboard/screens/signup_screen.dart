@@ -138,7 +138,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         //   routerContext: context,
         // );
         if (newViewModel.signupError != previousViewModel?.signupError &&
-            newViewModel.signupError != null) {
+            newViewModel.signupError != null && newViewModel.signupError?.message != null) {
           await showErrorSnack(
             title: newViewModel.signupError!.title,
             message: newViewModel.signupError!.message,
@@ -150,13 +150,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
               bottom: 120,
             ),
           );
-          log.error(newViewModel.signupError!.toString());
-          await Sentry.captureException(
-            newViewModel.signupError!.toString(),
-            stackTrace: StackTrace.current, // from catch (e, s)
-          );
+          log.error(newViewModel.signupError!.toString(), stackTrace: StackTrace.current,);
         }
-        // await checked.runNavigationIfNeeded();
       },
       builder: (context, viewmodel) {
         final errMessage = _createErrorMessage(viewmodel.signupError);

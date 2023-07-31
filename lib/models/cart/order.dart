@@ -92,6 +92,8 @@ class Order with _$Order {
       unknownEnumValue: OrderPaidStatus.unpaid,
     )
         required OrderPaidStatus paymentStatus,
+    @Default(false)
+        bool paymentAttempted,
     required String paymentIntentId,
     required String? firebaseRegistrationToken,
     required String? deliveryName,
@@ -100,8 +102,10 @@ class Order with _$Order {
     required String deliveryAddressLineOne,
     required String? deliveryAddressLineTwo,
     required String deliveryAddressCity,
-    @Default('GB') String deliveryAddressCountry,
-    @Default('') String deliveryAddressCounty,
+    @Default('GB')
+        String deliveryAddressCountry,
+    @Default('')
+        String deliveryAddressCounty,
     required String deliveryAddressPostCode,
     required double? deliveryAddressLatitude,
     required double? deliveryAddressLongitude,

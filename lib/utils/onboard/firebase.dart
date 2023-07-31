@@ -919,7 +919,7 @@ class FirebaseStrategy implements IOnBoardStrategy {
         }
         if (store.state.userState.isLoggedIn &&
             store.state.userState.vegiAccountId != null) {
-          store.dispatch(isBetaWhitelistedAddress());
+          store.dispatch(getVegiWalletAccountDetails());
         }
         unawaited(
           Analytics.track(

@@ -1016,7 +1016,7 @@ class Authentication {
             error: null,
           ),
         );
-        store.dispatch(isBetaWhitelistedAddress());
+        store.dispatch(getVegiWalletAccountDetails());
         unawaited(
           Analytics.track(
             eventName: AnalyticsEvents.loginWithPhone,

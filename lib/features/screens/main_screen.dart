@@ -44,7 +44,7 @@ class _MainScreenState extends State<MainScreen> {
 
   Future<void> _handleFuseAuthenticationSucceeded() async {
     (await reduxStore)
-      ..dispatch(isBetaWhitelistedAddress())
+      ..dispatch(getVegiWalletAccountDetails())
       ..dispatch(
         identifyCall(
           wallet: (await reduxStore).state.userState.walletAddress,

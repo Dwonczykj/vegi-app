@@ -59,7 +59,7 @@ class OrderConfirmedViewModel extends Equatable {
       log.error(e, stackTrace: s);
       log.error('Issue initialising OrderConfirmedViewModel: $e');
     }
-    if (order != null && order.transactions.length < 1) {
+    if (order != null && order.transactions.isEmpty) {
       order.transactions.add(
         TransactionItem(
           timestamp: order.orderedDateTime,

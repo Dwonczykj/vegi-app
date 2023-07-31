@@ -18,6 +18,7 @@ _$_Order _$$_OrderFromJson(Map<String, dynamic> json) => _$_Order(
       paymentStatus: $enumDecode(
           _$OrderPaidStatusEnumMap, json['paymentStatus'],
           unknownValue: OrderPaidStatus.unpaid),
+      paymentAttempted: json['paymentAttempted'] as bool? ?? false,
       paymentIntentId: json['paymentIntentId'] as String,
       firebaseRegistrationToken: json['firebaseRegistrationToken'] as String?,
       deliveryName: json['deliveryName'] as String?,
@@ -85,6 +86,7 @@ Map<String, dynamic> _$$_OrderToJson(_$_Order instance) => <String, dynamic>{
       'paidDateTime': timeStampToJsonIntNullable(instance.paidDateTime),
       'refundDateTime': timeStampToJsonIntNullable(instance.refundDateTime),
       'paymentStatus': _$OrderPaidStatusEnumMap[instance.paymentStatus]!,
+      'paymentAttempted': instance.paymentAttempted,
       'paymentIntentId': instance.paymentIntentId,
       'firebaseRegistrationToken': instance.firebaseRegistrationToken,
       'deliveryName': instance.deliveryName,

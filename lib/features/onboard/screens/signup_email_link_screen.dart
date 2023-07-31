@@ -50,7 +50,7 @@ class _SignUpEmailLinkScreenState extends State<SignUpEmailLinkScreen> {
             (reauthSucceeded) {
               if (reauthSucceeded &&
                   store.state.userState.walletAddress.isNotEmpty) {
-                store.dispatch(isBetaWhitelistedAddress());
+                store.dispatch(getVegiWalletAccountDetails());
               }
             },
           );

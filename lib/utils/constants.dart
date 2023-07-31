@@ -139,6 +139,10 @@ class Secrets {
   static String get testPhoneNumberCountryCode => dotenv.env['testPhoneNumberCountryCode']!;
   static String get testFirebaseSMSVerificationCode => dotenv.env['testFirebaseSMSVerificationCode']!;
   static String get testFirebaseSessionToken =>  dotenv.env['testFirebaseSessionToken']!;
+
+  static String get VEGI_SERVICE_API_KEY =>  dotenv.env['VEGI_SERVICE_API_KEY']!;
+  static String get VEGI_SERVICE_API_SECRET =>  dotenv.env['VEGI_SERVICE_API_SECRET']!;
+
 }
 
 const EMAIL_NOT_PROVIDED = 'email@notprovided.com';

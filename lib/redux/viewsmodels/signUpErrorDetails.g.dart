@@ -11,6 +11,7 @@ _$_SignUpErrorDetails _$$_SignUpErrorDetailsFromJson(
     _$_SignUpErrorDetails(
       title: json['title'] as String,
       message: json['message'] as String,
+      stackTrace: stackTraceFromString(json['stackTrace']),
       code: $enumDecodeNullable(_$SignUpErrCodeEnumMap, json['code']),
     );
 
@@ -19,6 +20,7 @@ Map<String, dynamic> _$$_SignUpErrorDetailsToJson(
     <String, dynamic>{
       'title': instance.title,
       'message': instance.message,
+      'stackTrace': stackTraceToString(instance.stackTrace),
       'code': _$SignUpErrCodeEnumMap[instance.code],
     };
 

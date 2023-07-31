@@ -156,30 +156,45 @@ class LogIt {
             ],
           )
         : stackTraceLines;
-
-    if (sentry) {
-      // reduxStore.then((store) async {
-      //   await Sentry.configureScope(
-      //     (scope) => scope
-      //       ..setContexts('user_state', store.state.userState.toJson())
-      //       ..setContexts('message', message)
-      //       ..setContexts(
-      //           'filteredStack',
-      //           filteredStackTrace.isNotEmpty
-      //               ? filteredStackTrace.pretty()
-      //               : (stackTrace ?? StackTrace.current)
-      //                   .filterCallStack()
-      //                   .pretty())
-      //       ..setContexts('timestamp', '${DateTime.now()}'),
-      //   );
-      //   await Sentry.captureMessage(
-      //     '* $message [${DateTime.now()}]',
-      //   );
-      // });
-      Sentry.captureMessage(
-        '$message [${DateTime.now()}]',
-      );
+    try {
+      if (stackTrace == null && stackTraceLines.isNotEmpty) {
+        stackTrace = StackTraceFilter.fromStackLines(stackTraceLines);
+      }
+    } catch (err) {
+      if (!kReleaseMode) {
+        logger.e('Unable to create stacktrace from stackLines: $err');
+      }
     }
+    // if (sentry) {
+    //   // reduxStore.then((store) async {
+    //   //   await Sentry.configureScope(
+    //   //     (scope) => scope
+    //   //       ..setContexts('user_state', store.state.userState.toJson())
+    //   //       ..setContexts('message', message)
+    //   //       ..setContexts(
+    //   //           'filteredStack',
+    //   //           filteredStackTrace.isNotEmpty
+    //   //               ? filteredStackTrace.pretty()
+    //   //               : (stackTrace ?? StackTrace.current)
+    //   //                   .filterCallStack()
+    //   //                   .pretty())
+    //   //       ..setContexts('timestamp', '${DateTime.now()}'),
+    //   //   );
+    //   //   await Sentry.captureMessage(
+    //   //     '* $message [${DateTime.now()}]',
+    //   //   );
+    //   // });
+    //   Sentry.captureMessage(
+    //     '$message [${DateTime.now()}]',
+    //   );
+    // }
+
+    peeplEatsService.writeLog(
+      message: '$message [${DateTime.now()}]',
+      details: {
+        'stackTrace': stackTrace.toString(),
+      },
+    );
 
     store!.dispatch(
       AddAppLog(
@@ -338,6 +353,15 @@ class LogIt {
             ],
           )
         : stackTraceLines;
+    try {
+      if (stackTrace == null && stackTraceLines.isNotEmpty) {
+        stackTrace = StackTraceFilter.fromStackLines(stackTraceLines);
+      }
+    } catch (err) {
+      if (!kReleaseMode) {
+        logger.e('Unable to create stacktrace from stackLines: $err');
+      }
+    }
     if (sentry) {
       Sentry.captureException(
         error,

@@ -5,6 +5,7 @@ class StackLine {
     this.fileName,
     this.lineNumber,
     this.characterNumber,
+    this.stackTraceString,
   });
 
   final String? className;
@@ -12,6 +13,7 @@ class StackLine {
   final String? fileName;
   final String? lineNumber;
   final String? characterNumber;
+  final String? stackTraceString;
 
   @override
   String toString() {

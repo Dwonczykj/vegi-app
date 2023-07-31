@@ -100,7 +100,9 @@ class _OnBoardScreenState extends State<OnBoardScreen>
           (isAuthenticated) {
             if (isAuthenticated) {
               reduxStore.then((store) {
-                store.dispatch(getUserDetails());
+                store
+                  ..dispatch(getUserDetails())
+                  ..dispatch(getVegiWalletAccountDetails());
                 if (store.state.userState.hasOnboarded) {
                   log.info(
                       '🚀 Push PinCodeScreen from on_board_screen as already  completed onboarding and userState.isLoggedIn');
@@ -109,10 +111,12 @@ class _OnBoardScreenState extends State<OnBoardScreen>
                   log.info(
                       '🚀 Push next onboarding flow screen from on_board_screen as need to complete onboarding flow though userState.isLoggedIn');
                   // authenticated but never completed onboarding so complete onboarding flow.
-                  store.dispatch(getUserDetails(
-                    onComplete: onBoardStrategy.nextOnboardingPage,
-                    onFailed: onBoardStrategy.nextOnboardingPage,
-                  ));
+                  store
+                    ..dispatch(getUserDetails(
+                      onComplete: onBoardStrategy.nextOnboardingPage,
+                      onFailed: onBoardStrategy.nextOnboardingPage,
+                    ))
+                    ..dispatch(getVegiWalletAccountDetails());
                 }
               });
             } else {

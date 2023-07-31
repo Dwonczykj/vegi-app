@@ -25,7 +25,7 @@ OnboardingState _setLoginError(
   SignUpFailed action,
 ) {
   return state.copyWith(
-    signupError: action.error,
+    signupError: action.error_,
   );
 }
 

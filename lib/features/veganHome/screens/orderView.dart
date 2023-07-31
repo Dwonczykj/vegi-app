@@ -111,7 +111,6 @@ class OrderViewScreen extends StatelessWidget {
                           store.dispatch(
                             cancelOrder(
                               orderId: order.id,
-                              accountId: store.state.userState.vegiAccountId!,
                               senderWalletAddress:
                                   store.state.userState.walletAddress,
                             ),

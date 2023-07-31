@@ -142,7 +142,7 @@ class _SignUpButtonsState extends State<SignUpButtons> {
       onInit: (store) {
         store.dispatch(fetchSurveyQuestions());
         if (store.state.userState.accountDetailsExist) {
-          store.dispatch(isBetaWhitelistedAddress());
+          store.dispatch(getVegiWalletAccountDetails());
           // ..dispatch(ReLogin());
         }
       },

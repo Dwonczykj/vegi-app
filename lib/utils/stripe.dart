@@ -144,8 +144,8 @@ class StripeService {
       );
       await instance.presentPaymentSheet(
         options: const PaymentSheetPresentOptions(
-          timeout: AppConfig.stripeCardPaymentFlowTimeOutMillis,
-        ),
+            // timeout: AppConfig.stripeCardPaymentFlowTimeOutMillis,
+            ),
       );
     } on StripeException catch (e, s) {
       if (e.error.code != FailureCode.Canceled) {
@@ -161,10 +161,6 @@ class StripeService {
           'Stripe Payment ${e.error.code} with StripeErrorType.[${e.error.type}] because of stripe error code StripeErrorCode.[${e.error.stripeErrorCode}]: ${e.error.localizedMessage};',
           stackTrace: s,
         );
-        await Sentry.captureException(
-          'Stripe Payment ${e.error.code} with StripeErrorType.[${e.error.type}] because of stripe error code StripeErrorCode.[${e.error.stripeErrorCode}]: ${e.error.localizedMessage};',
-          stackTrace: s,
-        );
         store
           ..dispatch(SetPaymentButtonFlag(false))
           ..dispatch(SetTransferringPayment(flag: false))
@@ -176,7 +172,6 @@ class StripeService {
           ..dispatch(
             cancelOrder(
               orderId: orderId,
-              accountId: accountId,
               senderWalletAddress: senderWalletAddress,
             ),
           )
@@ -199,7 +194,6 @@ class StripeService {
           ..dispatch(
             cancelOrder(
               orderId: orderId,
-              accountId: accountId,
               senderWalletAddress: senderWalletAddress,
             ),
           )
@@ -267,7 +261,6 @@ class StripeService {
           ..dispatch(
             cancelOrder(
               orderId: orderId,
-              accountId: accountId,
               senderWalletAddress: senderWalletAddress,
             ),
           )
@@ -290,7 +283,6 @@ class StripeService {
           ..dispatch(
             cancelOrder(
               orderId: orderId,
-              accountId: accountId,
               senderWalletAddress: senderWalletAddress,
             ),
           )
@@ -453,7 +445,6 @@ class StripeService {
           ..dispatch(
             cancelOrder(
               orderId: orderId,
-              accountId: accountId,
               senderWalletAddress: senderWalletAddress,
             ),
           )
@@ -533,7 +524,6 @@ class StripeService {
           ..dispatch(
             cancelOrder(
               orderId: orderId,
-              accountId: accountId,
               senderWalletAddress: senderWalletAddress,
             ),
           )
@@ -556,7 +546,6 @@ class StripeService {
           ..dispatch(
             cancelOrder(
               orderId: orderId,
-              accountId: accountId,
               senderWalletAddress: senderWalletAddress,
             ),
           )

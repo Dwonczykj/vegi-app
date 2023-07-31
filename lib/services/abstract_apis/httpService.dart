@@ -121,9 +121,15 @@ abstract class HttpService {
     return false;
   }
 
-  Future<Response<T>> _logHttpResult<T>(Future<Response<T>> responseAwaiter) {
+  Future<Response<T>> _logHttpResult<T>(
+    Future<Response<T>> responseAwaiter, {
+    bool dontLog = false,
+  }) {
     return responseAwaiter.then(
       (response) {
+        if (dontLog) {
+          return response;
+        }
         final cookiePresentStr =
             response.headers.value('Set-Cookie') != null ? '🍪' : '';
         String data = '';
@@ -306,6 +312,8 @@ abstract class HttpService {
     bool dontRoute = false,
     bool sendWithAuthCreds = false,
     List<int> allowStatusCodes = const <int>[],
+    Map<String, String>? customHeaders,
+    bool dontLog = false,
   }) async {
     _checkAuthRequestIsSatisfied(sendWithAuthCreds, dontRoute: dontRoute);
     if (!path.startsWith('/')) path = '/' + path;
@@ -314,14 +322,21 @@ abstract class HttpService {
       '$protocol: "${dio.options.baseUrl}$path"',
       sentry: true,
     );
+    if (customHeaders?.isNotEmpty ?? false) {
+      options ??= Options();
+      options.headers?.addAll(customHeaders!);
+    }
     return _handleHttpResult(
-      () => _logHttpResult(dio.get<T>(
-        path,
-        queryParameters: queryParameters,
-        options: options,
-        cancelToken: cancelToken,
-        onReceiveProgress: onReceiveProgress,
-      )),
+      () => _logHttpResult(
+        dio.get<T>(
+          path,
+          queryParameters: queryParameters,
+          options: options,
+          cancelToken: cancelToken,
+          onReceiveProgress: onReceiveProgress,
+        ),
+        dontLog: dontLog,
+      ),
       httpProtocol: protocol,
     );
     // try {
@@ -392,6 +407,8 @@ abstract class HttpService {
     bool sendWithAuthCreds = false,
     List<int> allowStatusCodes = const <int>[],
     Pattern? allowErrorMessage,
+    Map<String, String>? customHeaders,
+    bool dontLog = false,
   }) async {
     const protocol = 'POST';
     var path_ = path;
@@ -400,22 +417,32 @@ abstract class HttpService {
     } else if (path.startsWith('/') && dio.options.baseUrl.endsWith('/')) {
       path_ = path.substring(1);
     }
-    log.info(
-      '$protocol: "${dio.options.baseUrl}$path_"',
-      sentry: true,
-    );
+    if (dontLog == false) {
+      log.info(
+        '$protocol: "${dio.options.baseUrl}$path_"',
+        sentry: true,
+      );
+    }
     _checkAuthRequestIsSatisfied(sendWithAuthCreds, dontRoute: dontRoute);
+    if (customHeaders?.isNotEmpty ?? false) {
+      options ??= Options();
+      options.headers ??= {};
+      options.headers!.addAll(customHeaders!);
+    }
 
     return _handleHttpResult(
-      () => _logHttpResult(dio.post<T>(
-        path_,
-        data: data,
-        queryParameters: queryParameters,
-        options: options,
-        cancelToken: cancelToken,
-        onSendProgress: onSendProgress,
-        onReceiveProgress: onReceiveProgress,
-      )),
+      () => _logHttpResult(
+        dio.post<T>(
+          path_,
+          data: data,
+          queryParameters: queryParameters,
+          options: options,
+          cancelToken: cancelToken,
+          onSendProgress: onSendProgress,
+          onReceiveProgress: onReceiveProgress,
+        ),
+        dontLog: dontLog,
+      ),
       httpProtocol: protocol,
     );
   }

@@ -1482,7 +1482,7 @@ class PeeplEatsService extends HttpService {
         return null;
       } else {
         final result = UserDTO.fromJson(response.data as Map<String, dynamic>);
-        if(DebugHelpers.inDebugMode){
+        if (DebugHelpers.inDebugMode) {
           log.info(result);
         }
         return result;
@@ -1780,7 +1780,6 @@ class PeeplEatsService extends HttpService {
 
   Future<bool?> cancelOrder({
     required int orderId,
-    required int accountId,
     required String senderWalletAddress,
   }) async {
     final response = await dioPost<dynamic>(
@@ -1908,5 +1907,32 @@ class PeeplEatsService extends HttpService {
     }
 
     return outCodes;
+  }
+
+  Future<void> writeLog({
+    required String message,
+    Map<String, dynamic> details = const {},
+  }) async {
+    final Response<dynamic> response = await dioPost(
+      'api/v1/logging/log',
+      data: {
+        'message': message,
+        'details': details,
+      },
+      customHeaders: {
+        'api-key': Secrets.VEGI_SERVICE_API_KEY,
+        'api-secret': Secrets.VEGI_SERVICE_API_SECRET,
+      },
+      dontLog: true,
+    );
+
+    if (responseHasErrorStatus(response)) {
+      log.error(
+        'Failed to writeLog to vegi backend with response: ${response.statusMessage}',
+        stackTrace: StackTrace.current,
+      );
+      return;
+    }
+    return;
   }
 }

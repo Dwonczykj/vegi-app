@@ -1121,14 +1121,14 @@ ThunkAction<AppState> submitSurveyResponse(
   };
 }
 
-ThunkAction<AppState> isBetaWhitelistedAddress() {
+ThunkAction<AppState> getVegiWalletAccountDetails() {
   return (Store<AppState> store) async {
     try {
       if (store.state.userState.walletAddress.isEmpty) {
         // TODO RC 1.5.1: 1. Investigate the potential callstacks that could see us here without wallet initialised.
         // TODO RC 1.5.1: 2. Show UNs for functions further up in this callstack that require wallet to be initialised for functionality
         const warning =
-            "User wallet not initialised! Can't check the whitelist";
+            "User wallet not initialised! Can't get account details for user";
         log.warn(warning, stackTrace: StackTrace.current);
         return;
       }
@@ -1175,7 +1175,7 @@ ThunkAction<AppState> isBetaWhitelistedAddress() {
       }
     } catch (e, s) {
       log.error(
-        'ERROR - isBetaWhitelistedAddress Request',
+        'ERROR - getVegiWalletAccountDetails Request',
         error: e,
         stackTrace: s,
       );
@@ -1606,6 +1606,9 @@ ThunkAction<AppState> setRandomUserAvatarIfNone() {
           vegiAccount.id > 0 &&
           store.state.userState.avatarUrl.isEmpty) {
         store.dispatch(SetUserAvatar(vegiAccount.imageUrl));
+      }
+      if (store.state.userState.vegiAccountId == null && vegiAccount != null) {
+        store.dispatch(SetUserVegiAccountIdSuccess(vegiAccount.id));
       }
 
       store.dispatch(SetIsLoadingHttpRequest(isLoading: false));

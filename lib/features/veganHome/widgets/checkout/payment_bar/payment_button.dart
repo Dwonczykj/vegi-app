@@ -185,9 +185,9 @@ class PaymentButton extends StatelessWidget {
                     ),
                   ],
                 ),
-                const Text(
-                  'Place Order',
-                  style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
+                Text(
+                  viewmodel.selectedFulfilmentMethod == FulfilmentMethodType.inStore ? 'Pay now' : 'Place Order',
+                  style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
                 ),
               ],
             ),
