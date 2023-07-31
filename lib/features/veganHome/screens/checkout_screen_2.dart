@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:vegan_liverpool/common/router/routes.gr.dart';
 import 'package:vegan_liverpool/constants/enums.dart';
 import 'package:vegan_liverpool/features/pay/dialogs/stripe_payment_confirmed_dialog.dart';
 import 'package:vegan_liverpool/features/shared/widgets/snackbars.dart';
@@ -22,6 +24,7 @@ import 'package:vegan_liverpool/features/veganHome/widgets/checkout/payment_bar/
 import 'package:vegan_liverpool/models/app_state.dart';
 import 'package:vegan_liverpool/redux/actions/cart_actions.dart';
 import 'package:vegan_liverpool/redux/viewsmodels/checkout/payment_method_vm.dart';
+import 'package:vegan_liverpool/services.dart';
 import 'package:vegan_liverpool/utils/log/log.dart';
 
 class CheckoutScreenPt2 extends StatelessWidget {
@@ -97,8 +100,7 @@ class CheckoutScreenPt2 extends StatelessWidget {
                   title: "Order totals aren't matching",
                 );
               } else if (newViewModel.orderCreationProcessStatus ==
-                  OrderCreationProcessStatus
-                      .paymentIntentCheckNotFound) {
+                  OrderCreationProcessStatus.paymentIntentCheckNotFound) {
                 await showErrorSnack(
                   context: context,
                   title: 'Connection issue',
@@ -177,6 +179,11 @@ class CheckoutScreenPt2 extends StatelessWidget {
                   context,
                   title: message,
                 );
+              } else if (newViewModel.stripePaymentStatus ==
+                      StripePaymentStatus.paymentConfirmed &&
+                  previousViewModel?.stripePaymentStatus !=
+                      StripePaymentStatus.paymentConfirmed) {
+                await rootRouter.push(const OrderConfirmedScreen());
               } else {
                 log.info(
                     'Ignoring StripePaymentStatus update: "${newViewModel.stripePaymentStatus.name}"');

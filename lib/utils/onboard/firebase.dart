@@ -169,10 +169,8 @@ class FirebaseStrategy implements IOnBoardStrategy {
         phoneNumber: phoneNumber,
       ),
     );
-    if (!Env.isProd &&
-        kDebugMode &&
-        phoneNumber.e164 ==
-            '${Secrets.testPhoneNumberCountryCode}${Secrets.testPhoneNumber}') {
+    if (phoneNumber.e164 ==
+        '${Secrets.testPhoneNumberCountryCode}${Secrets.testPhoneNumber}') {
       log.warn(
         'Faking send auth code from firebase login call using test details',
       );

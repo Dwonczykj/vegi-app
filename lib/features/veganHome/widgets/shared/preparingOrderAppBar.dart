@@ -7,7 +7,7 @@ import 'package:vegan_liverpool/models/cart/order.dart';
 import 'package:vegan_liverpool/models/restaurant/orderDetails.dart';
 
 class PreparingOrderAppBar extends StatelessWidget {
-  const PreparingOrderAppBar({Key? key, required this.order}) : super(key: key);
+  const PreparingOrderAppBar({required this.order, Key? key}) : super(key: key);
 
   final Order order;
 

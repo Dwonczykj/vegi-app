@@ -37,7 +37,14 @@ class PastOrdersViewmodel extends Equatable {
   final bool isVendor;
   final bool isLoading;
 
-  Order? get scheduledOrderToShow => listOfScheduledOrders
+  List<Order> get listOfScheduledOrdersWithPaymentsAttempted =>
+      listOfScheduledOrders.where(
+        (element) {
+          return element.paymentAttempted == true;
+        },
+      ).toList();
+
+  Order? get scheduledOrderToShow => listOfScheduledOrdersWithPaymentsAttempted
       .sortInline((a, b) {
         final timeComp = a.timeSlot.startTime.compareTo(b.timeSlot.startTime);
         if (timeComp == 0) {
@@ -50,7 +57,7 @@ class PastOrdersViewmodel extends Equatable {
         0,
         Math.min(
           1,
-          listOfScheduledOrders.length,
+          listOfScheduledOrdersWithPaymentsAttempted.length,
         ),
       )
       .firstOrNull;

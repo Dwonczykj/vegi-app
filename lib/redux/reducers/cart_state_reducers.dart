@@ -66,6 +66,9 @@ final cartStateReducers = combineReducers<UserCartState>([
   TypedReducer<UserCartState, CreateProductSuggestion>(
     _createProductSuggestion,
   ),
+  TypedReducer<UserCartState, OrderPaymentAttemptCreated>(
+    _orderPaymentAttemptCreated,
+  ),
 ]);
 
 UserCartState _resetApp(
@@ -290,6 +293,16 @@ UserCartState _cancelOrder(
 ) {
   return state.copyWith(
     order: null,
+    paymentIntentID: '',
+  );
+}
+
+UserCartState _orderPaymentAttemptCreated(
+  UserCartState state,
+  OrderPaymentAttemptCreated action,
+) {
+  return state.copyWith(
+    order: state.order?.copyWith(paymentAttempted: true),
     paymentIntentID: '',
   );
 }

@@ -229,6 +229,8 @@ const _$OrderCreationProcessStatusEnumMap = {
       'paymentIntentCheckNotFound',
   OrderCreationProcessStatus.unableToGetStripeCustomerIdFromCreateOrderRequest:
       'unableToGetStripeCustomerIdFromCreateOrderRequest',
+  OrderCreationProcessStatus.orderPaymentAttemptCreated:
+      'orderPaymentAttemptCreated',
 };
 
 const _$StripePaymentStatusEnumMap = {
@@ -240,4 +242,5 @@ const _$StripePaymentStatusEnumMap = {
   StripePaymentStatus.mintingSucceeded: 'mintingSucceeded',
   StripePaymentStatus.mintingFailed: 'mintingFailed',
   StripePaymentStatus.paymentCancelled: 'paymentCancelled',
+  StripePaymentStatus.paymentAttemptCreated: 'paymentAttemptCreated',
 };

@@ -231,6 +231,26 @@ class StripeService {
             );
       }
     } on TimeoutException {
+      store
+        ..dispatch(SetTransferringPayment(flag: false))
+        ..dispatch(
+          StripePaymentStatusUpdate(
+            status: StripePaymentStatus
+                .paymentCancelled, // TODO: Hande this update and refactor apple pay stripe method to use this code too
+          ),
+        )
+        ..dispatch(
+          cancelOrder(
+            orderId: orderId,
+            senderWalletAddress: senderWalletAddress,
+          ),
+        )
+        ..dispatch(
+          OrderCreationProcessStatusUpdate(
+            status: OrderCreationProcessStatus.orderCancelled,
+          ),
+        )
+        ..dispatch(SetPaymentButtonFlag(false));
       return false;
     } on StripeException catch (e, s) {
       if (e.error.code != FailureCode.Canceled) {
@@ -296,10 +316,28 @@ class StripeService {
       }
     } on Exception catch (e, s) {
       // TODO
-      log.error('stripe._handleStripeCardPayentFlow failed with Exception: $e',
-          stackTrace: s);
+      log.error(
+        'stripe._handleStripeCardPayentFlow failed with Exception: $e',
+        stackTrace: s,
+      );
       return false;
     }
+    store
+      // ..dispatch(
+      //   StripePaymentStatusUpdate(
+      //     status: StripePaymentStatus.paymentAttemptCreated,
+      //   ),
+      // )
+      ..dispatch(
+        OrderPaymentAttemptCreated(
+          orderId: orderId,
+        ),
+      );
+    // ..dispatch(
+    //   OrderCreationProcessStatusUpdate(
+    //     status: OrderCreationProcessStatus.orderPaymentAttemptCreated,
+    //   ),
+    // );
     return true;
   }
 
@@ -691,6 +729,16 @@ class StripeService {
       } else {
         store
           ..dispatch(
+            OrderPaymentAttemptCreated(
+              orderId: orderId.round(),
+            ),
+          )
+          ..dispatch(
+            OrderCreationProcessStatusUpdate(
+              status: OrderCreationProcessStatus.orderPaymentAttemptCreated,
+            ),
+          )
+          ..dispatch(
             SetProcessingPayment(
               payment: LivePayment(
                 amount: amount.value,
@@ -732,20 +780,12 @@ class StripeService {
             ),
           );
           log.error(e.error.localizedMessage);
-          await Sentry.captureException(
-            e,
-            stackTrace: s,
-          );
           return false;
         } else {
           return false;
         }
       } else {
         log.error(e);
-        await Sentry.captureException(
-          e,
-          stackTrace: s,
-        );
         return false;
       }
     }
@@ -848,6 +888,16 @@ class StripeService {
           );
       } else {
         store
+          ..dispatch(
+            OrderPaymentAttemptCreated(
+              orderId: orderId.round(),
+            ),
+          )
+          ..dispatch(
+            OrderCreationProcessStatusUpdate(
+              status: OrderCreationProcessStatus.orderPaymentAttemptCreated,
+            ),
+          )
           ..dispatch(
             SetProcessingPayment(
               payment: LivePayment(

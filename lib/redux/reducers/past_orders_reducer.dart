@@ -11,6 +11,8 @@ final pastOrdersReducer = combineReducers<PastOrderState>([
   TypedReducer<PastOrderState, ResetAppState>(_resetApp),
   TypedReducer<PastOrderState, CreateOrder>(_createOrder),
   TypedReducer<PastOrderState, CancelOrder>(_cancelOrder),
+  TypedReducer<PastOrderState, OrderPaymentAttemptCreated>(
+      _orderPaymentAttemptCreated),
   TypedReducer<PastOrderState, UpdateOngoingOrderList>(_updateOngoingOrderList),
   TypedReducer<PastOrderState, UpdateScheduledOrders>(_updateScheduledOrders),
   TypedReducer<PastOrderState, AddAllPastOrdersList>(_updatePastOrders),
@@ -123,6 +125,27 @@ PastOrderState _cancelOrder(
         (element) => element.id != action.orderId,
       )
       .toList();
+  return state.copyWith(
+    listOfScheduledOrders: existingScheduledOrders,
+  );
+}
+
+PastOrderState _orderPaymentAttemptCreated(
+  PastOrderState state,
+  OrderPaymentAttemptCreated action,
+) {
+  final order = state.listOfScheduledOrders
+      .firstWhereExists((o) => o.id == action.orderId);
+  if (order == null) {
+    return state;
+  }
+
+  final existingScheduledOrders = state.listOfScheduledOrders
+      .where(
+        (element) => element.id != action.orderId,
+      )
+      .toList()
+      ..add(order.copyWith(paymentAttempted: true,),);
   return state.copyWith(
     listOfScheduledOrders: existingScheduledOrders,
   );

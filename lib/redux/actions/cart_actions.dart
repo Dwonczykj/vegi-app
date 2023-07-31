@@ -383,6 +383,19 @@ class CancelOrder {
   }
 }
 
+class OrderPaymentAttemptCreated {
+  OrderPaymentAttemptCreated({
+    required this.orderId,
+  });
+
+  final int orderId;
+
+  @override
+  String toString() {
+    return 'OrderPaymentAttemptCreated : orderId:"$orderId"';
+  }
+}
+
 class SetTransferringPayment {
   SetTransferringPayment({required this.flag});
   bool flag;
@@ -2712,10 +2725,6 @@ ThunkAction<AppState> subscribeToOrderUpdates() {
       log.error(
         err,
         stackTrace: StackTrace.current,
-      );
-      await Sentry.captureException(
-        err,
-        stackTrace: StackTrace.current, // from catch (err, s)
       );
       return;
     }

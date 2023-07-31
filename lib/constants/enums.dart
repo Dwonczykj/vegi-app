@@ -713,11 +713,12 @@ enum OrderCreationProcessStatus {
   paymentIntentAmountDoesntMatchCartTotal,
   success,
   sendOrderCallClientError,
-  orderCancelled, //todo: Handle
+  orderCancelled,
   orderPaymentFailed,
   orderAlreadyBeingCreated,
   paymentIntentCheckNotFound,
-  unableToGetStripeCustomerIdFromCreateOrderRequest, //todo: Handle
+  unableToGetStripeCustomerIdFromCreateOrderRequest,
+  orderPaymentAttemptCreated,
 }
 
 enum StripePaymentStatus {
@@ -728,7 +729,8 @@ enum StripePaymentStatus {
   mintingStarted,
   mintingSucceeded,
   mintingFailed,
-  paymentCancelled, //todo: Handle
+  paymentCancelled,
+  paymentAttemptCreated,
 }
 
 enum StripePaymentMethodType {
