@@ -307,9 +307,12 @@ class FirebaseStrategy implements IOnBoardStrategy {
         store,
         credential,
       );
+      store.dispatch(SignUpLoadingMessage(message: ''));
       return credential;
     } on FirebaseAuthException catch (e, s) {
       await _catchFirebaseException(e, s);
+      store.dispatch(SignUpLoadingMessage(
+          message: 'Failed to authenticate with email credentials 😳'));
     }
     return null;
   }

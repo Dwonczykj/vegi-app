@@ -35,11 +35,25 @@ abstract class RegisterModule {
       serializer: JsonSerializer<AppState>(AppState.fromJsonForPersistor),
       debug: DebugHelpers.isVerboseDebugMode,
     );
+
+    // Create a formatter that only prints out the dispatched action
+    String onlyLogActionFormatter<State>(
+      State state,
+      dynamic action,
+      DateTime timestamp,
+    ) {
+      return '{Action: $action}';
+    }
+
+    // Create your middleware using the formatter.
+    final reduxLoggingMiddleware =
+        new LoggingMiddleware(formatter: onlyLogActionFormatter);
     // Note: The LoggingMiddleware needs be the LAST middleware in the list.
     final List<Middleware<AppState>> wms = [
       thunkMiddleware,
       persistor.createMiddleware(),
-      LoggingMiddleware.printer().call,
+      // LoggingMiddleware.printer().call,
+      reduxLoggingMiddleware,
     ];
 
     late final Store<AppState> store;

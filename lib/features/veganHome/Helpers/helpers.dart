@@ -771,7 +771,7 @@ Future<SetPhoneNumberSuccess?> getPhoneDetails({
   CountryCode? countryCode;
   PhoneNumber? phoneNumber;
   try {
-    String? isoCode;
+    String? isoCode = 'GB';
     if (Platform.isAndroid) {
       final androidInfo = await CarrierInfo.getAndroidInfo();
       if ((androidInfo?.telephonyInfo.length ?? 0) >= 1) {
@@ -784,20 +784,17 @@ Future<SetPhoneNumberSuccess?> getPhoneDetails({
         isoCode = iosInfo.carrierData[0].isoCountryCode;
       }
     }
-    final currentCountryCode = isoCode;
-    if (currentCountryCode != null) {
-      final Map<String, String> localeData = codes.firstWhere(
-        (Map<String, String> code) =>
-            code['code'].toString().toLowerCase() ==
-            currentCountryCode.toLowerCase(),
+    final currentCountryCode = isoCode ?? 'GB';
+    final Map<String, String> localeData = codes.firstWhere(
+      (Map<String, String> code) =>
+          code['code'].toString().toLowerCase() ==
+          currentCountryCode.toLowerCase(),
+    );
+    if (localeData.containsKey('dial_code') && localeData.containsKey('code')) {
+      countryCode = CountryCode(
+        dialCode: localeData['dial_code'],
+        code: localeData['code'],
       );
-      if (localeData.containsKey('dial_code') &&
-          localeData.containsKey('code')) {
-        countryCode = CountryCode(
-          dialCode: localeData['dial_code'],
-          code: localeData['code'],
-        );
-      }
     }
   } catch (e, s) {
     log.error(

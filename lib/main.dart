@@ -50,7 +50,6 @@ void main() async {
 
   await configureDependencies(environment: envStr);
 
-  final store = await reduxStore;
 
   await initFirebaseRemote();
 
@@ -58,6 +57,7 @@ void main() async {
     // Dont put below condition in above as above is compile time and allows all this to be left out of production apps.
     await connectToFirebaseEmulator();
   }
+  
 
   await runZonedGuarded(() async {
     await SentryFlutter.init(
@@ -74,6 +74,7 @@ void main() async {
     await log.connectReduxLogs();
 
     //Pass the store to the Main App which injects it into the entire tree.
+    final store = await reduxStore;
     if (Env.isDev) {
       runApp(
         ReduxDevToolsContainer(

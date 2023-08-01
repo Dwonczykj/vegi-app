@@ -331,7 +331,7 @@ class PeeplEatsService extends HttpService {
           ),
         );
       if (userDetails.phoneNoCountry.isNotEmpty &&
-          userDetails.phoneCountryCode != 0) {
+          userDetails.phoneCountryCode != 0 && userDetails.phoneNoCountry.length > 1) {
         final phoneDetails = await getPhoneDetails(
           countryCode: '+${userDetails.phoneCountryCode}',
           phoneNoCountry: userDetails.phoneNoCountry,
@@ -440,16 +440,17 @@ class PeeplEatsService extends HttpService {
         'email': store.state.userState.email,
         'phone': store.state.userState.phoneNumber,
       },
+      allowStatusCodes: [302],
     );
 
+    if ((response.statusCode ?? 0) == 302) {
+      log.info(
+        'peeplEatsService.deleteAllUserDetails received a redirect response',
+        sentry: true,
+      );
+      return true;
+    }
     if (responseHasErrorStatus(response)) {
-      if (response.statusCode! == 302) {
-        log.info(
-          'peeplEatsService.deleteAllUserDetails received a redirect response',
-          sentry: true,
-        );
-        return true;
-      }
       log.error(
         'Bad response returned when trying to deregister user and delete all their data: $response',
       );
@@ -1042,7 +1043,7 @@ class PeeplEatsService extends HttpService {
     required ProgressCallback onReceiveProgress,
   }) async {
     try {
-      final Response<Map<String, dynamic>> response = await dioPostFile(
+      final response = await dioPostFile<Map<String, dynamic>>(
         'api/v1/products/upload-product-suggestion-image',
         file: image,
         formDataCreator: ({required MultipartFile file}) => FormData.fromMap({
@@ -1135,7 +1136,7 @@ class PeeplEatsService extends HttpService {
     ProgressCallback? onReceiveProgress,
   }) async {
     try {
-      final Response<Map<String, dynamic>> response = await dioPostFile(
+      final response = await dioPostFile<Map<String, dynamic>>(
         'api/v1/users/upload-user-avatar',
         file: image,
         sendWithAuthCreds: true,
@@ -1204,7 +1205,7 @@ class PeeplEatsService extends HttpService {
     ProgressCallback? onReceiveProgress,
   }) async {
     try {
-      final Response<Map<String, dynamic>> response = await dioPostFile(
+      final response = await dioPostFile<Map<String, dynamic>>(
         'api/v1/products/upload-product-suggestion-image',
         file: image,
         formDataCreator: ({required MultipartFile file}) => FormData.fromMap({
@@ -1534,14 +1535,19 @@ class PeeplEatsService extends HttpService {
       //   400,
       // ],
       allowErrorMessage: RegExp(
-          "Unable to update user\[[0-9]+\]'s email as another user\[[0-9]+\] already has email"),
+        "Unable to update user\[[0-9]+\]'s email as another user\[[0-9]+\] already has email|bad email passed",
+      ),
     );
 
     if (responseHasErrorStatus(response)) {
       // onError?.call(response.statusMessage ?? 'Unknown Error');
-      return response.statusMessage ?? 'Unknown Error';
+      return response.extra.containsKey('errorMessage')
+          ? response.extra['errorMessage'].toString()
+          : response.extra.containsKey('message')
+              ? response.extra['message'].toString()
+              : response.statusMessage ?? 'Unknown Error';
     } else if (response.extra.containsKey('errorMessage')) {
-      return response.extra['errorMessage'] as String;
+      return response.extra['errorMessage'].toString();
     }
     return null;
   }
@@ -1913,6 +1919,18 @@ class PeeplEatsService extends HttpService {
     required String message,
     Map<String, dynamic> details = const {},
   }) async {
+    bool authenticated = false;
+    try {
+      final store = await reduxStore;
+      if (!store.state.userState.isLoggedIn) {
+        return;
+      }
+      authenticated = true;
+    } catch (err) {
+      authenticated = false;
+      return;
+    }
+
     final Response<dynamic> response = await dioPost(
       'api/v1/logging/log',
       data: {

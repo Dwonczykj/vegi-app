@@ -819,6 +819,7 @@ ThunkAction<AppState> updateEmail({
 }) {
   return (Store<AppState> store) async {
     try {
+      final oldEmail = store.state.userState.email;
       store
         ..dispatch(SignUpLoadingMessage(message: 'Updating Email...'))
         ..dispatch(SignupLoading(isLoading: true))
@@ -839,16 +840,33 @@ ThunkAction<AppState> updateEmail({
       );
       if (errMsg != null) {
         // onError?.call(errMsg);
+        if (errMsg == 'bad email passed'){
+          store.dispatch(SignUpFailed(error: SignUpErrorDetails(title: 'Bad email format', message: '')));
+        }
         log.info(
           errMsg,
-          sentry: true,
+          sentry: errMsg != 'bad email passed',
         );
+        store
+          ..dispatch(
+              SignUpLoadingMessage(message: 'Reverting Email as $errMsg.'))
+          ..dispatch(SetEmail(oldEmail));
         onError?.call(
-            'Unable to update users email as another user has that email. Please check if you have previously registered with a different number.');
+          // 'Unable to update users email as another user has that email. Please check if you have previously registered with a different number.',
+          errMsg,
+        );
       }
-      store
-        ..dispatch(SignUpLoadingMessage(message: ''))
-        ..dispatch(SignupLoading(isLoading: false));
+      store.dispatch(
+        getUserDetails(
+          onComplete: () => store
+            ..dispatch(SignUpLoadingMessage(message: ''))
+            ..dispatch(SignupLoading(isLoading: false)),
+          onFailed: () => store
+            ..dispatch(SignUpLoadingMessage(message: ''))
+            ..dispatch(SignupLoading(isLoading: false)),
+        ),
+      );
+
       await onComplete?.call();
       return;
     } catch (e, s) {

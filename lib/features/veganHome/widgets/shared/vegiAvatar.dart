@@ -175,78 +175,74 @@ class VegiAvatar extends StatelessWidget {
                   ),
                 )
               : viewmodel.avatarTempFilePath.isNotEmpty
-                  ? Padding(
-                      padding: const EdgeInsets.only(left: 20),
-                      child: Stack(
-                        children: [
-                          SizedBox(
-                            height: avatarSquareSize,
-                            width: avatarSquareSize,
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(50),
-                              child: ColoredBox(
-                                color: Colors.grey.shade400,
-                                child: Stack(
-                                  children: [
-                                    CircleAvatar(
-                                      backgroundImage: AssetImage(
-                                          viewmodel.avatarTempFilePath),
-                                      // radius: 23,
-                                      radius: avatarSquareSize / 2.0 +
-                                          (avatarSquareSize * 0.1),
-                                    ),
-                                    if (viewmodel.userIsVegiAdmin)
-                                      Positioned(
-                                        right: -(avatarSquareSize / 4.0),
-                                        top: -(avatarSquareSize / 4.0),
-                                        child: Container(
-                                          height: avatarSquareSize * .5,
-                                          width: avatarSquareSize * .5,
-                                          alignment: Alignment.topRight,
-                                          child: Banner(
-                                            message: 'Admin',
-                                            textDirection: TextDirection.ltr,
-                                            location: BannerLocation.topEnd,
-                                            color: themeLightShade1000,
-                                            textStyle: TextStyle(
-                                              fontFamily: Fonts.fatFace,
-                                              fontSize:
-                                                  (avatarSquareSize / 5.0),
-                                            ),
+                  ? Stack(
+                      children: [
+                        SizedBox(
+                          height: avatarSquareSize,
+                          width: avatarSquareSize,
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(50),
+                            child: ColoredBox(
+                              color: Colors.grey.shade400,
+                              child: Stack(
+                                children: [
+                                  CircleAvatar(
+                                    backgroundImage: AssetImage(
+                                        viewmodel.avatarTempFilePath),
+                                    // radius: 23,
+                                    radius: avatarSquareSize / 2.0 +
+                                        (avatarSquareSize * 0.1),
+                                  ),
+                                  if (viewmodel.userIsVegiAdmin)
+                                    Positioned(
+                                      right: -(avatarSquareSize / 4.0),
+                                      top: -(avatarSquareSize / 4.0),
+                                      child: Container(
+                                        height: avatarSquareSize * .5,
+                                        width: avatarSquareSize * .5,
+                                        alignment: Alignment.topRight,
+                                        child: Banner(
+                                          message: 'Admin',
+                                          textDirection: TextDirection.ltr,
+                                          location: BannerLocation.topEnd,
+                                          color: themeLightShade1000,
+                                          textStyle: TextStyle(
+                                            fontFamily: Fonts.fatFace,
+                                            fontSize: (avatarSquareSize / 5.0),
                                           ),
                                         ),
                                       ),
-                                    if (viewmodel.isLoggedIn && isEditable)
-                                      Positioned.directional(
-                                        textDirection: TextDirection.ltr,
-                                        bottom: 0,
-                                        start: 0,
-                                        end: 0,
-                                        child: Container(
-                                          padding: const EdgeInsets.symmetric(
-                                            vertical: 3,
-                                          ),
-                                          alignment: Alignment.center,
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .onSurface,
-                                          child: Text(
-                                            I10n.of(context).edit,
-                                            style: TextStyle(
-                                              color:
-                                                  Theme.of(context).canvasColor,
-                                              fontSize: 9,
-                                            ),
+                                    ),
+                                  if (viewmodel.isLoggedIn && isEditable)
+                                    Positioned.directional(
+                                      textDirection: TextDirection.ltr,
+                                      bottom: 0,
+                                      start: 0,
+                                      end: 0,
+                                      child: Container(
+                                        padding: const EdgeInsets.symmetric(
+                                          vertical: 3,
+                                        ),
+                                        alignment: Alignment.center,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onSurface,
+                                        child: Text(
+                                          I10n.of(context).edit,
+                                          style: TextStyle(
+                                            color:
+                                                Theme.of(context).canvasColor,
+                                            fontSize: 9,
                                           ),
                                         ),
-                                      )
-                                  ],
-                                ),
+                                      ),
+                                    )
+                                ],
                               ),
                             ),
-                          )
-                        ],
-                      ),
+                          ),
+                        )
+                      ],
                     )
                   : Padding(
                       padding: const EdgeInsets.only(left: 20),

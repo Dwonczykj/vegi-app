@@ -102,28 +102,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
       converter: MainScreenViewModel.fromStore,
       distinct: true,
       onInit: (store) {
-        // ! Remove reauthentication on signup screen for now
-        // if (store.state.userState.firebaseCredentials != null) {
-        //   onBoardStrategy.reauthenticateUser().then(
-        //     (reauthSucceeded) {
-        //       if (reauthSucceeded &&
-        //           store.state.userState.walletAddress.isNotEmpty) {
-        //         store
-        //           .dispatch(isBetaWhitelistedAddress());
-        //       }
-        //     },
-        //   );
-        // }
         final userState = store.state.userState;
         if (userState.isoCode.isNotEmpty &&
             userState.countryCode.isNotEmpty &&
             userState.phoneNumberNoCountry.isNotEmpty) {
-          // setState(() {
-          //   countryCode = CountryCode(
-          //     dialCode: viewmodel.dialCode,
-          //     code: viewmodel.countryCode,
-          //   );
-          // });
           countryCode = CountryCode(
             dialCode: userState.countryCode,
             code: userState.isoCode,
@@ -132,11 +114,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
         }
       },
       onWillChange: (previousViewModel, newViewModel) async {
-        // final checked = checkAuth(
-        //   oldViewModel: previousViewModel,
-        //   newViewModel: newViewModel,
-        //   routerContext: context,
-        // );
         if (newViewModel.signupError != previousViewModel?.signupError &&
             newViewModel.signupError != null && newViewModel.signupError?.message != null) {
           await showErrorSnack(

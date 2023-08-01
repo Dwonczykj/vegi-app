@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:another_flushbar/flushbar.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
@@ -31,15 +33,51 @@ class _SplashScreenState extends State<SplashScreen> {
   late Flushbar<bool> flush;
 
   bool isRouting = false;
+  double? _opacity;
+  bool _loaded = false;
 
-  void finishAppStart(
+  @override
+  void initState() {
+    Future.delayed(const Duration(seconds: 1), () {
+      if (mounted) {
+        setState(() {
+          // _opacity = 1.0;
+          _opacity = 0.0;
+        });
+      }
+    });
+    super.initState();
+  }
+
+  Future<void> finishAppStart(
     BuildContext context, {
     required Store<AppState> store,
-  }) {
+  }) async {
     log.info('finishAppStart() called from SplashScreen');
+    final String privateKey = store.state.userState.privateKey;
+    final String jwtToken = store.state.userState.jwtToken;
+    final bool isLoggedOut = store.state.userState.hasNotOnboarded ||
+        !store.state.userState.isLoggedIn;
+    if (privateKey.isEmpty || jwtToken.isEmpty || isLoggedOut) {
+      log.info(
+          'Push OnBoardScreen() from ${rootRouter.current.name} at splash_screen.dart');
+      const navTo = OnBoardScreen();
+      if (mounted) {
+        await context.router.push(navTo);
+      } else {
+        await rootRouter.push(navTo);
+      }
+      widget.onLoginResult?.call(false);
+      return;
+    }
     final UserState userState = store.state.userState;
     if (userState.isLoggedIn && userState.authType != BiometricAuth.none) {
-      context.router.push(const PinCodeScreen());
+      const navTo = PinCodeScreen();
+      if (mounted) {
+        await context.router.push(navTo);
+      } else {
+        await rootRouter.push(navTo);
+      }
       log.info(
         'User is already authenticated so push the PinCodeScreen and check user details on vegi backend',
         sentry: true,
@@ -48,7 +86,12 @@ class _SplashScreenState extends State<SplashScreen> {
           // ..dispatch(getUserDetails())
           .dispatch(getVegiWalletAccountDetails());
     } else {
-      context.router.push(const OnBoardScreen());
+      const navTo = OnBoardScreen();
+      if (mounted) {
+        await context.router.push(navTo);
+      } else {
+        await rootRouter.push(navTo);
+      }
       log.info(
         'Navigate to OnBoardScreen from splash_screen because user has authState: ${store.state.userState.authState} and biometricAuth: [${userState.authType}]',
         sentry: true,
@@ -60,21 +103,10 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return StoreConnector<AppState, LockScreenViewModel>(
       onInit: (store) {
-        final String privateKey = store.state.userState.privateKey;
-        final String jwtToken = store.state.userState.jwtToken;
-        final bool isLoggedOut = store.state.userState.hasNotOnboarded ||
-            !store.state.userState.isLoggedIn;
-        if (privateKey.isEmpty || jwtToken.isEmpty || isLoggedOut) {
-          log.info(
-              'Push OnBoardScreen() from ${rootRouter.current.name} at splash_screen.dart');
-          context.router.replaceAll([const OnBoardScreen()]);
-          widget.onLoginResult?.call(false);
-        } else {
-          finishAppStart(
-            context,
-            store: store,
-          );
-        }
+        // unawaited(finishAppStart(context, store: store));
+        Future.delayed(const Duration(seconds: 1), () {
+          finishAppStart(context, store: store);
+        });
       },
       converter: LockScreenViewModel.fromStore,
       distinct: true,
@@ -95,29 +127,77 @@ class _SplashScreenState extends State<SplashScreen> {
       //   );
       //   await checked.runNavigationIfNeeded();
       // },
-      builder: (_, viewModel) {
+      builder: (context, viewModel) {
+        // final store = StoreProvider.of<AppState>(context);
+        // finishAppStart(context, store: store);
         return Scaffold(
-          body: Container(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topRight,
-                end: Alignment.bottomLeft,
-                colors: screenGradient,
-              ),
-            ),
-            height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * .5,
-                  child: Image.asset(
-                    'assets/images/Vegi-Logo-square.png',
+          body: Stack(
+            children: [
+              Container(
+                decoration: const BoxDecoration(
+                  image: DecorationImage(
+                    fit: BoxFit.cover,
+                    image: AssetImage(
+                      ImagePaths.onboardingTextureBelowBackgroundBrightCream,
+                    ),
                   ),
-                )
-              ],
-            ),
+                ),
+              ),
+              Container(
+                decoration: const BoxDecoration(
+                  color: Color.fromARGB(
+                    255,
+                    248,
+                    251,
+                    244,
+                  ),
+                  image: DecorationImage(
+                    fit: BoxFit.cover,
+                    image: AssetImage(
+                      ImagePaths.onboardingPage1Background,
+                    ),
+                  ),
+                ),
+              ),
+              // Positioned(
+              //   left: -30,
+              //   top: 0,
+              //   child: CustomPaint(
+              //     size: const Size(
+              //       200,
+              //       200 * 0.9019230769230769,
+              //     ),
+              //     painter: Shape1(),
+              //   ),
+              // ),
+              // AnimatedPositioned(
+              //   curve: Curves.fastLinearToSlowEaseIn,
+              //   left: _left ?? MediaQuery.of(context).size.width * 0.2,
+              //   top: _top ?? MediaQuery.of(context).size.height * 0.3,
+              //   duration: const Duration(seconds: 2),
+              //   onEnd: () {
+              //     setState(() {
+              //       _opacity = 1;
+              //     });
+              //   },
+              //   child: CustomPaint(
+              //     size: Size(_width, _width * 1.1484641638225255),
+              //     painter: PeamanPainter(),
+              //   ),
+              // ),
+              AnimatedOpacity(
+                // curve: Curves.fastLinearToSlowEaseIn,
+                duration: const Duration(seconds: 1),
+                opacity: _opacity ?? 0,
+                child: Align(
+                  child: Image.asset(
+                    // 'assets/images/Vegi-Logo-horizontal.png',
+                    ImagePaths.onboardingPage1VegiText,
+                    width: MediaQuery.of(context).size.width * .4,
+                  ),
+                ),
+              )
+            ],
           ),
         );
       },

@@ -144,6 +144,7 @@ class LogIt {
     List<StackLine> stackTraceLines = const <StackLine>[],
     bool sentry = false,
     String sentryHint = '',
+    bool dontLog = false,
   }) {
     final filteredStackTrace = stackTraceLines.isEmpty
         ? (stackTrace ?? StackTrace.current).filterCallStack(
@@ -188,20 +189,21 @@ class LogIt {
     //     '$message [${DateTime.now()}]',
     //   );
     // }
+    if (!dontLog) {
+      peeplEatsService.writeLog(
+        message: '$message [${DateTime.now()}]',
+        details: {
+          'stackTrace': stackTrace.toString(),
+        },
+      );
 
-    peeplEatsService.writeLog(
-      message: '$message [${DateTime.now()}]',
-      details: {
-        'stackTrace': stackTrace.toString(),
-      },
-    );
-
-    store!.dispatch(
-      AddAppLog(
-        message: '🔵 $message',
-        additionalInfo: {},
-      ),
-    );
+      store!.dispatch(
+        AddAppLog(
+          message: '🔵 $message',
+          additionalInfo: {},
+        ),
+      );
+    }
 
     if (kReleaseMode) {
       return;

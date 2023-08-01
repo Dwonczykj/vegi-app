@@ -425,16 +425,42 @@ class Authentication {
       funcName: 'deregisterUser',
     );
     final store = await reduxStore;
-    store.dispatch(SignupLoading(isLoading: true));
+    store
+      ..dispatch(SignupLoading(isLoading: true))
+      ..dispatch(SignUpLoadingMessage(message: 'Deleting users can take up to 30s, please bare with us... 🥵'));
     // no need to save seed phrase in this option as user wants all details to be deleted.
-    await peeplEatsService.deleteAllUserDetails();
-    await peeplEatsService.deleteWalletAddressDetailsFromAccountsList();
+    try {
+      await peeplEatsService.deleteAllUserDetails();
+    } on Exception catch (e, s) {
+      // TODO
+      log.error(
+        'Error trying delete user details from vegi: $e',
+        error: e,
+        stackTrace: s,
+      );
+    }
+    store
+      .dispatch(SignUpLoadingMessage(
+          message:
+              'Almost there now...'));
+    try {
+      await peeplEatsService.deleteWalletAddressDetailsFromAccountsList();
+    } on Exception catch (e, s) {
+      // TODO
+      log.error(
+        "Error trying delete user's wallet details from vegi: $e",
+        error: e,
+        stackTrace: s,
+      );
+    }
     await logout(
       bypassSeedPhraseCheck: true,
     );
     await Analytics.track(eventName: AnalyticsEvents.deleteAccountSuccess);
-    await rootRouter.replaceAll([const ResetApp()]);
-    store.dispatch(SignupLoading(isLoading: false));
+    await rootRouter.replaceAll([const ResetApp(), const OnBoardScreen()]);
+    store
+      ..dispatch(SignUpLoadingMessage(message: ''))
+      ..dispatch(SignupLoading(isLoading: false));
   }
 
   /// Wrapper function around the firebase.signInUserBySendingEmailLink method
@@ -714,12 +740,40 @@ class Authentication {
     );
   }
 
-  Future<String?> _getFusePrivateKeyForPhoneInStore() async {
+  Future<bool> _checkMnemonicMatchesPrivateKey({
+    required List<String> mnemonic,
+    required String privateKey,
+  }) async {
+    if (mnemonic.isEmpty || mnemonic.first.isEmpty) {
+      return false;
+    }
+    final String mnemonicStr = mnemonic.join(' ');
+    final derivedPrivateKey = Mnemonic.privateKeyFromMnemonic(mnemonicStr);
+    return derivedPrivateKey == privateKey;
+  }
+
+  Future<String?> _getFusePrivateKeyForPhoneInStore({
+    List<String>? useMnemonicWords,
+  }) async {
     final store = await reduxStore;
     final phoneNumber = store.state.userState.phoneNumberE164;
     if (store.state.authState.phoneNumberToPrivateKeyMap
         .containsKey(phoneNumber)) {
-      return store.state.authState.phoneNumberToPrivateKeyMap[phoneNumber];
+      final privateKeyForPhone =
+          store.state.authState.phoneNumberToPrivateKeyMap[phoneNumber];
+      if (useMnemonicWords != null &&
+          useMnemonicWords.isNotEmpty &&
+          privateKeyForPhone != null &&
+          privateKeyForPhone.isNotEmpty) {
+        final isMatch = await _checkMnemonicMatchesPrivateKey(
+          mnemonic: useMnemonicWords,
+          privateKey: privateKeyForPhone,
+        );
+        if (!isMatch) {
+          return null;
+        }
+      }
+      return privateKeyForPhone;
     } else {
       return null;
     }
@@ -735,7 +789,9 @@ class Authentication {
     );
     final store = await reduxStore;
     store.dispatch(SignUpLoadingMessage(message: 'Fetching wallet 👾...'));
-    final privateKeyForPhone = await _getFusePrivateKeyForPhoneInStore();
+    final privateKeyForPhone = await _getFusePrivateKeyForPhoneInStore(
+      useMnemonicWords: useMnemonicWords,
+    );
     if (privateKeyForPhone != store.state.userState.privateKey) {
       store.dispatch(
         ResetFuseCredentials(
@@ -743,13 +799,7 @@ class Authentication {
         ),
       );
     }
-    if (store.state.userState.fuseAuthenticationStatus ==
-            FuseAuthenticationStatus.authenticated &&
-        privateKeyForPhone != null) {
-      // return true;
-      onWalletInitialised?.call();
-      return;
-    }
+
     await _initFuseWallet(
       store,
       onWalletInitialised: onWalletInitialised,
@@ -766,6 +816,9 @@ class Authentication {
       className: 'Authentication',
       funcName: '_signInToOnboardingProviderWithEmail',
     );
+    final store = await reduxStore;
+    store.dispatch(
+        SignUpLoadingMessage(message: 'Authenticating Email & Password 🚀...'));
     // final store = await reduxStore;
     return onBoardStrategy.signInUserWithEmailAndPassword(
       email: email,
@@ -863,6 +916,9 @@ class Authentication {
             vegiStatus: VegiAuthenticationStatus.failed,
           ),
         );
+      onCompleteFlow();
+      store.dispatch(
+          SignUpLoadingMessage(message: 'vegi authentication failed'));
       await Analytics.track(
         eventName: AnalyticsEvents.loginWithPhone,
         properties: {
@@ -980,11 +1036,14 @@ class Authentication {
       funcName: '_loginToVegiWithEmail',
     );
     try {
-      store.dispatch(
-        SetUserAuthenticationStatus(
-          vegiStatus: VegiAuthenticationStatus.loading,
-        ),
-      );
+      store
+        ..dispatch(
+          SetUserAuthenticationStatus(
+            vegiStatus: VegiAuthenticationStatus.loading,
+          ),
+        )
+        ..dispatch(SignUpLoadingMessage(
+            message: 'Authenticating Email & Password on vegi 🥑...'));
 
       // * sets the session cookie on the service class instance.
       final vegiSession = await peeplEatsService.loginWithEmail(
@@ -1030,21 +1089,26 @@ class Authentication {
         await _complete(
           vegiStatus: VegiAuthenticationStatus.failed,
         );
+        store.dispatch(SignUpLoadingMessage(
+            message: 'Failed to authenticate email credentials with vegi'));
       }
+      store.dispatch(SignUpLoadingMessage(message: ''));
       return vegiSession.sessionCookie.isNotEmpty
           ? LoggedInToVegiResult.success
           : LoggedInToVegiResult.failedEmptySessionCookie;
-    } catch (err) {
+    } catch (err, s) {
       await _complete(
         firebaseStatus: FirebaseAuthenticationStatus.authenticated,
         vegiStatus: VegiAuthenticationStatus.failed,
       );
+      store.dispatch(SignUpLoadingMessage(
+          message: 'Failed to authenticate email credentials with vegi'));
       log
         ..error(
           err,
-          stackTrace: StackTrace.current,
+          stackTrace: s,
         )
-        ..error(err.toString());
+        ..error(err.toString(), stackTrace: s,);
       store.dispatch(
         SetFirebaseSessionToken(
           firebaseSessionToken: null,
@@ -1085,32 +1149,36 @@ class Authentication {
       ),
     );
     late final EthPrivateKey credentials;
-    // * Fuse - Create PrivateKey
+    final mnemonicInState = store.state.userState.mnemonic;
+    final mnemonic = useMnemonicWords ?? store.state.userState.mnemonic;
+    // * Fuse - Create PrivateKey if no privateKey in state or no mnemonic in state
     if (privateKey == null ||
         privateKey.isEmpty ||
-        store.state.userState.mnemonic.isEmpty ||
-        store.state.userState.mnemonic.first.isEmpty) {
-      if (store.state.userState.mnemonic.isEmpty ||
-          store.state.userState.mnemonic.first.isEmpty &&
+        mnemonicInState.isEmpty ||
+        mnemonicInState.first.isEmpty) {
+      if (mnemonic.isEmpty ||
+          mnemonic.first.isEmpty &&
               (privateKey != null || (privateKey?.isNotEmpty ?? false))) {
         log.warn(
-            'Creating a new wallet even though have already created one for this phone number as have lost the mnemonic in the state');
+          'Creating a new wallet even though have already created one for this phone number as have lost the mnemonic in the state',
+        );
       }
       log.info(
-        'Creating a new FuseSDK private key for phoneNumber: ${store.state.userState.phoneNumber}',
+        'Creating a new FuseSDK private key for phoneNumber: ${store.state.userState.phoneNumber}${useMnemonicWords != null ? " using recovery mnemonic" : ""}',
         sentry: true,
       );
-      final String mnemonic = useMnemonicWords != null
+      final String mnemonicStr = useMnemonicWords != null
           ? useMnemonicWords.join(' ')
-          : Mnemonic.generate();
-      final newPrivateKey = Mnemonic.privateKeyFromMnemonic(mnemonic);
-      //! await peeplEatsService.backupUserSK(privateKey);
+          : mnemonicInState.isNotEmpty && mnemonicInState.first.isNotEmpty
+              ? mnemonicInState.join(' ')
+              : Mnemonic.generate();
+      final newPrivateKey = Mnemonic.privateKeyFromMnemonic(mnemonicStr);
       credentials = EthPrivateKey.fromHex(newPrivateKey);
       final EthereumAddress accountAddress = credentials.address;
       store
         ..dispatch(
           CreateLocalAccountSuccess(
-            mnemonic.split(' '),
+            mnemonicStr.split(' '),
             newPrivateKey,
             credentials,
             // accountAddress.toString(),
@@ -1148,6 +1216,24 @@ class Authentication {
     if (!authSucceeded) {
       // return FuseAuthenticationStatus.failedAuthentication;
       return;
+    }
+
+    if (store.state.userState.fuseAuthenticationStatus ==
+            FuseAuthenticationStatus.authenticated &&
+        (privateKey?.isNotEmpty ?? false)) {
+      // return true;
+      onWalletInitialised?.call();
+
+      try {
+        await _emitWallet(fuseWalletSDK.smartWallet);
+        return;
+      } on Exception catch (e, s) {
+        log.warn(
+          'Unable to return smartWallet even though loaded and sdk not initialised yet.',
+          error: e,
+          stackTrace: s,
+        );
+      }
     }
 
     // * FUSE - Fetch/Create Wallet from FuseSDK
@@ -1202,6 +1288,11 @@ class Authentication {
       ..dispatch(
         SignUpFailed(
           error: null,
+        ),
+      )
+      ..dispatch(
+        SignUpLoadingMessage(
+          message: '',
         ),
       )
       ..dispatch(SignupLoading(isLoading: false))
@@ -1337,6 +1428,11 @@ class Authentication {
             error: exceptionOrStream.error,
             stackTrace: StackTrace.current,
           );
+          store.dispatch(
+            SignUpLoadingMessage(
+              message: 'Failed to create vegi wallet 👾 👎',
+            ),
+          );
         } else if (exceptionOrStream.hasData) {
           final smartWalletEventStream = exceptionOrStream.data!
             ..listen(
@@ -1366,6 +1462,11 @@ class Authentication {
                       'Authenticator._fetchCreateFuseWallet fuseWalletSDK.createWallet - transaction stream failed on chain with error ${event.data}',
                     );
                     store.dispatch(
+                      SignUpLoadingMessage(
+                        message: 'Failed to create vegi wallet 👾 👎',
+                      ),
+                    );
+                    store.dispatch(
                       SetUserAuthenticationStatus(
                         fuseStatus: FuseAuthenticationStatus.failedCreate,
                       ),
@@ -1379,6 +1480,11 @@ class Authentication {
                 store.dispatch(
                   SetUserAuthenticationStatus(
                     fuseStatus: FuseAuthenticationStatus.failedCreate,
+                  ),
+                );
+                store.dispatch(
+                  SignUpLoadingMessage(
+                    message: 'Failed to create vegi wallet 👾 👎',
                   ),
                 );
               },

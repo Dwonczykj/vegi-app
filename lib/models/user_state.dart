@@ -243,11 +243,6 @@ class UserState with _$UserState {
   const UserState._();
 
   factory UserState.initial() {
-    log.info(
-      'UserState.initial() called',
-      stackTrace: StackTrace.current,
-      sentry: true,
-    );
     return UserState(
       networks: [],
       mnemonic: [],

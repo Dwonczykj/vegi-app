@@ -64,8 +64,6 @@ Future<void> main() async {
   // ~ see solution https://stackoverflow.com/a/74477245
   await configureDependencies(environment: envStr);
 
-  final store = await reduxStore;
-
   await initFirebaseRemote();
 
   if (kDebugMode || USE_FIREBASE_EMULATOR) {
@@ -83,6 +81,7 @@ Future<void> main() async {
       },
     );
 
+    // final store = await reduxStore;
     // //Pass the store to the Main App which injects it into the entire tree.
     // if (Env.isDev) {
     //   runApp(

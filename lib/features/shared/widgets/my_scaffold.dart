@@ -13,12 +13,14 @@ class MyScaffold extends StatelessWidget {
     this.makeBodySafe = false,
     this.automaticallyImplyLeading = true,
     this.resizeToAvoidBottomInset = true,
+    this.actions,
   }) : super(key: key);
   final String title;
   final Widget body;
   final bool makeBodySafe;
   final bool automaticallyImplyLeading;
   final bool resizeToAvoidBottomInset;
+  final List<Widget>? actions;
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +28,7 @@ class MyScaffold extends StatelessWidget {
       resizeToAvoidBottomInset: resizeToAvoidBottomInset,
       appBar: MyAppBar(
         height: kToolbarHeight,
-        child: AppBar( 
+        child: AppBar(
           systemOverlayStyle: SystemUiOverlayStyle.dark,
           iconTheme: IconThemeData(
             color: Theme.of(context).colorScheme.onSurface,
@@ -44,6 +46,8 @@ class MyScaffold extends StatelessWidget {
             ),
             softWrap: true,
           ),
+          actions: actions,
+          
         ),
       ),
       body: makeBodySafe ? SafeArea(child: body) : body,

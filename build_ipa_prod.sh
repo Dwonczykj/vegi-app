@@ -100,6 +100,46 @@ xcrun agvtool what-version
 
 cd ..
 
+# ~ https://stackoverflow.com/a/43267603
+set -a # automatically export all variables
+source environment/.env_build
+set +a
+
+# ~ https://medium.com/ynap-tech/using-apples-itms-transporter-api-to-upload-builds-to-testflight-60dba18b07bc
+# Create the .itmsp folder
+ITMSP_DIR="$HOME/appstore_testflights.itmsp"
+IPA_FILE="build/ios/ipa/vegi.ipa"
+APPLE_ID="<Your Apple ID>"
+APPSTORE_CONNECT_USERNAME="<Your username>"
+APPSTORE_CONNECT_PASSWORD="<Your password>"
+mkdir "$ITMSP_DIR"
+
+# Move your .ipa file into the .itmsp folder
+cp "$IPA_FILE" "$ITMSP_DIR"
+
+# Generate the metadata.xml file
+fileSize=` stat -f %z "$IPA_FILE"`
+md5Checksum=`md5 "$IPA_FILE"  | cut -d "=" -f 2 | awk '{print $1}'`
+
+echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" > $ITMSP_DIR/metadata.xml
+echo "<package xmlns=\"http://apple.com/itunes/importer\" version=\"software5.4\">" >> $ITMSP_DIR/metadata.xml
+echo "    <software_assets apple_id=\"$APPLE_ID\" app_platform=\"ios\">" >> $ITMSP_DIR/metadata.xml
+echo "        <asset type=\"bundle\">" >> $ITMSP_DIR/metadata.xml 
+echo "        	<data_file>" >> metadata.xml
+echo "                <size>$fileSize</size>" >> $ITMSP_DIR/metadata.xml 
+echo "                <file_name>nap.ipa</file_name>" >> $ITMSP_DIR/metadata.xml 
+echo "            	  <checksum type=\"md5\">$md5Checksum</checksum>" >> $ITMSP_DIR/metadata.xml
+echo "          </data_file>" >> $ITMSP_DIR/metadata.xml 
+echo "        </asset>" >> $ITMSP_DIR/metadata.xml
+echo "    </software_assets>" >> $ITMSP_DIR/metadata.xml 
+echo "</package>" >> $ITMSP_DIR/metadata.xml
+
+# Upload the .itmsp folder to iTunes Connect
+/Applications/Xcode.app/Contents/Applications/Application Loader.app/Contents/itms/bin/iTMSTransporter -m upload -u $APPSTORE_CONNECT_USERNAME 
+-p $APPSTORE_CONNECT_PASSWORD -f $ITMSP_DIR -t DAV -t Signiant -k 100000 -v eXtreme
+
 open build/ios/ipa/
 
 open -a Transporter
+
+

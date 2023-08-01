@@ -322,22 +322,11 @@ class StripeService {
       );
       return false;
     }
-    store
-      // ..dispatch(
-      //   StripePaymentStatusUpdate(
-      //     status: StripePaymentStatus.paymentAttemptCreated,
-      //   ),
-      // )
-      ..dispatch(
-        OrderPaymentAttemptCreated(
-          orderId: orderId,
-        ),
-      );
-    // ..dispatch(
-    //   OrderCreationProcessStatusUpdate(
-    //     status: OrderCreationProcessStatus.orderPaymentAttemptCreated,
-    //   ),
-    // );
+    store.dispatch(
+      OrderPaymentAttemptCreated(
+        orderId: orderId,
+      ),
+    );
     return true;
   }
 
@@ -734,11 +723,6 @@ class StripeService {
             ),
           )
           ..dispatch(
-            OrderCreationProcessStatusUpdate(
-              status: OrderCreationProcessStatus.orderPaymentAttemptCreated,
-            ),
-          )
-          ..dispatch(
             SetProcessingPayment(
               payment: LivePayment(
                 amount: amount.value,
@@ -891,11 +875,6 @@ class StripeService {
           ..dispatch(
             OrderPaymentAttemptCreated(
               orderId: orderId.round(),
-            ),
-          )
-          ..dispatch(
-            OrderCreationProcessStatusUpdate(
-              status: OrderCreationProcessStatus.orderPaymentAttemptCreated,
             ),
           )
           ..dispatch(

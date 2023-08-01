@@ -6,6 +6,7 @@ import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:phone_number/phone_number.dart';
+import 'package:redux/src/store.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:vegan_liverpool/common/router/routes.gr.dart';
 import 'package:vegan_liverpool/common/router/routes.dart' as routes;
@@ -111,20 +112,12 @@ class _SignUpWithEmailAndPasswordScreenState
     return StoreConnector<AppState, MainScreenViewModel>(
       converter: MainScreenViewModel.fromStore,
       distinct: true,
-      // onInit: (store) {
-      //   if (store.state.userState.firebaseCredentials != null) {
-      //     onBoardStrategy.reauthenticateUser().then(
-      //       (reauthSucceeded) {
-      //         if (reauthSucceeded &&
-      //             store.state.userState.walletAddress.isNotEmpty) {
-      //           store
-      //             ..dispatch(isBetaWhitelistedAddress())
-      //             ..dispatch(SignupLoading(isLoading: false));
-      //         }
-      //       },
-      //     );
-      //   }
-      // },
+      onInit: (store) {
+        final userState = store.state.userState;
+        if (userState.email.isNotEmpty) {
+          emailController.text = userState.email;
+        }
+      },
       onWillChange: (previousViewModel, newViewModel) async {
         if (newViewModel.signupError != previousViewModel?.signupError &&
             newViewModel.signupError != null) {
@@ -153,9 +146,6 @@ class _SignUpWithEmailAndPasswordScreenState
         // await checked.runNavigationIfNeeded();
       },
       builder: (context, viewmodel) {
-        if (viewmodel.email.isNotEmpty) {
-          emailController.text = viewmodel.email;
-        }
         final errMessage = _createErrorMessage(viewmodel.signupError);
         return MyScaffold(
           automaticallyImplyLeading: false,
@@ -333,10 +323,28 @@ class _SignUpWithEmailAndPasswordScreenState
                                 StoreProvider.of<AppState>(context)
                                     .dispatch(SignupLoading(isLoading: false)),
                             onPressed: () async {
-                              viewmodel.signinEmailAndPassword(
-                                email:
-                                    emailController.text.toLowerCase().trim(),
-                                password: passwordController.text,
+                              await delayed(
+                                15000,
+                                () async {
+                                  final Store<AppState> store =
+                                      StoreProvider.of<AppState>(context);
+                                  if (store
+                                      .state.onboardingState.signupIsInFlux) {
+                                    await showErrorSnack(
+                                      context: context,
+                                      title: 'Email authentication',
+                                      message:
+                                          'Email authentication taking too long,',
+                                    );
+                                    store.dispatch(
+                                        SignupLoading(isLoading: false));
+                                  }
+                                },
+                                () => viewmodel.signinEmailAndPassword(
+                                  email:
+                                      emailController.text.toLowerCase().trim(),
+                                  password: passwordController.text,
+                                ),
                               );
                             },
                           ),

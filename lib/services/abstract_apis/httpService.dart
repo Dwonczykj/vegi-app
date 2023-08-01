@@ -124,6 +124,7 @@ abstract class HttpService {
   Future<Response<T>> _logHttpResult<T>(
     Future<Response<T>> responseAwaiter, {
     bool dontLog = false,
+    bool dontLogDataFromRequest = false,
   }) {
     return responseAwaiter.then(
       (response) {
@@ -133,9 +134,12 @@ abstract class HttpService {
         final cookiePresentStr =
             response.headers.value('Set-Cookie') != null ? '🍪' : '';
         String data = '';
-        if (response.requestOptions.method == 'POST') {
+        if (response.requestOptions.method == 'POST' &&
+            response.requestOptions.contentType == null &&
+            dontLogDataFromRequest == false) {
           data = jsonEncode(response.requestOptions.data);
-        } else if (response.requestOptions.method == 'GET') {
+        } else if (response.requestOptions.method == 'GET' &&
+            dontLogDataFromRequest == false) {
           data = jsonEncode(response.requestOptions.queryParameters);
         }
         log.info(
@@ -154,9 +158,28 @@ abstract class HttpService {
     List<int> allowStatusCodes = const <int>[],
     Pattern? allowErrorMessage,
   }) async {
+    late final Response<T> response;
+    // Future.value(
+    //   Response(
+    //     data: errorResponseData,
+    //     extra: {
+    //       'error': null,
+    //       'message': 'default response',
+    //       // 'errorMessage': error.response?.data,
+    //       // 'stackTrace': stackTrace.filterCallStack().pretty(),
+    //     },
+    //     statusCode: 400,
+    //     requestOptions: RequestOptions(path: 'error.response?.realUri'),
+    //   ),
+    // );
     try {
-      return responseAwaiterCallback();
+      response = await responseAwaiterCallback();
     } on DioError catch (error, stackTrace) {
+      log.error(
+        'Handle DioError from [$httpProtocol]: "${error.response?.realUri}"',
+        error: error,
+        stackTrace: stackTrace,
+      );
       if (error.response != null &&
           (allowStatusCodes.contains(error.response?.statusCode) ||
               (allowErrorMessage != null &&
@@ -167,13 +190,13 @@ abstract class HttpService {
             ..addAll(
               {
                 'message':
-                    '$httpProtocol: "error.response?.realUri" expected response with code: [${error.response!.statusCode}]',
+                    '$httpProtocol: "${error.response?.realUri}" expected response with code: [${error.response!.statusCode}]',
                 'errorMessage': error.response?.data,
                 'stackTrace': stackTrace.filterCallStack().pretty(),
               },
             ),
           statusCode: 200,
-          requestOptions: RequestOptions(path: 'error.response?.realUri'),
+          requestOptions: RequestOptions(path: '${error.response?.realUri}'),
         );
       }
       if (error.toString().contains('Connection reset by peer') ||
@@ -182,7 +205,7 @@ abstract class HttpService {
         // rootRouter.push(const SignUpScreen());
         log
           ..error(
-              'Ran into error trying to $httpProtocol to "error.response?.realUri"')
+              'Ran into error trying to $httpProtocol to "${error.response?.realUri}"')
           ..error(
             error,
             stackTrace: stackTrace,
@@ -200,7 +223,7 @@ abstract class HttpService {
       }
       log
         ..error(
-            'Ran into error trying to $httpProtocol to "error.response?.realUri"')
+            'Ran into error trying to $httpProtocol to "${error.response?.realUri}"')
         ..error(error, stackTrace: stackTrace);
       if (error.response?.statusCode == 403 ||
           error.response?.statusCode == 401) {
@@ -301,6 +324,7 @@ abstract class HttpService {
         requestOptions: RequestOptions(path: ''),
       );
     }
+    return response;
   }
 
   Future<Response<T?>> dioGet<T>(
@@ -315,21 +339,39 @@ abstract class HttpService {
     Map<String, String>? customHeaders,
     bool dontLog = false,
   }) async {
-    _checkAuthRequestIsSatisfied(sendWithAuthCreds, dontRoute: dontRoute);
-    if (!path.startsWith('/')) path = '/' + path;
     const protocol = 'GET';
-    log.info(
-      '$protocol: "${dio.options.baseUrl}$path"',
-      sentry: true,
-    );
+    var path_ = path;
+    if (!path.startsWith('/') && !dio.options.baseUrl.endsWith('/')) {
+      path_ = '/$path';
+    } else if (path.startsWith('/') && dio.options.baseUrl.endsWith('/')) {
+      path_ = path.substring(1);
+    }
+    if (dontLog == false) {
+      log.info(
+        '$protocol: "${dio.options.baseUrl}$path_"',
+        sentry: true,
+      );
+    }
+    final satisfied =
+        _checkAuthRequestIsSatisfied(sendWithAuthCreds, dontRoute: dontRoute);
+    if (!satisfied) {
+      return Future.value(
+        Response(
+          data: null,
+          statusCode: 401,
+          requestOptions: RequestOptions(path: path),
+        ),
+      );
+    }
     if (customHeaders?.isNotEmpty ?? false) {
       options ??= Options();
       options.headers?.addAll(customHeaders!);
+      options.headers!['Accept'] = 'application/json';
     }
     return _handleHttpResult(
       () => _logHttpResult(
         dio.get<T>(
-          path,
+          path_,
           queryParameters: queryParameters,
           options: options,
           cancelToken: cancelToken,
@@ -339,62 +381,9 @@ abstract class HttpService {
       ),
       httpProtocol: protocol,
     );
-    // try {
-    // } on DioError catch (dioErr, stackTrace) {
-    //   log.warn(
-    //       'Got an error GET response from "${dioErr.response?.realUri}" with error: "${dioErr.response?.data}"');
-    //   if (dioErr.response != null &&
-    //       allowStatusCodes.contains(dioErr.response!.statusCode)) {
-    //     return Future.value(
-    //       Response(
-    //         data: null,
-    //         extra: {
-    //           'message':
-    //               '$protocol: "${dio.options.baseUrl}$path" returned expected error response with code: [${dioErr.response!.statusCode}]',
-    //           'errorMessage': dioErr.response?.data,
-    //           'stackTrace': stackTrace.filterCallStack().pretty(),
-    //         },
-    //         statusCode: 200,
-    //         requestOptions: RequestOptions(path: '${dio.options.baseUrl}$path'),
-    //       ),
-    //     );
-    //   }
-    //   if (!_checkAuthDioResponse(dioErr, dontRoute: dontRoute)) {
-    //     log.error(
-    //         'ERROR [vegi service [${dioErr.response?.statusCode}]] - dioGet -> $dioErr');
-    //   }
-    //   return Future.value(
-    //     Response(
-    //       data: null,
-    //       extra: {
-    //         'error': dioErr,
-    //         'message':
-    //             '$protocol: "${dio.options.baseUrl}$path" threw -> "${dioErr.message}"',
-    //         'errorMessage': dioErr.response?.data,
-    //       },
-    //       statusCode: dioErr.response?.statusCode,
-    //       requestOptions: RequestOptions(path: '${dio.options.baseUrl}$path'),
-    //     ),
-    //   );
-    // } catch (e, s) {
-    //   log.error(
-    //     'ERROR - dio$protocol -> $e',
-    //     stackTrace: s,
-    //   );
-    //   return Future.value(
-    //     Response(
-    //       data: null,
-    //       extra: {
-    //         'error': e,
-    //         'message': '$protocol: "${dio.options.baseUrl}$path" threw -> "$e"',
-    //       },
-    //       requestOptions: RequestOptions(path: '${dio.options.baseUrl}$path'),
-    //     ),
-    //   );
-    // }
   }
 
-  Future<Response<T>> dioPost<T>(
+  Future<Response<T?>> dioPost<T>(
     String path, {
     dynamic data,
     Map<String, dynamic>? queryParameters,
@@ -423,11 +412,22 @@ abstract class HttpService {
         sentry: true,
       );
     }
-    _checkAuthRequestIsSatisfied(sendWithAuthCreds, dontRoute: dontRoute);
+    final satisfied =
+        _checkAuthRequestIsSatisfied(sendWithAuthCreds, dontRoute: dontRoute);
+    if (!satisfied) {
+      return Future.value(
+        Response(
+          data: errorResponseData,
+          statusCode: 401,
+          requestOptions: RequestOptions(path: path),
+        ),
+      );
+    }
     if (customHeaders?.isNotEmpty ?? false) {
       options ??= Options();
       options.headers ??= {};
       options.headers!.addAll(customHeaders!);
+      options.headers!['Accept'] = 'application/json';
     }
 
     return _handleHttpResult(
@@ -447,7 +447,7 @@ abstract class HttpService {
     );
   }
 
-  Future<Response<T>> dioPutFile<T>(
+  Future<Response<T?>> dioPutFile<T>(
     String path, {
     required File file,
     Map<String, dynamic>? queryParameters,
@@ -458,12 +458,26 @@ abstract class HttpService {
     void Function(int, int)? onReceiveProgress,
     bool dontRoute = false,
     bool sendWithAuthCreds = false,
+    List<int> allowStatusCodes = const <int>[],
+    Pattern? allowErrorMessage,
+    Map<String, String>? customHeaders,
+    bool dontLog = false,
   }) async {
     const protocol = 'PUT';
-    _checkAuthRequestIsSatisfied(sendWithAuthCreds, dontRoute: dontRoute);
+    final satisfied =
+        _checkAuthRequestIsSatisfied(sendWithAuthCreds, dontRoute: dontRoute);
+    if (!satisfied) {
+      return Future.value(
+        Response(
+          data: errorResponseData,
+          statusCode: 401,
+          requestOptions: RequestOptions(path: path),
+        ),
+      );
+    }
     final image = file.readAsBytesSync();
 
-    final options = Options(
+    final uploadOptions = Options(
       contentType: mime.lookupMimeType(file.path),
       headers: {
         'Accept': 'application/json',
@@ -472,121 +486,49 @@ abstract class HttpService {
         'User-Agent': 'ClinicPlush'
       },
     );
+    if (customHeaders?.isNotEmpty ?? false) {
+      uploadOptions.headers!.addAll(customHeaders!);
+    }
+    if (options == null) {
+      options = uploadOptions;
+    } else {
+      options
+        ..contentType = uploadOptions.contentType
+        ..headers ??= {}
+        ..followRedirects = false;
+      options.headers!.addAll(uploadOptions.headers!);
+    }
     var path_ = path;
     if (!path.startsWith('/') && !dio.options.baseUrl.endsWith('/')) {
       path_ = '/$path';
     } else if (path.startsWith('/') && dio.options.baseUrl.endsWith('/')) {
       path_ = path.substring(1);
     }
-    log.info(
-      '$protocol: "${dio.options.baseUrl}$path_"',
-      sentry: true,
-    );
+    if (dontLog == false) {
+      log.info(
+        '$protocol: "${dio.options.baseUrl}$path_"',
+        sentry: true,
+      );
+    }
 
     return _handleHttpResult(
-      () => _logHttpResult(dio.put<T>(
-        path_,
-        data: Stream.fromIterable(image.map((e) => [e])),
-        options: options,
-        cancelToken: cancelToken,
-        onSendProgress: onSendProgress,
-        onReceiveProgress: onReceiveProgress,
-      )),
+      () => _logHttpResult(
+        dio.put<T>(
+          path_,
+          data: Stream.fromIterable(image.map((e) => [e])),
+          options: options,
+          cancelToken: cancelToken,
+          onSendProgress: onSendProgress,
+          onReceiveProgress: onReceiveProgress,
+        ),
+        dontLog: dontLog,
+        dontLogDataFromRequest: true,
+      ),
       httpProtocol: protocol,
     );
-    // try {} on DioError catch (error, stackTrace) {
-    //   if (error.response?.data.toString() ==
-    //       'Unauthorized') if (!_checkAuthDioResponse(error, dontRoute: dontRoute)) {
-    //     return Response(
-    //       data: errorResponseData,
-    //       extra: {
-    //         'error': error.error,
-    //         'message': error.message,
-    //         'errorMessage': error.response?.data,
-    //         'dioResponse': error.response,
-    //         'dioErrorType': error.type,
-    //         'data': error.response?.data,
-    //       },
-    //       isRedirect: error.response?.isRedirect ?? false,
-    //       redirects: error.response?.redirects ?? [],
-    //       headers: error.response?.headers,
-    //       statusCode: error.response?.statusCode ?? 500,
-    //       requestOptions: error.requestOptions,
-    //     );
-    //   } else {
-    //     return Response(
-    //       data: errorResponseData,
-    //       extra: {
-    //         'error': null,
-    //         'message': 'Stale session cookie possible caused by server reboot',
-    //         'errorMessage': error.response?.data,
-    //       },
-    //       statusCode: 401,
-    //       requestOptions: RequestOptions(path: '${dio.options.baseUrl}${path}'),
-    //     );
-    //   }
-    // } on Exception catch (error, stackTrace) {
-    //   if (error.toString().contains('Connection reset by peer') ||
-    //       (error is DioError &&
-    //           error.response?.data.toString() == 'Unauthorized')) {
-    //     await deleteSessionCookie(); //todo: return a 401...
-    //     // rootRouter.push(const SignUpScreen());
-    //     log
-    //       ..error(
-    //           'Ran into error trying to POST to "${dio.options.baseUrl}${path.substring(1)}"')
-    //       ..error(error, stackTrace: stackTrace);
-    //     return Response(
-    //       data: errorResponseData,
-    //       extra: {
-    //         'error': null,
-    //         'message': 'Stale session cookie possible caused by server reboot',
-    //         'stackTrace': stackTrace.filterCallStack().pretty(),
-    //       },
-    //       statusCode: 401,
-    //       requestOptions: RequestOptions(path: '${dio.options.baseUrl}${path}'),
-    //     );
-    //   }
-    //   return Response(
-    //     data: errorResponseData,
-    //     extra: {
-    //       'error': error,
-    //       'message': '$error',
-    //       'stackTrace': stackTrace.filterCallStack().pretty(),
-    //     },
-    //     statusCode: 500,
-    //     requestOptions: RequestOptions(path: ''),
-    //   );
-    // } catch (error, stackTrace) {
-    //   if (error is Map<String, dynamic> &&
-    //       error['message'].toString().startsWith('SocketException:') &&
-    //       dio.options.baseUrl.startsWith('http://localhost')) {
-    //     log.warn(
-    //       'If running from real_device, cant connect to localhost on running machine...',
-    //     );
-    //   }
-    //   return Response(
-    //     data: errorResponseData,
-    //     extra: {
-    //       'error': error,
-    //       'message': '$error',
-    //       'stackTrace': stackTrace.filterCallStack().pretty(),
-    //     },
-    //     statusCode: 500,
-    //     requestOptions: RequestOptions(path: ''),
-    //   );
-    // }
-    // return Response(
-    //   data: errorResponseData,
-    //   extra: {
-    //     'error': null,
-    //     'message': '',
-    //   },
-    //   statusCode: 500,
-    //   requestOptions: RequestOptions(path: ''),
-    // );
   }
 
-  Future<Response<T>> dioPostFile<T>(
+  Future<Response<T?>> dioPostFile<T>(
     String path, {
     required File file,
     required FormData Function({required MultipartFile file}) formDataCreator,
@@ -599,20 +541,58 @@ abstract class HttpService {
     void Function(int, int)? onReceiveProgress,
     bool dontRoute = false,
     bool sendWithAuthCreds = false,
+    List<int> allowStatusCodes = const <int>[],
+    Pattern? allowErrorMessage,
+    Map<String, String>? customHeaders,
+    bool dontLog = false,
   }) async {
     const protocol = 'POST';
-    _checkAuthRequestIsSatisfied(sendWithAuthCreds, dontRoute: dontRoute);
+
+    final satisfied =
+        _checkAuthRequestIsSatisfied(sendWithAuthCreds, dontRoute: dontRoute);
+    if (!satisfied) {
+      return Future.value(
+        Response(
+          data: errorResponseData,
+          statusCode: 401,
+          requestOptions: RequestOptions(path: path),
+        ),
+      );
+    }
     final image = file.readAsBytesSync();
+    final uploadOptions = Options(
+      contentType: mime.lookupMimeType(file.path),
+      headers: {
+        'Accept': 'application/json',
+        'Content-Length': image.length,
+        'Connection': 'keep-alive',
+        'User-Agent': 'ClinicPlush'
+      },
+    );
+    if (customHeaders?.isNotEmpty ?? false) {
+      uploadOptions.headers!.addAll(customHeaders!);
+    }
+    if (options == null) {
+      options = uploadOptions;
+    } else {
+      options
+        ..contentType = uploadOptions.contentType
+        ..headers ??= {}
+        ..followRedirects = false;
+      options.headers!.addAll(uploadOptions.headers!);
+    }
     var path_ = path;
     if (!path.startsWith('/') && !dio.options.baseUrl.endsWith('/')) {
       path_ = '/$path';
     } else if (path.startsWith('/') && dio.options.baseUrl.endsWith('/')) {
       path_ = path.substring(1);
     }
-    log.info(
-      '$protocol: "${dio.options.baseUrl}$path_"',
-      sentry: true,
-    );
+    if (dontLog == false) {
+      log.info(
+        '$protocol: "${dio.options.baseUrl}$path_"',
+        sentry: true,
+      );
+    }
     MultipartFile imgByteStream;
     String mimeType;
     String mimeSubType;
@@ -646,22 +626,15 @@ abstract class HttpService {
       if ((imgByteStream.length * 0.00000095367432) > fileUploadVegiMaxSizeMB) {
         final wm =
             'Image upload (${(imgByteStream.length * 0.00000095367432).toStringAsFixed(2)}MB) is too large as > ${fileUploadVegiMaxSizeMB}MB. It will be compressed on the server';
-        log.info(wm);
-        // onError(
-        //   wm,
-        //   FileUploadErrCode.imageTooLarge,
-        // );
-        // return Future.value(
-        //   Response(
-        //     data: errorResponseData,
-        //     statusCode: 500,
-        //     requestOptions: RequestOptions(path: path),
-        //   ),
-        // );
+        if (dontLog == false) {
+          log.info(wm);
+        }
       }
     } catch (err, stack) {
       final wm = 'Unable to encode image for sending to vegi: $err';
-      log.error(err, stackTrace: stack);
+      if (dontLog == false) {
+        log.error(err, stackTrace: stack);
+      }
       onError(
         wm,
         FileUploadErrCode.unknownError,
@@ -675,89 +648,20 @@ abstract class HttpService {
       );
     }
 
-    final options = Options(
-      contentType: mime.lookupMimeType(file.path),
-      headers: {
-        'Accept': 'application/json',
-        'Content-Length': image.length,
-        'Connection': 'keep-alive',
-        'User-Agent': 'ClinicPlush'
-      },
-    );
-
     return _handleHttpResult(
-      () => _logHttpResult(dio.post<T>(
-        path_,
-        data: formDataCreator(file: imgByteStream),
-        options: options,
-        cancelToken: cancelToken,
-        onSendProgress: onSendProgress,
-        onReceiveProgress: onReceiveProgress,
-      )),
+      () => _logHttpResult(
+        dio.post<T>(
+          path_,
+          data: formDataCreator(file: imgByteStream),
+          options: options,
+          cancelToken: cancelToken,
+          onSendProgress: onSendProgress,
+          onReceiveProgress: onReceiveProgress,
+        ),
+        dontLog: dontLog,
+        dontLogDataFromRequest: true,
+      ),
       httpProtocol: protocol,
     );
-    // ..onError((error, stackTrace) {
-    //   log.error(error, stackTrace: stackTrace);
-    //   if (error is Map<String, dynamic> &&
-    //       error['message'].toString().startsWith('SocketException:') &&
-    //       dio.options.baseUrl.startsWith('http://localhost')) {
-    //     log.warn(
-    //       'If running from real_device, cant connect to localhost on running machine...',
-    //     );
-    //     onError(
-    //       'Simulator specific Error',
-    //       FileUploadErrCode.unknownError,
-    //     );
-    //   } else if (error is DioError) {
-    //     if (!_checkAuthDioResponse(error, dontRoute: dontRoute)) {
-    //       onError(
-    //         error.message ?? '',
-    //         FileUploadErrCode.unknownError,
-    //       );
-    //       return Response(
-    //         data: errorResponseData,
-    //         extra: {
-    //           'error': error.error,
-    //           'message': error.message,
-    //           'errorMessage': error.response?.data,
-    //           'dioResponse': error.response,
-    //           'dioErrorType': error.type,
-    //           'data': error.response?.data,
-    //         },
-    //         isRedirect: error.response?.isRedirect ?? false,
-    //         redirects: error.response?.redirects ?? [],
-    //         headers: error.response?.headers,
-    //         statusCode: error.response?.statusCode ?? 500,
-    //         requestOptions: error.requestOptions,
-    //       );
-    //     } else {
-    //       return Response(
-    //         data: errorResponseData,
-    //         extra: {
-    //           'error': null,
-    //           'message':
-    //               'Stale session cookie possible caused by server reboot',
-    //           'errorMessage': error.response?.data,
-    //         },
-    //         statusCode: 401,
-    //         requestOptions:
-    //             RequestOptions(path: '${dio.options.baseUrl}${path}'),
-    //       );
-    //     }
-    //   }
-    //   onError(
-    //     'Unknown error!',
-    //     FileUploadErrCode.unknownError,
-    //   );
-    //   return Response(
-    //     data: errorResponseData,
-    //     extra: {
-    //       'error': null,
-    //       'message': '',
-    //     },
-    //     statusCode: 500,
-    //     requestOptions: RequestOptions(path: path),
-    //   );
-    // });
   }
 }

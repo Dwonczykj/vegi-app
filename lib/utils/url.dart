@@ -68,3 +68,9 @@ final mailContactVegiSupport = mailAutofillNewMessage(
   Messages.newSupportRequestSubjectHeader,
   '',
 );
+
+String mailContactVegiSupportWithMessage(String message) => mailAutofillNewMessage(
+  VEGI_SUPPORT_EMAIL,
+  Messages.newSupportRequestSubjectHeader,
+  message,
+);
