@@ -5,9 +5,7 @@ import 'package:vegan_liverpool/models/restaurant/restaurantMenuItem.dart';
 
 class MenuStickyHeader<T> extends StatefulWidget {
   const MenuStickyHeader({
-    Key? key,
-    required this.title,
-    required this.controller,
+    required this.title, required this.controller, Key? key,
   }) : super(key: key);
 
   final String title;

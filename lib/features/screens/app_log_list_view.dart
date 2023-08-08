@@ -50,7 +50,7 @@ class AppLogListView extends StatelessWidget {
                   onTap: withHelloWorld(() => showDialog<Widget>(
                     context: context,
                     builder: (context) => AppLogDetailDialog(log: item),
-                  )),
+                  ),),
                 );
               },
             ),

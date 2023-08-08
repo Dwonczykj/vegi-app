@@ -75,7 +75,7 @@ class TipSelectionCard extends StatelessWidget {
 }
 
 class TipCard extends StatefulWidget {
-  const TipCard({Key? key, required this.emoji, required this.tipAmount})
+  const TipCard({required this.emoji, required this.tipAmount, Key? key})
       : super(key: key);
 
   final String emoji;
@@ -105,17 +105,17 @@ class _TipCardState extends State<TipCard> {
                   'tipAmount': widget.tipAmount,
                 },
               );
-              final _tipAmount = Money(
+              final tipAmount = Money(
                 currency: Currency.GBPx,
                 value: widget.tipAmount,
               );
-              log.verbose('Add tip: $_tipAmount');
+              log.verbose('Add tip: $tipAmount');
               Future.delayed(const Duration(milliseconds: 100), () {
                 viewmodel.selectedUserTip.inGBPx.value ==
-                        _tipAmount.inGBPx.value
-                    ? viewmodel.updateUserTip(tipAmount: Money.zeroGBPx())
+                        tipAmount.inGBPx.value
+                    ? viewmodel.updateUserTip(tipAmount: const Money.zeroGBPx())
                     : viewmodel.updateUserTip(
-                        tipAmount: _tipAmount,
+                        tipAmount: tipAmount,
                       );
               });
             },

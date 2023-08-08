@@ -21,8 +21,7 @@ class OpeningHours with _$OpeningHours {
     required String? timezone,
     required String? specialDate,
     required DayOfWeek dayOfWeek,
-    @Default(false) bool isOpen,
-    required String? logicId,
+    required String? logicId, @Default(false) bool isOpen,
   }) = _OpeningHours;
 
   const OpeningHours._();

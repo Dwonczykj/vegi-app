@@ -9,9 +9,6 @@ class Money implements Comparable {
     required this.value,
   });
 
-  final Currency currency;
-  final num value;
-
   const Money.zeroGBP()
       : currency = Currency.GBP,
         value = 0.0;
@@ -31,22 +28,22 @@ class Money implements Comparable {
         value: json['value'] as num,
       );
 
+  final Currency currency;
+  final num value;
+
   String get formattedGBPPrice => convertInternalCurrencyAmount(
         fromCurrency: currency,
-        toCurrency: Currency.GBP,
         amount: value,
       ).formattedGBPPrice;
 
   num get inGBPValue => convertInternalCurrencyAmount(
         fromCurrency: currency,
-        toCurrency: Currency.GBP,
         amount: value,
       );
   Money get inGBP => Money(
         currency: Currency.GBP,
         value: convertInternalCurrencyAmount(
           fromCurrency: currency,
-          toCurrency: Currency.GBP,
           amount: value,
         ),
       );
@@ -74,23 +71,21 @@ class Money implements Comparable {
         ),
       );
 
-  /**
-   * convert any crypto currencies to the local currency for that region
-   * 
-   * - FUSE -> GBP (FOR NOW),
-   * 
-   * - GBPx -> GBP,
-   * 
-   * - GBT -> GBP,
-   * 
-   * - PPL -> GBP,
-   * 
-   * - USD -> USD,
-   * 
-   * - EUR -> EUR,
-   * 
-   * - [GBP -> GBP],
-   */
+  /// convert any crypto currencies to the local currency for that region
+  /// 
+  /// - FUSE -> GBP (FOR NOW),
+  /// 
+  /// - GBPx -> GBP,
+  /// 
+  /// - GBT -> GBP,
+  /// 
+  /// - PPL -> GBP,
+  /// 
+  /// - USD -> USD,
+  /// 
+  /// - EUR -> EUR,
+  /// 
+  /// - [GBP -> GBP],
   Money toFiatCcy() {
     var toCurrency = Currency.GBP;
     if ([Currency.GBPx, Currency.GBT, Currency.PPL].contains(currency)) {
@@ -161,13 +156,13 @@ class Money implements Comparable {
   String get formattedCurrencySymbol => currency == Currency.GBP
       ? '£'
       : currency == Currency.USD
-          ? "\$"
+          ? r'$'
           : '[${currency.name}] ';
 
   String get formattedPrice =>
-      '${formattedCurrencySymbol}${value.toStringAsFixed(2)}';
+      '$formattedCurrencySymbol${value.toStringAsFixed(2)}';
   String get formattedPriceNoDecimals =>
-      '${formattedCurrencySymbol}${value.toStringAsFixed(0)}';
+      '$formattedCurrencySymbol${value.toStringAsFixed(0)}';
 
   @override
   String toString() {

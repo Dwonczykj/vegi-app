@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:simple_animations/simple_animations.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -30,7 +29,7 @@ class _OnBoardScreenState extends State<OnBoardScreen>
 
   Color screenColor = Colors.white;
 
-  double _bottomRowOpacity = 1;
+  final double _bottomRowOpacity = 1;
 
   @override
   void initState() {
@@ -105,17 +104,21 @@ class _OnBoardScreenState extends State<OnBoardScreen>
                   ..dispatch(getVegiWalletAccountDetails());
                 if (store.state.userState.hasOnboarded) {
                   log.info(
-                      '🚀 Push PinCodeScreen from on_board_screen as already  completed onboarding and userState.isLoggedIn');
+                    '🚀 Push PinCodeScreen from on_board_screen as already  completed onboarding and userState.isLoggedIn',
+                  );
                   rootRouter.push(const PinCodeScreen());
                 } else {
                   log.info(
-                      '🚀 Push next onboarding flow screen from on_board_screen as need to complete onboarding flow though userState.isLoggedIn');
+                    '🚀 Push next onboarding flow screen from on_board_screen as need to complete onboarding flow though userState.isLoggedIn',
+                  );
                   // authenticated but never completed onboarding so complete onboarding flow.
                   store
-                    ..dispatch(getUserDetails(
-                      onComplete: onBoardStrategy.nextOnboardingPage,
-                      onFailed: onBoardStrategy.nextOnboardingPage,
-                    ))
+                    ..dispatch(
+                      getUserDetails(
+                        onComplete: onBoardStrategy.nextOnboardingPage,
+                        onFailed: onBoardStrategy.nextOnboardingPage,
+                      ),
+                    )
                     ..dispatch(getVegiWalletAccountDetails());
                 }
               });
@@ -123,7 +126,8 @@ class _OnBoardScreenState extends State<OnBoardScreen>
               rootRouter.push(const SignUpScreen());
               reduxStore.then((store) {
                 log.info(
-                    'Navigate to SignUpScreen from on_board_screen because user has authState: ${store.state.userState.authState}');
+                  'Navigate to SignUpScreen from on_board_screen because user has authState: ${store.state.userState.authState}',
+                );
               });
             }
           },
@@ -154,7 +158,7 @@ class _OnBoardScreenState extends State<OnBoardScreen>
       );
     }
 
-    final _tween = MovieTween()
+    final tween = MovieTween()
       ..scene(begin: Duration.zero, duration: const Duration(seconds: 1)).tween(
         screenColor,
         ColorTween(begin: themeShade200, end: themeShade700),
@@ -184,8 +188,8 @@ class _OnBoardScreenState extends State<OnBoardScreen>
           Expanded(
             flex: 20,
             child: CustomAnimationBuilder(
-              tween: _tween, // Pass in tween
-              duration: _tween.duration, // Obtain duration
+              tween: tween, // Pass in tween
+              duration: tween.duration, // Obtain duration
               builder: (_, Movie value, child) {
                 return ColoredBox(
                   color: _bottomRowOpacity > 0
@@ -223,7 +227,6 @@ class _OnBoardScreenState extends State<OnBoardScreen>
                                 opacity: _bottomRowOpacity,
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
-                                  mainAxisSize: MainAxisSize.max,
                                   children: [
                                     arrowButton(
                                       context,
@@ -246,7 +249,7 @@ class _OnBoardScreenState extends State<OnBoardScreen>
                                           count: welcomeScreens.length,
                                           effect: CustomizableEffect(
                                             dotDecoration: DotDecoration(
-                                              color: Color.fromARGB(
+                                              color: const Color.fromARGB(
                                                 255,
                                                 245,
                                                 254,
@@ -254,17 +257,15 @@ class _OnBoardScreenState extends State<OnBoardScreen>
                                               ),
                                               borderRadius:
                                                   BorderRadius.circular(50),
-                                              dotBorder: DotBorder(
+                                              dotBorder: const DotBorder(
                                                 color: Colors.black,
-                                                width: 3.0,
-                                                padding: 0.0,
-                                                type: DotBorderType.solid,
+                                                width: 3,
                                               ),
                                               height: dotSize,
                                               width: dotSize,
                                             ),
                                             activeDotDecoration: DotDecoration(
-                                              color: Color.fromARGB(
+                                              color: const Color.fromARGB(
                                                 255,
                                                 168,
                                                 200,
@@ -272,11 +273,9 @@ class _OnBoardScreenState extends State<OnBoardScreen>
                                               ),
                                               borderRadius:
                                                   BorderRadius.circular(50),
-                                              dotBorder: DotBorder(
+                                              dotBorder: const DotBorder(
                                                 color: Colors.black,
-                                                width: 3.0,
-                                                padding: 0.0,
-                                                type: DotBorderType.solid,
+                                                width: 3,
                                               ),
                                               height: dotSize,
                                               width: dotSize,

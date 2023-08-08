@@ -112,6 +112,8 @@ _$_UserCartState _$$_UserCartStateFromJson(Map<String, dynamic> json) =>
               _$OrderCreationProcessStatusEnumMap,
               json['orderCreationProcessStatus']) ??
           OrderCreationProcessStatus.none,
+      orderCreationStatusMessage:
+          json['orderCreationStatusMessage'] as String? ?? '',
       stripePaymentStatus: $enumDecodeNullable(
               _$StripePaymentStatusEnumMap, json['stripePaymentStatus']) ??
           StripePaymentStatus.none,
@@ -170,6 +172,7 @@ Map<String, dynamic> _$$_UserCartStateToJson(_$_UserCartState instance) =>
       'productSuggestion': instance.productSuggestion?.toJson(),
       'orderCreationProcessStatus': _$OrderCreationProcessStatusEnumMap[
           instance.orderCreationProcessStatus]!,
+      'orderCreationStatusMessage': instance.orderCreationStatusMessage,
       'stripePaymentStatus':
           _$StripePaymentStatusEnumMap[instance.stripePaymentStatus]!,
       'paymentInProcess': paymentInProcessToJson(instance.paymentInProcess),
@@ -234,6 +237,19 @@ const _$OrderCreationProcessStatusEnumMap = {
   OrderCreationProcessStatus.stripeServiceFailedOnServer:
       'stripeServiceFailedOnServer',
   OrderCreationProcessStatus.invalidSlot: 'invalidSlot',
+  OrderCreationProcessStatus.invalidPostalDistrict: 'invalidPostalDistrict',
+  OrderCreationProcessStatus.invalidDiscountCode: 'invalidDiscountCode',
+  OrderCreationProcessStatus.badItemsRequest: 'badItemsRequest',
+  OrderCreationProcessStatus.allItemsUnavailable: 'allItemsUnavailable',
+  OrderCreationProcessStatus.minimumOrderAmount: 'minimumOrderAmount',
+  OrderCreationProcessStatus.noItemsFound: 'noItemsFound',
+  OrderCreationProcessStatus.invalidVendor: 'invalidVendor',
+  OrderCreationProcessStatus.invalidFulfilmentMethod: 'invalidFulfilmentMethod',
+  OrderCreationProcessStatus.invalidProduct: 'invalidProduct',
+  OrderCreationProcessStatus.invalidProductOption: 'invalidProductOption',
+  OrderCreationProcessStatus.invalidUserAddress: 'invalidUserAddress',
+  OrderCreationProcessStatus.deliveryPartnerUnavailable:
+      'deliveryPartnerUnavailable',
 };
 
 const _$StripePaymentStatusEnumMap = {

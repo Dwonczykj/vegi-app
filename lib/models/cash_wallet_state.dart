@@ -55,8 +55,12 @@ class CashWalletState with _$CashWalletState {
   factory CashWalletState({
     @JsonKey(fromJson: tokensFromJson) @Default({}) Map<String, Token> tokens,
     @JsonKey(fromJson: walletActionsFromJson) WalletActions? walletActions,
-    @JsonKey(ignore: true) @Default(false) bool isTransfersFetchingStarted,
-    @JsonKey(ignore: true) @Default(false) bool isFetchingBalances,
+    @JsonKey(includeFromJson: false, includeToJson: false)
+    @Default(false)
+    bool isTransfersFetchingStarted,
+    @JsonKey(includeFromJson: false, includeToJson: false)
+    @Default(false)
+    bool isFetchingBalances,
     @Default([]) List<WCSessionStore> wcSessionStores,
   }) = _CashWalletState;
 

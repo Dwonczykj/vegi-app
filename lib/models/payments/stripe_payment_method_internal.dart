@@ -9,13 +9,13 @@ part 'stripe_payment_method_internal.freezed.dart';
 part 'stripe_payment_method_internal.g.dart';
 
 List<StripePaymentMethodInternal> fromJsonStripePaymentMethodInternalList(
-        dynamic json) =>
+        dynamic json,) =>
     fromSailsListOfObjectJson<StripePaymentMethodInternal>(
-        StripePaymentMethodInternal.fromJson)(json);
+        StripePaymentMethodInternal.fromJson,)(json);
 StripePaymentMethodInternal? fromJsonStripePaymentMethodInternal(
-        dynamic json) =>
+        dynamic json,) =>
     fromSailsObjectJson<StripePaymentMethodInternal>(
-        StripePaymentMethodInternal.fromJson)(json);
+        StripePaymentMethodInternal.fromJson,)(json);
 
 @Freezed()
 class StripePaymentMethodInternal with _$StripePaymentMethodInternal {
@@ -23,11 +23,10 @@ class StripePaymentMethodInternal with _$StripePaymentMethodInternal {
   factory StripePaymentMethodInternal({
     required String id,
     required StripePaymentMethodType type,
-    @JsonKey(name: 'billing_details') StripeBillingDetails? billingDetails,
+    required bool livemode, @JsonKey(name: 'billing_details') StripeBillingDetails? billingDetails,
     StripePaymentMethodCard? card, // Only if this is a card paymentMethod
     String? customer,
     @Default(0) num created,
-    required bool livemode,
     @Default({}) Map<String, dynamic> metadata,
   }) = _StripePaymentMethodInternal;
 

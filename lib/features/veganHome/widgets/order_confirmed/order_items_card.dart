@@ -5,7 +5,7 @@ import 'package:vegan_liverpool/models/cart/view_item.dart';
 import 'package:vegan_liverpool/models/restaurant/cartItem.dart';
 
 class OrderListCard extends StatelessWidget {
-  const OrderListCard({Key? key, required this.orderItems}) : super(key: key);
+  const OrderListCard({required this.orderItems, Key? key}) : super(key: key);
 
   final List<ViewItem> orderItems;
   @override

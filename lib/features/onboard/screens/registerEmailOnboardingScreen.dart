@@ -134,14 +134,14 @@ class _RegisterEmailOnBoardingScreenState
                 Column(
                   children: [
                     if (viewModel.emailIsRegistered)
-                      Padding(
-                        padding: const EdgeInsets.only(
+                      const Padding(
+                        padding: EdgeInsets.only(
                           top: 10,
                           left: 30,
                           right: 30,
                         ),
                         child: Column(
-                          children: const [
+                          children: [
                             AutoSizeText(
                               Messages.wellBeInTouchSoon,
                               style: TextStyle(
@@ -250,7 +250,7 @@ class _RegisterEmailOnBoardingScreenState
                     if (viewModel.positionInQueue != null)
                       AutoSizeText(
                         "You're our ${viewModel.positionInQueue!.thFormatted(dontFormatStrictlyAbove: 100)} new pal!",
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Colors.black,
                           fontSize: 40,
                           fontWeight: FontWeight.w400,

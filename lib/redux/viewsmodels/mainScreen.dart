@@ -166,7 +166,6 @@ class MainScreenViewModel extends Equatable implements IAuthViewModel {
         if (email.toLowerCase().trim() != store.state.userState.email) {
           log.warn(
             'Cannot subscribeToEmailToNotifications as email on set email onboarding screen not same as email in userstate.',
-            sentry: true,
           );
           return;
         }
@@ -198,8 +197,11 @@ class MainScreenViewModel extends Equatable implements IAuthViewModel {
   final bool isLoggedInToVegi;
   final BiometricAuth biometricAuth;
   final String? firebaseSessionToken;
+  @override
   final FirebaseAuthenticationStatus firebaseAuthenticationStatus;
+  @override
   final FuseAuthenticationStatus fuseAuthenticationStatus;
+  @override
   final VegiAuthenticationStatus vegiAuthenticationStatus;
   final bool signupIsInFlux;
   final SignUpErrorDetails? signupError;

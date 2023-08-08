@@ -12,14 +12,14 @@ _$_CartItem _$$_CartItemFromJson(Map<String, dynamic> json) => _$_CartItem(
           RestaurantMenuItem.fromJson(json['menuItem'] as Map<String, dynamic>),
       totalItemPrice: gbpxPriceFromJson(json['totalItemPrice']),
       itemQuantity: json['itemQuantity'] as int,
-      itemCurrency:
-          $enumDecodeNullable(_$CurrencyEnumMap, json['itemCurrency']) ??
-              Currency.GBPx,
       selectedProductOptions:
           (json['selectedProductOptions'] as Map<String, dynamic>).map(
         (k, e) => MapEntry(int.parse(k),
             ProductOptionValue.fromJson(e as Map<String, dynamic>)),
       ),
+      itemCurrency:
+          $enumDecodeNullable(_$CurrencyEnumMap, json['itemCurrency']) ??
+              Currency.GBPx,
     );
 
 Map<String, dynamic> _$$_CartItemToJson(_$_CartItem instance) =>
@@ -28,9 +28,9 @@ Map<String, dynamic> _$$_CartItemToJson(_$_CartItem instance) =>
       'menuItem': instance.menuItem.toJson(),
       'totalItemPrice': gbpxPriceToJson(instance.totalItemPrice),
       'itemQuantity': instance.itemQuantity,
-      'itemCurrency': _$CurrencyEnumMap[instance.itemCurrency]!,
       'selectedProductOptions': instance.selectedProductOptions
           .map((k, e) => MapEntry(k.toString(), e.toJson())),
+      'itemCurrency': _$CurrencyEnumMap[instance.itemCurrency]!,
     };
 
 const _$CurrencyEnumMap = {

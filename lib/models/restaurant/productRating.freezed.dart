@@ -24,9 +24,9 @@ mixin _$ProductRating {
   double get createdAt => throw _privateConstructorUsedError;
   String get productPublicId => throw _privateConstructorUsedError;
   num get rating => throw _privateConstructorUsedError;
-  Object get evidence => throw _privateConstructorUsedError;
   DateTime get calculatedOn => throw _privateConstructorUsedError;
   Product get product => throw _privateConstructorUsedError;
+  Object get evidence => throw _privateConstructorUsedError;
   List<ESCExplanation> get explanations => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -46,9 +46,9 @@ abstract class $ProductRatingCopyWith<$Res> {
       double createdAt,
       String productPublicId,
       num rating,
-      Object evidence,
       DateTime calculatedOn,
       Product product,
+      Object evidence,
       List<ESCExplanation> explanations});
 
   $ProductCopyWith<$Res> get product;
@@ -71,9 +71,9 @@ class _$ProductRatingCopyWithImpl<$Res, $Val extends ProductRating>
     Object? createdAt = null,
     Object? productPublicId = null,
     Object? rating = null,
-    Object? evidence = null,
     Object? calculatedOn = null,
     Object? product = null,
+    Object? evidence = null,
     Object? explanations = null,
   }) {
     return _then(_value.copyWith(
@@ -93,7 +93,6 @@ class _$ProductRatingCopyWithImpl<$Res, $Val extends ProductRating>
           ? _value.rating
           : rating // ignore: cast_nullable_to_non_nullable
               as num,
-      evidence: null == evidence ? _value.evidence : evidence,
       calculatedOn: null == calculatedOn
           ? _value.calculatedOn
           : calculatedOn // ignore: cast_nullable_to_non_nullable
@@ -102,6 +101,7 @@ class _$ProductRatingCopyWithImpl<$Res, $Val extends ProductRating>
           ? _value.product
           : product // ignore: cast_nullable_to_non_nullable
               as Product,
+      evidence: null == evidence ? _value.evidence : evidence,
       explanations: null == explanations
           ? _value.explanations
           : explanations // ignore: cast_nullable_to_non_nullable
@@ -131,9 +131,9 @@ abstract class _$$_ProductRatingCopyWith<$Res>
       double createdAt,
       String productPublicId,
       num rating,
-      Object evidence,
       DateTime calculatedOn,
       Product product,
+      Object evidence,
       List<ESCExplanation> explanations});
 
   @override
@@ -155,9 +155,9 @@ class __$$_ProductRatingCopyWithImpl<$Res>
     Object? createdAt = null,
     Object? productPublicId = null,
     Object? rating = null,
-    Object? evidence = null,
     Object? calculatedOn = null,
     Object? product = null,
+    Object? evidence = null,
     Object? explanations = null,
   }) {
     return _then(_$_ProductRating(
@@ -177,7 +177,6 @@ class __$$_ProductRatingCopyWithImpl<$Res>
           ? _value.rating
           : rating // ignore: cast_nullable_to_non_nullable
               as num,
-      evidence: null == evidence ? _value.evidence : evidence,
       calculatedOn: null == calculatedOn
           ? _value.calculatedOn
           : calculatedOn // ignore: cast_nullable_to_non_nullable
@@ -186,6 +185,7 @@ class __$$_ProductRatingCopyWithImpl<$Res>
           ? _value.product
           : product // ignore: cast_nullable_to_non_nullable
               as Product,
+      evidence: null == evidence ? _value.evidence : evidence,
       explanations: null == explanations
           ? _value.explanations
           : explanations // ignore: cast_nullable_to_non_nullable
@@ -203,9 +203,9 @@ class _$_ProductRating extends _ProductRating {
       required this.createdAt,
       required this.productPublicId,
       required this.rating,
-      this.evidence = const {},
       required this.calculatedOn,
       required this.product,
+      this.evidence = const {},
       this.explanations = const []})
       : super._();
 
@@ -221,19 +221,19 @@ class _$_ProductRating extends _ProductRating {
   @override
   final num rating;
   @override
-  @JsonKey()
-  final Object evidence;
-  @override
   final DateTime calculatedOn;
   @override
   final Product product;
+  @override
+  @JsonKey()
+  final Object evidence;
   @override
   @JsonKey()
   final List<ESCExplanation> explanations;
 
   @override
   String toString() {
-    return 'ProductRating(id: $id, createdAt: $createdAt, productPublicId: $productPublicId, rating: $rating, evidence: $evidence, calculatedOn: $calculatedOn, product: $product, explanations: $explanations)';
+    return 'ProductRating(id: $id, createdAt: $createdAt, productPublicId: $productPublicId, rating: $rating, calculatedOn: $calculatedOn, product: $product, evidence: $evidence, explanations: $explanations)';
   }
 
   @override
@@ -247,10 +247,10 @@ class _$_ProductRating extends _ProductRating {
             (identical(other.productPublicId, productPublicId) ||
                 other.productPublicId == productPublicId) &&
             (identical(other.rating, rating) || other.rating == rating) &&
-            const DeepCollectionEquality().equals(other.evidence, evidence) &&
             (identical(other.calculatedOn, calculatedOn) ||
                 other.calculatedOn == calculatedOn) &&
             (identical(other.product, product) || other.product == product) &&
+            const DeepCollectionEquality().equals(other.evidence, evidence) &&
             const DeepCollectionEquality()
                 .equals(other.explanations, explanations));
   }
@@ -263,9 +263,9 @@ class _$_ProductRating extends _ProductRating {
       createdAt,
       productPublicId,
       rating,
-      const DeepCollectionEquality().hash(evidence),
       calculatedOn,
       product,
+      const DeepCollectionEquality().hash(evidence),
       const DeepCollectionEquality().hash(explanations));
 
   @JsonKey(ignore: true)
@@ -288,9 +288,9 @@ abstract class _ProductRating extends ProductRating {
       required final double createdAt,
       required final String productPublicId,
       required final num rating,
-      final Object evidence,
       required final DateTime calculatedOn,
       required final Product product,
+      final Object evidence,
       final List<ESCExplanation> explanations}) = _$_ProductRating;
   _ProductRating._() : super._();
 
@@ -306,11 +306,11 @@ abstract class _ProductRating extends ProductRating {
   @override
   num get rating;
   @override
-  Object get evidence;
-  @override
   DateTime get calculatedOn;
   @override
   Product get product;
+  @override
+  Object get evidence;
   @override
   List<ESCExplanation> get explanations;
   @override

@@ -12,10 +12,7 @@ import 'package:vegan_liverpool/utils/log/log.dart';
 
 class SuggestionQRCodeManualInputCard extends StatefulWidget {
   const SuggestionQRCodeManualInputCard({
-    Key? key,
-    required this.scanQRCodeHandler,
-    required this.handleError,
-    required this.isNumericBarCode,
+    required this.scanQRCodeHandler, required this.handleError, required this.isNumericBarCode, Key? key,
   }) : super(key: key);
 
   final void Function(
@@ -100,12 +97,13 @@ class _SuggestionQRCodeManualInputCardState
                                   !regex.hasMatch(value)) {
                                 return 'Barcode must be a text of digits.';
                               }
+                              return null;
                             },
                             decoration: InputDecoration(
                               fillColor: Colors.white,
                               // fillColor: Colors.transparent,
                               contentPadding: const EdgeInsets.only(
-                                  left: 12, top: 12, right: 12),
+                                  left: 12, top: 12, right: 12,),
                               labelText: 'Barcode',
                               // border: InputBorder.none,
                               border: OutlineInputBorder(
@@ -134,7 +132,7 @@ class _SuggestionQRCodeManualInputCardState
                               backgroundColor: Theme.of(context).canvasColor,
                             ),
                             validator: (value) {
-                              if (value is String && value != null) {
+                              if (value is String) {
                                 return null;
                               }
                               return 'Barcode must be non-empty text';
@@ -143,7 +141,7 @@ class _SuggestionQRCodeManualInputCardState
                               fillColor: Colors.white,
                               // fillColor: Colors.transparent,
                               contentPadding: const EdgeInsets.only(
-                                  left: 12, top: 12, right: 12),
+                                  left: 12, top: 12, right: 12,),
                               labelText: 'Barcode',
                               // border: InputBorder.none,
                               border: OutlineInputBorder(

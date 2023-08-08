@@ -83,8 +83,8 @@ class _RegisterEmailWaitingListScreenState
           children: [
             Container(
               padding: const EdgeInsets.all(20),
-              child: Column(
-                children: const <Widget>[
+              child: const Column(
+                children: <Widget>[
                   Text(
                     Messages.enterEmail,
                     textAlign: TextAlign.center,

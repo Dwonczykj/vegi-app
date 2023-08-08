@@ -7,12 +7,12 @@ part 'stripe_payment_method_card.freezed.dart';
 part 'stripe_payment_method_card.g.dart';
 
 List<StripePaymentMethodCard> fromJsonStripePaymentMethodCardList(
-        dynamic json) =>
+        dynamic json,) =>
     fromSailsListOfObjectJson<StripePaymentMethodCard>(
-        StripePaymentMethodCard.fromJson)(json);
+        StripePaymentMethodCard.fromJson,)(json);
 StripePaymentMethodCard? fromJsonStripePaymentMethodCard(dynamic json) =>
     fromSailsObjectJson<StripePaymentMethodCard>(
-        StripePaymentMethodCard.fromJson)(json);
+        StripePaymentMethodCard.fromJson,)(json);
 
 @Freezed()
 class StripePaymentMethodCard with _$StripePaymentMethodCard {

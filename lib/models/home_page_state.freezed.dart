@@ -20,26 +20,26 @@ HomePageState _$HomePageStateFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$HomePageState {
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   List<RestaurantItem> get featuredRestaurants =>
       throw _privateConstructorUsedError;
   List<RestaurantItem> get filteredRestaurants =>
       throw _privateConstructorUsedError;
   String get filterRestaurantsQuery => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   bool get showGlobalSearchBarField => throw _privateConstructorUsedError;
   List<RestaurantMenuItem> get filteredMenuItems =>
       throw _privateConstructorUsedError;
   String get filterMenuQuery => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   bool get showMenuSearchBarField => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   bool get isLoadingHomePage => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   bool get isLoadingHttpRequest => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   List<String> get postalCodes => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   String get selectedSearchPostCode => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -55,17 +55,24 @@ abstract class $HomePageStateCopyWith<$Res> {
       _$HomePageStateCopyWithImpl<$Res, HomePageState>;
   @useResult
   $Res call(
-      {@JsonKey(ignore: true) List<RestaurantItem> featuredRestaurants,
+      {@JsonKey(includeFromJson: false, includeToJson: false)
+          List<RestaurantItem> featuredRestaurants,
       List<RestaurantItem> filteredRestaurants,
       String filterRestaurantsQuery,
-      @JsonKey(ignore: true) bool showGlobalSearchBarField,
+      @JsonKey(includeFromJson: false, includeToJson: false)
+          bool showGlobalSearchBarField,
       List<RestaurantMenuItem> filteredMenuItems,
       String filterMenuQuery,
-      @JsonKey(ignore: true) bool showMenuSearchBarField,
-      @JsonKey(ignore: true) bool isLoadingHomePage,
-      @JsonKey(ignore: true) bool isLoadingHttpRequest,
-      @JsonKey(ignore: true) List<String> postalCodes,
-      @JsonKey(ignore: true) String selectedSearchPostCode});
+      @JsonKey(includeFromJson: false, includeToJson: false)
+          bool showMenuSearchBarField,
+      @JsonKey(includeFromJson: false, includeToJson: false)
+          bool isLoadingHomePage,
+      @JsonKey(includeFromJson: false, includeToJson: false)
+          bool isLoadingHttpRequest,
+      @JsonKey(includeFromJson: false, includeToJson: false)
+          List<String> postalCodes,
+      @JsonKey(includeFromJson: false, includeToJson: false)
+          String selectedSearchPostCode});
 }
 
 /// @nodoc
@@ -151,17 +158,24 @@ abstract class _$$_HomePageStateCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {@JsonKey(ignore: true) List<RestaurantItem> featuredRestaurants,
+      {@JsonKey(includeFromJson: false, includeToJson: false)
+          List<RestaurantItem> featuredRestaurants,
       List<RestaurantItem> filteredRestaurants,
       String filterRestaurantsQuery,
-      @JsonKey(ignore: true) bool showGlobalSearchBarField,
+      @JsonKey(includeFromJson: false, includeToJson: false)
+          bool showGlobalSearchBarField,
       List<RestaurantMenuItem> filteredMenuItems,
       String filterMenuQuery,
-      @JsonKey(ignore: true) bool showMenuSearchBarField,
-      @JsonKey(ignore: true) bool isLoadingHomePage,
-      @JsonKey(ignore: true) bool isLoadingHttpRequest,
-      @JsonKey(ignore: true) List<String> postalCodes,
-      @JsonKey(ignore: true) String selectedSearchPostCode});
+      @JsonKey(includeFromJson: false, includeToJson: false)
+          bool showMenuSearchBarField,
+      @JsonKey(includeFromJson: false, includeToJson: false)
+          bool isLoadingHomePage,
+      @JsonKey(includeFromJson: false, includeToJson: false)
+          bool isLoadingHttpRequest,
+      @JsonKey(includeFromJson: false, includeToJson: false)
+          List<String> postalCodes,
+      @JsonKey(includeFromJson: false, includeToJson: false)
+          String selectedSearchPostCode});
 }
 
 /// @nodoc
@@ -241,24 +255,31 @@ class __$$_HomePageStateCopyWithImpl<$Res>
 @JsonSerializable()
 class _$_HomePageState extends _HomePageState {
   _$_HomePageState(
-      {@JsonKey(ignore: true) this.featuredRestaurants = const [],
+      {@JsonKey(includeFromJson: false, includeToJson: false)
+          this.featuredRestaurants = const [],
       this.filteredRestaurants = const [],
       this.filterRestaurantsQuery = '',
-      @JsonKey(ignore: true) this.showGlobalSearchBarField = false,
+      @JsonKey(includeFromJson: false, includeToJson: false)
+          this.showGlobalSearchBarField = false,
       this.filteredMenuItems = const [],
       this.filterMenuQuery = '',
-      @JsonKey(ignore: true) this.showMenuSearchBarField = false,
-      @JsonKey(ignore: true) this.isLoadingHomePage = false,
-      @JsonKey(ignore: true) this.isLoadingHttpRequest = false,
-      @JsonKey(ignore: true) this.postalCodes = const [],
-      @JsonKey(ignore: true) this.selectedSearchPostCode = 'L1'})
+      @JsonKey(includeFromJson: false, includeToJson: false)
+          this.showMenuSearchBarField = false,
+      @JsonKey(includeFromJson: false, includeToJson: false)
+          this.isLoadingHomePage = false,
+      @JsonKey(includeFromJson: false, includeToJson: false)
+          this.isLoadingHttpRequest = false,
+      @JsonKey(includeFromJson: false, includeToJson: false)
+          this.postalCodes = const [],
+      @JsonKey(includeFromJson: false, includeToJson: false)
+          this.selectedSearchPostCode = 'L1'})
       : super._();
 
   factory _$_HomePageState.fromJson(Map<String, dynamic> json) =>
       _$$_HomePageStateFromJson(json);
 
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   final List<RestaurantItem> featuredRestaurants;
   @override
   @JsonKey()
@@ -267,7 +288,7 @@ class _$_HomePageState extends _HomePageState {
   @JsonKey()
   final String filterRestaurantsQuery;
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   final bool showGlobalSearchBarField;
   @override
   @JsonKey()
@@ -276,19 +297,19 @@ class _$_HomePageState extends _HomePageState {
   @JsonKey()
   final String filterMenuQuery;
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   final bool showMenuSearchBarField;
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   final bool isLoadingHomePage;
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   final bool isLoadingHttpRequest;
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   final List<String> postalCodes;
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   final String selectedSearchPostCode;
 
   @override
@@ -358,23 +379,23 @@ class _$_HomePageState extends _HomePageState {
 
 abstract class _HomePageState extends HomePageState {
   factory _HomePageState(
-      {@JsonKey(ignore: true)
+      {@JsonKey(includeFromJson: false, includeToJson: false)
           final List<RestaurantItem> featuredRestaurants,
       final List<RestaurantItem> filteredRestaurants,
       final String filterRestaurantsQuery,
-      @JsonKey(ignore: true)
+      @JsonKey(includeFromJson: false, includeToJson: false)
           final bool showGlobalSearchBarField,
       final List<RestaurantMenuItem> filteredMenuItems,
       final String filterMenuQuery,
-      @JsonKey(ignore: true)
+      @JsonKey(includeFromJson: false, includeToJson: false)
           final bool showMenuSearchBarField,
-      @JsonKey(ignore: true)
+      @JsonKey(includeFromJson: false, includeToJson: false)
           final bool isLoadingHomePage,
-      @JsonKey(ignore: true)
+      @JsonKey(includeFromJson: false, includeToJson: false)
           final bool isLoadingHttpRequest,
-      @JsonKey(ignore: true)
+      @JsonKey(includeFromJson: false, includeToJson: false)
           final List<String> postalCodes,
-      @JsonKey(ignore: true)
+      @JsonKey(includeFromJson: false, includeToJson: false)
           final String selectedSearchPostCode}) = _$_HomePageState;
   _HomePageState._() : super._();
 
@@ -382,33 +403,33 @@ abstract class _HomePageState extends HomePageState {
       _$_HomePageState.fromJson;
 
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   List<RestaurantItem> get featuredRestaurants;
   @override
   List<RestaurantItem> get filteredRestaurants;
   @override
   String get filterRestaurantsQuery;
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   bool get showGlobalSearchBarField;
   @override
   List<RestaurantMenuItem> get filteredMenuItems;
   @override
   String get filterMenuQuery;
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   bool get showMenuSearchBarField;
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   bool get isLoadingHomePage;
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   bool get isLoadingHttpRequest;
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   List<String> get postalCodes;
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   String get selectedSearchPostCode;
   @override
   @JsonKey(ignore: true)

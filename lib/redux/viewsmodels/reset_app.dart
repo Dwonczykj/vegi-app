@@ -25,7 +25,6 @@ class ResetApp extends StatelessWidget {
           log.error(
             'Unable to reset app FATAL - Causing app crash: $e',
             error: e,
-            sentry: true,
             stackTrace: s,
           );
         }
@@ -35,7 +34,6 @@ class ResetApp extends StatelessWidget {
           log.error(
             'Unable to reset app FATAL - Causing app crash: $e',
             error: e,
-            sentry: true,
             stackTrace: s,
           );
         }

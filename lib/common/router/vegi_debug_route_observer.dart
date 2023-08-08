@@ -52,7 +52,7 @@ class RootRouterLogger extends RootRouter {
 
   @override
   Future<T?> push<T extends Object?>(PageRouteInfo<dynamic> route,
-      {void Function(NavigationFailure)? onFailure}) {
+      {void Function(NavigationFailure)? onFailure,}) {
     final filteredStack = StackTrace.current.filterCallStack(
       dontMatch: RegExp(
         r'([A-Za-z_]+)\.([A-Za-z_. <>]+)\s\((package:vegan_liverpool)\/(common\/router\/)(vegi_debug_route_observer\.dart):(\d+):(\d+)\)',
@@ -76,7 +76,7 @@ class RootRouterLogger extends RootRouter {
   Future<bool> pop<T extends Object?>([T? result]) {
     final filteredStack = StackTrace.current.filterCallStack(
       dontMatch: RegExp(
-          r'([A-Za-z_]+)\.([A-Za-z_. <>]+)\s\((package:vegan_liverpool)\/(common\/router\/)(vegi_debug_route_observer\.dart):(\d+):(\d+)\)'),
+          r'([A-Za-z_]+)\.([A-Za-z_. <>]+)\s\((package:vegan_liverpool)\/(common\/router\/)(vegi_debug_route_observer\.dart):(\d+):(\d+)\)',),
     );
     log.info(
       '🚀 rootRouter.pop from ${current.route.name}: $filteredStack',
@@ -87,10 +87,10 @@ class RootRouterLogger extends RootRouter {
 
   @override
   Future<T?> replace<T extends Object?>(PageRouteInfo<dynamic> route,
-      {void Function(NavigationFailure)? onFailure}) {
+      {void Function(NavigationFailure)? onFailure,}) {
     final filteredStack = StackTrace.current.filterCallStack(
       dontMatch: RegExp(
-          r'([A-Za-z_]+)\.([A-Za-z_. <>]+)\s\((package:vegan_liverpool)\/(common\/router\/)(vegi_debug_route_observer\.dart):(\d+):(\d+)\)'),
+          r'([A-Za-z_]+)\.([A-Za-z_. <>]+)\s\((package:vegan_liverpool)\/(common\/router\/)(vegi_debug_route_observer\.dart):(\d+):(\d+)\)',),
     );
     log.info(
       '🚀 rootRouter.replace: ${route.routeName} from ${current.route.name}: $filteredStack',
@@ -109,7 +109,7 @@ class RootRouterLogger extends RootRouter {
   }) {
     final filteredStack = StackTrace.current.filterCallStack(
       dontMatch: RegExp(
-          r'([A-Za-z_]+)\.([A-Za-z_. <>]+)\s\((package:vegan_liverpool)\/(common\/router\/)(vegi_debug_route_observer\.dart):(\d+):(\d+)\)'),
+          r'([A-Za-z_]+)\.([A-Za-z_. <>]+)\s\((package:vegan_liverpool)\/(common\/router\/)(vegi_debug_route_observer\.dart):(\d+):(\d+)\)',),
     );
     log.info(
       '🚀 rootRouter.replacedAll with [${routes.map(

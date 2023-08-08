@@ -58,7 +58,7 @@ class _PinCodeScreenState extends State<PinCodeScreen> {
         store.state.userState.hasOnboarded == false) {
       if (store.state.userState.isLoggedIn) {
         await onBoardStrategy.nextOnboardingPage(
-            currentRoute: const routes.PinCodeScreen());
+            currentRoute: const routes.PinCodeScreen(),);
       } else {
         await rootRouter.replaceAll([const SignUpScreen()]);
       }

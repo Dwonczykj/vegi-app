@@ -84,7 +84,7 @@ class FeaturedRestaurantsVM extends Equatable {
           store.dispatch(fetchFeaturedRestaurantsByUserLocation());
         } else {
           store.dispatch(fetchFeaturedRestaurantsByPostCode(
-              outCode: store.state.homePageState.selectedSearchPostCode));
+              outCode: store.state.homePageState.selectedSearchPostCode,),);
         }
       },
       changeOutCode: (outCode) {

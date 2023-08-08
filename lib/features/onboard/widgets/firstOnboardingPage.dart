@@ -24,7 +24,7 @@ class FirstOnboardingPage extends StatefulWidget {
 class _FirstOnboardingPageState extends State<FirstOnboardingPage> {
   double? _left;
   double? _top;
-  double _width = 200;
+  final double _width = 200;
   double? _opacity;
 
   @override

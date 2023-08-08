@@ -5,9 +5,7 @@ import 'package:vegan_liverpool/features/shared/widgets/my_scaffold.dart';
 
 class WebViewScreen extends StatelessWidget {
   const WebViewScreen({
-    Key? key,
-    required this.url,
-    required this.title,
+    required this.url, required this.title, Key? key,
     this.onPageStarted,
   }) : super(key: key);
   final String url;

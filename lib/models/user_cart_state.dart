@@ -28,165 +28,114 @@ Map<String, dynamic> paymentInProcessToJson(
 class UserCartState with _$UserCartState {
   @JsonSerializable()
   factory UserCartState({
-    @Default([])
-        List<CartItem> cartItems,
+    @Default([]) List<CartItem> cartItems,
     @JsonKey(
       fromJson: Money.fromJson,
       toJson: Money.toJson,
     )
     @Default(Money.zeroGBP())
-        Money cartSubTotal,
+    Money cartSubTotal,
     @JsonKey(
       fromJson: Money.fromJson,
       toJson: Money.toJson,
     )
     @Default(Money.zeroGBP())
-        Money cartTax,
+    Money cartTax,
     @JsonKey(
       fromJson: Money.fromJson,
       toJson: Money.toJson,
     )
     @Default(Money.zeroGBP())
-        Money cartTotal,
-    @Default(Currency.GBP)
-        Currency cartCurrency,
-    @Default(0)
-        num cartDiscountPercent,
+    Money cartTotal,
+    @Default(Currency.GBP) Currency cartCurrency,
+    @Default(0) num cartDiscountPercent,
     @JsonKey(
       fromJson: Money.fromJson,
       toJson: Money.toJson,
     )
     @Default(Money.zeroGBP())
-        Money cartDiscountComputed,
+    Money cartDiscountComputed,
     @JsonKey(
       fromJson: Money.fromJson,
       toJson: Money.toJson,
     )
     @Default(Money.zeroGBP())
-        Money voucherPotValue,
-    @Default([])
-        List<Discount> appliedVouchers,
-    @Default([])
-        List<TimeSlot> deliverySlots,
-    @Default([])
-        List<TimeSlot> collectionSlots,
+    Money voucherPotValue,
+    @Default([]) List<Discount> appliedVouchers,
+    @Default([]) List<TimeSlot> deliverySlots,
+    @Default([]) List<TimeSlot> collectionSlots,
+    @Default(null) DeliveryAddresses? selectedDeliveryAddress,
+    @Default(null) TimeSlot? selectedTimeSlot,
+    @JsonKey(
+      fromJson: Money.fromJson,
+      toJson: Money.toJson,
+    )
+    @Default(Money.zeroGBP())
+    Money selectedTipAmount,
+    @Default('') String discountCode,
+    @Default('') String paymentIntentID,
+    @JsonKey(includeFromJson: false, includeToJson: false)
+    @Default('')
+    String paymentIntentClientSecret,
+    @JsonKey(includeFromJson: false, includeToJson: false)
     @Default(null)
-        DeliveryAddresses? selectedDeliveryAddress,
-    @Default(null)
-        TimeSlot? selectedTimeSlot,
-    @JsonKey(
-      fromJson: Money.fromJson,
-      toJson: Money.toJson,
-    )
-    @Default(Money.zeroGBP())
-        Money selectedTipAmount,
-    @Default('')
-        String discountCode,
-    @Default('')
-        String paymentIntentID,
-    @JsonKey(ignore: true)
-    @Default('')
-        String paymentIntentClientSecret,
-    @JsonKey(ignore: true)
-    @Default(null)
-        StripePaymentIntent? paymentIntent,
-    @Default('')
-        String ephemeralKey,
-    @Default('')
-        String publishableKey,
-    @Default(null)
-        Order? order,
-    @Default(0.0)
-        double selectedGBPxAmount,
-    @Default(0.0)
-        double selectedPPLAmount,
-    @Default(false)
-        bool payButtonLoading,
-    @Default(false)
-        bool transferringTokens,
-    @Default(false)
-        bool errorCompletingPayment,
-    @Default(false)
-        bool confirmedPayment,
-    @Default('')
-        String restaurantName,
-    @Default('')
-        String restaurantID,
-    @Default(false)
-        bool restaurantIsLive,
-    @Default(null)
-        DeliveryAddresses? restaurantAddress,
-    @Default('')
-        String restaurantWalletAddress,
+    StripePaymentIntent? paymentIntent,
+    @Default('') String ephemeralKey,
+    @Default('') String publishableKey,
+    @Default(null) Order? order,
+    @Default(0.0) double selectedGBPxAmount,
+    @Default(0.0) double selectedPPLAmount,
+    @Default(false) bool payButtonLoading,
+    @Default(false) bool transferringTokens,
+    @Default(false) bool errorCompletingPayment,
+    @Default(false) bool confirmedPayment,
+    @Default('') String restaurantName,
+    @Default('') String restaurantID,
+    @Default(false) bool restaurantIsLive,
+    @Default(null) DeliveryAddresses? restaurantAddress,
+    @Default('') String restaurantWalletAddress,
     @Default(FulfilmentMethodType.delivery)
-        FulfilmentMethodType fulfilmentMethod,
-    @Default(0)
-        int restaurantMinimumOrder,
+    FulfilmentMethodType fulfilmentMethod,
+    @Default(0) int restaurantMinimumOrder,
     @JsonKey(
       fromJson: Money.fromJson,
       toJson: Money.toJson,
     )
     @Default(Money.zeroGBP())
-        Money restaurantPlatformFee,
-    @Default('')
-        String deliveryInstructions,
-    @Default(null)
-        PaymentMethod? selectedPaymentMethod,
-    @Default([])
-        List<String> fulfilmentPostalDistricts,
-    @Default([])
-        List<DateTime> eligibleOrderDates,
-    @Default(null)
-        TimeSlot? nextCollectionSlot,
-    @Default(null)
-        TimeSlot? nextDeliverySlot,
-    @Default(null)
-        ProductSuggestion? productSuggestion,
+    Money restaurantPlatformFee,
+    @Default('') String deliveryInstructions,
+    @Default(null) PaymentMethod? selectedPaymentMethod,
+    @Default([]) List<String> fulfilmentPostalDistricts,
+    @Default([]) List<DateTime> eligibleOrderDates,
+    @Default(null) TimeSlot? nextCollectionSlot,
+    @Default(null) TimeSlot? nextDeliverySlot,
+    @Default(null) ProductSuggestion? productSuggestion,
     @Default(OrderCreationProcessStatus.none)
-        OrderCreationProcessStatus orderCreationProcessStatus,
-    @Default(StripePaymentStatus.none)
-        StripePaymentStatus stripePaymentStatus,
+    OrderCreationProcessStatus orderCreationProcessStatus,
+    @Default('') String orderCreationStatusMessage,
+    @Default(StripePaymentStatus.none) StripePaymentStatus stripePaymentStatus,
     @JsonKey(
       fromJson: LivePayment.fromJson,
       toJson: paymentInProcessToJson,
     )
     @Default(null)
-        LivePayment? paymentInProcess,
-    @JsonKey(ignore: true)
+    LivePayment? paymentInProcess,
+    @JsonKey(includeFromJson: false, includeToJson: false)
     @Default(false)
-        bool isLoadingCartState,
-    @JsonKey(ignore: true)
+    bool isLoadingCartState,
+    @JsonKey(includeFromJson: false, includeToJson: false)
     @Default(null)
-        ErrorDetails<CartErrCode>? errorDetails,
+    ErrorDetails<CartErrCode>? errorDetails,
   }) = _UserCartState;
 
   const UserCartState._();
 
   factory UserCartState.initial() => UserCartState(
         cartItems: [],
-        cartCurrency: Currency.GBP,
-        cartSubTotal: const Money.zeroGBP(),
-        cartTax: const Money.zeroGBP(),
-        cartTotal: const Money.zeroGBP(),
         cartDiscountPercent: 0.0,
-        selectedTipAmount: const Money.zeroGBP(),
-        cartDiscountComputed: const Money.zeroGBP(),
-        restaurantPlatformFee: const Money.zeroGBP(),
         deliverySlots: [],
         collectionSlots: [],
-        discountCode: '',
-        paymentIntentID: '',
-        selectedGBPxAmount: 0,
-        selectedPPLAmount: 0,
-        payButtonLoading: false,
-        transferringTokens: false,
-        errorCompletingPayment: false,
-        confirmedPayment: false,
-        restaurantName: '',
-        restaurantID: '',
         restaurantIsLive: !EnvService.isUsingProdServices,
-        restaurantWalletAddress: '',
-        fulfilmentMethod: FulfilmentMethodType.delivery,
         fulfilmentPostalDistricts: [],
         eligibleOrderDates: [],
         paymentInProcess: LivePayment.initial(),
@@ -220,7 +169,6 @@ class UserCartState with _$UserCartState {
         value: await convertCurrencyAmount(
           amount: cartTotal.value,
           fromCurrency: cartTotal.currency,
-          toCurrency: Currency.GBP,
         ),
       );
 
@@ -241,7 +189,6 @@ class UserCartState with _$UserCartState {
         value: await convertCurrencyAmount(
           amount: restaurantPlatformFee.value,
           fromCurrency: restaurantPlatformFee.currency,
-          toCurrency: Currency.GBP,
         ),
       );
 
@@ -262,7 +209,6 @@ class UserCartState with _$UserCartState {
         value: await convertCurrencyAmount(
           amount: selectedTipAmount.value,
           fromCurrency: selectedTipAmount.currency,
-          toCurrency: Currency.GBP,
         ),
       );
 
@@ -283,7 +229,6 @@ class UserCartState with _$UserCartState {
         value: await convertCurrencyAmount(
           amount: selectedTimeSlot?.priceModifier ?? 0.0,
           fromCurrency: Currency.GBPx,
-          toCurrency: Currency.GBP,
         ),
       );
 }

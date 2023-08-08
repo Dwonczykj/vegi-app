@@ -315,12 +315,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                     ? Text(
                                         'Using location to see nearest vendors to you!',
                                         style:
-                                            Theme.of(context).textTheme.caption,
+                                            Theme.of(context).textTheme.bodySmall,
                                       )
                                     : Text(
                                         'Enable location to see nearest vendors to you!',
                                         style:
-                                            Theme.of(context).textTheme.caption,
+                                            Theme.of(context).textTheme.bodySmall,
                                       ),
                                 child: CupertinoSwitch(
                                   // This bool value toggles the switch.

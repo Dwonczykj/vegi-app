@@ -24,10 +24,7 @@ import 'package:vegan_liverpool/utils/constants.dart';
 
 class OrderViewScreen extends StatelessWidget {
   const OrderViewScreen({
-    Key? key,
-    required this.order,
-    required this.isNewOrder,
-    required this.homeAction,
+    required this.order, required this.isNewOrder, required this.homeAction, Key? key,
   }) : super(key: key);
 
   final Order order;
@@ -81,7 +78,7 @@ class OrderViewScreen extends StatelessWidget {
                     orderItems: order.items
                         .map(
                           (element) => ViewItem(
-                            name: element.product?.name ?? 'N/A',
+                            name: element.product.name ?? 'N/A',
                             totalPriceFormatted: element.formattedPrice,
                             chosenOptions: element.selectedProductOptionsString,
                           ),

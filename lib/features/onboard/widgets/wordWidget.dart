@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 
 class Word extends StatelessWidget {
   const Word({
-    Key? key,
-    required this.mnemonic,
-    required this.wordIndex,
+    required this.mnemonic, required this.wordIndex, Key? key,
   }) : super(key: key);
   final List<String> mnemonic;
   final int wordIndex;

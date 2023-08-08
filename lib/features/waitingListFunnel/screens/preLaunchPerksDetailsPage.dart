@@ -1,7 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:vegan_liverpool/common/router/routes.gr.dart';
 import 'package:vegan_liverpool/constants/theme.dart';
@@ -59,7 +57,7 @@ class PreLaunchPerksDetailsPage extends StatelessWidget {
                 textAlign: TextAlign.center,
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 60,
             ),
             // Padding(

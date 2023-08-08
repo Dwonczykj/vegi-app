@@ -21,8 +21,8 @@ class _VerifyUserMnemonicState extends State<VerifyUserMnemonic> {
   List<int> getRandom3Numbers() {
     final List<int> list = List<int>.generate(12, (int index) => index + 1)
       ..shuffle();
-    final List<int> _l = list.sublist(0, 3)..sort();
-    return _l;
+    final List<int> l = list.sublist(0, 3)..sort();
+    return l;
   }
 
   @override

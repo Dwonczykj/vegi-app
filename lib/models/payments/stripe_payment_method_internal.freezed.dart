@@ -23,6 +23,7 @@ StripePaymentMethodInternal _$StripePaymentMethodInternalFromJson(
 mixin _$StripePaymentMethodInternal {
   String get id => throw _privateConstructorUsedError;
   StripePaymentMethodType get type => throw _privateConstructorUsedError;
+  bool get livemode => throw _privateConstructorUsedError;
   @JsonKey(name: 'billing_details')
   StripeBillingDetails? get billingDetails =>
       throw _privateConstructorUsedError;
@@ -30,7 +31,6 @@ mixin _$StripePaymentMethodInternal {
       throw _privateConstructorUsedError; // Only if this is a card paymentMethod
   String? get customer => throw _privateConstructorUsedError;
   num get created => throw _privateConstructorUsedError;
-  bool get livemode => throw _privateConstructorUsedError;
   Map<String, dynamic> get metadata => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -50,11 +50,11 @@ abstract class $StripePaymentMethodInternalCopyWith<$Res> {
   $Res call(
       {String id,
       StripePaymentMethodType type,
+      bool livemode,
       @JsonKey(name: 'billing_details') StripeBillingDetails? billingDetails,
       StripePaymentMethodCard? card,
       String? customer,
       num created,
-      bool livemode,
       Map<String, dynamic> metadata});
 
   $StripeBillingDetailsCopyWith<$Res>? get billingDetails;
@@ -77,11 +77,11 @@ class _$StripePaymentMethodInternalCopyWithImpl<$Res,
   $Res call({
     Object? id = null,
     Object? type = null,
+    Object? livemode = null,
     Object? billingDetails = freezed,
     Object? card = freezed,
     Object? customer = freezed,
     Object? created = null,
-    Object? livemode = null,
     Object? metadata = null,
   }) {
     return _then(_value.copyWith(
@@ -93,6 +93,10 @@ class _$StripePaymentMethodInternalCopyWithImpl<$Res,
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
               as StripePaymentMethodType,
+      livemode: null == livemode
+          ? _value.livemode
+          : livemode // ignore: cast_nullable_to_non_nullable
+              as bool,
       billingDetails: freezed == billingDetails
           ? _value.billingDetails
           : billingDetails // ignore: cast_nullable_to_non_nullable
@@ -109,10 +113,6 @@ class _$StripePaymentMethodInternalCopyWithImpl<$Res,
           ? _value.created
           : created // ignore: cast_nullable_to_non_nullable
               as num,
-      livemode: null == livemode
-          ? _value.livemode
-          : livemode // ignore: cast_nullable_to_non_nullable
-              as bool,
       metadata: null == metadata
           ? _value.metadata
           : metadata // ignore: cast_nullable_to_non_nullable
@@ -157,11 +157,11 @@ abstract class _$$_StripePaymentMethodInternalCopyWith<$Res>
   $Res call(
       {String id,
       StripePaymentMethodType type,
+      bool livemode,
       @JsonKey(name: 'billing_details') StripeBillingDetails? billingDetails,
       StripePaymentMethodCard? card,
       String? customer,
       num created,
-      bool livemode,
       Map<String, dynamic> metadata});
 
   @override
@@ -185,11 +185,11 @@ class __$$_StripePaymentMethodInternalCopyWithImpl<$Res>
   $Res call({
     Object? id = null,
     Object? type = null,
+    Object? livemode = null,
     Object? billingDetails = freezed,
     Object? card = freezed,
     Object? customer = freezed,
     Object? created = null,
-    Object? livemode = null,
     Object? metadata = null,
   }) {
     return _then(_$_StripePaymentMethodInternal(
@@ -201,6 +201,10 @@ class __$$_StripePaymentMethodInternalCopyWithImpl<$Res>
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
               as StripePaymentMethodType,
+      livemode: null == livemode
+          ? _value.livemode
+          : livemode // ignore: cast_nullable_to_non_nullable
+              as bool,
       billingDetails: freezed == billingDetails
           ? _value.billingDetails
           : billingDetails // ignore: cast_nullable_to_non_nullable
@@ -217,10 +221,6 @@ class __$$_StripePaymentMethodInternalCopyWithImpl<$Res>
           ? _value.created
           : created // ignore: cast_nullable_to_non_nullable
               as num,
-      livemode: null == livemode
-          ? _value.livemode
-          : livemode // ignore: cast_nullable_to_non_nullable
-              as bool,
       metadata: null == metadata
           ? _value.metadata
           : metadata // ignore: cast_nullable_to_non_nullable
@@ -236,11 +236,11 @@ class _$_StripePaymentMethodInternal extends _StripePaymentMethodInternal {
   _$_StripePaymentMethodInternal(
       {required this.id,
       required this.type,
+      required this.livemode,
       @JsonKey(name: 'billing_details') this.billingDetails,
       this.card,
       this.customer,
       this.created = 0,
-      required this.livemode,
       this.metadata = const {}})
       : super._();
 
@@ -251,6 +251,8 @@ class _$_StripePaymentMethodInternal extends _StripePaymentMethodInternal {
   final String id;
   @override
   final StripePaymentMethodType type;
+  @override
+  final bool livemode;
   @override
   @JsonKey(name: 'billing_details')
   final StripeBillingDetails? billingDetails;
@@ -263,14 +265,12 @@ class _$_StripePaymentMethodInternal extends _StripePaymentMethodInternal {
   @JsonKey()
   final num created;
   @override
-  final bool livemode;
-  @override
   @JsonKey()
   final Map<String, dynamic> metadata;
 
   @override
   String toString() {
-    return 'StripePaymentMethodInternal(id: $id, type: $type, billingDetails: $billingDetails, card: $card, customer: $customer, created: $created, livemode: $livemode, metadata: $metadata)';
+    return 'StripePaymentMethodInternal(id: $id, type: $type, livemode: $livemode, billingDetails: $billingDetails, card: $card, customer: $customer, created: $created, metadata: $metadata)';
   }
 
   @override
@@ -280,14 +280,14 @@ class _$_StripePaymentMethodInternal extends _StripePaymentMethodInternal {
             other is _$_StripePaymentMethodInternal &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.type, type) || other.type == type) &&
+            (identical(other.livemode, livemode) ||
+                other.livemode == livemode) &&
             (identical(other.billingDetails, billingDetails) ||
                 other.billingDetails == billingDetails) &&
             (identical(other.card, card) || other.card == card) &&
             (identical(other.customer, customer) ||
                 other.customer == customer) &&
             (identical(other.created, created) || other.created == created) &&
-            (identical(other.livemode, livemode) ||
-                other.livemode == livemode) &&
             const DeepCollectionEquality().equals(other.metadata, metadata));
   }
 
@@ -297,11 +297,11 @@ class _$_StripePaymentMethodInternal extends _StripePaymentMethodInternal {
       runtimeType,
       id,
       type,
+      livemode,
       billingDetails,
       card,
       customer,
       created,
-      livemode,
       const DeepCollectionEquality().hash(metadata));
 
   @JsonKey(ignore: true)
@@ -324,12 +324,12 @@ abstract class _StripePaymentMethodInternal
   factory _StripePaymentMethodInternal(
       {required final String id,
       required final StripePaymentMethodType type,
+      required final bool livemode,
       @JsonKey(name: 'billing_details')
           final StripeBillingDetails? billingDetails,
       final StripePaymentMethodCard? card,
       final String? customer,
       final num created,
-      required final bool livemode,
       final Map<String, dynamic> metadata}) = _$_StripePaymentMethodInternal;
   _StripePaymentMethodInternal._() : super._();
 
@@ -341,6 +341,8 @@ abstract class _StripePaymentMethodInternal
   @override
   StripePaymentMethodType get type;
   @override
+  bool get livemode;
+  @override
   @JsonKey(name: 'billing_details')
   StripeBillingDetails? get billingDetails;
   @override
@@ -349,8 +351,6 @@ abstract class _StripePaymentMethodInternal
   String? get customer;
   @override
   num get created;
-  @override
-  bool get livemode;
   @override
   Map<String, dynamic> get metadata;
   @override

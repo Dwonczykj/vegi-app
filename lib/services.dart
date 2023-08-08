@@ -36,7 +36,7 @@ final StripePayService stripePayService = getIt<StripePayService>();
 
 final PeeplPayService peeplPayService = getIt<PeeplPayService>();
 
-final BlueBeaconService beaconService = getIt<BlueBeaconService>();
+// final BlueBeaconService beaconService = getIt<BlueBeaconService>();
 
 final FirebaseAuth firebaseAuth = getIt<FirebaseAuth>();
 

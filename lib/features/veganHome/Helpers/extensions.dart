@@ -33,18 +33,18 @@ List<StackLine> _filterStackTrace(
   final lines = stackTrace.toString().split('\n');
   if (removeFirstNLines != null && lines.length < removeFirstNLines) {
     print(
-        'Unable to remove first $removeFirstNLines most recent function call');
+        'Unable to remove first $removeFirstNLines most recent function call',);
     return [];
   }
 
-  final regex_vegan_liverpool_only = RegExp(
+  final regexVeganLiverpoolOnly = RegExp(
     r'([A-Za-z_]+)\.([A-Za-z_. <>]+)\s\((package:vegan_liverpool)\/([A-Za-z0-9_\/]+\/)?([A-Za-z0-9_]+\.dart):(\d+):(\d+)\)',
   );
   final filterThisPackage = lines
       .where(
     (e) =>
-        regex_vegan_liverpool_only.hasMatch(e.trim()) &&
-        regex_vegan_liverpool_only.firstMatch(e.trim())?.groupCount == 7 &&
+        regexVeganLiverpoolOnly.hasMatch(e.trim()) &&
+        regexVeganLiverpoolOnly.firstMatch(e.trim())?.groupCount == 7 &&
         (dontMatch == null ||
             (dontMatch is RegExp && dontMatch.hasMatch(e.trim()) == false) ||
             (dontMatch is String && (e.trim().contains(dontMatch)) == false)) &&
@@ -52,7 +52,7 @@ List<StackLine> _filterStackTrace(
   )
       .map(
     (e) {
-      final match = regex_vegan_liverpool_only.firstMatch(e.trim());
+      final match = regexVeganLiverpoolOnly.firstMatch(e.trim());
       return StackLine(
         className: match?.group(1),
         functionName: match?.group(2),
@@ -148,7 +148,7 @@ extension EnumHelpers on Enum {
     return value == null
         ? null
         : values.firstWhereOrNull(
-            (type) => type.toString().split('.').last == value);
+            (type) => type.toString().split('.').last == value,);
   }
 
   static T? enumFromString<T extends Enum>(Iterable<T> values, String? value) {
@@ -159,8 +159,8 @@ extension EnumHelpers on Enum {
 extension NumHelpers on num {
   String get formattedGBPxPrice => '£${(this / 100).toStringAsFixed(2)}';
   String get formattedGBPxPriceNoDec => '£${(this / 100).toStringAsFixed(0)}';
-  String get formattedGBPPrice => '£${(this).toStringAsFixed(2)}';
-  String get formattedGBPPriceNoDec => '£${(this).toStringAsFixed(0)}';
+  String get formattedGBPPrice => '£${toStringAsFixed(2)}';
+  String get formattedGBPPriceNoDec => '£${toStringAsFixed(0)}';
 }
 
 final _thLookUp = <int, String>{
@@ -383,7 +383,7 @@ extension NumIterableHelpers<T> on Iterable<T> {
       ) as T;
     } else {
       log.error(
-          'Type of array vals must either extend a num or have a comparitor defined!');
+          'Type of array vals must either extend a num or have a comparitor defined!',);
       throw TypeError();
     }
   }
@@ -412,7 +412,7 @@ extension NumIterableHelpers<T> on Iterable<T> {
       ) as T;
     } else {
       log.error(
-          'Type of array vals must either extend a num or have a comparitor defined!');
+          'Type of array vals must either extend a num or have a comparitor defined!',);
       throw TypeError();
     }
   }
@@ -461,7 +461,7 @@ extension NumIterableHelpers<T> on Iterable<T> {
       return 0.0;
     } else {
       log.error(
-          'Type of array vals must either extend a num or have a comparitor defined!');
+          'Type of array vals must either extend a num or have a comparitor defined!',);
       throw TypeError();
     }
   }

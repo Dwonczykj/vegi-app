@@ -26,8 +26,8 @@ mixin _$FulfilmentMethod {
   num? get bufferLength => throw _privateConstructorUsedError;
   String? get orderCutoff => throw _privateConstructorUsedError;
   int? get maxOrders => throw _privateConstructorUsedError;
-  int? get maxDeliveryDistance => throw _privateConstructorUsedError;
   num? get priceModifier => throw _privateConstructorUsedError;
+  int? get maxDeliveryDistance => throw _privateConstructorUsedError;
   @JsonKey(fromJson: fromJsonVendorDTO)
   VendorDTO? get vendor => throw _privateConstructorUsedError;
   @JsonKey(fromJson: fromJsonDeliveryPartnerDTO)
@@ -56,8 +56,8 @@ abstract class $FulfilmentMethodCopyWith<$Res> {
       num? bufferLength,
       String? orderCutoff,
       int? maxOrders,
-      int? maxDeliveryDistance,
       num? priceModifier,
+      int? maxDeliveryDistance,
       @JsonKey(fromJson: fromJsonVendorDTO)
           VendorDTO? vendor,
       @JsonKey(fromJson: fromJsonDeliveryPartnerDTO)
@@ -92,8 +92,8 @@ class _$FulfilmentMethodCopyWithImpl<$Res, $Val extends FulfilmentMethod>
     Object? bufferLength = freezed,
     Object? orderCutoff = freezed,
     Object? maxOrders = freezed,
-    Object? maxDeliveryDistance = freezed,
     Object? priceModifier = freezed,
+    Object? maxDeliveryDistance = freezed,
     Object? vendor = freezed,
     Object? deliveryPartner = freezed,
     Object? openingHours = freezed,
@@ -124,14 +124,14 @@ class _$FulfilmentMethodCopyWithImpl<$Res, $Val extends FulfilmentMethod>
           ? _value.maxOrders
           : maxOrders // ignore: cast_nullable_to_non_nullable
               as int?,
-      maxDeliveryDistance: freezed == maxDeliveryDistance
-          ? _value.maxDeliveryDistance
-          : maxDeliveryDistance // ignore: cast_nullable_to_non_nullable
-              as int?,
       priceModifier: freezed == priceModifier
           ? _value.priceModifier
           : priceModifier // ignore: cast_nullable_to_non_nullable
               as num?,
+      maxDeliveryDistance: freezed == maxDeliveryDistance
+          ? _value.maxDeliveryDistance
+          : maxDeliveryDistance // ignore: cast_nullable_to_non_nullable
+              as int?,
       vendor: freezed == vendor
           ? _value.vendor
           : vendor // ignore: cast_nullable_to_non_nullable
@@ -215,8 +215,8 @@ abstract class _$$_FulfilmentMethodCopyWith<$Res>
       num? bufferLength,
       String? orderCutoff,
       int? maxOrders,
-      int? maxDeliveryDistance,
       num? priceModifier,
+      int? maxDeliveryDistance,
       @JsonKey(fromJson: fromJsonVendorDTO)
           VendorDTO? vendor,
       @JsonKey(fromJson: fromJsonDeliveryPartnerDTO)
@@ -253,8 +253,8 @@ class __$$_FulfilmentMethodCopyWithImpl<$Res>
     Object? bufferLength = freezed,
     Object? orderCutoff = freezed,
     Object? maxOrders = freezed,
-    Object? maxDeliveryDistance = freezed,
     Object? priceModifier = freezed,
+    Object? maxDeliveryDistance = freezed,
     Object? vendor = freezed,
     Object? deliveryPartner = freezed,
     Object? openingHours = freezed,
@@ -285,14 +285,14 @@ class __$$_FulfilmentMethodCopyWithImpl<$Res>
           ? _value.maxOrders
           : maxOrders // ignore: cast_nullable_to_non_nullable
               as int?,
-      maxDeliveryDistance: freezed == maxDeliveryDistance
-          ? _value.maxDeliveryDistance
-          : maxDeliveryDistance // ignore: cast_nullable_to_non_nullable
-              as int?,
       priceModifier: freezed == priceModifier
           ? _value.priceModifier
           : priceModifier // ignore: cast_nullable_to_non_nullable
               as num?,
+      maxDeliveryDistance: freezed == maxDeliveryDistance
+          ? _value.maxDeliveryDistance
+          : maxDeliveryDistance // ignore: cast_nullable_to_non_nullable
+              as int?,
       vendor: freezed == vendor
           ? _value.vendor
           : vendor // ignore: cast_nullable_to_non_nullable
@@ -324,8 +324,8 @@ class _$_FulfilmentMethod extends _FulfilmentMethod {
       required this.bufferLength,
       required this.orderCutoff,
       required this.maxOrders,
-      this.maxDeliveryDistance = null,
       required this.priceModifier,
+      this.maxDeliveryDistance = null,
       @JsonKey(fromJson: fromJsonVendorDTO)
           this.vendor = null,
       @JsonKey(fromJson: fromJsonDeliveryPartnerDTO)
@@ -352,10 +352,10 @@ class _$_FulfilmentMethod extends _FulfilmentMethod {
   @override
   final int? maxOrders;
   @override
+  final num? priceModifier;
+  @override
   @JsonKey()
   final int? maxDeliveryDistance;
-  @override
-  final num? priceModifier;
   @override
   @JsonKey(fromJson: fromJsonVendorDTO)
   final VendorDTO? vendor;
@@ -371,7 +371,7 @@ class _$_FulfilmentMethod extends _FulfilmentMethod {
 
   @override
   String toString() {
-    return 'FulfilmentMethod(id: $id, methodType: $methodType, slotLength: $slotLength, bufferLength: $bufferLength, orderCutoff: $orderCutoff, maxOrders: $maxOrders, maxDeliveryDistance: $maxDeliveryDistance, priceModifier: $priceModifier, vendor: $vendor, deliveryPartner: $deliveryPartner, openingHours: $openingHours, fulfilmentOrigin: $fulfilmentOrigin)';
+    return 'FulfilmentMethod(id: $id, methodType: $methodType, slotLength: $slotLength, bufferLength: $bufferLength, orderCutoff: $orderCutoff, maxOrders: $maxOrders, priceModifier: $priceModifier, maxDeliveryDistance: $maxDeliveryDistance, vendor: $vendor, deliveryPartner: $deliveryPartner, openingHours: $openingHours, fulfilmentOrigin: $fulfilmentOrigin)';
   }
 
   @override
@@ -390,10 +390,10 @@ class _$_FulfilmentMethod extends _FulfilmentMethod {
                 other.orderCutoff == orderCutoff) &&
             (identical(other.maxOrders, maxOrders) ||
                 other.maxOrders == maxOrders) &&
-            (identical(other.maxDeliveryDistance, maxDeliveryDistance) ||
-                other.maxDeliveryDistance == maxDeliveryDistance) &&
             (identical(other.priceModifier, priceModifier) ||
                 other.priceModifier == priceModifier) &&
+            (identical(other.maxDeliveryDistance, maxDeliveryDistance) ||
+                other.maxDeliveryDistance == maxDeliveryDistance) &&
             (identical(other.vendor, vendor) || other.vendor == vendor) &&
             (identical(other.deliveryPartner, deliveryPartner) ||
                 other.deliveryPartner == deliveryPartner) &&
@@ -413,8 +413,8 @@ class _$_FulfilmentMethod extends _FulfilmentMethod {
       bufferLength,
       orderCutoff,
       maxOrders,
-      maxDeliveryDistance,
       priceModifier,
+      maxDeliveryDistance,
       vendor,
       deliveryPartner,
       openingHours,
@@ -442,8 +442,8 @@ abstract class _FulfilmentMethod extends FulfilmentMethod {
       required final num? bufferLength,
       required final String? orderCutoff,
       required final int? maxOrders,
-      final int? maxDeliveryDistance,
       required final num? priceModifier,
+      final int? maxDeliveryDistance,
       @JsonKey(fromJson: fromJsonVendorDTO)
           final VendorDTO? vendor,
       @JsonKey(fromJson: fromJsonDeliveryPartnerDTO)
@@ -470,9 +470,9 @@ abstract class _FulfilmentMethod extends FulfilmentMethod {
   @override
   int? get maxOrders;
   @override
-  int? get maxDeliveryDistance;
-  @override
   num? get priceModifier;
+  @override
+  int? get maxDeliveryDistance;
   @override
   @JsonKey(fromJson: fromJsonVendorDTO)
   VendorDTO? get vendor;

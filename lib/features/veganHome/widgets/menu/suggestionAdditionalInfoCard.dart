@@ -96,7 +96,6 @@ class _SuggestionAdditionalInfoCardState
                       key: _formKey,
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        mainAxisSize: MainAxisSize.max,
                         children: <Widget>[
                           TextFormField(
                             controller: nameController,
@@ -124,7 +123,7 @@ class _SuggestionAdditionalInfoCardState
                               fillColor: Colors.white,
                               // fillColor: Colors.transparent,
                               contentPadding: const EdgeInsets.only(
-                                  left: 12, top: 12, right: 12),
+                                  left: 12, top: 12, right: 12,),
                               labelText: 'Product Name',
                               // border: InputBorder.none,
                               border: OutlineInputBorder(
@@ -259,7 +258,7 @@ class _SuggestionAdditionalInfoCardState
                               ),
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 24,
                           ),
                         ],
@@ -304,7 +303,7 @@ class _SuggestionAdditionalInfoCardState
                                   await Sentry.captureMessage(
                                     warning,
                                   );
-                                  showErrorSnack(
+                                  await showErrorSnack(
                                     context: context,
                                     // ignore: use_build_context_synchronously
                                     message: I10n.of(context).error,
@@ -326,7 +325,7 @@ class _SuggestionAdditionalInfoCardState
                                   await Sentry.captureMessage(
                                     warning,
                                   );
-                                  showErrorSnack(
+                                  await showErrorSnack(
                                     context: context,
                                     // ignore: use_build_context_synchronously
                                     message: I10n.of(context).error,
@@ -349,7 +348,7 @@ class _SuggestionAdditionalInfoCardState
                                 await Sentry.captureMessage(
                                   warning,
                                 );
-                                showErrorSnack(
+                                await showErrorSnack(
                                   context: context,
                                   // ignore: use_build_context_synchronously
                                   message: I10n.of(context).error,

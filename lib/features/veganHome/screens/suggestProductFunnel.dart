@@ -149,7 +149,7 @@ class _SuggestProductFunnelScreenState extends State<SuggestProductFunnelScreen>
   @override
   Widget build(BuildContext context) {
     final suggestionScreens = getSuggestionUploadScreens(context);
-    final _tween = MovieTween()
+    final tween = MovieTween()
       ..scene(begin: Duration.zero, duration: const Duration(seconds: 1)).tween(
         screenColor,
         ColorTween(begin: themeShade200, end: themeShade700),
@@ -201,8 +201,8 @@ class _SuggestProductFunnelScreenState extends State<SuggestProductFunnelScreen>
                 Expanded(
                   flex: 20,
                   child: CustomAnimationBuilder(
-                    tween: _tween, // Pass in tween
-                    duration: _tween.duration, // Obtain duration
+                    tween: tween, // Pass in tween
+                    duration: tween.duration, // Obtain duration
                     builder: (_, Movie value, child) {
                       return ColoredBox(
                         color: value.get(screenColor),
@@ -349,7 +349,7 @@ class _SuggestProductFunnelScreenState extends State<SuggestProductFunnelScreen>
                                               ),
                                               GestureDetector(
                                                 onTap: nextPage(
-                                                    screenTypes.length),
+                                                    screenTypes.length,),
                                                 child: CustomPaint(
                                                   painter: CustomButton2(),
                                                   child: SizedBox(
@@ -359,7 +359,7 @@ class _SuggestProductFunnelScreenState extends State<SuggestProductFunnelScreen>
                                                     child: Center(
                                                       child: Text(
                                                         isLastPage(screenTypes
-                                                                .length)
+                                                                .length,)
                                                             ? 'Finish'
                                                             : 'Skip',
                                                         style: const TextStyle(
@@ -391,6 +391,6 @@ class _SuggestProductFunnelScreenState extends State<SuggestProductFunnelScreen>
               ],
             ),
           );
-        });
+        },);
   }
 }

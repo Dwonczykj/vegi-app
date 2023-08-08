@@ -3,7 +3,7 @@ import 'package:vegan_liverpool/models/cart/view_item.dart';
 import 'package:vegan_liverpool/models/restaurant/cartItem.dart';
 
 class OrderItemSingle extends StatelessWidget {
-  const OrderItemSingle({Key? key, required this.orderItem}) : super(key: key);
+  const OrderItemSingle({required this.orderItem, Key? key}) : super(key: key);
 
   final ViewItem orderItem;
 

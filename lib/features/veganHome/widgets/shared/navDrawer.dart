@@ -25,6 +25,8 @@ import 'package:vegan_liverpool/utils/constants.dart';
 import 'package:vegan_liverpool/utils/url.dart';
 
 class NavDrawer extends StatefulWidget {
+  const NavDrawer({Key? key}) : super(key: key);
+
   @override
   State<NavDrawer> createState() => _NavDrawerState();
 }
@@ -61,7 +63,6 @@ class _NavDrawerState extends State<NavDrawer> {
                     //   ),
                     const VegiAvatar(
                       isEditable: false,
-                      avatarSquareSize: avatarSquareSize,
                     ),
                     Padding(
                       padding: const EdgeInsets.only(
@@ -78,52 +79,12 @@ class _NavDrawerState extends State<NavDrawer> {
                         ),
                       ),
                     ),
-                    Align(
+                    const Align(
                       alignment: Alignment.bottomLeft,
                       child: Padding(
-                        padding: const EdgeInsets.all(6),
+                        padding: EdgeInsets.all(6),
                         child: Row(
-                          children: [
-                            // Text.rich(
-                            //   TextSpan(
-                            //     text: viewmodel.gbpxBalance,
-                            //     children: [
-                            //       TextSpan(
-                            //         text: ' ${Currency.GBPx.name}',
-                            //         style: TextStyle(
-                            //           color: Colors.grey[700],
-                            //           fontSize: 14,
-                            //         ),
-                            //       ),
-                            //     ],
-                            //   ),
-                            //   style: const TextStyle(
-                            //     color: Colors.black,
-                            //     fontSize: 20,
-                            //     fontWeight: FontWeight.w600,
-                            //   ),
-                            // ),
-                            // const Spacer(),
-                            // Text.rich(
-                            //   TextSpan(
-                            //     text: viewmodel.pplBalance,
-                            //     children: [
-                            //       TextSpan(
-                            //         text: ' ${Currency.PPL.name}',
-                            //         style: TextStyle(
-                            //           color: Colors.grey[700],
-                            //           fontSize: 14,
-                            //         ),
-                            //       ),
-                            //     ],
-                            //   ),
-                            //   style: const TextStyle(
-                            //     color: Colors.black,
-                            //     fontSize: 20,
-                            //     fontWeight: FontWeight.w600,
-                            //   ),
-                            // ),
-                          ],
+                          
                         ),
                       ),
                     ),
@@ -141,7 +102,7 @@ class _NavDrawerState extends State<NavDrawer> {
                           title: const Text('Scheduled Orders'),
                           onTap: () {
                             Analytics.track(
-                                eventName: AnalyticsEvents.viewSchOrders);
+                                eventName: AnalyticsEvents.viewSchOrders,);
                             context.router.push(const ScheduledOrdersPage());
                           },
                         ),
@@ -171,7 +132,7 @@ class _NavDrawerState extends State<NavDrawer> {
                         title: const Text('My Orders'),
                         onTap: () {
                           Analytics.track(
-                              eventName: AnalyticsEvents.viewAllOrders);
+                              eventName: AnalyticsEvents.viewAllOrders,);
                           context.router.push(const AllOrdersPage());
                         },
                       ),
@@ -180,7 +141,7 @@ class _NavDrawerState extends State<NavDrawer> {
                         title: const Text('Account'),
                         onTap: () {
                           Analytics.track(
-                              eventName: AnalyticsEvents.viewAccount);
+                              eventName: AnalyticsEvents.viewAccount,);
                           context.router.push(const ProfileScreen());
                         },
                       ),
@@ -249,7 +210,6 @@ class _NavDrawerState extends State<NavDrawer> {
                           title: const Text('QR scan (DEV)'),
                           onTap: () => showDialog<Widget>(
                             context: context,
-                            barrierDismissible: true,
                             builder: (context) => const SuggestProductDialog(),
                           ),
                         ),

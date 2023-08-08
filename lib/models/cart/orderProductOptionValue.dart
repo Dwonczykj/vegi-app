@@ -6,12 +6,12 @@ part 'orderProductOptionValue.freezed.dart';
 part 'orderProductOptionValue.g.dart';
 
 List<OrderProductOptionValue> fromJsonOrderProductOptionValueList(
-        dynamic json) =>
+        dynamic json,) =>
     fromSailsListOfObjectJson<OrderProductOptionValue>(
-        OrderProductOptionValue.fromJson)(json);
+        OrderProductOptionValue.fromJson,)(json);
 OrderProductOptionValue? fromJsonOrderProductOptionValue(dynamic json) =>
     fromSailsObjectJson<OrderProductOptionValue>(
-        OrderProductOptionValue.fromJson)(json);
+        OrderProductOptionValue.fromJson,)(json);
 
 @Freezed()
 class OrderProductOptionValue with _$OrderProductOptionValue {
@@ -22,10 +22,10 @@ class OrderProductOptionValue with _$OrderProductOptionValue {
     required int priceModifier,
   }) = _OrderProductOptionValue;
 
+  factory OrderProductOptionValue.fromJson(Map<String, dynamic> json) =>
+      _$OrderProductOptionValueFromJson(json);
+
   const OrderProductOptionValue._();
 
   String get priceModifierFormatted => cFPrice(priceModifier);
-
-  factory OrderProductOptionValue.fromJson(Map<String, dynamic> json) =>
-      _$OrderProductOptionValueFromJson(json);
 }

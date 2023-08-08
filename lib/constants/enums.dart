@@ -187,7 +187,7 @@ enum SignUpErrCode {
 
 extension SignUpErrCodeHelpers on SignUpErrCode {
   static SignUpErrCode? fromFuseErrCode(
-      FuseAuthenticationStatus fuseAuthenticationStatus) {
+      FuseAuthenticationStatus fuseAuthenticationStatus,) {
     switch (fuseAuthenticationStatus) {
       case FuseAuthenticationStatus.failedAuthentication:
         return SignUpErrCode.fuseWalletSDKFailedAuthentication;
@@ -718,7 +718,10 @@ enum OrderCreationProcessStatus {
   orderAlreadyBeingCreated,
   paymentIntentCheckNotFound,
   unableToGetStripeCustomerIdFromCreateOrderRequest,
-  orderPaymentAttemptCreated, stripeServiceFailedOnServer, invalidSlot,
+  orderPaymentAttemptCreated, 
+  stripeServiceFailedOnServer, 
+  invalidSlot, 
+  invalidPostalDistrict, invalidDiscountCode, badItemsRequest, allItemsUnavailable, minimumOrderAmount, noItemsFound, invalidVendor, invalidFulfilmentMethod, invalidProduct, invalidProductOption, invalidUserAddress, deliveryPartnerUnavailable,
 }
 
 enum StripePaymentStatus {

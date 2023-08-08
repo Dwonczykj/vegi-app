@@ -178,7 +178,7 @@ Widget wordWidget(
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 20),
           child: Text(
-            '${index.toString()}. $word',
+            '$index. $word',
             style: const TextStyle(fontSize: 16, fontWeight: FontWeight.normal),
           ),
         ),

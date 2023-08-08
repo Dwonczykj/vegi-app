@@ -10,15 +10,10 @@ _$_Order _$$_OrderFromJson(Map<String, dynamic> json) => _$_Order(
       id: json['id'] as int,
       total: json['total'] as num,
       subtotal: json['subtotal'] as num,
-      currency: $enumDecodeNullable(_$CurrencyEnumMap, json['currency']) ??
-          Currency.GBPx,
       orderedDateTime: jsonToTimeStamp(json['orderedDateTime']),
-      paidDateTime: jsonToTimeStampNullable(json['paidDateTime']),
-      refundDateTime: jsonToTimeStampNullable(json['refundDateTime']),
       paymentStatus: $enumDecode(
           _$OrderPaidStatusEnumMap, json['paymentStatus'],
           unknownValue: OrderPaidStatus.unpaid),
-      paymentAttempted: json['paymentAttempted'] as bool? ?? false,
       paymentIntentId: json['paymentIntentId'] as String,
       firebaseRegistrationToken: json['firebaseRegistrationToken'] as String?,
       deliveryName: json['deliveryName'] as String?,
@@ -27,8 +22,6 @@ _$_Order _$$_OrderFromJson(Map<String, dynamic> json) => _$_Order(
       deliveryAddressLineOne: json['deliveryAddressLineOne'] as String,
       deliveryAddressLineTwo: json['deliveryAddressLineTwo'] as String?,
       deliveryAddressCity: json['deliveryAddressCity'] as String,
-      deliveryAddressCountry: json['deliveryAddressCountry'] as String? ?? 'GB',
-      deliveryAddressCounty: json['deliveryAddressCounty'] as String? ?? '',
       deliveryAddressPostCode: json['deliveryAddressPostCode'] as String,
       deliveryAddressLatitude:
           (json['deliveryAddressLatitude'] as num?)?.toDouble(),
@@ -60,10 +53,19 @@ _$_Order _$$_OrderFromJson(Map<String, dynamic> json) => _$_Order(
       fulfilmentMethod: fromJsonFulfilmentMethod(json['fulfilmentMethod']),
       vendor: fromJsonVendorDTO(json['vendor']),
       deliveryPartner: fromJsonDeliveryPartnerDTO(json['deliveryPartner']),
+      items: fromJsonOrderItemList(json['items']),
+      fulfilmentCharge: json['fulfilmentCharge'] as num,
+      platformFee: json['platformFee'] as num,
+      currency: $enumDecodeNullable(_$CurrencyEnumMap, json['currency']) ??
+          Currency.GBPx,
+      paidDateTime: jsonToTimeStampNullable(json['paidDateTime']),
+      refundDateTime: jsonToTimeStampNullable(json['refundDateTime']),
+      paymentAttempted: json['paymentAttempted'] as bool? ?? false,
+      deliveryAddressCountry: json['deliveryAddressCountry'] as String? ?? 'GB',
+      deliveryAddressCounty: json['deliveryAddressCounty'] as String? ?? '',
       discounts: json['discounts'] == null
           ? const []
           : fromJsonDiscountList(json['discounts']),
-      items: fromJsonOrderItemList(json['items']),
       parentOrder: json['parentOrder'] == null
           ? null
           : fromJsonOrder(json['parentOrder']),
@@ -73,20 +75,14 @@ _$_Order _$$_OrderFromJson(Map<String, dynamic> json) => _$_Order(
       transactions: json['transactions'] == null
           ? const []
           : fromJsonTransactionItemList(json['transactions']),
-      fulfilmentCharge: json['fulfilmentCharge'] as num,
-      platformFee: json['platformFee'] as num,
     );
 
 Map<String, dynamic> _$$_OrderToJson(_$_Order instance) => <String, dynamic>{
       'id': instance.id,
       'total': instance.total,
       'subtotal': instance.subtotal,
-      'currency': _$CurrencyEnumMap[instance.currency]!,
       'orderedDateTime': timeStampToJsonInt(instance.orderedDateTime),
-      'paidDateTime': timeStampToJsonIntNullable(instance.paidDateTime),
-      'refundDateTime': timeStampToJsonIntNullable(instance.refundDateTime),
       'paymentStatus': _$OrderPaidStatusEnumMap[instance.paymentStatus]!,
-      'paymentAttempted': instance.paymentAttempted,
       'paymentIntentId': instance.paymentIntentId,
       'firebaseRegistrationToken': instance.firebaseRegistrationToken,
       'deliveryName': instance.deliveryName,
@@ -95,8 +91,6 @@ Map<String, dynamic> _$$_OrderToJson(_$_Order instance) => <String, dynamic>{
       'deliveryAddressLineOne': instance.deliveryAddressLineOne,
       'deliveryAddressLineTwo': instance.deliveryAddressLineTwo,
       'deliveryAddressCity': instance.deliveryAddressCity,
-      'deliveryAddressCountry': instance.deliveryAddressCountry,
-      'deliveryAddressCounty': instance.deliveryAddressCounty,
       'deliveryAddressPostCode': instance.deliveryAddressPostCode,
       'deliveryAddressLatitude': instance.deliveryAddressLatitude,
       'deliveryAddressLongitude': instance.deliveryAddressLongitude,
@@ -122,26 +116,21 @@ Map<String, dynamic> _$$_OrderToJson(_$_Order instance) => <String, dynamic>{
       'fulfilmentMethod': instance.fulfilmentMethod?.toJson(),
       'vendor': instance.vendor?.toJson(),
       'deliveryPartner': instance.deliveryPartner?.toJson(),
-      'discounts': instance.discounts.map((e) => e.toJson()).toList(),
       'items': instance.items.map((e) => e.toJson()).toList(),
+      'fulfilmentCharge': instance.fulfilmentCharge,
+      'platformFee': instance.platformFee,
+      'currency': _$CurrencyEnumMap[instance.currency]!,
+      'paidDateTime': timeStampToJsonIntNullable(instance.paidDateTime),
+      'refundDateTime': timeStampToJsonIntNullable(instance.refundDateTime),
+      'paymentAttempted': instance.paymentAttempted,
+      'deliveryAddressCountry': instance.deliveryAddressCountry,
+      'deliveryAddressCounty': instance.deliveryAddressCounty,
+      'discounts': instance.discounts.map((e) => e.toJson()).toList(),
       'parentOrder': instance.parentOrder?.toJson(),
       'unfulfilledItems':
           instance.unfulfilledItems.map((e) => e.toJson()).toList(),
       'transactions': instance.transactions.map((e) => e.toJson()).toList(),
-      'fulfilmentCharge': instance.fulfilmentCharge,
-      'platformFee': instance.platformFee,
     };
-
-const _$CurrencyEnumMap = {
-  Currency.GBP: 'GBP',
-  Currency.USD: 'USD',
-  Currency.EUR: 'EUR',
-  Currency.GBPx: 'GBPx',
-  Currency.PPL: 'PPL',
-  Currency.GBT: 'GBT',
-  Currency.FUSE: 'FUSE',
-  Currency.percent: 'percent',
-};
 
 const _$OrderPaidStatusEnumMap = {
   OrderPaidStatus.paid: 'paid',
@@ -166,4 +155,15 @@ const _$OrderAcceptanceStatusEnumMap = {
   OrderAcceptanceStatus.outForDelivery: 'outForDelivery',
   OrderAcceptanceStatus.delivered: 'delivered',
   OrderAcceptanceStatus.collected: 'collected',
+};
+
+const _$CurrencyEnumMap = {
+  Currency.GBP: 'GBP',
+  Currency.USD: 'USD',
+  Currency.EUR: 'EUR',
+  Currency.GBPx: 'GBPx',
+  Currency.PPL: 'PPL',
+  Currency.GBT: 'GBT',
+  Currency.FUSE: 'FUSE',
+  Currency.percent: 'percent',
 };

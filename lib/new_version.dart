@@ -16,6 +16,13 @@ import 'package:vegan_liverpool/version.dart';
 /// Information about the app's current version, and the most recent version
 /// available in the Apple App Store or Google Play Store.
 class VersionStatus {
+
+  VersionStatus._({
+    required this.localVersion,
+    required this.storeVersion,
+    required this.appStoreLink,
+    this.releaseNotes,
+  });
   /// The current version of the app.
   final String localVersion;
   Version? get localVersionParsed => Version.tryParse(localVersion);
@@ -69,16 +76,16 @@ class VersionStatus {
       return false;
     }
   }
-
-  VersionStatus._({
-    required this.localVersion,
-    required this.storeVersion,
-    required this.appStoreLink,
-    this.releaseNotes,
-  });
 }
 
 class NewVersion {
+
+  NewVersion({
+    this.androidId,
+    this.iOSId,
+    this.iOSAppStoreCountry,
+    this.forceAppVersion,
+  });
   /// An optional value that can override the default packageName when
   /// attempting to reach the Apple App Store. This is useful if your app has
   /// a different package name in the App Store.
@@ -100,20 +107,13 @@ class NewVersion {
   /// before publishng a new version.
   final String? forceAppVersion;
 
-  NewVersion({
-    this.androidId,
-    this.iOSId,
-    this.iOSAppStoreCountry,
-    this.forceAppVersion,
-  });
-
   static Future<NewVersion> fromPackageInfo() async {
-    final _packageInfo = await PackageInfo.fromPlatform();
+    final packageInfo = await PackageInfo.fromPlatform();
     return NewVersion(
       iOSAppStoreCountry:
           'GB', // ~ https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2
-      iOSId: _packageInfo.packageName,
-      androidId: _packageInfo.packageName,
+      iOSId: packageInfo.packageName,
+      androidId: packageInfo.packageName,
     );
   }
 
@@ -122,7 +122,7 @@ class NewVersion {
   showAlertIfNecessary({required BuildContext context}) async {
     final VersionStatus? versionStatus = await getVersionStatus();
     if (versionStatus != null && versionStatus.canUpdate) {
-      showUpdateDialog(context: context, versionStatus: versionStatus);
+      await showUpdateDialog(context: context, versionStatus: versionStatus);
     }
   }
 
@@ -137,7 +137,7 @@ class NewVersion {
       return _getAndroidStoreVersion(packageInfo);
     } else {
       log.warn(
-          'The target platform "${Platform.operatingSystem}" is not yet supported by this package.');
+          'The target platform "${Platform.operatingSystem}" is not yet supported by this package.',);
       return null;
     }
   }
@@ -154,11 +154,11 @@ class NewVersion {
   /// JSON document.
   Future<VersionStatus?> _getiOSStoreVersion(PackageInfo packageInfo) async {
     final id = iOSId ?? packageInfo.packageName;
-    final parameters = {"bundleId": "$id"};
+    final parameters = {'bundleId': id};
     if (iOSAppStoreCountry != null) {
-      parameters.addAll({"country": iOSAppStoreCountry!});
+      parameters.addAll({'country': iOSAppStoreCountry!});
     }
-    final uri = Uri.https("itunes.apple.com", "/lookup", parameters);
+    final uri = Uri.https('itunes.apple.com', '/lookup', parameters);
     final response = await http.get(
       uri,
     ); // ~ https://itunes.apple.com/lookup?country=GB&bundleId=com.vegiapp.vegi
@@ -204,10 +204,10 @@ class NewVersion {
 
   /// Android info is fetched by parsing the html of the app store page.
   Future<VersionStatus?> _getAndroidStoreVersion(
-      PackageInfo packageInfo) async {
+      PackageInfo packageInfo,) async {
     final id = androidId ?? packageInfo.packageName;
     final uri = Uri.https(
-        "play.google.com", "/store/apps/details", {"id": "$id", "hl": "en"});
+        'play.google.com', '/store/apps/details', {'id': id, 'hl': 'en'},);
     final response = await http.get(uri);
     if (response.statusCode != 200) {
       log.warn("Can't find an app in the Play Store with the id: $id");
@@ -272,7 +272,7 @@ class NewVersion {
   /// To change the appearance and behavior of the update dialog, you can
   /// optionally provide [dialogTitle], [dialogText], [updateButtonText],
   /// [dismissButtonText], and [dismissAction] parameters.
-  void showUpdateDialog({
+  Future<void> showUpdateDialog({
     required BuildContext context,
     required VersionStatus versionStatus,
     String dialogTitle = 'Update Available',
@@ -297,14 +297,12 @@ class NewVersion {
     }
 
     List<Widget> actions = [
-      Platform.isAndroid
-          ? TextButton(
-              child: updateButtonTextWidget,
+      if (Platform.isAndroid) TextButton(
               onPressed: updateAction,
-            )
-          : CupertinoDialogAction(
               child: updateButtonTextWidget,
+            ) else CupertinoDialogAction(
               onPressed: updateAction,
+              child: updateButtonTextWidget,
             ),
     ];
 
@@ -315,12 +313,12 @@ class NewVersion {
       actions.add(
         Platform.isAndroid
             ? TextButton(
-                child: dismissButtonTextWidget,
                 onPressed: dismissAction,
+                child: dismissButtonTextWidget,
               )
             : CupertinoDialogAction(
-                child: dismissButtonTextWidget,
                 onPressed: dismissAction,
+                child: dismissButtonTextWidget,
               ),
       );
     }
@@ -341,7 +339,7 @@ class NewVersion {
                     content: dialogTextWidget,
                     actions: actions,
                   ),
-            onWillPop: () => Future.value(allowDismissal));
+            onWillPop: () => Future.value(allowDismissal),);
       },
     );
   }

@@ -68,7 +68,7 @@ class ScheduledOrdersPage extends StatelessWidget {
 }
 
 class SingleScheduledOrderCard extends StatelessWidget {
-  const SingleScheduledOrderCard({Key? key, required this.order})
+  const SingleScheduledOrderCard({required this.order, Key? key})
       : super(key: key);
 
   final Order order;
@@ -235,7 +235,7 @@ class SingleScheduledOrderCard extends StatelessWidget {
 }
 
 class SingleProductOrderItem extends StatefulWidget {
-  const SingleProductOrderItem({Key? key, required this.item})
+  const SingleProductOrderItem({required this.item, Key? key})
       : super(key: key);
 
   final OrderItem item;

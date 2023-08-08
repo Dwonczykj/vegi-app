@@ -6,10 +6,7 @@ import 'package:vegan_liverpool/redux/viewsmodels/checkout/cart_item_list_vm.dar
 
 class CartItemSingle extends StatelessWidget {
   const CartItemSingle({
-    Key? key,
-    required this.width,
-    required this.animation,
-    required this.index,
+    required this.width, required this.animation, required this.index, Key? key,
   }) : super(key: key);
 
   final double width;

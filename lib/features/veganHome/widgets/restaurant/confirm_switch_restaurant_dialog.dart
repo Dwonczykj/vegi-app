@@ -8,7 +8,7 @@ import 'package:vegan_liverpool/models/restaurant/restaurantItem.dart';
 import 'package:vegan_liverpool/redux/viewsmodels/restaurantItem.dart';
 
 class ConfirmSwitchRestaurant extends StatefulWidget {
-  const ConfirmSwitchRestaurant({Key? key, required this.restaurantItem})
+  const ConfirmSwitchRestaurant({required this.restaurantItem, Key? key})
       : super(key: key);
   final RestaurantItem restaurantItem;
 
@@ -96,7 +96,7 @@ class _ConfirmSwitchRestaurantState extends State<ConfirmSwitchRestaurant>
                             );
                             context.router.pop();
                             context.router.push(
-                              RestaurantMenuScreen(),
+                              const RestaurantMenuScreen(),
                             );
                           },
                           label: 'Yes',
@@ -117,7 +117,7 @@ class _ConfirmSwitchRestaurantState extends State<ConfirmSwitchRestaurant>
                   ],
                 );
               },
-            )),
+            ),),
       ),
     );
   }

@@ -50,6 +50,7 @@ class FirebaseStrategy implements IOnBoardStrategy {
         ),
       );
 
+  @override
   bool expectingSMSVerificationCode = false;
 
   @override
@@ -312,7 +313,7 @@ class FirebaseStrategy implements IOnBoardStrategy {
     } on FirebaseAuthException catch (e, s) {
       await _catchFirebaseException(e, s);
       store.dispatch(SignUpLoadingMessage(
-          message: 'Failed to authenticate with email credentials 😳'));
+          message: 'Failed to authenticate with email credentials 😳',),);
     }
     return null;
   }
@@ -442,8 +443,8 @@ class FirebaseStrategy implements IOnBoardStrategy {
         credentials,
       );
     } on FirebaseAuthException catch (e, s) {
-      log.error(Exception('Error in verify phone number: ${e.toString()}'),
-          stackTrace: s);
+      log.error(Exception('Error in verify phone number: $e'),
+          stackTrace: s,);
       await Analytics.track(
         eventName: AnalyticsEvents.verify,
         properties: {
@@ -642,7 +643,6 @@ class FirebaseStrategy implements IOnBoardStrategy {
     if (firebaseSessionToken == null) {
       log.warn(
         'Firebase unable to get sessionToken from email and password userCredential',
-        sentry: true,
       );
       return;
     }
@@ -653,7 +653,7 @@ class FirebaseStrategy implements IOnBoardStrategy {
     required String email,
   }) async {
     await firebaseAuth.sendPasswordResetEmail(
-        email: email.toLowerCase().trim());
+        email: email.toLowerCase().trim(),);
   }
 
   @override
@@ -665,7 +665,7 @@ class FirebaseStrategy implements IOnBoardStrategy {
     final store = await reduxStore;
     if (firebaseAuth.currentUser == null) {
       log.info(
-          'Not able to update email to "$email" on firebase as no firebase user exists yet.');
+          'Not able to update email to "$email" on firebase as no firebase user exists yet.',);
       return true;
     }
     final existingEmail =
@@ -678,7 +678,7 @@ class FirebaseStrategy implements IOnBoardStrategy {
           : <String>[];
       if (dummySigninMethods.isNotEmpty) {
         log.warn(
-            'Unable to change current user with email: $existingEmail to new email: $email because there is already another user registered to this email: $email');
+            'Unable to change current user with email: $existingEmail to new email: $email because there is already another user registered to this email: $email',);
         return false;
       }
       // !BUG this line just through as had unsuccesffuly tried to set email on previous attempt so store was out of sync with firebase...
@@ -699,13 +699,13 @@ class FirebaseStrategy implements IOnBoardStrategy {
       if (e.code == 'email-already-in-use') {
         // FirebaseAuth.instance.currentUser?.linkWithCredential(credential)
         log.warn(
-            'Unable to change current user with email: $existingEmail to new email: $email because there is already another user registered to this email: $email');
+            'Unable to change current user with email: $existingEmail to new email: $email because there is already another user registered to this email: $email',);
         if (!dontComplete) {
           store.dispatch(
             SignUpFailed(
               error: SignUpErrorDetails(
                 message:
-                    'Email registered to this account is $existingEmail and can\'t be updated to $email as another account already exists with that email.',
+                    "Email registered to this account is $existingEmail and can't be updated to $email as another account already exists with that email.",
                 title: '$email already registered',
                 code: SignUpErrCode.emailAlreadyInUse,
               ),
@@ -820,7 +820,7 @@ class FirebaseStrategy implements IOnBoardStrategy {
         store.state.userState.firebaseAuthenticationStatus
             .isNewFailureStatus(FirebaseAuthenticationStatus.unauthenticated)) {
       log.warn(
-          'Failed to reauthenticate firebase as status: FirebaseAuthenticationStatus.[${store.state.userState.firebaseAuthenticationStatus.name}]');
+          'Failed to reauthenticate firebase as status: FirebaseAuthenticationStatus.[${store.state.userState.firebaseAuthenticationStatus.name}]',);
       return false;
     }
 
@@ -878,7 +878,7 @@ class FirebaseStrategy implements IOnBoardStrategy {
     try {
       if (USE_FIREBASE_EMULATOR) {
         log.warn(
-            'Will not attempt to login to vegi for now as we are using the firebase emulator and the ${Env.activeEnv} vegi backend server cannot sign verification codes. See https://github.com/firebase/firebase-tools/issues/2764');
+            'Will not attempt to login to vegi for now as we are using the firebase emulator and the ${Env.activeEnv} vegi backend server cannot sign verification codes. See https://github.com/firebase/firebase-tools/issues/2764',);
         store.dispatch(
           SetUserAuthenticationStatus(
             vegiStatus: VegiAuthenticationStatus.failed,
@@ -889,7 +889,7 @@ class FirebaseStrategy implements IOnBoardStrategy {
       if (store.state.userState.fuseAuthenticationStatus !=
           FuseAuthenticationStatus.authenticated) {
         log.warn(
-            'Should not be logging into vegi as fuse is not authenticated');
+            'Should not be logging into vegi as fuse is not authenticated',);
         return LoggedInToVegiResult.failed;
       }
       store.dispatch(
@@ -901,7 +901,6 @@ class FirebaseStrategy implements IOnBoardStrategy {
       final vegiSession = await peeplEatsService.loginWithPhone(
         phoneNumber: phoneNumber,
         firebaseSessionToken: firebaseSessionToken,
-        rememberMe: true,
       );
       final userDetails = vegiSession.user;
       if (vegiSession.sessionCookie.isNotEmpty) {
@@ -916,7 +915,7 @@ class FirebaseStrategy implements IOnBoardStrategy {
         );
         if (store.state.userState.hasNotOnboarded) {
           log.error(
-              'Should never have userState.hasNotOnboarded here. Please refactor');
+              'Should never have userState.hasNotOnboarded here. Please refactor',);
         }
         if (store.state.userState.isLoggedIn &&
             store.state.userState.vegiAccountId != null) {
@@ -1448,6 +1447,7 @@ class FirebaseStrategy implements IOnBoardStrategy {
     );
   }
 
+  @override
   bool get onOnboarding =>
       onboardingAuthRoutesOrder.contains(rootRouter.current.name);
 

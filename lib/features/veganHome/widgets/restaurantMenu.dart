@@ -17,10 +17,7 @@ import 'package:vegan_liverpool/redux/viewsmodels/restaurantMenu.dart';
 
 class RestaurantMenuList extends StatefulWidget {
   const RestaurantMenuList({
-    Key? key,
-    required this.featuredList,
-    required this.groupedList,
-    required this.categories,
+    required this.featuredList, required this.groupedList, required this.categories, Key? key,
   }) : super(key: key);
 
   @override
@@ -34,7 +31,7 @@ class RestaurantMenuList extends StatefulWidget {
 class _RestaurantMenuListState extends State<RestaurantMenuList> {
   final ExpandableSliverListController<RestaurantMenuItem>
       featuredListController = ExpandableSliverListController(
-    initialStatus: ExpandableSliverListStatus.expanded,
+    
   );
   final ExpandableSliverListController<RestaurantMenuItem>
       regularListController = ExpandableSliverListController();
@@ -43,16 +40,11 @@ class _RestaurantMenuListState extends State<RestaurantMenuList> {
 
   @override
   void initState() {
-    categoryItemsControllers = Map<String,
-        ExpandableSliverListController<RestaurantMenuItem>>.fromIterable(
-      widget.categories,
-      key: (cat) => cat.toString(),
-      value: (cat) => ExpandableSliverListController(
-        initialStatus: cat.toString().toLowerCase() != 'featured'
+    categoryItemsControllers = { for (var cat in widget.categories) cat : ExpandableSliverListController(
+        initialStatus: cat.toLowerCase() != 'featured'
             ? ExpandableSliverListStatus.collapsed
             : ExpandableSliverListStatus.expanded,
-      ),
-    );
+      ) };
     super.initState();
   }
 
@@ -141,31 +133,30 @@ class _RestaurantMenuListState extends State<RestaurantMenuList> {
 }
 
 class ExpandableContainer extends StatelessWidget {
+
+  const ExpandableContainer({
+    required this.child, Key? key,
+    this.collapsedHeight = 0.0,
+    this.expandedHeight = 300.0,
+    this.expanded = true,
+  }) : super(key: key);
   final bool expanded;
   final double collapsedHeight;
   final double expandedHeight;
   final Widget child;
 
-  ExpandableContainer({
-    Key? key,
-    required this.child,
-    this.collapsedHeight = 0.0,
-    this.expandedHeight = 300.0,
-    this.expanded = true,
-  }) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
-    double screenWidth = MediaQuery.of(context).size.width;
-    return new AnimatedContainer(
-      duration: new Duration(milliseconds: 500),
+    final double screenWidth = MediaQuery.of(context).size.width;
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 500),
       curve: Curves.easeInOut,
       width: screenWidth,
       height: expanded ? expandedHeight : collapsedHeight,
-      child: new Container(
+      child: DecoratedBox(
+        decoration: BoxDecoration(
+            border: Border.all(color: Colors.blue),),
         child: child,
-        decoration: new BoxDecoration(
-            border: new Border.all(width: 1.0, color: Colors.blue)),
       ),
     );
   }

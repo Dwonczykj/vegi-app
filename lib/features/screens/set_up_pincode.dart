@@ -13,8 +13,7 @@ import 'package:vegan_liverpool/utils/analytics.dart';
 
 class SetUpPinCodeScreen extends StatefulWidget {
   const SetUpPinCodeScreen({
-    Key? key,
-    required this.onSuccess,
+    required this.onSuccess, Key? key,
   }) : super(key: key);
   final void Function() onSuccess;
   @override

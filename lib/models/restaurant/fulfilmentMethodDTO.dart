@@ -11,10 +11,10 @@ part 'fulfilmentMethodDTO.g.dart';
 
 List<FulfilmentMethodDTO> fromJsonFulfilmentMethodDTOList(dynamic json) =>
     fromSailsListOfObjectJson<FulfilmentMethodDTO>(
-        FulfilmentMethodDTO.fromJson)(json);
+        FulfilmentMethodDTO.fromJson,)(json);
 FulfilmentMethodDTO? fromJsonFulfilmentMethodDTO(dynamic json) =>
     fromSailsObjectJson<FulfilmentMethodDTO>(FulfilmentMethodDTO.fromJson)(
-        json);
+        json,);
 
 @Freezed()
 class FulfilmentMethodDTO with _$FulfilmentMethodDTO {
@@ -23,14 +23,12 @@ class FulfilmentMethodDTO with _$FulfilmentMethodDTO {
     required int id,
     required FulfilmentMethodType methodType,
     required num slotLength,
-    num? bufferLength,
+    @JsonKey(fromJson: fromJsonVendorDTO) required VendorDTO? vendor, @JsonKey(fromJson: fromJsonDeliveryPartnerDTO)
+        required DeliveryPartnerDTO? deliveryPartner, num? bufferLength,
     String? orderCutoff,
     int? maxOrders,
     num? maxDeliveryDistance,
     num? priceModifier,
-    @JsonKey(fromJson: fromJsonVendorDTO) required VendorDTO? vendor,
-    @JsonKey(fromJson: fromJsonDeliveryPartnerDTO)
-        required DeliveryPartnerDTO? deliveryPartner,
     @JsonKey(fromJson: fromJsonAddressDTO) AddressDTO? fulfilmentOrigin,
     @JsonKey(fromJson: fromJsonOpeningHours) OpeningHours? openingHours,
   }) = _FulfilmentMethodDTO;

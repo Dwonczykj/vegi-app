@@ -1,8 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui' as ui;
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:image_picker/image_picker.dart';
@@ -19,8 +17,7 @@ import 'package:vegan_liverpool/utils/constants.dart';
 
 class VegiAvatar extends StatelessWidget {
   const VegiAvatar({
-    Key? key,
-    required this.isEditable,
+    required this.isEditable, Key? key,
     this.avatarSquareSize = 50.0,
     this.showAdminBanner = false,
   }) : super(key: key);
@@ -76,7 +73,7 @@ class VegiAvatar extends StatelessWidget {
                                   color: themeLightShade1000,
                                   textStyle: TextStyle(
                                     fontFamily: Fonts.fatFace,
-                                    fontSize: (avatarSquareSize / 5.0),
+                                    fontSize: avatarSquareSize / 5.0,
                                   ),
                                 ),
                               ),
@@ -127,7 +124,7 @@ class VegiAvatar extends StatelessWidget {
                       await showErrorSnack(
                         context: context,
                         title: Messages.operationFailed,
-                        message: '$errStr',
+                        message: errStr,
                       );
                     },
                   ),
@@ -188,7 +185,7 @@ class VegiAvatar extends StatelessWidget {
                                 children: [
                                   CircleAvatar(
                                     backgroundImage: AssetImage(
-                                        viewmodel.avatarTempFilePath),
+                                        viewmodel.avatarTempFilePath,),
                                     // radius: 23,
                                     radius: avatarSquareSize / 2.0 +
                                         (avatarSquareSize * 0.1),
@@ -208,7 +205,7 @@ class VegiAvatar extends StatelessWidget {
                                           color: themeLightShade1000,
                                           textStyle: TextStyle(
                                             fontFamily: Fonts.fatFace,
-                                            fontSize: (avatarSquareSize / 5.0),
+                                            fontSize: avatarSquareSize / 5.0,
                                           ),
                                         ),
                                       ),

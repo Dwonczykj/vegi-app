@@ -23,7 +23,7 @@ class PreparingOrderAppBar extends StatelessWidget {
       barColor = themeLightShade1000;
     }
     return SliverAppBar(
-      toolbarHeight: 30,
+      toolbarHeight: 50,
       automaticallyImplyLeading: false,
       backgroundColor: Colors.transparent,
       centerTitle: false,

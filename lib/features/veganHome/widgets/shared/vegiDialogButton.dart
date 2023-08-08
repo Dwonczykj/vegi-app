@@ -3,10 +3,8 @@ import 'package:vegan_liverpool/constants/theme.dart';
 
 class VegiDialogButton extends StatelessWidget {
   const VegiDialogButton({
-    Key? key,
-    required this.label,
+    required this.label, required this.onPressed, Key? key,
     this.icon,
-    required this.onPressed,
     this.disabled = false,
     this.dangerButton = false,
   }) : super(key: key);
@@ -19,10 +17,10 @@ class VegiDialogButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final _buttonLabelColour =
+    final buttonLabelColour =
         disabled ? const Color(0xFF797979) : Colors.white;
-    const _buttonLabelFontSize = 30.0;
-    final _buttonBackgroundColor = dangerButton
+    const buttonLabelFontSize = 30.0;
+    final buttonBackgroundColor = dangerButton
         ? disabled
             ? themeShade800
             : themeAccent600
@@ -38,7 +36,6 @@ class VegiDialogButton extends StatelessWidget {
             ? ElevatedButton.styleFrom(backgroundColor: themeShade1100)
             : ElevatedButton.styleFrom(backgroundColor: themeShade600),
         child: Row(
-          mainAxisSize: MainAxisSize.max,
           // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             Expanded(
@@ -46,8 +43,8 @@ class VegiDialogButton extends StatelessWidget {
                 child: Text(
                   label,
                   style: TextStyle(
-                    color: _buttonLabelColour,
-                    fontSize: _buttonLabelFontSize * 0.75,
+                    color: buttonLabelColour,
+                    fontSize: buttonLabelFontSize * 0.75,
                     fontWeight: FontWeight.normal,
                   ),
                   maxLines: 1,
@@ -60,8 +57,8 @@ class VegiDialogButton extends StatelessWidget {
             if(icon != null)
               Icon(
                 icon, //Icons.sms
-                color: _buttonLabelColour,
-                size: _buttonLabelFontSize,
+                color: buttonLabelColour,
+                size: buttonLabelFontSize,
               ),
           ],
         ),

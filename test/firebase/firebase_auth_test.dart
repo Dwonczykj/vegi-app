@@ -126,7 +126,7 @@ void main() {
       user = kMockUser;
 
       mockUserPlatform = MockUserPlatform(
-          mockAuthPlatform, TestMultiFactorPlatform(mockAuthPlatform), user);
+          mockAuthPlatform, TestMultiFactorPlatform(mockAuthPlatform), user,);
       mockConfirmationResultPlatform = MockConfirmationResultPlatform();
       mockAdditionalUserInfo = AdditionalUserInfo(
         isNewUser: false,
@@ -150,23 +150,23 @@ void main() {
           .thenAnswer((_) async => mockUserCredPlatform!);
 
       when(mockAuthPlatform.signInWithCredential(any)).thenAnswer(
-          (_) => Future<UserCredentialPlatform>.value(mockUserCredPlatform));
+          (_) => Future<UserCredentialPlatform>.value(mockUserCredPlatform),);
 
       when(mockAuthPlatform.currentUser).thenReturn(mockUserPlatform);
 
       when(mockAuthPlatform.instanceFor(
         app: anyNamed('app'),
         pluginConstants: anyNamed('pluginConstants'),
-      )).thenAnswer((_) => mockUserPlatform);
+      ),).thenAnswer((_) => mockUserPlatform);
 
       when(mockAuthPlatform.delegateFor(
         app: anyNamed('app'),
-      )).thenAnswer((_) => mockAuthPlatform);
+      ),).thenAnswer((_) => mockAuthPlatform);
 
       when(mockAuthPlatform.setInitialValues(
         currentUser: anyNamed('currentUser'),
         languageCode: anyNamed('languageCode'),
-      )).thenAnswer((_) => mockAuthPlatform);
+      ),).thenAnswer((_) => mockAuthPlatform);
 
       when(mockAuthPlatform.createUserWithEmailAndPassword(any, any))
           .thenAnswer((_) async => mockUserCredPlatform!);
@@ -195,15 +195,15 @@ void main() {
           .thenAnswer((_) async => mockUserCredPlatform);
 
       when(mockAuthPlatform.authStateChanges()).thenAnswer((_) =>
-          Stream<UserPlatform>.fromIterable(<UserPlatform>[mockUserPlatform!]));
+          Stream<UserPlatform>.fromIterable(<UserPlatform>[mockUserPlatform!]),);
 
       when(mockAuthPlatform.idTokenChanges()).thenAnswer((_) =>
-          Stream<UserPlatform>.fromIterable(<UserPlatform>[mockUserPlatform!]));
+          Stream<UserPlatform>.fromIterable(<UserPlatform>[mockUserPlatform!]),);
 
       when(mockAuthPlatform.userChanges()).thenAnswer((_) =>
-          Stream<UserPlatform>.fromIterable(<UserPlatform>[mockUserPlatform!]));
+          Stream<UserPlatform>.fromIterable(<UserPlatform>[mockUserPlatform!]),);
 
-      TestDefaultBinaryMessengerBinding.instance?.defaultBinaryMessenger
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
           .setMockMethodCallHandler(MethodChannelFirebaseAuth.channel,
               (call) async {
         return <String, dynamic>{'user': user};
@@ -222,8 +222,8 @@ void main() {
       firebaseRemoteConfig = FirebaseRemoteConfig.instance;
       firebaseAuth = FirebaseAuth.instance;
       // await configureDependencies(environment: Env.test);
-      final dependency_injection = GetIt.instance;
-      dependency_injection.registerFactory<LogIt>(() => LogIt(Logger()));
+      final dependencyInjection = GetIt.instance;
+      dependencyInjection.registerFactory<LogIt>(() => LogIt(Logger()));
       return firebaseApp;
     });
 
@@ -254,16 +254,12 @@ void main() {
           timeout: anyNamed('timeout'),
           verificationCompleted: anyNamed('verificationCompleted'),
           verificationFailed: anyNamed('verificationFailed'),
-        )).thenAnswer((i) async {});
+        ),).thenAnswer((i) async {});
 
-        final PhoneVerificationCompleted verificationCompleted =
-            (PhoneAuthCredential phoneAuthCredential) {};
-        final PhoneVerificationFailed verificationFailed =
-            (FirebaseAuthException authException) {};
-        final PhoneCodeSent codeSent =
-            (String verificationId, [int? forceResendingToken]) async {};
-        final PhoneCodeAutoRetrievalTimeout autoRetrievalTimeout =
-            (String verificationId) {};
+        verificationCompleted(PhoneAuthCredential phoneAuthCredential) {}
+        verificationFailed(FirebaseAuthException authException) {}
+        codeSent(String verificationId, [int? forceResendingToken]) async {}
+        autoRetrievalTimeout(String verificationId) {}
 
         await auth.verifyPhoneNumber(
           phoneNumber: kMockPhoneNumber,

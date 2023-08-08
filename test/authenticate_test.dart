@@ -43,7 +43,7 @@ void main() {
           expect(
               store.state.userState.fuseAuthenticationStatus
                   .isNewFailureStatus(currentFuseStatus),
-              false);
+              false,);
           currentFuseStatus = store.state.userState.fuseAuthenticationStatus;
           if (currentFuseStatus == FuseAuthenticationStatus.authenticated) {
             expect(

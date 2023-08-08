@@ -28,6 +28,7 @@ class PaymentMethodViewModel extends Equatable {
     required this.selectedFulfilmentMethod,
     required this.showvegiPay,
     required this.orderCreationProcessStatus,
+    required this.orderCreationStatusMessage,
     required this.stripePaymentStatus,
     required this.transferringTokens,
     required this.processingPayment,
@@ -60,17 +61,26 @@ class PaymentMethodViewModel extends Equatable {
       restaurantMinimumOrder: store.state.cartState.restaurantMinimumOrder,
       orderCreationProcessStatus:
           store.state.cartState.orderCreationProcessStatus,
+      orderCreationStatusMessage:
+          store.state.cartState.orderCreationStatusMessage,
       stripePaymentStatus: store.state.cartState.stripePaymentStatus,
       processingPayment: store.state.cartState.paymentInProcess,
       transferringTokens: store.state.cartState.transferringTokens,
       startPaymentProcess: ({
         required Future<void> Function(PaymentMethod?) showBottomPaymentSheet,
-      }) =>
+      }) {
+        if (store.state.cartState.payButtonLoading) {
           store.dispatch(
-        startOrderCreationProcess(
-          showBottomPaymentSheet: showBottomPaymentSheet,
-        ),
-      ),
+            stopPaymentProcess(),
+          );
+        } else {
+          store.dispatch(
+            startOrderCreationProcess(
+              showBottomPaymentSheet: showBottomPaymentSheet,
+            ),
+          );
+        }
+      },
       setPaymentMethod: ({required PaymentMethod paymentMethod}) {
         store.dispatch(SetPaymentMethod(paymentMethod));
       },
@@ -96,6 +106,7 @@ class PaymentMethodViewModel extends Equatable {
     required Future<void> Function(PaymentMethod?) showBottomPaymentSheet,
   }) startPaymentProcess;
   final OrderCreationProcessStatus orderCreationProcessStatus;
+  final String orderCreationStatusMessage;
   final StripePaymentStatus stripePaymentStatus;
   final LivePayment? processingPayment;
   final bool transferringTokens;
@@ -120,6 +131,7 @@ class PaymentMethodViewModel extends Equatable {
         restaurantMinimumOrder,
         cartTotal,
         orderCreationProcessStatus,
+        orderCreationStatusMessage,
         stripePaymentStatus,
         processingPayment?.amount,
         processingPayment?.status,

@@ -23,7 +23,7 @@ class FAQScreen extends StatelessWidget {
 }
 
 class SingleQuestionItem extends StatelessWidget {
-  const SingleQuestionItem({Key? key, required this.faq}) : super(key: key);
+  const SingleQuestionItem({required this.faq, Key? key}) : super(key: key);
 
   final Map<String, dynamic> faq;
 

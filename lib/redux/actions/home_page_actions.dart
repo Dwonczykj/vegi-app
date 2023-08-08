@@ -197,9 +197,8 @@ ThunkAction<AppState> fetchFeaturedRestaurantsByPostCode({
         )
         ..dispatch(SetIsLoadingHomePage(isLoading: false));
     } catch (e, s) {
-      log.error('ERROR - fetchFeaturedRestaurantsByPostCode $e');
-      await Sentry.captureException(
-        e,
+      log.error(
+        'ERROR - fetchFeaturedRestaurantsByPostCode $e',
         stackTrace: s,
       );
       store.dispatch(
@@ -222,7 +221,8 @@ ThunkAction<AppState> fetchRestaurantById({
       );
       if (restaurant == null) {
         log.error(
-            'ERROR - fetchRestaurantById unable to fetch restaurant with ID: $restaurantID');
+          'ERROR - fetchRestaurantById unable to fetch restaurant with ID: $restaurantID',
+        );
         await Sentry.captureMessage(
           'ERROR - fetchRestaurantById unable to fetch restaurant with ID: $restaurantID',
         );
@@ -316,7 +316,8 @@ ThunkAction<AppState> fetchRestaurantMenuItemProductDetailsForItems({
       );
       if (error != null) {
         return error(
-            'ERROR - fetchRestaurantMenuItemProductDetailsForItems $e');
+          'ERROR - fetchRestaurantMenuItemProductDetailsForItems $e',
+        );
       }
       store.dispatch(SetIsLoadingHttpRequest(isLoading: false));
     }
@@ -329,9 +330,11 @@ Future<Coordinates> fetchUserDeliverToCoordinates(Store<AppState> store) async {
     final coordinate = Coordinates(deliverTo.latitude, deliverTo.longitude);
     if (deliverTo.latitude == 0 || deliverTo.longitude == 0) {
       log.warn(
-          'WARN - fetchUserDeliverToCoordinates has a deliverTo location with coordinates: $coordinate');
+        'WARN - fetchUserDeliverToCoordinates has a deliverTo location with coordinates: $coordinate',
+      );
       await Sentry.captureMessage(
-          'WARN - fetchUserDeliverToCoordinates has a deliverTo location with coordinates: $coordinate');
+        'WARN - fetchUserDeliverToCoordinates has a deliverTo location with coordinates: $coordinate',
+      );
     }
     return Future.value(coordinate);
   } else {
@@ -415,12 +418,15 @@ ThunkAction<AppState> fetchMenuItemsForFeaturedRestaurants({
         (RestaurantItem element) async {
           element.productCategories.addAll(
             await peeplEatsService.getProductCategoriesForVendor(
-                int.parse(element.restaurantID),
-                dontRoute: dontRoute),
+              int.parse(element.restaurantID),
+              dontRoute: dontRoute,
+            ),
           );
           element.listOfMenuItems.addAll(
-            await peeplEatsService.getRestaurantMenuItems(element.restaurantID,
-                dontRoute: dontRoute),
+            await peeplEatsService.getRestaurantMenuItems(
+              element.restaurantID,
+              dontRoute: dontRoute,
+            ),
           );
         },
       );
@@ -453,9 +459,11 @@ ThunkAction<AppState> fetchMenuItemsForRestaurant({
       store.dispatch(
         SetIsLoadingHttpRequest(isLoading: true),
       );
-      final productCategories = await peeplEatsService
-          .getProductCategoriesForVendor(int.parse(restaurantID),
-              dontRoute: dontRoute);
+      final productCategories =
+          await peeplEatsService.getProductCategoriesForVendor(
+        int.parse(restaurantID),
+        dontRoute: dontRoute,
+      );
       final products = await peeplEatsService
           .getRestaurantMenuItems(restaurantID, dontRoute: dontRoute);
 
@@ -530,8 +538,10 @@ ThunkAction<AppState> fetchMenuItemProductOptionsForRestaurant() {
   };
 }
 
-ThunkAction<AppState> setGlobalSearchQuery(
-    {required String globalSearchQuery, required String outCode}) {
+ThunkAction<AppState> setGlobalSearchQuery({
+  required String globalSearchQuery,
+  required String outCode,
+}) {
   return (Store<AppState> store) async {
     try {
       final featuredRestaurants = store.state.homePageState.featuredRestaurants;
@@ -634,7 +644,8 @@ ThunkAction<AppState> setMenuSearchQuery({required String searchQuery}) {
       final matchingNamedOptionItems = restaurantMenuItems.where(
         (element) {
           return matchingNamedItems.indexWhere(
-                      (already) => element.menuItemID == already.menuItemID) ==
+                    (already) => element.menuItemID == already.menuItemID,
+                  ) ==
                   -1 &&
               (element.listOfProductOptionCategories.any(
                 (productOptionCategory) =>

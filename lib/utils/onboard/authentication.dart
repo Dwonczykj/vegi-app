@@ -159,7 +159,7 @@ class Authentication {
     if (store.state.userState.vegiAuthenticationStatus !=
         VegiAuthenticationStatus.authenticated) {
       log.error(
-          'Unable to call authentcator.reauthenticate and authentiate vegi. So stopping auth flow here');
+          'Unable to call authentcator.reauthenticate and authentiate vegi. So stopping auth flow here',);
       return;
     }
     // check fuse
@@ -261,7 +261,7 @@ class Authentication {
           ),
         )
         ..dispatch(SetFirebaseSessionToken(
-            firebaseSessionToken: Secrets.testFirebaseSessionToken));
+            firebaseSessionToken: Secrets.testFirebaseSessionToken,),);
       await _loginToVegiWithPhone(
         store: store,
         phoneNumber: store.state.userState.phoneNumber,
@@ -280,7 +280,7 @@ class Authentication {
     }
 
     // * NORMAL - NOT TEST NUMBER CONTINUE HERE
-    store.dispatch(SignUpLoadingMessage(message: "Verifying phone 🚀..."));
+    store.dispatch(SignUpLoadingMessage(message: 'Verifying phone 🚀...'));
     final userCredential = await firebaseOnboarding.verify(
       store,
       verificationCode,
@@ -442,7 +442,7 @@ class Authentication {
     store
       .dispatch(SignUpLoadingMessage(
           message:
-              'Almost there now...'));
+              'Almost there now...',),);
     try {
       await peeplEatsService.deleteWalletAddressDetailsFromAccountsList();
     } on Exception catch (e, s) {
@@ -483,7 +483,6 @@ class Authentication {
     if (!emailSent) {
       log.warn(
         'Authentication.requestEmailLinkForEmailAddresss("$email") - Email link failed to send',
-        sentry: true,
       );
     } else {
       log.info(
@@ -654,7 +653,7 @@ class Authentication {
         );
         if (vegiAuthResult != LoggedInToVegiResult.success) {
           log.warn(
-              'Failed to authenticate with vegi: LoggedInToVegiResult.[${vegiAuthResult.name}]');
+              'Failed to authenticate with vegi: LoggedInToVegiResult.[${vegiAuthResult.name}]',);
           // finish by navigating to MainScreen regardless
         }
       } else if (store.state.userState.preferredSignonMethod ==
@@ -666,7 +665,7 @@ class Authentication {
         );
         if (vegiAuthResult != LoggedInToVegiResult.success) {
           log.warn(
-              'Failed to authenticate with vegi: LoggedInToVegiResult.[${vegiAuthResult.name}]');
+              'Failed to authenticate with vegi: LoggedInToVegiResult.[${vegiAuthResult.name}]',);
           // finish by navigating to MainScreen regardless
         }
       } else if (store.state.userState.preferredSignonMethod ==
@@ -678,7 +677,7 @@ class Authentication {
         );
         if (vegiAuthResult != LoggedInToVegiResult.success) {
           log.warn(
-              'Failed to authenticate with vegi: LoggedInToVegiResult.[${vegiAuthResult.name}]');
+              'Failed to authenticate with vegi: LoggedInToVegiResult.[${vegiAuthResult.name}]',);
           // finish by navigating to MainScreen regardless
         }
       } else if (store.state.userState.preferredSignonMethod ==
@@ -690,7 +689,7 @@ class Authentication {
         );
         if (vegiAuthResult != LoggedInToVegiResult.success) {
           log.warn(
-              'Failed to authenticate with vegi: LoggedInToVegiResult.[${vegiAuthResult.name}]');
+              'Failed to authenticate with vegi: LoggedInToVegiResult.[${vegiAuthResult.name}]',);
           // finish by navigating to MainScreen regardless
         }
       } else {
@@ -721,19 +720,19 @@ class Authentication {
     StackTrace? s,
   }) async {
     final store = await reduxStore;
-    var _title = title;
-    if (_title.isEmpty) {
-      _title = 'Authentication error';
+    var title0 = title;
+    if (title0.isEmpty) {
+      title0 = 'Authentication error';
     }
     final codeStr = signUpErrCode == null ? '' : '[Code=$signUpErrCode]';
     log.error(
-      '*$_title* $codeStr $message (in $className.$methodName())',
+      '*$title0* $codeStr $message (in $className.$methodName())',
       error: e,
       stackTrace: s,
     );
     store.dispatch(
       SignUpErrorDetails(
-        title: _title,
+        title: title0,
         message: message,
         code: signUpErrCode,
       ),
@@ -818,7 +817,7 @@ class Authentication {
     );
     final store = await reduxStore;
     store.dispatch(
-        SignUpLoadingMessage(message: 'Authenticating Email & Password 🚀...'));
+        SignUpLoadingMessage(message: 'Authenticating Email & Password 🚀...'),);
     // final store = await reduxStore;
     return onBoardStrategy.signInUserWithEmailAndPassword(
       email: email,
@@ -835,14 +834,14 @@ class Authentication {
       className: 'Authentication',
       funcName: '_requestSMSCodeForPhoneNumber',
     );
-    bool _useWeb3Auth = false;
+    const bool useWeb3Auth = false;
     final store = await reduxStore;
     try {
       store.dispatch(setDevicePhoneNumberForId(phoneNumber.e164));
       await Analytics.setUserId(phoneNumber.e164);
       // * Firebase login -> will route to verify_screen
       store.dispatch(
-          SignUpLoadingMessage(message: 'Sending SMS code to phone 🚀...'));
+          SignUpLoadingMessage(message: 'Sending SMS code to phone 🚀...'),);
       await firebaseOnboarding.login(
         countryCode: countryCode,
         phoneNumber: phoneNumber,
@@ -918,7 +917,7 @@ class Authentication {
         );
       onCompleteFlow();
       store.dispatch(
-          SignUpLoadingMessage(message: 'vegi authentication failed'));
+          SignUpLoadingMessage(message: 'vegi authentication failed'),);
       await Analytics.track(
         eventName: AnalyticsEvents.loginWithPhone,
         properties: {
@@ -953,7 +952,6 @@ class Authentication {
       final vegiSession = await peeplEatsService.loginWithPhone(
         phoneNumber: phoneNumber,
         firebaseSessionToken: firebaseSessionToken,
-        rememberMe: true,
       );
       final userDetails = vegiSession.user;
       if (vegiSession.sessionCookie.isNotEmpty) {
@@ -972,7 +970,7 @@ class Authentication {
         } else {
           log.error(
               'Signed into vegi but failed to receive user details in result',
-              stackTrace: StackTrace.current);
+              stackTrace: StackTrace.current,);
         }
         if (store.state.userState.vegiAuthenticationStatus !=
             VegiAuthenticationStatus.authenticated) {
@@ -1043,13 +1041,12 @@ class Authentication {
           ),
         )
         ..dispatch(SignUpLoadingMessage(
-            message: 'Authenticating Email & Password on vegi 🥑...'));
+            message: 'Authenticating Email & Password on vegi 🥑...',),);
 
       // * sets the session cookie on the service class instance.
       final vegiSession = await peeplEatsService.loginWithEmail(
         emailAddress: email,
         firebaseSessionToken: firebaseSessionToken,
-        rememberMe: true,
       );
       final userDetails = vegiSession.user;
       if (vegiSession.sessionCookie.isNotEmpty) {
@@ -1068,7 +1065,7 @@ class Authentication {
         } else {
           log.error(
               'Signed into vegi but failed to receive user details in result',
-              stackTrace: StackTrace.current);
+              stackTrace: StackTrace.current,);
         }
         store.dispatch(
           SignUpFailed(
@@ -1090,7 +1087,7 @@ class Authentication {
           vegiStatus: VegiAuthenticationStatus.failed,
         );
         store.dispatch(SignUpLoadingMessage(
-            message: 'Failed to authenticate email credentials with vegi'));
+            message: 'Failed to authenticate email credentials with vegi',),);
       }
       store.dispatch(SignUpLoadingMessage(message: ''));
       return vegiSession.sessionCookie.isNotEmpty
@@ -1102,7 +1099,7 @@ class Authentication {
         vegiStatus: VegiAuthenticationStatus.failed,
       );
       store.dispatch(SignUpLoadingMessage(
-          message: 'Failed to authenticate email credentials with vegi'));
+          message: 'Failed to authenticate email credentials with vegi',),);
       log
         ..error(
           err,
@@ -1200,7 +1197,7 @@ class Authentication {
       );
     } else {
       log.info(
-          'reauthenticating fuseSDK using existing private key stored against phoneNumber: ${store.state.userState.phoneNumber}');
+          'reauthenticating fuseSDK using existing private key stored against phoneNumber: ${store.state.userState.phoneNumber}',);
       credentials = EthPrivateKey.fromHex(privateKey);
       if (store.state.userState.mnemonic.isEmpty ||
           store.state.userState.mnemonic.first.isEmpty) {
@@ -1240,7 +1237,7 @@ class Authentication {
     try {
       await _fetchCreateWallet(
           onWalletInitialised: onWalletInitialised,
-          newPrivateKeyUsed: privateKey?.isEmpty ?? true);
+          newPrivateKeyUsed: privateKey?.isEmpty ?? true,);
       return;
     } catch (e, s) {
       log.error(
@@ -1307,7 +1304,7 @@ class Authentication {
     if (walletData.hasData) {
       final smartWallet = walletData.data!;
       log.info(
-          'Successfully refetched smart wallet address ${smartWallet.smartWalletAddress}');
+          'Successfully refetched smart wallet address ${smartWallet.smartWalletAddress}',);
       store
         ..dispatch(
           saveSmartWallet(
@@ -1347,8 +1344,8 @@ class Authentication {
       if (walletDataReFetched.hasData) {
         final smartWallet = walletDataReFetched.data!;
         log.info(
-            'Successfully refetched smart wallet address ${smartWallet.smartWalletAddress}');
-        _emitWallet(fuseWalletSDK.smartWallet);
+            'Successfully refetched smart wallet address ${smartWallet.smartWalletAddress}',);
+        await _emitWallet(fuseWalletSDK.smartWallet);
       } else if (walletDataReFetched.hasError) {
         final exception = walletDataReFetched.error!;
         if (exception.toString().contains('LateInit')) {
@@ -1388,7 +1385,6 @@ class Authentication {
         if (newPrivateKeyUsed) {
           log.warn(
             'fuseWalletSDK.fetchWallet succeeded despite using a new privateKey for phone: "${store.state.userState.phoneNumber}" with Smart wallet address "${smartWallet.smartWalletAddress}"',
-            sentry: true,
           );
         } else {
           log.info(
@@ -1413,7 +1409,6 @@ class Authentication {
               //     'fuseWalletSDK.fetchWallet failed to fetch fuse smart wallet with error: "$exception"')
               .warn(
             'Authenticator._fetchCreateWallet - UNEXPECTED - create a new fuse smart wallet as failed to fetch despite using an existing private key for phone: "${store.state.userState.phoneNumber}"...',
-            sentry: true,
           );
         }
         store.dispatch(
@@ -1438,18 +1433,18 @@ class Authentication {
             ..listen(
               (SmartWalletEvent event) {
                 switch (event.name) {
-                  case "smartWalletCreationStarted":
+                  case 'smartWalletCreationStarted':
                     log.info(
                       'Authenticator._fetchCreateFuseWallet fuseWalletSDK.createWallet - smartWalletCreationStarted',
                       sentry: true,
                     );
                     break;
-                  case "transactionHash":
+                  case 'transactionHash':
                     log.info(
                       'Authenticator._fetchCreateFuseWallet fuseWalletSDK.createWallet - transactionHash "${event.data}"',
                     );
                     break;
-                  case "smartWalletCreationSucceeded":
+                  case 'smartWalletCreationSucceeded':
                     log.info(
                       'Authenticator._fetchCreateFuseWallet fuseWalletSDK.createWallet - smartWalletCreationSucceeded ${event.data}',
                       sentry: true,
@@ -1457,7 +1452,7 @@ class Authentication {
                     _emitWallet(SmartWallet.fromJson(event.data));
                     onWalletInitialised?.call();
                     break;
-                  case "smartWalletCreationFailed":
+                  case 'smartWalletCreationFailed':
                     log.error(
                       'Authenticator._fetchCreateFuseWallet fuseWalletSDK.createWallet - transaction stream failed on chain with error ${event.data}',
                     );
@@ -1476,7 +1471,7 @@ class Authentication {
               },
               onError: (dynamic error) {
                 log.error(
-                    'Authentication._fetchCreateWallet fuseWalletSDK.createWallet Error occurred: $error');
+                    'Authentication._fetchCreateWallet fuseWalletSDK.createWallet Error occurred: $error',);
                 store.dispatch(
                   SetUserAuthenticationStatus(
                     fuseStatus: FuseAuthenticationStatus.failedCreate,
@@ -1538,11 +1533,11 @@ class Authentication {
     );
 
     try {
-      final _smartWallet = fuseWalletSDK.smartWallet;
+      final smartWallet0 = fuseWalletSDK.smartWallet;
       store
         ..dispatch(
           saveSmartWallet(
-            smartWallet: _smartWallet,
+            smartWallet: smartWallet0,
           ),
         )
         ..dispatch(
@@ -1551,7 +1546,7 @@ class Authentication {
           ),
         );
       return FuseAuthenticationStatus.authenticated;
-    } catch (e, s) {
+    } catch (e) {
       // TODO
       // do nothing
     }
@@ -1595,7 +1590,7 @@ class Authentication {
             List<String> networks = <String>[];
             if (event.data.containsKey('networks')) {
               networks = List<String>.from(
-                  event.data['networks'] as Iterable<dynamic>);
+                  event.data['networks'] as Iterable<dynamic>,);
             }
             final fuseSDKVersion = event.data['version'];
             log.info(
@@ -1696,7 +1691,6 @@ class Authentication {
       log.error(
         errStr,
         error: walletCreationResult.error,
-        sentry: true,
         sentryHint: errStr,
       );
       store.dispatch(

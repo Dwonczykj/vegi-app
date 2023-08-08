@@ -3,9 +3,7 @@ import 'package:flutter/material.dart';
 
 class SingleCategoryItem extends StatefulWidget {
   const SingleCategoryItem({
-    Key? key,
-    required this.imageURL,
-    required this.title,
+    required this.imageURL, required this.title, Key? key,
   }) : super(key: key);
   final String imageURL;
   final String title;

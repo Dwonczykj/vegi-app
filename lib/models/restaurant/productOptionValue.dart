@@ -8,7 +8,7 @@ part 'productOptionValue.g.dart';
 
 List<ProductOptionValue> fromJsonProductOptionValueList(dynamic json) =>
     fromSailsListOfObjectJson<ProductOptionValue>(ProductOptionValue.fromJson)(
-        json);
+        json,);
 ProductOptionValue? fromJsonProductOptionValue(dynamic json) =>
     fromSailsObjectJson<ProductOptionValue>(ProductOptionValue.fromJson)(json);
 
@@ -22,6 +22,11 @@ class ProductOptionValue with _$ProductOptionValue {
     @JsonKey(defaultValue: 0) required int priceModifier,
     @JsonKey(defaultValue: false) required bool isAvaliable,
   }) = _ProductOptions;
+
+  const ProductOptionValue._();
+
+  factory ProductOptionValue.fromJson(Map<String, dynamic> json) =>
+      _$ProductOptionValueFromJson(json);
 
   // int get price => priceModifier;
   int get optionID => id;
@@ -43,7 +48,6 @@ class ProductOptionValue with _$ProductOptionValue {
         value: await convertCurrencyAmount(
           amount: priceModifier,
           fromCurrency: Currency.GBPx,
-          toCurrency: Currency.GBP,
         ),
       );
 
@@ -51,11 +55,6 @@ class ProductOptionValue with _$ProductOptionValue {
         currency: Currency.GBP,
         value: priceModifier,
       );
-
-  const ProductOptionValue._();
-
-  factory ProductOptionValue.fromJson(Map<String, dynamic> json) =>
-      _$ProductOptionValueFromJson(json);
 
   Money get priceModifierMoney => Money(
         currency: Currency.GBPx,

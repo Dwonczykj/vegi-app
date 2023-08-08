@@ -25,14 +25,14 @@ class Product with _$Product {
         List<OrderProductOptionValue> options,
   }) = _Product;
 
+  factory Product.fromJson(Map<String, dynamic> json) =>
+      _$ProductFromJson(json);
+
   const Product._();
 
   static Product empty() {
     return Product(name: 'n/a', basePrice: 0);
   }
-
-  factory Product.fromJson(Map<String, dynamic> json) =>
-      _$ProductFromJson(json);
 
   //Section Getters
   Money get price => Money(currency: Currency.GBPx, value: basePrice);

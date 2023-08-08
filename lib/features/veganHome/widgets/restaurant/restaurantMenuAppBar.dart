@@ -64,7 +64,7 @@ class _RestaurantMenuAppBarState extends State<RestaurantMenuAppBar> {
                 ),
               ),
               child: Padding(
-                padding: const EdgeInsets.only(left: 20, right: 20, bottom: 0),
+                padding: const EdgeInsets.only(left: 20, right: 20),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   mainAxisAlignment: MainAxisAlignment.end,
@@ -78,12 +78,11 @@ class _RestaurantMenuAppBarState extends State<RestaurantMenuAppBar> {
                             size: 24,
                           ),
                           contentPadding:
-                              EdgeInsets.symmetric(horizontal: 16.0),
+                              const EdgeInsets.symmetric(horizontal: 16),
                           visualDensity: VisualDensity.compact,
                           title: TypeAheadField<String>(
                             hideOnEmpty: true,
                             textFieldConfiguration: TextFieldConfiguration(
-                              autocorrect: true,
                               controller: _searchTextController,
                               onSubmitted: (value) {
                                 viewmodel.filterRestaurantMenu(
@@ -98,7 +97,7 @@ class _RestaurantMenuAppBarState extends State<RestaurantMenuAppBar> {
                                 ),
                                 focusedBorder: UnderlineInputBorder(
                                   borderSide: BorderSide(
-                                      color: themeShade300, width: 3),
+                                      color: themeShade300, width: 3,),
                                 ),
                                 fillColor: Colors.transparent,
                                 hintText: Messages.searchVendorPlaceholder,
@@ -123,9 +122,6 @@ class _RestaurantMenuAppBarState extends State<RestaurantMenuAppBar> {
                                 const CircularProgressIndicator(
                               color: themeShade600,
                             ),
-                            debounceDuration: const Duration(
-                              milliseconds: 300,
-                            ),
                             suggestionsCallback: (menuSearchQuery) async {
                               if (menuSearchQuery.isNotEmpty) {
                                 final result = <String>[];
@@ -138,7 +134,7 @@ class _RestaurantMenuAppBarState extends State<RestaurantMenuAppBar> {
                                       return element.name
                                               .toLowerCase()
                                               .contains(menuSearchQuery
-                                                  .toLowerCase()) ||
+                                                  .toLowerCase(),) ||
                                           element.categoryName
                                               .toLowerCase()
                                               .contains(
@@ -160,7 +156,7 @@ class _RestaurantMenuAppBarState extends State<RestaurantMenuAppBar> {
                                                   .toList()
                                                   .indexWhere((already) =>
                                                       element.menuItemID ==
-                                                      already.menuItemID) ==
+                                                      already.menuItemID,) ==
                                               -1 &&
                                           (element.listOfProductOptionCategories
                                               .any(
@@ -168,7 +164,7 @@ class _RestaurantMenuAppBarState extends State<RestaurantMenuAppBar> {
                                                 productOptionCategory.name
                                                     .toLowerCase()
                                                     .contains(menuSearchQuery
-                                                        .toLowerCase()) ||
+                                                        .toLowerCase(),) ||
                                                 productOptionCategory
                                                     .listOfOptions
                                                     .any(
@@ -176,7 +172,7 @@ class _RestaurantMenuAppBarState extends State<RestaurantMenuAppBar> {
                                                       .name
                                                       .toLowerCase()
                                                       .contains(menuSearchQuery
-                                                          .toLowerCase()),
+                                                          .toLowerCase(),),
                                                 ),
                                           ));
                                     },
@@ -198,7 +194,7 @@ class _RestaurantMenuAppBarState extends State<RestaurantMenuAppBar> {
                                   return result;
                                 } catch (e, s) {
                                   log.error(
-                                      'ERROR - query menu items from search bar: $e');
+                                      'ERROR - query menu items from search bar: $e',);
                                   await Sentry.captureException(
                                     e,
                                     stackTrace: s,

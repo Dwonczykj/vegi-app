@@ -27,9 +27,9 @@ mixin _$CartItem {
   @JsonKey(fromJson: gbpxPriceFromJson, toJson: gbpxPriceToJson)
   Money get totalItemPrice => throw _privateConstructorUsedError;
   int get itemQuantity => throw _privateConstructorUsedError;
-  Currency get itemCurrency => throw _privateConstructorUsedError;
   Map<int, ProductOptionValue> get selectedProductOptions =>
       throw _privateConstructorUsedError;
+  Currency get itemCurrency => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -48,8 +48,8 @@ abstract class $CartItemCopyWith<$Res> {
       @JsonKey(fromJson: gbpxPriceFromJson, toJson: gbpxPriceToJson)
           Money totalItemPrice,
       int itemQuantity,
-      Currency itemCurrency,
-      Map<int, ProductOptionValue> selectedProductOptions});
+      Map<int, ProductOptionValue> selectedProductOptions,
+      Currency itemCurrency});
 
   $RestaurantMenuItemCopyWith<$Res> get menuItem;
 }
@@ -71,8 +71,8 @@ class _$CartItemCopyWithImpl<$Res, $Val extends CartItem>
     Object? menuItem = null,
     Object? totalItemPrice = null,
     Object? itemQuantity = null,
-    Object? itemCurrency = null,
     Object? selectedProductOptions = null,
+    Object? itemCurrency = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -91,14 +91,14 @@ class _$CartItemCopyWithImpl<$Res, $Val extends CartItem>
           ? _value.itemQuantity
           : itemQuantity // ignore: cast_nullable_to_non_nullable
               as int,
-      itemCurrency: null == itemCurrency
-          ? _value.itemCurrency
-          : itemCurrency // ignore: cast_nullable_to_non_nullable
-              as Currency,
       selectedProductOptions: null == selectedProductOptions
           ? _value.selectedProductOptions
           : selectedProductOptions // ignore: cast_nullable_to_non_nullable
               as Map<int, ProductOptionValue>,
+      itemCurrency: null == itemCurrency
+          ? _value.itemCurrency
+          : itemCurrency // ignore: cast_nullable_to_non_nullable
+              as Currency,
     ) as $Val);
   }
 
@@ -124,8 +124,8 @@ abstract class _$$_CartItemCopyWith<$Res> implements $CartItemCopyWith<$Res> {
       @JsonKey(fromJson: gbpxPriceFromJson, toJson: gbpxPriceToJson)
           Money totalItemPrice,
       int itemQuantity,
-      Currency itemCurrency,
-      Map<int, ProductOptionValue> selectedProductOptions});
+      Map<int, ProductOptionValue> selectedProductOptions,
+      Currency itemCurrency});
 
   @override
   $RestaurantMenuItemCopyWith<$Res> get menuItem;
@@ -146,8 +146,8 @@ class __$$_CartItemCopyWithImpl<$Res>
     Object? menuItem = null,
     Object? totalItemPrice = null,
     Object? itemQuantity = null,
-    Object? itemCurrency = null,
     Object? selectedProductOptions = null,
+    Object? itemCurrency = null,
   }) {
     return _then(_$_CartItem(
       id: null == id
@@ -166,14 +166,14 @@ class __$$_CartItemCopyWithImpl<$Res>
           ? _value.itemQuantity
           : itemQuantity // ignore: cast_nullable_to_non_nullable
               as int,
-      itemCurrency: null == itemCurrency
-          ? _value.itemCurrency
-          : itemCurrency // ignore: cast_nullable_to_non_nullable
-              as Currency,
       selectedProductOptions: null == selectedProductOptions
           ? _value.selectedProductOptions
           : selectedProductOptions // ignore: cast_nullable_to_non_nullable
               as Map<int, ProductOptionValue>,
+      itemCurrency: null == itemCurrency
+          ? _value.itemCurrency
+          : itemCurrency // ignore: cast_nullable_to_non_nullable
+              as Currency,
     ));
   }
 }
@@ -188,8 +188,8 @@ class _$_CartItem extends _CartItem {
       @JsonKey(fromJson: gbpxPriceFromJson, toJson: gbpxPriceToJson)
           required this.totalItemPrice,
       required this.itemQuantity,
-      this.itemCurrency = Currency.GBPx,
-      required this.selectedProductOptions})
+      required this.selectedProductOptions,
+      this.itemCurrency = Currency.GBPx})
       : super._();
 
   factory _$_CartItem.fromJson(Map<String, dynamic> json) =>
@@ -207,14 +207,14 @@ class _$_CartItem extends _CartItem {
   @override
   final int itemQuantity;
   @override
+  final Map<int, ProductOptionValue> selectedProductOptions;
+  @override
   @JsonKey()
   final Currency itemCurrency;
-  @override
-  final Map<int, ProductOptionValue> selectedProductOptions;
 
   @override
   String toString() {
-    return 'CartItem(id: $id, menuItem: $menuItem, totalItemPrice: $totalItemPrice, itemQuantity: $itemQuantity, itemCurrency: $itemCurrency, selectedProductOptions: $selectedProductOptions)';
+    return 'CartItem(id: $id, menuItem: $menuItem, totalItemPrice: $totalItemPrice, itemQuantity: $itemQuantity, selectedProductOptions: $selectedProductOptions, itemCurrency: $itemCurrency)';
   }
 
   @override
@@ -229,10 +229,10 @@ class _$_CartItem extends _CartItem {
                 other.totalItemPrice == totalItemPrice) &&
             (identical(other.itemQuantity, itemQuantity) ||
                 other.itemQuantity == itemQuantity) &&
-            (identical(other.itemCurrency, itemCurrency) ||
-                other.itemCurrency == itemCurrency) &&
             const DeepCollectionEquality()
-                .equals(other.selectedProductOptions, selectedProductOptions));
+                .equals(other.selectedProductOptions, selectedProductOptions) &&
+            (identical(other.itemCurrency, itemCurrency) ||
+                other.itemCurrency == itemCurrency));
   }
 
   @JsonKey(ignore: true)
@@ -243,8 +243,8 @@ class _$_CartItem extends _CartItem {
       menuItem,
       totalItemPrice,
       itemQuantity,
-      itemCurrency,
-      const DeepCollectionEquality().hash(selectedProductOptions));
+      const DeepCollectionEquality().hash(selectedProductOptions),
+      itemCurrency);
 
   @JsonKey(ignore: true)
   @override
@@ -262,14 +262,13 @@ class _$_CartItem extends _CartItem {
 
 abstract class _CartItem extends CartItem {
   factory _CartItem(
-          {required final int id,
-          required final RestaurantMenuItem menuItem,
-          @JsonKey(fromJson: gbpxPriceFromJson, toJson: gbpxPriceToJson)
-              required final Money totalItemPrice,
-          required final int itemQuantity,
-          final Currency itemCurrency,
-          required final Map<int, ProductOptionValue> selectedProductOptions}) =
-      _$_CartItem;
+      {required final int id,
+      required final RestaurantMenuItem menuItem,
+      @JsonKey(fromJson: gbpxPriceFromJson, toJson: gbpxPriceToJson)
+          required final Money totalItemPrice,
+      required final int itemQuantity,
+      required final Map<int, ProductOptionValue> selectedProductOptions,
+      final Currency itemCurrency}) = _$_CartItem;
   _CartItem._() : super._();
 
   factory _CartItem.fromJson(Map<String, dynamic> json) = _$_CartItem.fromJson;
@@ -286,9 +285,9 @@ abstract class _CartItem extends CartItem {
   @override
   int get itemQuantity;
   @override
-  Currency get itemCurrency;
-  @override
   Map<int, ProductOptionValue> get selectedProductOptions;
+  @override
+  Currency get itemCurrency;
   @override
   @JsonKey(ignore: true)
   _$$_CartItemCopyWith<_$_CartItem> get copyWith =>

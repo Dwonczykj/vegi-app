@@ -12,15 +12,34 @@ part 'menu_item_state.g.dart';
 class MenuItemState with _$MenuItemState {
   @JsonSerializable()
   factory MenuItemState({
-    @JsonKey(ignore: true) @Default(null) RestaurantMenuItem? menuItem,
-    @JsonKey(ignore: true) @Default(Money.zeroGBPx()) Money totalPrice,
-    @JsonKey(ignore: true) @Default(0) num itemReward,
-    @JsonKey(ignore: true)
+    @JsonKey(includeFromJson: false, includeToJson: false)
+    @Default(null)
+    RestaurantMenuItem? menuItem,
+    @JsonKey(includeFromJson: false, includeToJson: false)
+    @Default(Money.zeroGBPx())
+    Money totalPrice,
+    @JsonKey(includeFromJson: false, includeToJson: false)
+    @Default(0)
+    num itemReward,
+    @JsonKey(includeFromJson: false, includeToJson: false)
     @Default({})
-        Map<int, ProductOptionValue> selectedProductOptionsForCategory,
-    @JsonKey(ignore: true) @Default(false) bool loadingProductOptions,
-    @JsonKey(ignore: true) @Default(0) int quantity,
+    Map<int, ProductOptionValue> selectedProductOptionsForCategory,
+    @JsonKey(includeFromJson: false, includeToJson: false)
+    @Default(false)
+    bool loadingProductOptions,
+    @JsonKey(includeFromJson: false, includeToJson: false)
+    @Default(0)
+    int quantity,
   }) = _MenuItemState;
+
+  factory MenuItemState.initial() => MenuItemState(
+        selectedProductOptionsForCategory: {},
+      );
+
+  factory MenuItemState.fromJson(Map<String, dynamic> json) =>
+      tryCatchRethrowInline(
+        () => _$MenuItemStateFromJson(json),
+      );
 
   const MenuItemState._();
 
@@ -41,7 +60,6 @@ class MenuItemState with _$MenuItemState {
         value: await convertCurrencyAmount(
           amount: totalPrice.value,
           fromCurrency: totalPrice.currency,
-          toCurrency: Currency.GBP,
         ),
       );
   Money get totalPriceGBPx => Money(
@@ -70,20 +88,7 @@ class MenuItemState with _$MenuItemState {
         value: await convertCurrencyAmount(
           amount: itemReward,
           fromCurrency: Currency.GBPx,
-          toCurrency: Currency.GBP,
         ),
-      );
-
-  factory MenuItemState.initial() => MenuItemState(
-        totalPrice: const Money.zeroGBPx(),
-        itemReward: 0,
-        quantity: 0,
-        selectedProductOptionsForCategory: {},
-      );
-
-  factory MenuItemState.fromJson(Map<String, dynamic> json) =>
-      tryCatchRethrowInline(
-        () => _$MenuItemStateFromJson(json),
       );
 }
 

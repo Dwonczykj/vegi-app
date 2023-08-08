@@ -12,7 +12,7 @@ import 'package:vegan_liverpool/services/apis/places.dart';
 import 'package:vegan_liverpool/utils/constants.dart';
 import 'package:vegan_liverpool/utils/log/log.dart';
 
-void ToNull() => null;
+void ToNull() {}
 
 @lazySingleton
 class FXService {
@@ -38,18 +38,18 @@ class FXService {
         '',
         queryParameters: {
           'apiKey': Secrets.CURRENCY_CONVERTER_API_KEY,
-          'q': '${fromCurrency}_${toCurrency}',
+          'q': '${fromCurrency}_$toCurrency',
           'compact': 'y',
         },
       );
       if(response.statusCode != 200){
         throw Exception(
-          'Currency converter webservice failed to request live currency rates from currency:[${fromCurrency}] to currency:[${toCurrency}] with status: ${response.statusCode} and reason: ${response}',
+          'Currency converter webservice failed to request live currency rates from currency:[$fromCurrency] to currency:[$toCurrency] with status: ${response.statusCode} and reason: $response',
         );
       }
-      if(response == null || response.data == null){
+      if(response.data == null){
         throw Exception(
-          'Currency converter webservice failed to request live currency rates from currency:[${fromCurrency}] to currency:[${toCurrency}] with no status.',
+          'Currency converter webservice failed to request live currency rates from currency:[$fromCurrency] to currency:[$toCurrency] with no status.',
         );
       }
       if (response.statusCode == 200 && response.data != null) {

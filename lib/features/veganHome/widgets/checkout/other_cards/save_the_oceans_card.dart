@@ -12,10 +12,10 @@ class SaveTheOceansCard extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
       ),
-      child: SizedBox(
+      child: const SizedBox(
         width: double.infinity,
         child: Padding(
-          padding: const EdgeInsets.symmetric(
+          padding: EdgeInsets.symmetric(
             horizontal: 10,
             vertical: 10,
           ),
@@ -25,7 +25,7 @@ class SaveTheOceansCard extends StatelessWidget {
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
+                  children: [
                     Text(
                       'Help save the oceans!',
                       style: TextStyle(
@@ -46,7 +46,7 @@ class SaveTheOceansCard extends StatelessWidget {
                   ],
                 ),
               ),
-              const Checkbox(
+              Checkbox(
                 value: true,
                 onChanged: print,
               )

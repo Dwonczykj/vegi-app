@@ -53,8 +53,11 @@ class SurveyThanksViewModel extends Equatable implements IAuthViewModel {
   final bool accountCreated;
   final bool isLoggedOut;
   final bool surveyCompleted;
+  @override
   final FirebaseAuthenticationStatus firebaseAuthenticationStatus;
+  @override
   final FuseAuthenticationStatus fuseAuthenticationStatus;
+  @override
   final VegiAuthenticationStatus vegiAuthenticationStatus;
   final void Function() logout;
   final void Function() loginAgain;

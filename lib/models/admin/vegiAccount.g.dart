@@ -9,11 +9,11 @@ part of 'vegiAccount.dart';
 _$_VegiAccount _$$_VegiAccountFromJson(Map<String, dynamic> json) =>
     _$_VegiAccount(
       id: json['id'] as int,
+      verified: json['verified'] as bool,
+      walletAddress: json['walletAddress'] as String,
       accountType:
           $enumDecodeNullable(_$VegiAccountTypeEnumMap, json['accountType']) ??
               null,
-      verified: json['verified'] as bool,
-      walletAddress: json['walletAddress'] as String,
       imageUrl: json['imageUrl'] as String? ?? '',
       stripeCustomerId: json['stripeCustomerId'] as String? ?? null,
       stripeAccountId: json['stripeAccountId'] as String? ?? null,
@@ -26,9 +26,9 @@ _$_VegiAccount _$$_VegiAccountFromJson(Map<String, dynamic> json) =>
 Map<String, dynamic> _$$_VegiAccountToJson(_$_VegiAccount instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'accountType': _$VegiAccountTypeEnumMap[instance.accountType],
       'verified': instance.verified,
       'walletAddress': instance.walletAddress,
+      'accountType': _$VegiAccountTypeEnumMap[instance.accountType],
       'imageUrl': instance.imageUrl,
       'stripeCustomerId': instance.stripeCustomerId,
       'stripeAccountId': instance.stripeAccountId,

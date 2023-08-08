@@ -22,30 +22,30 @@ ProductDTO _$ProductDTOFromJson(Map<String, dynamic> json) {
 mixin _$ProductDTO {
   int get id => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
-  String get description => throw _privateConstructorUsedError;
-  String get shortDescription => throw _privateConstructorUsedError;
 
   /// this is the price in pence of the restaurant item without any product options applied
   int get basePrice => throw _privateConstructorUsedError;
-  String get imageURL => throw _privateConstructorUsedError;
   bool get isAvailable => throw _privateConstructorUsedError;
   int get priority => throw _privateConstructorUsedError;
   bool get isFeatured => throw _privateConstructorUsedError;
   ProductDiscontinuedStatus get status => throw _privateConstructorUsedError;
+  String get productBarCode => throw _privateConstructorUsedError;
+  @JsonKey(fromJson: fromJsonVendorDTO)
+  VendorDTO? get vendor => throw _privateConstructorUsedError;
+  @JsonKey(fromJson: fromJsonProductCategory)
+  ProductCategory? get category => throw _privateConstructorUsedError;
+  String get description => throw _privateConstructorUsedError;
+  String get shortDescription => throw _privateConstructorUsedError;
+  String get imageURL => throw _privateConstructorUsedError;
   String? get ingredients => throw _privateConstructorUsedError;
   String get vendorInternalId => throw _privateConstructorUsedError;
   int get stockCount => throw _privateConstructorUsedError;
   num get stockUnitsPerProduct => throw _privateConstructorUsedError;
   num get sizeInnerUnitValue => throw _privateConstructorUsedError;
   String get sizeInnerUnitType => throw _privateConstructorUsedError;
-  String get productBarCode => throw _privateConstructorUsedError;
   String get supplier => throw _privateConstructorUsedError;
   String get brandName => throw _privateConstructorUsedError;
   String get taxGroup => throw _privateConstructorUsedError;
-  @JsonKey(fromJson: fromJsonVendorDTO)
-  VendorDTO? get vendor => throw _privateConstructorUsedError;
-  @JsonKey(fromJson: fromJsonProductCategory)
-  ProductCategory? get category => throw _privateConstructorUsedError;
   @JsonKey(fromJson: fromJsonProductOptionList)
   List<ProductOption> get options => throw _privateConstructorUsedError;
   @JsonKey(fromJson: fromJsonESCRating)
@@ -66,26 +66,26 @@ abstract class $ProductDTOCopyWith<$Res> {
   $Res call(
       {int id,
       String name,
-      String description,
-      String shortDescription,
       int basePrice,
-      String imageURL,
       bool isAvailable,
       int priority,
       bool isFeatured,
       ProductDiscontinuedStatus status,
+      String productBarCode,
+      @JsonKey(fromJson: fromJsonVendorDTO) VendorDTO? vendor,
+      @JsonKey(fromJson: fromJsonProductCategory) ProductCategory? category,
+      String description,
+      String shortDescription,
+      String imageURL,
       String? ingredients,
       String vendorInternalId,
       int stockCount,
       num stockUnitsPerProduct,
       num sizeInnerUnitValue,
       String sizeInnerUnitType,
-      String productBarCode,
       String supplier,
       String brandName,
       String taxGroup,
-      @JsonKey(fromJson: fromJsonVendorDTO) VendorDTO? vendor,
-      @JsonKey(fromJson: fromJsonProductCategory) ProductCategory? category,
       @JsonKey(fromJson: fromJsonProductOptionList) List<ProductOption> options,
       @JsonKey(fromJson: fromJsonESCRating) ESCRating? rating});
 
@@ -109,26 +109,26 @@ class _$ProductDTOCopyWithImpl<$Res, $Val extends ProductDTO>
   $Res call({
     Object? id = null,
     Object? name = null,
-    Object? description = null,
-    Object? shortDescription = null,
     Object? basePrice = null,
-    Object? imageURL = null,
     Object? isAvailable = null,
     Object? priority = null,
     Object? isFeatured = null,
     Object? status = null,
+    Object? productBarCode = null,
+    Object? vendor = freezed,
+    Object? category = freezed,
+    Object? description = null,
+    Object? shortDescription = null,
+    Object? imageURL = null,
     Object? ingredients = freezed,
     Object? vendorInternalId = null,
     Object? stockCount = null,
     Object? stockUnitsPerProduct = null,
     Object? sizeInnerUnitValue = null,
     Object? sizeInnerUnitType = null,
-    Object? productBarCode = null,
     Object? supplier = null,
     Object? brandName = null,
     Object? taxGroup = null,
-    Object? vendor = freezed,
-    Object? category = freezed,
     Object? options = null,
     Object? rating = freezed,
   }) {
@@ -141,22 +141,10 @@ class _$ProductDTOCopyWithImpl<$Res, $Val extends ProductDTO>
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
-      description: null == description
-          ? _value.description
-          : description // ignore: cast_nullable_to_non_nullable
-              as String,
-      shortDescription: null == shortDescription
-          ? _value.shortDescription
-          : shortDescription // ignore: cast_nullable_to_non_nullable
-              as String,
       basePrice: null == basePrice
           ? _value.basePrice
           : basePrice // ignore: cast_nullable_to_non_nullable
               as int,
-      imageURL: null == imageURL
-          ? _value.imageURL
-          : imageURL // ignore: cast_nullable_to_non_nullable
-              as String,
       isAvailable: null == isAvailable
           ? _value.isAvailable
           : isAvailable // ignore: cast_nullable_to_non_nullable
@@ -173,6 +161,30 @@ class _$ProductDTOCopyWithImpl<$Res, $Val extends ProductDTO>
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
               as ProductDiscontinuedStatus,
+      productBarCode: null == productBarCode
+          ? _value.productBarCode
+          : productBarCode // ignore: cast_nullable_to_non_nullable
+              as String,
+      vendor: freezed == vendor
+          ? _value.vendor
+          : vendor // ignore: cast_nullable_to_non_nullable
+              as VendorDTO?,
+      category: freezed == category
+          ? _value.category
+          : category // ignore: cast_nullable_to_non_nullable
+              as ProductCategory?,
+      description: null == description
+          ? _value.description
+          : description // ignore: cast_nullable_to_non_nullable
+              as String,
+      shortDescription: null == shortDescription
+          ? _value.shortDescription
+          : shortDescription // ignore: cast_nullable_to_non_nullable
+              as String,
+      imageURL: null == imageURL
+          ? _value.imageURL
+          : imageURL // ignore: cast_nullable_to_non_nullable
+              as String,
       ingredients: freezed == ingredients
           ? _value.ingredients
           : ingredients // ignore: cast_nullable_to_non_nullable
@@ -197,10 +209,6 @@ class _$ProductDTOCopyWithImpl<$Res, $Val extends ProductDTO>
           ? _value.sizeInnerUnitType
           : sizeInnerUnitType // ignore: cast_nullable_to_non_nullable
               as String,
-      productBarCode: null == productBarCode
-          ? _value.productBarCode
-          : productBarCode // ignore: cast_nullable_to_non_nullable
-              as String,
       supplier: null == supplier
           ? _value.supplier
           : supplier // ignore: cast_nullable_to_non_nullable
@@ -213,14 +221,6 @@ class _$ProductDTOCopyWithImpl<$Res, $Val extends ProductDTO>
           ? _value.taxGroup
           : taxGroup // ignore: cast_nullable_to_non_nullable
               as String,
-      vendor: freezed == vendor
-          ? _value.vendor
-          : vendor // ignore: cast_nullable_to_non_nullable
-              as VendorDTO?,
-      category: freezed == category
-          ? _value.category
-          : category // ignore: cast_nullable_to_non_nullable
-              as ProductCategory?,
       options: null == options
           ? _value.options
           : options // ignore: cast_nullable_to_non_nullable
@@ -280,26 +280,26 @@ abstract class _$$_ProductDTOCopyWith<$Res>
   $Res call(
       {int id,
       String name,
-      String description,
-      String shortDescription,
       int basePrice,
-      String imageURL,
       bool isAvailable,
       int priority,
       bool isFeatured,
       ProductDiscontinuedStatus status,
+      String productBarCode,
+      @JsonKey(fromJson: fromJsonVendorDTO) VendorDTO? vendor,
+      @JsonKey(fromJson: fromJsonProductCategory) ProductCategory? category,
+      String description,
+      String shortDescription,
+      String imageURL,
       String? ingredients,
       String vendorInternalId,
       int stockCount,
       num stockUnitsPerProduct,
       num sizeInnerUnitValue,
       String sizeInnerUnitType,
-      String productBarCode,
       String supplier,
       String brandName,
       String taxGroup,
-      @JsonKey(fromJson: fromJsonVendorDTO) VendorDTO? vendor,
-      @JsonKey(fromJson: fromJsonProductCategory) ProductCategory? category,
       @JsonKey(fromJson: fromJsonProductOptionList) List<ProductOption> options,
       @JsonKey(fromJson: fromJsonESCRating) ESCRating? rating});
 
@@ -324,26 +324,26 @@ class __$$_ProductDTOCopyWithImpl<$Res>
   $Res call({
     Object? id = null,
     Object? name = null,
-    Object? description = null,
-    Object? shortDescription = null,
     Object? basePrice = null,
-    Object? imageURL = null,
     Object? isAvailable = null,
     Object? priority = null,
     Object? isFeatured = null,
     Object? status = null,
+    Object? productBarCode = null,
+    Object? vendor = freezed,
+    Object? category = freezed,
+    Object? description = null,
+    Object? shortDescription = null,
+    Object? imageURL = null,
     Object? ingredients = freezed,
     Object? vendorInternalId = null,
     Object? stockCount = null,
     Object? stockUnitsPerProduct = null,
     Object? sizeInnerUnitValue = null,
     Object? sizeInnerUnitType = null,
-    Object? productBarCode = null,
     Object? supplier = null,
     Object? brandName = null,
     Object? taxGroup = null,
-    Object? vendor = freezed,
-    Object? category = freezed,
     Object? options = null,
     Object? rating = freezed,
   }) {
@@ -356,22 +356,10 @@ class __$$_ProductDTOCopyWithImpl<$Res>
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String,
-      description: null == description
-          ? _value.description
-          : description // ignore: cast_nullable_to_non_nullable
-              as String,
-      shortDescription: null == shortDescription
-          ? _value.shortDescription
-          : shortDescription // ignore: cast_nullable_to_non_nullable
-              as String,
       basePrice: null == basePrice
           ? _value.basePrice
           : basePrice // ignore: cast_nullable_to_non_nullable
               as int,
-      imageURL: null == imageURL
-          ? _value.imageURL
-          : imageURL // ignore: cast_nullable_to_non_nullable
-              as String,
       isAvailable: null == isAvailable
           ? _value.isAvailable
           : isAvailable // ignore: cast_nullable_to_non_nullable
@@ -388,6 +376,30 @@ class __$$_ProductDTOCopyWithImpl<$Res>
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
               as ProductDiscontinuedStatus,
+      productBarCode: null == productBarCode
+          ? _value.productBarCode
+          : productBarCode // ignore: cast_nullable_to_non_nullable
+              as String,
+      vendor: freezed == vendor
+          ? _value.vendor
+          : vendor // ignore: cast_nullable_to_non_nullable
+              as VendorDTO?,
+      category: freezed == category
+          ? _value.category
+          : category // ignore: cast_nullable_to_non_nullable
+              as ProductCategory?,
+      description: null == description
+          ? _value.description
+          : description // ignore: cast_nullable_to_non_nullable
+              as String,
+      shortDescription: null == shortDescription
+          ? _value.shortDescription
+          : shortDescription // ignore: cast_nullable_to_non_nullable
+              as String,
+      imageURL: null == imageURL
+          ? _value.imageURL
+          : imageURL // ignore: cast_nullable_to_non_nullable
+              as String,
       ingredients: freezed == ingredients
           ? _value.ingredients
           : ingredients // ignore: cast_nullable_to_non_nullable
@@ -412,10 +424,6 @@ class __$$_ProductDTOCopyWithImpl<$Res>
           ? _value.sizeInnerUnitType
           : sizeInnerUnitType // ignore: cast_nullable_to_non_nullable
               as String,
-      productBarCode: null == productBarCode
-          ? _value.productBarCode
-          : productBarCode // ignore: cast_nullable_to_non_nullable
-              as String,
       supplier: null == supplier
           ? _value.supplier
           : supplier // ignore: cast_nullable_to_non_nullable
@@ -428,14 +436,6 @@ class __$$_ProductDTOCopyWithImpl<$Res>
           ? _value.taxGroup
           : taxGroup // ignore: cast_nullable_to_non_nullable
               as String,
-      vendor: freezed == vendor
-          ? _value.vendor
-          : vendor // ignore: cast_nullable_to_non_nullable
-              as VendorDTO?,
-      category: freezed == category
-          ? _value.category
-          : category // ignore: cast_nullable_to_non_nullable
-              as ProductCategory?,
       options: null == options
           ? _value.options
           : options // ignore: cast_nullable_to_non_nullable
@@ -455,26 +455,26 @@ class _$_ProductDTO extends _ProductDTO {
   _$_ProductDTO(
       {required this.id,
       required this.name,
-      this.description = '',
-      this.shortDescription = '',
       required this.basePrice,
-      this.imageURL = '',
       required this.isAvailable,
       required this.priority,
       required this.isFeatured,
       required this.status,
+      required this.productBarCode,
+      @JsonKey(fromJson: fromJsonVendorDTO) required this.vendor,
+      @JsonKey(fromJson: fromJsonProductCategory) required this.category,
+      this.description = '',
+      this.shortDescription = '',
+      this.imageURL = '',
       this.ingredients,
       this.vendorInternalId = '',
       this.stockCount = 0,
       this.stockUnitsPerProduct = 1,
       this.sizeInnerUnitValue = 1,
       this.sizeInnerUnitType = '',
-      required this.productBarCode,
       this.supplier = '',
       this.brandName = '',
       this.taxGroup = '',
-      @JsonKey(fromJson: fromJsonVendorDTO) required this.vendor,
-      @JsonKey(fromJson: fromJsonProductCategory) required this.category,
       @JsonKey(fromJson: fromJsonProductOptionList) this.options = const [],
       @JsonKey(fromJson: fromJsonESCRating) this.rating = null})
       : super._();
@@ -486,19 +486,10 @@ class _$_ProductDTO extends _ProductDTO {
   final int id;
   @override
   final String name;
-  @override
-  @JsonKey()
-  final String description;
-  @override
-  @JsonKey()
-  final String shortDescription;
 
   /// this is the price in pence of the restaurant item without any product options applied
   @override
   final int basePrice;
-  @override
-  @JsonKey()
-  final String imageURL;
   @override
   final bool isAvailable;
   @override
@@ -507,6 +498,23 @@ class _$_ProductDTO extends _ProductDTO {
   final bool isFeatured;
   @override
   final ProductDiscontinuedStatus status;
+  @override
+  final String productBarCode;
+  @override
+  @JsonKey(fromJson: fromJsonVendorDTO)
+  final VendorDTO? vendor;
+  @override
+  @JsonKey(fromJson: fromJsonProductCategory)
+  final ProductCategory? category;
+  @override
+  @JsonKey()
+  final String description;
+  @override
+  @JsonKey()
+  final String shortDescription;
+  @override
+  @JsonKey()
+  final String imageURL;
   @override
   final String? ingredients;
   @override
@@ -525,8 +533,6 @@ class _$_ProductDTO extends _ProductDTO {
   @JsonKey()
   final String sizeInnerUnitType;
   @override
-  final String productBarCode;
-  @override
   @JsonKey()
   final String supplier;
   @override
@@ -536,12 +542,6 @@ class _$_ProductDTO extends _ProductDTO {
   @JsonKey()
   final String taxGroup;
   @override
-  @JsonKey(fromJson: fromJsonVendorDTO)
-  final VendorDTO? vendor;
-  @override
-  @JsonKey(fromJson: fromJsonProductCategory)
-  final ProductCategory? category;
-  @override
   @JsonKey(fromJson: fromJsonProductOptionList)
   final List<ProductOption> options;
   @override
@@ -550,7 +550,7 @@ class _$_ProductDTO extends _ProductDTO {
 
   @override
   String toString() {
-    return 'ProductDTO(id: $id, name: $name, description: $description, shortDescription: $shortDescription, basePrice: $basePrice, imageURL: $imageURL, isAvailable: $isAvailable, priority: $priority, isFeatured: $isFeatured, status: $status, ingredients: $ingredients, vendorInternalId: $vendorInternalId, stockCount: $stockCount, stockUnitsPerProduct: $stockUnitsPerProduct, sizeInnerUnitValue: $sizeInnerUnitValue, sizeInnerUnitType: $sizeInnerUnitType, productBarCode: $productBarCode, supplier: $supplier, brandName: $brandName, taxGroup: $taxGroup, vendor: $vendor, category: $category, options: $options, rating: $rating)';
+    return 'ProductDTO(id: $id, name: $name, basePrice: $basePrice, isAvailable: $isAvailable, priority: $priority, isFeatured: $isFeatured, status: $status, productBarCode: $productBarCode, vendor: $vendor, category: $category, description: $description, shortDescription: $shortDescription, imageURL: $imageURL, ingredients: $ingredients, vendorInternalId: $vendorInternalId, stockCount: $stockCount, stockUnitsPerProduct: $stockUnitsPerProduct, sizeInnerUnitValue: $sizeInnerUnitValue, sizeInnerUnitType: $sizeInnerUnitType, supplier: $supplier, brandName: $brandName, taxGroup: $taxGroup, options: $options, rating: $rating)';
   }
 
   @override
@@ -560,14 +560,8 @@ class _$_ProductDTO extends _ProductDTO {
             other is _$_ProductDTO &&
             (identical(other.id, id) || other.id == id) &&
             (identical(other.name, name) || other.name == name) &&
-            (identical(other.description, description) ||
-                other.description == description) &&
-            (identical(other.shortDescription, shortDescription) ||
-                other.shortDescription == shortDescription) &&
             (identical(other.basePrice, basePrice) ||
                 other.basePrice == basePrice) &&
-            (identical(other.imageURL, imageURL) ||
-                other.imageURL == imageURL) &&
             (identical(other.isAvailable, isAvailable) ||
                 other.isAvailable == isAvailable) &&
             (identical(other.priority, priority) ||
@@ -575,6 +569,17 @@ class _$_ProductDTO extends _ProductDTO {
             (identical(other.isFeatured, isFeatured) ||
                 other.isFeatured == isFeatured) &&
             (identical(other.status, status) || other.status == status) &&
+            (identical(other.productBarCode, productBarCode) ||
+                other.productBarCode == productBarCode) &&
+            (identical(other.vendor, vendor) || other.vendor == vendor) &&
+            (identical(other.category, category) ||
+                other.category == category) &&
+            (identical(other.description, description) ||
+                other.description == description) &&
+            (identical(other.shortDescription, shortDescription) ||
+                other.shortDescription == shortDescription) &&
+            (identical(other.imageURL, imageURL) ||
+                other.imageURL == imageURL) &&
             (identical(other.ingredients, ingredients) ||
                 other.ingredients == ingredients) &&
             (identical(other.vendorInternalId, vendorInternalId) ||
@@ -587,17 +592,12 @@ class _$_ProductDTO extends _ProductDTO {
                 other.sizeInnerUnitValue == sizeInnerUnitValue) &&
             (identical(other.sizeInnerUnitType, sizeInnerUnitType) ||
                 other.sizeInnerUnitType == sizeInnerUnitType) &&
-            (identical(other.productBarCode, productBarCode) ||
-                other.productBarCode == productBarCode) &&
             (identical(other.supplier, supplier) ||
                 other.supplier == supplier) &&
             (identical(other.brandName, brandName) ||
                 other.brandName == brandName) &&
             (identical(other.taxGroup, taxGroup) ||
                 other.taxGroup == taxGroup) &&
-            (identical(other.vendor, vendor) || other.vendor == vendor) &&
-            (identical(other.category, category) ||
-                other.category == category) &&
             const DeepCollectionEquality().equals(other.options, options) &&
             (identical(other.rating, rating) || other.rating == rating));
   }
@@ -608,26 +608,26 @@ class _$_ProductDTO extends _ProductDTO {
         runtimeType,
         id,
         name,
-        description,
-        shortDescription,
         basePrice,
-        imageURL,
         isAvailable,
         priority,
         isFeatured,
         status,
+        productBarCode,
+        vendor,
+        category,
+        description,
+        shortDescription,
+        imageURL,
         ingredients,
         vendorInternalId,
         stockCount,
         stockUnitsPerProduct,
         sizeInnerUnitValue,
         sizeInnerUnitType,
-        productBarCode,
         supplier,
         brandName,
         taxGroup,
-        vendor,
-        category,
         const DeepCollectionEquality().hash(options),
         rating
       ]);
@@ -650,28 +650,28 @@ abstract class _ProductDTO extends ProductDTO {
   factory _ProductDTO(
       {required final int id,
       required final String name,
-      final String description,
-      final String shortDescription,
       required final int basePrice,
-      final String imageURL,
       required final bool isAvailable,
       required final int priority,
       required final bool isFeatured,
       required final ProductDiscontinuedStatus status,
+      required final String productBarCode,
+      @JsonKey(fromJson: fromJsonVendorDTO)
+          required final VendorDTO? vendor,
+      @JsonKey(fromJson: fromJsonProductCategory)
+          required final ProductCategory? category,
+      final String description,
+      final String shortDescription,
+      final String imageURL,
       final String? ingredients,
       final String vendorInternalId,
       final int stockCount,
       final num stockUnitsPerProduct,
       final num sizeInnerUnitValue,
       final String sizeInnerUnitType,
-      required final String productBarCode,
       final String supplier,
       final String brandName,
       final String taxGroup,
-      @JsonKey(fromJson: fromJsonVendorDTO)
-          required final VendorDTO? vendor,
-      @JsonKey(fromJson: fromJsonProductCategory)
-          required final ProductCategory? category,
       @JsonKey(fromJson: fromJsonProductOptionList)
           final List<ProductOption> options,
       @JsonKey(fromJson: fromJsonESCRating)
@@ -686,15 +686,9 @@ abstract class _ProductDTO extends ProductDTO {
   @override
   String get name;
   @override
-  String get description;
-  @override
-  String get shortDescription;
-  @override
 
   /// this is the price in pence of the restaurant item without any product options applied
   int get basePrice;
-  @override
-  String get imageURL;
   @override
   bool get isAvailable;
   @override
@@ -703,6 +697,20 @@ abstract class _ProductDTO extends ProductDTO {
   bool get isFeatured;
   @override
   ProductDiscontinuedStatus get status;
+  @override
+  String get productBarCode;
+  @override
+  @JsonKey(fromJson: fromJsonVendorDTO)
+  VendorDTO? get vendor;
+  @override
+  @JsonKey(fromJson: fromJsonProductCategory)
+  ProductCategory? get category;
+  @override
+  String get description;
+  @override
+  String get shortDescription;
+  @override
+  String get imageURL;
   @override
   String? get ingredients;
   @override
@@ -716,19 +724,11 @@ abstract class _ProductDTO extends ProductDTO {
   @override
   String get sizeInnerUnitType;
   @override
-  String get productBarCode;
-  @override
   String get supplier;
   @override
   String get brandName;
   @override
   String get taxGroup;
-  @override
-  @JsonKey(fromJson: fromJsonVendorDTO)
-  VendorDTO? get vendor;
-  @override
-  @JsonKey(fromJson: fromJsonProductCategory)
-  ProductCategory? get category;
   @override
   @JsonKey(fromJson: fromJsonProductOptionList)
   List<ProductOption> get options;

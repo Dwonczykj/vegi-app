@@ -9,9 +9,7 @@ class VegiAccount with _$VegiAccount {
   @JsonSerializable()
   factory VegiAccount({
     required int id,
-    @Default(null) VegiAccountType? accountType,
-    required bool verified,
-    required String walletAddress,
+    required bool verified, required String walletAddress, @Default(null) VegiAccountType? accountType,
     @Default('') String imageUrl,
     @Default(null) String? stripeCustomerId,
     @Default(null) String? stripeAccountId,

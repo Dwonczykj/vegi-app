@@ -16,7 +16,6 @@ abstract class LoggerDi {
               12, // Number of method calls if stacktrace is provided
           lineLength: 80, // Width of the output
           colors: false, // Colorful log messages
-          printEmojis: true, // Print an emoji for each log message
           printTime: true, // Should each log print contain a timestamp
         ),
         // filter: DevelopmentFilter,

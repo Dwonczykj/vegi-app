@@ -8,13 +8,13 @@ part of 'orderItem.dart';
 
 _$_OrderItem _$$_OrderItemFromJson(Map<String, dynamic> json) => _$_OrderItem(
       id: json['id'] as int,
-      unfulfilled: json['unfulfilled'] as bool?,
       product: fromJsonProduct(json['product']),
+      unfulfilled: json['unfulfilled'] as bool?,
     );
 
 Map<String, dynamic> _$$_OrderItemToJson(_$_OrderItem instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'unfulfilled': instance.unfulfilled,
       'product': instance.product.toJson(),
+      'unfulfilled': instance.unfulfilled,
     };

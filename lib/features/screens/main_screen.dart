@@ -7,12 +7,12 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:vegan_liverpool/common/router/routes.dart'
     hide WaitingListFunnelScreen;
 import 'package:vegan_liverpool/constants/enums.dart';
-import 'package:vegan_liverpool/constants/firebase_options.dart';
 import 'package:vegan_liverpool/features/shared/widgets/my_scaffold.dart';
 import 'package:vegan_liverpool/features/shared/widgets/snackbars.dart';
 import 'package:vegan_liverpool/features/veganHome/Helpers/helpers.dart';
 import 'package:vegan_liverpool/features/veganHome/widgets/shared/dialogs/appUpdateNeededDialog.dart';
 import 'package:vegan_liverpool/features/waitingListFunnel/screens/waitingListFunnel.dart';
+import 'package:vegan_liverpool/firebase_options.dart';
 import 'package:vegan_liverpool/models/app_state.dart';
 import 'package:vegan_liverpool/redux/actions/cash_wallet_actions.dart';
 import 'package:vegan_liverpool/redux/actions/past_order_actions.dart';
@@ -193,7 +193,7 @@ Future<void> _firebaseMessagingBackgroundHandler(
   Store<AppState> store,
 ) async {
   await Firebase.initializeApp(
-    options: await DefaultFirebaseOptions.currentPlatform,
+    options: DefaultFirebaseOptions.currentPlatform,
   );
 
   await handleFCM(
@@ -203,10 +203,13 @@ Future<void> _firebaseMessagingBackgroundHandler(
 }
 
 Future<void> handleFCM(
-    RemoteMessage? remoteMessage, Store<AppState> store) async {
+  RemoteMessage? remoteMessage,
+  Store<AppState> store,
+) async {
   if (remoteMessage != null) {
     log.info(
-        'New Message From Firebase with message: ${remoteMessage}  data: ${remoteMessage.data}');
+      'New Message From Firebase with message: $remoteMessage  data: ${remoteMessage.data}',
+    );
   } else {
     return;
   }

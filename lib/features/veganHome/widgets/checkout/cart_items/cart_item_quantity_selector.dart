@@ -10,9 +10,7 @@ import 'package:vegan_liverpool/utils/analytics.dart';
 
 class CartItemQuantitySelector extends StatelessWidget {
   const CartItemQuantitySelector({
-    Key? key,
-    required this.width,
-    required this.index,
+    required this.width, required this.index, Key? key,
   }) : super(key: key);
 
   final double width;

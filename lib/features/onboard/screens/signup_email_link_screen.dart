@@ -203,7 +203,7 @@ class _SignUpEmailLinkScreenState extends State<SignUpEmailLinkScreen> {
                             const SizedBox(height: 10),
                             Text(
                               errMessage,
-                              style: TextStyle(
+                              style: const TextStyle(
                                 color: Colors.red,
                               ),
                             ),

@@ -6,7 +6,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carrier_info/carrier_info.dart';
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:html/parser.dart';
 import 'package:intl/intl.dart';
@@ -114,14 +113,14 @@ BoolThenRouteResult checkAuth<T extends IAuthViewModel>({
       .isNewFailureStatus(oldFirebaseAuthStatus)) {
     if (routerContext.mounted) {
       log.info(
-          'Push SignUpScreen() due to failed status: FirebaseAuthenticationStatus.[${newViewModel.firebaseAuthenticationStatus.name}]');
+          'Push SignUpScreen() due to failed status: FirebaseAuthenticationStatus.[${newViewModel.firebaseAuthenticationStatus.name}]',);
       debugPrintStack(
         label:
             'Push SignUpScreen() due to failed status: FirebaseAuthenticationStatus.[${newViewModel.firebaseAuthenticationStatus.name}]',
         maxFrames: 3,
       );
       navigationToRun = () => rootRouter.replace(
-          const SignUpScreen()); //TODO: Remove this as should be taken care of from authentication action failure inside the thunk
+          const SignUpScreen(),); //TODO: Remove this as should be taken care of from authentication action failure inside the thunk
     }
     return BoolThenRouteResult(
       succeeded: false,
@@ -131,7 +130,7 @@ BoolThenRouteResult checkAuth<T extends IAuthViewModel>({
   if (newViewModel.vegiAuthenticationStatus
       .isNewFailureStatus(oldVegiAuthStatus)) {
     log.error(
-        'vegi auth has failed, investigate why this is happening...: status: ${newViewModel.vegiAuthenticationStatus.name}');
+        'vegi auth has failed, investigate why this is happening...: status: ${newViewModel.vegiAuthenticationStatus.name}',);
     return BoolThenRouteResult(
       succeeded: false,
       navigationToRun: navigationToRun,
@@ -268,7 +267,7 @@ double getPoundValueFromPPL(num pplAmount) {
 
 double getPPLRewardsFromPounds(num gBPAmount) {
   return getPPLValueFromPounds(
-      gBPAmount * CurrencyRateConstants.pplRewardsPcntDelivery);
+      gBPAmount * CurrencyRateConstants.pplRewardsPcntDelivery,);
 }
 
 double getPPLRewardsFromPence(num penceAmount) =>
@@ -281,8 +280,8 @@ int calculateRewardsForPrice({
 }) {
   return ((Math.max(
                   Math.min(
-                      rating?.rating ?? 0, CurrencyRateConstants.maxESCRating),
-                  CurrencyRateConstants.minESCRating) /
+                      rating?.rating ?? 0, CurrencyRateConstants.maxESCRating,),
+                  CurrencyRateConstants.minESCRating,) /
               CurrencyRateConstants.maxESCRating) *
           penceAmount *
           (fulfilmentMethod == FulfilmentMethodType.inStore
@@ -300,8 +299,8 @@ double calculateCartRewardsForPrice({
     (item) {
       return (Math.max(
                   Math.min(item.menuItem.rating?.rating ?? 0,
-                      CurrencyRateConstants.maxESCRating),
-                  CurrencyRateConstants.minESCRating) /
+                      CurrencyRateConstants.maxESCRating,),
+                  CurrencyRateConstants.minESCRating,) /
               CurrencyRateConstants.maxESCRating) *
           item.totalItemPrice.inGBPxValue *
           (fulfilmentMethod == FulfilmentMethodType.inStore
@@ -357,7 +356,7 @@ Future<UpdateComputedCartValues?> computeTotalsFromCart({
   List<Discount> appliedVouchers = const <Discount>[],
 }) async {
   try {
-    Money cartTax = Money.zero(inCurrency: cartCurrency);
+    final Money cartTax = Money.zero(inCurrency: cartCurrency);
     Money cartTotal = Money.zero(inCurrency: cartCurrency);
     Money cartSubTotal = Money.zero(inCurrency: cartCurrency);
     Money cartPcntDiscountComputed = Money.zero(inCurrency: cartCurrency);
@@ -461,7 +460,7 @@ num getInternalCurrencyConversionRateSync({
       return 1.0 / CurrencyRateConstants.PPLPoundPegValue;
     } else if (toCurrency == Currency.USD || toCurrency == Currency.EUR) {
       throw Exception(
-          'Requested a currency conversion from getInternalCurrencyConversionRateSync but toCurrency: $toCurrency is not an internal currency.');
+          'Requested a currency conversion from getInternalCurrencyConversionRateSync but toCurrency: $toCurrency is not an internal currency.',);
     } else {
       log.error(
         'Unsupported currencies requested from helpers.getCurrencyConversionRate of fromCurrency: $fromCurrency, toCurrency: $toCurrency.',
@@ -780,7 +779,7 @@ Future<SetPhoneNumberSuccess?> getPhoneDetails({
     }
     if (Platform.isIOS) {
       final iosInfo = await CarrierInfo.getIosInfo();
-      if (iosInfo.carrierData.length >= 1) {
+      if (iosInfo.carrierData.isNotEmpty) {
         isoCode = iosInfo.carrierData[0].isoCountryCode;
       }
     }
@@ -804,11 +803,11 @@ Future<SetPhoneNumberSuccess?> getPhoneDetails({
     return null;
   }
 
-  final String _phoneNumber = '${countryCode!.dialCode}$phoneNoCountry';
+  final String phoneNumber0 = '${countryCode!.dialCode}$phoneNoCountry';
 
   try {
     phoneNumber = await phoneNumberUtil.parse(
-      _phoneNumber,
+      phoneNumber0,
     );
   } catch (e) {
     // do nothing and try again....

@@ -66,8 +66,11 @@ class SplashViewModel extends Equatable implements IAuthViewModel {
   final bool accountDetailsExist;
   final bool surveyCompleted;
   final bool isWhiteListedAccount;
+  @override
   final FirebaseAuthenticationStatus firebaseAuthenticationStatus;
+  @override
   final FuseAuthenticationStatus fuseAuthenticationStatus;
+  @override
   final VegiAuthenticationStatus vegiAuthenticationStatus;
   final AuthCredential? firebaseAuthCredential;
   final bool firebaseAuthCredIsSet;

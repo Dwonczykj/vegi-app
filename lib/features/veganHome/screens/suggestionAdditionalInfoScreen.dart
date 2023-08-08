@@ -12,10 +12,7 @@ import 'package:vegan_liverpool/features/veganHome/widgets/menu/suggestionAdditi
 
 class SuggestionAdditionalInfoScreen extends StatelessWidget {
   SuggestionAdditionalInfoScreen({
-    Key? key,
-    required this.title,
-    required this.nextPage,
-    required this.previousPage,
+    required this.title, required this.nextPage, required this.previousPage, Key? key,
   }) : super(key: key);
 
   final String title;
@@ -41,7 +38,7 @@ class SuggestionAdditionalInfoScreen extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SuggestionAdditionalInfoCard(
+                const SuggestionAdditionalInfoCard(
                     // scrollController: scrollController,
                     ),
                 Container(

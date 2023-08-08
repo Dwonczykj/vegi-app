@@ -210,7 +210,7 @@ class _ReduxStateViewerState extends State<ReduxStateViewer> {
 }
 
 class StatePropertyTile extends StatelessWidget {
-  const StatePropertyTile({Key? key, required this.data}) : super(key: key);
+  const StatePropertyTile({required this.data, Key? key}) : super(key: key);
 
   final Map<String, dynamic> data;
 
@@ -288,7 +288,7 @@ class ReduxDevToolsViewModel {
       recomputeColor:
           containerState != null && containerState.recomputeOnHotReload
               ? Theme.of(context).colorScheme.secondary
-              : Theme.of(context).textTheme.button?.color,
+              : Theme.of(context).textTheme.labelLarge?.color,
       onRecomputePressed: () {
         if (containerState != null) {
           containerState.toggleRecomputeOnHotReload();
@@ -354,9 +354,7 @@ class ReduxDevToolsViewModel {
 /// repo for a demonstration of how to do this.
 class ReduxDevToolsContainer<S> extends StatefulWidget {
   const ReduxDevToolsContainer({
-    Key? key,
-    required this.store,
-    required this.child,
+    required this.store, required this.child, Key? key,
     this.recomputeOnHotReload = true,
   }) : super(key: key);
   final Store<S> store;
@@ -406,10 +404,7 @@ class _ReduxDevToolsRecomputeState extends State<ReduxDevToolsContainer> {
 
 class _ContainerState extends InheritedWidget {
   const _ContainerState({
-    Key? key,
-    required Widget child,
-    required this.recomputeOnHotReload,
-    required this.toggleRecomputeOnHotReload,
+    required Widget child, required this.recomputeOnHotReload, required this.toggleRecomputeOnHotReload, Key? key,
   }) : super(key: key, child: child);
   final bool recomputeOnHotReload;
   final Function() toggleRecomputeOnHotReload;

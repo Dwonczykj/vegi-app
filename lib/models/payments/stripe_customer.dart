@@ -15,11 +15,10 @@ class StripeCustomer with _$StripeCustomer {
   @JsonSerializable()
   factory StripeCustomer({
     required String id,
-    StripeAddress? address,
+    required bool livemode, StripeAddress? address,
     @Default(0) num balance,
     @Default(0) num created,
     String? currency,
-    required bool livemode,
     @Default({}) Map<String, dynamic> metadata,
     String? name,
     String? phone,

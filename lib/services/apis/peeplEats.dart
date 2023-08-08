@@ -79,7 +79,8 @@ class PeeplEatsService extends HttpService {
   bool responseHasErrorStatus(Response<dynamic> response) {
     if (response.statusCode != null && response.statusCode! >= 400) {
       log.error(
-          'Received a "exits.${_getResponseExitName(response)}" exit from sails vegi backend with message: "${_getResponseExitDescription(response)}"');
+        'Received a "exits.${_getResponseExitName(response)}" exit from sails vegi backend with message: "${_getResponseExitDescription(response)}"',
+      );
       return true;
     }
     return false;
@@ -135,6 +136,7 @@ class PeeplEatsService extends HttpService {
 
   // User Details
 
+  @override
   bool get hasCookieStored => dio.options.headers.containsKey('Cookie');
 
   Future<bool> checkVegiSessionIsStillValid({
@@ -176,7 +178,8 @@ class PeeplEatsService extends HttpService {
       if ((dioErr.message?.contains('Connection refused') ?? false) &&
           onRealDevice) {
         log.warn(
-            'Unable to reverse proxy from physical device back to localhost vegi server.');
+          'Unable to reverse proxy from physical device back to localhost vegi server.',
+        );
       } else {
         log.error(dioErr, stackTrace: s);
       }
@@ -221,7 +224,6 @@ class PeeplEatsService extends HttpService {
         _authenticating = false;
         log.error(
           'No set-cookie returned in response headers when trying to loginWithPhone with:\n\t responseHeaders: ${response.headers} & response: $response',
-          sentry: true,
         );
       }
 
@@ -273,7 +275,6 @@ class PeeplEatsService extends HttpService {
       );
       return VegiSession(
         sessionCookie: '',
-        user: null,
       );
     }
   }
@@ -365,13 +366,11 @@ class PeeplEatsService extends HttpService {
     if (onboardingAuthRoutesOrder.contains(rootRouter.current.name)) {
       log.warn(
         'vegi backend service isLoggedIn request as currently in onbaording auth screens for now.',
-        sentry: true,
       );
       return;
     } else if (_authenticating) {
       log.warn(
         'vegi backend service is already authenticating, not calling isLoggedIn for now.',
-        sentry: true,
       );
       return;
     }
@@ -417,7 +416,6 @@ class PeeplEatsService extends HttpService {
   }) async {
     final response = await dioPost<dynamic>(
       VegiBackendEndpoints.resetPassword,
-      sendWithAuthCreds: false,
       data: {
         'emailAddress': email,
       },
@@ -498,30 +496,30 @@ class PeeplEatsService extends HttpService {
   }) async {
     final Response<dynamic> response = await dioGet<dynamic>(
       VegiBackendEndpoints.featuredRestaurants(outCode),
-      sendWithAuthCreds: true,
       dontRoute: dontRoute,
-    ).timeout(
-      const Duration(seconds: 5),
-      onTimeout: () {
-        return Response(
-          data: {'vendors': List<RestaurantItem>.empty()},
-          requestOptions: RequestOptions(path: ''),
-        );
-      },
-    ).onError((error, stackTrace) {
-      log.error(error, stackTrace: stackTrace);
-      if (error is DioError &&
-          (error.message?.startsWith('SocketException:') ?? false) &&
-          dio.options.baseUrl.startsWith('http://localhost')) {
-        log.warn(
-          'If running from real_device, cant connect to localhost on running machine...',
-        );
-      }
-      return Response(
-        data: {'vendors': List<RestaurantItem>.empty()},
-        requestOptions: RequestOptions(path: ''),
-      );
-    });
+    );
+    // .timeout(
+    //   const Duration(seconds: 5),
+    //   onTimeout: () {
+    //     return Response(
+    //       data: {'vendors': List<RestaurantItem>.empty()},
+    //       requestOptions: RequestOptions(),
+    //     );
+    //   },
+    // ).onError((error, stackTrace) {
+    //   log.error(error, stackTrace: stackTrace);
+    //   if (error is DioError &&
+    //       (error.message?.startsWith('SocketException:') ?? false) &&
+    //       dio.options.baseUrl.startsWith('http://localhost')) {
+    //     log.warn(
+    //       'If running from real_device, cant connect to localhost on running machine...',
+    //     );
+    //   }
+    //   return Response(
+    //     data: {'vendors': List<RestaurantItem>.empty()},
+    //     requestOptions: RequestOptions(),
+    //   );
+    // });
 
     final List<Map<String, dynamic>> results =
         List.from(response.data['vendors'] as Iterable<dynamic>);
@@ -548,7 +546,7 @@ class PeeplEatsService extends HttpService {
       log.error(error, stackTrace: stackTrace);
       return Response(
         data: {'vendor': null},
-        requestOptions: RequestOptions(path: ''),
+        requestOptions: RequestOptions(),
       );
     });
 
@@ -573,7 +571,7 @@ class PeeplEatsService extends HttpService {
       );
       return Response(
         data: {'vendor': null},
-        requestOptions: RequestOptions(path: ''),
+        requestOptions: RequestOptions(),
       );
     });
 
@@ -611,13 +609,13 @@ class PeeplEatsService extends HttpService {
       onTimeout: () {
         return Response(
           data: {'vendors': List<RestaurantItem>.empty()},
-          requestOptions: RequestOptions(path: ''),
+          requestOptions: RequestOptions(),
         );
       },
     ).onError(
       (error, stackTrace) => Response(
         data: {'vendors': List<RestaurantItem>.empty()},
-        requestOptions: RequestOptions(path: ''),
+        requestOptions: RequestOptions(),
       ),
     );
 
@@ -686,13 +684,13 @@ class PeeplEatsService extends HttpService {
       onTimeout: () {
         return Response(
           data: {'vendors': List<RestaurantItem>.empty()},
-          requestOptions: RequestOptions(path: ''),
+          requestOptions: RequestOptions(),
         );
       },
     ).onError(
       (error, stackTrace) => Response(
         data: {'vendors': List<RestaurantItem>.empty()},
-        requestOptions: RequestOptions(path: ''),
+        requestOptions: RequestOptions(),
       ),
     );
 
@@ -1103,6 +1101,7 @@ class PeeplEatsService extends HttpService {
     } catch (err, st) {
       log.error(err, stackTrace: st);
     }
+    return null;
   }
 
   Future<String> setRandomAvatar({
@@ -1197,6 +1196,7 @@ class PeeplEatsService extends HttpService {
     } catch (err, st) {
       log.error(err, stackTrace: st);
     }
+    return null;
   }
 
   Future<UploadProductSuggestionImageResponse?> tryUploadImage({
@@ -1265,6 +1265,7 @@ class PeeplEatsService extends HttpService {
     } catch (err, st) {
       log.error(err, stackTrace: st);
     }
+    return null;
   }
 
   Future<void> uploadProductSuggestion(
@@ -1281,7 +1282,7 @@ class PeeplEatsService extends HttpService {
       log.error(error, stackTrace: stackTrace);
       if (error is Map<String, dynamic> && error.containsKey('response')) {
         if (error['response'] is Response) {
-          Response resp = (error as Map<String, Response>)['response']!;
+          final Response resp = (error as Map<String, Response>)['response']!;
           final wm = resp.toString();
           return resp;
         } else {
@@ -1293,7 +1294,7 @@ class PeeplEatsService extends HttpService {
       return Response(
         data: {},
         statusCode: 500,
-        requestOptions: RequestOptions(path: ''),
+        requestOptions: RequestOptions(),
       );
     });
 
@@ -1344,12 +1345,14 @@ class PeeplEatsService extends HttpService {
 
     if (responseHasErrorStatus(response)) {
       log.error(
-          'Unable to validate fixed discount code with response: ${response.statusMessage}');
+        'Unable to validate fixed discount code with response: ${response.statusMessage}',
+      );
       return null;
     }
     if (response.data == false) {
       log.error(
-          'No discount codes found for vendor[$vendor] and wallet: "$walletAddress" with code: "$code"');
+        'No discount codes found for vendor[$vendor] and wallet: "$walletAddress" with code: "$code"',
+      );
       return null;
     }
     final data = response.data as Map<String, dynamic>;
@@ -1478,7 +1481,8 @@ class PeeplEatsService extends HttpService {
       if (responseHasErrorStatus(response)) {
         if (response.statusCode! == 404) {
           log.info(
-              'Expected 404 response for user details request for not internal vegi user');
+            'Expected 404 response for user details request for not internal vegi user',
+          );
           return null;
         }
         onError(response.statusMessage ?? 'Unknown Error');
@@ -1537,7 +1541,7 @@ class PeeplEatsService extends HttpService {
       //   400,
       // ],
       allowErrorMessage: RegExp(
-        "Unable to update user\[[0-9]+\]'s email as another user\[[0-9]+\] already has email|bad email passed",
+        "Unable to update user[[0-9]+]'s email as another user[[0-9]+] already has email|bad email passed",
       ),
     );
 
@@ -1753,9 +1757,132 @@ class PeeplEatsService extends HttpService {
   Future<CreateOrderResponse?> createOrder<T extends CreateOrderForFulfilment>(
     T orderObject,
   ) async {
+    final store = await reduxStore;
     final response = await dioPost<Map<String, dynamic>>(
       'api/v1/orders/create-order',
       data: await orderObject.toUploadJson(),
+      handleErrorCodes: (errCode) {
+        switch (errCode) {
+          case 'noItemsFound':
+            store.dispatch(
+              OrderCreationProcessStatusUpdate(
+                status: OrderCreationProcessStatus.noItemsFound,
+                orderCreationStatusMessage:
+                    'No items found in basket, please try again.',
+              ),
+            );
+            break;
+          case 'invalidVendor':
+            store.dispatch(
+              OrderCreationProcessStatusUpdate(
+                status: OrderCreationProcessStatus.invalidVendor,
+                orderCreationStatusMessage:
+                    'This vendor has been removed or has stopped serving today.',
+              ),
+            );
+            break;
+          case 'invalidFulfilmentMethod':
+            store.dispatch(
+              OrderCreationProcessStatusUpdate(
+                status: OrderCreationProcessStatus.invalidFulfilmentMethod,
+                orderCreationStatusMessage:
+                    'This vendor is not currently accepting ${store.state.cartState.fulfilmentMethod.name}',
+              ),
+            );
+            break;
+          case 'invalidProduct':
+            store.dispatch(
+              OrderCreationProcessStatusUpdate(
+                status: OrderCreationProcessStatus.invalidProduct,
+                orderCreationStatusMessage:
+                    'Order creation failed due to an invalid product',
+              ),
+            );
+            break;
+          case 'invalidProductOption':
+            store.dispatch(
+              OrderCreationProcessStatusUpdate(
+                status: OrderCreationProcessStatus.invalidProductOption,
+                orderCreationStatusMessage:
+                    'Order creation failed due to an invalid option chosen on a product',
+              ),
+            );
+            break;
+          case 'invalidUserAddress':
+            store.dispatch(
+              OrderCreationProcessStatusUpdate(
+                status: OrderCreationProcessStatus.invalidUserAddress,
+                orderCreationStatusMessage:
+                    "Order creation failed as we couldn't validate your delivery address",
+              ),
+            );
+            break;
+          case 'deliveryPartnerUnavailable':
+            store.dispatch(
+              OrderCreationProcessStatusUpdate(
+                status: OrderCreationProcessStatus.deliveryPartnerUnavailable,
+                orderCreationStatusMessage:
+                    'Unable to create order as no delivery partners are available at this time',
+              ),
+            );
+            break;
+          case 'allItemsUnavailable':
+            store.dispatch(
+              OrderCreationProcessStatusUpdate(
+                status: OrderCreationProcessStatus.allItemsUnavailable,
+                orderCreationStatusMessage:
+                    'All items from your order are unavailable. Please clear your basket and start again',
+              ),
+            );
+            break;
+          case 'minimumOrderAmount':
+            store.dispatch(
+              OrderCreationProcessStatusUpdate(
+                status: OrderCreationProcessStatus.minimumOrderAmount,
+                orderCreationStatusMessage:
+                    "Your order is below the vendor's minimum order amount. Please add more to order.",
+              ),
+            );
+            break;
+          case 'badItemsRequest':
+            store.dispatch(
+              OrderCreationProcessStatusUpdate(
+                status: OrderCreationProcessStatus.badItemsRequest,
+                orderCreationStatusMessage:
+                    'Some items in the order are unavailable, please start again.',
+              ),
+            );
+            break;
+          case 'invalidPostalDistrict':
+            store.dispatch(
+              OrderCreationProcessStatusUpdate(
+                status: OrderCreationProcessStatus.invalidPostalDistrict,
+                orderCreationStatusMessage:
+                    'Whoops, vendor doesn\'t deliver to "${store.state.cartState.selectedDeliveryAddress?.postalCode ?? 'the selected postcode'}", please choose a different delivery address or change to collection',
+              ),
+            );
+            break;
+          case 'invalidSlot':
+            store.dispatch(
+              OrderCreationProcessStatusUpdate(
+                status: OrderCreationProcessStatus.invalidSlot,
+                orderCreationStatusMessage:
+                    'Whoops, over-subscribed delivery slot, please pick a new slot',
+              ),
+            );
+            break;
+          case 'invalidDiscountCode':
+            store.dispatch(
+              OrderCreationProcessStatusUpdate(
+                status: OrderCreationProcessStatus.invalidDiscountCode,
+                orderCreationStatusMessage:
+                    'the order contained an invalid discount code',
+              ),
+            );
+            break;
+          default:
+        }
+      },
     ).timeout(
       const Duration(seconds: inDebugMode ? 300 : 10),
       onTimeout: () {
@@ -1766,9 +1893,9 @@ class PeeplEatsService extends HttpService {
         );
       },
     );
+
     if ((response.data?.isEmpty ?? true) ||
         !CreateOrderResponse.canParse(response.data!)) {
-      final store = await reduxStore;
       if (response.data != null &&
           response.data!.isNotEmpty &&
           response.data!.containsKey('error')) {
@@ -1778,30 +1905,38 @@ class PeeplEatsService extends HttpService {
           store.dispatch(
             OrderCreationProcessStatusUpdate(
               status: OrderCreationProcessStatus.stripeServiceFailedOnServer,
+              orderCreationStatusMessage: 'Stripe failed',
             ),
           );
           return null;
         }
       }
       if (response.extra.isNotEmpty &&
+          response.extra.containsKey('errorCode')) {
+        // * handled in the handleErrorCodeHandler above.
+        return null;
+      }
+      if (response.extra.isNotEmpty &&
           response.extra.containsKey('errorMessage')) {
-        if(response.extra['errorMessage'] is Map){
-
+        if (response.extra['errorMessage'] is Map) {
         } else if (response.extra['errorMessage'] is String) {
           final errorMessage = response.extra['errorMessage'].toString();
-          if (errorMessage.toLowerCase().contains('Invalid slot')){
+          if (errorMessage.toLowerCase().contains('Invalid slot')) {
             store.dispatch(
               OrderCreationProcessStatusUpdate(
                 status: OrderCreationProcessStatus.invalidSlot,
+                orderCreationStatusMessage:
+                    'Whoops, over-subscribed delivery slot, please pick a new slot',
               ),
             );
           }
-
         }
       }
       store.dispatch(
         OrderCreationProcessStatusUpdate(
           status: OrderCreationProcessStatus.sendOrderCallServerError,
+          orderCreationStatusMessage:
+              'Order creation failed, please try again later.',
         ),
       );
       return null;
@@ -1863,7 +1998,8 @@ class PeeplEatsService extends HttpService {
     final completedFlag = data['completedFlag'] as String;
     if (completedFlag != 'cancelled') {
       log.warn(
-          'cancel-order request failed and returned an order with completedFlag: $completedFlag');
+        'cancel-order request failed and returned an order with completedFlag: $completedFlag',
+      );
     }
     return completedFlag == 'cancelled';
   }

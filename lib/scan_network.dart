@@ -9,7 +9,7 @@ Future<List<String>> scanNetwork() async {
   final ipAddressesOnWifiNetwork = <String>[];
   if (kDebugMode) {
     if (Platform.isAndroid || Platform.isIOS) {
-      await (NetworkInfo().getWifiIP()).then(
+      await NetworkInfo().getWifiIP().then(
         (ip) async {
           final String subnet = ip!.substring(0, ip.lastIndexOf('.'));
           const port = 22;
@@ -30,7 +30,7 @@ Future<List<String>> scanNetwork() async {
                 ipAddressesOnWifiNetwork.add(value.host);
               }).catchError((dynamic error) {
                 if (error is SocketException) {
-                  final socketException = error as SocketException;
+                  final socketException = error;
                   if (socketException.message != 'Failed reverse host lookup') {
                     print(socket.address.address);
                     print('Unknown SocketException: $error');
@@ -47,7 +47,7 @@ Future<List<String>> scanNetwork() async {
       print('Done');
     } else {
       throw Exception(
-          'Network info not implemented for non-mobile platforms, see https://stackoverflow.com/a/68209358');
+          'Network info not implemented for non-mobile platforms, see https://stackoverflow.com/a/68209358',);
     }
   }
   return ipAddressesOnWifiNetwork;

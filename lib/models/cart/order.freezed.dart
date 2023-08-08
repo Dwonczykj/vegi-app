@@ -27,19 +27,11 @@ mixin _$Order {
 
   /// DO NOT USE, USE cartSubTotal INSTEAD
   num get subtotal => throw _privateConstructorUsedError;
-  Currency get currency => throw _privateConstructorUsedError;
   @JsonKey(fromJson: jsonToTimeStamp, toJson: timeStampToJsonInt)
   DateTime get orderedDateTime => throw _privateConstructorUsedError;
-  @JsonKey(
-      fromJson: jsonToTimeStampNullable, toJson: timeStampToJsonIntNullable)
-  DateTime? get paidDateTime => throw _privateConstructorUsedError;
-  @JsonKey(
-      fromJson: jsonToTimeStampNullable, toJson: timeStampToJsonIntNullable)
-  DateTime? get refundDateTime => throw _privateConstructorUsedError;
   @JsonEnum()
   @JsonKey(unknownEnumValue: OrderPaidStatus.unpaid)
   OrderPaidStatus get paymentStatus => throw _privateConstructorUsedError;
-  bool get paymentAttempted => throw _privateConstructorUsedError;
   String get paymentIntentId => throw _privateConstructorUsedError;
   String? get firebaseRegistrationToken => throw _privateConstructorUsedError;
   String? get deliveryName => throw _privateConstructorUsedError;
@@ -48,8 +40,6 @@ mixin _$Order {
   String get deliveryAddressLineOne => throw _privateConstructorUsedError;
   String? get deliveryAddressLineTwo => throw _privateConstructorUsedError;
   String get deliveryAddressCity => throw _privateConstructorUsedError;
-  String get deliveryAddressCountry => throw _privateConstructorUsedError;
-  String get deliveryAddressCounty => throw _privateConstructorUsedError;
   String get deliveryAddressPostCode => throw _privateConstructorUsedError;
   double? get deliveryAddressLatitude => throw _privateConstructorUsedError;
   double? get deliveryAddressLongitude => throw _privateConstructorUsedError;
@@ -75,27 +65,37 @@ mixin _$Order {
   int? get deliveryPunctuality => throw _privateConstructorUsedError;
   int? get orderCondition => throw _privateConstructorUsedError;
   DateTime get fulfilmentSlotFrom =>
-      throw _privateConstructorUsedError; // "2022-09-29T10:00:00.000Z"
+      throw _privateConstructorUsedError; /* "2022-09-29T10:00:00.000Z",*/
   DateTime get fulfilmentSlotTo =>
-      throw _privateConstructorUsedError; // "2022-09-29T10:00:00.000Z"
+      throw _privateConstructorUsedError; /* "2022-09-29T10:00:00.000Z",*/
   @JsonKey(fromJson: fromJsonFulfilmentMethod)
   FulfilmentMethod? get fulfilmentMethod => throw _privateConstructorUsedError;
   @JsonKey(fromJson: fromJsonVendorDTO)
   VendorDTO? get vendor => throw _privateConstructorUsedError;
   @JsonKey(fromJson: fromJsonDeliveryPartnerDTO)
   DeliveryPartnerDTO? get deliveryPartner => throw _privateConstructorUsedError;
-  @JsonKey(fromJson: fromJsonDiscountList)
-  List<Discount> get discounts => throw _privateConstructorUsedError;
   @JsonKey(fromJson: fromJsonOrderItemList)
   List<OrderItem> get items => throw _privateConstructorUsedError;
+  num get fulfilmentCharge => throw _privateConstructorUsedError;
+  num get platformFee => throw _privateConstructorUsedError;
+  Currency get currency => throw _privateConstructorUsedError;
+  @JsonKey(
+      fromJson: jsonToTimeStampNullable, toJson: timeStampToJsonIntNullable)
+  DateTime? get paidDateTime => throw _privateConstructorUsedError;
+  @JsonKey(
+      fromJson: jsonToTimeStampNullable, toJson: timeStampToJsonIntNullable)
+  DateTime? get refundDateTime => throw _privateConstructorUsedError;
+  bool get paymentAttempted => throw _privateConstructorUsedError;
+  String get deliveryAddressCountry => throw _privateConstructorUsedError;
+  String get deliveryAddressCounty => throw _privateConstructorUsedError;
+  @JsonKey(fromJson: fromJsonDiscountList)
+  List<Discount> get discounts => throw _privateConstructorUsedError;
   @JsonKey(fromJson: fromJsonOrder)
   Order? get parentOrder => throw _privateConstructorUsedError;
   @JsonKey(fromJson: fromJsonOrderItemList)
   List<OrderItem> get unfulfilledItems => throw _privateConstructorUsedError;
   @JsonKey(fromJson: fromJsonTransactionItemList)
   List<TransactionItem> get transactions => throw _privateConstructorUsedError;
-  num get fulfilmentCharge => throw _privateConstructorUsedError;
-  num get platformFee => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -111,17 +111,11 @@ abstract class $OrderCopyWith<$Res> {
       {int id,
       num total,
       num subtotal,
-      Currency currency,
       @JsonKey(fromJson: jsonToTimeStamp, toJson: timeStampToJsonInt)
           DateTime orderedDateTime,
-      @JsonKey(fromJson: jsonToTimeStampNullable, toJson: timeStampToJsonIntNullable)
-          DateTime? paidDateTime,
-      @JsonKey(fromJson: jsonToTimeStampNullable, toJson: timeStampToJsonIntNullable)
-          DateTime? refundDateTime,
       @JsonEnum()
       @JsonKey(unknownEnumValue: OrderPaidStatus.unpaid)
           OrderPaidStatus paymentStatus,
-      bool paymentAttempted,
       String paymentIntentId,
       String? firebaseRegistrationToken,
       String? deliveryName,
@@ -130,8 +124,6 @@ abstract class $OrderCopyWith<$Res> {
       String deliveryAddressLineOne,
       String? deliveryAddressLineTwo,
       String deliveryAddressCity,
-      String deliveryAddressCountry,
-      String deliveryAddressCounty,
       String deliveryAddressPostCode,
       double? deliveryAddressLatitude,
       double? deliveryAddressLongitude,
@@ -161,18 +153,26 @@ abstract class $OrderCopyWith<$Res> {
           VendorDTO? vendor,
       @JsonKey(fromJson: fromJsonDeliveryPartnerDTO)
           DeliveryPartnerDTO? deliveryPartner,
-      @JsonKey(fromJson: fromJsonDiscountList)
-          List<Discount> discounts,
       @JsonKey(fromJson: fromJsonOrderItemList)
           List<OrderItem> items,
+      num fulfilmentCharge,
+      num platformFee,
+      Currency currency,
+      @JsonKey(fromJson: jsonToTimeStampNullable, toJson: timeStampToJsonIntNullable)
+          DateTime? paidDateTime,
+      @JsonKey(fromJson: jsonToTimeStampNullable, toJson: timeStampToJsonIntNullable)
+          DateTime? refundDateTime,
+      bool paymentAttempted,
+      String deliveryAddressCountry,
+      String deliveryAddressCounty,
+      @JsonKey(fromJson: fromJsonDiscountList)
+          List<Discount> discounts,
       @JsonKey(fromJson: fromJsonOrder)
           Order? parentOrder,
       @JsonKey(fromJson: fromJsonOrderItemList)
           List<OrderItem> unfulfilledItems,
       @JsonKey(fromJson: fromJsonTransactionItemList)
-          List<TransactionItem> transactions,
-      num fulfilmentCharge,
-      num platformFee});
+          List<TransactionItem> transactions});
 
   $FulfilmentMethodCopyWith<$Res>? get fulfilmentMethod;
   $VendorDTOCopyWith<$Res>? get vendor;
@@ -196,12 +196,8 @@ class _$OrderCopyWithImpl<$Res, $Val extends Order>
     Object? id = null,
     Object? total = null,
     Object? subtotal = null,
-    Object? currency = null,
     Object? orderedDateTime = null,
-    Object? paidDateTime = freezed,
-    Object? refundDateTime = freezed,
     Object? paymentStatus = null,
-    Object? paymentAttempted = null,
     Object? paymentIntentId = null,
     Object? firebaseRegistrationToken = freezed,
     Object? deliveryName = freezed,
@@ -210,8 +206,6 @@ class _$OrderCopyWithImpl<$Res, $Val extends Order>
     Object? deliveryAddressLineOne = null,
     Object? deliveryAddressLineTwo = freezed,
     Object? deliveryAddressCity = null,
-    Object? deliveryAddressCountry = null,
-    Object? deliveryAddressCounty = null,
     Object? deliveryAddressPostCode = null,
     Object? deliveryAddressLatitude = freezed,
     Object? deliveryAddressLongitude = freezed,
@@ -235,13 +229,19 @@ class _$OrderCopyWithImpl<$Res, $Val extends Order>
     Object? fulfilmentMethod = freezed,
     Object? vendor = freezed,
     Object? deliveryPartner = freezed,
-    Object? discounts = null,
     Object? items = null,
+    Object? fulfilmentCharge = null,
+    Object? platformFee = null,
+    Object? currency = null,
+    Object? paidDateTime = freezed,
+    Object? refundDateTime = freezed,
+    Object? paymentAttempted = null,
+    Object? deliveryAddressCountry = null,
+    Object? deliveryAddressCounty = null,
+    Object? discounts = null,
     Object? parentOrder = freezed,
     Object? unfulfilledItems = null,
     Object? transactions = null,
-    Object? fulfilmentCharge = null,
-    Object? platformFee = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -256,30 +256,14 @@ class _$OrderCopyWithImpl<$Res, $Val extends Order>
           ? _value.subtotal
           : subtotal // ignore: cast_nullable_to_non_nullable
               as num,
-      currency: null == currency
-          ? _value.currency
-          : currency // ignore: cast_nullable_to_non_nullable
-              as Currency,
       orderedDateTime: null == orderedDateTime
           ? _value.orderedDateTime
           : orderedDateTime // ignore: cast_nullable_to_non_nullable
               as DateTime,
-      paidDateTime: freezed == paidDateTime
-          ? _value.paidDateTime
-          : paidDateTime // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
-      refundDateTime: freezed == refundDateTime
-          ? _value.refundDateTime
-          : refundDateTime // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
       paymentStatus: null == paymentStatus
           ? _value.paymentStatus
           : paymentStatus // ignore: cast_nullable_to_non_nullable
               as OrderPaidStatus,
-      paymentAttempted: null == paymentAttempted
-          ? _value.paymentAttempted
-          : paymentAttempted // ignore: cast_nullable_to_non_nullable
-              as bool,
       paymentIntentId: null == paymentIntentId
           ? _value.paymentIntentId
           : paymentIntentId // ignore: cast_nullable_to_non_nullable
@@ -311,14 +295,6 @@ class _$OrderCopyWithImpl<$Res, $Val extends Order>
       deliveryAddressCity: null == deliveryAddressCity
           ? _value.deliveryAddressCity
           : deliveryAddressCity // ignore: cast_nullable_to_non_nullable
-              as String,
-      deliveryAddressCountry: null == deliveryAddressCountry
-          ? _value.deliveryAddressCountry
-          : deliveryAddressCountry // ignore: cast_nullable_to_non_nullable
-              as String,
-      deliveryAddressCounty: null == deliveryAddressCounty
-          ? _value.deliveryAddressCounty
-          : deliveryAddressCounty // ignore: cast_nullable_to_non_nullable
               as String,
       deliveryAddressPostCode: null == deliveryAddressPostCode
           ? _value.deliveryAddressPostCode
@@ -412,14 +388,46 @@ class _$OrderCopyWithImpl<$Res, $Val extends Order>
           ? _value.deliveryPartner
           : deliveryPartner // ignore: cast_nullable_to_non_nullable
               as DeliveryPartnerDTO?,
-      discounts: null == discounts
-          ? _value.discounts
-          : discounts // ignore: cast_nullable_to_non_nullable
-              as List<Discount>,
       items: null == items
           ? _value.items
           : items // ignore: cast_nullable_to_non_nullable
               as List<OrderItem>,
+      fulfilmentCharge: null == fulfilmentCharge
+          ? _value.fulfilmentCharge
+          : fulfilmentCharge // ignore: cast_nullable_to_non_nullable
+              as num,
+      platformFee: null == platformFee
+          ? _value.platformFee
+          : platformFee // ignore: cast_nullable_to_non_nullable
+              as num,
+      currency: null == currency
+          ? _value.currency
+          : currency // ignore: cast_nullable_to_non_nullable
+              as Currency,
+      paidDateTime: freezed == paidDateTime
+          ? _value.paidDateTime
+          : paidDateTime // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      refundDateTime: freezed == refundDateTime
+          ? _value.refundDateTime
+          : refundDateTime // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      paymentAttempted: null == paymentAttempted
+          ? _value.paymentAttempted
+          : paymentAttempted // ignore: cast_nullable_to_non_nullable
+              as bool,
+      deliveryAddressCountry: null == deliveryAddressCountry
+          ? _value.deliveryAddressCountry
+          : deliveryAddressCountry // ignore: cast_nullable_to_non_nullable
+              as String,
+      deliveryAddressCounty: null == deliveryAddressCounty
+          ? _value.deliveryAddressCounty
+          : deliveryAddressCounty // ignore: cast_nullable_to_non_nullable
+              as String,
+      discounts: null == discounts
+          ? _value.discounts
+          : discounts // ignore: cast_nullable_to_non_nullable
+              as List<Discount>,
       parentOrder: freezed == parentOrder
           ? _value.parentOrder
           : parentOrder // ignore: cast_nullable_to_non_nullable
@@ -432,14 +440,6 @@ class _$OrderCopyWithImpl<$Res, $Val extends Order>
           ? _value.transactions
           : transactions // ignore: cast_nullable_to_non_nullable
               as List<TransactionItem>,
-      fulfilmentCharge: null == fulfilmentCharge
-          ? _value.fulfilmentCharge
-          : fulfilmentCharge // ignore: cast_nullable_to_non_nullable
-              as num,
-      platformFee: null == platformFee
-          ? _value.platformFee
-          : platformFee // ignore: cast_nullable_to_non_nullable
-              as num,
     ) as $Val);
   }
 
@@ -502,17 +502,11 @@ abstract class _$$_OrderCopyWith<$Res> implements $OrderCopyWith<$Res> {
       {int id,
       num total,
       num subtotal,
-      Currency currency,
       @JsonKey(fromJson: jsonToTimeStamp, toJson: timeStampToJsonInt)
           DateTime orderedDateTime,
-      @JsonKey(fromJson: jsonToTimeStampNullable, toJson: timeStampToJsonIntNullable)
-          DateTime? paidDateTime,
-      @JsonKey(fromJson: jsonToTimeStampNullable, toJson: timeStampToJsonIntNullable)
-          DateTime? refundDateTime,
       @JsonEnum()
       @JsonKey(unknownEnumValue: OrderPaidStatus.unpaid)
           OrderPaidStatus paymentStatus,
-      bool paymentAttempted,
       String paymentIntentId,
       String? firebaseRegistrationToken,
       String? deliveryName,
@@ -521,8 +515,6 @@ abstract class _$$_OrderCopyWith<$Res> implements $OrderCopyWith<$Res> {
       String deliveryAddressLineOne,
       String? deliveryAddressLineTwo,
       String deliveryAddressCity,
-      String deliveryAddressCountry,
-      String deliveryAddressCounty,
       String deliveryAddressPostCode,
       double? deliveryAddressLatitude,
       double? deliveryAddressLongitude,
@@ -552,18 +544,26 @@ abstract class _$$_OrderCopyWith<$Res> implements $OrderCopyWith<$Res> {
           VendorDTO? vendor,
       @JsonKey(fromJson: fromJsonDeliveryPartnerDTO)
           DeliveryPartnerDTO? deliveryPartner,
-      @JsonKey(fromJson: fromJsonDiscountList)
-          List<Discount> discounts,
       @JsonKey(fromJson: fromJsonOrderItemList)
           List<OrderItem> items,
+      num fulfilmentCharge,
+      num platformFee,
+      Currency currency,
+      @JsonKey(fromJson: jsonToTimeStampNullable, toJson: timeStampToJsonIntNullable)
+          DateTime? paidDateTime,
+      @JsonKey(fromJson: jsonToTimeStampNullable, toJson: timeStampToJsonIntNullable)
+          DateTime? refundDateTime,
+      bool paymentAttempted,
+      String deliveryAddressCountry,
+      String deliveryAddressCounty,
+      @JsonKey(fromJson: fromJsonDiscountList)
+          List<Discount> discounts,
       @JsonKey(fromJson: fromJsonOrder)
           Order? parentOrder,
       @JsonKey(fromJson: fromJsonOrderItemList)
           List<OrderItem> unfulfilledItems,
       @JsonKey(fromJson: fromJsonTransactionItemList)
-          List<TransactionItem> transactions,
-      num fulfilmentCharge,
-      num platformFee});
+          List<TransactionItem> transactions});
 
   @override
   $FulfilmentMethodCopyWith<$Res>? get fulfilmentMethod;
@@ -587,12 +587,8 @@ class __$$_OrderCopyWithImpl<$Res> extends _$OrderCopyWithImpl<$Res, _$_Order>
     Object? id = null,
     Object? total = null,
     Object? subtotal = null,
-    Object? currency = null,
     Object? orderedDateTime = null,
-    Object? paidDateTime = freezed,
-    Object? refundDateTime = freezed,
     Object? paymentStatus = null,
-    Object? paymentAttempted = null,
     Object? paymentIntentId = null,
     Object? firebaseRegistrationToken = freezed,
     Object? deliveryName = freezed,
@@ -601,8 +597,6 @@ class __$$_OrderCopyWithImpl<$Res> extends _$OrderCopyWithImpl<$Res, _$_Order>
     Object? deliveryAddressLineOne = null,
     Object? deliveryAddressLineTwo = freezed,
     Object? deliveryAddressCity = null,
-    Object? deliveryAddressCountry = null,
-    Object? deliveryAddressCounty = null,
     Object? deliveryAddressPostCode = null,
     Object? deliveryAddressLatitude = freezed,
     Object? deliveryAddressLongitude = freezed,
@@ -626,13 +620,19 @@ class __$$_OrderCopyWithImpl<$Res> extends _$OrderCopyWithImpl<$Res, _$_Order>
     Object? fulfilmentMethod = freezed,
     Object? vendor = freezed,
     Object? deliveryPartner = freezed,
-    Object? discounts = null,
     Object? items = null,
+    Object? fulfilmentCharge = null,
+    Object? platformFee = null,
+    Object? currency = null,
+    Object? paidDateTime = freezed,
+    Object? refundDateTime = freezed,
+    Object? paymentAttempted = null,
+    Object? deliveryAddressCountry = null,
+    Object? deliveryAddressCounty = null,
+    Object? discounts = null,
     Object? parentOrder = freezed,
     Object? unfulfilledItems = null,
     Object? transactions = null,
-    Object? fulfilmentCharge = null,
-    Object? platformFee = null,
   }) {
     return _then(_$_Order(
       id: null == id
@@ -647,30 +647,14 @@ class __$$_OrderCopyWithImpl<$Res> extends _$OrderCopyWithImpl<$Res, _$_Order>
           ? _value.subtotal
           : subtotal // ignore: cast_nullable_to_non_nullable
               as num,
-      currency: null == currency
-          ? _value.currency
-          : currency // ignore: cast_nullable_to_non_nullable
-              as Currency,
       orderedDateTime: null == orderedDateTime
           ? _value.orderedDateTime
           : orderedDateTime // ignore: cast_nullable_to_non_nullable
               as DateTime,
-      paidDateTime: freezed == paidDateTime
-          ? _value.paidDateTime
-          : paidDateTime // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
-      refundDateTime: freezed == refundDateTime
-          ? _value.refundDateTime
-          : refundDateTime // ignore: cast_nullable_to_non_nullable
-              as DateTime?,
       paymentStatus: null == paymentStatus
           ? _value.paymentStatus
           : paymentStatus // ignore: cast_nullable_to_non_nullable
               as OrderPaidStatus,
-      paymentAttempted: null == paymentAttempted
-          ? _value.paymentAttempted
-          : paymentAttempted // ignore: cast_nullable_to_non_nullable
-              as bool,
       paymentIntentId: null == paymentIntentId
           ? _value.paymentIntentId
           : paymentIntentId // ignore: cast_nullable_to_non_nullable
@@ -702,14 +686,6 @@ class __$$_OrderCopyWithImpl<$Res> extends _$OrderCopyWithImpl<$Res, _$_Order>
       deliveryAddressCity: null == deliveryAddressCity
           ? _value.deliveryAddressCity
           : deliveryAddressCity // ignore: cast_nullable_to_non_nullable
-              as String,
-      deliveryAddressCountry: null == deliveryAddressCountry
-          ? _value.deliveryAddressCountry
-          : deliveryAddressCountry // ignore: cast_nullable_to_non_nullable
-              as String,
-      deliveryAddressCounty: null == deliveryAddressCounty
-          ? _value.deliveryAddressCounty
-          : deliveryAddressCounty // ignore: cast_nullable_to_non_nullable
               as String,
       deliveryAddressPostCode: null == deliveryAddressPostCode
           ? _value.deliveryAddressPostCode
@@ -803,14 +779,46 @@ class __$$_OrderCopyWithImpl<$Res> extends _$OrderCopyWithImpl<$Res, _$_Order>
           ? _value.deliveryPartner
           : deliveryPartner // ignore: cast_nullable_to_non_nullable
               as DeliveryPartnerDTO?,
-      discounts: null == discounts
-          ? _value.discounts
-          : discounts // ignore: cast_nullable_to_non_nullable
-              as List<Discount>,
       items: null == items
           ? _value.items
           : items // ignore: cast_nullable_to_non_nullable
               as List<OrderItem>,
+      fulfilmentCharge: null == fulfilmentCharge
+          ? _value.fulfilmentCharge
+          : fulfilmentCharge // ignore: cast_nullable_to_non_nullable
+              as num,
+      platformFee: null == platformFee
+          ? _value.platformFee
+          : platformFee // ignore: cast_nullable_to_non_nullable
+              as num,
+      currency: null == currency
+          ? _value.currency
+          : currency // ignore: cast_nullable_to_non_nullable
+              as Currency,
+      paidDateTime: freezed == paidDateTime
+          ? _value.paidDateTime
+          : paidDateTime // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      refundDateTime: freezed == refundDateTime
+          ? _value.refundDateTime
+          : refundDateTime // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      paymentAttempted: null == paymentAttempted
+          ? _value.paymentAttempted
+          : paymentAttempted // ignore: cast_nullable_to_non_nullable
+              as bool,
+      deliveryAddressCountry: null == deliveryAddressCountry
+          ? _value.deliveryAddressCountry
+          : deliveryAddressCountry // ignore: cast_nullable_to_non_nullable
+              as String,
+      deliveryAddressCounty: null == deliveryAddressCounty
+          ? _value.deliveryAddressCounty
+          : deliveryAddressCounty // ignore: cast_nullable_to_non_nullable
+              as String,
+      discounts: null == discounts
+          ? _value.discounts
+          : discounts // ignore: cast_nullable_to_non_nullable
+              as List<Discount>,
       parentOrder: freezed == parentOrder
           ? _value.parentOrder
           : parentOrder // ignore: cast_nullable_to_non_nullable
@@ -823,14 +831,6 @@ class __$$_OrderCopyWithImpl<$Res> extends _$OrderCopyWithImpl<$Res, _$_Order>
           ? _value.transactions
           : transactions // ignore: cast_nullable_to_non_nullable
               as List<TransactionItem>,
-      fulfilmentCharge: null == fulfilmentCharge
-          ? _value.fulfilmentCharge
-          : fulfilmentCharge // ignore: cast_nullable_to_non_nullable
-              as num,
-      platformFee: null == platformFee
-          ? _value.platformFee
-          : platformFee // ignore: cast_nullable_to_non_nullable
-              as num,
     ));
   }
 }
@@ -843,17 +843,11 @@ class _$_Order extends _Order {
       {required this.id,
       required this.total,
       required this.subtotal,
-      this.currency = Currency.GBPx,
       @JsonKey(fromJson: jsonToTimeStamp, toJson: timeStampToJsonInt)
           required this.orderedDateTime,
-      @JsonKey(fromJson: jsonToTimeStampNullable, toJson: timeStampToJsonIntNullable)
-          this.paidDateTime,
-      @JsonKey(fromJson: jsonToTimeStampNullable, toJson: timeStampToJsonIntNullable)
-          this.refundDateTime,
       @JsonEnum()
       @JsonKey(unknownEnumValue: OrderPaidStatus.unpaid)
           required this.paymentStatus,
-      this.paymentAttempted = false,
       required this.paymentIntentId,
       required this.firebaseRegistrationToken,
       required this.deliveryName,
@@ -862,8 +856,6 @@ class _$_Order extends _Order {
       required this.deliveryAddressLineOne,
       required this.deliveryAddressLineTwo,
       required this.deliveryAddressCity,
-      this.deliveryAddressCountry = 'GB',
-      this.deliveryAddressCounty = '',
       required this.deliveryAddressPostCode,
       required this.deliveryAddressLatitude,
       required this.deliveryAddressLongitude,
@@ -893,18 +885,26 @@ class _$_Order extends _Order {
           required this.vendor,
       @JsonKey(fromJson: fromJsonDeliveryPartnerDTO)
           required this.deliveryPartner,
-      @JsonKey(fromJson: fromJsonDiscountList)
-          this.discounts = const [],
       @JsonKey(fromJson: fromJsonOrderItemList)
           required this.items,
+      required this.fulfilmentCharge,
+      required this.platformFee,
+      this.currency = Currency.GBPx,
+      @JsonKey(fromJson: jsonToTimeStampNullable, toJson: timeStampToJsonIntNullable)
+          this.paidDateTime,
+      @JsonKey(fromJson: jsonToTimeStampNullable, toJson: timeStampToJsonIntNullable)
+          this.refundDateTime,
+      this.paymentAttempted = false,
+      this.deliveryAddressCountry = 'GB',
+      this.deliveryAddressCounty = '',
+      @JsonKey(fromJson: fromJsonDiscountList)
+          this.discounts = const [],
       @JsonKey(fromJson: fromJsonOrder)
           this.parentOrder = null,
       @JsonKey(fromJson: fromJsonOrderItemList)
           this.unfulfilledItems = const [],
       @JsonKey(fromJson: fromJsonTransactionItemList)
-          this.transactions = const [],
-      required this.fulfilmentCharge,
-      required this.platformFee})
+          this.transactions = const []})
       : super._();
 
   factory _$_Order.fromJson(Map<String, dynamic> json) =>
@@ -921,26 +921,12 @@ class _$_Order extends _Order {
   @override
   final num subtotal;
   @override
-  @JsonKey()
-  final Currency currency;
-  @override
   @JsonKey(fromJson: jsonToTimeStamp, toJson: timeStampToJsonInt)
   final DateTime orderedDateTime;
-  @override
-  @JsonKey(
-      fromJson: jsonToTimeStampNullable, toJson: timeStampToJsonIntNullable)
-  final DateTime? paidDateTime;
-  @override
-  @JsonKey(
-      fromJson: jsonToTimeStampNullable, toJson: timeStampToJsonIntNullable)
-  final DateTime? refundDateTime;
   @override
   @JsonEnum()
   @JsonKey(unknownEnumValue: OrderPaidStatus.unpaid)
   final OrderPaidStatus paymentStatus;
-  @override
-  @JsonKey()
-  final bool paymentAttempted;
   @override
   final String paymentIntentId;
   @override
@@ -957,12 +943,6 @@ class _$_Order extends _Order {
   final String? deliveryAddressLineTwo;
   @override
   final String deliveryAddressCity;
-  @override
-  @JsonKey()
-  final String deliveryAddressCountry;
-  @override
-  @JsonKey()
-  final String deliveryAddressCounty;
   @override
   final String deliveryAddressPostCode;
   @override
@@ -1005,10 +985,10 @@ class _$_Order extends _Order {
   final int? orderCondition;
   @override
   final DateTime fulfilmentSlotFrom;
-// "2022-09-29T10:00:00.000Z"
+/* "2022-09-29T10:00:00.000Z",*/
   @override
   final DateTime fulfilmentSlotTo;
-// "2022-09-29T10:00:00.000Z"
+/* "2022-09-29T10:00:00.000Z",*/
   @override
   @JsonKey(fromJson: fromJsonFulfilmentMethod)
   final FulfilmentMethod? fulfilmentMethod;
@@ -1019,11 +999,35 @@ class _$_Order extends _Order {
   @JsonKey(fromJson: fromJsonDeliveryPartnerDTO)
   final DeliveryPartnerDTO? deliveryPartner;
   @override
-  @JsonKey(fromJson: fromJsonDiscountList)
-  final List<Discount> discounts;
-  @override
   @JsonKey(fromJson: fromJsonOrderItemList)
   final List<OrderItem> items;
+  @override
+  final num fulfilmentCharge;
+  @override
+  final num platformFee;
+  @override
+  @JsonKey()
+  final Currency currency;
+  @override
+  @JsonKey(
+      fromJson: jsonToTimeStampNullable, toJson: timeStampToJsonIntNullable)
+  final DateTime? paidDateTime;
+  @override
+  @JsonKey(
+      fromJson: jsonToTimeStampNullable, toJson: timeStampToJsonIntNullable)
+  final DateTime? refundDateTime;
+  @override
+  @JsonKey()
+  final bool paymentAttempted;
+  @override
+  @JsonKey()
+  final String deliveryAddressCountry;
+  @override
+  @JsonKey()
+  final String deliveryAddressCounty;
+  @override
+  @JsonKey(fromJson: fromJsonDiscountList)
+  final List<Discount> discounts;
   @override
   @JsonKey(fromJson: fromJsonOrder)
   final Order? parentOrder;
@@ -1033,14 +1037,10 @@ class _$_Order extends _Order {
   @override
   @JsonKey(fromJson: fromJsonTransactionItemList)
   final List<TransactionItem> transactions;
-  @override
-  final num fulfilmentCharge;
-  @override
-  final num platformFee;
 
   @override
   String toString() {
-    return 'Order(id: $id, total: $total, subtotal: $subtotal, currency: $currency, orderedDateTime: $orderedDateTime, paidDateTime: $paidDateTime, refundDateTime: $refundDateTime, paymentStatus: $paymentStatus, paymentAttempted: $paymentAttempted, paymentIntentId: $paymentIntentId, firebaseRegistrationToken: $firebaseRegistrationToken, deliveryName: $deliveryName, deliveryEmail: $deliveryEmail, deliveryPhoneNumber: $deliveryPhoneNumber, deliveryAddressLineOne: $deliveryAddressLineOne, deliveryAddressLineTwo: $deliveryAddressLineTwo, deliveryAddressCity: $deliveryAddressCity, deliveryAddressCountry: $deliveryAddressCountry, deliveryAddressCounty: $deliveryAddressCounty, deliveryAddressPostCode: $deliveryAddressPostCode, deliveryAddressLatitude: $deliveryAddressLatitude, deliveryAddressLongitude: $deliveryAddressLongitude, deliveryAddressInstructions: $deliveryAddressInstructions, deliveryId: $deliveryId, deliveryPartnerAccepted: $deliveryPartnerAccepted, deliveryPartnerConfirmed: $deliveryPartnerConfirmed, customerWalletAddress: $customerWalletAddress, publicId: $publicId, restaurantAcceptanceStatus: $restaurantAcceptanceStatus, orderAcceptanceStatus: $orderAcceptanceStatus, tipAmount: $tipAmount, rewardsIssued: $rewardsIssued, sentToDeliveryPartner: $sentToDeliveryPartner, completedFlag: $completedFlag, completedOrderFeedback: $completedOrderFeedback, deliveryPunctuality: $deliveryPunctuality, orderCondition: $orderCondition, fulfilmentSlotFrom: $fulfilmentSlotFrom, fulfilmentSlotTo: $fulfilmentSlotTo, fulfilmentMethod: $fulfilmentMethod, vendor: $vendor, deliveryPartner: $deliveryPartner, discounts: $discounts, items: $items, parentOrder: $parentOrder, unfulfilledItems: $unfulfilledItems, transactions: $transactions, fulfilmentCharge: $fulfilmentCharge, platformFee: $platformFee)';
+    return 'Order(id: $id, total: $total, subtotal: $subtotal, orderedDateTime: $orderedDateTime, paymentStatus: $paymentStatus, paymentIntentId: $paymentIntentId, firebaseRegistrationToken: $firebaseRegistrationToken, deliveryName: $deliveryName, deliveryEmail: $deliveryEmail, deliveryPhoneNumber: $deliveryPhoneNumber, deliveryAddressLineOne: $deliveryAddressLineOne, deliveryAddressLineTwo: $deliveryAddressLineTwo, deliveryAddressCity: $deliveryAddressCity, deliveryAddressPostCode: $deliveryAddressPostCode, deliveryAddressLatitude: $deliveryAddressLatitude, deliveryAddressLongitude: $deliveryAddressLongitude, deliveryAddressInstructions: $deliveryAddressInstructions, deliveryId: $deliveryId, deliveryPartnerAccepted: $deliveryPartnerAccepted, deliveryPartnerConfirmed: $deliveryPartnerConfirmed, customerWalletAddress: $customerWalletAddress, publicId: $publicId, restaurantAcceptanceStatus: $restaurantAcceptanceStatus, orderAcceptanceStatus: $orderAcceptanceStatus, tipAmount: $tipAmount, rewardsIssued: $rewardsIssued, sentToDeliveryPartner: $sentToDeliveryPartner, completedFlag: $completedFlag, completedOrderFeedback: $completedOrderFeedback, deliveryPunctuality: $deliveryPunctuality, orderCondition: $orderCondition, fulfilmentSlotFrom: $fulfilmentSlotFrom, fulfilmentSlotTo: $fulfilmentSlotTo, fulfilmentMethod: $fulfilmentMethod, vendor: $vendor, deliveryPartner: $deliveryPartner, items: $items, fulfilmentCharge: $fulfilmentCharge, platformFee: $platformFee, currency: $currency, paidDateTime: $paidDateTime, refundDateTime: $refundDateTime, paymentAttempted: $paymentAttempted, deliveryAddressCountry: $deliveryAddressCountry, deliveryAddressCounty: $deliveryAddressCounty, discounts: $discounts, parentOrder: $parentOrder, unfulfilledItems: $unfulfilledItems, transactions: $transactions)';
   }
 
   @override
@@ -1052,18 +1052,10 @@ class _$_Order extends _Order {
             (identical(other.total, total) || other.total == total) &&
             (identical(other.subtotal, subtotal) ||
                 other.subtotal == subtotal) &&
-            (identical(other.currency, currency) ||
-                other.currency == currency) &&
             (identical(other.orderedDateTime, orderedDateTime) ||
                 other.orderedDateTime == orderedDateTime) &&
-            (identical(other.paidDateTime, paidDateTime) ||
-                other.paidDateTime == paidDateTime) &&
-            (identical(other.refundDateTime, refundDateTime) ||
-                other.refundDateTime == refundDateTime) &&
             (identical(other.paymentStatus, paymentStatus) ||
                 other.paymentStatus == paymentStatus) &&
-            (identical(other.paymentAttempted, paymentAttempted) ||
-                other.paymentAttempted == paymentAttempted) &&
             (identical(other.paymentIntentId, paymentIntentId) ||
                 other.paymentIntentId == paymentIntentId) &&
             (identical(other.firebaseRegistrationToken, firebaseRegistrationToken) ||
@@ -1080,10 +1072,6 @@ class _$_Order extends _Order {
                 other.deliveryAddressLineTwo == deliveryAddressLineTwo) &&
             (identical(other.deliveryAddressCity, deliveryAddressCity) ||
                 other.deliveryAddressCity == deliveryAddressCity) &&
-            (identical(other.deliveryAddressCountry, deliveryAddressCountry) ||
-                other.deliveryAddressCountry == deliveryAddressCountry) &&
-            (identical(other.deliveryAddressCounty, deliveryAddressCounty) ||
-                other.deliveryAddressCounty == deliveryAddressCounty) &&
             (identical(other.deliveryAddressPostCode, deliveryAddressPostCode) ||
                 other.deliveryAddressPostCode == deliveryAddressPostCode) &&
             (identical(other.deliveryAddressLatitude, deliveryAddressLatitude) ||
@@ -1110,7 +1098,8 @@ class _$_Order extends _Order {
                 other.orderAcceptanceStatus == orderAcceptanceStatus) &&
             (identical(other.tipAmount, tipAmount) ||
                 other.tipAmount == tipAmount) &&
-            (identical(other.rewardsIssued, rewardsIssued) || other.rewardsIssued == rewardsIssued) &&
+            (identical(other.rewardsIssued, rewardsIssued) ||
+                other.rewardsIssued == rewardsIssued) &&
             (identical(other.sentToDeliveryPartner, sentToDeliveryPartner) || other.sentToDeliveryPartner == sentToDeliveryPartner) &&
             (identical(other.completedFlag, completedFlag) || other.completedFlag == completedFlag) &&
             (identical(other.completedOrderFeedback, completedOrderFeedback) || other.completedOrderFeedback == completedOrderFeedback) &&
@@ -1121,13 +1110,19 @@ class _$_Order extends _Order {
             (identical(other.fulfilmentMethod, fulfilmentMethod) || other.fulfilmentMethod == fulfilmentMethod) &&
             (identical(other.vendor, vendor) || other.vendor == vendor) &&
             (identical(other.deliveryPartner, deliveryPartner) || other.deliveryPartner == deliveryPartner) &&
-            const DeepCollectionEquality().equals(other.discounts, discounts) &&
             const DeepCollectionEquality().equals(other.items, items) &&
+            (identical(other.fulfilmentCharge, fulfilmentCharge) || other.fulfilmentCharge == fulfilmentCharge) &&
+            (identical(other.platformFee, platformFee) || other.platformFee == platformFee) &&
+            (identical(other.currency, currency) || other.currency == currency) &&
+            (identical(other.paidDateTime, paidDateTime) || other.paidDateTime == paidDateTime) &&
+            (identical(other.refundDateTime, refundDateTime) || other.refundDateTime == refundDateTime) &&
+            (identical(other.paymentAttempted, paymentAttempted) || other.paymentAttempted == paymentAttempted) &&
+            (identical(other.deliveryAddressCountry, deliveryAddressCountry) || other.deliveryAddressCountry == deliveryAddressCountry) &&
+            (identical(other.deliveryAddressCounty, deliveryAddressCounty) || other.deliveryAddressCounty == deliveryAddressCounty) &&
+            const DeepCollectionEquality().equals(other.discounts, discounts) &&
             (identical(other.parentOrder, parentOrder) || other.parentOrder == parentOrder) &&
             const DeepCollectionEquality().equals(other.unfulfilledItems, unfulfilledItems) &&
-            const DeepCollectionEquality().equals(other.transactions, transactions) &&
-            (identical(other.fulfilmentCharge, fulfilmentCharge) || other.fulfilmentCharge == fulfilmentCharge) &&
-            (identical(other.platformFee, platformFee) || other.platformFee == platformFee));
+            const DeepCollectionEquality().equals(other.transactions, transactions));
   }
 
   @JsonKey(ignore: true)
@@ -1137,12 +1132,8 @@ class _$_Order extends _Order {
         id,
         total,
         subtotal,
-        currency,
         orderedDateTime,
-        paidDateTime,
-        refundDateTime,
         paymentStatus,
-        paymentAttempted,
         paymentIntentId,
         firebaseRegistrationToken,
         deliveryName,
@@ -1151,8 +1142,6 @@ class _$_Order extends _Order {
         deliveryAddressLineOne,
         deliveryAddressLineTwo,
         deliveryAddressCity,
-        deliveryAddressCountry,
-        deliveryAddressCounty,
         deliveryAddressPostCode,
         deliveryAddressLatitude,
         deliveryAddressLongitude,
@@ -1176,13 +1165,19 @@ class _$_Order extends _Order {
         fulfilmentMethod,
         vendor,
         deliveryPartner,
-        const DeepCollectionEquality().hash(discounts),
         const DeepCollectionEquality().hash(items),
+        fulfilmentCharge,
+        platformFee,
+        currency,
+        paidDateTime,
+        refundDateTime,
+        paymentAttempted,
+        deliveryAddressCountry,
+        deliveryAddressCounty,
+        const DeepCollectionEquality().hash(discounts),
         parentOrder,
         const DeepCollectionEquality().hash(unfulfilledItems),
-        const DeepCollectionEquality().hash(transactions),
-        fulfilmentCharge,
-        platformFee
+        const DeepCollectionEquality().hash(transactions)
       ]);
 
   @JsonKey(ignore: true)
@@ -1204,17 +1199,11 @@ abstract class _Order extends Order {
       {required final int id,
       required final num total,
       required final num subtotal,
-      final Currency currency,
       @JsonKey(fromJson: jsonToTimeStamp, toJson: timeStampToJsonInt)
           required final DateTime orderedDateTime,
-      @JsonKey(fromJson: jsonToTimeStampNullable, toJson: timeStampToJsonIntNullable)
-          final DateTime? paidDateTime,
-      @JsonKey(fromJson: jsonToTimeStampNullable, toJson: timeStampToJsonIntNullable)
-          final DateTime? refundDateTime,
       @JsonEnum()
       @JsonKey(unknownEnumValue: OrderPaidStatus.unpaid)
           required final OrderPaidStatus paymentStatus,
-      final bool paymentAttempted,
       required final String paymentIntentId,
       required final String? firebaseRegistrationToken,
       required final String? deliveryName,
@@ -1223,8 +1212,6 @@ abstract class _Order extends Order {
       required final String deliveryAddressLineOne,
       required final String? deliveryAddressLineTwo,
       required final String deliveryAddressCity,
-      final String deliveryAddressCountry,
-      final String deliveryAddressCounty,
       required final String deliveryAddressPostCode,
       required final double? deliveryAddressLatitude,
       required final double? deliveryAddressLongitude,
@@ -1254,18 +1241,26 @@ abstract class _Order extends Order {
           required final VendorDTO? vendor,
       @JsonKey(fromJson: fromJsonDeliveryPartnerDTO)
           required final DeliveryPartnerDTO? deliveryPartner,
-      @JsonKey(fromJson: fromJsonDiscountList)
-          final List<Discount> discounts,
       @JsonKey(fromJson: fromJsonOrderItemList)
           required final List<OrderItem> items,
+      required final num fulfilmentCharge,
+      required final num platformFee,
+      final Currency currency,
+      @JsonKey(fromJson: jsonToTimeStampNullable, toJson: timeStampToJsonIntNullable)
+          final DateTime? paidDateTime,
+      @JsonKey(fromJson: jsonToTimeStampNullable, toJson: timeStampToJsonIntNullable)
+          final DateTime? refundDateTime,
+      final bool paymentAttempted,
+      final String deliveryAddressCountry,
+      final String deliveryAddressCounty,
+      @JsonKey(fromJson: fromJsonDiscountList)
+          final List<Discount> discounts,
       @JsonKey(fromJson: fromJsonOrder)
           final Order? parentOrder,
       @JsonKey(fromJson: fromJsonOrderItemList)
           final List<OrderItem> unfulfilledItems,
       @JsonKey(fromJson: fromJsonTransactionItemList)
-          final List<TransactionItem> transactions,
-      required final num fulfilmentCharge,
-      required final num platformFee}) = _$_Order;
+          final List<TransactionItem> transactions}) = _$_Order;
   _Order._() : super._();
 
   factory _Order.fromJson(Map<String, dynamic> json) = _$_Order.fromJson;
@@ -1281,24 +1276,12 @@ abstract class _Order extends Order {
   /// DO NOT USE, USE cartSubTotal INSTEAD
   num get subtotal;
   @override
-  Currency get currency;
-  @override
   @JsonKey(fromJson: jsonToTimeStamp, toJson: timeStampToJsonInt)
   DateTime get orderedDateTime;
-  @override
-  @JsonKey(
-      fromJson: jsonToTimeStampNullable, toJson: timeStampToJsonIntNullable)
-  DateTime? get paidDateTime;
-  @override
-  @JsonKey(
-      fromJson: jsonToTimeStampNullable, toJson: timeStampToJsonIntNullable)
-  DateTime? get refundDateTime;
   @override
   @JsonEnum()
   @JsonKey(unknownEnumValue: OrderPaidStatus.unpaid)
   OrderPaidStatus get paymentStatus;
-  @override
-  bool get paymentAttempted;
   @override
   String get paymentIntentId;
   @override
@@ -1315,10 +1298,6 @@ abstract class _Order extends Order {
   String? get deliveryAddressLineTwo;
   @override
   String get deliveryAddressCity;
-  @override
-  String get deliveryAddressCountry;
-  @override
-  String get deliveryAddressCounty;
   @override
   String get deliveryAddressPostCode;
   @override
@@ -1361,9 +1340,9 @@ abstract class _Order extends Order {
   int? get orderCondition;
   @override
   DateTime get fulfilmentSlotFrom;
-  @override // "2022-09-29T10:00:00.000Z"
+  @override /* "2022-09-29T10:00:00.000Z",*/
   DateTime get fulfilmentSlotTo;
-  @override // "2022-09-29T10:00:00.000Z"
+  @override /* "2022-09-29T10:00:00.000Z",*/
   @JsonKey(fromJson: fromJsonFulfilmentMethod)
   FulfilmentMethod? get fulfilmentMethod;
   @override
@@ -1373,11 +1352,31 @@ abstract class _Order extends Order {
   @JsonKey(fromJson: fromJsonDeliveryPartnerDTO)
   DeliveryPartnerDTO? get deliveryPartner;
   @override
-  @JsonKey(fromJson: fromJsonDiscountList)
-  List<Discount> get discounts;
-  @override
   @JsonKey(fromJson: fromJsonOrderItemList)
   List<OrderItem> get items;
+  @override
+  num get fulfilmentCharge;
+  @override
+  num get platformFee;
+  @override
+  Currency get currency;
+  @override
+  @JsonKey(
+      fromJson: jsonToTimeStampNullable, toJson: timeStampToJsonIntNullable)
+  DateTime? get paidDateTime;
+  @override
+  @JsonKey(
+      fromJson: jsonToTimeStampNullable, toJson: timeStampToJsonIntNullable)
+  DateTime? get refundDateTime;
+  @override
+  bool get paymentAttempted;
+  @override
+  String get deliveryAddressCountry;
+  @override
+  String get deliveryAddressCounty;
+  @override
+  @JsonKey(fromJson: fromJsonDiscountList)
+  List<Discount> get discounts;
   @override
   @JsonKey(fromJson: fromJsonOrder)
   Order? get parentOrder;
@@ -1387,10 +1386,6 @@ abstract class _Order extends Order {
   @override
   @JsonKey(fromJson: fromJsonTransactionItemList)
   List<TransactionItem> get transactions;
-  @override
-  num get fulfilmentCharge;
-  @override
-  num get platformFee;
   @override
   @JsonKey(ignore: true)
   _$$_OrderCopyWith<_$_Order> get copyWith =>

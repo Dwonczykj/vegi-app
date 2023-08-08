@@ -24,6 +24,9 @@ class CreateOrderResponse with _$CreateOrderResponse {
     required StripePaymentIntent stripePaymentIntent,
   }) = _CreateOrderResponse;
 
+  factory CreateOrderResponse.fromJson(Map<String, dynamic> json) =>
+      tryCatchRethrowInline(() => _$CreateOrderResponseFromJson(json));
+
   const CreateOrderResponse._();
 
   static bool canParse(Map<String, dynamic> json) {
@@ -37,7 +40,4 @@ class CreateOrderResponse with _$CreateOrderResponse {
   String get paymentIntentID => stripePaymentIntent.paymentIntent.id;
   String get paymentIntentClientSecret =>
       stripePaymentIntent.paymentIntent.clientSecret;
-
-  factory CreateOrderResponse.fromJson(Map<String, dynamic> json) =>
-      tryCatchRethrowInline(() => _$CreateOrderResponseFromJson(json));
 }

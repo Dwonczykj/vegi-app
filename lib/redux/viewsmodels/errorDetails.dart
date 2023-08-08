@@ -26,7 +26,7 @@ T? codeFromJson<T extends Enum>(dynamic json) {
           as T?;
     } else {
       tryCatchRethrowInline(
-        () => throw Exception('ErrorDetails code of ${T} not implemented'),
+        () => throw Exception('ErrorDetails code of $T not implemented'),
       );
       return null;
     }

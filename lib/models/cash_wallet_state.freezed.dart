@@ -24,9 +24,9 @@ mixin _$CashWalletState {
   Map<String, Token> get tokens => throw _privateConstructorUsedError;
   @JsonKey(fromJson: walletActionsFromJson)
   WalletActions? get walletActions => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   bool get isTransfersFetchingStarted => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   bool get isFetchingBalances => throw _privateConstructorUsedError;
   List<WCSessionStore> get wcSessionStores =>
       throw _privateConstructorUsedError;
@@ -44,10 +44,14 @@ abstract class $CashWalletStateCopyWith<$Res> {
       _$CashWalletStateCopyWithImpl<$Res, CashWalletState>;
   @useResult
   $Res call(
-      {@JsonKey(fromJson: tokensFromJson) Map<String, Token> tokens,
-      @JsonKey(fromJson: walletActionsFromJson) WalletActions? walletActions,
-      @JsonKey(ignore: true) bool isTransfersFetchingStarted,
-      @JsonKey(ignore: true) bool isFetchingBalances,
+      {@JsonKey(fromJson: tokensFromJson)
+          Map<String, Token> tokens,
+      @JsonKey(fromJson: walletActionsFromJson)
+          WalletActions? walletActions,
+      @JsonKey(includeFromJson: false, includeToJson: false)
+          bool isTransfersFetchingStarted,
+      @JsonKey(includeFromJson: false, includeToJson: false)
+          bool isFetchingBalances,
       List<WCSessionStore> wcSessionStores});
 
   $WalletActionsCopyWith<$Res>? get walletActions;
@@ -118,10 +122,14 @@ abstract class _$$_CashWalletStateCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {@JsonKey(fromJson: tokensFromJson) Map<String, Token> tokens,
-      @JsonKey(fromJson: walletActionsFromJson) WalletActions? walletActions,
-      @JsonKey(ignore: true) bool isTransfersFetchingStarted,
-      @JsonKey(ignore: true) bool isFetchingBalances,
+      {@JsonKey(fromJson: tokensFromJson)
+          Map<String, Token> tokens,
+      @JsonKey(fromJson: walletActionsFromJson)
+          WalletActions? walletActions,
+      @JsonKey(includeFromJson: false, includeToJson: false)
+          bool isTransfersFetchingStarted,
+      @JsonKey(includeFromJson: false, includeToJson: false)
+          bool isFetchingBalances,
       List<WCSessionStore> wcSessionStores});
 
   @override
@@ -174,10 +182,14 @@ class __$$_CashWalletStateCopyWithImpl<$Res>
 @JsonSerializable()
 class _$_CashWalletState extends _CashWalletState with DiagnosticableTreeMixin {
   _$_CashWalletState(
-      {@JsonKey(fromJson: tokensFromJson) this.tokens = const {},
-      @JsonKey(fromJson: walletActionsFromJson) this.walletActions,
-      @JsonKey(ignore: true) this.isTransfersFetchingStarted = false,
-      @JsonKey(ignore: true) this.isFetchingBalances = false,
+      {@JsonKey(fromJson: tokensFromJson)
+          this.tokens = const {},
+      @JsonKey(fromJson: walletActionsFromJson)
+          this.walletActions,
+      @JsonKey(includeFromJson: false, includeToJson: false)
+          this.isTransfersFetchingStarted = false,
+      @JsonKey(includeFromJson: false, includeToJson: false)
+          this.isFetchingBalances = false,
       this.wcSessionStores = const []})
       : super._();
 
@@ -191,10 +203,10 @@ class _$_CashWalletState extends _CashWalletState with DiagnosticableTreeMixin {
   @JsonKey(fromJson: walletActionsFromJson)
   final WalletActions? walletActions;
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   final bool isTransfersFetchingStarted;
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   final bool isFetchingBalances;
   @override
   @JsonKey()
@@ -266,9 +278,9 @@ abstract class _CashWalletState extends CashWalletState {
           final Map<String, Token> tokens,
       @JsonKey(fromJson: walletActionsFromJson)
           final WalletActions? walletActions,
-      @JsonKey(ignore: true)
+      @JsonKey(includeFromJson: false, includeToJson: false)
           final bool isTransfersFetchingStarted,
-      @JsonKey(ignore: true)
+      @JsonKey(includeFromJson: false, includeToJson: false)
           final bool isFetchingBalances,
       final List<WCSessionStore> wcSessionStores}) = _$_CashWalletState;
   _CashWalletState._() : super._();
@@ -283,10 +295,10 @@ abstract class _CashWalletState extends CashWalletState {
   @JsonKey(fromJson: walletActionsFromJson)
   WalletActions? get walletActions;
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   bool get isTransfersFetchingStarted;
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   bool get isFetchingBalances;
   @override
   List<WCSessionStore> get wcSessionStores;

@@ -11,8 +11,7 @@ import 'package:vegan_liverpool/utils/constants.dart';
 
 class BillInvoiceCard extends StatelessWidget {
   const BillInvoiceCard({
-    Key? key,
-    required this.order,
+    required this.order, Key? key,
   }) : super(key: key);
 
   final Order order;

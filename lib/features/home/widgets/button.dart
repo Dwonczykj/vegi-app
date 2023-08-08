@@ -4,10 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 class Button extends StatelessWidget {
   const Button({
-    Key? key,
-    required this.onPressed,
-    required this.text,
-    required this.icon,
+    required this.onPressed, required this.text, required this.icon, Key? key,
     this.width,
   }) : super(key: key);
   final void Function() onPressed;

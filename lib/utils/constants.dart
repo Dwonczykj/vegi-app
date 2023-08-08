@@ -74,7 +74,6 @@ final Token pplToken = Token(
   // imageUrl: 'https://fuselogo.s3.eu-central-1.amazonaws.com/fuse-token.png',
   decimals: 18,
   address: Addresses.gbtTokenAddress,
-  isNative: false,
   timestamp: 0,
   amount: BigInt.from(0.0),
   walletActions: WalletActions.initial(),
@@ -213,34 +212,28 @@ class CurrencyRateConstants {
   static const minESCRating = 0.0;
   static const maxESCRating = 5.0;
 
-  /**
-   * Description placeholder
-   * @date 25/05/2023 - 09:15:53
-   *
-   * @type {0.01}
-   * 
-   * @value of 1 GBT in GBP
-   */
+  /// Description placeholder
+  /// @date 25/05/2023 - 09:15:53
+  ///
+  /// @type {0.01}
+  /// 
+  /// @value of 1 GBT in GBP
   static const GBTPoundPegValue = 0.01;
 
-  /**
-   * Description placeholder
-   * @date 25/05/2023 - 09:15:53
-   *
-   * @type {0.01}
-   * 
-   * @value of 1 GBPx in GBP
-   */
+  /// Description placeholder
+  /// @date 25/05/2023 - 09:15:53
+  ///
+  /// @type {0.01}
+  /// 
+  /// @value of 1 GBPx in GBP
   static const GBPxPoundPegValue = 0.01;
 
-  /**
-   * Description placeholder
-   * @date 25/05/2023 - 09:15:53
-   *
-   * @type {0.01}
-   * 
-   * @value of 1 PPL in GBP
-   */
+  /// Description placeholder
+  /// @date 25/05/2023 - 09:15:53
+  ///
+  /// @type {0.01}
+  /// 
+  /// @value of 1 PPL in GBP
   static const PPLPoundPegValue = 0.1;
 }
 
@@ -524,7 +517,6 @@ const STRIPE_LIVEMODE =
     String.fromEnvironment('stripe_live_mode', defaultValue: 'false');
 const USE_FIREBASE_EMULATOR = bool.fromEnvironment(
   'USE_FIREBASE_EMULATOR',
-  defaultValue: false,
 );
 // Uncomment the following if want to use firestore db in firebase
 // const FIRESTORE_EMULATOR_PORT =

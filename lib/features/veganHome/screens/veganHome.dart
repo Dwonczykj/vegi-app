@@ -28,7 +28,7 @@ class VeganHomeScreen extends StatelessWidget {
       },
       builder: (_, viewmodel) {
         return Scaffold(
-          drawer: NavDrawer(),
+          drawer: const NavDrawer(),
           body: Stack(
             children: [
               NestedScrollView(

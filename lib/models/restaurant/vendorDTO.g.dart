@@ -14,13 +14,15 @@ _$_VendorDTO _$$_VendorDTOFromJson(Map<String, dynamic> json) => _$_VendorDTO(
       costLevel: json['costLevel'] as num?,
       rating: json['rating'] as num?,
       isVegan: json['isVegan'] as bool,
-      minimumOrderAmount: json['minimumOrderAmount'] as num? ?? 0,
-      platformFee: json['platformFee'] as num? ?? 0,
       status: $enumDecode(_$VendorStatusEnumMap, json['status']),
       walletAddress: json['walletAddress'] as String,
+      pickupAddress: fromJsonAddressDTO(json['pickupAddress']),
+      vendorCategories: fromJsonVendorCategoryList(json['vendorCategories']),
+      productCategories: fromJsonProductCategoryList(json['productCategories']),
+      minimumOrderAmount: json['minimumOrderAmount'] as num? ?? 0,
+      platformFee: json['platformFee'] as num? ?? 0,
       description: json['description'] as String? ?? '',
       imageUrl: json['imageUrl'] as String? ?? '',
-      pickupAddress: fromJsonAddressDTO(json['pickupAddress']),
       deliveryPartner: fromJsonDeliveryPartnerDTO(json['deliveryPartner']),
       deliveryFulfilmentMethod:
           fromJsonFulfilmentMethodDTO(json['deliveryFulfilmentMethod']),
@@ -29,8 +31,6 @@ _$_VendorDTO _$$_VendorDTOFromJson(Map<String, dynamic> json) => _$_VendorDTO(
       products: json['products'] == null
           ? const []
           : fromJsonProductDTOList(json['products']),
-      vendorCategories: fromJsonVendorCategoryList(json['vendorCategories']),
-      productCategories: fromJsonProductCategoryList(json['productCategories']),
       fulfilmentPostalDistricts: json['fulfilmentPostalDistricts'] == null
           ? const []
           : fromJsonPostalDistrictList(json['fulfilmentPostalDistricts']),
@@ -45,22 +45,22 @@ Map<String, dynamic> _$$_VendorDTOToJson(_$_VendorDTO instance) =>
       'costLevel': instance.costLevel,
       'rating': instance.rating,
       'isVegan': instance.isVegan,
-      'minimumOrderAmount': instance.minimumOrderAmount,
-      'platformFee': instance.platformFee,
       'status': _$VendorStatusEnumMap[instance.status]!,
       'walletAddress': instance.walletAddress,
+      'pickupAddress': instance.pickupAddress?.toJson(),
+      'vendorCategories':
+          instance.vendorCategories.map((e) => e.toJson()).toList(),
+      'productCategories':
+          instance.productCategories.map((e) => e.toJson()).toList(),
+      'minimumOrderAmount': instance.minimumOrderAmount,
+      'platformFee': instance.platformFee,
       'description': instance.description,
       'imageUrl': instance.imageUrl,
-      'pickupAddress': instance.pickupAddress?.toJson(),
       'deliveryPartner': instance.deliveryPartner?.toJson(),
       'deliveryFulfilmentMethod': instance.deliveryFulfilmentMethod?.toJson(),
       'collectionFulfilmentMethod':
           instance.collectionFulfilmentMethod?.toJson(),
       'products': instance.products.map((e) => e.toJson()).toList(),
-      'vendorCategories':
-          instance.vendorCategories.map((e) => e.toJson()).toList(),
-      'productCategories':
-          instance.productCategories.map((e) => e.toJson()).toList(),
       'fulfilmentPostalDistricts':
           instance.fulfilmentPostalDistricts.map((e) => e.toJson()).toList(),
     };

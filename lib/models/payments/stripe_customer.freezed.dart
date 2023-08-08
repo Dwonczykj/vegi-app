@@ -21,11 +21,11 @@ StripeCustomer _$StripeCustomerFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$StripeCustomer {
   String get id => throw _privateConstructorUsedError;
+  bool get livemode => throw _privateConstructorUsedError;
   StripeAddress? get address => throw _privateConstructorUsedError;
   num get balance => throw _privateConstructorUsedError;
   num get created => throw _privateConstructorUsedError;
   String? get currency => throw _privateConstructorUsedError;
-  bool get livemode => throw _privateConstructorUsedError;
   Map<String, dynamic> get metadata => throw _privateConstructorUsedError;
   String? get name => throw _privateConstructorUsedError;
   String? get phone => throw _privateConstructorUsedError;
@@ -45,11 +45,11 @@ abstract class $StripeCustomerCopyWith<$Res> {
   @useResult
   $Res call(
       {String id,
+      bool livemode,
       StripeAddress? address,
       num balance,
       num created,
       String? currency,
-      bool livemode,
       Map<String, dynamic> metadata,
       String? name,
       String? phone,
@@ -72,11 +72,11 @@ class _$StripeCustomerCopyWithImpl<$Res, $Val extends StripeCustomer>
   @override
   $Res call({
     Object? id = null,
+    Object? livemode = null,
     Object? address = freezed,
     Object? balance = null,
     Object? created = null,
     Object? currency = freezed,
-    Object? livemode = null,
     Object? metadata = null,
     Object? name = freezed,
     Object? phone = freezed,
@@ -87,6 +87,10 @@ class _$StripeCustomerCopyWithImpl<$Res, $Val extends StripeCustomer>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
+      livemode: null == livemode
+          ? _value.livemode
+          : livemode // ignore: cast_nullable_to_non_nullable
+              as bool,
       address: freezed == address
           ? _value.address
           : address // ignore: cast_nullable_to_non_nullable
@@ -103,10 +107,6 @@ class _$StripeCustomerCopyWithImpl<$Res, $Val extends StripeCustomer>
           ? _value.currency
           : currency // ignore: cast_nullable_to_non_nullable
               as String?,
-      livemode: null == livemode
-          ? _value.livemode
-          : livemode // ignore: cast_nullable_to_non_nullable
-              as bool,
       metadata: null == metadata
           ? _value.metadata
           : metadata // ignore: cast_nullable_to_non_nullable
@@ -149,11 +149,11 @@ abstract class _$$_StripeCustomerCopyWith<$Res>
   @useResult
   $Res call(
       {String id,
+      bool livemode,
       StripeAddress? address,
       num balance,
       num created,
       String? currency,
-      bool livemode,
       Map<String, dynamic> metadata,
       String? name,
       String? phone,
@@ -175,11 +175,11 @@ class __$$_StripeCustomerCopyWithImpl<$Res>
   @override
   $Res call({
     Object? id = null,
+    Object? livemode = null,
     Object? address = freezed,
     Object? balance = null,
     Object? created = null,
     Object? currency = freezed,
-    Object? livemode = null,
     Object? metadata = null,
     Object? name = freezed,
     Object? phone = freezed,
@@ -190,6 +190,10 @@ class __$$_StripeCustomerCopyWithImpl<$Res>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as String,
+      livemode: null == livemode
+          ? _value.livemode
+          : livemode // ignore: cast_nullable_to_non_nullable
+              as bool,
       address: freezed == address
           ? _value.address
           : address // ignore: cast_nullable_to_non_nullable
@@ -206,10 +210,6 @@ class __$$_StripeCustomerCopyWithImpl<$Res>
           ? _value.currency
           : currency // ignore: cast_nullable_to_non_nullable
               as String?,
-      livemode: null == livemode
-          ? _value.livemode
-          : livemode // ignore: cast_nullable_to_non_nullable
-              as bool,
       metadata: null == metadata
           ? _value.metadata
           : metadata // ignore: cast_nullable_to_non_nullable
@@ -236,11 +236,11 @@ class __$$_StripeCustomerCopyWithImpl<$Res>
 class _$_StripeCustomer extends _StripeCustomer {
   _$_StripeCustomer(
       {required this.id,
+      required this.livemode,
       this.address,
       this.balance = 0,
       this.created = 0,
       this.currency,
-      required this.livemode,
       this.metadata = const {},
       this.name,
       this.phone,
@@ -253,6 +253,8 @@ class _$_StripeCustomer extends _StripeCustomer {
   @override
   final String id;
   @override
+  final bool livemode;
+  @override
   final StripeAddress? address;
   @override
   @JsonKey()
@@ -262,8 +264,6 @@ class _$_StripeCustomer extends _StripeCustomer {
   final num created;
   @override
   final String? currency;
-  @override
-  final bool livemode;
   @override
   @JsonKey()
   final Map<String, dynamic> metadata;
@@ -277,7 +277,7 @@ class _$_StripeCustomer extends _StripeCustomer {
 
   @override
   String toString() {
-    return 'StripeCustomer(id: $id, address: $address, balance: $balance, created: $created, currency: $currency, livemode: $livemode, metadata: $metadata, name: $name, phone: $phone, preferred_locals: $preferred_locals)';
+    return 'StripeCustomer(id: $id, livemode: $livemode, address: $address, balance: $balance, created: $created, currency: $currency, metadata: $metadata, name: $name, phone: $phone, preferred_locals: $preferred_locals)';
   }
 
   @override
@@ -286,13 +286,13 @@ class _$_StripeCustomer extends _StripeCustomer {
         (other.runtimeType == runtimeType &&
             other is _$_StripeCustomer &&
             (identical(other.id, id) || other.id == id) &&
+            (identical(other.livemode, livemode) ||
+                other.livemode == livemode) &&
             (identical(other.address, address) || other.address == address) &&
             (identical(other.balance, balance) || other.balance == balance) &&
             (identical(other.created, created) || other.created == created) &&
             (identical(other.currency, currency) ||
                 other.currency == currency) &&
-            (identical(other.livemode, livemode) ||
-                other.livemode == livemode) &&
             const DeepCollectionEquality().equals(other.metadata, metadata) &&
             (identical(other.name, name) || other.name == name) &&
             (identical(other.phone, phone) || other.phone == phone) &&
@@ -305,11 +305,11 @@ class _$_StripeCustomer extends _StripeCustomer {
   int get hashCode => Object.hash(
       runtimeType,
       id,
+      livemode,
       address,
       balance,
       created,
       currency,
-      livemode,
       const DeepCollectionEquality().hash(metadata),
       name,
       phone,
@@ -332,11 +332,11 @@ class _$_StripeCustomer extends _StripeCustomer {
 abstract class _StripeCustomer extends StripeCustomer {
   factory _StripeCustomer(
       {required final String id,
+      required final bool livemode,
       final StripeAddress? address,
       final num balance,
       final num created,
       final String? currency,
-      required final bool livemode,
       final Map<String, dynamic> metadata,
       final String? name,
       final String? phone,
@@ -349,6 +349,8 @@ abstract class _StripeCustomer extends StripeCustomer {
   @override
   String get id;
   @override
+  bool get livemode;
+  @override
   StripeAddress? get address;
   @override
   num get balance;
@@ -356,8 +358,6 @@ abstract class _StripeCustomer extends StripeCustomer {
   num get created;
   @override
   String? get currency;
-  @override
-  bool get livemode;
   @override
   Map<String, dynamic> get metadata;
   @override

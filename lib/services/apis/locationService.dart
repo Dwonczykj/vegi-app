@@ -10,7 +10,7 @@ import 'package:vegan_liverpool/models/location/postCodeDetail.dart';
 import 'package:vegan_liverpool/services/apis/places.dart';
 import 'package:vegan_liverpool/utils/constants.dart';
 
-void ToNull() => null;
+void ToNull() {}
 
 @lazySingleton
 class LocationService {
@@ -32,7 +32,7 @@ class LocationService {
       }
     }).onError((error, stackTrace) async {
       await Geolocator.requestPermission();
-      print("ERROR" + error.toString());
+      print('ERROR$error');
     });
     final currentPosition = await Geolocator.getCurrentPosition();
     return currentPosition;
@@ -52,13 +52,13 @@ class LocationService {
       onTimeout: () {
         return Response(
           data: {'result': List<PostCodeDetail>.empty()},
-          requestOptions: RequestOptions(path: ''),
+          requestOptions: RequestOptions(),
         );
       },
     ).onError(
       (error, stackTrace) => Response(
         data: {'result': List<PostCodeDetail>.empty()},
-        requestOptions: RequestOptions(path: ''),
+        requestOptions: RequestOptions(),
       ),
     );
 
@@ -67,7 +67,7 @@ class LocationService {
     }
 
     final results = List.from(response.data['result'] as Iterable<dynamic>)
-        .map((e) => PostCodeDetail.fromJson((e as Map<String, dynamic>)))
+        .map((e) => PostCodeDetail.fromJson(e as Map<String, dynamic>))
         .toList();
 
     return results;
@@ -84,7 +84,7 @@ class LocationService {
       }
       return true;
     }).onError((error, stackTrace) async {
-      print("ERROR" + error.toString());
+      print('ERROR$error');
       await Geolocator.requestPermission();
       return false;
     });

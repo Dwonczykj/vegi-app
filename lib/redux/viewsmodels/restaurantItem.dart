@@ -34,7 +34,7 @@ class RestaurantItemViewModel extends Equatable {
       restaurantAddress: store.state.cartState.restaurantAddress,
       selectedVendor: store.state.homePageState.featuredRestaurants.any(
               (element) =>
-                  element.restaurantID == store.state.cartState.restaurantID)
+                  element.restaurantID == store.state.cartState.restaurantID,)
           ? store.state.homePageState.featuredRestaurants.singleWhere(
               (element) =>
                   element.restaurantID == store.state.cartState.restaurantID,
@@ -42,7 +42,7 @@ class RestaurantItemViewModel extends Equatable {
           : null,
       restaurantListOfMenuItems: store.state.homePageState.featuredRestaurants
               .any((element) =>
-                  element.restaurantID == store.state.cartState.restaurantID)
+                  element.restaurantID == store.state.cartState.restaurantID,)
           ? store.state.homePageState.featuredRestaurants
               .singleWhere(
                 (element) =>
@@ -134,7 +134,7 @@ class RestaurantItemViewModel extends Equatable {
       regularList,
       (RestaurantMenuItem menuItem) => menuItem.categoryName,
     ).map((category, list) => MapEntry(category,
-        Map.fromEntries(list.map((item) => MapEntry(item.menuItemID, item)))));
+        Map.fromEntries(list.map((item) => MapEntry(item.menuItemID, item))),),);
   }
 
   Iterable<String> get categories => groupedList.keys

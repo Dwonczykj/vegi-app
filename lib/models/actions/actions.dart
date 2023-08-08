@@ -16,8 +16,7 @@ class WalletActions with _$WalletActions {
 
   factory WalletActions.initial() {
     return WalletActions(
-      updatedAt: 0,
-      list: const <WalletAction>[],
+      
     );
   }
 

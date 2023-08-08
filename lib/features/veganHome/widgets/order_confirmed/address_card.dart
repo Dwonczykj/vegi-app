@@ -5,12 +5,7 @@ import 'package:vegan_liverpool/models/restaurant/time_slot.dart';
 
 class AddressCard extends StatelessWidget {
   const AddressCard({
-    Key? key,
-    required this.isDelivery,
-    required this.orderAddress,
-    required this.selectedSlot,
-    required this.userName,
-    required this.restaurantName,
+    required this.isDelivery, required this.orderAddress, required this.selectedSlot, required this.userName, required this.restaurantName, Key? key,
   }) : super(key: key);
 
   final bool isDelivery;

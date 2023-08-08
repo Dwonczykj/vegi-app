@@ -18,13 +18,12 @@ import 'package:vegan_liverpool/services.dart';
 import 'package:vegan_liverpool/utils/constants.dart';
 import 'package:vegan_liverpool/utils/log/log.dart';
 
-import '../Helpers/helpers.dart';
+import 'package:vegan_liverpool/features/veganHome/Helpers/helpers.dart';
 
 class ImageFromGalleryEx extends StatefulWidget {
   const ImageFromGalleryEx(
     this.type, {
-    Key? key,
-    required this.handleImagePicked,
+    required this.handleImagePicked, Key? key,
   }) : super(key: key);
 
   final ImageSourceType type;
@@ -42,7 +41,7 @@ class _ImageFromGalleryExState extends State<ImageFromGalleryEx> {
   File? _image;
   bool isPreloading = false;
 
-  double _bottomRowOpacity = 1;
+  final double _bottomRowOpacity = 1;
 
   Future<void> _addImage(BuildContext? context) async {
     setState(() {
@@ -58,21 +57,17 @@ class _ImageFromGalleryExState extends State<ImageFromGalleryEx> {
           context != null ? MediaQuery.of(context).size.height * 0.5 : null,
       maxWidth:
           context != null ? MediaQuery.of(context).size.width * 0.5 : null,
-      preferredCameraDevice: CameraDevice.rear,
     );
     File? imageFile;
     if (image != null) {
       imageFile = await compressFileToMaxSize(
         File(image.path),
-        maxSizeMB: fileUploadVegiMaxSizeMB,
       );
     }
 
     setState(() {
       isPreloading = false;
-      _image = imageFile != null
-          ? imageFile
-          : null; // used to populate image on screen
+      _image = imageFile; // used to populate image on screen
     });
   }
 
@@ -81,10 +76,10 @@ class _ImageFromGalleryExState extends State<ImageFromGalleryEx> {
 
     // Create output file path
     // eg:- "Volume/VM/abcd_out.jpeg"
-    final lastIndex = filePath.lastIndexOf(RegExp(r'.jp'));
-    final splitted = filePath.substring(0, (lastIndex));
+    final lastIndex = filePath.lastIndexOf(RegExp('.jp'));
+    final splitted = filePath.substring(0, lastIndex);
     final outPath = '${splitted}_out${filePath.substring(lastIndex)}';
-    var result = await FlutterImageCompress.compressAndGetFile(
+    final result = await FlutterImageCompress.compressAndGetFile(
       file.absolute.path,
       outPath,
       quality: imageQuality,
@@ -97,7 +92,7 @@ class _ImageFromGalleryExState extends State<ImageFromGalleryEx> {
   }
 
   Future<File?> compressFileToMaxSize(File file,
-      {int maxSizeMB = fileUploadVegiMaxSizeMB}) async {
+      {int maxSizeMB = fileUploadVegiMaxSizeMB,}) async {
     var currentSize = getFileSizeMB(_image);
     File? outFile = file;
 
@@ -111,7 +106,7 @@ class _ImageFromGalleryExState extends State<ImageFromGalleryEx> {
       }
     }
     log.error(
-        'Unable to compress ${getFileSizeMB(file)} MB file to below $maxSizeMB MB');
+        'Unable to compress ${getFileSizeMB(file)} MB file to below $maxSizeMB MB',);
     return null;
 
     // while (currentSize > maxSizeMB && outFile != null) {
@@ -179,13 +174,12 @@ class _ImageFromGalleryExState extends State<ImageFromGalleryEx> {
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
-          mainAxisSize: MainAxisSize.max,
           children: <Widget>[
             // const SizedBox(
             //   height: 52,
             // ),
             Expanded(
-              child: Container(
+              child: DecoratedBox(
                 decoration: const BoxDecoration(color: themeShade1200),
                 child: Stack(
                   alignment: Alignment.center,
@@ -204,7 +198,6 @@ class _ImageFromGalleryExState extends State<ImageFromGalleryEx> {
                                 decoration:
                                     const BoxDecoration(color: themeShade1200),
                                 child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Icon(
@@ -310,19 +303,13 @@ class _ImageFromGalleryExState extends State<ImageFromGalleryEx> {
                           children: [
                             if (_image != null)
                               Expanded(
-                                child: Container(
+                                child: SizedBox(
                                   height: 100,
                                   child: Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.stretch,
                                     children: [
                                       ElevatedButton(
-                                        child: Text(
-                                          'Upload AWS (${getFileSizeMB(_image!).toStringAsFixed(3)}MB)',
-                                          style: TextStyle(
-                                            color: Colors.indigo[900],
-                                          ),
-                                        ),
                                         style: ElevatedButton.styleFrom(
                                           backgroundColor: Colors
                                               .white, // ~ The backgroundColor and foregroundColor properties were introduced in Flutter 3.3. Prior to that, they were called primary and onPrimary.
@@ -367,11 +354,11 @@ class _ImageFromGalleryExState extends State<ImageFromGalleryEx> {
                                                               'Upload Failed',
                                                           message: error,);
                                                     },
-                                                    onSuccess: ((p0) {
+                                                    onSuccess: (p0) {
                                                       showInfoSnack(context,
                                                           title:
-                                                              'Upload Succeeded');
-                                                    }));
+                                                              'Upload Succeeded',);
+                                                    },);
                                           } catch (err) {
                                             print('Error: $err');
                                           }
@@ -408,14 +395,19 @@ class _ImageFromGalleryExState extends State<ImageFromGalleryEx> {
                                             isPreloading = false;
                                           });
                                         },
+                                        child: Text(
+                                          'Upload AWS (${getFileSizeMB(_image!).toStringAsFixed(3)}MB)',
+                                          style: TextStyle(
+                                            color: Colors.indigo[900],
+                                          ),
+                                        ),
                                       ),
                                       Slider(
                                         value: _sliderValue.toDouble(),
-                                        min: 0,
                                         max: 100,
                                         divisions: 101,
                                         label:
-                                            '${_sliderValue}% ==> File Size (${getFileSizeMB(_image!).toStringAsFixed(3)})MB',
+                                            '$_sliderValue% ==> File Size (${getFileSizeMB(_image!).toStringAsFixed(3)})MB',
                                         onChanged: (value) {},
                                         onChangeEnd: (value) async {
                                           final valueInt = value.round();

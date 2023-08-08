@@ -15,6 +15,6 @@ class UploadProductSuggestionImageResponse
   const UploadProductSuggestionImageResponse._();
 
   factory UploadProductSuggestionImageResponse.fromJson(
-          Map<String, dynamic> json) =>
+          Map<String, dynamic> json,) =>
       _$UploadProductSuggestionImageResponseFromJson(json);
 }

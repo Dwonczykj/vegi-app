@@ -28,9 +28,7 @@ class _MintingDialogViewModel extends Equatable {
 
 class MintingDialog extends StatefulWidget {
   const MintingDialog({
-    Key? key,
-    required this.amountText,
-    required this.shouldPushToHome,
+    required this.amountText, required this.shouldPushToHome, Key? key,
   }) : super(key: key);
   final String amountText;
   final bool shouldPushToHome;

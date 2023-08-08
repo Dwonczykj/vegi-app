@@ -25,8 +25,7 @@ class FulfilmentMethod with _$FulfilmentMethod {
     required num? bufferLength,
     required String? orderCutoff,
     required int? maxOrders,
-    @Default(null) int? maxDeliveryDistance,
-    required num? priceModifier,
+    required num? priceModifier, @Default(null) int? maxDeliveryDistance,
     @JsonKey(fromJson: fromJsonVendorDTO)
     @Default(null) VendorDTO? vendor,
     @JsonKey(fromJson: fromJsonDeliveryPartnerDTO)

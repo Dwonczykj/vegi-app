@@ -66,7 +66,7 @@ class OrderConfirmedViewModel extends Equatable {
           amount: store.state.cartState.cartTotal.value,
           currency: store.state.cartState.cartTotal.currency,
           receiver: -2,
-          payer: store.state.userState.vegiAccountId?.toInt() ?? -1,
+          payer: store.state.userState.vegiAccountId ?? -1,
           order: order.id,
         ),
       );

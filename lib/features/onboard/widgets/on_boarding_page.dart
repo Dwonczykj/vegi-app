@@ -48,7 +48,6 @@ class OnBoardingScreenGeneric extends StatelessWidget {
           ),
         ),
         Column(
-          mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             SizedBox(
               height: MediaQuery.of(context).size.height * 0.275,

@@ -58,7 +58,6 @@ class _SearchProductsAppBarState extends State<SearchProductsAppBar> {
                           child: Row(
                             children: [
                               Expanded(
-                                flex: 1,
                                 child: Icon(
                                   Icons.search,
                                   color: Colors.teal.shade900,
@@ -71,7 +70,6 @@ class _SearchProductsAppBarState extends State<SearchProductsAppBar> {
                                   hideOnEmpty: true,
                                   textFieldConfiguration:
                                       TextFieldConfiguration(
-                                    autocorrect: true,
                                     controller: _searchTextController,
                                     onSubmitted: (value) {
                                       viewmodel.filterRestaurantMenu(
@@ -101,7 +99,7 @@ class _SearchProductsAppBarState extends State<SearchProductsAppBar> {
                                   onSuggestionSelected: (String suggestion) {
                                     _searchTextController.text = suggestion;
                                     viewmodel.filterRestaurantMenu(
-                                        query: suggestion);
+                                        query: suggestion,);
                                   },
                                   itemBuilder: (context, String suggestion) {
                                     return ListTile(title: Text(suggestion));
@@ -115,9 +113,6 @@ class _SearchProductsAppBarState extends State<SearchProductsAppBar> {
                                       const CircularProgressIndicator(
                                     color: themeShade600,
                                   ),
-                                  debounceDuration: const Duration(
-                                    milliseconds: 300,
-                                  ),
                                   suggestionsCallback: (menuSearchQuery) async {
                                     if (menuSearchQuery.isNotEmpty) {
                                       final result = <String>[];
@@ -130,7 +125,7 @@ class _SearchProductsAppBarState extends State<SearchProductsAppBar> {
                                             return element.name
                                                     .toLowerCase()
                                                     .contains(menuSearchQuery
-                                                        .toLowerCase()) ||
+                                                        .toLowerCase(),) ||
                                                 element.categoryName
                                                     .toLowerCase()
                                                     .contains(
@@ -155,7 +150,7 @@ class _SearchProductsAppBarState extends State<SearchProductsAppBar> {
                                                             element
                                                                 .menuItemID ==
                                                             already
-                                                                .menuItemID) ==
+                                                                .menuItemID,) ==
                                                     -1 &&
                                                 (element
                                                     .listOfProductOptionCategories
@@ -164,7 +159,7 @@ class _SearchProductsAppBarState extends State<SearchProductsAppBar> {
                                                       productOptionCategory.name
                                                           .toLowerCase()
                                                           .contains(menuSearchQuery
-                                                              .toLowerCase()) ||
+                                                              .toLowerCase(),) ||
                                                       productOptionCategory
                                                           .listOfOptions
                                                           .any(
@@ -173,7 +168,7 @@ class _SearchProductsAppBarState extends State<SearchProductsAppBar> {
                                                                 .toLowerCase()
                                                                 .contains(
                                                                     menuSearchQuery
-                                                                        .toLowerCase()),
+                                                                        .toLowerCase(),),
                                                       ),
                                                 ));
                                           },
@@ -195,7 +190,7 @@ class _SearchProductsAppBarState extends State<SearchProductsAppBar> {
                                         return result;
                                       } catch (e, s) {
                                         log.error(
-                                            'ERROR - query menu items from search bar: $e');
+                                            'ERROR - query menu items from search bar: $e',);
                                         await Sentry.captureException(
                                           e,
                                           stackTrace: s,

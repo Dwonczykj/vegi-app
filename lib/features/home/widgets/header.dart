@@ -37,11 +37,11 @@ class Header extends StatelessWidget {
                   ),
                 ),
               ),
-              Flexible(
+              const Flexible(
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const <Widget>[
+                  children: <Widget>[
                     Flexible(
                       child: Balance(),
                     )

@@ -54,7 +54,6 @@ class _SearchVendorsAppBarState extends State<SearchVendorsAppBar> {
                           child: Row(
                             children: [
                               Expanded(
-                                flex: 1,
                                 child: Icon(
                                   Icons.search,
                                   color: Colors.teal.shade900,
@@ -64,11 +63,9 @@ class _SearchVendorsAppBarState extends State<SearchVendorsAppBar> {
                               Expanded(
                                 flex: 5,
                                 child: TypeAheadField<String>(
-                                  keepSuggestionsOnLoading: true,
                                   hideOnEmpty: true,
                                   textFieldConfiguration:
                                       TextFieldConfiguration(
-                                    autocorrect: true,
                                     controller: _searchTextController,
                                     onSubmitted: (value) {
                                       viewmodel.filterVendors(
@@ -115,9 +112,6 @@ class _SearchVendorsAppBarState extends State<SearchVendorsAppBar> {
                                   loadingBuilder: (_) =>
                                       const CircularProgressIndicator(
                                     color: themeShade600,
-                                  ),
-                                  debounceDuration: const Duration(
-                                    milliseconds: 300,
                                   ),
                                   suggestionsCallback:
                                       (globalSearchQuery) async {
@@ -166,7 +160,7 @@ class _SearchVendorsAppBarState extends State<SearchVendorsAppBar> {
                                         return result;
                                       } catch (e, s) {
                                         log.error(
-                                            'ERROR - query vendors items from search bar: $e');
+                                            'ERROR - query vendors items from search bar: $e',);
                                         await Sentry.captureException(
                                           e,
                                           stackTrace: s,

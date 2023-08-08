@@ -46,7 +46,7 @@ class _LogoutAppState extends State<LogoutApp> {
 
   @override
   Widget build(BuildContext context) {
-    return StoreConnector(
+    return StoreConnector<AppState, LogOutRouteViewModel>(
       converter: LogOutRouteViewModel.fromStore,
       builder: (context, viewModel) {
         return LoadingScaffold;
@@ -63,7 +63,7 @@ class LogOutRouteViewModel extends Equatable {
       );
 
   factory LogOutRouteViewModel.fromStore(Store<AppState> store) {
-    return LogOutRouteViewModel(
+    return const LogOutRouteViewModel(
         // refreshOrders: () {
         //   store.dispatch(
         //     ResetAppState(),

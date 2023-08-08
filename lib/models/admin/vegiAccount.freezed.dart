@@ -21,9 +21,9 @@ VegiAccount _$VegiAccountFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$VegiAccount {
   int get id => throw _privateConstructorUsedError;
-  VegiAccountType? get accountType => throw _privateConstructorUsedError;
   bool get verified => throw _privateConstructorUsedError;
   String get walletAddress => throw _privateConstructorUsedError;
+  VegiAccountType? get accountType => throw _privateConstructorUsedError;
   String get imageUrl => throw _privateConstructorUsedError;
   String? get stripeCustomerId => throw _privateConstructorUsedError;
   String? get stripeAccountId => throw _privateConstructorUsedError;
@@ -46,9 +46,9 @@ abstract class $VegiAccountCopyWith<$Res> {
   @useResult
   $Res call(
       {int id,
-      VegiAccountType? accountType,
       bool verified,
       String walletAddress,
+      VegiAccountType? accountType,
       String imageUrl,
       String? stripeCustomerId,
       String? stripeAccountId,
@@ -72,9 +72,9 @@ class _$VegiAccountCopyWithImpl<$Res, $Val extends VegiAccount>
   @override
   $Res call({
     Object? id = null,
-    Object? accountType = freezed,
     Object? verified = null,
     Object? walletAddress = null,
+    Object? accountType = freezed,
     Object? imageUrl = null,
     Object? stripeCustomerId = freezed,
     Object? stripeAccountId = freezed,
@@ -88,10 +88,6 @@ class _$VegiAccountCopyWithImpl<$Res, $Val extends VegiAccount>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int,
-      accountType: freezed == accountType
-          ? _value.accountType
-          : accountType // ignore: cast_nullable_to_non_nullable
-              as VegiAccountType?,
       verified: null == verified
           ? _value.verified
           : verified // ignore: cast_nullable_to_non_nullable
@@ -100,6 +96,10 @@ class _$VegiAccountCopyWithImpl<$Res, $Val extends VegiAccount>
           ? _value.walletAddress
           : walletAddress // ignore: cast_nullable_to_non_nullable
               as String,
+      accountType: freezed == accountType
+          ? _value.accountType
+          : accountType // ignore: cast_nullable_to_non_nullable
+              as VegiAccountType?,
       imageUrl: null == imageUrl
           ? _value.imageUrl
           : imageUrl // ignore: cast_nullable_to_non_nullable
@@ -142,9 +142,9 @@ abstract class _$$_VegiAccountCopyWith<$Res>
   @useResult
   $Res call(
       {int id,
-      VegiAccountType? accountType,
       bool verified,
       String walletAddress,
+      VegiAccountType? accountType,
       String imageUrl,
       String? stripeCustomerId,
       String? stripeAccountId,
@@ -166,9 +166,9 @@ class __$$_VegiAccountCopyWithImpl<$Res>
   @override
   $Res call({
     Object? id = null,
-    Object? accountType = freezed,
     Object? verified = null,
     Object? walletAddress = null,
+    Object? accountType = freezed,
     Object? imageUrl = null,
     Object? stripeCustomerId = freezed,
     Object? stripeAccountId = freezed,
@@ -182,10 +182,6 @@ class __$$_VegiAccountCopyWithImpl<$Res>
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int,
-      accountType: freezed == accountType
-          ? _value.accountType
-          : accountType // ignore: cast_nullable_to_non_nullable
-              as VegiAccountType?,
       verified: null == verified
           ? _value.verified
           : verified // ignore: cast_nullable_to_non_nullable
@@ -194,6 +190,10 @@ class __$$_VegiAccountCopyWithImpl<$Res>
           ? _value.walletAddress
           : walletAddress // ignore: cast_nullable_to_non_nullable
               as String,
+      accountType: freezed == accountType
+          ? _value.accountType
+          : accountType // ignore: cast_nullable_to_non_nullable
+              as VegiAccountType?,
       imageUrl: null == imageUrl
           ? _value.imageUrl
           : imageUrl // ignore: cast_nullable_to_non_nullable
@@ -232,9 +232,9 @@ class __$$_VegiAccountCopyWithImpl<$Res>
 class _$_VegiAccount extends _VegiAccount {
   _$_VegiAccount(
       {required this.id,
-      this.accountType = null,
       required this.verified,
       required this.walletAddress,
+      this.accountType = null,
       this.imageUrl = '',
       this.stripeCustomerId = null,
       this.stripeAccountId = null,
@@ -250,12 +250,12 @@ class _$_VegiAccount extends _VegiAccount {
   @override
   final int id;
   @override
-  @JsonKey()
-  final VegiAccountType? accountType;
-  @override
   final bool verified;
   @override
   final String walletAddress;
+  @override
+  @JsonKey()
+  final VegiAccountType? accountType;
   @override
   @JsonKey()
   final String imageUrl;
@@ -280,7 +280,7 @@ class _$_VegiAccount extends _VegiAccount {
 
   @override
   String toString() {
-    return 'VegiAccount(id: $id, accountType: $accountType, verified: $verified, walletAddress: $walletAddress, imageUrl: $imageUrl, stripeCustomerId: $stripeCustomerId, stripeAccountId: $stripeAccountId, bankCardNumber: $bankCardNumber, bankCardAccountName: $bankCardAccountName, bankCardExpiryDateMonth: $bankCardExpiryDateMonth, bankCardExpiryDateYear: $bankCardExpiryDateYear)';
+    return 'VegiAccount(id: $id, verified: $verified, walletAddress: $walletAddress, accountType: $accountType, imageUrl: $imageUrl, stripeCustomerId: $stripeCustomerId, stripeAccountId: $stripeAccountId, bankCardNumber: $bankCardNumber, bankCardAccountName: $bankCardAccountName, bankCardExpiryDateMonth: $bankCardExpiryDateMonth, bankCardExpiryDateYear: $bankCardExpiryDateYear)';
   }
 
   @override
@@ -289,12 +289,12 @@ class _$_VegiAccount extends _VegiAccount {
         (other.runtimeType == runtimeType &&
             other is _$_VegiAccount &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.accountType, accountType) ||
-                other.accountType == accountType) &&
             (identical(other.verified, verified) ||
                 other.verified == verified) &&
             (identical(other.walletAddress, walletAddress) ||
                 other.walletAddress == walletAddress) &&
+            (identical(other.accountType, accountType) ||
+                other.accountType == accountType) &&
             (identical(other.imageUrl, imageUrl) ||
                 other.imageUrl == imageUrl) &&
             (identical(other.stripeCustomerId, stripeCustomerId) ||
@@ -317,9 +317,9 @@ class _$_VegiAccount extends _VegiAccount {
   int get hashCode => Object.hash(
       runtimeType,
       id,
-      accountType,
       verified,
       walletAddress,
+      accountType,
       imageUrl,
       stripeCustomerId,
       stripeAccountId,
@@ -345,9 +345,9 @@ class _$_VegiAccount extends _VegiAccount {
 abstract class _VegiAccount extends VegiAccount {
   factory _VegiAccount(
       {required final int id,
-      final VegiAccountType? accountType,
       required final bool verified,
       required final String walletAddress,
+      final VegiAccountType? accountType,
       final String imageUrl,
       final String? stripeCustomerId,
       final String? stripeAccountId,
@@ -363,11 +363,11 @@ abstract class _VegiAccount extends VegiAccount {
   @override
   int get id;
   @override
-  VegiAccountType? get accountType;
-  @override
   bool get verified;
   @override
   String get walletAddress;
+  @override
+  VegiAccountType? get accountType;
   @override
   String get imageUrl;
   @override

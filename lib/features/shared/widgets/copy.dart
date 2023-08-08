@@ -6,8 +6,7 @@ import 'package:vegan_liverpool/generated/l10n.dart';
 
 class CopyToClipboard extends StatelessWidget {
   const CopyToClipboard({
-    Key? key,
-    required this.content,
+    required this.content, Key? key,
     this.textColor,
   }) : super(key: key);
   final String content;
@@ -28,7 +27,7 @@ class CopyToClipboard extends StatelessWidget {
       ),
       onTap: () async {
         unawaited(Clipboard.setData(ClipboardData(text: content)));
-        showCopiedFlushbar(context);
+        await showCopiedFlushbar(context);
       },
     );
   }

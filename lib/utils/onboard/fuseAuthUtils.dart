@@ -52,7 +52,7 @@ Future<bool> authenticateSDK(
       ),
     );
     final s = StackTrace.current;
-    final errMsg =
+    const errMsg =
         'Bad AuthRes from Fuse Authentication did not contain either data or an error';
     log.error(errMsg, stackTrace: s);
     return false;

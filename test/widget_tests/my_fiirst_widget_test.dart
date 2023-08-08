@@ -24,10 +24,10 @@ void main() {
   testWidgets('Counter increments smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
     // todo: instead we should use main_test init code
-    FlutterSecureStorage storage = new FlutterSecureStorage();
+    FlutterSecureStorage storage = const FlutterSecureStorage();
     final Persistor<AppState> persistor = Persistor<AppState>(
       storage: SecureStorage(storage = storage),
-      serializer: JsonSerializer<AppState>((json) => AppState.fromJson(json)),
+      serializer: JsonSerializer<AppState>(AppState.fromJson),
       debug: kDebugMode,
     );
     final initialState = await loadState(persistor, false);

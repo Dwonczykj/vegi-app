@@ -20,11 +20,11 @@ class PaymentBar extends StatelessWidget {
         ),
         width: width,
         height: 100,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
+        child: const Padding(
+          padding: EdgeInsets.symmetric(horizontal: 20),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: const [PaymentMethodSelector(), PaymentButton()],
+            children: [PaymentMethodSelector(), PaymentButton()],
           ),
         ),
       ),

@@ -43,9 +43,9 @@ mixin _$UserCartState {
   Money get selectedTipAmount => throw _privateConstructorUsedError;
   String get discountCode => throw _privateConstructorUsedError;
   String get paymentIntentID => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   String get paymentIntentClientSecret => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   StripePaymentIntent? get paymentIntent => throw _privateConstructorUsedError;
   String get ephemeralKey => throw _privateConstructorUsedError;
   String get publishableKey => throw _privateConstructorUsedError;
@@ -79,13 +79,14 @@ mixin _$UserCartState {
       throw _privateConstructorUsedError;
   OrderCreationProcessStatus get orderCreationProcessStatus =>
       throw _privateConstructorUsedError;
+  String get orderCreationStatusMessage => throw _privateConstructorUsedError;
   StripePaymentStatus get stripePaymentStatus =>
       throw _privateConstructorUsedError;
   @JsonKey(fromJson: LivePayment.fromJson, toJson: paymentInProcessToJson)
   LivePayment? get paymentInProcess => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   bool get isLoadingCartState => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   ErrorDetails<CartErrCode>? get errorDetails =>
       throw _privateConstructorUsedError;
 
@@ -124,9 +125,9 @@ abstract class $UserCartStateCopyWith<$Res> {
           Money selectedTipAmount,
       String discountCode,
       String paymentIntentID,
-      @JsonKey(ignore: true)
+      @JsonKey(includeFromJson: false, includeToJson: false)
           String paymentIntentClientSecret,
-      @JsonKey(ignore: true)
+      @JsonKey(includeFromJson: false, includeToJson: false)
           StripePaymentIntent? paymentIntent,
       String ephemeralKey,
       String publishableKey,
@@ -154,12 +155,13 @@ abstract class $UserCartStateCopyWith<$Res> {
       TimeSlot? nextDeliverySlot,
       ProductSuggestion? productSuggestion,
       OrderCreationProcessStatus orderCreationProcessStatus,
+      String orderCreationStatusMessage,
       StripePaymentStatus stripePaymentStatus,
       @JsonKey(fromJson: LivePayment.fromJson, toJson: paymentInProcessToJson)
           LivePayment? paymentInProcess,
-      @JsonKey(ignore: true)
+      @JsonKey(includeFromJson: false, includeToJson: false)
           bool isLoadingCartState,
-      @JsonKey(ignore: true)
+      @JsonKey(includeFromJson: false, includeToJson: false)
           ErrorDetails<CartErrCode>? errorDetails});
 
   $DeliveryAddressesCopyWith<$Res>? get selectedDeliveryAddress;
@@ -230,6 +232,7 @@ class _$UserCartStateCopyWithImpl<$Res, $Val extends UserCartState>
     Object? nextDeliverySlot = freezed,
     Object? productSuggestion = freezed,
     Object? orderCreationProcessStatus = null,
+    Object? orderCreationStatusMessage = null,
     Object? stripePaymentStatus = null,
     Object? paymentInProcess = freezed,
     Object? isLoadingCartState = null,
@@ -408,6 +411,10 @@ class _$UserCartStateCopyWithImpl<$Res, $Val extends UserCartState>
           ? _value.orderCreationProcessStatus
           : orderCreationProcessStatus // ignore: cast_nullable_to_non_nullable
               as OrderCreationProcessStatus,
+      orderCreationStatusMessage: null == orderCreationStatusMessage
+          ? _value.orderCreationStatusMessage
+          : orderCreationStatusMessage // ignore: cast_nullable_to_non_nullable
+              as String,
       stripePaymentStatus: null == stripePaymentStatus
           ? _value.stripePaymentStatus
           : stripePaymentStatus // ignore: cast_nullable_to_non_nullable
@@ -581,9 +588,9 @@ abstract class _$$_UserCartStateCopyWith<$Res>
           Money selectedTipAmount,
       String discountCode,
       String paymentIntentID,
-      @JsonKey(ignore: true)
+      @JsonKey(includeFromJson: false, includeToJson: false)
           String paymentIntentClientSecret,
-      @JsonKey(ignore: true)
+      @JsonKey(includeFromJson: false, includeToJson: false)
           StripePaymentIntent? paymentIntent,
       String ephemeralKey,
       String publishableKey,
@@ -611,12 +618,13 @@ abstract class _$$_UserCartStateCopyWith<$Res>
       TimeSlot? nextDeliverySlot,
       ProductSuggestion? productSuggestion,
       OrderCreationProcessStatus orderCreationProcessStatus,
+      String orderCreationStatusMessage,
       StripePaymentStatus stripePaymentStatus,
       @JsonKey(fromJson: LivePayment.fromJson, toJson: paymentInProcessToJson)
           LivePayment? paymentInProcess,
-      @JsonKey(ignore: true)
+      @JsonKey(includeFromJson: false, includeToJson: false)
           bool isLoadingCartState,
-      @JsonKey(ignore: true)
+      @JsonKey(includeFromJson: false, includeToJson: false)
           ErrorDetails<CartErrCode>? errorDetails});
 
   @override
@@ -695,6 +703,7 @@ class __$$_UserCartStateCopyWithImpl<$Res>
     Object? nextDeliverySlot = freezed,
     Object? productSuggestion = freezed,
     Object? orderCreationProcessStatus = null,
+    Object? orderCreationStatusMessage = null,
     Object? stripePaymentStatus = null,
     Object? paymentInProcess = freezed,
     Object? isLoadingCartState = null,
@@ -873,6 +882,10 @@ class __$$_UserCartStateCopyWithImpl<$Res>
           ? _value.orderCreationProcessStatus
           : orderCreationProcessStatus // ignore: cast_nullable_to_non_nullable
               as OrderCreationProcessStatus,
+      orderCreationStatusMessage: null == orderCreationStatusMessage
+          ? _value.orderCreationStatusMessage
+          : orderCreationStatusMessage // ignore: cast_nullable_to_non_nullable
+              as String,
       stripePaymentStatus: null == stripePaymentStatus
           ? _value.stripePaymentStatus
           : stripePaymentStatus // ignore: cast_nullable_to_non_nullable
@@ -920,9 +933,9 @@ class _$_UserCartState extends _UserCartState with DiagnosticableTreeMixin {
           this.selectedTipAmount = const Money.zeroGBP(),
       this.discountCode = '',
       this.paymentIntentID = '',
-      @JsonKey(ignore: true)
+      @JsonKey(includeFromJson: false, includeToJson: false)
           this.paymentIntentClientSecret = '',
-      @JsonKey(ignore: true)
+      @JsonKey(includeFromJson: false, includeToJson: false)
           this.paymentIntent = null,
       this.ephemeralKey = '',
       this.publishableKey = '',
@@ -950,12 +963,13 @@ class _$_UserCartState extends _UserCartState with DiagnosticableTreeMixin {
       this.nextDeliverySlot = null,
       this.productSuggestion = null,
       this.orderCreationProcessStatus = OrderCreationProcessStatus.none,
+      this.orderCreationStatusMessage = '',
       this.stripePaymentStatus = StripePaymentStatus.none,
       @JsonKey(fromJson: LivePayment.fromJson, toJson: paymentInProcessToJson)
           this.paymentInProcess = null,
-      @JsonKey(ignore: true)
+      @JsonKey(includeFromJson: false, includeToJson: false)
           this.isLoadingCartState = false,
-      @JsonKey(ignore: true)
+      @JsonKey(includeFromJson: false, includeToJson: false)
           this.errorDetails = null})
       : super._();
 
@@ -1011,10 +1025,10 @@ class _$_UserCartState extends _UserCartState with DiagnosticableTreeMixin {
   @JsonKey()
   final String paymentIntentID;
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   final String paymentIntentClientSecret;
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   final StripePaymentIntent? paymentIntent;
   @override
   @JsonKey()
@@ -1093,20 +1107,23 @@ class _$_UserCartState extends _UserCartState with DiagnosticableTreeMixin {
   final OrderCreationProcessStatus orderCreationProcessStatus;
   @override
   @JsonKey()
+  final String orderCreationStatusMessage;
+  @override
+  @JsonKey()
   final StripePaymentStatus stripePaymentStatus;
   @override
   @JsonKey(fromJson: LivePayment.fromJson, toJson: paymentInProcessToJson)
   final LivePayment? paymentInProcess;
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   final bool isLoadingCartState;
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   final ErrorDetails<CartErrCode>? errorDetails;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'UserCartState(cartItems: $cartItems, cartSubTotal: $cartSubTotal, cartTax: $cartTax, cartTotal: $cartTotal, cartCurrency: $cartCurrency, cartDiscountPercent: $cartDiscountPercent, cartDiscountComputed: $cartDiscountComputed, voucherPotValue: $voucherPotValue, appliedVouchers: $appliedVouchers, deliverySlots: $deliverySlots, collectionSlots: $collectionSlots, selectedDeliveryAddress: $selectedDeliveryAddress, selectedTimeSlot: $selectedTimeSlot, selectedTipAmount: $selectedTipAmount, discountCode: $discountCode, paymentIntentID: $paymentIntentID, paymentIntentClientSecret: $paymentIntentClientSecret, paymentIntent: $paymentIntent, ephemeralKey: $ephemeralKey, publishableKey: $publishableKey, order: $order, selectedGBPxAmount: $selectedGBPxAmount, selectedPPLAmount: $selectedPPLAmount, payButtonLoading: $payButtonLoading, transferringTokens: $transferringTokens, errorCompletingPayment: $errorCompletingPayment, confirmedPayment: $confirmedPayment, restaurantName: $restaurantName, restaurantID: $restaurantID, restaurantIsLive: $restaurantIsLive, restaurantAddress: $restaurantAddress, restaurantWalletAddress: $restaurantWalletAddress, fulfilmentMethod: $fulfilmentMethod, restaurantMinimumOrder: $restaurantMinimumOrder, restaurantPlatformFee: $restaurantPlatformFee, deliveryInstructions: $deliveryInstructions, selectedPaymentMethod: $selectedPaymentMethod, fulfilmentPostalDistricts: $fulfilmentPostalDistricts, eligibleOrderDates: $eligibleOrderDates, nextCollectionSlot: $nextCollectionSlot, nextDeliverySlot: $nextDeliverySlot, productSuggestion: $productSuggestion, orderCreationProcessStatus: $orderCreationProcessStatus, stripePaymentStatus: $stripePaymentStatus, paymentInProcess: $paymentInProcess, isLoadingCartState: $isLoadingCartState, errorDetails: $errorDetails)';
+    return 'UserCartState(cartItems: $cartItems, cartSubTotal: $cartSubTotal, cartTax: $cartTax, cartTotal: $cartTotal, cartCurrency: $cartCurrency, cartDiscountPercent: $cartDiscountPercent, cartDiscountComputed: $cartDiscountComputed, voucherPotValue: $voucherPotValue, appliedVouchers: $appliedVouchers, deliverySlots: $deliverySlots, collectionSlots: $collectionSlots, selectedDeliveryAddress: $selectedDeliveryAddress, selectedTimeSlot: $selectedTimeSlot, selectedTipAmount: $selectedTipAmount, discountCode: $discountCode, paymentIntentID: $paymentIntentID, paymentIntentClientSecret: $paymentIntentClientSecret, paymentIntent: $paymentIntent, ephemeralKey: $ephemeralKey, publishableKey: $publishableKey, order: $order, selectedGBPxAmount: $selectedGBPxAmount, selectedPPLAmount: $selectedPPLAmount, payButtonLoading: $payButtonLoading, transferringTokens: $transferringTokens, errorCompletingPayment: $errorCompletingPayment, confirmedPayment: $confirmedPayment, restaurantName: $restaurantName, restaurantID: $restaurantID, restaurantIsLive: $restaurantIsLive, restaurantAddress: $restaurantAddress, restaurantWalletAddress: $restaurantWalletAddress, fulfilmentMethod: $fulfilmentMethod, restaurantMinimumOrder: $restaurantMinimumOrder, restaurantPlatformFee: $restaurantPlatformFee, deliveryInstructions: $deliveryInstructions, selectedPaymentMethod: $selectedPaymentMethod, fulfilmentPostalDistricts: $fulfilmentPostalDistricts, eligibleOrderDates: $eligibleOrderDates, nextCollectionSlot: $nextCollectionSlot, nextDeliverySlot: $nextDeliverySlot, productSuggestion: $productSuggestion, orderCreationProcessStatus: $orderCreationProcessStatus, orderCreationStatusMessage: $orderCreationStatusMessage, stripePaymentStatus: $stripePaymentStatus, paymentInProcess: $paymentInProcess, isLoadingCartState: $isLoadingCartState, errorDetails: $errorDetails)';
   }
 
   @override
@@ -1164,6 +1181,8 @@ class _$_UserCartState extends _UserCartState with DiagnosticableTreeMixin {
       ..add(DiagnosticsProperty('productSuggestion', productSuggestion))
       ..add(DiagnosticsProperty(
           'orderCreationProcessStatus', orderCreationProcessStatus))
+      ..add(DiagnosticsProperty(
+          'orderCreationStatusMessage', orderCreationStatusMessage))
       ..add(DiagnosticsProperty('stripePaymentStatus', stripePaymentStatus))
       ..add(DiagnosticsProperty('paymentInProcess', paymentInProcess))
       ..add(DiagnosticsProperty('isLoadingCartState', isLoadingCartState))
@@ -1249,6 +1268,7 @@ class _$_UserCartState extends _UserCartState with DiagnosticableTreeMixin {
             (identical(other.nextDeliverySlot, nextDeliverySlot) || other.nextDeliverySlot == nextDeliverySlot) &&
             (identical(other.productSuggestion, productSuggestion) || other.productSuggestion == productSuggestion) &&
             (identical(other.orderCreationProcessStatus, orderCreationProcessStatus) || other.orderCreationProcessStatus == orderCreationProcessStatus) &&
+            (identical(other.orderCreationStatusMessage, orderCreationStatusMessage) || other.orderCreationStatusMessage == orderCreationStatusMessage) &&
             (identical(other.stripePaymentStatus, stripePaymentStatus) || other.stripePaymentStatus == stripePaymentStatus) &&
             (identical(other.paymentInProcess, paymentInProcess) || other.paymentInProcess == paymentInProcess) &&
             (identical(other.isLoadingCartState, isLoadingCartState) || other.isLoadingCartState == isLoadingCartState) &&
@@ -1302,6 +1322,7 @@ class _$_UserCartState extends _UserCartState with DiagnosticableTreeMixin {
         nextDeliverySlot,
         productSuggestion,
         orderCreationProcessStatus,
+        orderCreationStatusMessage,
         stripePaymentStatus,
         paymentInProcess,
         isLoadingCartState,
@@ -1346,9 +1367,9 @@ abstract class _UserCartState extends UserCartState {
           final Money selectedTipAmount,
       final String discountCode,
       final String paymentIntentID,
-      @JsonKey(ignore: true)
+      @JsonKey(includeFromJson: false, includeToJson: false)
           final String paymentIntentClientSecret,
-      @JsonKey(ignore: true)
+      @JsonKey(includeFromJson: false, includeToJson: false)
           final StripePaymentIntent? paymentIntent,
       final String ephemeralKey,
       final String publishableKey,
@@ -1376,12 +1397,13 @@ abstract class _UserCartState extends UserCartState {
       final TimeSlot? nextDeliverySlot,
       final ProductSuggestion? productSuggestion,
       final OrderCreationProcessStatus orderCreationProcessStatus,
+      final String orderCreationStatusMessage,
       final StripePaymentStatus stripePaymentStatus,
       @JsonKey(fromJson: LivePayment.fromJson, toJson: paymentInProcessToJson)
           final LivePayment? paymentInProcess,
-      @JsonKey(ignore: true)
+      @JsonKey(includeFromJson: false, includeToJson: false)
           final bool isLoadingCartState,
-      @JsonKey(ignore: true)
+      @JsonKey(includeFromJson: false, includeToJson: false)
           final ErrorDetails<CartErrCode>? errorDetails}) = _$_UserCartState;
   _UserCartState._() : super._();
 
@@ -1427,10 +1449,10 @@ abstract class _UserCartState extends UserCartState {
   @override
   String get paymentIntentID;
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   String get paymentIntentClientSecret;
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   StripePaymentIntent? get paymentIntent;
   @override
   String get ephemeralKey;
@@ -1484,15 +1506,17 @@ abstract class _UserCartState extends UserCartState {
   @override
   OrderCreationProcessStatus get orderCreationProcessStatus;
   @override
+  String get orderCreationStatusMessage;
+  @override
   StripePaymentStatus get stripePaymentStatus;
   @override
   @JsonKey(fromJson: LivePayment.fromJson, toJson: paymentInProcessToJson)
   LivePayment? get paymentInProcess;
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   bool get isLoadingCartState;
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   ErrorDetails<CartErrCode>? get errorDetails;
   @override
   @JsonKey(ignore: true)

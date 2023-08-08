@@ -71,14 +71,14 @@ void main() {
   MockUserPlatform? mockUserPlatform;
   MockUserCredentialPlatform? mockUserCredPlatform;
 
-  AdditionalUserInfo mockAdditionalInfo = AdditionalUserInfo(
+  final AdditionalUserInfo mockAdditionalInfo = AdditionalUserInfo(
     isNewUser: false,
     username: 'flutterUser',
     providerId: 'testProvider',
     profile: <String, dynamic>{'foo': 'bar'},
   );
 
-  EmailAuthCredential mockCredential =
+  final EmailAuthCredential mockCredential =
       EmailAuthProvider.credential(email: 'test', password: 'test')
           as EmailAuthCredential;
 
@@ -131,7 +131,7 @@ void main() {
         languageCode: anyNamed('languageCode'),
       )).thenAnswer((_) => mockAuthPlatform);
 
-      TestDefaultBinaryMessengerBinding.instance!.defaultBinaryMessenger
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
           .setMockMethodCallHandler(MethodChannelFirebaseAuth.channel,
               (call) async {
         switch (call.method) {
@@ -184,8 +184,8 @@ void main() {
       });
 
       test('should call linkWithCredential()', () async {
-        String newEmail = 'new@email.com';
-        EmailAuthCredential credential =
+        const String newEmail = 'new@email.com';
+        final EmailAuthCredential credential =
             EmailAuthProvider.credential(email: newEmail, password: 'test')
                 as EmailAuthCredential;
 
@@ -201,8 +201,8 @@ void main() {
             .thenAnswer((_) => Future.value(mockUserCredPlatform));
       });
       test('should call reauthenticateWithCredential()', () async {
-        String newEmail = 'new@email.com';
-        EmailAuthCredential credential =
+        const String newEmail = 'new@email.com';
+        final EmailAuthCredential credential =
             EmailAuthProvider.credential(email: newEmail, password: 'test')
                 as EmailAuthCredential;
 
@@ -277,7 +277,7 @@ void main() {
         // Necessary as we otherwise get a "null is not a Future<void>" error
         when(mockUserPlatform!.updatePhoneNumber(any)).thenAnswer((i) async {});
 
-        PhoneAuthCredential phoneAuthCredential = PhoneAuthProvider.credential(
+        final PhoneAuthCredential phoneAuthCredential = PhoneAuthProvider.credential(
           verificationId: 'test',
           smsCode: 'test',
         );
@@ -313,7 +313,7 @@ void main() {
             .thenAnswer((i) async {});
 
         const newEmail = 'new@email.com';
-        ActionCodeSettings actionCodeSettings = ActionCodeSettings(url: 'test');
+        final ActionCodeSettings actionCodeSettings = ActionCodeSettings(url: 'test');
 
         await auth!.currentUser!
             .verifyBeforeUpdateEmail(newEmail, actionCodeSettings);

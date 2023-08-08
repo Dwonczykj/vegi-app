@@ -3,11 +3,9 @@ import 'package:flutter/material.dart';
 
 class PrimaryButton extends StatelessWidget {
   const PrimaryButton({
-    Key? key,
+    required this.onPressed, required this.label, Key? key,
     this.fontSize = 20,
-    required this.onPressed,
     this.onPressedDisabled,
-    required this.label,
     this.width = 255.0,
     this.height = 50.0,
     this.preload = false,
@@ -45,7 +43,7 @@ class PrimaryButton extends StatelessWidget {
                       ],
               )
             : null,
-        color: buttonColor != null ? buttonColor : null,
+        color: buttonColor,
         borderRadius: const BorderRadius.all(Radius.circular(11)),
       ),
       child: Material(

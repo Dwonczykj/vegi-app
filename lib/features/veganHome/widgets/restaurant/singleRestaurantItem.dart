@@ -14,8 +14,7 @@ import 'package:vegan_liverpool/utils/analytics.dart';
 
 class SingleRestaurantItem extends StatelessWidget {
   const SingleRestaurantItem({
-    Key? key,
-    required this.vendorItem,
+    required this.vendorItem, Key? key,
   }) : super(key: key);
 
   final RestaurantItem vendorItem;

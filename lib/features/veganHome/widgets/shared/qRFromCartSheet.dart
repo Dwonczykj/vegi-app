@@ -55,8 +55,8 @@ class QRFromCartSheet extends StatelessWidget {
                 ),
                 child: Stack(
                   children: [
-                    Center(
-                      child: const Text(
+                    const Center(
+                      child: Text(
                         'vegiPay',
                         style: TextStyle(
                           color: Colors.white,
@@ -90,15 +90,14 @@ class QRFromCartSheet extends StatelessWidget {
                   ],
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(
+              const Padding(
+                padding: EdgeInsets.only(
                   left: 20,
                   right: 20,
-                  top: 0,
                   bottom: 10,
                 ),
                 child: Center(
-                  child: const Text(
+                  child: Text(
                     'Scan with Cashier',
                     style: TextStyle(
                       color: Colors.grey,
@@ -118,7 +117,7 @@ class QRFromCartSheet extends StatelessWidget {
               //     image: NetworkImage(
               //         "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQQyYwscUPOH_qPPe8Hp0HAbFNMx-TxRFubpg&usqp=CAU")),
 
-              GenerateQRFromCart(),
+              const GenerateQRFromCart(),
               //First Button
               // ElevatedButton(
               //   child: Text(

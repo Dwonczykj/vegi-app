@@ -71,16 +71,13 @@ class _DetailMenuItemViewState extends State<DetailMenuItemView> {
                             cardCurvatureHeight +
                             marginBetweenImageAndDetailsCard, // TODO: Needs to be more dynamic based on the image height...
                         decoration: BoxDecoration(
-                          color: !debugColors ? null : const Color(0xff7c94b6),
                           border: Border.all(
                             width: !debugColors ? 0 : 8,
                           ),
-                          borderRadius:
-                              !debugColors ? null : BorderRadius.circular(12),
                         ),
                         child: FutureBuilder<Size>(
                           future: calculateImageDimensionFromUrl(
-                              imageUrl: viewmodel.menuItem!.imageURL),
+                              imageUrl: viewmodel.menuItem!.imageURL,),
                           builder: (context, snapshot) {
                             if (!snapshot.hasData) {
                               return const CircularProgressIndicator();
@@ -146,7 +143,7 @@ class _DetailMenuItemViewState extends State<DetailMenuItemView> {
                       width: MediaQuery.of(context).size.width,
                       alignment: Alignment.center,
                       color: Colors.redAccent[400],
-                      child: Text('SizedBox'),
+                      child: const Text('SizedBox'),
                     ),
                   Container(
                     padding: const EdgeInsets.only(
@@ -154,8 +151,7 @@ class _DetailMenuItemViewState extends State<DetailMenuItemView> {
                       right: 20,
                     ),
                     margin: const EdgeInsets.only(
-                      // * THis doesnt help as th
-                      top: !debugColors ? 0 : 60,
+                      
                     ),
                     color: !debugColors
                         ? Theme.of(context).canvasColor
@@ -164,7 +160,6 @@ class _DetailMenuItemViewState extends State<DetailMenuItemView> {
                       color: !debugColors ? Colors.white : Colors.lightGreen,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Text(
                             viewmodel.menuItem!.name,
@@ -213,7 +208,7 @@ class _DetailMenuItemViewState extends State<DetailMenuItemView> {
               ),
             ),
             const DetailMenuViewFloatingBar(
-              detailFloatingBarHeight: detailFloatingBarHeight,
+              
             ),
           ],
         );

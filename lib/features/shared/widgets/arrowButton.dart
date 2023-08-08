@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:vegan_liverpool/constants/theme.dart';
 
 class ArrowButton extends StatelessWidget {
-  ArrowButton({
+  const ArrowButton({
     required this.onTap,
     this.tooltip = '',
     this.iconSize,

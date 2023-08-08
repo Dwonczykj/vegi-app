@@ -6,28 +6,28 @@ import 'package:vegan_liverpool/redux/actions/user_actions.dart';
 
 final homePageReducers = combineReducers<HomePageState>(
   [
-    TypedReducer<HomePageState, ResetAppState>(_resetApp),
+    TypedReducer<HomePageState, ResetAppState>(_resetApp).call,
     TypedReducer<HomePageState, UpdateFeaturedRestaurants>(
       _getFeaturedRestaurants,
-    ),
+    ).call,
     TypedReducer<HomePageState, UpdateRestaurant>(
       _updateRestaurant,
-    ),
-    TypedReducer<HomePageState, SetIsLoadingHomePage>(_setIsLoadingHomePage),
+    ).call,
+    TypedReducer<HomePageState, SetIsLoadingHomePage>(_setIsLoadingHomePage).call,
     TypedReducer<HomePageState, SetIsLoadingHttpRequest>(
-        _setIsLoadingHttpRequest),
-    TypedReducer<HomePageState, UpdatePostalCodes>(_updatePostalCodes),
+        _setIsLoadingHttpRequest,).call,
+    TypedReducer<HomePageState, UpdatePostalCodes>(_updatePostalCodes).call,
     TypedReducer<HomePageState, UpdateSelectedSearchPostCode>(
-        _updateSelectedSearchPostCode),
+        _updateSelectedSearchPostCode,).call,
     TypedReducer<HomePageState, ShowGlobalSearchBarField>(
       _showGlobalSearchBarField,
-    ),
+    ).call,
     TypedReducer<HomePageState, SetGlobalSearchQuerySuccess>(
-        _setGlobalSearchQuery),
-    TypedReducer<HomePageState, SetMenuSearchQuerySuccess>(_setMenuSearchQuery),
+        _setGlobalSearchQuery,).call,
+    TypedReducer<HomePageState, SetMenuSearchQuerySuccess>(_setMenuSearchQuery).call,
     TypedReducer<HomePageState, ShowRestaurantMenuSearchBarField>(
       _showMenuSearchBarField,
-    ),
+    ).call,
   ],
 );
 

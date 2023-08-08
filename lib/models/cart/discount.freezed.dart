@@ -29,8 +29,8 @@ mixin _$Discount {
   DateTime get expiryDateTime => throw _privateConstructorUsedError;
   int? get timesUsed => throw _privateConstructorUsedError;
   int? get maxUses => throw _privateConstructorUsedError;
-  bool get isEnabled => throw _privateConstructorUsedError;
   String? get linkedWalletAddress => throw _privateConstructorUsedError;
+  bool get isEnabled => throw _privateConstructorUsedError;
   @JsonKey()
   VendorDTO? get vendor => throw _privateConstructorUsedError;
 
@@ -55,8 +55,8 @@ abstract class $DiscountCopyWith<$Res> {
           DateTime expiryDateTime,
       int? timesUsed,
       int? maxUses,
-      bool isEnabled,
       String? linkedWalletAddress,
+      bool isEnabled,
       @JsonKey()
           VendorDTO? vendor});
 
@@ -84,8 +84,8 @@ class _$DiscountCopyWithImpl<$Res, $Val extends Discount>
     Object? expiryDateTime = null,
     Object? timesUsed = freezed,
     Object? maxUses = freezed,
-    Object? isEnabled = null,
     Object? linkedWalletAddress = freezed,
+    Object? isEnabled = null,
     Object? vendor = freezed,
   }) {
     return _then(_value.copyWith(
@@ -121,14 +121,14 @@ class _$DiscountCopyWithImpl<$Res, $Val extends Discount>
           ? _value.maxUses
           : maxUses // ignore: cast_nullable_to_non_nullable
               as int?,
-      isEnabled: null == isEnabled
-          ? _value.isEnabled
-          : isEnabled // ignore: cast_nullable_to_non_nullable
-              as bool,
       linkedWalletAddress: freezed == linkedWalletAddress
           ? _value.linkedWalletAddress
           : linkedWalletAddress // ignore: cast_nullable_to_non_nullable
               as String?,
+      isEnabled: null == isEnabled
+          ? _value.isEnabled
+          : isEnabled // ignore: cast_nullable_to_non_nullable
+              as bool,
       vendor: freezed == vendor
           ? _value.vendor
           : vendor // ignore: cast_nullable_to_non_nullable
@@ -166,8 +166,8 @@ abstract class _$$_DiscountCopyWith<$Res> implements $DiscountCopyWith<$Res> {
           DateTime expiryDateTime,
       int? timesUsed,
       int? maxUses,
-      bool isEnabled,
       String? linkedWalletAddress,
+      bool isEnabled,
       @JsonKey()
           VendorDTO? vendor});
 
@@ -194,8 +194,8 @@ class __$$_DiscountCopyWithImpl<$Res>
     Object? expiryDateTime = null,
     Object? timesUsed = freezed,
     Object? maxUses = freezed,
-    Object? isEnabled = null,
     Object? linkedWalletAddress = freezed,
+    Object? isEnabled = null,
     Object? vendor = freezed,
   }) {
     return _then(_$_Discount(
@@ -231,14 +231,14 @@ class __$$_DiscountCopyWithImpl<$Res>
           ? _value.maxUses
           : maxUses // ignore: cast_nullable_to_non_nullable
               as int?,
-      isEnabled: null == isEnabled
-          ? _value.isEnabled
-          : isEnabled // ignore: cast_nullable_to_non_nullable
-              as bool,
       linkedWalletAddress: freezed == linkedWalletAddress
           ? _value.linkedWalletAddress
           : linkedWalletAddress // ignore: cast_nullable_to_non_nullable
               as String?,
+      isEnabled: null == isEnabled
+          ? _value.isEnabled
+          : isEnabled // ignore: cast_nullable_to_non_nullable
+              as bool,
       vendor: freezed == vendor
           ? _value.vendor
           : vendor // ignore: cast_nullable_to_non_nullable
@@ -261,8 +261,8 @@ class _$_Discount extends _Discount {
           required this.expiryDateTime,
       required this.timesUsed,
       required this.maxUses,
-      this.isEnabled = false,
       required this.linkedWalletAddress,
+      this.isEnabled = false,
       @JsonKey()
           this.vendor = null})
       : super._();
@@ -288,17 +288,17 @@ class _$_Discount extends _Discount {
   @override
   final int? maxUses;
   @override
+  final String? linkedWalletAddress;
+  @override
   @JsonKey()
   final bool isEnabled;
-  @override
-  final String? linkedWalletAddress;
   @override
   @JsonKey()
   final VendorDTO? vendor;
 
   @override
   String toString() {
-    return 'Discount(id: $id, code: $code, value: $value, currency: $currency, discountType: $discountType, expiryDateTime: $expiryDateTime, timesUsed: $timesUsed, maxUses: $maxUses, isEnabled: $isEnabled, linkedWalletAddress: $linkedWalletAddress, vendor: $vendor)';
+    return 'Discount(id: $id, code: $code, value: $value, currency: $currency, discountType: $discountType, expiryDateTime: $expiryDateTime, timesUsed: $timesUsed, maxUses: $maxUses, linkedWalletAddress: $linkedWalletAddress, isEnabled: $isEnabled, vendor: $vendor)';
   }
 
   @override
@@ -318,10 +318,10 @@ class _$_Discount extends _Discount {
             (identical(other.timesUsed, timesUsed) ||
                 other.timesUsed == timesUsed) &&
             (identical(other.maxUses, maxUses) || other.maxUses == maxUses) &&
-            (identical(other.isEnabled, isEnabled) ||
-                other.isEnabled == isEnabled) &&
             (identical(other.linkedWalletAddress, linkedWalletAddress) ||
                 other.linkedWalletAddress == linkedWalletAddress) &&
+            (identical(other.isEnabled, isEnabled) ||
+                other.isEnabled == isEnabled) &&
             (identical(other.vendor, vendor) || other.vendor == vendor));
   }
 
@@ -337,8 +337,8 @@ class _$_Discount extends _Discount {
       expiryDateTime,
       timesUsed,
       maxUses,
-      isEnabled,
       linkedWalletAddress,
+      isEnabled,
       vendor);
 
   @JsonKey(ignore: true)
@@ -366,8 +366,8 @@ abstract class _Discount extends Discount {
           required final DateTime expiryDateTime,
       required final int? timesUsed,
       required final int? maxUses,
-      final bool isEnabled,
       required final String? linkedWalletAddress,
+      final bool isEnabled,
       @JsonKey()
           final VendorDTO? vendor}) = _$_Discount;
   _Discount._() : super._();
@@ -392,9 +392,9 @@ abstract class _Discount extends Discount {
   @override
   int? get maxUses;
   @override
-  bool get isEnabled;
-  @override
   String? get linkedWalletAddress;
+  @override
+  bool get isEnabled;
   @override
   @JsonKey()
   VendorDTO? get vendor;

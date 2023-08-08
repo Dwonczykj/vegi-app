@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:vegan_liverpool/constants/theme.dart';
@@ -11,9 +10,7 @@ import 'package:vegan_liverpool/redux/viewsmodels/suggestProductViewModel.dart';
 
 class ScanProductSuggestionQRCodeScreen extends StatelessWidget {
   const ScanProductSuggestionQRCodeScreen({
-    Key? key,
-    required this.nextPage,
-    required this.previousPage,
+    required this.nextPage, required this.previousPage, Key? key,
     this.scannedQRCode,
   }) : super(key: key);
 

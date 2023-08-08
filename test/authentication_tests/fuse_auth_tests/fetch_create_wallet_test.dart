@@ -23,35 +23,37 @@ void main() async {
     bool succeeded = false;
     late final Store<AppState> store;
     late final LogIt log;
-    var _error;
+    Object? error;
 
     void _onSmartWalletEvent(SmartWalletEvent event) {
       switch (event.name) {
-        case "smartWalletCreationStarted":
-          print('smartWalletCreationStarted ${event.data.toString()}');
+        case 'smartWalletCreationStarted':
+          print('smartWalletCreationStarted ${event.data}');
           break;
-        case "transactionHash":
-          print('transactionHash ${event.data.toString()}');
+        case 'transactionHash':
+          print('transactionHash ${event.data}');
           break;
-        case "smartWalletCreationSucceeded":
-          print('smartWalletCreationSucceeded ${event.data.toString()}');
+        case 'smartWalletCreationSucceeded':
+          print('smartWalletCreationSucceeded ${event.data}');
           completed = true;
           succeeded = true;
-          _error = null;
+          error = null;
           // exit(1);
           break;
-        case "smartWalletCreationFailed":
-          print('smartWalletCreationFailed ${event.data.toString()}');
+        case 'smartWalletCreationFailed':
+          print('smartWalletCreationFailed ${event.data}');
           completed = true;
           succeeded = false;
-          _error = event.data;
+          error = event.data;
           break;
         // exit(1);
       }
     }
 
     Stream<String> flattenStreams(Stream<SmartWalletEvent> source) async* {
-      await for (var event in source) yield event.name;
+      await for (final event in source) {
+        yield event.name;
+      }
     }
 
     setUp(() async {
@@ -62,9 +64,9 @@ void main() async {
       // await configureDependencies(
       //   environment: Env.activeEnv,
       // );
-      final dependency_injection = GetIt.instance;
-      dependency_injection.registerFactory<LogIt>(() => LogIt(Logger()));
-      log = dependency_injection.get<LogIt>();
+      final dependencyInjection = GetIt.instance;
+      dependencyInjection.registerFactory<LogIt>(() => LogIt(Logger()));
+      log = dependencyInjection.get<LogIt>();
     });
 
     Future<FuseWalletSDK> _initFuseWithCreds(String privateKey) async {
@@ -125,13 +127,13 @@ void main() async {
 
       if (exceptionOrStream.hasError) {
         final defaultCreateWalletException =
-            Exception("An error occurred while creating wallet.");
+            Exception('An error occurred while creating wallet.');
         final exception =
             exceptionOrStream.error ?? defaultCreateWalletException;
-        print(exception.toString());
+        print(exception);
         completed = true;
         succeeded = false;
-        _error = exception;
+        error = exception;
         // exit(1);
         return;
       }
@@ -145,7 +147,7 @@ void main() async {
           print('Error occurred: $error');
           completed = true;
           succeeded = false;
-          _error = error;
+          error = error;
           exit(1);
         },
       );
@@ -153,16 +155,16 @@ void main() async {
       expect(
         smartWalletEventNameStream,
         emitsInOrder([
-          "smartWalletCreationStarted",
+          'smartWalletCreationStarted',
           // SmartWalletEvent(name: "smartWalletCreationStarted", data: {}),
-          "transactionHash",
+          'transactionHash',
           // SmartWalletEvent(
           //   name: "transactionHash",
           //   data: anything as Map<String, dynamic>,
           // ),
           // AsyncLoading<void>(),
           // AsyncData<void>(null),
-          "smartWalletCreationSucceeded",
+          'smartWalletCreationSucceeded',
           // SmartWalletEvent(
           //   name: "smartWalletCreationSucceeded",
           //   data: anything as Map<String, dynamic>,
@@ -186,16 +188,16 @@ void main() async {
       expect(
         smartWalletEventNameStream,
         emitsInOrder([
-          "smartWalletCreationStarted",
+          'smartWalletCreationStarted',
           // SmartWalletEvent(name: "smartWalletCreationStarted", data: {}),
-          "transactionHash",
+          'transactionHash',
           // SmartWalletEvent(
           //   name: "transactionHash",
           //   data: anything as Map<String, dynamic>,
           // ),
           // AsyncLoading<void>(),
           // AsyncData<void>(null),
-          "smartWalletCreationSucceeded",
+          'smartWalletCreationSucceeded',
           // SmartWalletEvent(
           //   name: "smartWalletCreationSucceeded",
           //   data: anything as Map<String, dynamic>,
@@ -240,14 +242,14 @@ void main() async {
       walletData.pick(
         onData: (SmartWallet smartWallet) async {
           log.info(
-              'fuseWalletSDK.fetchWallet succeeded with Smart wallet address "${smartWallet.smartWalletAddress}"');
+              'fuseWalletSDK.fetchWallet succeeded with Smart wallet address "${smartWallet.smartWalletAddress}"',);
         },
         onError: (Exception exception) async {
           log
               // ..error(
               //     'fuseWalletSDK.fetchWallet failed to fetch fuse smart wallet with error: "$exception"')
               .info(
-                  'Authenticator._fetchCreateWallet trying to create a new fuse smart wallet as failed to fetch...');
+                  'Authenticator._fetchCreateWallet trying to create a new fuse smart wallet as failed to fetch...',);
           final exceptionOrStream = await fuseWalletSDK.createWallet();
           expect(exceptionOrStream.hasError, false);
           if (exceptionOrStream.hasError) {
@@ -306,16 +308,16 @@ void main() async {
             expect(
               smartWalletEventNameStream,
               emitsInOrder([
-                "smartWalletCreationStarted",
+                'smartWalletCreationStarted',
                 // SmartWalletEvent(name: "smartWalletCreationStarted", data: {}),
-                "transactionHash",
+                'transactionHash',
                 // SmartWalletEvent(
                 //   name: "transactionHash",
                 //   data: anything as Map<String, dynamic>,
                 // ),
                 // AsyncLoading<void>(),
                 // AsyncData<void>(null),
-                "smartWalletCreationSucceeded",
+                'smartWalletCreationSucceeded',
                 // SmartWalletEvent(
                 //   name: "smartWalletCreationSucceeded",
                 //   data: anything as Map<String, dynamic>,

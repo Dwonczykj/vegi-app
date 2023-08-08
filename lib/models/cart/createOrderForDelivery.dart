@@ -31,9 +31,6 @@ class CreateOrderForDelivery extends CreateOrderForFulfilment
     required bool isDelivery,
     required String publicId,
   }) = _CreateOrderForDelivery;
-  
-  @JsonEnum()
-  final FulfilmentMethodType fulfilmentTypeString = FulfilmentMethodType.delivery;
 
   CreateOrderForDelivery._();
 
@@ -80,4 +77,8 @@ class CreateOrderForDelivery extends CreateOrderForFulfilment
         publicId: '',
         );
   }
+  
+  @override
+  @JsonEnum()
+  final FulfilmentMethodType fulfilmentTypeString = FulfilmentMethodType.delivery;
 }

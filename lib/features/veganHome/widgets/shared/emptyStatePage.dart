@@ -3,11 +3,7 @@ import 'package:vegan_liverpool/utils/constants.dart';
 
 class EmptyStatePage extends StatelessWidget {
   const EmptyStatePage({
-    Key? key,
-    required this.emoji,
-    required this.title,
-    required this.subtitle,
-    required this.refreshable,
+    required this.emoji, required this.title, required this.subtitle, required this.refreshable, Key? key,
   }) : super(key: key);
   final String emoji;
   final String title;
@@ -61,7 +57,7 @@ class EmptyStatePage extends StatelessWidget {
             const Text(
               Messages.pullDownToRefresh,
               textAlign: TextAlign.center,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.w500,
                 fontStyle: FontStyle.italic,

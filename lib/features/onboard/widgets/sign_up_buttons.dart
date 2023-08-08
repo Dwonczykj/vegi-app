@@ -88,7 +88,7 @@ class _SignUpButtonsState extends State<SignUpButtons> {
       setState(() {
         isPrimaryPreloading = true;
       });
-      viewmodel.initFuse();
+      await viewmodel.initFuse();
     };
   }
 
@@ -109,7 +109,7 @@ class _SignUpButtonsState extends State<SignUpButtons> {
     SplashViewModel viewmodel,
   ) {
     return () async {
-      viewmodel.initFuse();
+      await viewmodel.initFuse();
     };
   }
 

@@ -124,10 +124,10 @@ class _VerifyPhoneNumberState extends State<VerifyPhoneNumber> {
                         fontWeight: FontWeight.normal,
                       ),
                     ),
-                    Text(
+                    const Text(
                       'A message has been sent to: ',
                       textAlign: TextAlign.center,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 15,
                         fontWeight: FontWeight.normal,
                       ),

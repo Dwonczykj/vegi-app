@@ -72,9 +72,11 @@ class UpdateCartItem {
 class OrderCreationProcessStatusUpdate {
   OrderCreationProcessStatusUpdate({
     required this.status,
+    required this.orderCreationStatusMessage,
   });
 
   final OrderCreationProcessStatus status;
+  final String orderCreationStatusMessage;
 
   @override
   String toString() {
@@ -180,7 +182,7 @@ class AddQRCodeToProductSuggestionRTO {
 
   @override
   String toString() {
-    return 'AddQRCodeToProductSuggestionRTO : ${qrCode}';
+    return 'AddQRCodeToProductSuggestionRTO : $qrCode';
   }
 }
 
@@ -221,7 +223,7 @@ class ReplaceCart {
 
   @override
   String toString() {
-    return 'ReplaceCart : ${newCart}';
+    return 'ReplaceCart : $newCart';
   }
 }
 
@@ -380,7 +382,7 @@ class CancelOrder {
 
   @override
   String toString() {
-    return 'CancelOrder : orderID: ${orderId}';
+    return 'CancelOrder : orderID: $orderId';
   }
 }
 
@@ -575,7 +577,8 @@ ThunkAction<AppState> autoSelectDeliveryAddress() {
           store.state.userState.listOfDeliveryAddresses
               .where(
                 (address) => address.deliversTo(
-                    store.state.cartState.fulfilmentPostalDistricts),
+                  store.state.cartState.fulfilmentPostalDistricts,
+                ),
               )
               .toList();
       if (availableDeliveryAddresses.isNotEmpty) {
@@ -748,22 +751,24 @@ ThunkAction<AppState> registerEmailWaitingListHandler({
         },
       );
       await Sentry.captureException(
-        Exception('Error in Email Registration: ${e.toString()}'),
+        Exception('Error in Email Registration: $e'),
         stackTrace: s,
       );
     }
     store.dispatch(
-      fetchPositionInWaitingListQueue(errorHandler: (err) {
-        store.dispatch(
-          SetCartError(
-            error: ErrorDetails<CartErrCode>(
-              title: Messages.connectionError,
-              message: Messages.failedToCheckPositionInWaitingList,
-              code: CartErrCode.failedToCheckPositionInWaitingList,
+      fetchPositionInWaitingListQueue(
+        errorHandler: (err) {
+          store.dispatch(
+            SetCartError(
+              error: ErrorDetails<CartErrCode>(
+                title: Messages.connectionError,
+                message: Messages.failedToCheckPositionInWaitingList,
+                code: CartErrCode.failedToCheckPositionInWaitingList,
+              ),
             ),
-          ),
-        );
-      }),
+          );
+        },
+      ),
     );
   };
 }
@@ -1070,7 +1075,8 @@ ThunkAction<AppState> loadBasketUriToCart(
       );
       if (basket == null) {
         return errorHandler(
-            'Unable to fetch order for relative uri: $basketUri');
+          'Unable to fetch order for relative uri: $basketUri',
+        );
       }
       store.dispatch(
         ReplaceCart(
@@ -1546,7 +1552,8 @@ ThunkAction<AppState> startOrderCreationProcess({
     try {
       final cartState = store.state.cartState;
       log.verbose(
-          'startOrderCreationProcess: [${cartState.isDelivery ? 'Delivery' : cartState.isInStore ? 'inStore' : 'collection'}]');
+        'startOrderCreationProcess: [${cartState.isDelivery ? 'Delivery' : cartState.isInStore ? 'inStore' : 'collection'}]',
+      );
       OrderCreationProcessStatus sentryUpdatePipe(
         OrderCreationProcessStatus status,
       ) {
@@ -1565,6 +1572,7 @@ ThunkAction<AppState> startOrderCreationProcess({
             status: sentryUpdatePipe(
               OrderCreationProcessStatus.orderAlreadyBeingCreated,
             ),
+            orderCreationStatusMessage: 'Order creation in progress',
           ),
         );
         return;
@@ -1575,6 +1583,7 @@ ThunkAction<AppState> startOrderCreationProcess({
             status: sentryUpdatePipe(
               OrderCreationProcessStatus.needToSelectATimeSlot,
             ),
+            orderCreationStatusMessage: 'Please select a time slot',
           ),
         );
         return;
@@ -1585,6 +1594,7 @@ ThunkAction<AppState> startOrderCreationProcess({
             status: sentryUpdatePipe(
               OrderCreationProcessStatus.needToSelectADeliveryAddress,
             ),
+            orderCreationStatusMessage: 'Please select a delivery address',
           ),
         );
         return;
@@ -1596,6 +1606,8 @@ ThunkAction<AppState> startOrderCreationProcess({
             status: sentryUpdatePipe(
               OrderCreationProcessStatus.orderIsBelowVendorMinimumOrder,
             ),
+            orderCreationStatusMessage:
+                "Your order is below the vendor's minimum order amount. Please add more to order.",
           ),
         );
       } else {
@@ -1603,6 +1615,7 @@ ThunkAction<AppState> startOrderCreationProcess({
           ..dispatch(
             OrderCreationProcessStatusUpdate(
               status: OrderCreationProcessStatus.none,
+              orderCreationStatusMessage: '',
             ),
           )
           ..dispatch(
@@ -1743,6 +1756,8 @@ ThunkAction<AppState> sendOrderObject<T extends CreateOrderForFulfilment>({
               status: _sentryUpdatePipe(
                 OrderCreationProcessStatus.sendOrderCallTimedOut,
               ),
+              orderCreationStatusMessage:
+                  'Unable to reach vegi servers at this time. Please check internet connection',
             ),
           );
       } else if (result.orderCreationStatus == OrderCreationStatus.failed) {
@@ -1757,6 +1772,8 @@ ThunkAction<AppState> sendOrderObject<T extends CreateOrderForFulfilment>({
               status: _sentryUpdatePipe(
                 OrderCreationProcessStatus.sendOrderCallServerError,
               ),
+              orderCreationStatusMessage:
+                  'An unknown error occurred on the server',
             ),
           );
       } else {
@@ -1774,6 +1791,7 @@ ThunkAction<AppState> sendOrderObject<T extends CreateOrderForFulfilment>({
                 status: _sentryUpdatePipe(
                   OrderCreationProcessStatus.paymentIntentCheckNotFound,
                 ),
+                orderCreationStatusMessage: 'Stripe payment checks failed',
               ),
             );
           return;
@@ -1799,6 +1817,8 @@ ThunkAction<AppState> sendOrderObject<T extends CreateOrderForFulfilment>({
                   OrderCreationProcessStatus
                       .paymentIntentAmountDoesntMatchCartTotal,
                 ),
+                orderCreationStatusMessage:
+                    "cart total doesn't match amount on server",
               ),
             );
         } else if (result.stripePaymentIntent.customer == null) {
@@ -1814,6 +1834,7 @@ ThunkAction<AppState> sendOrderObject<T extends CreateOrderForFulfilment>({
                   OrderCreationProcessStatus
                       .unableToGetStripeCustomerIdFromCreateOrderRequest,
                 ),
+                orderCreationStatusMessage: '',
               ),
             );
         } else {
@@ -1889,6 +1910,8 @@ ThunkAction<AppState> sendOrderObject<T extends CreateOrderForFulfilment>({
         store.dispatch(
           OrderCreationProcessStatusUpdate(
             status: OrderCreationProcessStatus.sendOrderCallServerError,
+            orderCreationStatusMessage:
+                'An unknown error occurred on the server',
           ),
         );
       }
@@ -1911,6 +1934,8 @@ ThunkAction<AppState> sendOrderObject<T extends CreateOrderForFulfilment>({
         ..dispatch(
           OrderCreationProcessStatusUpdate(
             status: OrderCreationProcessStatus.sendOrderCallClientError,
+            orderCreationStatusMessage:
+                'An unknown error occurred before sending the order to vegi',
           ),
         );
       log.error(
@@ -1945,13 +1970,49 @@ ThunkAction<AppState> cancelOrder({
   };
 }
 
+ThunkAction<AppState> stopPaymentProcess() {
+  return (Store<AppState> store) async {
+    try {
+      final orderId = store.state.cartState.orderID.isNotEmpty
+          ? int.tryParse(store.state.cartState.orderID)
+          : null;
+      if (orderId != null) {
+        store.dispatch(
+          cancelOrder(
+            orderId: orderId,
+            senderWalletAddress: store.state.userState.walletAddress,
+          ),
+        );
+      }
+      store
+        ..dispatch(SetTransferringPayment(flag: false))
+        ..dispatch(
+          StripePaymentStatusUpdate(
+            status: StripePaymentStatus
+                .paymentCancelled, // TODO: Hande this update and refactor apple pay stripe method to use this code too
+          ),
+        )
+        ..dispatch(
+          OrderCreationProcessStatusUpdate(
+            status: OrderCreationProcessStatus.orderCancelled,
+            orderCreationStatusMessage: 'Order cancelled',
+          ),
+        )
+        ..dispatch(SetPaymentButtonFlag(false));
+    } catch (e, s) {
+      log.error('ERROR - stopPaymentProcess $e', stackTrace: s);
+    }
+  };
+}
+
 ThunkAction<AppState> startPaymentProcess({
   required Future<void> Function(PaymentMethod?) showBottomPaymentSheet,
 }) {
   return (Store<AppState> store) async {
     try {
       log.verbose(
-          'startPaymentProcess called with payment method: ${store.state.cartState.selectedPaymentMethod?.name ?? 'UNKNOWN'}');
+        'startPaymentProcess called with payment method: ${store.state.cartState.selectedPaymentMethod?.name ?? 'UNKNOWN'}',
+      );
       if (store.state.cartState.selectedPaymentMethod == PaymentMethod.stripe) {
         unawaited(
           Analytics.track(
@@ -1960,7 +2021,7 @@ ThunkAction<AppState> startPaymentProcess({
         );
         final paymentIntentID = store.state.cartState.paymentIntentID;
         if (store.state.userState.vegiAccountId == null) {
-          final e = 'vegi AccountId not set on state... Cannot start payment';
+          const e = 'vegi AccountId not set on state... Cannot start payment';
           log.error(e, stackTrace: StackTrace.current);
 
           store
@@ -1978,29 +2039,15 @@ ThunkAction<AppState> startPaymentProcess({
             );
           return;
         } else if (store.state.userState.stripeCustomerId == null) {
-          final e =
+          const e =
               'stripe customer id not set on state... Cannot startPaymentProcess';
           log.error(
             e,
             stackTrace: StackTrace.current,
           );
-          await Sentry.captureException(
-            Exception(e),
-            stackTrace: StackTrace.current, // from catch (e, s)
+          store.dispatch(
+            stopPaymentProcess(),
           );
-          store
-            ..dispatch(SetPaymentButtonFlag(false))
-            ..dispatch(
-              SetIsLoadingHttpRequest(
-                isLoading: false,
-              ),
-            )
-            ..dispatch(
-              cancelOrder(
-                orderId: int.parse(store.state.cartState.orderID),
-                senderWalletAddress: store.state.userState.walletAddress,
-              ),
-            );
           return;
         } else if (store.state.cartState.orderCreationProcessStatus !=
             OrderCreationProcessStatus.none) {
@@ -2090,7 +2137,7 @@ ThunkAction<AppState> startPaymentProcess({
             );
           return;
         } else if (store.state.userState.stripeCustomerId == null) {
-          final e =
+          const e =
               'stripe customer id not set on state... Cannot start payment';
           log.error(
             e,
@@ -2261,6 +2308,8 @@ ThunkAction<AppState> startPaymentProcess({
                     status: value
                         ? OrderCreationProcessStatus.success
                         : OrderCreationProcessStatus.orderCancelled,
+                    orderCreationStatusMessage:
+                        value ? 'Order success' : 'Order cancelled',
                   ),
                 )
                 ..dispatch(
@@ -2292,7 +2341,7 @@ ThunkAction<AppState> startPaymentProcess({
           ),
         );
         if (store.state.userState.vegiAccountId == null) {
-          final e = 'Vegi AccountId not set on state... Cannot start payment';
+          const e = 'Vegi AccountId not set on state... Cannot start payment';
           log.error(e);
           await Sentry.captureException(
             Exception(e),
@@ -2430,7 +2479,7 @@ ThunkAction<AppState> startPeeplPayProcess() {
   return (Store<AppState> store) async {
     try {
       if (store.state.userState.vegiAccountId == null) {
-        final e = 'vegi AccountId not set on state... Cannot start payment';
+        const e = 'vegi AccountId not set on state... Cannot start payment';
         log.error(
           e,
           stackTrace: StackTrace.current,
@@ -2440,7 +2489,7 @@ ThunkAction<AppState> startPeeplPayProcess() {
           stackTrace: StackTrace.current, // from catch (e, s)
         );
       } else if (store.state.userState.stripeCustomerId == null) {
-        final e = 'stripe customer id not set on state... Cannot start payment';
+        const e = 'stripe customer id not set on state... Cannot start payment';
         log.error(
           e,
           stackTrace: StackTrace.current,
@@ -2562,7 +2611,7 @@ ThunkAction<AppState> startTokenPaymentToRestaurant() {
           //   externalId: store.state.cartState.paymentIntentID,
           // ) as Map<String, dynamic>;
           if (exceptionOrSmartWalletEventStream.hasError) {
-            print(exceptionOrSmartWalletEventStream.error.toString());
+            print(exceptionOrSmartWalletEventStream.error);
           } else {
             gbpxResponse = {};
             //todo: refactor this part to include success, failure and error handlers visible from the build context called from
@@ -2570,22 +2619,22 @@ ThunkAction<AppState> startTokenPaymentToRestaurant() {
               (SmartWalletEvent event) {
                 switch (event.name) {
                   case 'transactionStarted':
-                    log.info('transactionStarted ${event.data.toString()}');
+                    log.info('transactionStarted ${event.data}');
                     break;
                   case 'transactionHash':
-                    log.info('transactionHash ${event.data.toString()}');
+                    log.info('transactionHash ${event.data}');
                     break;
                   case 'transactionSucceeded':
-                    log.info('transactionSucceeded ${event.data.toString()}');
+                    log.info('transactionSucceeded ${event.data}');
                     gbpxResponse = event.data;
                     break;
                   case 'transactionFailed':
-                    log.warn('transactionFailed ${event.data.toString()}');
+                    log.warn('transactionFailed ${event.data}');
                     break;
                 }
               },
               onError: (error) {
-                log.error('Error occurred: ${error.toString()}');
+                log.error('Error occurred: $error');
               },
             );
           }
@@ -2612,7 +2661,7 @@ ThunkAction<AppState> startTokenPaymentToRestaurant() {
           //   externalId: store.state.cartState.paymentIntentID,
           // ) as Map<String, dynamic>;
           if (exceptionOrSmartWalletEventStream.hasError) {
-            print(exceptionOrSmartWalletEventStream.error.toString());
+            print(exceptionOrSmartWalletEventStream.error);
           } else {
             gbpxResponse = {};
             //todo: refactor this part to include success, failure and error handlers visible from the build context called from
@@ -2620,22 +2669,22 @@ ThunkAction<AppState> startTokenPaymentToRestaurant() {
               (SmartWalletEvent event) {
                 switch (event.name) {
                   case 'transactionStarted':
-                    log.info('transactionStarted ${event.data.toString()}');
+                    log.info('transactionStarted ${event.data}');
                     break;
                   case 'transactionHash':
-                    log.info('transactionHash ${event.data.toString()}');
+                    log.info('transactionHash ${event.data}');
                     break;
                   case 'transactionSucceeded':
-                    log.info('transactionSucceeded ${event.data.toString()}');
+                    log.info('transactionSucceeded ${event.data}');
                     gbpxResponse = event.data;
                     break;
                   case 'transactionFailed':
-                    log.warn('transactionFailed ${event.data.toString()}');
+                    log.warn('transactionFailed ${event.data}');
                     break;
                 }
               },
               onError: (error) {
-                log.error('Error occurred: ${error.toString()}');
+                log.error('Error occurred: $error');
               },
             );
           }
@@ -2691,10 +2740,12 @@ ThunkAction<AppState> startPaymentConfirmationCheck() {
               if (completedValue.paymentStatus == OrderPaidStatus.paid) {
                 store
                   ..dispatch(SetTransferringPayment(flag: false))
-                  ..dispatch(SetConfirmed(
-                    flag: true,
-                    orderId: int.parse(store.state.cartState.orderID),
-                  ));
+                  ..dispatch(
+                    SetConfirmed(
+                      flag: true,
+                      orderId: int.parse(store.state.cartState.orderID),
+                    ),
+                  );
                 timer.cancel();
                 unawaited(
                   Analytics.track(
@@ -2751,7 +2802,8 @@ ThunkAction<AppState> subscribeToOrderUpdates() {
     );
     if (orderDetails == null) {
       final err = Exception(
-          'Unable to locate order with internal id: ${store.state.cartState.orderID} from vegi backend.');
+        'Unable to locate order with internal id: ${store.state.cartState.orderID} from vegi backend.',
+      );
       log.error(
         err,
         stackTrace: StackTrace.current,

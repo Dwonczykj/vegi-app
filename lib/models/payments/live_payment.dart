@@ -19,10 +19,6 @@ class LivePayment with _$LivePayment {
 
   factory LivePayment.initial() => LivePayment(
     amount: 0.0,
-    currency: Currency.GBP,
-    status: PaymentProcessingStatus.none,
-    technology: PaymentTechnology.card,
-    type: PaymentType.cardPayment,
   );
 
   factory LivePayment.fromJson(Map<String, dynamic> json) =>

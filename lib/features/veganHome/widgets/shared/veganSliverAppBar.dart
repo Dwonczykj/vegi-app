@@ -109,7 +109,7 @@ class _VeganSliverAppBarState extends State<VeganSliverAppBar> {
                                   onChanged: (value) {
                                     setState(() {
                                       viewmodel.updateSelectedSearchPostalCode(
-                                          value!);
+                                          value!,);
                                       viewmodel.changeOutCode(value);
                                       Analytics.track(
                                         eventName:
@@ -165,10 +165,10 @@ class _VeganSliverAppBarState extends State<VeganSliverAppBar> {
                         },
                         icon: const Icon(Icons.search),
                         padding: const EdgeInsets.fromLTRB(
-                          4.0,
-                          0.0,
-                          0.0,
-                          0.0,
+                          4,
+                          0,
+                          0,
+                          0,
                         ),
                       ),
                     IconButton(
@@ -178,20 +178,20 @@ class _VeganSliverAppBarState extends State<VeganSliverAppBar> {
                       ),
                       icon: const Icon(Icons.headset_mic),
                       padding: const EdgeInsets.fromLTRB(
-                        0.0,
-                        0.0,
-                        4.0,
-                        0.0,
+                        0,
+                        0,
+                        4,
+                        0,
                       ),
                       // icon: const Icon(Icons.contact_support),
                       // icon: const Icon(Icons.live_help),
                     ),
                     Padding(
                       padding: const EdgeInsets.fromLTRB(
-                        8.0,
-                        0.0,
-                        4.0,
-                        0.0,
+                        8,
+                        0,
+                        4,
+                        0,
                       ),
                       child: Material(
                         borderRadius: BorderRadius.circular(50),

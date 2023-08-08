@@ -15,8 +15,8 @@ _$_Discount _$$_DiscountFromJson(Map<String, dynamic> json) => _$_Discount(
       expiryDateTime: jsonToTimeStamp(json['expiryDateTime']),
       timesUsed: json['timesUsed'] as int?,
       maxUses: json['maxUses'] as int?,
-      isEnabled: json['isEnabled'] as bool? ?? false,
       linkedWalletAddress: json['linkedWalletAddress'] as String?,
+      isEnabled: json['isEnabled'] as bool? ?? false,
       vendor: json['vendor'] == null
           ? null
           : VendorDTO.fromJson(json['vendor'] as Map<String, dynamic>),
@@ -32,8 +32,8 @@ Map<String, dynamic> _$$_DiscountToJson(_$_Discount instance) =>
       'expiryDateTime': timeStampToJsonInt(instance.expiryDateTime),
       'timesUsed': instance.timesUsed,
       'maxUses': instance.maxUses,
-      'isEnabled': instance.isEnabled,
       'linkedWalletAddress': instance.linkedWalletAddress,
+      'isEnabled': instance.isEnabled,
       'vendor': instance.vendor?.toJson(),
     };
 

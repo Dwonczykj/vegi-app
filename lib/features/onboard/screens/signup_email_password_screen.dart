@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:ui';
 
 import 'package:carrier_info/carrier_info.dart';
 import 'package:country_code_picker/country_code_picker.dart';
@@ -133,7 +132,7 @@ class _SignUpWithEmailAndPasswordScreenState
             ),
           );
           log.error(newViewModel.signupError!.toString(),
-              sentryHint: 'Error signup email and password: ');
+              sentryHint: 'Error signup email and password: ',);
           if (newViewModel.signupError!.code != null) {
             final errCode = newViewModel.signupError!.code!;
             if (errCode == SignUpErrCode.userNotFound) {
@@ -337,7 +336,7 @@ class _SignUpWithEmailAndPasswordScreenState
                                           'Email authentication taking too long,',
                                     );
                                     store.dispatch(
-                                        SignupLoading(isLoading: false));
+                                        SignupLoading(isLoading: false),);
                                   }
                                 },
                                 () => viewmodel.signinEmailAndPassword(

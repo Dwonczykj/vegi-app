@@ -52,8 +52,8 @@ void main() {
       firebaseRemoteConfig = FirebaseRemoteConfig.instance;
       auth = FirebaseAuth.instance;
       // await configureDependencies(environment: Env.test);
-      final dependency_injection = GetIt.instance;
-      dependency_injection.registerFactory<LogIt>(() => LogIt(Logger()));
+      final dependencyInjection = GetIt.instance;
+      dependencyInjection.registerFactory<LogIt>(() => LogIt(Logger()));
       return firebaseApp;
     });
 

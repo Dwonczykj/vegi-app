@@ -191,6 +191,7 @@ class PaymentButton extends StatelessWidget {
                 ),
               ],
             ),
+            isLoading: viewmodel.isLoading,
             buttonAction: () {
               if (viewmodel.selectedRestaurantIsLive) {
                 Analytics.track(
@@ -237,7 +238,6 @@ class PaymentButton extends StatelessWidget {
             },
             baseColor: Colors.white,
             highlightColor: Colors.grey.shade200,
-            isLoading: viewmodel.isLoading,
           );
         },
       ),

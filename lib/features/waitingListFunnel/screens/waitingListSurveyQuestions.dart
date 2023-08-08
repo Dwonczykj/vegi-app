@@ -14,8 +14,7 @@ import 'package:vegan_liverpool/redux/viewsmodels/waitingListFunnel/waitingListF
 
 class WaitingListSurveyQuestionsScreens extends StatefulWidget {
   const WaitingListSurveyQuestionsScreens({
-    Key? key,
-    required this.surveyCompleted,
+    required this.surveyCompleted, Key? key,
   }) : super(key: key);
 
   final bool surveyCompleted;
@@ -107,7 +106,7 @@ class _WaitingListSurveyQuestionsScreensState
 
   @override
   Widget build(BuildContext context) {
-    final _tween = MovieTween()
+    final tween = MovieTween()
       ..scene(begin: Duration.zero, duration: const Duration(seconds: 1)).tween(
         screenColor,
         ColorTween(begin: themeShade200, end: themeShade700),
@@ -132,8 +131,8 @@ class _WaitingListSurveyQuestionsScreensState
           Expanded(
             flex: 20,
             child: CustomAnimationBuilder(
-              tween: _tween, // Pass in tween
-              duration: _tween.duration, // Obtain duration
+              tween: tween, // Pass in tween
+              duration: tween.duration, // Obtain duration
               builder: (_, Movie value, child) {
                 return ColoredBox(
                   color: value.get(screenColor),

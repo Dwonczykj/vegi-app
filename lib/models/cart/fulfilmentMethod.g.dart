@@ -15,8 +15,8 @@ _$_FulfilmentMethod _$$_FulfilmentMethodFromJson(Map<String, dynamic> json) =>
       bufferLength: json['bufferLength'] as num?,
       orderCutoff: json['orderCutoff'] as String?,
       maxOrders: json['maxOrders'] as int?,
-      maxDeliveryDistance: json['maxDeliveryDistance'] as int? ?? null,
       priceModifier: json['priceModifier'] as num?,
+      maxDeliveryDistance: json['maxDeliveryDistance'] as int? ?? null,
       vendor: json['vendor'] == null ? null : fromJsonVendorDTO(json['vendor']),
       deliveryPartner: json['deliveryPartner'] == null
           ? null
@@ -37,8 +37,8 @@ Map<String, dynamic> _$$_FulfilmentMethodToJson(_$_FulfilmentMethod instance) =>
       'bufferLength': instance.bufferLength,
       'orderCutoff': instance.orderCutoff,
       'maxOrders': instance.maxOrders,
-      'maxDeliveryDistance': instance.maxDeliveryDistance,
       'priceModifier': instance.priceModifier,
+      'maxDeliveryDistance': instance.maxDeliveryDistance,
       'vendor': instance.vendor?.toJson(),
       'deliveryPartner': instance.deliveryPartner?.toJson(),
       'openingHours': instance.openingHours?.toJson(),

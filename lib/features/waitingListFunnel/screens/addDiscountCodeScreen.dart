@@ -28,8 +28,7 @@ typedef AddDiscountCode = void Function(
 
 class AddDiscountCodeScreen extends StatefulWidget {
   const AddDiscountCodeScreen({
-    Key? key,
-    required this.onVerifyDiscountCode,
+    required this.onVerifyDiscountCode, Key? key,
   }) : super(key: key);
 
   final void Function() onVerifyDiscountCode;
@@ -81,7 +80,6 @@ class _AddDiscountCodeScreenState extends State<AddDiscountCodeScreen>
   Widget build(BuildContext context) {
     return MyScaffold(
       title: 'Add voucher',
-      makeBodySafe: false,
       body: StoreConnector<AppState, AddDiscountCodeViewModel>(
         onInit: (store) {},
         distinct: true,
@@ -134,17 +132,15 @@ class _AddDiscountCodeScreenState extends State<AddDiscountCodeScreen>
           return ColoredBox(
             color: Colors.grey[300]!,
             child: Column(
-              mainAxisSize: MainAxisSize.max,
               children: [
                 SingleChildScrollView(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    mainAxisSize: MainAxisSize.max,
                     children: [
                       Container(
                         // color: Colors.blue,
                         // width: 300.0,
-                        height: 200.0,
+                        height: 200,
                         padding: const EdgeInsets.only(
                           top: 20,
                           right: 20,
@@ -170,7 +166,7 @@ class _AddDiscountCodeScreenState extends State<AddDiscountCodeScreen>
                               ),
                               child: Center(
                                 child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
+                                  padding: const EdgeInsets.all(8),
                                   child: AutoSizeText(
                                     viewModel.voucherPotValue
                                         .formattedPriceNoDecimals,
@@ -190,11 +186,10 @@ class _AddDiscountCodeScreenState extends State<AddDiscountCodeScreen>
                       ),
                       Column(
                         mainAxisAlignment: MainAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.max,
                         children: [
                           Padding(
                             padding:
-                                const EdgeInsets.symmetric(horizontal: 8.0),
+                                const EdgeInsets.symmetric(horizontal: 8),
                             child: AutoSizeText(
                               Messages.addVoucherCode,
                               textAlign: TextAlign.center,
@@ -225,7 +220,7 @@ class _AddDiscountCodeScreenState extends State<AddDiscountCodeScreen>
                               key: _formKey,
                               child: Column(
                                 children: <Widget>[
-                                  Container(
+                                  SizedBox(
                                     width: 280,
                                     // decoration: BoxDecoration(
                                     //   border: Border(

@@ -34,7 +34,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   bool isRouting = false;
   double? _opacity;
-  bool _loaded = false;
+  final bool _loaded = false;
 
   @override
   void initState() {
@@ -60,7 +60,7 @@ class _SplashScreenState extends State<SplashScreen> {
         !store.state.userState.isLoggedIn;
     if (privateKey.isEmpty || jwtToken.isEmpty || isLoggedOut) {
       log.info(
-          'Push OnBoardScreen() from ${rootRouter.current.name} at splash_screen.dart');
+          'Push OnBoardScreen() from ${rootRouter.current.name} at splash_screen.dart',);
       const navTo = OnBoardScreen();
       if (mounted) {
         await context.router.push(navTo);

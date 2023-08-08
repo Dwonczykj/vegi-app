@@ -3,10 +3,8 @@ import 'package:vegan_liverpool/features/veganHome/Helpers/helpers.dart';
 
 class TransparentButton extends StatelessWidget {
   const TransparentButton({
-    Key? key,
+    required this.onPressed, required this.label, Key? key,
     this.fontSize = 18,
-    required this.onPressed,
-    required this.label,
     this.width = 21.0,
     this.height = 21.0,
     this.preload = false,

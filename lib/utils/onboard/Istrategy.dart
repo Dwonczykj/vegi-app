@@ -84,7 +84,7 @@ class OnBoardStrategyFactory {
       return FirebaseStrategy();
     } else {
       final err = UnsupportedError(
-          '`$strategy` onboarding strategy no longer supported');
+          '`$strategy` onboarding strategy no longer supported',);
       Sentry.captureException(
         err,
         stackTrace: StackTrace.current,

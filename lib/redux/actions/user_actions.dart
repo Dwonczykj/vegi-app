@@ -7,9 +7,7 @@ import 'package:device_info_plus/device_info_plus.dart';
 import 'package:apple_product_name/apple_product_name.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_auth_platform_interface/firebase_auth_platform_interface.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_udid/flutter_udid.dart';
@@ -777,7 +775,7 @@ ThunkAction<AppState> updateEmailForWaitingListEntry({
       store.dispatch(SetEmail(email.toLowerCase().trim()));
 
       if (store.state.userState.waitingListEntryId == null) {
-        final warning =
+        const warning =
             "Can't update user email with vegi as no waiting list entry id is stored in state...";
         log.error(warning);
         // onError(warning);
@@ -860,7 +858,7 @@ ThunkAction<AppState> updateEmail({
         if (errMsg == 'bad email passed') {
           store.dispatch(SignUpFailed(
               error:
-                  SignUpErrorDetails(title: 'Bad email format', message: '')));
+                  SignUpErrorDetails(title: 'Bad email format', message: ''),),);
         }
         log.info(
           errMsg,
@@ -868,7 +866,7 @@ ThunkAction<AppState> updateEmail({
         );
         store
           ..dispatch(
-              SignUpLoadingMessage(message: 'Reverting Email as $errMsg.'))
+              SignUpLoadingMessage(message: 'Reverting Email as $errMsg.'),)
           ..dispatch(SetEmail(oldEmail));
         onError?.call(
           // 'Unable to update users email as another user has that email. Please check if you have previously registered with a different number.',
@@ -976,7 +974,7 @@ ThunkAction<AppState> checkForUpdatesFirebaseRemoteConfig() {
       final currentBuildVersionStatus = await newVersion.getVersionStatus();
       if (currentBuildVersionStatus != null) {
         currentBuildNumber = currentBuildVersionStatus.localVersionParsed;
-        if (currentBuildNumber == null || requiredBuildNumber == null) {
+        if (currentBuildNumber == null) {
           updateNeededUsingFirebaseConfig = false;
         } else {
           updateNeededUsingFirebaseConfig =
@@ -1029,8 +1027,7 @@ ThunkAction<AppState> updateAppNeededNotificationSeen() {
 }
 
 ThunkAction<AppState> fetchPositionInWaitingListQueue({
-  void Function()? successHandler,
-  required void Function(String) errorHandler,
+  required void Function(String) errorHandler, void Function()? successHandler,
 }) {
   return (Store<AppState> store) async {
     try {
@@ -1127,7 +1124,7 @@ ThunkAction<AppState> submitSurveyResponse(
           //     answer: response,
           //   ),
           // );
-          onSuccess?.call();
+          onSuccess.call();
         },
         (eStr) {
           Analytics.track(
@@ -1137,7 +1134,7 @@ ThunkAction<AppState> submitSurveyResponse(
               'error': eStr,
             },
           );
-          onError?.call(eStr);
+          onError.call(eStr);
         },
       );
     } catch (e, s) {
@@ -1146,7 +1143,7 @@ ThunkAction<AppState> submitSurveyResponse(
         error: e,
         stackTrace: s,
       );
-      onError?.call(e.toString());
+      onError.call(e.toString());
       await Analytics.track(
         eventName: AnalyticsEvents.submitSurveyResponse,
         properties: {
@@ -1606,7 +1603,6 @@ ThunkAction<AppState> updateDisplayNameCall(String displayName) {
       if (errMsg != null) {
         log.warn(
           errMsg,
-          sentry: true,
         );
       }
       await updateFirebaseCurrentUser(({required User firebaseUser}) async {
@@ -1744,7 +1740,7 @@ ThunkAction<AppState> updateUserAvatarCall(
   return (Store<AppState> store) async {
     if (store.state.userState.vegiAccountId == null) {
       log.error(
-          'No Account is set on vegi for user. Please login and retrieve account details first.');
+          'No Account is set on vegi for user. Please login and retrieve account details first.',);
       store.dispatch(
         SetIsLoadingHttpRequest(
           isLoading: false,
@@ -1778,7 +1774,7 @@ ThunkAction<AppState> updateUserAvatarCall(
         await updateFirebaseCurrentUser(({required User firebaseUser}) async {
           final imageUrl = await peeplEatsService.uploadImageForUserAvatar(
             image: File(file!.path),
-            accountId: store.state.userState.vegiAccountId!.round(),
+            accountId: store.state.userState.vegiAccountId!,
             onError: (error, errCode) async {
               log.error(
                 'ERROR - peeplEatsService.uploadImageForUserAvatar',

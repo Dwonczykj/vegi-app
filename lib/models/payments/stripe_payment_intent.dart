@@ -10,10 +10,7 @@ part 'stripe_payment_intent.g.dart';
 class StripePaymentIntent with _$StripePaymentIntent {
   @JsonSerializable()
   factory StripePaymentIntent({
-    StripeCustomer? customer,
-    required String ephemeralKey,
-    required String publishableKey,
-    required StripePaymentIntentInternal paymentIntent,
+    required String ephemeralKey, required String publishableKey, required StripePaymentIntentInternal paymentIntent, StripeCustomer? customer,
     @Default([]) List<StripePaymentMethodInternal> paymentMethods,
   }) = _StripePaymentIntent;
 

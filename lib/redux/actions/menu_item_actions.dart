@@ -123,7 +123,7 @@ ThunkAction<AppState> updateComputeQuantity({required bool isAdd}) {
 ThunkAction<AppState> calculateItemTotalPrice() {
   return (Store<AppState> store) async {
     try {
-      int total = 0;
+      const int total = 0;
 
       final RestaurantMenuItem? menuItem = store.state.menuItemState.menuItem;
 

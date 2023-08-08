@@ -94,7 +94,7 @@ class _RestaurantNotLiveDialogState extends State<RestaurantNotLiveDialog>
                   ],
                 );
               },
-            )),
+            ),),
       ),
     );
   }

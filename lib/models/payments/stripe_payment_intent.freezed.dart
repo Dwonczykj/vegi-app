@@ -20,11 +20,11 @@ StripePaymentIntent _$StripePaymentIntentFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$StripePaymentIntent {
-  StripeCustomer? get customer => throw _privateConstructorUsedError;
   String get ephemeralKey => throw _privateConstructorUsedError;
   String get publishableKey => throw _privateConstructorUsedError;
   StripePaymentIntentInternal get paymentIntent =>
       throw _privateConstructorUsedError;
+  StripeCustomer? get customer => throw _privateConstructorUsedError;
   List<StripePaymentMethodInternal> get paymentMethods =>
       throw _privateConstructorUsedError;
 
@@ -41,14 +41,14 @@ abstract class $StripePaymentIntentCopyWith<$Res> {
       _$StripePaymentIntentCopyWithImpl<$Res, StripePaymentIntent>;
   @useResult
   $Res call(
-      {StripeCustomer? customer,
-      String ephemeralKey,
+      {String ephemeralKey,
       String publishableKey,
       StripePaymentIntentInternal paymentIntent,
+      StripeCustomer? customer,
       List<StripePaymentMethodInternal> paymentMethods});
 
-  $StripeCustomerCopyWith<$Res>? get customer;
   $StripePaymentIntentInternalCopyWith<$Res> get paymentIntent;
+  $StripeCustomerCopyWith<$Res>? get customer;
 }
 
 /// @nodoc
@@ -64,17 +64,13 @@ class _$StripePaymentIntentCopyWithImpl<$Res, $Val extends StripePaymentIntent>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? customer = freezed,
     Object? ephemeralKey = null,
     Object? publishableKey = null,
     Object? paymentIntent = null,
+    Object? customer = freezed,
     Object? paymentMethods = null,
   }) {
     return _then(_value.copyWith(
-      customer: freezed == customer
-          ? _value.customer
-          : customer // ignore: cast_nullable_to_non_nullable
-              as StripeCustomer?,
       ephemeralKey: null == ephemeralKey
           ? _value.ephemeralKey
           : ephemeralKey // ignore: cast_nullable_to_non_nullable
@@ -87,11 +83,24 @@ class _$StripePaymentIntentCopyWithImpl<$Res, $Val extends StripePaymentIntent>
           ? _value.paymentIntent
           : paymentIntent // ignore: cast_nullable_to_non_nullable
               as StripePaymentIntentInternal,
+      customer: freezed == customer
+          ? _value.customer
+          : customer // ignore: cast_nullable_to_non_nullable
+              as StripeCustomer?,
       paymentMethods: null == paymentMethods
           ? _value.paymentMethods
           : paymentMethods // ignore: cast_nullable_to_non_nullable
               as List<StripePaymentMethodInternal>,
     ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $StripePaymentIntentInternalCopyWith<$Res> get paymentIntent {
+    return $StripePaymentIntentInternalCopyWith<$Res>(_value.paymentIntent,
+        (value) {
+      return _then(_value.copyWith(paymentIntent: value) as $Val);
+    });
   }
 
   @override
@@ -105,15 +114,6 @@ class _$StripePaymentIntentCopyWithImpl<$Res, $Val extends StripePaymentIntent>
       return _then(_value.copyWith(customer: value) as $Val);
     });
   }
-
-  @override
-  @pragma('vm:prefer-inline')
-  $StripePaymentIntentInternalCopyWith<$Res> get paymentIntent {
-    return $StripePaymentIntentInternalCopyWith<$Res>(_value.paymentIntent,
-        (value) {
-      return _then(_value.copyWith(paymentIntent: value) as $Val);
-    });
-  }
 }
 
 /// @nodoc
@@ -125,16 +125,16 @@ abstract class _$$_StripePaymentIntentCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {StripeCustomer? customer,
-      String ephemeralKey,
+      {String ephemeralKey,
       String publishableKey,
       StripePaymentIntentInternal paymentIntent,
+      StripeCustomer? customer,
       List<StripePaymentMethodInternal> paymentMethods});
 
   @override
-  $StripeCustomerCopyWith<$Res>? get customer;
-  @override
   $StripePaymentIntentInternalCopyWith<$Res> get paymentIntent;
+  @override
+  $StripeCustomerCopyWith<$Res>? get customer;
 }
 
 /// @nodoc
@@ -148,17 +148,13 @@ class __$$_StripePaymentIntentCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? customer = freezed,
     Object? ephemeralKey = null,
     Object? publishableKey = null,
     Object? paymentIntent = null,
+    Object? customer = freezed,
     Object? paymentMethods = null,
   }) {
     return _then(_$_StripePaymentIntent(
-      customer: freezed == customer
-          ? _value.customer
-          : customer // ignore: cast_nullable_to_non_nullable
-              as StripeCustomer?,
       ephemeralKey: null == ephemeralKey
           ? _value.ephemeralKey
           : ephemeralKey // ignore: cast_nullable_to_non_nullable
@@ -171,6 +167,10 @@ class __$$_StripePaymentIntentCopyWithImpl<$Res>
           ? _value.paymentIntent
           : paymentIntent // ignore: cast_nullable_to_non_nullable
               as StripePaymentIntentInternal,
+      customer: freezed == customer
+          ? _value.customer
+          : customer // ignore: cast_nullable_to_non_nullable
+              as StripeCustomer?,
       paymentMethods: null == paymentMethods
           ? _value.paymentMethods
           : paymentMethods // ignore: cast_nullable_to_non_nullable
@@ -184,10 +184,10 @@ class __$$_StripePaymentIntentCopyWithImpl<$Res>
 @JsonSerializable()
 class _$_StripePaymentIntent extends _StripePaymentIntent {
   _$_StripePaymentIntent(
-      {this.customer,
-      required this.ephemeralKey,
+      {required this.ephemeralKey,
       required this.publishableKey,
       required this.paymentIntent,
+      this.customer,
       this.paymentMethods = const []})
       : super._();
 
@@ -195,20 +195,20 @@ class _$_StripePaymentIntent extends _StripePaymentIntent {
       _$$_StripePaymentIntentFromJson(json);
 
   @override
-  final StripeCustomer? customer;
-  @override
   final String ephemeralKey;
   @override
   final String publishableKey;
   @override
   final StripePaymentIntentInternal paymentIntent;
   @override
+  final StripeCustomer? customer;
+  @override
   @JsonKey()
   final List<StripePaymentMethodInternal> paymentMethods;
 
   @override
   String toString() {
-    return 'StripePaymentIntent(customer: $customer, ephemeralKey: $ephemeralKey, publishableKey: $publishableKey, paymentIntent: $paymentIntent, paymentMethods: $paymentMethods)';
+    return 'StripePaymentIntent(ephemeralKey: $ephemeralKey, publishableKey: $publishableKey, paymentIntent: $paymentIntent, customer: $customer, paymentMethods: $paymentMethods)';
   }
 
   @override
@@ -216,14 +216,14 @@ class _$_StripePaymentIntent extends _StripePaymentIntent {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_StripePaymentIntent &&
-            (identical(other.customer, customer) ||
-                other.customer == customer) &&
             (identical(other.ephemeralKey, ephemeralKey) ||
                 other.ephemeralKey == ephemeralKey) &&
             (identical(other.publishableKey, publishableKey) ||
                 other.publishableKey == publishableKey) &&
             (identical(other.paymentIntent, paymentIntent) ||
                 other.paymentIntent == paymentIntent) &&
+            (identical(other.customer, customer) ||
+                other.customer == customer) &&
             const DeepCollectionEquality()
                 .equals(other.paymentMethods, paymentMethods));
   }
@@ -232,10 +232,10 @@ class _$_StripePaymentIntent extends _StripePaymentIntent {
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      customer,
       ephemeralKey,
       publishableKey,
       paymentIntent,
+      customer,
       const DeepCollectionEquality().hash(paymentMethods));
 
   @JsonKey(ignore: true)
@@ -255,10 +255,10 @@ class _$_StripePaymentIntent extends _StripePaymentIntent {
 
 abstract class _StripePaymentIntent extends StripePaymentIntent {
   factory _StripePaymentIntent(
-          {final StripeCustomer? customer,
-          required final String ephemeralKey,
+          {required final String ephemeralKey,
           required final String publishableKey,
           required final StripePaymentIntentInternal paymentIntent,
+          final StripeCustomer? customer,
           final List<StripePaymentMethodInternal> paymentMethods}) =
       _$_StripePaymentIntent;
   _StripePaymentIntent._() : super._();
@@ -267,13 +267,13 @@ abstract class _StripePaymentIntent extends StripePaymentIntent {
       _$_StripePaymentIntent.fromJson;
 
   @override
-  StripeCustomer? get customer;
-  @override
   String get ephemeralKey;
   @override
   String get publishableKey;
   @override
   StripePaymentIntentInternal get paymentIntent;
+  @override
+  StripeCustomer? get customer;
   @override
   List<StripePaymentMethodInternal> get paymentMethods;
   @override

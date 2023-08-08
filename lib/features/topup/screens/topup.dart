@@ -25,10 +25,6 @@ class _TopupScreenState extends State<TopupScreen>
   String _amountText = '25';
   final bool _isPreloading = false;
 
-  @override
-  void dispose() {
-    super.dispose();
-  }
 
   @override
   void initState() {
@@ -117,9 +113,9 @@ class _TopupScreenState extends State<TopupScreen>
                                 20,
                               ),
                             ),
-                            child: Row(
+                            child: const Row(
                               mainAxisSize: MainAxisSize.min,
-                              children: const <Widget>[
+                              children: <Widget>[
                                 Text(
                                   'GBP',
                                   style: TextStyle(

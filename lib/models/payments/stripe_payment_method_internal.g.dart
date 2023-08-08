@@ -11,6 +11,7 @@ _$_StripePaymentMethodInternal _$$_StripePaymentMethodInternalFromJson(
     _$_StripePaymentMethodInternal(
       id: json['id'] as String,
       type: $enumDecode(_$StripePaymentMethodTypeEnumMap, json['type']),
+      livemode: json['livemode'] as bool,
       billingDetails: json['billing_details'] == null
           ? null
           : StripeBillingDetails.fromJson(
@@ -21,7 +22,6 @@ _$_StripePaymentMethodInternal _$$_StripePaymentMethodInternalFromJson(
               json['card'] as Map<String, dynamic>),
       customer: json['customer'] as String?,
       created: json['created'] as num? ?? 0,
-      livemode: json['livemode'] as bool,
       metadata: json['metadata'] as Map<String, dynamic>? ?? const {},
     );
 
@@ -30,11 +30,11 @@ Map<String, dynamic> _$$_StripePaymentMethodInternalToJson(
     <String, dynamic>{
       'id': instance.id,
       'type': _$StripePaymentMethodTypeEnumMap[instance.type]!,
+      'livemode': instance.livemode,
       'billing_details': instance.billingDetails?.toJson(),
       'card': instance.card?.toJson(),
       'customer': instance.customer,
       'created': instance.created,
-      'livemode': instance.livemode,
       'metadata': instance.metadata,
     };
 

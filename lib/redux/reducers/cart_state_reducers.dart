@@ -9,66 +9,66 @@ import 'package:vegan_liverpool/redux/actions/cart_actions.dart';
 import 'package:vegan_liverpool/redux/actions/user_actions.dart';
 
 final cartStateReducers = combineReducers<UserCartState>([
-  TypedReducer<UserCartState, ResetAppState>(_resetApp),
-  TypedReducer<UserCartState, UpdateCartItems>(_updateCartItems),
-  TypedReducer<UserCartState, UpdateCartItem>(_updateCartItem),
-  TypedReducer<UserCartState, UpdateComputedCartValues>(_computeCartTotals),
-  TypedReducer<UserCartState, UpdateCartDiscount>(_updateCartDiscount),
+  TypedReducer<UserCartState, ResetAppState>(_resetApp).call,
+  TypedReducer<UserCartState, UpdateCartItems>(_updateCartItems).call,
+  TypedReducer<UserCartState, UpdateCartItem>(_updateCartItem).call,
+  TypedReducer<UserCartState, UpdateComputedCartValues>(_computeCartTotals).call,
+  TypedReducer<UserCartState, UpdateCartDiscount>(_updateCartDiscount).call,
   TypedReducer<UserCartState, AddValidVoucherCodeToCart>(
-      _addValidVoucherCodeToCart),
+      _addValidVoucherCodeToCart,).call,
   TypedReducer<UserCartState, RemoveVoucherCodeFromCart>(
-      _removeVoucherCodeFromCart),
-  TypedReducer<UserCartState, ClearCart>(_clearCart),
-  TypedReducer<UserCartState, UpdateSlots>(_updateSlots),
+      _removeVoucherCodeFromCart,).call,
+  TypedReducer<UserCartState, ClearCart>(_clearCart).call,
+  TypedReducer<UserCartState, UpdateSlots>(_updateSlots).call,
   TypedReducer<UserCartState, OrderCreationProcessStatusUpdate>(
-      _updateOrderCreationProcessStatus),
+      _updateOrderCreationProcessStatus,).call,
   TypedReducer<UserCartState, StripePaymentStatusUpdate>(
-      _updateStripePaymentStatus),
-  TypedReducer<UserCartState, UpdateSelectedTimeSlot>(_updateSelectedTimeSlot),
-  TypedReducer<UserCartState, UpdateTipAmount>(_updateTipAmount),
+      _updateStripePaymentStatus,).call,
+  TypedReducer<UserCartState, UpdateSelectedTimeSlot>(_updateSelectedTimeSlot).call,
+  TypedReducer<UserCartState, UpdateTipAmount>(_updateTipAmount).call,
   TypedReducer<UserCartState, UpdateSelectedDeliveryAddress>(
     _updateSelectedDeliveryAddress,
-  ),
-  TypedReducer<UserCartState, CreateOrder>(_createOrder),
-  TypedReducer<UserCartState, CancelOrder>(_cancelOrder),
-  TypedReducer<UserCartState, SetTransferringPayment>(_toggleTransfer),
-  TypedReducer<UserCartState, SetError>(_toggleError),
-  TypedReducer<UserCartState, SetCartErrorResolved>(_setCartErrorResolved),
-  TypedReducer<UserCartState, SetCartError>(_setCartError),
-  TypedReducer<UserCartState, SetCartIsLoading>(_setCartIsLoading),
-  TypedReducer<UserCartState, SetConfirmed>(_toggleConfirmed),
-  TypedReducer<UserCartState, UpdateSelectedAmounts>(_updateSelectedAmounts),
-  TypedReducer<UserCartState, SetRestaurantDetails>(_setRestaurantDetails),
-  TypedReducer<UserCartState, SetFulfilmentMethod>(_setFulfilmentMethodType),
+  ).call,
+  TypedReducer<UserCartState, CreateOrder>(_createOrder).call,
+  TypedReducer<UserCartState, CancelOrder>(_cancelOrder).call,
+  TypedReducer<UserCartState, SetTransferringPayment>(_toggleTransfer).call,
+  TypedReducer<UserCartState, SetError>(_toggleError).call,
+  TypedReducer<UserCartState, SetCartErrorResolved>(_setCartErrorResolved).call,
+  TypedReducer<UserCartState, SetCartError>(_setCartError).call,
+  TypedReducer<UserCartState, SetCartIsLoading>(_setCartIsLoading).call,
+  TypedReducer<UserCartState, SetConfirmed>(_toggleConfirmed).call,
+  TypedReducer<UserCartState, UpdateSelectedAmounts>(_updateSelectedAmounts).call,
+  TypedReducer<UserCartState, SetRestaurantDetails>(_setRestaurantDetails).call,
+  TypedReducer<UserCartState, SetFulfilmentMethod>(_setFulfilmentMethodType).call,
   TypedReducer<UserCartState, SetDeliveryInstructions>(
     _setDeliveryInstructions,
-  ),
-  TypedReducer<UserCartState, SetPaymentMethod>(_setPaymentMethod),
-  TypedReducer<UserCartState, SetPaymentButtonFlag>(_setPaymentButtonFlag),
+  ).call,
+  TypedReducer<UserCartState, SetPaymentMethod>(_setPaymentMethod).call,
+  TypedReducer<UserCartState, SetPaymentButtonFlag>(_setPaymentButtonFlag).call,
   TypedReducer<UserCartState, UpdateEligibleOrderDates>(
     _updateEligibleOrderDates,
-  ),
+  ).call,
   TypedReducer<UserCartState, UpdateNextAvaliableTimeSlots>(
     _updateNextAvaliableSlots,
-  ),
+  ).call,
   TypedReducer<UserCartState, AddImageToProductSuggestionRTO>(
     _addImageToProductSuggestion,
-  ),
+  ).call,
   TypedReducer<UserCartState, AddQRCodeToProductSuggestionRTO>(
     _addQRCodeToProductSuggestion,
-  ),
+  ).call,
   TypedReducer<UserCartState, AddAdditionalInformationToProductSuggestionRTO>(
     _addAdditionalInfoToProductSuggestion,
-  ),
+  ).call,
   TypedReducer<UserCartState, AddProductNameToProductSuggestionRTO>(
     _addProductNameToProductSuggestion,
-  ),
+  ).call,
   TypedReducer<UserCartState, CreateProductSuggestion>(
     _createProductSuggestion,
-  ),
+  ).call,
   TypedReducer<UserCartState, OrderPaymentAttemptCreated>(
     _orderPaymentAttemptCreated,
-  ),
+  ).call,
 ]);
 
 UserCartState _resetApp(
@@ -239,6 +239,7 @@ UserCartState _updateOrderCreationProcessStatus(
 ) {
   return state.copyWith(
     orderCreationProcessStatus: action.status,
+    orderCreationStatusMessage: action.orderCreationStatusMessage,
     payButtonLoading: false,
   );
 }

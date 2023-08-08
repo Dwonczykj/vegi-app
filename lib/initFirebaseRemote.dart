@@ -5,7 +5,7 @@ import 'package:vegan_liverpool/services.dart';
 import 'package:vegan_liverpool/utils/constants.dart';
 import 'package:vegan_liverpool/version.dart';
 
-import 'common/di/package_info.dart';
+import 'package:vegan_liverpool/common/di/package_info.dart';
 
 Future<void> initFirebaseRemote() async {
   await firebaseRemoteConfig.setConfigSettings(

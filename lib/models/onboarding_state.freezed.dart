@@ -20,16 +20,16 @@ OnboardingState _$OnboardingStateFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$OnboardingState {
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   bool get signupIsInFlux => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   SignUpErrorDetails? get signupError => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   String get signupStatusMessage => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   AuthCredential? get conflictingCredentials =>
       throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   String? get conflictingEmail => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -45,11 +45,16 @@ abstract class $OnboardingStateCopyWith<$Res> {
       _$OnboardingStateCopyWithImpl<$Res, OnboardingState>;
   @useResult
   $Res call(
-      {@JsonKey(ignore: true) bool signupIsInFlux,
-      @JsonKey(ignore: true) SignUpErrorDetails? signupError,
-      @JsonKey(ignore: true) String signupStatusMessage,
-      @JsonKey(ignore: true) AuthCredential? conflictingCredentials,
-      @JsonKey(ignore: true) String? conflictingEmail});
+      {@JsonKey(includeFromJson: false, includeToJson: false)
+          bool signupIsInFlux,
+      @JsonKey(includeFromJson: false, includeToJson: false)
+          SignUpErrorDetails? signupError,
+      @JsonKey(includeFromJson: false, includeToJson: false)
+          String signupStatusMessage,
+      @JsonKey(includeFromJson: false, includeToJson: false)
+          AuthCredential? conflictingCredentials,
+      @JsonKey(includeFromJson: false, includeToJson: false)
+          String? conflictingEmail});
 
   $SignUpErrorDetailsCopyWith<$Res>? get signupError;
 }
@@ -119,11 +124,16 @@ abstract class _$$_OnboardingStateCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {@JsonKey(ignore: true) bool signupIsInFlux,
-      @JsonKey(ignore: true) SignUpErrorDetails? signupError,
-      @JsonKey(ignore: true) String signupStatusMessage,
-      @JsonKey(ignore: true) AuthCredential? conflictingCredentials,
-      @JsonKey(ignore: true) String? conflictingEmail});
+      {@JsonKey(includeFromJson: false, includeToJson: false)
+          bool signupIsInFlux,
+      @JsonKey(includeFromJson: false, includeToJson: false)
+          SignUpErrorDetails? signupError,
+      @JsonKey(includeFromJson: false, includeToJson: false)
+          String signupStatusMessage,
+      @JsonKey(includeFromJson: false, includeToJson: false)
+          AuthCredential? conflictingCredentials,
+      @JsonKey(includeFromJson: false, includeToJson: false)
+          String? conflictingEmail});
 
   @override
   $SignUpErrorDetailsCopyWith<$Res>? get signupError;
@@ -176,30 +186,35 @@ class __$$_OnboardingStateCopyWithImpl<$Res>
 @JsonSerializable()
 class _$_OnboardingState extends _OnboardingState {
   _$_OnboardingState(
-      {@JsonKey(ignore: true) this.signupIsInFlux = false,
-      @JsonKey(ignore: true) this.signupError = null,
-      @JsonKey(ignore: true) this.signupStatusMessage = '',
-      @JsonKey(ignore: true) this.conflictingCredentials,
-      @JsonKey(ignore: true) this.conflictingEmail})
+      {@JsonKey(includeFromJson: false, includeToJson: false)
+          this.signupIsInFlux = false,
+      @JsonKey(includeFromJson: false, includeToJson: false)
+          this.signupError = null,
+      @JsonKey(includeFromJson: false, includeToJson: false)
+          this.signupStatusMessage = '',
+      @JsonKey(includeFromJson: false, includeToJson: false)
+          this.conflictingCredentials,
+      @JsonKey(includeFromJson: false, includeToJson: false)
+          this.conflictingEmail})
       : super._();
 
   factory _$_OnboardingState.fromJson(Map<String, dynamic> json) =>
       _$$_OnboardingStateFromJson(json);
 
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   final bool signupIsInFlux;
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   final SignUpErrorDetails? signupError;
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   final String signupStatusMessage;
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   final AuthCredential? conflictingCredentials;
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   final String? conflictingEmail;
 
   @override
@@ -245,31 +260,35 @@ class _$_OnboardingState extends _OnboardingState {
 
 abstract class _OnboardingState extends OnboardingState {
   factory _OnboardingState(
-          {@JsonKey(ignore: true) final bool signupIsInFlux,
-          @JsonKey(ignore: true) final SignUpErrorDetails? signupError,
-          @JsonKey(ignore: true) final String signupStatusMessage,
-          @JsonKey(ignore: true) final AuthCredential? conflictingCredentials,
-          @JsonKey(ignore: true) final String? conflictingEmail}) =
-      _$_OnboardingState;
+      {@JsonKey(includeFromJson: false, includeToJson: false)
+          final bool signupIsInFlux,
+      @JsonKey(includeFromJson: false, includeToJson: false)
+          final SignUpErrorDetails? signupError,
+      @JsonKey(includeFromJson: false, includeToJson: false)
+          final String signupStatusMessage,
+      @JsonKey(includeFromJson: false, includeToJson: false)
+          final AuthCredential? conflictingCredentials,
+      @JsonKey(includeFromJson: false, includeToJson: false)
+          final String? conflictingEmail}) = _$_OnboardingState;
   _OnboardingState._() : super._();
 
   factory _OnboardingState.fromJson(Map<String, dynamic> json) =
       _$_OnboardingState.fromJson;
 
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   bool get signupIsInFlux;
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   SignUpErrorDetails? get signupError;
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   String get signupStatusMessage;
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   AuthCredential? get conflictingCredentials;
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   String? get conflictingEmail;
   @override
   @JsonKey(ignore: true)

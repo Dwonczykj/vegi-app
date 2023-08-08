@@ -7,9 +7,7 @@ import 'package:vegan_liverpool/utils/constants.dart';
 
 class MyScaffold extends StatelessWidget {
   const MyScaffold({
-    Key? key,
-    required this.title,
-    required this.body,
+    required this.title, required this.body, Key? key,
     this.makeBodySafe = false,
     this.automaticallyImplyLeading = true,
     this.resizeToAvoidBottomInset = true,

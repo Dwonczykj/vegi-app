@@ -11,11 +11,11 @@ final userReducers = combineReducers<UserState>([
   TypedReducer<UserState, ResetAppState>(_resetApp).call,
   TypedReducer<UserState, SetAppUpdateRequired>(_setAppUpdateRequired).call,
   TypedReducer<UserState, SetAppUpdateAcknowledged>(
-          _setAppUpdateNotificationCheked)
+          _setAppUpdateNotificationCheked,)
       .call,
   TypedReducer<UserState, ResetSurveyCompleted>(_resetSurveyCompleted).call,
   TypedReducer<UserState, SetSubscribedToWaitingListUpdates>(
-          _setSubscribedToWaitingListUpdates)
+          _setSubscribedToWaitingListUpdates,)
       .call,
   TypedReducer<UserState, SetWalletConnectURI>(_setWalletConnectURI).call,
   TypedReducer<UserState, GotWalletDataSuccess>(_getWalletDataSuccess).call,
@@ -36,7 +36,7 @@ final userReducers = combineReducers<UserState>([
   TypedReducer<UserState, LogoutRequestSuccess>(_logoutSuccess).call,
   TypedReducer<UserState, SetPincodeSuccess>(_setPincode).call,
   TypedReducer<UserState, SetCompletedOnboardingSuccess>(
-          _setCompletedOnboarding)
+          _setCompletedOnboarding,)
       .call,
   TypedReducer<UserState, SetDisplayName>(_setDisplayName).call,
   TypedReducer<UserState, SetEmail>(_setEmail).call,
@@ -44,7 +44,7 @@ final userReducers = combineReducers<UserState>([
   TypedReducer<UserState, SetPreferredSignOnMethod>(_setPreferredSignonMethod)
       .call,
   TypedReducer<UserState, SetUserAuthenticationStatus>(
-          _setUserAuthenticationStatus)
+          _setUserAuthenticationStatus,)
       .call,
   TypedReducer<UserState, EmailWLRegistrationSuccess>(
     _setUserEmailForRegistrationToWaitingList,
@@ -73,7 +73,7 @@ final userReducers = combineReducers<UserState>([
   TypedReducer<UserState, SetDeviceName>(_deviceNameSuccess).call,
   TypedReducer<UserState, SetSecurityType>(_setSecurityType).call,
   TypedReducer<UserState, SetBiometricallyAuthenticated>(
-          _setBiometricallyAuthenticated)
+          _setBiometricallyAuthenticated,)
       .call,
   TypedReducer<UserState, WarnSendDialogShowed>(_warnSendDialogShowed).call,
   TypedReducer<UserState, UpdateCurrency>(_updateCurrency).call,

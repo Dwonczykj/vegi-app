@@ -7,10 +7,7 @@ import 'package:vegan_liverpool/features/veganHome/Helpers/extensions.dart';
 
 class OrderStatusCard extends StatefulWidget {
   const OrderStatusCard({
-    Key? key,
-    required this.isDelivery,
-    required this.orderId,
-    required this.orderStatus,
+    required this.isDelivery, required this.orderId, required this.orderStatus, Key? key,
   }) : super(key: key);
 
   final bool isDelivery;

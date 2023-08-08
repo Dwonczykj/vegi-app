@@ -35,9 +35,8 @@ class CartItem with _$CartItem {
     )
         required Money totalItemPrice,
     required int itemQuantity,
-    @Default(Currency.GBPx)
+    required Map<int, ProductOptionValue> selectedProductOptions, @Default(Currency.GBPx)
         Currency itemCurrency,
-    required Map<int, ProductOptionValue> selectedProductOptions,
   }) = _CartItem;
 
   const CartItem._();
@@ -50,12 +49,12 @@ class CartItem with _$CartItem {
   }
 
   List<String> get selectedProductOptionsString {
-    int _counter = 0;
+    int counter = 0;
     final List<String> optionValues = [];
     for (final element in selectedProductOptions.values) {
-      _counter++;
+      counter++;
       optionValues.add(
-        '$_counter. ${element.name} -  ${element.description}'
+        '$counter. ${element.name} -  ${element.description}'
             .capitalizeWords(),
       );
     }
@@ -79,7 +78,6 @@ class CartItem with _$CartItem {
         value: await convertCurrencyAmount(
           amount: totalItemPrice.value,
           fromCurrency: totalItemPrice.currency,
-          toCurrency: Currency.GBP,
         ),
       );
 }

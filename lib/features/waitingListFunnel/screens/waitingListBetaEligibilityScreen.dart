@@ -1,7 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:vegan_liverpool/common/router/routes.dart';
@@ -90,7 +88,6 @@ class WaitingListBetaEligibilityScreen extends StatelessWidget {
                 ),
                 Expanded(
                   child: Column(
-                    mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       const Padding(

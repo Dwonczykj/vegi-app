@@ -53,7 +53,7 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
   Object? _err;
   GlobalKey<NavigatorState> navigatorKey = GlobalKey();
   StreamSubscription? _sub;
-  UniLinksType _type = UniLinksType.string;
+  final UniLinksType _type = UniLinksType.string;
   String _latestLink = 'Unknown';
   Uri? _latestUri;
   // final ScreenCaptureEvent screenListener = ScreenCaptureEvent();
@@ -121,7 +121,7 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
   }
 
   // Platform messages are asynchronous, so we initialize in an async method.
-  void initPlatformState() async {
+  Future<void> initPlatformState() async {
     // ~ https://stackoverflow.com/a/59979431
     if (_type == UniLinksType.string) {
       await initPlatformStateForStringUniLinks();
@@ -161,7 +161,7 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
       _latestLink = latestLink ?? 'Unknown';
       _latestUri = null;
       try {
-        if (_latestLink != null) _latestUri = Uri.parse(_latestLink);
+ _latestUri = Uri.parse(_latestLink);
       } on FormatException {}
       // Parse the link and warn the user, if it is not correct,
       // but keep in mind it could be `null`.
@@ -224,10 +224,10 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
     Uri? initialUri;
     // Platform messages may fail, so we use a try/catch PlatformException.
     try {
-      final _initialLink = await getInitialLink();
-      print('initial link: $_initialLink');
-      initialLink = _initialLink ?? 'Unknown';
-      if (_initialLink != null) initialUri = Uri.parse(_initialLink);
+      final initialLink0 = await getInitialLink();
+      print('initial link: $initialLink0');
+      initialLink = initialLink0 ?? 'Unknown';
+      if (initialLink0 != null) initialUri = Uri.parse(initialLink0);
     } on PlatformException {
       initialLink = 'Failed to get initial link.';
       initialUri = null;

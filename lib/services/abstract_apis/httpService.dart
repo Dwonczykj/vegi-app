@@ -21,26 +21,25 @@ enum AuthenticationStatus {
 }
 
 abstract class HttpService {
-  final Dio dio;
-  String get baseUrl => this.dio.options.baseUrl;
-  AuthenticationStatus authStatus = AuthenticationStatus.unauthenticated;
-
   HttpService(this.dio, String baseUrl) {
-    this.dio.options.baseUrl = baseUrl.endsWith('/')
+    dio.options.baseUrl = baseUrl.endsWith('/')
         ? baseUrl.substring(0, baseUrl.length - 1)
         : baseUrl;
-    this.dio.options.headers = Map.from({
+    dio.options.headers = Map.from({
       'Content-Type': 'application/json',
       'Accept': 'application/json',
     });
   }
+  final Dio dio;
+  String get baseUrl => dio.options.baseUrl;
+  AuthenticationStatus authStatus = AuthenticationStatus.unauthenticated;
 
   bool _checkAuthRequestIsSatisfied(
     bool authRequired, {
     required bool dontRoute,
   }) {
     final unsatisfied =
-        authRequired && !this.dio.options.headers.containsKey('Cookie');
+        authRequired && !dio.options.headers.containsKey('Cookie');
     if (unsatisfied &&
         !dontRoute &&
         authStatus != AuthenticationStatus.authenticationFailed) {
@@ -157,6 +156,7 @@ abstract class HttpService {
     bool dontRoute = false,
     List<int> allowStatusCodes = const <int>[],
     Pattern? allowErrorMessage,
+    void Function(String errCode)? handleErrorCodes,
   }) async {
     late final Response<T> response;
     // Future.value(
@@ -180,12 +180,39 @@ abstract class HttpService {
         error: error,
         stackTrace: stackTrace,
       );
+      String errorCode = '';
+      if (error.response != null &&
+          error.response?.data is Map &&
+          (error.response?.data as Map).containsKey('cause') &&
+          ((error.response?.data as Map<String, dynamic>)['cause']) is Map) {
+        errorCode = ((error.response?.data as Map<String, dynamic>)['cause']
+                as Map<String, dynamic>)['code']
+            .toString();
+        handleErrorCodes?.call(errorCode);
+        return Response(
+          data: errorResponseData,
+          extra: {
+            'error': error.error,
+            'message': error.message,
+            'errorCode': errorCode,
+            'errorMessage': error.response?.data,
+            'dioResponse': error.response,
+            'dioErrorType': error.type,
+            'data': error.response?.data,
+            'stackTrace': stackTrace.filterCallStack().pretty(),
+          },
+          isRedirect: error.response?.isRedirect ?? false,
+          redirects: error.response?.redirects ?? [],
+          headers: error.response?.headers,
+          statusCode: error.response?.statusCode ?? 500,
+          requestOptions: error.requestOptions,
+        );
+      }
       if (error.response != null &&
           (allowStatusCodes.contains(error.response?.statusCode) ||
               (allowErrorMessage != null &&
                   '${error.response?.data}'.contains(allowErrorMessage)))) {
         return Response(
-          data: null,
           extra: (error.response?.extra ?? {})
             ..addAll(
               {
@@ -202,14 +229,6 @@ abstract class HttpService {
       if (error.toString().contains('Connection reset by peer') ||
           error.response?.data.toString() == 'Unauthorized') {
         await deleteSessionCookie(); //todo: return a 401...
-        // rootRouter.push(const SignUpScreen());
-        log
-          ..error(
-              'Ran into error trying to $httpProtocol to "${error.response?.realUri}"')
-          ..error(
-            error,
-            stackTrace: stackTrace,
-          );
         return Response(
           data: errorResponseData,
           extra: {
@@ -218,19 +237,13 @@ abstract class HttpService {
             'stackTrace': stackTrace.filterCallStack().pretty(),
           },
           statusCode: 401,
-          requestOptions: RequestOptions(path: 'error.response?.realUri'),
+          requestOptions: RequestOptions(path: '${error.response?.realUri}'),
         );
       }
-      log
-        ..error(
-            'Ran into error trying to $httpProtocol to "${error.response?.realUri}"')
-        ..error(error, stackTrace: stackTrace);
       if (error.response?.statusCode == 403 ||
           error.response?.statusCode == 401) {
         await peeplEatsService.isLoggedIn();
       }
-      log.warn(
-          'Got an error $httpProtocol response from "${error.response?.realUri}" with error: "${error.response?.data}"');
 
       if (!_checkAuthDioResponse(error, dontRoute: dontRoute)) {
         return Response(
@@ -289,7 +302,8 @@ abstract class HttpService {
         // rootRouter.push(const SignUpScreen());
         log
           ..error(
-              'Ran into error trying to $httpProtocol to "error.response?.realUri"')
+            'Ran into error trying to $httpProtocol to "error.response?.realUri"',
+          )
           ..error(error, stackTrace: stackTrace);
         return Response(
           data: errorResponseData,
@@ -307,7 +321,8 @@ abstract class HttpService {
           dio.options.baseUrl.startsWith('http://localhost')) {
         log
           ..error(
-              'Ran into error trying to $httpProtocol to "error.response?.realUri"')
+            'Ran into error trying to $httpProtocol to "error.response?.realUri"',
+          )
           ..error(error, stackTrace: stackTrace)
           ..warn(
             'If running from real_device, cant connect to localhost on running machine...',
@@ -321,7 +336,7 @@ abstract class HttpService {
           'stackTrace': stackTrace.filterCallStack().pretty(),
         },
         statusCode: 500,
-        requestOptions: RequestOptions(path: ''),
+        requestOptions: RequestOptions(),
       );
     }
     return response;
@@ -338,6 +353,7 @@ abstract class HttpService {
     List<int> allowStatusCodes = const <int>[],
     Map<String, String>? customHeaders,
     bool dontLog = false,
+    void Function(String errCode)? handleErrorCodes,
   }) async {
     const protocol = 'GET';
     var path_ = path;
@@ -357,7 +373,6 @@ abstract class HttpService {
     if (!satisfied) {
       return Future.value(
         Response(
-          data: null,
           statusCode: 401,
           requestOptions: RequestOptions(path: path),
         ),
@@ -380,6 +395,9 @@ abstract class HttpService {
         dontLog: dontLog,
       ),
       httpProtocol: protocol,
+      handleErrorCodes: handleErrorCodes,
+      allowStatusCodes: allowStatusCodes,
+      dontRoute: dontRoute,
     );
   }
 
@@ -398,6 +416,7 @@ abstract class HttpService {
     Pattern? allowErrorMessage,
     Map<String, String>? customHeaders,
     bool dontLog = false,
+    void Function(String errCode)? handleErrorCodes,
   }) async {
     const protocol = 'POST';
     var path_ = path;
@@ -444,6 +463,9 @@ abstract class HttpService {
         dontLog: dontLog,
       ),
       httpProtocol: protocol,
+      handleErrorCodes: handleErrorCodes,
+      allowStatusCodes: allowStatusCodes,
+      dontRoute: dontRoute,
     );
   }
 
@@ -462,6 +484,7 @@ abstract class HttpService {
     Pattern? allowErrorMessage,
     Map<String, String>? customHeaders,
     bool dontLog = false,
+    void Function(String errCode)? handleErrorCodes,
   }) async {
     const protocol = 'PUT';
     final satisfied =
@@ -525,6 +548,9 @@ abstract class HttpService {
         dontLogDataFromRequest: true,
       ),
       httpProtocol: protocol,
+      handleErrorCodes: handleErrorCodes,
+      allowStatusCodes: allowStatusCodes,
+      dontRoute: dontRoute,
     );
   }
 
@@ -545,6 +571,7 @@ abstract class HttpService {
     Pattern? allowErrorMessage,
     Map<String, String>? customHeaders,
     bool dontLog = false,
+    void Function(String errCode)? handleErrorCodes,
   }) async {
     const protocol = 'POST';
 
@@ -662,6 +689,9 @@ abstract class HttpService {
         dontLogDataFromRequest: true,
       ),
       httpProtocol: protocol,
+      handleErrorCodes: handleErrorCodes,
+      allowStatusCodes: allowStatusCodes,
+      dontRoute: dontRoute,
     );
   }
 }

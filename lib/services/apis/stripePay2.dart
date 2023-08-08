@@ -56,7 +56,7 @@ class StripePayService {
       return paymentIntent;
     } catch (e, s) {
       log.info(
-        'Error: startPaymentIntentCheck ${e.toString()}',
+        'Error: startPaymentIntentCheck $e',
         stackTrace: s,
       );
       await Sentry.captureException(
@@ -69,12 +69,8 @@ class StripePayService {
 
   Future<StripePaymentIntent?> createStripePaymentIntent({
     required num amount,
-    String? stripeCustomerId,
+    required String recipientWalletAddress, required String senderWalletAddress, required num orderId, required num accountId, String? stripeCustomerId,
     String currency = 'gbp',
-    required String recipientWalletAddress,
-    required String senderWalletAddress,
-    required num orderId,
-    required num accountId,
   }) async {
     try {
       final Response<dynamic> response = await peeplEatsService.dioPost(

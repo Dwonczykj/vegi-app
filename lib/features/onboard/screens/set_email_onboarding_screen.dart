@@ -98,8 +98,8 @@ class _SetEmailOnboardingScreenState extends State<SetEmailOnboardingScreen> {
             children: [
               Container(
                 padding: const EdgeInsets.all(20),
-                child: Column(
-                  children: const <Widget>[
+                child: const Column(
+                  children: <Widget>[
                     Text(
                       Messages.emailPleaseEnterToHelpProtectYourAccount,
                       textAlign: TextAlign.center,
@@ -185,7 +185,7 @@ class _SetEmailOnboardingScreenState extends State<SetEmailOnboardingScreen> {
                                 },
                                 onError: (errStr) {
                                   log.warn(
-                                      'Unable to update email for user on vegi with error: $errStr');
+                                      'Unable to update email for user on vegi with error: $errStr',);
                                   if (DebugHelpers.inDebugMode) {
                                     showErrorSnack(
                                       context: context,

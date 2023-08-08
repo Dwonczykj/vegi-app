@@ -32,7 +32,7 @@ class AllOrdersPage extends StatefulWidget {
 class _AllOrdersPageState extends State<AllOrdersPage> {
   late List<Order> listOfOrders;
   bool _isLoading = true;
-  bool _isEmpty = false;
+  final bool _isEmpty = false;
 
   late final Map<String, ExpandableSliverListController<Order>>
       categoryItemsControllers;
@@ -40,16 +40,12 @@ class _AllOrdersPageState extends State<AllOrdersPage> {
   @override
   void initState() {
     categoryItemsControllers =
-        Map<String, ExpandableSliverListController<Order>>.fromIterable(
-      categoryNames.keys,
-      key: (cat) => cat.toString(),
-      value: (cat) => ExpandableSliverListController(
+        { for (var cat in categoryNames.keys) cat : ExpandableSliverListController(
         initialStatus:
-            cat.toString().toLowerCase() != scheduledOrders.toLowerCase()
+            cat.toLowerCase() != scheduledOrders.toLowerCase()
                 ? ExpandableSliverListStatus.collapsed
                 : ExpandableSliverListStatus.expanded,
-      ),
-    );
+      ) };
     super.initState();
   }
 
@@ -221,7 +217,7 @@ class _AllOrdersPageState extends State<AllOrdersPage> {
                       : CustomScrollView(
                           slivers: [
                             const SliverPadding(
-                                padding: EdgeInsets.only(bottom: 10)),
+                                padding: EdgeInsets.only(bottom: 10),),
                             // SliverStickyHeader(
                             //   header: MenuStickyHeader(
                             //     title: 'Featured Items',
@@ -253,7 +249,7 @@ class _AllOrdersPageState extends State<AllOrdersPage> {
 }
 
 class SingleOrderCard extends StatefulWidget {
-  const SingleOrderCard({Key? key, required this.order}) : super(key: key);
+  const SingleOrderCard({required this.order, Key? key}) : super(key: key);
 
   final Order order;
 
@@ -429,7 +425,7 @@ class _SingleOrderCardState extends State<SingleOrderCard> {
 }
 
 class SingleProductOrderItem extends StatelessWidget {
-  const SingleProductOrderItem({Key? key, required this.orderItem})
+  const SingleProductOrderItem({required this.orderItem, Key? key})
       : super(key: key);
 
   final OrderItem orderItem;

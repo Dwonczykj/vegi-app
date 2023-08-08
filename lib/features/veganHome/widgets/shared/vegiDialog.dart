@@ -12,9 +12,7 @@ import 'package:vegan_liverpool/utils/analytics.dart';
 
 class VegiDialog<ViewModel> extends StatefulWidget {
   const VegiDialog({
-    Key? key,
-    required this.child,
-    required this.storeConverter,
+    required this.child, required this.storeConverter, Key? key,
     this.onWillChange,
     this.actions,
   }) : super(key: key);
@@ -67,16 +65,14 @@ class _VegiDialogState<ViewModel> extends State<VegiDialog<ViewModel>>
       builder: (_, viewmodel) {
         return ScaleTransition(
           scale: scaleAnimation,
-          alignment: Alignment.center,
           child: AlertDialog(
-            shape: RoundedRectangleBorder(
+            shape: const RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(20)),
             ),
-            contentPadding: const EdgeInsets.all(0.0),
+            contentPadding: const EdgeInsets.all(0),
             content: Container(
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: themeShade100,
-                shape: BoxShape.rectangle,
                 borderRadius: BorderRadius.all(Radius.circular(20)),
               ),
               padding: const EdgeInsets.all(8),

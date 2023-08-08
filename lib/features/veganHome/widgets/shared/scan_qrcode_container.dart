@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:auto_route/auto_route.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
@@ -19,10 +18,7 @@ import 'package:vegan_liverpool/utils/log/log.dart';
 
 class ScanQRCodeScreen extends StatefulWidget {
   const ScanQRCodeScreen({
-    Key? key,
-    required this.scanQRCodeHandler,
-    required this.handleError,
-    required this.isNumericBarCode,
+    required this.scanQRCodeHandler, required this.handleError, required this.isNumericBarCode, Key? key,
   }) : super(key: key);
 
   final void Function(String, String, QRCodeScanErrCode) handleError;
@@ -139,7 +135,7 @@ class _ScanQRCodeScreenState extends State<ScanQRCodeScreen> {
             backgroundColor: themeShade1100,
             appBar: AppBar(
               title: const Text('Barcode Scanner'),
-              actions: [],
+              actions: const [],
             ),
             body: Stack(
               fit: StackFit.expand,
@@ -201,11 +197,9 @@ class _ScanQRCodeScreenState extends State<ScanQRCodeScreen> {
                 children: [
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
-                    mainAxisSize: MainAxisSize.max,
                     children: [
                       Expanded(
                         child: Stack(
-                          fit: StackFit.loose,
                           children: [
                             QRView(
                               key: qrKey,
@@ -240,13 +234,12 @@ class _ScanQRCodeScreenState extends State<ScanQRCodeScreen> {
                                         : MediaQuery.of(context).size.height) *
                                     0.45,
                                 decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.all(
+                                  borderRadius: const BorderRadius.all(
                                     Radius.circular(0),
                                   ), //here
-                                  color: Color.fromARGB(15, 50, 187, 255),
+                                  color: const Color.fromARGB(15, 50, 187, 255),
                                   border: Border.all(
-                                    color: Color.fromARGB(255, 50, 187, 255),
-                                    width: 1.0,
+                                    color: const Color.fromARGB(255, 50, 187, 255),
                                   ),
                                 ),
                               ),
@@ -274,11 +267,9 @@ class _ScanQRCodeScreenState extends State<ScanQRCodeScreen> {
                       child: Form(
                         key: _formKey,
                         child: Container(
-                          padding: const EdgeInsets.all(8.0),
+                          padding: const EdgeInsets.all(8),
                           height: 50,
                           child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisSize: MainAxisSize.max,
                             children: <Widget>[
                               Expanded(
                                 child: TextFormField(

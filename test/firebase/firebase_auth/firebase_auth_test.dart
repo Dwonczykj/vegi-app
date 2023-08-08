@@ -172,7 +172,7 @@ void main() {
       when(mockAuthPlatform.userChanges()).thenAnswer((_) =>
           Stream<UserPlatform>.fromIterable(<UserPlatform>[mockUserPlatform!]));
 
-      TestDefaultBinaryMessengerBinding.instance?.defaultBinaryMessenger
+      TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
           .setMockMethodCallHandler(MethodChannelFirebaseAuth.channel,
               (call) async {
         return <String, dynamic>{'user': user};
@@ -431,11 +431,11 @@ void main() {
           userAccessGroup: any,
         )).thenAnswer((i) async {});
 
-        String phoneNumber = '123456';
-        String smsCode = '1234';
-        bool forceRecaptchaFlow = true;
-        bool appVerificationDisabledForTesting = true;
-        String userAccessGroup = 'group-id';
+        const String phoneNumber = '123456';
+        const String smsCode = '1234';
+        const bool forceRecaptchaFlow = true;
+        const bool appVerificationDisabledForTesting = true;
+        const String userAccessGroup = 'group-id';
 
         await auth.setSettings(
           appVerificationDisabledForTesting: appVerificationDisabledForTesting,
@@ -542,7 +542,7 @@ void main() {
       });
 
       test('OAuthProvider signInWithCredential for Apple', () async {
-        OAuthProvider oAuthProvider = OAuthProvider('apple.com');
+        final OAuthProvider oAuthProvider = OAuthProvider('apple.com');
         final AuthCredential credential = oAuthProvider.credential(
           idToken: kMockIdToken,
           accessToken: kMockAccessToken,
@@ -666,14 +666,10 @@ void main() {
           verificationFailed: anyNamed('verificationFailed'),
         )).thenAnswer((i) async {});
 
-        final PhoneVerificationCompleted verificationCompleted =
-            (PhoneAuthCredential phoneAuthCredential) {};
-        final PhoneVerificationFailed verificationFailed =
-            (FirebaseAuthException authException) {};
-        final PhoneCodeSent codeSent =
-            (String verificationId, [int? forceResendingToken]) async {};
-        final PhoneCodeAutoRetrievalTimeout autoRetrievalTimeout =
-            (String verificationId) {};
+        verificationCompleted(PhoneAuthCredential phoneAuthCredential) {}
+        verificationFailed(FirebaseAuthException authException) {}
+        codeSent(String verificationId, [int? forceResendingToken]) async {}
+        autoRetrievalTimeout(String verificationId) {}
 
         await auth.verifyPhoneNumber(
           phoneNumber: kMockPhoneNumber,

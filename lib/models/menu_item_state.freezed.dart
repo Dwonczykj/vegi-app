@@ -20,18 +20,18 @@ MenuItemState _$MenuItemStateFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$MenuItemState {
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   RestaurantMenuItem? get menuItem => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   Money get totalPrice => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   num get itemReward => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   Map<int, ProductOptionValue> get selectedProductOptionsForCategory =>
       throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   bool get loadingProductOptions => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   int get quantity => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -47,17 +47,17 @@ abstract class $MenuItemStateCopyWith<$Res> {
       _$MenuItemStateCopyWithImpl<$Res, MenuItemState>;
   @useResult
   $Res call(
-      {@JsonKey(ignore: true)
+      {@JsonKey(includeFromJson: false, includeToJson: false)
           RestaurantMenuItem? menuItem,
-      @JsonKey(ignore: true)
+      @JsonKey(includeFromJson: false, includeToJson: false)
           Money totalPrice,
-      @JsonKey(ignore: true)
+      @JsonKey(includeFromJson: false, includeToJson: false)
           num itemReward,
-      @JsonKey(ignore: true)
+      @JsonKey(includeFromJson: false, includeToJson: false)
           Map<int, ProductOptionValue> selectedProductOptionsForCategory,
-      @JsonKey(ignore: true)
+      @JsonKey(includeFromJson: false, includeToJson: false)
           bool loadingProductOptions,
-      @JsonKey(ignore: true)
+      @JsonKey(includeFromJson: false, includeToJson: false)
           int quantity});
 
   $RestaurantMenuItemCopyWith<$Res>? get menuItem;
@@ -134,17 +134,17 @@ abstract class _$$_MenuItemStateCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {@JsonKey(ignore: true)
+      {@JsonKey(includeFromJson: false, includeToJson: false)
           RestaurantMenuItem? menuItem,
-      @JsonKey(ignore: true)
+      @JsonKey(includeFromJson: false, includeToJson: false)
           Money totalPrice,
-      @JsonKey(ignore: true)
+      @JsonKey(includeFromJson: false, includeToJson: false)
           num itemReward,
-      @JsonKey(ignore: true)
+      @JsonKey(includeFromJson: false, includeToJson: false)
           Map<int, ProductOptionValue> selectedProductOptionsForCategory,
-      @JsonKey(ignore: true)
+      @JsonKey(includeFromJson: false, includeToJson: false)
           bool loadingProductOptions,
-      @JsonKey(ignore: true)
+      @JsonKey(includeFromJson: false, includeToJson: false)
           int quantity});
 
   @override
@@ -204,34 +204,40 @@ class __$$_MenuItemStateCopyWithImpl<$Res>
 @JsonSerializable()
 class _$_MenuItemState extends _MenuItemState {
   _$_MenuItemState(
-      {@JsonKey(ignore: true) this.menuItem = null,
-      @JsonKey(ignore: true) this.totalPrice = const Money.zeroGBPx(),
-      @JsonKey(ignore: true) this.itemReward = 0,
-      @JsonKey(ignore: true) this.selectedProductOptionsForCategory = const {},
-      @JsonKey(ignore: true) this.loadingProductOptions = false,
-      @JsonKey(ignore: true) this.quantity = 0})
+      {@JsonKey(includeFromJson: false, includeToJson: false)
+          this.menuItem = null,
+      @JsonKey(includeFromJson: false, includeToJson: false)
+          this.totalPrice = const Money.zeroGBPx(),
+      @JsonKey(includeFromJson: false, includeToJson: false)
+          this.itemReward = 0,
+      @JsonKey(includeFromJson: false, includeToJson: false)
+          this.selectedProductOptionsForCategory = const {},
+      @JsonKey(includeFromJson: false, includeToJson: false)
+          this.loadingProductOptions = false,
+      @JsonKey(includeFromJson: false, includeToJson: false)
+          this.quantity = 0})
       : super._();
 
   factory _$_MenuItemState.fromJson(Map<String, dynamic> json) =>
       _$$_MenuItemStateFromJson(json);
 
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   final RestaurantMenuItem? menuItem;
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   final Money totalPrice;
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   final num itemReward;
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   final Map<int, ProductOptionValue> selectedProductOptionsForCategory;
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   final bool loadingProductOptions;
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   final int quantity;
 
   @override
@@ -286,17 +292,17 @@ class _$_MenuItemState extends _MenuItemState {
 
 abstract class _MenuItemState extends MenuItemState {
   factory _MenuItemState(
-      {@JsonKey(ignore: true)
+      {@JsonKey(includeFromJson: false, includeToJson: false)
           final RestaurantMenuItem? menuItem,
-      @JsonKey(ignore: true)
+      @JsonKey(includeFromJson: false, includeToJson: false)
           final Money totalPrice,
-      @JsonKey(ignore: true)
+      @JsonKey(includeFromJson: false, includeToJson: false)
           final num itemReward,
-      @JsonKey(ignore: true)
+      @JsonKey(includeFromJson: false, includeToJson: false)
           final Map<int, ProductOptionValue> selectedProductOptionsForCategory,
-      @JsonKey(ignore: true)
+      @JsonKey(includeFromJson: false, includeToJson: false)
           final bool loadingProductOptions,
-      @JsonKey(ignore: true)
+      @JsonKey(includeFromJson: false, includeToJson: false)
           final int quantity}) = _$_MenuItemState;
   _MenuItemState._() : super._();
 
@@ -304,22 +310,22 @@ abstract class _MenuItemState extends MenuItemState {
       _$_MenuItemState.fromJson;
 
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   RestaurantMenuItem? get menuItem;
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   Money get totalPrice;
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   num get itemReward;
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   Map<int, ProductOptionValue> get selectedProductOptionsForCategory;
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   bool get loadingProductOptions;
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   int get quantity;
   @override
   @JsonKey(ignore: true)

@@ -16,54 +16,29 @@ part 'wallet_action.g.dart';
 class WalletAction with _$WalletAction implements Comparable<WalletAction> {
   @FreezedUnionValue('tokenBonus')
   const factory WalletAction.bonus({
-    @Default(0) int timestamp,
-    @JsonKey(name: '_id') required String id,
+    @JsonKey(name: '_id') required String id, required String status, required String tokenAddress, required String to, required BigInt value, required String tokenName, required String tokenSymbol, required int tokenDecimal, @Default(0) int timestamp,
     @Default('tokenBonus') String name,
     String? txHash,
-    required String status,
     @Default(0) int? blockNumber,
-    required String tokenAddress,
     String? from,
-    required String to,
-    required BigInt value,
-    required String tokenName,
-    required String tokenSymbol,
-    required int tokenDecimal,
     String? bonusType,
   }) = Bonus;
 
   @FreezedUnionValue('sendTokens')
   const factory WalletAction.send({
-    @Default(0) int timestamp,
-    @JsonKey(name: '_id') required String id,
+    @JsonKey(name: '_id') required String id, required String status, required String tokenAddress, required String from, required String to, required BigInt value, required String tokenName, required String tokenSymbol, required int tokenDecimal, @Default(0) int timestamp,
     @Default('sendTokens') String name,
     String? txHash,
-    required String status,
     @Default(0) int? blockNumber,
-    required String tokenAddress,
-    required String from,
-    required String to,
-    required BigInt value,
-    required String tokenName,
-    required String tokenSymbol,
-    required int tokenDecimal,
   }) = Send;
 
   @FreezedUnionValue('fiat-deposit')
   const factory WalletAction.fiatDeposit({
-    @Default(0) int timestamp,
-    @JsonKey(name: '_id') required String id,
+    @JsonKey(name: '_id') required String id, required String status, required String tokenAddress, required String to, required BigInt value, required String tokenName, required String tokenSymbol, required int tokenDecimal, @Default(0) int timestamp,
     @Default('fiat-deposit') String name,
     String? txHash,
-    required String status,
     @Default(0) int? blockNumber,
-    required String tokenAddress,
     String? from,
-    required String to,
-    required BigInt value,
-    required String tokenName,
-    required String tokenSymbol,
-    required int tokenDecimal,
   }) = FiatDeposit;
 
   factory WalletAction.fromJson(Map<String, dynamic> json) =>
@@ -71,21 +46,17 @@ class WalletAction with _$WalletAction implements Comparable<WalletAction> {
 
   @FreezedUnionValue('createWallet')
   const factory WalletAction.createWallet({
-    @Default(0) int timestamp,
-    @JsonKey(name: '_id') required String id,
+    @JsonKey(name: '_id') required String id, required String status, @Default(0) int timestamp,
     @Default('createWallet') String name,
     String? txHash,
-    required String status,
     @Default(0) int? blockNumber,
   }) = CreateWallet;
 
   @FreezedUnionValue('swapTokens')
   const factory WalletAction.swap({
-    @Default(0) int timestamp,
-    @JsonKey(name: '_id') required String id,
+    @JsonKey(name: '_id') required String id, required String status, @Default(0) int timestamp,
     @Default('swapTokens') String name,
     String? txHash,
-    required String status,
     @Default(0) int? blockNumber,
     @JsonKey(name: 'metadata') Trade? tradeInfo,
   }) = Swap;
@@ -105,35 +76,18 @@ class WalletAction with _$WalletAction implements Comparable<WalletAction> {
 
   @FreezedUnionValue('receiveTokens')
   const factory WalletAction.receive({
-    @Default(0) int timestamp,
-    @JsonKey(name: '_id') required String id,
+    @JsonKey(name: '_id') required String id, required String status, required String tokenAddress, required String from, required String to, required BigInt value, required String tokenName, required String tokenSymbol, required int tokenDecimal, @Default(0) int timestamp,
     @Default('receiveTokens') String name,
     String? txHash,
-    required String status,
     @Default(0) int? blockNumber,
-    required String tokenAddress,
-    required String from,
-    required String to,
-    required BigInt value,
-    required String tokenName,
-    required String tokenSymbol,
-    required int tokenDecimal,
   }) = Receive;
 
   @FreezedUnionValue('receiveNFT')
   const factory WalletAction.receiveNFT({
-    @Default(0) int timestamp,
-    @JsonKey(name: '_id') required String id,
+    @JsonKey(name: '_id') required String id, required String status, required String tokenAddress, required String from, required String to, required String tokenName, required String tokenSymbol, required int tokenDecimal, @Default(0) int timestamp,
     @Default('receiveNFT') String name,
     String? txHash,
-    required String status,
     @Default(0) int? blockNumber,
-    required String tokenAddress,
-    required String from,
-    required String to,
-    required String tokenName,
-    required String tokenSymbol,
-    required int tokenDecimal,
   }) = ReceiveNFT;
   const WalletAction._();
 

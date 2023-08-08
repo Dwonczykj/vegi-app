@@ -36,7 +36,7 @@ class DiscountCards extends StatelessWidget {
                 .map((voucher) {
               return Container(
                 margin: const EdgeInsets.symmetric(
-                  vertical: 5.0,
+                  vertical: 5,
                 ),
                 child: DiscountCard(
                   hasDiscount: true,
@@ -130,7 +130,7 @@ class DiscountCard extends StatelessWidget {
                   hasDiscount
                       ? discountValue != null
                           ? '$discountCode ($discountValue)'
-                          : '$discountCode'
+                          : discountCode
                       : 'Add a discount code',
                   style: const TextStyle(
                     fontSize: 15,

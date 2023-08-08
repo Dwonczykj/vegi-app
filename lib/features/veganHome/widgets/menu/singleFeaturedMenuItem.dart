@@ -9,7 +9,7 @@ import 'package:vegan_liverpool/models/restaurant/restaurantMenuItem.dart';
 import 'package:vegan_liverpool/redux/viewsmodels/detailMenuItem.dart';
 
 class SingleFeaturedMenuItem extends StatelessWidget {
-  const SingleFeaturedMenuItem({Key? key, required this.menuItem})
+  const SingleFeaturedMenuItem({required this.menuItem, Key? key})
       : super(key: key);
 
   final RestaurantMenuItem menuItem;

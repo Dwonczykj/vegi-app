@@ -16,10 +16,7 @@ import 'package:vegan_liverpool/utils/constants.dart';
 
 class SuggestionPhotoScreen extends StatefulWidget {
   const SuggestionPhotoScreen({
-    Key? key,
-    required this.suggestion,
-    required this.nextPage,
-    required this.previousPage,
+    required this.suggestion, required this.nextPage, required this.previousPage, Key? key,
   }) : super(key: key);
 
   final ProductSuggestionImageType suggestion;
@@ -170,7 +167,7 @@ class _SuggestionPhotoScreenState extends State<SuggestionPhotoScreen>
                                   setState(() {
                                     isPreloading = false;
                                   });
-                                  showErrorSnack(
+                                  await showErrorSnack(
                                     context: context,
                                     title: I10n.of(context).oops,
                                     message:
@@ -202,7 +199,7 @@ class _SuggestionPhotoScreenState extends State<SuggestionPhotoScreen>
                                   widget.nextPage();
                                 },
                                 (errMessage) async {
-                                  showErrorSnack(
+                                  await showErrorSnack(
                                     context: context,
                                     title: I10n.of(context).oops,
                                     message:
@@ -228,6 +225,6 @@ class _SuggestionPhotoScreenState extends State<SuggestionPhotoScreen>
                 )
             ],
           );
-        });
+        },);
   }
 }

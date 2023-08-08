@@ -70,30 +70,16 @@ class Order with _$Order {
 
     /// DO NOT USE, USE cartSubTotal INSTEAD
     required num subtotal,
-    @Default(Currency.GBPx)
-        Currency currency,
     @JsonKey(
       fromJson: jsonToTimeStamp,
       toJson: timeStampToJsonInt,
     )
-        required DateTime orderedDateTime,
-    @JsonKey(
-      fromJson: jsonToTimeStampNullable,
-      toJson: timeStampToJsonIntNullable,
-    )
-        DateTime? paidDateTime,
-    @JsonKey(
-      fromJson: jsonToTimeStampNullable,
-      toJson: timeStampToJsonIntNullable,
-    )
-        DateTime? refundDateTime,
+    required DateTime orderedDateTime,
     @JsonEnum()
     @JsonKey(
       unknownEnumValue: OrderPaidStatus.unpaid,
     )
-        required OrderPaidStatus paymentStatus,
-    @Default(false)
-        bool paymentAttempted,
+    required OrderPaidStatus paymentStatus,
     required String paymentIntentId,
     required String? firebaseRegistrationToken,
     required String? deliveryName,
@@ -102,10 +88,6 @@ class Order with _$Order {
     required String deliveryAddressLineOne,
     required String? deliveryAddressLineTwo,
     required String deliveryAddressCity,
-    @Default('GB')
-        String deliveryAddressCountry,
-    @Default('')
-        String deliveryAddressCounty,
     required String deliveryAddressPostCode,
     required double? deliveryAddressLatitude,
     required double? deliveryAddressLongitude,
@@ -116,9 +98,9 @@ class Order with _$Order {
     required String customerWalletAddress,
     required String publicId,
     @JsonKey(unknownEnumValue: RestaurantAcceptanceStatus.pending)
-        required RestaurantAcceptanceStatus restaurantAcceptanceStatus,
+    required RestaurantAcceptanceStatus restaurantAcceptanceStatus,
     @JsonKey(unknownEnumValue: OrderAcceptanceStatus.pending)
-        required OrderAcceptanceStatus orderAcceptanceStatus,
+    required OrderAcceptanceStatus orderAcceptanceStatus,
     required int tipAmount,
     required double rewardsIssued,
     required bool sentToDeliveryPartner,
@@ -126,34 +108,46 @@ class Order with _$Order {
       fromJson: orderCompletedFlagFromJson,
       toJson: orderCompletedFlagToJson,
     )
-        required OrderCompletedFlag completedFlag,
+    required OrderCompletedFlag completedFlag,
     required String? completedOrderFeedback,
     required int? deliveryPunctuality,
     required int? orderCondition,
-    required DateTime fulfilmentSlotFrom, // "2022-09-29T10:00:00.000Z"
-    required DateTime fulfilmentSlotTo, // "2022-09-29T10:00:00.000Z"
+    required DateTime fulfilmentSlotFrom,
+    /* "2022-09-29T10:00:00.000Z",*/
+    required DateTime fulfilmentSlotTo,
+    /* "2022-09-29T10:00:00.000Z",*/
     @JsonKey(fromJson: fromJsonFulfilmentMethod)
-        required FulfilmentMethod? fulfilmentMethod,
-    @JsonKey(fromJson: fromJsonVendorDTO)
-        required VendorDTO? vendor,
+    required FulfilmentMethod? fulfilmentMethod,
+    @JsonKey(fromJson: fromJsonVendorDTO) required VendorDTO? vendor,
     @JsonKey(fromJson: fromJsonDeliveryPartnerDTO)
-        required DeliveryPartnerDTO? deliveryPartner,
-    @JsonKey(fromJson: fromJsonDiscountList)
-    @Default([])
-        List<Discount> discounts,
-    @JsonKey(fromJson: fromJsonOrderItemList)
-        required List<OrderItem> items,
-    @JsonKey(fromJson: fromJsonOrder)
-    @Default(null)
-        Order? parentOrder,
-    @JsonKey(fromJson: fromJsonOrderItemList)
-    @Default([])
-        List<OrderItem> unfulfilledItems,
-    @JsonKey(fromJson: fromJsonTransactionItemList)
-    @Default([])
-        List<TransactionItem> transactions,
+    required DeliveryPartnerDTO? deliveryPartner,
+    @JsonKey(fromJson: fromJsonOrderItemList) required List<OrderItem> items,
     required num fulfilmentCharge,
     required num platformFee,
+    @Default(Currency.GBPx) Currency currency,
+    @JsonKey(
+      fromJson: jsonToTimeStampNullable,
+      toJson: timeStampToJsonIntNullable,
+    )
+    DateTime? paidDateTime,
+    @JsonKey(
+      fromJson: jsonToTimeStampNullable,
+      toJson: timeStampToJsonIntNullable,
+    )
+    DateTime? refundDateTime,
+    @Default(false) bool paymentAttempted,
+    @Default('GB') String deliveryAddressCountry,
+    @Default('') String deliveryAddressCounty,
+    @JsonKey(fromJson: fromJsonDiscountList)
+    @Default([])
+    List<Discount> discounts,
+    @JsonKey(fromJson: fromJsonOrder) @Default(null) Order? parentOrder,
+    @JsonKey(fromJson: fromJsonOrderItemList)
+    @Default([])
+    List<OrderItem> unfulfilledItems,
+    @JsonKey(fromJson: fromJsonTransactionItemList)
+    @Default([])
+    List<TransactionItem> transactions,
   }) = _Order;
 
   const Order._();

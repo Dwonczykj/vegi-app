@@ -91,7 +91,7 @@ class LogIt {
         stackTrace =
             StackTraceFilter.fromStackLines(StackTrace.current.filterCallStack(
           ignoreLastNCalls: 2,
-        ));
+        ),);
       }
     } catch (err) {
       if (!kReleaseMode) {
@@ -99,38 +99,38 @@ class LogIt {
       }
     }
     String emoji = '';
-    void Function(dynamic, [dynamic, StackTrace?]) _logFn;
-    AnsiPen _pen = AnsiPen();
+    void Function(dynamic, [dynamic, StackTrace?]) logFn;
+    AnsiPen pen = AnsiPen();
     switch (level) {
       case LogLevel.wtf:
         emoji = '🖕';
-        _logFn = logger.wtf;
-        _pen = AnsiPen()..yellow();
+        logFn = logger.wtf;
+        pen = AnsiPen()..yellow();
         break;
       case LogLevel.trace:
         emoji = '🕵️‍♀️';
-        _logFn = logger.v;
-        _pen = AnsiPen()..green();
+        logFn = logger.v;
+        pen = AnsiPen()..green();
         break;
       case LogLevel.verbose:
         emoji = '🧐';
-        _logFn = logger.v;
-        _pen = AnsiPen()..gray();
+        logFn = logger.v;
+        pen = AnsiPen()..gray();
         break;
       case LogLevel.debug:
         emoji = '👾';
-        _logFn = logger.d;
-        _pen = AnsiPen()..magenta();
+        logFn = logger.d;
+        pen = AnsiPen()..magenta();
         break;
       case LogLevel.info:
         emoji = '🔵';
-        _logFn = logger.i;
-        _pen = AnsiPen()..blue();
+        logFn = logger.i;
+        pen = AnsiPen()..blue();
         break;
       case LogLevel.warn:
         emoji = '🚧';
-        _logFn = logger.w;
-        _pen = AnsiPen()
+        logFn = logger.w;
+        pen = AnsiPen()
           ..rgb(
             r: Colors.amber.red.toDouble() / 255.0,
             b: Colors.amber.blue.toDouble() / 255.0,
@@ -139,8 +139,8 @@ class LogIt {
         break;
       case LogLevel.error:
         emoji = '❌';
-        _logFn = logger.e;
-        _pen = AnsiPen()..red();
+        logFn = logger.e;
+        pen = AnsiPen()..red();
         break;
     }
     // if (sentry) {
@@ -176,7 +176,7 @@ class LogIt {
         },
       );
 
-      store!.dispatch(
+      store?.dispatch(
         AddAppLog(
           message: '$emoji $message',
           additionalInfo: {},
@@ -188,8 +188,8 @@ class LogIt {
       return;
     }
 
-    _logFn(
-        _pen('$emoji $message'),
+    logFn(
+        pen('$emoji $message'),
         error,
         stackTrace ??
             StackTraceFilter.fromStackLines(StackTrace.current.filterCallStack(
@@ -231,7 +231,6 @@ class LogIt {
   }) {
     _writeLog(
       message,
-      level: LogLevel.debug,
       error: error,
       stackTrace: stackTrace,
       stackTraceLines: stackTraceLines,

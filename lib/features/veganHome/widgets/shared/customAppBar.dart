@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:vegan_liverpool/constants/theme.dart';
 
 class CustomAppBar extends StatefulWidget implements PreferredSizeWidget {
-  const CustomAppBar({Key? key, required this.pageTitle, this.otherAction})
+  const CustomAppBar({required this.pageTitle, Key? key, this.otherAction})
       : preferredSize = const Size.fromHeight(115),
         super(key: key);
 

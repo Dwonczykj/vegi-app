@@ -36,14 +36,13 @@ class VendorDTO with _$VendorDTO {
     required num? costLevel,
     required num? rating,
     required bool isVegan,
-    @Default(0) num minimumOrderAmount,
+    required VendorStatus status, required String walletAddress, @JsonKey(fromJson: fromJsonAddressDTO)
+    required AddressDTO? pickupAddress, @JsonKey(fromJson: fromJsonVendorCategoryList)
+    required List<VendorCategory> vendorCategories, @JsonKey(fromJson: fromJsonProductCategoryList)
+    required List<ProductCategory> productCategories, @Default(0) num minimumOrderAmount,
     @Default(0) num platformFee,
-    required VendorStatus status,
-    required String walletAddress,
     @Default('') String description,
     @Default('') String imageUrl,
-    @JsonKey(fromJson: fromJsonAddressDTO)
-    required AddressDTO? pickupAddress,
     @JsonKey(fromJson: fromJsonDeliveryPartnerDTO)
     DeliveryPartnerDTO? deliveryPartner,
     @JsonKey(fromJson: fromJsonFulfilmentMethodDTO)
@@ -52,13 +51,12 @@ class VendorDTO with _$VendorDTO {
     FulfilmentMethodDTO? collectionFulfilmentMethod,
     @JsonKey(fromJson: fromJsonProductDTOList)
     @Default([]) List<ProductDTO> products,
-    @JsonKey(fromJson: fromJsonVendorCategoryList)
-    required List<VendorCategory> vendorCategories,
-    @JsonKey(fromJson: fromJsonProductCategoryList)
-    required List<ProductCategory> productCategories,
     @JsonKey(fromJson: fromJsonPostalDistrictList)
     @Default([]) List<PostalDistrict> fulfilmentPostalDistricts,
   }) = _VendorDTO;
+
+  factory VendorDTO.fromJson(Map<String, dynamic> json) =>
+      tryCatchRethrowInline(() => _$VendorDTOFromJson(json));
 
   const VendorDTO._();
 
@@ -88,9 +86,6 @@ class VendorDTO with _$VendorDTO {
         (product) => product.toRestaurantMenuItem(),
       )
       .toList();
-
-  factory VendorDTO.fromJson(Map<String, dynamic> json) =>
-      tryCatchRethrowInline(() => _$VendorDTOFromJson(json));
 
   Money get minimumOrderAmountMoney => Money(
         currency: Currency.GBPx,

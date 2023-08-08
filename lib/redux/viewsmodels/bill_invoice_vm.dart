@@ -27,7 +27,7 @@ class BillInvoiceViewModel extends Equatable {
           store.state.cartState.selectedGBPxAmount * 100,
         ).toStringAsFixed(2),
         pplRewardsEarnedValue:
-            '£${(getPPLRewardsFromPence(store.state.cartState.selectedGBPxAmount * 100) / 10).toStringAsFixed(2)}');
+            '£${(getPPLRewardsFromPence(store.state.cartState.selectedGBPxAmount * 100) / 10).toStringAsFixed(2)}',);
   }
 
   final String gbpxUsed;

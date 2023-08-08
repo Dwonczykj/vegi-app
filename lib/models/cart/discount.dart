@@ -28,18 +28,17 @@ class Discount with _$Discount {
         required DateTime expiryDateTime,
     required int? timesUsed,
     required int? maxUses,
-    @Default(false)
+    required String? linkedWalletAddress, @Default(false)
         bool isEnabled,
-    required String? linkedWalletAddress,
     @JsonKey()
     @Default(null)
         VendorDTO? vendor,
   }) = _Discount;
 
+  factory Discount.fromJson(Map<String, dynamic> json) =>
+      tryCatchRethrowInline(() => _$DiscountFromJson(json));
+
   const Discount._();
 
   Money get moneyAmount => Money(currency: currency, value: value);
-
-  factory Discount.fromJson(Map<String, dynamic> json) =>
-      tryCatchRethrowInline(() => _$DiscountFromJson(json));
 }

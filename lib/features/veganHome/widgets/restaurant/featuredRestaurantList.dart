@@ -29,7 +29,7 @@ class FeaturedRestaurantList extends StatelessWidget {
       },
       builder: (_, viewmodel) {
         final location = viewmodel.userLocationEnabled
-            ? '${viewmodel.selectedSearchPostCode}'
+            ? viewmodel.selectedSearchPostCode
             : 'your area (${viewmodel.selectedSearchPostCode})';
         final restaurants = viewmodel.filterRestaurantsQuery.isEmpty
             ? viewmodel.featuredRestaurants
@@ -42,6 +42,7 @@ class FeaturedRestaurantList extends StatelessWidget {
                 fit: StackFit.expand,
                 children: [
                   RefreshIndicator(
+                    onRefresh: viewmodel.refreshFeaturedRestaurants,
                     child: restaurants.isEmpty
                         ? ListView(
                             children: [
@@ -71,7 +72,6 @@ class FeaturedRestaurantList extends StatelessWidget {
                               padding: EdgeInsets.symmetric(vertical: 20),
                             ),
                           ),
-                    onRefresh: viewmodel.refreshFeaturedRestaurants,
                   ),
                   if (viewmodel.userIsVegiAdmin)
                     VegiPayBottomButton(
@@ -86,8 +86,7 @@ class FeaturedRestaurantList extends StatelessWidget {
 
 class VegiPayBottomButton extends StatelessWidget {
   const VegiPayBottomButton({
-    Key? key,
-    required this.userInVendorMode,
+    required this.userInVendorMode, Key? key,
   }) : super(key: key);
 
   final bool userInVendorMode;
@@ -98,10 +97,10 @@ class VegiPayBottomButton extends StatelessWidget {
       alignment: Alignment.bottomCenter,
       padding: const EdgeInsets.only(
         bottom: 20,
-        right: 20.0,
-        left: 20.0,
+        right: 20,
+        left: 20,
       ),
-      child: Container(
+      child: SizedBox(
         width: MediaQuery.of(context).size.width * 0.65,
         height: 60,
         child: GestureDetector(

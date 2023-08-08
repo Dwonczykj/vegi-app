@@ -23,34 +23,28 @@ class ProductDTO with _$ProductDTO {
   factory ProductDTO({
     required int id,
     required String name,
-    @Default('') String description,
-    @Default('') String shortDescription,
-
     /// this is the price in pence of the restaurant item without any product options applied
-    required int basePrice,
+    required int basePrice, required bool isAvailable, required int priority, required bool isFeatured, required ProductDiscontinuedStatus status, required String productBarCode, @JsonKey(fromJson: fromJsonVendorDTO) required VendorDTO? vendor, @JsonKey(fromJson: fromJsonProductCategory)
+        required ProductCategory? category, @Default('') String description,
+    @Default('') String shortDescription,
     @Default('') String imageURL,
-    required bool isAvailable,
-    required int priority,
-    required bool isFeatured,
-    required ProductDiscontinuedStatus status,
     String? ingredients,
     @Default('') String vendorInternalId,
     @Default(0) int stockCount,
     @Default(1) num stockUnitsPerProduct,
     @Default(1) num sizeInnerUnitValue,
     @Default('') String sizeInnerUnitType,
-    required String productBarCode,
     @Default('') String supplier,
     @Default('') String brandName,
     @Default('') String taxGroup,
-    @JsonKey(fromJson: fromJsonVendorDTO) required VendorDTO? vendor,
-    @JsonKey(fromJson: fromJsonProductCategory)
-        required ProductCategory? category,
     @JsonKey(fromJson: fromJsonProductOptionList)
     @Default([])
         List<ProductOption> options,
     @JsonKey(fromJson: fromJsonESCRating) @Default(null) ESCRating? rating,
   }) = _ProductDTO;
+
+  factory ProductDTO.fromJson(Map<String, dynamic> json) =>
+      tryCatchRethrowInline(() => _$ProductDTOFromJson(json));
 
   const ProductDTO._();
 
@@ -74,9 +68,6 @@ class ProductDTO with _$ProductDTO {
         currency: Currency.GBPx,
         value: basePrice,
       );
-
-  factory ProductDTO.fromJson(Map<String, dynamic> json) =>
-      tryCatchRethrowInline(() => _$ProductDTOFromJson(json));
 
   RestaurantMenuItem toRestaurantMenuItem() => RestaurantMenuItem(
         categoryId: categoryId,

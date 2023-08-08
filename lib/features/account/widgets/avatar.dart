@@ -26,7 +26,7 @@ class Avatar extends StatelessWidget {
           ),
           child: InkWell(
             onTap: () {
-              context.router.push(ProfileScreen());
+              context.router.push(const ProfileScreen());
             },
             child: Column(
               children: [

@@ -11,6 +11,8 @@ import 'package:vegan_liverpool/utils/constants.dart';
 import 'package:vegan_liverpool/utils/copy.dart';
 
 class GenerateQRFromCartScreen extends StatelessWidget {
+  GenerateQRFromCartScreen({Key? key}) : super(key: key);
+
   // String qrData = "https://github.com/ChinmayMunje";
   final qrdataFeed = TextEditingController();
 
@@ -19,9 +21,9 @@ class GenerateQRFromCartScreen extends StatelessWidget {
     return Scaffold(
       //Appbar having title
       appBar: AppBar(
-        title: Center(child: Text("Generate Tote QR Code")),
+        title: const Center(child: Text('Generate Tote QR Code')),
       ),
-      body: GenerateQRFromCart(),
+      body: const GenerateQRFromCart(),
     );
   }
 }

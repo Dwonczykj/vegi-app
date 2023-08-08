@@ -29,9 +29,8 @@ class OrderItem with _$OrderItem {
   @JsonSerializable()
   factory OrderItem({
     required int id,
-    bool? unfulfilled,
     @JsonKey(fromJson: fromJsonProduct)
-    required Product product,
+    required Product product, bool? unfulfilled,
   }) = _OrderItem;
 
   const OrderItem._();
@@ -42,16 +41,16 @@ class OrderItem with _$OrderItem {
       );
 
   String get formattedPrice {
-    return product?.totalPriceFormatted ?? '£0.00';
+    return product.totalPriceFormatted ?? '£0.00';
   }
 
   List<String> get selectedProductOptionsString {
-    int _counter = 0;
+    int counter = 0;
     final List<String> optionValues = [];
-    for (final element in (product?.options ?? [])) {
-      _counter++;
+    for (final element in product.options ?? []) {
+      counter++;
       optionValues.add(
-        '$_counter. ${element.chosenOption}'.capitalizeWords(),
+        '$counter. ${element.chosenOption}'.capitalizeWords(),
       );
     }
     return optionValues;

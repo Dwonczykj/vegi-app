@@ -264,8 +264,8 @@ class RootRouter extends _i49.RootStackRouter {
       return _i49.MaterialPageX<dynamic>(
         routeData: routeData,
         child: _i23.WaitingListSurveyQuestionsScreens(
-          key: args.key,
           surveyCompleted: args.surveyCompleted,
+          key: args.key,
         ),
       );
     },
@@ -286,8 +286,8 @@ class RootRouter extends _i49.RootStackRouter {
       return _i49.MaterialPageX<dynamic>(
         routeData: routeData,
         child: _i26.AddDiscountCodeScreen(
-          key: args.key,
           onVerifyDiscountCode: args.onVerifyDiscountCode,
+          key: args.key,
         ),
       );
     },
@@ -314,8 +314,8 @@ class RootRouter extends _i49.RootStackRouter {
         routeData: routeData,
         child: _i29.ImageFromGalleryEx(
           args.type,
-          key: args.key,
           handleImagePicked: args.handleImagePicked,
+          key: args.key,
         ),
       );
     },
@@ -426,8 +426,8 @@ class RootRouter extends _i49.RootStackRouter {
       return _i49.CustomPage<dynamic>(
         routeData: routeData,
         child: _i43.PreparingOrderPage(
-          key: args.key,
           order: args.order,
+          key: args.key,
         ),
         transitionsBuilder: _i49.TransitionsBuilders.slideBottom,
         opaque: true,
@@ -441,9 +441,11 @@ class RootRouter extends _i49.RootStackRouter {
       );
     },
     GenerateQRFromCartScreen.name: (routeData) {
+      final args = routeData.argsAs<GenerateQRFromCartScreenArgs>(
+          orElse: () => const GenerateQRFromCartScreenArgs());
       return _i49.MaterialPageX<dynamic>(
         routeData: routeData,
-        child: _i45.GenerateQRFromCartScreen(),
+        child: _i45.GenerateQRFromCartScreen(key: args.key),
       );
     },
     ScanPaymentRecipientQR.name: (routeData) {
@@ -1203,14 +1205,14 @@ class CreateWalletFirstOnboardingScreen extends _i49.PageRouteInfo<void> {
 class WaitingListSurveyQuestionsScreens
     extends _i49.PageRouteInfo<WaitingListSurveyQuestionsScreensArgs> {
   WaitingListSurveyQuestionsScreens({
-    _i52.Key? key,
     required bool surveyCompleted,
+    _i52.Key? key,
   }) : super(
           WaitingListSurveyQuestionsScreens.name,
           path: '/waiting-list-survey-questions-screens',
           args: WaitingListSurveyQuestionsScreensArgs(
-            key: key,
             surveyCompleted: surveyCompleted,
+            key: key,
           ),
         );
 
@@ -1219,17 +1221,17 @@ class WaitingListSurveyQuestionsScreens
 
 class WaitingListSurveyQuestionsScreensArgs {
   const WaitingListSurveyQuestionsScreensArgs({
-    this.key,
     required this.surveyCompleted,
+    this.key,
   });
-
-  final _i52.Key? key;
 
   final bool surveyCompleted;
 
+  final _i52.Key? key;
+
   @override
   String toString() {
-    return 'WaitingListSurveyQuestionsScreensArgs{key: $key, surveyCompleted: $surveyCompleted}';
+    return 'WaitingListSurveyQuestionsScreensArgs{surveyCompleted: $surveyCompleted, key: $key}';
   }
 }
 
@@ -1262,14 +1264,14 @@ class WaitingListPositionInQueueRoute extends _i49.PageRouteInfo<void> {
 class AddDiscountCodeScreen
     extends _i49.PageRouteInfo<AddDiscountCodeScreenArgs> {
   AddDiscountCodeScreen({
-    _i52.Key? key,
     required void Function() onVerifyDiscountCode,
+    _i52.Key? key,
   }) : super(
           AddDiscountCodeScreen.name,
           path: '/add-discount-code-screen',
           args: AddDiscountCodeScreenArgs(
-            key: key,
             onVerifyDiscountCode: onVerifyDiscountCode,
+            key: key,
           ),
         );
 
@@ -1278,17 +1280,17 @@ class AddDiscountCodeScreen
 
 class AddDiscountCodeScreenArgs {
   const AddDiscountCodeScreenArgs({
-    this.key,
     required this.onVerifyDiscountCode,
+    this.key,
   });
-
-  final _i52.Key? key;
 
   final void Function() onVerifyDiscountCode;
 
+  final _i52.Key? key;
+
   @override
   String toString() {
-    return 'AddDiscountCodeScreenArgs{key: $key, onVerifyDiscountCode: $onVerifyDiscountCode}';
+    return 'AddDiscountCodeScreenArgs{onVerifyDiscountCode: $onVerifyDiscountCode, key: $key}';
   }
 }
 
@@ -1344,15 +1346,15 @@ class SuggestProductFunnelScreenArgs {
 class ImageFromGalleryEx extends _i49.PageRouteInfo<ImageFromGalleryExArgs> {
   ImageFromGalleryEx({
     required _i53.ImageSourceType type,
-    _i52.Key? key,
     required void Function(_i54.File?) handleImagePicked,
+    _i52.Key? key,
   }) : super(
           ImageFromGalleryEx.name,
           path: '/image-from-gallery-ex',
           args: ImageFromGalleryExArgs(
             type: type,
-            key: key,
             handleImagePicked: handleImagePicked,
+            key: key,
           ),
         );
 
@@ -1362,19 +1364,19 @@ class ImageFromGalleryEx extends _i49.PageRouteInfo<ImageFromGalleryExArgs> {
 class ImageFromGalleryExArgs {
   const ImageFromGalleryExArgs({
     required this.type,
-    this.key,
     required this.handleImagePicked,
+    this.key,
   });
 
   final _i53.ImageSourceType type;
 
-  final _i52.Key? key;
-
   final void Function(_i54.File?) handleImagePicked;
+
+  final _i52.Key? key;
 
   @override
   String toString() {
-    return 'ImageFromGalleryExArgs{type: $type, key: $key, handleImagePicked: $handleImagePicked}';
+    return 'ImageFromGalleryExArgs{type: $type, handleImagePicked: $handleImagePicked, key: $key}';
   }
 }
 
@@ -1597,14 +1599,14 @@ class AboutScreen extends _i49.PageRouteInfo<void> {
 /// [_i43.PreparingOrderPage]
 class PreparingOrderPage extends _i49.PageRouteInfo<PreparingOrderPageArgs> {
   PreparingOrderPage({
-    _i52.Key? key,
     required _i57.Order order,
+    _i52.Key? key,
   }) : super(
           PreparingOrderPage.name,
           path: 'preparing-order-page',
           args: PreparingOrderPageArgs(
-            key: key,
             order: order,
+            key: key,
           ),
         );
 
@@ -1613,17 +1615,17 @@ class PreparingOrderPage extends _i49.PageRouteInfo<PreparingOrderPageArgs> {
 
 class PreparingOrderPageArgs {
   const PreparingOrderPageArgs({
-    this.key,
     required this.order,
+    this.key,
   });
-
-  final _i52.Key? key;
 
   final _i57.Order order;
 
+  final _i52.Key? key;
+
   @override
   String toString() {
-    return 'PreparingOrderPageArgs{key: $key, order: $order}';
+    return 'PreparingOrderPageArgs{order: $order, key: $key}';
   }
 }
 
@@ -1641,14 +1643,27 @@ class CheckoutScreenPt2 extends _i49.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i45.GenerateQRFromCartScreen]
-class GenerateQRFromCartScreen extends _i49.PageRouteInfo<void> {
-  const GenerateQRFromCartScreen()
+class GenerateQRFromCartScreen
+    extends _i49.PageRouteInfo<GenerateQRFromCartScreenArgs> {
+  GenerateQRFromCartScreen({_i52.Key? key})
       : super(
           GenerateQRFromCartScreen.name,
           path: 'generate-qr-from-cart-screen',
+          args: GenerateQRFromCartScreenArgs(key: key),
         );
 
   static const String name = 'GenerateQRFromCartScreen';
+}
+
+class GenerateQRFromCartScreenArgs {
+  const GenerateQRFromCartScreenArgs({this.key});
+
+  final _i52.Key? key;
+
+  @override
+  String toString() {
+    return 'GenerateQRFromCartScreenArgs{key: $key}';
+  }
 }
 
 /// generated route for

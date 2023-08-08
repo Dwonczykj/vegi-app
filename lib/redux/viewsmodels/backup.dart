@@ -15,7 +15,7 @@ import 'package:vegan_liverpool/utils/log/log.dart';
 import 'package:vegan_liverpool/utils/onboard/authentication.dart';
 import 'package:vegan_liverpool/utils/onboard/firebase.dart';
 
-import '../../common/router/routes.gr.dart';
+import 'package:vegan_liverpool/common/router/routes.gr.dart';
 
 class BackupViewModel extends Equatable {
   const BackupViewModel({
@@ -121,8 +121,11 @@ class LockScreenViewModel extends Equatable implements IAuthViewModel {
   final void Function() loginAgain;
   final void Function({required bool isBiometricallyAuthenticated})
       setBiometricallyAuthenticated;
+  @override
   final FirebaseAuthenticationStatus firebaseAuthenticationStatus;
+  @override
   final FuseAuthenticationStatus fuseAuthenticationStatus;
+  @override
   final VegiAuthenticationStatus vegiAuthenticationStatus;
 
   @override

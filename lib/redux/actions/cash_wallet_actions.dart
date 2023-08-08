@@ -373,7 +373,7 @@ ThunkAction<AppState> startFetchTokensBalances() {
                 }
               } catch (e, s) {
                 log.error(
-                  'Error fetch tokens balances - ${e.toString()}',
+                  'Error fetch tokens balances - $e',
                   error: e,
                   stackTrace: s,
                 );

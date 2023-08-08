@@ -21,10 +21,7 @@ typedef SubmitSurveyResponse = void Function(
 
 class SurveyQuestionScreen extends StatefulWidget {
   const SurveyQuestionScreen({
-    Key? key,
-    required this.question,
-    required this.nextPage,
-    required this.previousPage,
+    required this.question, required this.nextPage, required this.previousPage, Key? key,
   }) : super(key: key);
 
   final SurveyQuestion question;
@@ -168,7 +165,7 @@ class _SurveyQuestionScreenState extends State<SurveyQuestionScreen>
                                 setState(() {
                                   isPreloading = false;
                                 });
-                                showErrorSnack(
+                                await showErrorSnack(
                                   message: Messages.invalidEmail,
                                   title: I10n.of(context).something_went_wrong,
                                   context: context,
@@ -220,7 +217,7 @@ class _SurveyQuestionScreenState extends State<SurveyQuestionScreen>
       case SurveyResponseType.boolean:
         return Container(
           width: 280,
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
               // border: Border(
               //   bottom: BorderSide(
               //     color: Theme.of(context).colorScheme.onSurface,
@@ -288,8 +285,9 @@ class _SurveyQuestionScreenState extends State<SurveyQuestionScreen>
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.resolveWith<Color?>(
                       (Set<MaterialState> states) {
-                        if (states.contains(MaterialState.pressed))
+                        if (states.contains(MaterialState.pressed)) {
                           return themeShade300;
+                        }
                         return null; // Use the component's default.
                       },
                     ),
@@ -341,8 +339,9 @@ class _SurveyQuestionScreenState extends State<SurveyQuestionScreen>
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.resolveWith<Color?>(
                       (Set<MaterialState> states) {
-                        if (states.contains(MaterialState.pressed))
+                        if (states.contains(MaterialState.pressed)) {
                           return themeAccent300;
+                        }
                         return themeAccent400; // Use the component's default.
                       },
                     ),

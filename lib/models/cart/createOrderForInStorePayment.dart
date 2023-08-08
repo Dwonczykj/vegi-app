@@ -29,10 +29,6 @@ class CreateOrderForInStorePayment extends CreateOrderForFulfilment
     required String publicId,
   }) = _CreateOrderForInStorePayment;
 
-  @JsonEnum()
-  final FulfilmentMethodType fulfilmentTypeString =
-      FulfilmentMethodType.inStore;
-
   factory CreateOrderForInStorePayment.fromStore(Store<AppState> store) {
     return CreateOrderForInStorePayment(
       items: store.state.cartState.cartItems,
@@ -61,4 +57,9 @@ class CreateOrderForInStorePayment extends CreateOrderForFulfilment
 
   factory CreateOrderForInStorePayment.fromJson(Map<String, dynamic> json) =>
       _$$_CreateOrderForInStorePaymentFromJson(json);
+
+  @override
+  @JsonEnum()
+  final FulfilmentMethodType fulfilmentTypeString =
+      FulfilmentMethodType.inStore;
 }

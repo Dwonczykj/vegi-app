@@ -23,15 +23,15 @@ mixin _$FulfilmentMethodDTO {
   int get id => throw _privateConstructorUsedError;
   FulfilmentMethodType get methodType => throw _privateConstructorUsedError;
   num get slotLength => throw _privateConstructorUsedError;
+  @JsonKey(fromJson: fromJsonVendorDTO)
+  VendorDTO? get vendor => throw _privateConstructorUsedError;
+  @JsonKey(fromJson: fromJsonDeliveryPartnerDTO)
+  DeliveryPartnerDTO? get deliveryPartner => throw _privateConstructorUsedError;
   num? get bufferLength => throw _privateConstructorUsedError;
   String? get orderCutoff => throw _privateConstructorUsedError;
   int? get maxOrders => throw _privateConstructorUsedError;
   num? get maxDeliveryDistance => throw _privateConstructorUsedError;
   num? get priceModifier => throw _privateConstructorUsedError;
-  @JsonKey(fromJson: fromJsonVendorDTO)
-  VendorDTO? get vendor => throw _privateConstructorUsedError;
-  @JsonKey(fromJson: fromJsonDeliveryPartnerDTO)
-  DeliveryPartnerDTO? get deliveryPartner => throw _privateConstructorUsedError;
   @JsonKey(fromJson: fromJsonAddressDTO)
   AddressDTO? get fulfilmentOrigin => throw _privateConstructorUsedError;
   @JsonKey(fromJson: fromJsonOpeningHours)
@@ -53,15 +53,15 @@ abstract class $FulfilmentMethodDTOCopyWith<$Res> {
       {int id,
       FulfilmentMethodType methodType,
       num slotLength,
+      @JsonKey(fromJson: fromJsonVendorDTO)
+          VendorDTO? vendor,
+      @JsonKey(fromJson: fromJsonDeliveryPartnerDTO)
+          DeliveryPartnerDTO? deliveryPartner,
       num? bufferLength,
       String? orderCutoff,
       int? maxOrders,
       num? maxDeliveryDistance,
       num? priceModifier,
-      @JsonKey(fromJson: fromJsonVendorDTO)
-          VendorDTO? vendor,
-      @JsonKey(fromJson: fromJsonDeliveryPartnerDTO)
-          DeliveryPartnerDTO? deliveryPartner,
       @JsonKey(fromJson: fromJsonAddressDTO)
           AddressDTO? fulfilmentOrigin,
       @JsonKey(fromJson: fromJsonOpeningHours)
@@ -89,13 +89,13 @@ class _$FulfilmentMethodDTOCopyWithImpl<$Res, $Val extends FulfilmentMethodDTO>
     Object? id = null,
     Object? methodType = null,
     Object? slotLength = null,
+    Object? vendor = freezed,
+    Object? deliveryPartner = freezed,
     Object? bufferLength = freezed,
     Object? orderCutoff = freezed,
     Object? maxOrders = freezed,
     Object? maxDeliveryDistance = freezed,
     Object? priceModifier = freezed,
-    Object? vendor = freezed,
-    Object? deliveryPartner = freezed,
     Object? fulfilmentOrigin = freezed,
     Object? openingHours = freezed,
   }) {
@@ -112,6 +112,14 @@ class _$FulfilmentMethodDTOCopyWithImpl<$Res, $Val extends FulfilmentMethodDTO>
           ? _value.slotLength
           : slotLength // ignore: cast_nullable_to_non_nullable
               as num,
+      vendor: freezed == vendor
+          ? _value.vendor
+          : vendor // ignore: cast_nullable_to_non_nullable
+              as VendorDTO?,
+      deliveryPartner: freezed == deliveryPartner
+          ? _value.deliveryPartner
+          : deliveryPartner // ignore: cast_nullable_to_non_nullable
+              as DeliveryPartnerDTO?,
       bufferLength: freezed == bufferLength
           ? _value.bufferLength
           : bufferLength // ignore: cast_nullable_to_non_nullable
@@ -132,14 +140,6 @@ class _$FulfilmentMethodDTOCopyWithImpl<$Res, $Val extends FulfilmentMethodDTO>
           ? _value.priceModifier
           : priceModifier // ignore: cast_nullable_to_non_nullable
               as num?,
-      vendor: freezed == vendor
-          ? _value.vendor
-          : vendor // ignore: cast_nullable_to_non_nullable
-              as VendorDTO?,
-      deliveryPartner: freezed == deliveryPartner
-          ? _value.deliveryPartner
-          : deliveryPartner // ignore: cast_nullable_to_non_nullable
-              as DeliveryPartnerDTO?,
       fulfilmentOrigin: freezed == fulfilmentOrigin
           ? _value.fulfilmentOrigin
           : fulfilmentOrigin // ignore: cast_nullable_to_non_nullable
@@ -212,15 +212,15 @@ abstract class _$$_FulfilmentMethodDTOCopyWith<$Res>
       {int id,
       FulfilmentMethodType methodType,
       num slotLength,
+      @JsonKey(fromJson: fromJsonVendorDTO)
+          VendorDTO? vendor,
+      @JsonKey(fromJson: fromJsonDeliveryPartnerDTO)
+          DeliveryPartnerDTO? deliveryPartner,
       num? bufferLength,
       String? orderCutoff,
       int? maxOrders,
       num? maxDeliveryDistance,
       num? priceModifier,
-      @JsonKey(fromJson: fromJsonVendorDTO)
-          VendorDTO? vendor,
-      @JsonKey(fromJson: fromJsonDeliveryPartnerDTO)
-          DeliveryPartnerDTO? deliveryPartner,
       @JsonKey(fromJson: fromJsonAddressDTO)
           AddressDTO? fulfilmentOrigin,
       @JsonKey(fromJson: fromJsonOpeningHours)
@@ -250,13 +250,13 @@ class __$$_FulfilmentMethodDTOCopyWithImpl<$Res>
     Object? id = null,
     Object? methodType = null,
     Object? slotLength = null,
+    Object? vendor = freezed,
+    Object? deliveryPartner = freezed,
     Object? bufferLength = freezed,
     Object? orderCutoff = freezed,
     Object? maxOrders = freezed,
     Object? maxDeliveryDistance = freezed,
     Object? priceModifier = freezed,
-    Object? vendor = freezed,
-    Object? deliveryPartner = freezed,
     Object? fulfilmentOrigin = freezed,
     Object? openingHours = freezed,
   }) {
@@ -273,6 +273,14 @@ class __$$_FulfilmentMethodDTOCopyWithImpl<$Res>
           ? _value.slotLength
           : slotLength // ignore: cast_nullable_to_non_nullable
               as num,
+      vendor: freezed == vendor
+          ? _value.vendor
+          : vendor // ignore: cast_nullable_to_non_nullable
+              as VendorDTO?,
+      deliveryPartner: freezed == deliveryPartner
+          ? _value.deliveryPartner
+          : deliveryPartner // ignore: cast_nullable_to_non_nullable
+              as DeliveryPartnerDTO?,
       bufferLength: freezed == bufferLength
           ? _value.bufferLength
           : bufferLength // ignore: cast_nullable_to_non_nullable
@@ -293,14 +301,6 @@ class __$$_FulfilmentMethodDTOCopyWithImpl<$Res>
           ? _value.priceModifier
           : priceModifier // ignore: cast_nullable_to_non_nullable
               as num?,
-      vendor: freezed == vendor
-          ? _value.vendor
-          : vendor // ignore: cast_nullable_to_non_nullable
-              as VendorDTO?,
-      deliveryPartner: freezed == deliveryPartner
-          ? _value.deliveryPartner
-          : deliveryPartner // ignore: cast_nullable_to_non_nullable
-              as DeliveryPartnerDTO?,
       fulfilmentOrigin: freezed == fulfilmentOrigin
           ? _value.fulfilmentOrigin
           : fulfilmentOrigin // ignore: cast_nullable_to_non_nullable
@@ -321,15 +321,15 @@ class _$_FulfilmentMethodDTO extends _FulfilmentMethodDTO {
       {required this.id,
       required this.methodType,
       required this.slotLength,
+      @JsonKey(fromJson: fromJsonVendorDTO)
+          required this.vendor,
+      @JsonKey(fromJson: fromJsonDeliveryPartnerDTO)
+          required this.deliveryPartner,
       this.bufferLength,
       this.orderCutoff,
       this.maxOrders,
       this.maxDeliveryDistance,
       this.priceModifier,
-      @JsonKey(fromJson: fromJsonVendorDTO)
-          required this.vendor,
-      @JsonKey(fromJson: fromJsonDeliveryPartnerDTO)
-          required this.deliveryPartner,
       @JsonKey(fromJson: fromJsonAddressDTO)
           this.fulfilmentOrigin,
       @JsonKey(fromJson: fromJsonOpeningHours)
@@ -346,6 +346,12 @@ class _$_FulfilmentMethodDTO extends _FulfilmentMethodDTO {
   @override
   final num slotLength;
   @override
+  @JsonKey(fromJson: fromJsonVendorDTO)
+  final VendorDTO? vendor;
+  @override
+  @JsonKey(fromJson: fromJsonDeliveryPartnerDTO)
+  final DeliveryPartnerDTO? deliveryPartner;
+  @override
   final num? bufferLength;
   @override
   final String? orderCutoff;
@@ -356,12 +362,6 @@ class _$_FulfilmentMethodDTO extends _FulfilmentMethodDTO {
   @override
   final num? priceModifier;
   @override
-  @JsonKey(fromJson: fromJsonVendorDTO)
-  final VendorDTO? vendor;
-  @override
-  @JsonKey(fromJson: fromJsonDeliveryPartnerDTO)
-  final DeliveryPartnerDTO? deliveryPartner;
-  @override
   @JsonKey(fromJson: fromJsonAddressDTO)
   final AddressDTO? fulfilmentOrigin;
   @override
@@ -370,7 +370,7 @@ class _$_FulfilmentMethodDTO extends _FulfilmentMethodDTO {
 
   @override
   String toString() {
-    return 'FulfilmentMethodDTO(id: $id, methodType: $methodType, slotLength: $slotLength, bufferLength: $bufferLength, orderCutoff: $orderCutoff, maxOrders: $maxOrders, maxDeliveryDistance: $maxDeliveryDistance, priceModifier: $priceModifier, vendor: $vendor, deliveryPartner: $deliveryPartner, fulfilmentOrigin: $fulfilmentOrigin, openingHours: $openingHours)';
+    return 'FulfilmentMethodDTO(id: $id, methodType: $methodType, slotLength: $slotLength, vendor: $vendor, deliveryPartner: $deliveryPartner, bufferLength: $bufferLength, orderCutoff: $orderCutoff, maxOrders: $maxOrders, maxDeliveryDistance: $maxDeliveryDistance, priceModifier: $priceModifier, fulfilmentOrigin: $fulfilmentOrigin, openingHours: $openingHours)';
   }
 
   @override
@@ -383,6 +383,9 @@ class _$_FulfilmentMethodDTO extends _FulfilmentMethodDTO {
                 other.methodType == methodType) &&
             (identical(other.slotLength, slotLength) ||
                 other.slotLength == slotLength) &&
+            (identical(other.vendor, vendor) || other.vendor == vendor) &&
+            (identical(other.deliveryPartner, deliveryPartner) ||
+                other.deliveryPartner == deliveryPartner) &&
             (identical(other.bufferLength, bufferLength) ||
                 other.bufferLength == bufferLength) &&
             (identical(other.orderCutoff, orderCutoff) ||
@@ -393,9 +396,6 @@ class _$_FulfilmentMethodDTO extends _FulfilmentMethodDTO {
                 other.maxDeliveryDistance == maxDeliveryDistance) &&
             (identical(other.priceModifier, priceModifier) ||
                 other.priceModifier == priceModifier) &&
-            (identical(other.vendor, vendor) || other.vendor == vendor) &&
-            (identical(other.deliveryPartner, deliveryPartner) ||
-                other.deliveryPartner == deliveryPartner) &&
             (identical(other.fulfilmentOrigin, fulfilmentOrigin) ||
                 other.fulfilmentOrigin == fulfilmentOrigin) &&
             (identical(other.openingHours, openingHours) ||
@@ -409,13 +409,13 @@ class _$_FulfilmentMethodDTO extends _FulfilmentMethodDTO {
       id,
       methodType,
       slotLength,
+      vendor,
+      deliveryPartner,
       bufferLength,
       orderCutoff,
       maxOrders,
       maxDeliveryDistance,
       priceModifier,
-      vendor,
-      deliveryPartner,
       fulfilmentOrigin,
       openingHours);
 
@@ -439,15 +439,15 @@ abstract class _FulfilmentMethodDTO extends FulfilmentMethodDTO {
       {required final int id,
       required final FulfilmentMethodType methodType,
       required final num slotLength,
+      @JsonKey(fromJson: fromJsonVendorDTO)
+          required final VendorDTO? vendor,
+      @JsonKey(fromJson: fromJsonDeliveryPartnerDTO)
+          required final DeliveryPartnerDTO? deliveryPartner,
       final num? bufferLength,
       final String? orderCutoff,
       final int? maxOrders,
       final num? maxDeliveryDistance,
       final num? priceModifier,
-      @JsonKey(fromJson: fromJsonVendorDTO)
-          required final VendorDTO? vendor,
-      @JsonKey(fromJson: fromJsonDeliveryPartnerDTO)
-          required final DeliveryPartnerDTO? deliveryPartner,
       @JsonKey(fromJson: fromJsonAddressDTO)
           final AddressDTO? fulfilmentOrigin,
       @JsonKey(fromJson: fromJsonOpeningHours)
@@ -464,6 +464,12 @@ abstract class _FulfilmentMethodDTO extends FulfilmentMethodDTO {
   @override
   num get slotLength;
   @override
+  @JsonKey(fromJson: fromJsonVendorDTO)
+  VendorDTO? get vendor;
+  @override
+  @JsonKey(fromJson: fromJsonDeliveryPartnerDTO)
+  DeliveryPartnerDTO? get deliveryPartner;
+  @override
   num? get bufferLength;
   @override
   String? get orderCutoff;
@@ -473,12 +479,6 @@ abstract class _FulfilmentMethodDTO extends FulfilmentMethodDTO {
   num? get maxDeliveryDistance;
   @override
   num? get priceModifier;
-  @override
-  @JsonKey(fromJson: fromJsonVendorDTO)
-  VendorDTO? get vendor;
-  @override
-  @JsonKey(fromJson: fromJsonDeliveryPartnerDTO)
-  DeliveryPartnerDTO? get deliveryPartner;
   @override
   @JsonKey(fromJson: fromJsonAddressDTO)
   AddressDTO? get fulfilmentOrigin;

@@ -7,9 +7,7 @@ import 'package:vegan_liverpool/utils/constants.dart';
 
 class ThankYouCard extends StatefulWidget {
   const ThankYouCard({
-    Key? key,
-    required this.isDelivery,
-    required this.orderId,
+    required this.isDelivery, required this.orderId, Key? key,
   }) : super(key: key);
 
   final bool isDelivery;

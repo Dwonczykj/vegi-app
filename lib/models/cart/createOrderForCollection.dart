@@ -34,9 +34,6 @@ class CreateOrderForCollection extends CreateOrderForFulfilment
     required String publicId,
   }) = _CreateOrderForCollection;
 
-  @JsonEnum()
-  final FulfilmentMethodType fulfilmentTypeString = FulfilmentMethodType.collection;
-
   factory CreateOrderForCollection.fromStore(Store<AppState> store) {
     return CreateOrderForCollection(
       isDelivery: false,
@@ -54,7 +51,7 @@ class CreateOrderForCollection extends CreateOrderForFulfilment
       address: DeliveryAddresses(
         label: DeliveryAddressLabel.work,
         internalID:
-            Random((DateTime.now().millisecondsSinceEpoch)).nextInt(10000),
+            Random(DateTime.now().millisecondsSinceEpoch).nextInt(10000),
         addressLine1: 'Collection Order',
         addressLine2:
             store.state.cartState.restaurantAddress!.shortAddressLessPostCode,
@@ -85,4 +82,8 @@ class CreateOrderForCollection extends CreateOrderForFulfilment
 
   factory CreateOrderForCollection.fromJson(Map<String, dynamic> json) =>
       _$$_CreateOrderForCollectionFromJson(json);
+
+  @override
+  @JsonEnum()
+  final FulfilmentMethodType fulfilmentTypeString = FulfilmentMethodType.collection;
 }

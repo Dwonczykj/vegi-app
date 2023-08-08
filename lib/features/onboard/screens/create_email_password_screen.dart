@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:ui';
 
 import 'package:carrier_info/carrier_info.dart';
 import 'package:country_code_picker/country_code_picker.dart';

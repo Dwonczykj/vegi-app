@@ -1,7 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:vegan_liverpool/common/router/routes.dart';
@@ -65,9 +63,6 @@ class WaitingListPositionInQueuePage extends StatelessWidget {
         }
         return SafeArea(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            mainAxisSize: MainAxisSize.max,
-            crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               Container(
                 // color: Colors.blue,
@@ -79,7 +74,6 @@ class WaitingListPositionInQueuePage extends StatelessWidget {
               ),
               Expanded(
                 child: Column(
-                  mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Padding(
@@ -92,7 +86,7 @@ class WaitingListPositionInQueuePage extends StatelessWidget {
                       child: AutoSizeText.rich(
                         TextSpan(
                           children: [
-                            TextSpan(
+                            const TextSpan(
                               text: 'You are',
                             ),
                             TextSpan(
@@ -103,7 +97,7 @@ class WaitingListPositionInQueuePage extends StatelessWidget {
                                 fontSize: queueTextSize * 2.0,
                               ),
                             ),
-                            TextSpan(
+                            const TextSpan(
                               text: 'in the queue',
                             ),
                           ],
@@ -117,7 +111,7 @@ class WaitingListPositionInQueuePage extends StatelessWidget {
                         maxLines: 2,
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 40,
                     ),
                     if (viewModel.positionInQueue! <=
@@ -144,7 +138,7 @@ class WaitingListPositionInQueuePage extends StatelessWidget {
                             ),
                           ),
                           // const Spacer(),
-                          SizedBox(
+                          const SizedBox(
                             height: 40,
                           ),
                           Padding(

@@ -25,8 +25,7 @@ class BiometricUtils {
   }
 
   static Future<void> showDefaultPopupCheckBiometricAuth({
-    String message = '',
-    required void Function(bool) callback,
+    required void Function(bool) callback, String message = '',
     void Function()? noHardWare,
     void Function()? permanentLockOut,
     void Function()? authFailed,

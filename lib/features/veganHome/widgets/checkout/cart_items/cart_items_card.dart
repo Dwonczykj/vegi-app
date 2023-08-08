@@ -40,9 +40,9 @@ class CartItemsCard extends StatelessWidget {
               ),
               GestureDetector(
                 onTap: context.router.pop,
-                child: Row(
+                child: const Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: const [
+                  children: [
                     Text(
                       'Add more items',
                       style: TextStyle(

@@ -128,7 +128,6 @@ class _AddressViewState extends State<AddressView> {
                         _addressFormKey.currentState!.setInternalFieldValue(
                           'addressLine1Internal',
                           _typeAheadController.text,
-                          isSetState: false,
                         );
                       }
                     },
@@ -139,7 +138,6 @@ class _AddressViewState extends State<AddressView> {
                         _addressFormKey.currentState!.setInternalFieldValue(
                           'addressLine1Internal',
                           '${place.streetNumber} ${place.street}',
-                          isSetState: false,
                         );
                         _addressFormKey.currentState!.fields['townCity']!
                             .didChange(place.city);
@@ -213,7 +211,8 @@ class _AddressViewState extends State<AddressView> {
                           ),
                           keyboardType: TextInputType.text,
                           validator: FormBuilderValidators.required(
-                              errorText: 'Please add a city'),
+                            errorText: 'Please add a city',
+                          ),
                         ),
                       ),
                       SizedBox(
@@ -240,7 +239,8 @@ class _AddressViewState extends State<AddressView> {
                           ),
                           keyboardType: TextInputType.text,
                           validator: FormBuilderValidators.required(
-                              errorText: 'Please add a postal code'),
+                            errorText: 'Please add a postal code',
+                          ),
                         ),
                       ),
                     ],

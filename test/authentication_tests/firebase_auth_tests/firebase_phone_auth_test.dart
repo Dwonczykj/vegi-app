@@ -25,8 +25,8 @@ void main() {
     });
     testWidgets('should send a verification code', (tester) async {
       // We are using a test phone number and a test code from Firebase docs for testing purposes.
-      final phoneNumber = '+1 234-566-9420';
-      final testCode = '133337';
+      const phoneNumber = '+1 234-566-9420';
+      const testCode = '133337';
 
       expect(auth, isNotNull);
 

@@ -12,7 +12,7 @@ import 'package:vegan_liverpool/redux/viewsmodels/checkout/delivery_address_vm.d
 import 'package:vegan_liverpool/utils/analytics.dart';
 
 class SingleSavedAddressItem extends StatelessWidget {
-  const SingleSavedAddressItem({Key? key, required this.index})
+  const SingleSavedAddressItem({required this.index, Key? key})
       : super(key: key);
 
   final int index;

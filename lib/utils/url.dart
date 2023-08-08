@@ -35,7 +35,7 @@ int _convert24HourTo12Hour(int hour) {
 const whatsappContactVegiSupportOpens24HourClock = 7;
 const whatsappContactVegiSupportCloses24HourClock = 21;
 String whatsappContactVegiSupportUrlButtonLabel() {
-  return 'Chat ' + (whatsappChatIsOutOfHours() ? 'offline' : 'now');
+  return 'Chat ${whatsappChatIsOutOfHours() ? 'offline' : 'now'}';
 }
 
 final whatsappContactVegiSupportUrl =

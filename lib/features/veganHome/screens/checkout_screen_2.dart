@@ -52,6 +52,7 @@ class CheckoutScreenPt2 extends StatelessWidget {
           converter: PaymentMethodViewModel.fromStore,
           distinct: true,
           onWillChange: (previousViewModel, newViewModel) async {
+            final store = StoreProvider.of<AppState>(context);
             if (newViewModel.transferringTokens &&
                 !(previousViewModel?.transferringTokens ?? false)) {
               await showDialog<void>(
@@ -134,6 +135,90 @@ class CheckoutScreenPt2 extends StatelessWidget {
                   title:
                       'Whoops, over-subscribed delivery slot, please pick a new slot',
                 );
+              } else if (newViewModel.orderCreationProcessStatus ==
+                  OrderCreationProcessStatus.invalidPostalDistrict) {
+                await showInfoSnack(
+                  context,
+                  title:
+                      'Whoops, vendor doesn\'t deliver to "${store.state.cartState.selectedDeliveryAddress?.postalCode ?? 'the selected postcode'}", please choose a different delivery address or change to collection',
+                );
+              } else if (newViewModel.orderCreationProcessStatus ==
+                  OrderCreationProcessStatus.invalidDiscountCode) {
+                await showInfoSnack(
+                  context,
+                  title:
+                      newViewModel.orderCreationStatusMessage.isNotEmpty ? newViewModel.orderCreationStatusMessage : 'Whoops, ${newViewModel.orderCreationProcessStatus.name.capitalizeWordsFromLowerCamelCase()}',
+                );
+              } else if (newViewModel.orderCreationProcessStatus ==
+                  OrderCreationProcessStatus.badItemsRequest) {
+                await showInfoSnack(
+                  context,
+                  title:
+                      newViewModel.orderCreationStatusMessage.isNotEmpty ? newViewModel.orderCreationStatusMessage : 'Whoops, ${newViewModel.orderCreationProcessStatus.name.capitalizeWordsFromLowerCamelCase()}',
+                );
+              } else if (newViewModel.orderCreationProcessStatus ==
+                  OrderCreationProcessStatus.allItemsUnavailable) {
+                await showInfoSnack(
+                  context,
+                  title:
+                      newViewModel.orderCreationStatusMessage.isNotEmpty ? newViewModel.orderCreationStatusMessage : 'Whoops, ${newViewModel.orderCreationProcessStatus.name.capitalizeWordsFromLowerCamelCase()}',
+                );
+              } else if (newViewModel.orderCreationProcessStatus ==
+                  OrderCreationProcessStatus.minimumOrderAmount) {
+                await showInfoSnack(
+                  context,
+                  title:
+                      newViewModel.orderCreationStatusMessage.isNotEmpty ? newViewModel.orderCreationStatusMessage : 'Whoops, ${newViewModel.orderCreationProcessStatus.name.capitalizeWordsFromLowerCamelCase()}',
+                );
+              } else if (newViewModel.orderCreationProcessStatus ==
+                  OrderCreationProcessStatus.deliveryPartnerUnavailable) {
+                await showInfoSnack(
+                  context,
+                  title:
+                      newViewModel.orderCreationStatusMessage.isNotEmpty ? newViewModel.orderCreationStatusMessage : 'Whoops, ${newViewModel.orderCreationProcessStatus.name.capitalizeWordsFromLowerCamelCase()}',
+                );
+              } else if (newViewModel.orderCreationProcessStatus ==
+                  OrderCreationProcessStatus.invalidUserAddress) {
+                await showInfoSnack(
+                  context,
+                  title:
+                      newViewModel.orderCreationStatusMessage.isNotEmpty ? newViewModel.orderCreationStatusMessage : 'Whoops, ${newViewModel.orderCreationProcessStatus.name.capitalizeWordsFromLowerCamelCase()}',
+                );
+              } else if (newViewModel.orderCreationProcessStatus ==
+                  OrderCreationProcessStatus.invalidProductOption) {
+                await showInfoSnack(
+                  context,
+                  title:
+                      newViewModel.orderCreationStatusMessage.isNotEmpty ? newViewModel.orderCreationStatusMessage : 'Whoops, ${newViewModel.orderCreationProcessStatus.name.capitalizeWordsFromLowerCamelCase()}',
+                );
+              } else if (newViewModel.orderCreationProcessStatus ==
+                  OrderCreationProcessStatus.invalidProduct) {
+                await showInfoSnack(
+                  context,
+                  title:
+                      newViewModel.orderCreationStatusMessage.isNotEmpty ? newViewModel.orderCreationStatusMessage : 'Whoops, ${newViewModel.orderCreationProcessStatus.name.capitalizeWordsFromLowerCamelCase()}',
+                );
+              } else if (newViewModel.orderCreationProcessStatus ==
+                  OrderCreationProcessStatus.invalidFulfilmentMethod) {
+                await showInfoSnack(
+                  context,
+                  title:
+                      newViewModel.orderCreationStatusMessage.isNotEmpty ? newViewModel.orderCreationStatusMessage : 'Whoops, ${newViewModel.orderCreationProcessStatus.name.capitalizeWordsFromLowerCamelCase()}',
+                );
+              } else if (newViewModel.orderCreationProcessStatus ==
+                  OrderCreationProcessStatus.invalidVendor) {
+                await showInfoSnack(
+                  context,
+                  title:
+                      newViewModel.orderCreationStatusMessage.isNotEmpty ? newViewModel.orderCreationStatusMessage : 'Whoops, ${newViewModel.orderCreationProcessStatus.name.capitalizeWordsFromLowerCamelCase()}',
+                );
+              } else if (newViewModel.orderCreationProcessStatus ==
+                  OrderCreationProcessStatus.noItemsFound) {
+                await showInfoSnack(
+                  context,
+                  title:
+                      newViewModel.orderCreationStatusMessage.isNotEmpty ? newViewModel.orderCreationStatusMessage : 'Whoops, ${newViewModel.orderCreationProcessStatus.name.capitalizeWordsFromLowerCamelCase()}',
+                );
               } else if (newViewModel.orderCreationProcessStatus !=
                   OrderCreationProcessStatus.none) {
                 await showInfoSnack(
@@ -215,7 +300,8 @@ class CheckoutScreenPt2 extends StatelessWidget {
                 await rootRouter.push(const OrderConfirmedScreen());
               } else {
                 log.info(
-                    'Ignoring StripePaymentStatus update: "${newViewModel.stripePaymentStatus.name}"');
+                  'Ignoring StripePaymentStatus update: "${newViewModel.stripePaymentStatus.name}"',
+                );
               }
             }
           },

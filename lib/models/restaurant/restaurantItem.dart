@@ -32,11 +32,11 @@ class RestaurantItem with _$RestaurantItem {
     required DeliveryPartnerDTO? deliveryPartner,
   }) = _RestaurantItem;
 
+  factory RestaurantItem.fromJson(Map<String, dynamic> json) =>
+      _$RestaurantItemFromJson(json);
+
   const RestaurantItem._();
 
   num get platformFeeGBP =>
       platformFee * CurrencyRateConstants.GBPxPoundPegValue;
-
-  factory RestaurantItem.fromJson(Map<String, dynamic> json) =>
-      _$RestaurantItemFromJson(json);
 }

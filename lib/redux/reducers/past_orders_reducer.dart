@@ -8,17 +8,17 @@ import 'package:vegan_liverpool/redux/actions/past_order_actions.dart';
 import 'package:vegan_liverpool/redux/actions/user_actions.dart';
 
 final pastOrdersReducer = combineReducers<PastOrderState>([
-  TypedReducer<PastOrderState, ResetAppState>(_resetApp),
-  TypedReducer<PastOrderState, CreateOrder>(_createOrder),
-  TypedReducer<PastOrderState, CancelOrder>(_cancelOrder),
+  TypedReducer<PastOrderState, ResetAppState>(_resetApp).call,
+  TypedReducer<PastOrderState, CreateOrder>(_createOrder).call,
+  TypedReducer<PastOrderState, CancelOrder>(_cancelOrder).call,
   TypedReducer<PastOrderState, OrderPaymentAttemptCreated>(
-      _orderPaymentAttemptCreated),
-  TypedReducer<PastOrderState, UpdateOngoingOrderList>(_updateOngoingOrderList),
-  TypedReducer<PastOrderState, UpdateScheduledOrders>(_updateScheduledOrders),
-  TypedReducer<PastOrderState, AddAllPastOrdersList>(_updatePastOrders),
-  TypedReducer<PastOrderState, SetConfirmed>(_toggleConfirmed),
+      _orderPaymentAttemptCreated,).call,
+  TypedReducer<PastOrderState, UpdateOngoingOrderList>(_updateOngoingOrderList).call,
+  TypedReducer<PastOrderState, UpdateScheduledOrders>(_updateScheduledOrders).call,
+  TypedReducer<PastOrderState, AddAllPastOrdersList>(_updatePastOrders).call,
+  TypedReducer<PastOrderState, SetConfirmed>(_toggleConfirmed).call,
   TypedReducer<PastOrderState, UpdateTransactionHistory>(
-      _updateTransactionHistory),
+      _updateTransactionHistory,).call,
 ]);
 
 PastOrderState _resetApp(

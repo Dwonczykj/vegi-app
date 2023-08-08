@@ -38,8 +38,8 @@ class PaymentMethodSelector extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: const [
+          const Row(
+            children: [
               Text(
                 'Pay Using',
                 style: TextStyle(

@@ -9,35 +9,35 @@ import 'package:vegan_liverpool/redux/actions/user_actions.dart';
 import 'package:wallet_connect/wc_session_store.dart';
 
 final cashWalletReducers = combineReducers<CashWalletState>([
-  TypedReducer<CashWalletState, ResetAppState>(_resetApp),
+  TypedReducer<CashWalletState, ResetAppState>(_resetApp).call,
   TypedReducer<CashWalletState, GetTokenIntervalStatsSuccess>(
     _getTokenIntervalStatsSuccess,
-  ),
-  TypedReducer<CashWalletState, AddSession>(_addSession),
+  ).call,
+  TypedReducer<CashWalletState, AddSession>(_addSession).call,
   TypedReducer<CashWalletState, RemoveSession>(
     _removeSession,
-  ),
+  ).call,
   TypedReducer<CashWalletState, CreateLocalAccountSuccess>(
     _createNewWalletSuccess,
-  ),
-  TypedReducer<CashWalletState, UpdateTokenPrice>(_updateTokenPrice),
-  TypedReducer<CashWalletState, GetActionsSuccess>(_getActionsSuccess),
+  ).call,
+  TypedReducer<CashWalletState, UpdateTokenPrice>(_updateTokenPrice).call,
+  TypedReducer<CashWalletState, GetActionsSuccess>(_getActionsSuccess).call,
   TypedReducer<CashWalletState, GetTokenWalletActionsSuccess>(
     _getTokenWalletActionsSuccess,
-  ),
+  ).call,
   TypedReducer<CashWalletState, GetTokensListSuccess>(
     _getTokenListSuccess,
-  ),
-  TypedReducer<CashWalletState, AddCashTokens>(_addCashTokens),
-  TypedReducer<CashWalletState, AddCashToken>(_addCashToken),
+  ).call,
+  TypedReducer<CashWalletState, AddCashTokens>(_addCashTokens).call,
+  TypedReducer<CashWalletState, AddCashToken>(_addCashToken).call,
   TypedReducer<CashWalletState, GotTokenBalanceSuccess>(
     _getTokenBalanceSuccess,
-  ),
-  TypedReducer<CashWalletState, ResetTokenTxs>(_resetTokensTxs),
+  ).call,
+  TypedReducer<CashWalletState, ResetTokenTxs>(_resetTokensTxs).call,
   TypedReducer<CashWalletState, SetIsTransfersFetching>(
     _setIsTransfersFetching,
-  ),
-  TypedReducer<CashWalletState, SetIsFetchingBalances>(_setIsFetchingBalances),
+  ).call,
+  TypedReducer<CashWalletState, SetIsFetchingBalances>(_setIsFetchingBalances).call,
 ]);
 
 CashWalletState _resetApp(

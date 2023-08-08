@@ -3,8 +3,7 @@ import 'package:flutter/services.dart';
 
 class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   const MyAppBar({
-    Key? key,
-    required this.child,
+    required this.child, Key? key,
     this.height = 350.0,
     this.backgroundColor = Colors.white,
   }) : super(key: key);
@@ -15,12 +14,12 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    final SystemUiOverlayStyle _overlayStyle =
+    final SystemUiOverlayStyle overlayStyle =
         ThemeData.estimateBrightnessForColor(backgroundColor) == Brightness.dark
             ? SystemUiOverlayStyle.light
             : SystemUiOverlayStyle.dark;
     return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: _overlayStyle,
+      value: overlayStyle,
       sized: false,
       child: ColoredBox(
         color: Theme.of(context).canvasColor,

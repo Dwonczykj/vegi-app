@@ -107,7 +107,7 @@ PODS:
     - flutter_blue_plus/Protos (= 0.0.1)
   - flutter_blue_plus/Protos (0.0.1):
     - Flutter
-    - Protobuf (~> 3.11)
+    - Protobuf (~> 3.21)
   - flutter_image_compress (1.0.0):
     - Flutter
     - Mantle
@@ -326,13 +326,13 @@ DEPENDENCIES:
   - network_info_plus (from `.symlinks/plugins/network_info_plus/ios`)
   - package_info (from `.symlinks/plugins/package_info/ios`)
   - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
-  - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/ios`)
+  - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
   - pay_ios (from `.symlinks/plugins/pay_ios/ios`)
   - phone_number (from `.symlinks/plugins/phone_number/ios`)
   - qr_code_scanner (from `.symlinks/plugins/qr_code_scanner/ios`)
   - screen_capture_event (from `.symlinks/plugins/screen_capture_event/ios`)
   - sentry_flutter (from `.symlinks/plugins/sentry_flutter/ios`)
-  - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/ios`)
+  - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
   - sqflite (from `.symlinks/plugins/sqflite/ios`)
   - stripe_ios (from `.symlinks/plugins/stripe_ios/ios`)
   - uni_links (from `.symlinks/plugins/uni_links/ios`)
@@ -432,7 +432,7 @@ EXTERNAL SOURCES:
   package_info_plus:
     :path: ".symlinks/plugins/package_info_plus/ios"
   path_provider_foundation:
-    :path: ".symlinks/plugins/path_provider_foundation/ios"
+    :path: ".symlinks/plugins/path_provider_foundation/darwin"
   pay_ios:
     :path: ".symlinks/plugins/pay_ios/ios"
   phone_number:
@@ -444,7 +444,7 @@ EXTERNAL SOURCES:
   sentry_flutter:
     :path: ".symlinks/plugins/sentry_flutter/ios"
   shared_preferences_foundation:
-    :path: ".symlinks/plugins/shared_preferences_foundation/ios"
+    :path: ".symlinks/plugins/shared_preferences_foundation/darwin"
   sqflite:
     :path: ".symlinks/plugins/sqflite/ios"
   stripe_ios:
@@ -476,7 +476,7 @@ SPEC CHECKSUMS:
   FirebaseRemoteConfig: bc7f260e6596956fafbb532443c19bd3c30f5258
   Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
   flutter_barcode_scanner: 7a1144744c28dc0c57a8de7218ffe5ec59a9e4bf
-  flutter_blue_plus: 6787777145d615de01828f3a9fa423c3c702f0b3
+  flutter_blue_plus: 316ac8d1179789616d2c148e8a03c37720e63933
   flutter_image_compress: 5a5e9aee05b6553048b8df1c3bc456d0afaac433
   flutter_inappwebview: bfd58618f49dc62f2676de690fc6dcda1d6c3721
   flutter_keyboard_visibility: 0339d06371254c3eb25eeb90ba8d17dca8f9c069
@@ -493,7 +493,7 @@ SPEC CHECKSUMS:
   GTMAppAuth: 0ff230db599948a9ad7470ca667337803b3fc4dd
   GTMSessionFetcher: 3a63d75eecd6aa32c2fc79f578064e1214dfdec2
   image_picker_ios: 4a8aadfbb6dc30ad5141a2ce3832af9214a705b5
-  integration_test: a1e7d09bd98eca2fc37aefd79d4f41ad37bdbbe5
+  integration_test: 13825b8a9334a850581300559b8839134b124670
   libwebp: 33dc822fbbf4503668d09f7885bbfedc76c45e96
   local_auth_ios: 0d333dde7780f669e66f19d2ff6005f3ea84008d
   Mantle: c5aa8794a29a022dfbbfc9799af95f477a69b62d

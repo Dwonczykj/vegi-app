@@ -15,11 +15,19 @@ OnboardingState? fromJsonOnboardingState(dynamic json) =>
 class OnboardingState with _$OnboardingState {
   @JsonSerializable()
   factory OnboardingState({
-    @JsonKey(ignore: true) @Default(false) bool signupIsInFlux,
-    @JsonKey(ignore: true) @Default(null) SignUpErrorDetails? signupError,
-    @JsonKey(ignore: true) @Default('') String signupStatusMessage,
-    @JsonKey(ignore: true) AuthCredential? conflictingCredentials,
-    @JsonKey(ignore: true) String? conflictingEmail,
+    @JsonKey(includeFromJson: false, includeToJson: false)
+    @Default(false)
+    bool signupIsInFlux,
+    @JsonKey(includeFromJson: false, includeToJson: false)
+    @Default(null)
+    SignUpErrorDetails? signupError,
+    @JsonKey(includeFromJson: false, includeToJson: false)
+    @Default('')
+    String signupStatusMessage,
+    @JsonKey(includeFromJson: false, includeToJson: false)
+    AuthCredential? conflictingCredentials,
+    @JsonKey(includeFromJson: false, includeToJson: false)
+    String? conflictingEmail,
   }) = _OnboardingState;
 
   const OnboardingState._();
@@ -29,10 +37,7 @@ class OnboardingState with _$OnboardingState {
         () => _$OnboardingStateFromJson(json),
       );
 
-  factory OnboardingState.initial() => OnboardingState(
-        signupIsInFlux: false,
-        signupStatusMessage: '',
-      );
+  factory OnboardingState.initial() => OnboardingState();
 }
 
 class OnboardingStateConverter

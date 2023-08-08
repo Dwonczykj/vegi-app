@@ -12,6 +12,8 @@ import 'package:vegan_liverpool/utils/constants.dart';
 import 'package:vegan_liverpool/utils/copy.dart';
 
 class GenerateQRFromCart extends StatefulWidget {
+  const GenerateQRFromCart({Key? key}) : super(key: key);
+
   @override
   _GenerateQRFromCartState createState() => _GenerateQRFromCartState();
 }
@@ -36,7 +38,7 @@ class _GenerateQRFromCartState extends State<GenerateQRFromCart> {
           );
       },
       builder: (_, viewmodel) {
-        final _qrImage = Container(
+        final qrImage = Container(
           alignment: Alignment.center,
           decoration: BoxDecoration(
             color: Theme.of(context).canvasColor.withAlpha(0),
@@ -72,7 +74,7 @@ class _GenerateQRFromCartState extends State<GenerateQRFromCart> {
           ),
         );
         return Container(
-          padding: EdgeInsets.all(20),
+          padding: const EdgeInsets.all(20),
           child: SingleChildScrollView(
             //Scroll view given to Column
             child: Column(
@@ -82,19 +84,19 @@ class _GenerateQRFromCartState extends State<GenerateQRFromCart> {
                 // Show a QR Code that a consumer or vendor can scan to transfer basket information
                 if (viewmodel.isSimulator)
                   GestureDetector(
-                    child: _qrImage,
+                    child: qrImage,
                     onTap: () async {
                       await copyToClipboard(
                         await viewmodel.encodedBasket(),
                       );
-                      showInfoSnack(
+                      await showInfoSnack(
                         context,
                         title: 'Basked copied to clipboard',
                       );
                     },
                   )
                 else
-                  _qrImage,
+                  qrImage,
                 // SizedBox(height: 20),
                 // Text(
                 //   "Generate QR Code",

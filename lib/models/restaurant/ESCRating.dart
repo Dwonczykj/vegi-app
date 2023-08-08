@@ -20,9 +20,7 @@ class ESCRating with _$ESCRating {
     required double createdAt,
     required String productPublicId,
     required num rating,
-    @Default({}) Object evidence,
-    required DateTime calculatedOn,
-    required Product product,
+    required DateTime calculatedOn, required Product product, @Default({}) Object evidence,
     @Default([]) List<ESCExplanation> explanations,
   }) = _ESCRating;
 

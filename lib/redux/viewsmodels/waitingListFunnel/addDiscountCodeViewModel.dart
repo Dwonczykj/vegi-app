@@ -52,7 +52,7 @@ class AddDiscountCodeViewModel extends Equatable {
             .firstWhereExists((element) => element.name == 'Purple Carrot');
         if (vendor == null) {
           return log.error(
-              'Purple Carrot was not found in app memory. Please load vendors first...');
+              'Purple Carrot was not found in app memory. Please load vendors first...',);
         }
         store.dispatch(
           validateFixedVoucherCode(

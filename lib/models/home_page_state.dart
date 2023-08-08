@@ -10,19 +10,31 @@ part 'home_page_state.g.dart';
 class HomePageState with _$HomePageState {
   @JsonSerializable()
   factory HomePageState({
-    @JsonKey(ignore: true)
+    @JsonKey(includeFromJson: false, includeToJson: false)
     @Default([])
-        List<RestaurantItem> featuredRestaurants,
+    List<RestaurantItem> featuredRestaurants,
     @Default([]) List<RestaurantItem> filteredRestaurants,
     @Default('') String filterRestaurantsQuery,
-    @JsonKey(ignore: true) @Default(false) bool showGlobalSearchBarField,
+    @JsonKey(includeFromJson: false, includeToJson: false)
+    @Default(false)
+    bool showGlobalSearchBarField,
     @Default([]) List<RestaurantMenuItem> filteredMenuItems,
     @Default('') String filterMenuQuery,
-    @JsonKey(ignore: true) @Default(false) bool showMenuSearchBarField,
-    @JsonKey(ignore: true) @Default(false) bool isLoadingHomePage,
-    @JsonKey(ignore: true) @Default(false) bool isLoadingHttpRequest,
-    @JsonKey(ignore: true) @Default([]) List<String> postalCodes,
-    @JsonKey(ignore: true) @Default('L1') String selectedSearchPostCode,
+    @JsonKey(includeFromJson: false, includeToJson: false)
+    @Default(false)
+    bool showMenuSearchBarField,
+    @JsonKey(includeFromJson: false, includeToJson: false)
+    @Default(false)
+    bool isLoadingHomePage,
+    @JsonKey(includeFromJson: false, includeToJson: false)
+    @Default(false)
+    bool isLoadingHttpRequest,
+    @JsonKey(includeFromJson: false, includeToJson: false)
+    @Default([])
+    List<String> postalCodes,
+    @JsonKey(includeFromJson: false, includeToJson: false)
+    @Default('L1')
+    String selectedSearchPostCode,
   }) = _HomePageState;
 
   const HomePageState._();
@@ -30,14 +42,8 @@ class HomePageState with _$HomePageState {
   factory HomePageState.initial() => HomePageState(
         featuredRestaurants: [],
         filteredRestaurants: [],
-        filterRestaurantsQuery: '',
-        showGlobalSearchBarField: false,
         filteredMenuItems: [],
-        filterMenuQuery: '',
-        showMenuSearchBarField: false,
-        isLoadingHomePage: false,
         postalCodes: [],
-        selectedSearchPostCode: 'L1',
       );
 
   factory HomePageState.fromJson(Map<String, dynamic> json) =>

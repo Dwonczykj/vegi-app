@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:ui';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:carrier_info/carrier_info.dart';
@@ -66,7 +65,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       }
       if (Platform.isIOS) {
         final iosInfo = await CarrierInfo.getIosInfo();
-        if (iosInfo.carrierData.length >= 1) {
+        if (iosInfo.carrierData.isNotEmpty) {
           isoCode = iosInfo.carrierData[0].isoCountryCode;
         }
       }
@@ -115,7 +114,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
       },
       onWillChange: (previousViewModel, newViewModel) async {
         if (newViewModel.signupError != previousViewModel?.signupError &&
-            newViewModel.signupError != null && newViewModel.signupError?.message != null) {
+            newViewModel.signupError != null &&
+            newViewModel.signupError?.message != null) {
           await showErrorSnack(
             title: newViewModel.signupError!.title,
             message: newViewModel.signupError!.message,
@@ -127,7 +127,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
               bottom: 120,
             ),
           );
-          log.error(newViewModel.signupError!.toString(), stackTrace: StackTrace.current,);
+          log.error(
+            newViewModel.signupError!.toString(),
+            stackTrace: StackTrace.current,
+          );
         }
       },
       builder: (context, viewmodel) {
@@ -210,10 +213,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             child: Row(
                               children: <Widget>[
                                 CountryCodePicker(
-                                  onChanged: (_countryCode) {
+                                  onChanged: (countryCode_) {
                                     setState(() {
-                                      countryCode = _countryCode;
+                                      countryCode = countryCode_;
                                     });
+                                    log.verbose(
+                                      'CountryCode changed to ${countryCode_.dialCode}',
+                                    );
                                   },
                                   searchDecoration: InputDecoration(
                                     border: UnderlineInputBorder(
@@ -416,7 +422,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     // setState(() {
     //   isPreloading = true;
     // });
-    PhoneNumber? value = null;
+    PhoneNumber? value;
     try {
       value = await phoneNumberUtil.parse(
         phoneNumber,
@@ -530,7 +536,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 }
-
 
 String _createErrorMessage(SignUpErrorDetails? errorDetails) {
   if (errorDetails == null || errorDetails.code == null) {

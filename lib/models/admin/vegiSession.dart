@@ -12,10 +12,10 @@ class VegiSession with _$VegiSession {
     @Default(null) UserDTO? user,
   }) = _VegiSession;
 
-  final createdAt = DateTime.now();
-
   VegiSession._();
 
   factory VegiSession.fromJson(Map<String, dynamic> json) =>
       _$VegiSessionFromJson(json);
+
+  final createdAt = DateTime.now();
 }

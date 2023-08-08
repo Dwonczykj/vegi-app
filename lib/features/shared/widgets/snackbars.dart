@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:vegan_liverpool/generated/l10n.dart';
 
-import '../../../utils/log/log.dart';
+import 'package:vegan_liverpool/utils/log/log.dart';
 
 Future<void> showErrorSnack({
   required BuildContext context,

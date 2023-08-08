@@ -20,7 +20,7 @@ UserState _$UserStateFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$UserState {
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   String? get wcURI => throw _privateConstructorUsedError;
   WalletModules? get walletModules => throw _privateConstructorUsedError;
   DateTime? get installedAt => throw _privateConstructorUsedError;
@@ -86,10 +86,10 @@ mixin _$UserState {
   List<String> get syncedContacts => throw _privateConstructorUsedError;
   Map<String, String> get reverseContacts => throw _privateConstructorUsedError;
   String get currency => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   bool get hasUpgrade => throw _privateConstructorUsedError;
   BiometricAuth get authType => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   bool get biometricallyAuthenticated => throw _privateConstructorUsedError;
   @JsonKey(fromJson: localeFromJson, toJson: localeToJson)
   Locale? get locale => throw _privateConstructorUsedError;
@@ -101,17 +101,17 @@ mixin _$UserState {
       throw _privateConstructorUsedError;
   bool get hasSavedSeedPhrase => throw _privateConstructorUsedError;
   bool get useLiveLocation => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   bool get userIsVerified => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   Position? get userLocation => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   bool get isUsingSimulator => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   bool get isUsingIosSimulator => throw _privateConstructorUsedError;
   String get initialLoginDateTime => throw _privateConstructorUsedError;
   bool get showSeedPhraseBanner => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   List<SurveyQuestion> get surveyQuestions =>
       throw _privateConstructorUsedError;
   bool get surveyCompleted => throw _privateConstructorUsedError;
@@ -139,7 +139,7 @@ abstract class $UserStateCopyWith<$Res> {
       _$UserStateCopyWithImpl<$Res, UserState>;
   @useResult
   $Res call(
-      {@JsonKey(ignore: true)
+      {@JsonKey(includeFromJson: false, includeToJson: false)
           String? wcURI,
       WalletModules? walletModules,
       DateTime? installedAt,
@@ -183,10 +183,10 @@ abstract class $UserStateCopyWith<$Res> {
       List<String> syncedContacts,
       Map<String, String> reverseContacts,
       String currency,
-      @JsonKey(ignore: true)
+      @JsonKey(includeFromJson: false, includeToJson: false)
           bool hasUpgrade,
       BiometricAuth authType,
-      @JsonKey(ignore: true)
+      @JsonKey(includeFromJson: false, includeToJson: false)
           bool biometricallyAuthenticated,
       @JsonKey(fromJson: localeFromJson, toJson: localeToJson)
           Locale? locale,
@@ -197,17 +197,17 @@ abstract class $UserStateCopyWith<$Res> {
       List<DeliveryAddresses> listOfDeliveryAddresses,
       bool hasSavedSeedPhrase,
       bool useLiveLocation,
-      @JsonKey(ignore: true)
+      @JsonKey(includeFromJson: false, includeToJson: false)
           bool userIsVerified,
-      @JsonKey(ignore: true)
+      @JsonKey(includeFromJson: false, includeToJson: false)
           Position? userLocation,
-      @JsonKey(ignore: true)
+      @JsonKey(includeFromJson: false, includeToJson: false)
           bool isUsingSimulator,
-      @JsonKey(ignore: true)
+      @JsonKey(includeFromJson: false, includeToJson: false)
           bool isUsingIosSimulator,
       String initialLoginDateTime,
       bool showSeedPhraseBanner,
-      @JsonKey(ignore: true)
+      @JsonKey(includeFromJson: false, includeToJson: false)
           List<SurveyQuestion> surveyQuestions,
       bool surveyCompleted,
       String surveyEmailUsed,
@@ -623,7 +623,7 @@ abstract class _$$_UserStateCopyWith<$Res> implements $UserStateCopyWith<$Res> {
   @override
   @useResult
   $Res call(
-      {@JsonKey(ignore: true)
+      {@JsonKey(includeFromJson: false, includeToJson: false)
           String? wcURI,
       WalletModules? walletModules,
       DateTime? installedAt,
@@ -667,10 +667,10 @@ abstract class _$$_UserStateCopyWith<$Res> implements $UserStateCopyWith<$Res> {
       List<String> syncedContacts,
       Map<String, String> reverseContacts,
       String currency,
-      @JsonKey(ignore: true)
+      @JsonKey(includeFromJson: false, includeToJson: false)
           bool hasUpgrade,
       BiometricAuth authType,
-      @JsonKey(ignore: true)
+      @JsonKey(includeFromJson: false, includeToJson: false)
           bool biometricallyAuthenticated,
       @JsonKey(fromJson: localeFromJson, toJson: localeToJson)
           Locale? locale,
@@ -681,17 +681,17 @@ abstract class _$$_UserStateCopyWith<$Res> implements $UserStateCopyWith<$Res> {
       List<DeliveryAddresses> listOfDeliveryAddresses,
       bool hasSavedSeedPhrase,
       bool useLiveLocation,
-      @JsonKey(ignore: true)
+      @JsonKey(includeFromJson: false, includeToJson: false)
           bool userIsVerified,
-      @JsonKey(ignore: true)
+      @JsonKey(includeFromJson: false, includeToJson: false)
           Position? userLocation,
-      @JsonKey(ignore: true)
+      @JsonKey(includeFromJson: false, includeToJson: false)
           bool isUsingSimulator,
-      @JsonKey(ignore: true)
+      @JsonKey(includeFromJson: false, includeToJson: false)
           bool isUsingIosSimulator,
       String initialLoginDateTime,
       bool showSeedPhraseBanner,
-      @JsonKey(ignore: true)
+      @JsonKey(includeFromJson: false, includeToJson: false)
           List<SurveyQuestion> surveyQuestions,
       bool surveyCompleted,
       String surveyEmailUsed,
@@ -1080,7 +1080,7 @@ class __$$_UserStateCopyWithImpl<$Res>
 @JsonSerializable()
 class _$_UserState extends _UserState with DiagnosticableTreeMixin {
   _$_UserState(
-      {@JsonKey(ignore: true)
+      {@JsonKey(includeFromJson: false, includeToJson: false)
           this.wcURI,
       this.walletModules,
       this.installedAt,
@@ -1125,10 +1125,10 @@ class _$_UserState extends _UserState with DiagnosticableTreeMixin {
       this.syncedContacts = const [],
       this.reverseContacts = const {},
       this.currency = 'usd',
-      @JsonKey(ignore: true)
+      @JsonKey(includeFromJson: false, includeToJson: false)
           this.hasUpgrade = false,
       this.authType = BiometricAuth.none,
-      @JsonKey(ignore: true)
+      @JsonKey(includeFromJson: false, includeToJson: false)
           this.biometricallyAuthenticated = false,
       @JsonKey(fromJson: localeFromJson, toJson: localeToJson)
           this.locale,
@@ -1139,17 +1139,17 @@ class _$_UserState extends _UserState with DiagnosticableTreeMixin {
       this.listOfDeliveryAddresses = const [],
       this.hasSavedSeedPhrase = false,
       this.useLiveLocation = false,
-      @JsonKey(ignore: true)
+      @JsonKey(includeFromJson: false, includeToJson: false)
           this.userIsVerified = false,
-      @JsonKey(ignore: true)
+      @JsonKey(includeFromJson: false, includeToJson: false)
           this.userLocation = null,
-      @JsonKey(ignore: true)
+      @JsonKey(includeFromJson: false, includeToJson: false)
           this.isUsingSimulator = false,
-      @JsonKey(ignore: true)
+      @JsonKey(includeFromJson: false, includeToJson: false)
           this.isUsingIosSimulator = false,
       this.initialLoginDateTime = '',
       this.showSeedPhraseBanner = false,
-      @JsonKey(ignore: true)
+      @JsonKey(includeFromJson: false, includeToJson: false)
           this.surveyQuestions = const [],
       this.surveyCompleted = false,
       this.surveyEmailUsed = '',
@@ -1169,7 +1169,7 @@ class _$_UserState extends _UserState with DiagnosticableTreeMixin {
       _$$_UserStateFromJson(json);
 
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   final String? wcURI;
   @override
   final WalletModules? walletModules;
@@ -1301,13 +1301,13 @@ class _$_UserState extends _UserState with DiagnosticableTreeMixin {
   @JsonKey()
   final String currency;
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   final bool hasUpgrade;
   @override
   @JsonKey()
   final BiometricAuth authType;
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   final bool biometricallyAuthenticated;
   @override
   @JsonKey(fromJson: localeFromJson, toJson: localeToJson)
@@ -1331,16 +1331,16 @@ class _$_UserState extends _UserState with DiagnosticableTreeMixin {
   @JsonKey()
   final bool useLiveLocation;
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   final bool userIsVerified;
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   final Position? userLocation;
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   final bool isUsingSimulator;
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   final bool isUsingIosSimulator;
   @override
   @JsonKey()
@@ -1349,7 +1349,7 @@ class _$_UserState extends _UserState with DiagnosticableTreeMixin {
   @JsonKey()
   final bool showSeedPhraseBanner;
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   final List<SurveyQuestion> surveyQuestions;
   @override
   @JsonKey()
@@ -1671,7 +1671,7 @@ class _$_UserState extends _UserState with DiagnosticableTreeMixin {
 
 abstract class _UserState extends UserState {
   factory _UserState(
-      {@JsonKey(ignore: true)
+      {@JsonKey(includeFromJson: false, includeToJson: false)
           final String? wcURI,
       final WalletModules? walletModules,
       final DateTime? installedAt,
@@ -1715,10 +1715,10 @@ abstract class _UserState extends UserState {
       final List<String> syncedContacts,
       final Map<String, String> reverseContacts,
       final String currency,
-      @JsonKey(ignore: true)
+      @JsonKey(includeFromJson: false, includeToJson: false)
           final bool hasUpgrade,
       final BiometricAuth authType,
-      @JsonKey(ignore: true)
+      @JsonKey(includeFromJson: false, includeToJson: false)
           final bool biometricallyAuthenticated,
       @JsonKey(fromJson: localeFromJson, toJson: localeToJson)
           final Locale? locale,
@@ -1729,17 +1729,17 @@ abstract class _UserState extends UserState {
       final List<DeliveryAddresses> listOfDeliveryAddresses,
       final bool hasSavedSeedPhrase,
       final bool useLiveLocation,
-      @JsonKey(ignore: true)
+      @JsonKey(includeFromJson: false, includeToJson: false)
           final bool userIsVerified,
-      @JsonKey(ignore: true)
+      @JsonKey(includeFromJson: false, includeToJson: false)
           final Position? userLocation,
-      @JsonKey(ignore: true)
+      @JsonKey(includeFromJson: false, includeToJson: false)
           final bool isUsingSimulator,
-      @JsonKey(ignore: true)
+      @JsonKey(includeFromJson: false, includeToJson: false)
           final bool isUsingIosSimulator,
       final String initialLoginDateTime,
       final bool showSeedPhraseBanner,
-      @JsonKey(ignore: true)
+      @JsonKey(includeFromJson: false, includeToJson: false)
           final List<SurveyQuestion> surveyQuestions,
       final bool surveyCompleted,
       final String surveyEmailUsed,
@@ -1759,7 +1759,7 @@ abstract class _UserState extends UserState {
       _$_UserState.fromJson;
 
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   String? get wcURI;
   @override
   WalletModules? get walletModules;
@@ -1859,12 +1859,12 @@ abstract class _UserState extends UserState {
   @override
   String get currency;
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   bool get hasUpgrade;
   @override
   BiometricAuth get authType;
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   bool get biometricallyAuthenticated;
   @override
   @JsonKey(fromJson: localeFromJson, toJson: localeToJson)
@@ -1883,23 +1883,23 @@ abstract class _UserState extends UserState {
   @override
   bool get useLiveLocation;
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   bool get userIsVerified;
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   Position? get userLocation;
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   bool get isUsingSimulator;
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   bool get isUsingIosSimulator;
   @override
   String get initialLoginDateTime;
   @override
   bool get showSeedPhraseBanner;
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   List<SurveyQuestion> get surveyQuestions;
   @override
   bool get surveyCompleted;

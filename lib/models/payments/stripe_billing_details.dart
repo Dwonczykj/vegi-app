@@ -8,10 +8,10 @@ part 'stripe_billing_details.g.dart';
 
 List<StripeBillingDetails> fromJsonStripeBillingDetailsList(dynamic json) =>
     fromSailsListOfObjectJson<StripeBillingDetails>(
-        StripeBillingDetails.fromJson)(json);
+        StripeBillingDetails.fromJson,)(json);
 StripeBillingDetails? fromJsonStripeBillingDetails(dynamic json) =>
     fromSailsObjectJson<StripeBillingDetails>(StripeBillingDetails.fromJson)(
-        json);
+        json,);
 
 @Freezed()
 class StripeBillingDetails with _$StripeBillingDetails {

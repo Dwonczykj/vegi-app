@@ -31,7 +31,6 @@ class VendorHomeView extends StatelessWidget {
                 child: CircularProgressIndicator(color: themeShade400),
               )
             : Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   SizedBox(
@@ -56,8 +55,8 @@ class VendorHomeView extends StatelessWidget {
                         ),
                         elevation: 5,
                         color: themeShade1100,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
+                        child: const Padding(
+                          padding: EdgeInsets.symmetric(
                             vertical: 10,
                             horizontal: 20,
                           ),
@@ -65,7 +64,7 @@ class VendorHomeView extends StatelessWidget {
                             child: Text.rich(
                               TextSpan(
                                 text: 'New Customer',
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontWeight: FontWeight.w900,
                                   fontSize: 18,
                                   color: Colors.white,
@@ -95,8 +94,8 @@ class VendorHomeView extends StatelessWidget {
                         ),
                         elevation: 5,
                         color: themeShade1100,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
+                        child: const Padding(
+                          padding: EdgeInsets.symmetric(
                             vertical: 10,
                             horizontal: 20,
                           ),
@@ -104,7 +103,7 @@ class VendorHomeView extends StatelessWidget {
                             child: Text.rich(
                               TextSpan(
                                 text: 'Take vegiPay',
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontWeight: FontWeight.w900,
                                   fontSize: 18,
                                   color: Colors.white,

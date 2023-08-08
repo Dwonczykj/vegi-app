@@ -89,8 +89,6 @@ class StripeService {
     try {
       await instance.initPaymentSheet(
         paymentSheetParameters: SetupPaymentSheetParameters(
-          // Enable custom flow
-          customFlow: customFlowBreaking,
           // Main params
           paymentIntentClientSecret: paymentIntentClientSecret.clientSecret,
           merchantDisplayName: Labels.stripeVegiProductName,
@@ -178,6 +176,7 @@ class StripeService {
           ..dispatch(
             OrderCreationProcessStatusUpdate(
               status: OrderCreationProcessStatus.orderPaymentFailed,
+              orderCreationStatusMessage: 'Order payment failed',
             ),
           );
         return false;
@@ -200,12 +199,18 @@ class StripeService {
           ..dispatch(
             OrderCreationProcessStatusUpdate(
               status: OrderCreationProcessStatus.orderCancelled,
+              orderCreationStatusMessage: 'Order cancelled',
             ),
           )
           ..dispatch(SetPaymentButtonFlag(false));
         return false;
       }
     } on Exception catch (e, s) {
+      store.dispatch(stopPaymentProcess());
+      log.error(
+        e,
+        stackTrace: s,
+      );
       return false;
     }
 
@@ -218,8 +223,7 @@ class StripeService {
               .isNotEmpty &&
           customFlowBreaking) {
         preregisteredPaymentMethodUsedForThisIntent = store.state.cartState
-                .paymentIntent!.paymentIntent.paymentMethodTypes.length >
-            0;
+            .paymentIntent!.paymentIntent.paymentMethodTypes.isNotEmpty;
       }
       // final newCardDetailsWereUsed = !preregisteredPaymentMethodUsedForThisIntent;
       if (preregisteredPaymentMethodUsedForThisIntent) {
@@ -248,6 +252,7 @@ class StripeService {
         ..dispatch(
           OrderCreationProcessStatusUpdate(
             status: OrderCreationProcessStatus.orderCancelled,
+            orderCreationStatusMessage: 'Order cancelled',
           ),
         )
         ..dispatch(SetPaymentButtonFlag(false));
@@ -284,6 +289,7 @@ class StripeService {
           ..dispatch(
             OrderCreationProcessStatusUpdate(
               status: OrderCreationProcessStatus.orderPaymentFailed,
+              orderCreationStatusMessage: 'Order payment failed',
             ),
           );
         return false;
@@ -306,6 +312,7 @@ class StripeService {
           ..dispatch(
             OrderCreationProcessStatusUpdate(
               status: OrderCreationProcessStatus.orderCancelled,
+              orderCreationStatusMessage: 'Order cancelled',
             ),
           )
           ..dispatch(SetPaymentButtonFlag(false));
@@ -351,9 +358,9 @@ class StripeService {
         stripeCustomerId: stripeCustomerId,
       );
       if (paymentIntentClientSecret == null) {
-        log.error('Unable to create payment intent from ${stripePayService}');
+        log.error('Unable to create payment intent from $stripePayService');
         await Sentry.captureException(
-          Exception('Unable to create payment intent from ${stripePayService}'),
+          Exception('Unable to create payment intent from $stripePayService'),
           stackTrace: StackTrace.current, // from catch (err, s)
         );
         store.dispatch(
@@ -454,10 +461,7 @@ class StripeService {
           'Failed to fetch paymentIntent[${store.state.cartState.paymentIntentID}] from vegi server using paymentIntent client secret that was created on the order',
           stackTrace: StackTrace.current,
         );
-        await Sentry.captureException(
-          'Failed to fetch paymentIntent[${store.state.cartState.paymentIntentID}] from vegi server using paymentIntent client secret that was created on the order',
-          stackTrace: StackTrace.current, // from catch (err, s)
-        );
+
         store
           ..dispatch(SetPaymentButtonFlag(false))
           ..dispatch(SetTransferringPayment(flag: false))
@@ -475,6 +479,7 @@ class StripeService {
           ..dispatch(
             OrderCreationProcessStatusUpdate(
               status: OrderCreationProcessStatus.orderPaymentFailed,
+              orderCreationStatusMessage: 'Order payment failed',
             ),
           );
         return false;
@@ -501,8 +506,6 @@ class StripeService {
               amount: amount.value,
               currency: currency,
               status: PaymentProcessingStatus.succeeded,
-              technology: PaymentTechnology.card,
-              type: PaymentType.cardPayment,
             ),
           ),
         )
@@ -551,6 +554,7 @@ class StripeService {
           ..dispatch(
             OrderCreationProcessStatusUpdate(
               status: OrderCreationProcessStatus.orderPaymentFailed,
+              orderCreationStatusMessage: 'Order payment failed',
             ),
           );
         return false;
@@ -573,6 +577,7 @@ class StripeService {
           ..dispatch(
             OrderCreationProcessStatusUpdate(
               status: OrderCreationProcessStatus.orderCancelled,
+              orderCreationStatusMessage: 'Order cancelled',
             ),
           )
           ..dispatch(SetPaymentButtonFlag(false));
@@ -628,10 +633,11 @@ class StripeService {
           stripeCustomerId: stripeCustomerId,
         );
         if (paymentIntentClientSecret == null) {
-          log.error('Unable to create payment intent from ${stripePayService}');
+          log.error('Unable to create payment intent from $stripePayService');
           await Sentry.captureException(
             Exception(
-                'Unable to create payment intent from ${stripePayService}'),
+              'Unable to create payment intent from $stripePayService',
+            ),
             stackTrace: StackTrace.current, // from catch (err, s)
           );
           store.dispatch(
@@ -642,10 +648,12 @@ class StripeService {
           return false;
         } else if (currency != Currency.GBP && currency != Currency.GBPx) {
           log.error(
-              'Unable to use apple pay via stripe for currency: $currency');
+            'Unable to use apple pay via stripe for currency: $currency',
+          );
           await Sentry.captureException(
             Exception(
-                'Unable to use apple pay via stripe for currency: $currency'),
+              'Unable to use apple pay via stripe for currency: $currency',
+            ),
             stackTrace: StackTrace.current, // from catch (err, s)
           );
           store.dispatch(
@@ -723,7 +731,6 @@ class StripeService {
                 currency: currency,
                 status: PaymentProcessingStatus.succeeded,
                 technology: PaymentTechnology.applePay,
-                type: PaymentType.cardPayment,
               ),
             ),
           )
@@ -741,7 +748,7 @@ class StripeService {
           );
       }
       return true;
-    } on Exception catch (e, s) {
+    } on Exception catch (e) {
       store.dispatch(
         StripePaymentStatusUpdate(
           status: StripePaymentStatus.paymentFailed,
@@ -800,10 +807,11 @@ class StripeService {
           stripeCustomerId: stripeCustomerId,
         );
         if (paymentIntentClientSecret == null) {
-          log.error('Unable to create payment intent from ${stripePayService}');
+          log.error('Unable to create payment intent from $stripePayService');
           await Sentry.captureException(
             Exception(
-                'Unable to create payment intent from ${stripePayService}'),
+              'Unable to create payment intent from $stripePayService',
+            ),
             stackTrace: StackTrace.current, // from catch (err, s)
           );
           store.dispatch(
@@ -814,10 +822,12 @@ class StripeService {
           return false;
         } else if (currency != Currency.GBP && currency != Currency.GBPx) {
           log.error(
-              'Unable to use google pay via stripe for currency: $currency');
+            'Unable to use google pay via stripe for currency: $currency',
+          );
           await Sentry.captureException(
             Exception(
-                'Unable to use google pay via stripe for currency: $currency'),
+              'Unable to use google pay via stripe for currency: $currency',
+            ),
             stackTrace: StackTrace.current, // from catch (err, s)
           );
           store.dispatch(
@@ -878,7 +888,6 @@ class StripeService {
                 currency: currency,
                 status: PaymentProcessingStatus.succeeded,
                 technology: PaymentTechnology.googlePay,
-                type: PaymentType.cardPayment,
               ),
             ),
           )

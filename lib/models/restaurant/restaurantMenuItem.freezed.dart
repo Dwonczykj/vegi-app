@@ -38,13 +38,13 @@ mixin _$RestaurantMenuItem {
   int get priority => throw _privateConstructorUsedError;
   bool get isFeatured => throw _privateConstructorUsedError;
   ProductDiscontinuedStatus get status => throw _privateConstructorUsedError;
+  String get productBarCode => throw _privateConstructorUsedError;
   String? get ingredients => throw _privateConstructorUsedError;
   String get vendorInternalId => throw _privateConstructorUsedError;
   int get stockCount => throw _privateConstructorUsedError;
   num get stockUnitsPerProduct => throw _privateConstructorUsedError;
   num get sizeInnerUnitValue => throw _privateConstructorUsedError;
   String get sizeInnerUnitType => throw _privateConstructorUsedError;
-  String get productBarCode => throw _privateConstructorUsedError;
   String get supplier => throw _privateConstructorUsedError;
   String get brandName => throw _privateConstructorUsedError;
   String get taxGroup => throw _privateConstructorUsedError;
@@ -78,13 +78,13 @@ abstract class $RestaurantMenuItemCopyWith<$Res> {
       int priority,
       bool isFeatured,
       ProductDiscontinuedStatus status,
+      String productBarCode,
       String? ingredients,
       String vendorInternalId,
       int stockCount,
       num stockUnitsPerProduct,
       num sizeInnerUnitValue,
       String sizeInnerUnitType,
-      String productBarCode,
       String supplier,
       String brandName,
       String taxGroup,
@@ -120,13 +120,13 @@ class _$RestaurantMenuItemCopyWithImpl<$Res, $Val extends RestaurantMenuItem>
     Object? priority = null,
     Object? isFeatured = null,
     Object? status = null,
+    Object? productBarCode = null,
     Object? ingredients = freezed,
     Object? vendorInternalId = null,
     Object? stockCount = null,
     Object? stockUnitsPerProduct = null,
     Object? sizeInnerUnitValue = null,
     Object? sizeInnerUnitType = null,
-    Object? productBarCode = null,
     Object? supplier = null,
     Object? brandName = null,
     Object? taxGroup = null,
@@ -189,6 +189,10 @@ class _$RestaurantMenuItemCopyWithImpl<$Res, $Val extends RestaurantMenuItem>
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
               as ProductDiscontinuedStatus,
+      productBarCode: null == productBarCode
+          ? _value.productBarCode
+          : productBarCode // ignore: cast_nullable_to_non_nullable
+              as String,
       ingredients: freezed == ingredients
           ? _value.ingredients
           : ingredients // ignore: cast_nullable_to_non_nullable
@@ -212,10 +216,6 @@ class _$RestaurantMenuItemCopyWithImpl<$Res, $Val extends RestaurantMenuItem>
       sizeInnerUnitType: null == sizeInnerUnitType
           ? _value.sizeInnerUnitType
           : sizeInnerUnitType // ignore: cast_nullable_to_non_nullable
-              as String,
-      productBarCode: null == productBarCode
-          ? _value.productBarCode
-          : productBarCode // ignore: cast_nullable_to_non_nullable
               as String,
       supplier: null == supplier
           ? _value.supplier
@@ -273,13 +273,13 @@ abstract class _$$_RestaurantMenuItemCopyWith<$Res>
       int priority,
       bool isFeatured,
       ProductDiscontinuedStatus status,
+      String productBarCode,
       String? ingredients,
       String vendorInternalId,
       int stockCount,
       num stockUnitsPerProduct,
       num sizeInnerUnitValue,
       String sizeInnerUnitType,
-      String productBarCode,
       String supplier,
       String brandName,
       String taxGroup,
@@ -314,13 +314,13 @@ class __$$_RestaurantMenuItemCopyWithImpl<$Res>
     Object? priority = null,
     Object? isFeatured = null,
     Object? status = null,
+    Object? productBarCode = null,
     Object? ingredients = freezed,
     Object? vendorInternalId = null,
     Object? stockCount = null,
     Object? stockUnitsPerProduct = null,
     Object? sizeInnerUnitValue = null,
     Object? sizeInnerUnitType = null,
-    Object? productBarCode = null,
     Object? supplier = null,
     Object? brandName = null,
     Object? taxGroup = null,
@@ -383,6 +383,10 @@ class __$$_RestaurantMenuItemCopyWithImpl<$Res>
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
               as ProductDiscontinuedStatus,
+      productBarCode: null == productBarCode
+          ? _value.productBarCode
+          : productBarCode // ignore: cast_nullable_to_non_nullable
+              as String,
       ingredients: freezed == ingredients
           ? _value.ingredients
           : ingredients // ignore: cast_nullable_to_non_nullable
@@ -406,10 +410,6 @@ class __$$_RestaurantMenuItemCopyWithImpl<$Res>
       sizeInnerUnitType: null == sizeInnerUnitType
           ? _value.sizeInnerUnitType
           : sizeInnerUnitType // ignore: cast_nullable_to_non_nullable
-              as String,
-      productBarCode: null == productBarCode
-          ? _value.productBarCode
-          : productBarCode // ignore: cast_nullable_to_non_nullable
               as String,
       supplier: null == supplier
           ? _value.supplier
@@ -451,13 +451,13 @@ class _$_RestaurantMenuItem extends _RestaurantMenuItem {
       required this.priority,
       required this.isFeatured,
       required this.status,
+      required this.productBarCode,
       this.ingredients,
       this.vendorInternalId = '',
       this.stockCount = 0,
       this.stockUnitsPerProduct = 1,
       this.sizeInnerUnitValue = 1,
       this.sizeInnerUnitType = '',
-      required this.productBarCode,
       this.supplier = '',
       this.brandName = '',
       this.taxGroup = '',
@@ -499,6 +499,8 @@ class _$_RestaurantMenuItem extends _RestaurantMenuItem {
   @override
   final ProductDiscontinuedStatus status;
   @override
+  final String productBarCode;
+  @override
   final String? ingredients;
   @override
   @JsonKey()
@@ -516,8 +518,6 @@ class _$_RestaurantMenuItem extends _RestaurantMenuItem {
   @JsonKey()
   final String sizeInnerUnitType;
   @override
-  final String productBarCode;
-  @override
   @JsonKey()
   final String supplier;
   @override
@@ -531,7 +531,7 @@ class _$_RestaurantMenuItem extends _RestaurantMenuItem {
 
   @override
   String toString() {
-    return 'RestaurantMenuItem(menuItemID: $menuItemID, restaurantID: $restaurantID, name: $name, imageURL: $imageURL, categoryName: $categoryName, categoryId: $categoryId, price: $price, description: $description, extras: $extras, listOfProductOptionCategories: $listOfProductOptionCategories, isAvailable: $isAvailable, priority: $priority, isFeatured: $isFeatured, status: $status, ingredients: $ingredients, vendorInternalId: $vendorInternalId, stockCount: $stockCount, stockUnitsPerProduct: $stockUnitsPerProduct, sizeInnerUnitValue: $sizeInnerUnitValue, sizeInnerUnitType: $sizeInnerUnitType, productBarCode: $productBarCode, supplier: $supplier, brandName: $brandName, taxGroup: $taxGroup, rating: $rating)';
+    return 'RestaurantMenuItem(menuItemID: $menuItemID, restaurantID: $restaurantID, name: $name, imageURL: $imageURL, categoryName: $categoryName, categoryId: $categoryId, price: $price, description: $description, extras: $extras, listOfProductOptionCategories: $listOfProductOptionCategories, isAvailable: $isAvailable, priority: $priority, isFeatured: $isFeatured, status: $status, productBarCode: $productBarCode, ingredients: $ingredients, vendorInternalId: $vendorInternalId, stockCount: $stockCount, stockUnitsPerProduct: $stockUnitsPerProduct, sizeInnerUnitValue: $sizeInnerUnitValue, sizeInnerUnitType: $sizeInnerUnitType, supplier: $supplier, brandName: $brandName, taxGroup: $taxGroup, rating: $rating)';
   }
 
   @override
@@ -564,6 +564,8 @@ class _$_RestaurantMenuItem extends _RestaurantMenuItem {
             (identical(other.isFeatured, isFeatured) ||
                 other.isFeatured == isFeatured) &&
             (identical(other.status, status) || other.status == status) &&
+            (identical(other.productBarCode, productBarCode) ||
+                other.productBarCode == productBarCode) &&
             (identical(other.ingredients, ingredients) ||
                 other.ingredients == ingredients) &&
             (identical(other.vendorInternalId, vendorInternalId) ||
@@ -576,8 +578,6 @@ class _$_RestaurantMenuItem extends _RestaurantMenuItem {
                 other.sizeInnerUnitValue == sizeInnerUnitValue) &&
             (identical(other.sizeInnerUnitType, sizeInnerUnitType) ||
                 other.sizeInnerUnitType == sizeInnerUnitType) &&
-            (identical(other.productBarCode, productBarCode) ||
-                other.productBarCode == productBarCode) &&
             (identical(other.supplier, supplier) ||
                 other.supplier == supplier) &&
             (identical(other.brandName, brandName) ||
@@ -605,13 +605,13 @@ class _$_RestaurantMenuItem extends _RestaurantMenuItem {
         priority,
         isFeatured,
         status,
+        productBarCode,
         ingredients,
         vendorInternalId,
         stockCount,
         stockUnitsPerProduct,
         sizeInnerUnitValue,
         sizeInnerUnitType,
-        productBarCode,
         supplier,
         brandName,
         taxGroup,
@@ -650,13 +650,13 @@ abstract class _RestaurantMenuItem extends RestaurantMenuItem {
       required final int priority,
       required final bool isFeatured,
       required final ProductDiscontinuedStatus status,
+      required final String productBarCode,
       final String? ingredients,
       final String vendorInternalId,
       final int stockCount,
       final num stockUnitsPerProduct,
       final num sizeInnerUnitValue,
       final String sizeInnerUnitType,
-      required final String productBarCode,
       final String supplier,
       final String brandName,
       final String taxGroup,
@@ -697,6 +697,8 @@ abstract class _RestaurantMenuItem extends RestaurantMenuItem {
   @override
   ProductDiscontinuedStatus get status;
   @override
+  String get productBarCode;
+  @override
   String? get ingredients;
   @override
   String get vendorInternalId;
@@ -708,8 +710,6 @@ abstract class _RestaurantMenuItem extends RestaurantMenuItem {
   num get sizeInnerUnitValue;
   @override
   String get sizeInnerUnitType;
-  @override
-  String get productBarCode;
   @override
   String get supplier;
   @override

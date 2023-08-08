@@ -5,7 +5,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:injectable/injectable.dart';
 import 'package:vegan_liverpool/common/di/env.dart';
-import 'package:vegan_liverpool/constants/firebase_options.dart';
+import 'package:vegan_liverpool/firebase_options.dart';
 
 @module
 abstract class FirebaseInjectableModule {

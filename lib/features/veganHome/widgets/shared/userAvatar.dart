@@ -1,16 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'dart:ui' as ui;
-import 'package:flutter/src/foundation/key.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:vegan_liverpool/constants/theme.dart';
 import 'package:vegan_liverpool/utils/constants.dart';
 
 class UserAvatar extends StatelessWidget {
   const UserAvatar({
-    Key? key,
-    required this.avatarUrl,
+    required this.avatarUrl, Key? key,
     this.avatarSquareSize = 50.0,
     this.showAdminBanner = false,
     this.isUpdating = false,
@@ -62,7 +59,7 @@ class UserAvatar extends StatelessWidget {
                   color: themeLightShade1000,
                   textStyle: TextStyle(
                     fontFamily: Fonts.fatFace,
-                    fontSize: (avatarSquareSize / 5.0),
+                    fontSize: avatarSquareSize / 5.0,
                   ),
                 ),
               ),
@@ -72,10 +69,10 @@ class UserAvatar extends StatelessWidget {
             Positioned.fill(
               child: BackdropFilter(
                 filter: ui.ImageFilter.blur(
-                  sigmaX: 1.0,
-                  sigmaY: 1.0,
+                  sigmaX: 1,
+                  sigmaY: 1,
                 ),
-                child: Center(
+                child: const Center(
                   child:
                       CircularProgressIndicator(), // replace your loading widget
                 ),

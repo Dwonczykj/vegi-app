@@ -27,14 +27,20 @@ mixin _$VendorDTO {
   num? get costLevel => throw _privateConstructorUsedError;
   num? get rating => throw _privateConstructorUsedError;
   bool get isVegan => throw _privateConstructorUsedError;
-  num get minimumOrderAmount => throw _privateConstructorUsedError;
-  num get platformFee => throw _privateConstructorUsedError;
   VendorStatus get status => throw _privateConstructorUsedError;
   String get walletAddress => throw _privateConstructorUsedError;
-  String get description => throw _privateConstructorUsedError;
-  String get imageUrl => throw _privateConstructorUsedError;
   @JsonKey(fromJson: fromJsonAddressDTO)
   AddressDTO? get pickupAddress => throw _privateConstructorUsedError;
+  @JsonKey(fromJson: fromJsonVendorCategoryList)
+  List<VendorCategory> get vendorCategories =>
+      throw _privateConstructorUsedError;
+  @JsonKey(fromJson: fromJsonProductCategoryList)
+  List<ProductCategory> get productCategories =>
+      throw _privateConstructorUsedError;
+  num get minimumOrderAmount => throw _privateConstructorUsedError;
+  num get platformFee => throw _privateConstructorUsedError;
+  String get description => throw _privateConstructorUsedError;
+  String get imageUrl => throw _privateConstructorUsedError;
   @JsonKey(fromJson: fromJsonDeliveryPartnerDTO)
   DeliveryPartnerDTO? get deliveryPartner => throw _privateConstructorUsedError;
   @JsonKey(fromJson: fromJsonFulfilmentMethodDTO)
@@ -45,12 +51,6 @@ mixin _$VendorDTO {
       throw _privateConstructorUsedError;
   @JsonKey(fromJson: fromJsonProductDTOList)
   List<ProductDTO> get products => throw _privateConstructorUsedError;
-  @JsonKey(fromJson: fromJsonVendorCategoryList)
-  List<VendorCategory> get vendorCategories =>
-      throw _privateConstructorUsedError;
-  @JsonKey(fromJson: fromJsonProductCategoryList)
-  List<ProductCategory> get productCategories =>
-      throw _privateConstructorUsedError;
   @JsonKey(fromJson: fromJsonPostalDistrictList)
   List<PostalDistrict> get fulfilmentPostalDistricts =>
       throw _privateConstructorUsedError;
@@ -74,14 +74,18 @@ abstract class $VendorDTOCopyWith<$Res> {
       num? costLevel,
       num? rating,
       bool isVegan,
-      num minimumOrderAmount,
-      num platformFee,
       VendorStatus status,
       String walletAddress,
-      String description,
-      String imageUrl,
       @JsonKey(fromJson: fromJsonAddressDTO)
           AddressDTO? pickupAddress,
+      @JsonKey(fromJson: fromJsonVendorCategoryList)
+          List<VendorCategory> vendorCategories,
+      @JsonKey(fromJson: fromJsonProductCategoryList)
+          List<ProductCategory> productCategories,
+      num minimumOrderAmount,
+      num platformFee,
+      String description,
+      String imageUrl,
       @JsonKey(fromJson: fromJsonDeliveryPartnerDTO)
           DeliveryPartnerDTO? deliveryPartner,
       @JsonKey(fromJson: fromJsonFulfilmentMethodDTO)
@@ -90,10 +94,6 @@ abstract class $VendorDTOCopyWith<$Res> {
           FulfilmentMethodDTO? collectionFulfilmentMethod,
       @JsonKey(fromJson: fromJsonProductDTOList)
           List<ProductDTO> products,
-      @JsonKey(fromJson: fromJsonVendorCategoryList)
-          List<VendorCategory> vendorCategories,
-      @JsonKey(fromJson: fromJsonProductCategoryList)
-          List<ProductCategory> productCategories,
       @JsonKey(fromJson: fromJsonPostalDistrictList)
           List<PostalDistrict> fulfilmentPostalDistricts});
 
@@ -123,19 +123,19 @@ class _$VendorDTOCopyWithImpl<$Res, $Val extends VendorDTO>
     Object? costLevel = freezed,
     Object? rating = freezed,
     Object? isVegan = null,
-    Object? minimumOrderAmount = null,
-    Object? platformFee = null,
     Object? status = null,
     Object? walletAddress = null,
+    Object? pickupAddress = freezed,
+    Object? vendorCategories = null,
+    Object? productCategories = null,
+    Object? minimumOrderAmount = null,
+    Object? platformFee = null,
     Object? description = null,
     Object? imageUrl = null,
-    Object? pickupAddress = freezed,
     Object? deliveryPartner = freezed,
     Object? deliveryFulfilmentMethod = freezed,
     Object? collectionFulfilmentMethod = freezed,
     Object? products = null,
-    Object? vendorCategories = null,
-    Object? productCategories = null,
     Object? fulfilmentPostalDistricts = null,
   }) {
     return _then(_value.copyWith(
@@ -167,14 +167,6 @@ class _$VendorDTOCopyWithImpl<$Res, $Val extends VendorDTO>
           ? _value.isVegan
           : isVegan // ignore: cast_nullable_to_non_nullable
               as bool,
-      minimumOrderAmount: null == minimumOrderAmount
-          ? _value.minimumOrderAmount
-          : minimumOrderAmount // ignore: cast_nullable_to_non_nullable
-              as num,
-      platformFee: null == platformFee
-          ? _value.platformFee
-          : platformFee // ignore: cast_nullable_to_non_nullable
-              as num,
       status: null == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
@@ -183,6 +175,26 @@ class _$VendorDTOCopyWithImpl<$Res, $Val extends VendorDTO>
           ? _value.walletAddress
           : walletAddress // ignore: cast_nullable_to_non_nullable
               as String,
+      pickupAddress: freezed == pickupAddress
+          ? _value.pickupAddress
+          : pickupAddress // ignore: cast_nullable_to_non_nullable
+              as AddressDTO?,
+      vendorCategories: null == vendorCategories
+          ? _value.vendorCategories
+          : vendorCategories // ignore: cast_nullable_to_non_nullable
+              as List<VendorCategory>,
+      productCategories: null == productCategories
+          ? _value.productCategories
+          : productCategories // ignore: cast_nullable_to_non_nullable
+              as List<ProductCategory>,
+      minimumOrderAmount: null == minimumOrderAmount
+          ? _value.minimumOrderAmount
+          : minimumOrderAmount // ignore: cast_nullable_to_non_nullable
+              as num,
+      platformFee: null == platformFee
+          ? _value.platformFee
+          : platformFee // ignore: cast_nullable_to_non_nullable
+              as num,
       description: null == description
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
@@ -191,10 +203,6 @@ class _$VendorDTOCopyWithImpl<$Res, $Val extends VendorDTO>
           ? _value.imageUrl
           : imageUrl // ignore: cast_nullable_to_non_nullable
               as String,
-      pickupAddress: freezed == pickupAddress
-          ? _value.pickupAddress
-          : pickupAddress // ignore: cast_nullable_to_non_nullable
-              as AddressDTO?,
       deliveryPartner: freezed == deliveryPartner
           ? _value.deliveryPartner
           : deliveryPartner // ignore: cast_nullable_to_non_nullable
@@ -211,14 +219,6 @@ class _$VendorDTOCopyWithImpl<$Res, $Val extends VendorDTO>
           ? _value.products
           : products // ignore: cast_nullable_to_non_nullable
               as List<ProductDTO>,
-      vendorCategories: null == vendorCategories
-          ? _value.vendorCategories
-          : vendorCategories // ignore: cast_nullable_to_non_nullable
-              as List<VendorCategory>,
-      productCategories: null == productCategories
-          ? _value.productCategories
-          : productCategories // ignore: cast_nullable_to_non_nullable
-              as List<ProductCategory>,
       fulfilmentPostalDistricts: null == fulfilmentPostalDistricts
           ? _value.fulfilmentPostalDistricts
           : fulfilmentPostalDistricts // ignore: cast_nullable_to_non_nullable
@@ -292,14 +292,18 @@ abstract class _$$_VendorDTOCopyWith<$Res> implements $VendorDTOCopyWith<$Res> {
       num? costLevel,
       num? rating,
       bool isVegan,
-      num minimumOrderAmount,
-      num platformFee,
       VendorStatus status,
       String walletAddress,
-      String description,
-      String imageUrl,
       @JsonKey(fromJson: fromJsonAddressDTO)
           AddressDTO? pickupAddress,
+      @JsonKey(fromJson: fromJsonVendorCategoryList)
+          List<VendorCategory> vendorCategories,
+      @JsonKey(fromJson: fromJsonProductCategoryList)
+          List<ProductCategory> productCategories,
+      num minimumOrderAmount,
+      num platformFee,
+      String description,
+      String imageUrl,
       @JsonKey(fromJson: fromJsonDeliveryPartnerDTO)
           DeliveryPartnerDTO? deliveryPartner,
       @JsonKey(fromJson: fromJsonFulfilmentMethodDTO)
@@ -308,10 +312,6 @@ abstract class _$$_VendorDTOCopyWith<$Res> implements $VendorDTOCopyWith<$Res> {
           FulfilmentMethodDTO? collectionFulfilmentMethod,
       @JsonKey(fromJson: fromJsonProductDTOList)
           List<ProductDTO> products,
-      @JsonKey(fromJson: fromJsonVendorCategoryList)
-          List<VendorCategory> vendorCategories,
-      @JsonKey(fromJson: fromJsonProductCategoryList)
-          List<ProductCategory> productCategories,
       @JsonKey(fromJson: fromJsonPostalDistrictList)
           List<PostalDistrict> fulfilmentPostalDistricts});
 
@@ -343,19 +343,19 @@ class __$$_VendorDTOCopyWithImpl<$Res>
     Object? costLevel = freezed,
     Object? rating = freezed,
     Object? isVegan = null,
-    Object? minimumOrderAmount = null,
-    Object? platformFee = null,
     Object? status = null,
     Object? walletAddress = null,
+    Object? pickupAddress = freezed,
+    Object? vendorCategories = null,
+    Object? productCategories = null,
+    Object? minimumOrderAmount = null,
+    Object? platformFee = null,
     Object? description = null,
     Object? imageUrl = null,
-    Object? pickupAddress = freezed,
     Object? deliveryPartner = freezed,
     Object? deliveryFulfilmentMethod = freezed,
     Object? collectionFulfilmentMethod = freezed,
     Object? products = null,
-    Object? vendorCategories = null,
-    Object? productCategories = null,
     Object? fulfilmentPostalDistricts = null,
   }) {
     return _then(_$_VendorDTO(
@@ -387,14 +387,6 @@ class __$$_VendorDTOCopyWithImpl<$Res>
           ? _value.isVegan
           : isVegan // ignore: cast_nullable_to_non_nullable
               as bool,
-      minimumOrderAmount: null == minimumOrderAmount
-          ? _value.minimumOrderAmount
-          : minimumOrderAmount // ignore: cast_nullable_to_non_nullable
-              as num,
-      platformFee: null == platformFee
-          ? _value.platformFee
-          : platformFee // ignore: cast_nullable_to_non_nullable
-              as num,
       status: null == status
           ? _value.status
           : status // ignore: cast_nullable_to_non_nullable
@@ -403,6 +395,26 @@ class __$$_VendorDTOCopyWithImpl<$Res>
           ? _value.walletAddress
           : walletAddress // ignore: cast_nullable_to_non_nullable
               as String,
+      pickupAddress: freezed == pickupAddress
+          ? _value.pickupAddress
+          : pickupAddress // ignore: cast_nullable_to_non_nullable
+              as AddressDTO?,
+      vendorCategories: null == vendorCategories
+          ? _value.vendorCategories
+          : vendorCategories // ignore: cast_nullable_to_non_nullable
+              as List<VendorCategory>,
+      productCategories: null == productCategories
+          ? _value.productCategories
+          : productCategories // ignore: cast_nullable_to_non_nullable
+              as List<ProductCategory>,
+      minimumOrderAmount: null == minimumOrderAmount
+          ? _value.minimumOrderAmount
+          : minimumOrderAmount // ignore: cast_nullable_to_non_nullable
+              as num,
+      platformFee: null == platformFee
+          ? _value.platformFee
+          : platformFee // ignore: cast_nullable_to_non_nullable
+              as num,
       description: null == description
           ? _value.description
           : description // ignore: cast_nullable_to_non_nullable
@@ -411,10 +423,6 @@ class __$$_VendorDTOCopyWithImpl<$Res>
           ? _value.imageUrl
           : imageUrl // ignore: cast_nullable_to_non_nullable
               as String,
-      pickupAddress: freezed == pickupAddress
-          ? _value.pickupAddress
-          : pickupAddress // ignore: cast_nullable_to_non_nullable
-              as AddressDTO?,
       deliveryPartner: freezed == deliveryPartner
           ? _value.deliveryPartner
           : deliveryPartner // ignore: cast_nullable_to_non_nullable
@@ -431,14 +439,6 @@ class __$$_VendorDTOCopyWithImpl<$Res>
           ? _value.products
           : products // ignore: cast_nullable_to_non_nullable
               as List<ProductDTO>,
-      vendorCategories: null == vendorCategories
-          ? _value.vendorCategories
-          : vendorCategories // ignore: cast_nullable_to_non_nullable
-              as List<VendorCategory>,
-      productCategories: null == productCategories
-          ? _value.productCategories
-          : productCategories // ignore: cast_nullable_to_non_nullable
-              as List<ProductCategory>,
       fulfilmentPostalDistricts: null == fulfilmentPostalDistricts
           ? _value.fulfilmentPostalDistricts
           : fulfilmentPostalDistricts // ignore: cast_nullable_to_non_nullable
@@ -459,14 +459,18 @@ class _$_VendorDTO extends _VendorDTO {
       required this.costLevel,
       required this.rating,
       required this.isVegan,
-      this.minimumOrderAmount = 0,
-      this.platformFee = 0,
       required this.status,
       required this.walletAddress,
-      this.description = '',
-      this.imageUrl = '',
       @JsonKey(fromJson: fromJsonAddressDTO)
           required this.pickupAddress,
+      @JsonKey(fromJson: fromJsonVendorCategoryList)
+          required this.vendorCategories,
+      @JsonKey(fromJson: fromJsonProductCategoryList)
+          required this.productCategories,
+      this.minimumOrderAmount = 0,
+      this.platformFee = 0,
+      this.description = '',
+      this.imageUrl = '',
       @JsonKey(fromJson: fromJsonDeliveryPartnerDTO)
           this.deliveryPartner,
       @JsonKey(fromJson: fromJsonFulfilmentMethodDTO)
@@ -475,10 +479,6 @@ class _$_VendorDTO extends _VendorDTO {
           this.collectionFulfilmentMethod,
       @JsonKey(fromJson: fromJsonProductDTOList)
           this.products = const [],
-      @JsonKey(fromJson: fromJsonVendorCategoryList)
-          required this.vendorCategories,
-      @JsonKey(fromJson: fromJsonProductCategoryList)
-          required this.productCategories,
       @JsonKey(fromJson: fromJsonPostalDistrictList)
           this.fulfilmentPostalDistricts = const []})
       : super._();
@@ -501,24 +501,30 @@ class _$_VendorDTO extends _VendorDTO {
   @override
   final bool isVegan;
   @override
+  final VendorStatus status;
+  @override
+  final String walletAddress;
+  @override
+  @JsonKey(fromJson: fromJsonAddressDTO)
+  final AddressDTO? pickupAddress;
+  @override
+  @JsonKey(fromJson: fromJsonVendorCategoryList)
+  final List<VendorCategory> vendorCategories;
+  @override
+  @JsonKey(fromJson: fromJsonProductCategoryList)
+  final List<ProductCategory> productCategories;
+  @override
   @JsonKey()
   final num minimumOrderAmount;
   @override
   @JsonKey()
   final num platformFee;
   @override
-  final VendorStatus status;
-  @override
-  final String walletAddress;
-  @override
   @JsonKey()
   final String description;
   @override
   @JsonKey()
   final String imageUrl;
-  @override
-  @JsonKey(fromJson: fromJsonAddressDTO)
-  final AddressDTO? pickupAddress;
   @override
   @JsonKey(fromJson: fromJsonDeliveryPartnerDTO)
   final DeliveryPartnerDTO? deliveryPartner;
@@ -532,18 +538,12 @@ class _$_VendorDTO extends _VendorDTO {
   @JsonKey(fromJson: fromJsonProductDTOList)
   final List<ProductDTO> products;
   @override
-  @JsonKey(fromJson: fromJsonVendorCategoryList)
-  final List<VendorCategory> vendorCategories;
-  @override
-  @JsonKey(fromJson: fromJsonProductCategoryList)
-  final List<ProductCategory> productCategories;
-  @override
   @JsonKey(fromJson: fromJsonPostalDistrictList)
   final List<PostalDistrict> fulfilmentPostalDistricts;
 
   @override
   String toString() {
-    return 'VendorDTO(id: $id, name: $name, type: $type, phoneNumber: $phoneNumber, costLevel: $costLevel, rating: $rating, isVegan: $isVegan, minimumOrderAmount: $minimumOrderAmount, platformFee: $platformFee, status: $status, walletAddress: $walletAddress, description: $description, imageUrl: $imageUrl, pickupAddress: $pickupAddress, deliveryPartner: $deliveryPartner, deliveryFulfilmentMethod: $deliveryFulfilmentMethod, collectionFulfilmentMethod: $collectionFulfilmentMethod, products: $products, vendorCategories: $vendorCategories, productCategories: $productCategories, fulfilmentPostalDistricts: $fulfilmentPostalDistricts)';
+    return 'VendorDTO(id: $id, name: $name, type: $type, phoneNumber: $phoneNumber, costLevel: $costLevel, rating: $rating, isVegan: $isVegan, status: $status, walletAddress: $walletAddress, pickupAddress: $pickupAddress, vendorCategories: $vendorCategories, productCategories: $productCategories, minimumOrderAmount: $minimumOrderAmount, platformFee: $platformFee, description: $description, imageUrl: $imageUrl, deliveryPartner: $deliveryPartner, deliveryFulfilmentMethod: $deliveryFulfilmentMethod, collectionFulfilmentMethod: $collectionFulfilmentMethod, products: $products, fulfilmentPostalDistricts: $fulfilmentPostalDistricts)';
   }
 
   @override
@@ -560,19 +560,23 @@ class _$_VendorDTO extends _VendorDTO {
                 other.costLevel == costLevel) &&
             (identical(other.rating, rating) || other.rating == rating) &&
             (identical(other.isVegan, isVegan) || other.isVegan == isVegan) &&
+            (identical(other.status, status) || other.status == status) &&
+            (identical(other.walletAddress, walletAddress) ||
+                other.walletAddress == walletAddress) &&
+            (identical(other.pickupAddress, pickupAddress) ||
+                other.pickupAddress == pickupAddress) &&
+            const DeepCollectionEquality()
+                .equals(other.vendorCategories, vendorCategories) &&
+            const DeepCollectionEquality()
+                .equals(other.productCategories, productCategories) &&
             (identical(other.minimumOrderAmount, minimumOrderAmount) ||
                 other.minimumOrderAmount == minimumOrderAmount) &&
             (identical(other.platformFee, platformFee) ||
                 other.platformFee == platformFee) &&
-            (identical(other.status, status) || other.status == status) &&
-            (identical(other.walletAddress, walletAddress) ||
-                other.walletAddress == walletAddress) &&
             (identical(other.description, description) ||
                 other.description == description) &&
             (identical(other.imageUrl, imageUrl) ||
                 other.imageUrl == imageUrl) &&
-            (identical(other.pickupAddress, pickupAddress) ||
-                other.pickupAddress == pickupAddress) &&
             (identical(other.deliveryPartner, deliveryPartner) ||
                 other.deliveryPartner == deliveryPartner) &&
             (identical(
@@ -583,10 +587,6 @@ class _$_VendorDTO extends _VendorDTO {
                 other.collectionFulfilmentMethod ==
                     collectionFulfilmentMethod) &&
             const DeepCollectionEquality().equals(other.products, products) &&
-            const DeepCollectionEquality()
-                .equals(other.vendorCategories, vendorCategories) &&
-            const DeepCollectionEquality()
-                .equals(other.productCategories, productCategories) &&
             const DeepCollectionEquality().equals(
                 other.fulfilmentPostalDistricts, fulfilmentPostalDistricts));
   }
@@ -602,19 +602,19 @@ class _$_VendorDTO extends _VendorDTO {
         costLevel,
         rating,
         isVegan,
-        minimumOrderAmount,
-        platformFee,
         status,
         walletAddress,
+        pickupAddress,
+        const DeepCollectionEquality().hash(vendorCategories),
+        const DeepCollectionEquality().hash(productCategories),
+        minimumOrderAmount,
+        platformFee,
         description,
         imageUrl,
-        pickupAddress,
         deliveryPartner,
         deliveryFulfilmentMethod,
         collectionFulfilmentMethod,
         const DeepCollectionEquality().hash(products),
-        const DeepCollectionEquality().hash(vendorCategories),
-        const DeepCollectionEquality().hash(productCategories),
         const DeepCollectionEquality().hash(fulfilmentPostalDistricts)
       ]);
 
@@ -641,14 +641,18 @@ abstract class _VendorDTO extends VendorDTO {
       required final num? costLevel,
       required final num? rating,
       required final bool isVegan,
-      final num minimumOrderAmount,
-      final num platformFee,
       required final VendorStatus status,
       required final String walletAddress,
-      final String description,
-      final String imageUrl,
       @JsonKey(fromJson: fromJsonAddressDTO)
           required final AddressDTO? pickupAddress,
+      @JsonKey(fromJson: fromJsonVendorCategoryList)
+          required final List<VendorCategory> vendorCategories,
+      @JsonKey(fromJson: fromJsonProductCategoryList)
+          required final List<ProductCategory> productCategories,
+      final num minimumOrderAmount,
+      final num platformFee,
+      final String description,
+      final String imageUrl,
       @JsonKey(fromJson: fromJsonDeliveryPartnerDTO)
           final DeliveryPartnerDTO? deliveryPartner,
       @JsonKey(fromJson: fromJsonFulfilmentMethodDTO)
@@ -657,10 +661,6 @@ abstract class _VendorDTO extends VendorDTO {
           final FulfilmentMethodDTO? collectionFulfilmentMethod,
       @JsonKey(fromJson: fromJsonProductDTOList)
           final List<ProductDTO> products,
-      @JsonKey(fromJson: fromJsonVendorCategoryList)
-          required final List<VendorCategory> vendorCategories,
-      @JsonKey(fromJson: fromJsonProductCategoryList)
-          required final List<ProductCategory> productCategories,
       @JsonKey(fromJson: fromJsonPostalDistrictList)
           final List<PostalDistrict> fulfilmentPostalDistricts}) = _$_VendorDTO;
   _VendorDTO._() : super._();
@@ -683,20 +683,26 @@ abstract class _VendorDTO extends VendorDTO {
   @override
   bool get isVegan;
   @override
-  num get minimumOrderAmount;
-  @override
-  num get platformFee;
-  @override
   VendorStatus get status;
   @override
   String get walletAddress;
   @override
+  @JsonKey(fromJson: fromJsonAddressDTO)
+  AddressDTO? get pickupAddress;
+  @override
+  @JsonKey(fromJson: fromJsonVendorCategoryList)
+  List<VendorCategory> get vendorCategories;
+  @override
+  @JsonKey(fromJson: fromJsonProductCategoryList)
+  List<ProductCategory> get productCategories;
+  @override
+  num get minimumOrderAmount;
+  @override
+  num get platformFee;
+  @override
   String get description;
   @override
   String get imageUrl;
-  @override
-  @JsonKey(fromJson: fromJsonAddressDTO)
-  AddressDTO? get pickupAddress;
   @override
   @JsonKey(fromJson: fromJsonDeliveryPartnerDTO)
   DeliveryPartnerDTO? get deliveryPartner;
@@ -709,12 +715,6 @@ abstract class _VendorDTO extends VendorDTO {
   @override
   @JsonKey(fromJson: fromJsonProductDTOList)
   List<ProductDTO> get products;
-  @override
-  @JsonKey(fromJson: fromJsonVendorCategoryList)
-  List<VendorCategory> get vendorCategories;
-  @override
-  @JsonKey(fromJson: fromJsonProductCategoryList)
-  List<ProductCategory> get productCategories;
   @override
   @JsonKey(fromJson: fromJsonPostalDistrictList)
   List<PostalDistrict> get fulfilmentPostalDistricts;

@@ -36,9 +36,9 @@ class Suggestion {
 }
 
 class Coordinates {
+  const Coordinates(this.lat, this.lng);
   final double lat;
   final double lng;
-  const Coordinates(this.lat, this.lng);
 }
 
 class Candidate {
@@ -105,7 +105,7 @@ class PlaceApiProvider {
                   element['geometry']['location'] != null &&
                   element['geometry']['location']['lat'] != null &&
                   num.tryParse(
-                          element['geometry']['location']['lat'].toString()) !=
+                          element['geometry']['location']['lat'].toString(),) !=
                       null,
             )
             .map(

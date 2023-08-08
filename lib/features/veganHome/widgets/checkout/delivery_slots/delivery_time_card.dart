@@ -21,8 +21,8 @@ class DeliveryTimeCard extends StatelessWidget {
       builder: (context, viewmodel) {
         return GestureDetector(
           onTap: () {
-            final _fm = viewmodel.isDelivery ? 'delivery' : 'collection';
-            log.verbose('Change $_fm time slot button pressed');
+            final fm = viewmodel.isDelivery ? 'delivery' : 'collection';
+            log.verbose('Change $fm time slot button pressed');
             Analytics.track(
               eventName: AnalyticsEvents.changeTimeSlot,
             );
@@ -101,7 +101,7 @@ class DeliveryTimeCard extends StatelessWidget {
 }
 
 class DeliverySlotSelectorModalSheet extends StatelessWidget {
-  const DeliverySlotSelectorModalSheet({Key? key, required this.isDelivery})
+  const DeliverySlotSelectorModalSheet({required this.isDelivery, Key? key})
       : super(key: key);
   final bool isDelivery;
 

@@ -31,35 +31,32 @@ import 'package:vegan_liverpool/utils/stripe.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-
-  await SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-  ]);
-
-  final envStr = Env.activeEnv;
-
-  // if (DebugHelpers.inDebugMode) {
-  //   print('Loading secrets from ${Env.envFile} for Env: ${Env.activeEnv}');
-  // }
-  await dotenv.load(fileName: Env.envFile);
-
-  StripeService().init();
-
-  await initWeb3AuthService();
-
-  await configureDependencies(environment: envStr);
-
-
-  await initFirebaseRemote();
-
-  if (kDebugMode || USE_FIREBASE_EMULATOR) {
-    // Dont put below condition in above as above is compile time and allows all this to be left out of production apps.
-    await connectToFirebaseEmulator();
-  }
-  
-
   await runZonedGuarded(() async {
+    WidgetsFlutterBinding.ensureInitialized();
+
+    await SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+    ]);
+
+    final envStr = Env.activeEnv;
+
+    // if (DebugHelpers.inDebugMode) {
+    //   print('Loading secrets from ${Env.envFile} for Env: ${Env.activeEnv}');
+    // }
+    await dotenv.load(fileName: Env.envFile);
+
+    StripeService().init();
+
+    await initWeb3AuthService();
+
+    await configureDependencies(environment: envStr);
+
+    await initFirebaseRemote();
+
+    if (kDebugMode || USE_FIREBASE_EMULATOR) {
+      // Dont put below condition in above as above is compile time and allows all this to be left out of production apps.
+      await connectToFirebaseEmulator();
+    }
     await SentryFlutter.init(
       (options) {
         options

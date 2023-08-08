@@ -12,8 +12,7 @@ import 'package:vegan_liverpool/utils/constants.dart';
 
 class ESCExplanationsDrillDownListView extends StatefulWidget {
   const ESCExplanationsDrillDownListView({
-    Key? key,
-    required this.productOptionsCategory,
+    required this.productOptionsCategory, Key? key,
   }) : super(key: key);
 
   final ProductOptionsCategory productOptionsCategory;
@@ -93,7 +92,7 @@ class _ESCExplanationsDrillDownListViewState
                             .entries
                             .first
                             .key,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 16,
                           // color: subHeadingColour,
                           fontFamily: Fonts.gelica,

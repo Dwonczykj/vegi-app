@@ -47,20 +47,20 @@ abstract class RegisterModule {
 
     // Create your middleware using the formatter.
     final reduxLoggingMiddleware =
-        new LoggingMiddleware(formatter: onlyLogActionFormatter);
+        LoggingMiddleware(formatter: onlyLogActionFormatter);
     // Note: The LoggingMiddleware needs be the LAST middleware in the list.
     final List<Middleware<AppState>> wms = [
       thunkMiddleware,
       persistor.createMiddleware(),
       // LoggingMiddleware.printer().call,
-      reduxLoggingMiddleware,
+      reduxLoggingMiddleware.call,
     ];
 
     late final Store<AppState> store;
 
     if (Env.isDev) {
       if (DebugHelpers.isVerboseDebugMode) {
-        wms.add(LoggingMiddleware<AppState>.printer());
+        wms.add(LoggingMiddleware<AppState>.printer().call);
       }
       final notSim = await DebugHelpers.deviceIsNotSimulator();
       if (kDebugMode && notSim) {
@@ -77,7 +77,7 @@ abstract class RegisterModule {
           );
 
           await remoteDevtools.connect();
-          wms.add(remoteDevtools);
+          wms.add(remoteDevtools.call);
 
           final devStore = DevToolsStore<AppState>(
             appReducer,

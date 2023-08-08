@@ -46,7 +46,7 @@ class RestaurantMenuItem with _$RestaurantMenuItem {
     required int priority,
     required bool isFeatured,
     required ProductDiscontinuedStatus status,
-    String? ingredients,
+    required String productBarCode, String? ingredients,
     @Default('')
         String vendorInternalId,
     @Default(0)
@@ -57,7 +57,6 @@ class RestaurantMenuItem with _$RestaurantMenuItem {
         num sizeInnerUnitValue,
     @Default('')
         String sizeInnerUnitType,
-    required String productBarCode,
     @Default('')
         String supplier,
     @Default('')
@@ -89,7 +88,6 @@ class RestaurantMenuItem with _$RestaurantMenuItem {
         value: await convertCurrencyAmount(
           amount: price.value,
           fromCurrency: price.currency,
-          toCurrency: Currency.GBP,
         ),
       );
 

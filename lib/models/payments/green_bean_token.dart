@@ -11,10 +11,10 @@ class GreenBeanToken with _$GreenBeanToken {
     required num amount,
   }) = _GreenBeanToken;
 
+  factory GreenBeanToken.fromJson(Map<String, dynamic> json) =>
+      _$GreenBeanTokenFromJson(json);
+
   const GreenBeanToken._();
 
   Currency get currency => Currency.GBT;
-
-  factory GreenBeanToken.fromJson(Map<String, dynamic> json) =>
-      _$GreenBeanTokenFromJson(json);
 }

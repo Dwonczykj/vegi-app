@@ -27,8 +27,8 @@ mixin _$OpeningHours {
   String? get timezone => throw _privateConstructorUsedError;
   String? get specialDate => throw _privateConstructorUsedError;
   DayOfWeek get dayOfWeek => throw _privateConstructorUsedError;
-  bool get isOpen => throw _privateConstructorUsedError;
   String? get logicId => throw _privateConstructorUsedError;
+  bool get isOpen => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -49,8 +49,8 @@ abstract class $OpeningHoursCopyWith<$Res> {
       String? timezone,
       String? specialDate,
       DayOfWeek dayOfWeek,
-      bool isOpen,
-      String? logicId});
+      String? logicId,
+      bool isOpen});
 }
 
 /// @nodoc
@@ -72,8 +72,8 @@ class _$OpeningHoursCopyWithImpl<$Res, $Val extends OpeningHours>
     Object? timezone = freezed,
     Object? specialDate = freezed,
     Object? dayOfWeek = null,
-    Object? isOpen = null,
     Object? logicId = freezed,
+    Object? isOpen = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
@@ -100,14 +100,14 @@ class _$OpeningHoursCopyWithImpl<$Res, $Val extends OpeningHours>
           ? _value.dayOfWeek
           : dayOfWeek // ignore: cast_nullable_to_non_nullable
               as DayOfWeek,
-      isOpen: null == isOpen
-          ? _value.isOpen
-          : isOpen // ignore: cast_nullable_to_non_nullable
-              as bool,
       logicId: freezed == logicId
           ? _value.logicId
           : logicId // ignore: cast_nullable_to_non_nullable
               as String?,
+      isOpen: null == isOpen
+          ? _value.isOpen
+          : isOpen // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 }
@@ -127,8 +127,8 @@ abstract class _$$_OpeningHoursCopyWith<$Res>
       String? timezone,
       String? specialDate,
       DayOfWeek dayOfWeek,
-      bool isOpen,
-      String? logicId});
+      String? logicId,
+      bool isOpen});
 }
 
 /// @nodoc
@@ -148,8 +148,8 @@ class __$$_OpeningHoursCopyWithImpl<$Res>
     Object? timezone = freezed,
     Object? specialDate = freezed,
     Object? dayOfWeek = null,
-    Object? isOpen = null,
     Object? logicId = freezed,
+    Object? isOpen = null,
   }) {
     return _then(_$_OpeningHours(
       id: null == id
@@ -176,14 +176,14 @@ class __$$_OpeningHoursCopyWithImpl<$Res>
           ? _value.dayOfWeek
           : dayOfWeek // ignore: cast_nullable_to_non_nullable
               as DayOfWeek,
-      isOpen: null == isOpen
-          ? _value.isOpen
-          : isOpen // ignore: cast_nullable_to_non_nullable
-              as bool,
       logicId: freezed == logicId
           ? _value.logicId
           : logicId // ignore: cast_nullable_to_non_nullable
               as String?,
+      isOpen: null == isOpen
+          ? _value.isOpen
+          : isOpen // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -199,8 +199,8 @@ class _$_OpeningHours extends _OpeningHours {
       required this.timezone,
       required this.specialDate,
       required this.dayOfWeek,
-      this.isOpen = false,
-      required this.logicId})
+      required this.logicId,
+      this.isOpen = false})
       : super._();
 
   factory _$_OpeningHours.fromJson(Map<String, dynamic> json) =>
@@ -220,14 +220,14 @@ class _$_OpeningHours extends _OpeningHours {
   @override
   final DayOfWeek dayOfWeek;
   @override
+  final String? logicId;
+  @override
   @JsonKey()
   final bool isOpen;
-  @override
-  final String? logicId;
 
   @override
   String toString() {
-    return 'OpeningHours(id: $id, openTime: $openTime, closeTime: $closeTime, timezone: $timezone, specialDate: $specialDate, dayOfWeek: $dayOfWeek, isOpen: $isOpen, logicId: $logicId)';
+    return 'OpeningHours(id: $id, openTime: $openTime, closeTime: $closeTime, timezone: $timezone, specialDate: $specialDate, dayOfWeek: $dayOfWeek, logicId: $logicId, isOpen: $isOpen)';
   }
 
   @override
@@ -246,14 +246,14 @@ class _$_OpeningHours extends _OpeningHours {
                 other.specialDate == specialDate) &&
             (identical(other.dayOfWeek, dayOfWeek) ||
                 other.dayOfWeek == dayOfWeek) &&
-            (identical(other.isOpen, isOpen) || other.isOpen == isOpen) &&
-            (identical(other.logicId, logicId) || other.logicId == logicId));
+            (identical(other.logicId, logicId) || other.logicId == logicId) &&
+            (identical(other.isOpen, isOpen) || other.isOpen == isOpen));
   }
 
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, id, openTime, closeTime,
-      timezone, specialDate, dayOfWeek, isOpen, logicId);
+      timezone, specialDate, dayOfWeek, logicId, isOpen);
 
   @JsonKey(ignore: true)
   @override
@@ -277,8 +277,8 @@ abstract class _OpeningHours extends OpeningHours {
       required final String? timezone,
       required final String? specialDate,
       required final DayOfWeek dayOfWeek,
-      final bool isOpen,
-      required final String? logicId}) = _$_OpeningHours;
+      required final String? logicId,
+      final bool isOpen}) = _$_OpeningHours;
   _OpeningHours._() : super._();
 
   factory _OpeningHours.fromJson(Map<String, dynamic> json) =
@@ -297,9 +297,9 @@ abstract class _OpeningHours extends OpeningHours {
   @override
   DayOfWeek get dayOfWeek;
   @override
-  bool get isOpen;
-  @override
   String? get logicId;
+  @override
+  bool get isOpen;
   @override
   @JsonKey(ignore: true)
   _$$_OpeningHoursCopyWith<_$_OpeningHours> get copyWith =>

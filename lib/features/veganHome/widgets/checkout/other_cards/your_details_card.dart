@@ -140,7 +140,7 @@ class _YourDetailsModalSheetState extends State<YourDetailsModalSheet> {
                         isDense: true,
                       ),
                       readOnly: true,
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.grey,
                       ),
                       name: 'phoneNumber',

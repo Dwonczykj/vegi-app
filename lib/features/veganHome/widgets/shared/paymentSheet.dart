@@ -106,7 +106,7 @@ class PaymentSheet extends StatelessWidget {
             );
           } else {
             log.info(
-                'Ignoring StripePaymentStatus update: "${newViewModel.stripePaymentStatus.name}"');
+                'Ignoring StripePaymentStatus update: "${newViewModel.stripePaymentStatus.name}"',);
           }
         }
       },

@@ -52,7 +52,7 @@ You can download the beta version of our app from the [Google Play](https://play
 - `flutterfire logout  # refresh OAuth Token`
 - `flutterfire login`
 - `dart pub global activate flutterfire_cli`
-- `flutterfire configure --project=vegiliverpool  #follow the cli instructions`
+- `flutterfire configure --project=we-are-vegi-app  #follow the cli instructions`
 This generates the firebase default-options firebase-options.dart file.
 
 [After this initial running of flutterfire configure, you need to re-run the command any time that you:
@@ -120,7 +120,7 @@ firebase emulators:start --import ./emulators_data --export-on-exit
 See docs [here](https://www.notion.so/gember/Firebase-Add-Firebase-to-Flutter-App-67f42bd125034d22acdcf77bc476ae59?pvs=4#56afaf0ec85d43b290e067394b80e6ce)
 
 ### Messaging templates
-Firebase messaging templates i.e. [email templates](https://console.firebase.google.com/u/0/project/vegiliverpool/authentication/emails) can be configured in the [Authentication](https://console.firebase.google.com/u/0/project/vegiliverpool/authentication/emails) tab on the firebase console for [vegiliverpool](https://console.firebase.google.com/u/0/project/vegiliverpool/overview).
+Firebase messaging templates i.e. [email templates](https://console.firebase.google.com/u/0/project/we-are-vegi-app/authentication/emails) can be configured in the [Authentication](https://console.firebase.google.com/u/0/project/we-are-vegi-app/authentication/emails) tab on the firebase console for [we-are-vegi-app](https://console.firebase.google.com/u/0/project/we-are-vegi-app/overview).
 
 ## As an enterprenuer or a community manager
 Launch your community on the [Fuse Studio](https://studio.fuse.io/), then open the community dashboard. There you can configure it and *customize your wallet* app. When you done go to "White label wallet" and send an app invite link to yourself. Visit our [docs](https://docs.fuse.io/the-fuse-studio/overview) to learn about the Fuse Studio.

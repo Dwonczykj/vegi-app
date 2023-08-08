@@ -32,8 +32,7 @@ class ProductOptionsView extends StatelessWidget {
 
 class ProductOptionsCategoryView extends StatefulWidget {
   const ProductOptionsCategoryView({
-    Key? key,
-    required this.productOptionsCategory,
+    required this.productOptionsCategory, Key? key,
   }) : super(key: key);
 
   final ProductOptionsCategory productOptionsCategory;

@@ -29,7 +29,7 @@ class TopUpViewModel extends Equatable {
             : store.state.cartState.cartTotal.inGBPValue,
         handleApplePay: (int amountPence) async {
           if (store.state.userState.vegiAccountId == null) {
-            final e = 'vegi AccountId not set on state... Cannot start payment';
+            const e = 'vegi AccountId not set on state... Cannot start payment';
             log.error(e);
             await Sentry.captureException(
               Exception(e),
@@ -49,7 +49,7 @@ class TopUpViewModel extends Equatable {
             shouldPushToHome: true,
             productName: Labels.stripeVegiProductName,
           );
-        });
+        },);
   }
 
   final String recipientWalletAddress;
