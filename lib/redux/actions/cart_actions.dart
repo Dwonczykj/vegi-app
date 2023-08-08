@@ -1738,7 +1738,7 @@ ThunkAction<AppState> sendOrderObject<T extends CreateOrderForFulfilment>({
       ) {
         final message =
             'OrderCreationProcessStatus changed to "${status.name}"';
-        Sentry.captureMessage(
+        log.verbose(
           message,
         );
         return status;
@@ -2974,9 +2974,8 @@ ThunkAction<AppState> setDeliveryAddress({
       log.verbose('Set delivery address with postcode: "${address.outcode}"');
       store.dispatch(UpdateSelectedDeliveryAddress(address));
     } catch (e, s) {
-      log.error('ERROR - setDeliveryAddress $e');
-      await Sentry.captureException(
-        e,
+      log.error(
+        'ERROR - setDeliveryAddress $e',
         stackTrace: s,
       );
     }

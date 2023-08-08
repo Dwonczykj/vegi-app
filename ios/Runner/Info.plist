@@ -49,7 +49,7 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>app-1-526129377-ios-b603d00494434cb770bfa0</string>
+				<string>app-1-786588268049-ios-793805ccb21c864040e3b0</string>
 			</array>
 		</dict>
 		<dict>
@@ -57,7 +57,7 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>com.googleusercontent.apps.526129377-hogf35nhebt59qdn7j4m2qhb7a4jc6r2</string>
+				<string>com.googleusercontent.apps.786588268049-3agrso6jeabc605veomk05gb6e3h6v1q</string>
 			</array>
 		</dict>
 		<dict>
@@ -72,7 +72,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>137</string>
+	<string>140</string>
 	<key>FirebaseAppDelegateProxyEnabled</key>
 	<true/>
 	<key>FlutterDeepLinkingEnabled</key>

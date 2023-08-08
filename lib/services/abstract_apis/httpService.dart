@@ -143,6 +143,9 @@ abstract class HttpService {
         }
         log.info(
           '${response.requestOptions.method}: "${response.requestOptions.uri}" -> [${response.statusCode}]$cookiePresentStr \n params:"$data"',
+          additionalDetails: response.data != null && response.data is Map
+              ? ((response.data as Map<String,dynamic>?) ?? <String,dynamic>{})
+              : <String,dynamic>{},
         );
         return response;
       },

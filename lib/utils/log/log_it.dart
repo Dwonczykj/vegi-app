@@ -69,6 +69,7 @@ class LogIt {
     bool sentry = false,
     String sentryHint = '',
     bool dontLog = false,
+    Map<String, dynamic> additionalDetails = const {},
   }) {
     if (logLevel.index > level.index) {
       return;
@@ -88,10 +89,11 @@ class LogIt {
       if (stackTrace == null && stackTraceLines.isNotEmpty) {
         stackTrace = StackTraceFilter.fromStackLines(stackTraceLines);
       } else {
-        stackTrace =
-            StackTraceFilter.fromStackLines(StackTrace.current.filterCallStack(
-          ignoreLastNCalls: 2,
-        ),);
+        stackTrace = StackTraceFilter.fromStackLines(
+          StackTrace.current.filterCallStack(
+            ignoreLastNCalls: 2,
+          ),
+        );
       }
     } catch (err) {
       if (!kReleaseMode) {
@@ -173,6 +175,7 @@ class LogIt {
           'stackTrace': stackTrace.toString(),
           'meta': deviceMeta,
           'level': level.name,
+          'detail': additionalDetails,
         },
       );
 
@@ -189,12 +192,15 @@ class LogIt {
     }
 
     logFn(
-        pen('$emoji $message'),
-        error,
-        stackTrace ??
-            StackTraceFilter.fromStackLines(StackTrace.current.filterCallStack(
+      pen('$emoji $message'),
+      error,
+      stackTrace ??
+          StackTraceFilter.fromStackLines(
+            StackTrace.current.filterCallStack(
               ignoreLastNCalls: 2,
-            ),),);
+            ),
+          ),
+    );
   }
 
   /// Log a message at level [Level.verbose].
@@ -206,6 +212,7 @@ class LogIt {
     bool sentry = false,
     String sentryHint = '',
     bool dontLog = false,
+    Map<String, dynamic> additionalDetails = const {},
   }) {
     _writeLog(
       message,
@@ -216,6 +223,7 @@ class LogIt {
       sentry: sentry,
       sentryHint: sentryHint,
       dontLog: dontLog,
+      additionalDetails: additionalDetails,
     );
   }
 
@@ -228,6 +236,7 @@ class LogIt {
     bool sentry = false,
     String sentryHint = '',
     bool dontLog = false,
+    Map<String, dynamic> additionalDetails = const {},
   }) {
     _writeLog(
       message,
@@ -237,6 +246,7 @@ class LogIt {
       sentry: sentry,
       sentryHint: sentryHint,
       dontLog: dontLog,
+      additionalDetails: additionalDetails,
     );
   }
 
@@ -249,6 +259,7 @@ class LogIt {
     bool sentry = false,
     String sentryHint = '',
     bool dontLog = false,
+    Map<String, dynamic> additionalDetails = const {},
   }) {
     _writeLog(
       message,
@@ -259,6 +270,7 @@ class LogIt {
       sentry: sentry,
       sentryHint: sentryHint,
       dontLog: dontLog,
+      additionalDetails: additionalDetails,
     );
   }
 
@@ -270,6 +282,7 @@ class LogIt {
     bool sentry = false,
     String sentryHint = '',
     bool dontLog = false,
+    Map<String, dynamic> additionalDetails = const {},
   }) async {
     _writeLog(
       message,
@@ -280,6 +293,7 @@ class LogIt {
       sentry: sentry,
       sentryHint: sentryHint,
       dontLog: dontLog,
+      additionalDetails: additionalDetails,
     );
   }
 
@@ -292,6 +306,7 @@ class LogIt {
     bool sentry = true,
     String sentryHint = '',
     bool dontLog = false,
+    Map<String, dynamic> additionalDetails = const {},
   }) {
     _writeLog(
       message,
@@ -302,6 +317,7 @@ class LogIt {
       sentry: sentry,
       sentryHint: sentryHint,
       dontLog: dontLog,
+      additionalDetails: additionalDetails,
     );
   }
 
@@ -314,6 +330,7 @@ class LogIt {
     bool sentry = true,
     String sentryHint = '',
     bool dontLog = false,
+    Map<String, dynamic> additionalDetails = const {},
   }) {
     _writeLog(
       message,
@@ -324,6 +341,7 @@ class LogIt {
       sentry: sentry,
       sentryHint: sentryHint,
       dontLog: dontLog,
+      additionalDetails: additionalDetails,
     );
   }
 
@@ -336,6 +354,7 @@ class LogIt {
     bool sentry = true,
     String sentryHint = '',
     bool dontLog = false,
+    Map<String, dynamic> additionalDetails = const {},
   }) {
     _writeLog(
       message,
@@ -346,6 +365,7 @@ class LogIt {
       sentry: sentry,
       sentryHint: sentryHint,
       dontLog: dontLog,
+      additionalDetails: additionalDetails,
     );
   }
 }

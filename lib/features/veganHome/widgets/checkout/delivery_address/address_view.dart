@@ -338,9 +338,9 @@ class _AddressViewState extends State<AddressView> {
           ? widget.existingAddress!.internalID
           : math.Random(DateTime.now().millisecondsSinceEpoch).nextInt(10000),
       label: formValue['label'] as DeliveryAddressLabel,
-      addressLine1: (formValue['addressLine1Internal'] as String?) ??
-          formValue['addressLine1'] as String,
-      addressLine2: formValue['addressLine2'] as String? ?? '',
+      addressLine1: ((formValue['addressLine1Internal'] as String?) ??
+          formValue['addressLine1'] as String).trim(),
+      addressLine2: (formValue['addressLine2'] as String? ?? '').trim(),
       townCity: formValue['townCity'] as String,
       postalCode: (formValue['postalCode'] as String).toUpperCase(),
       latitude: addressCoordinates?.lat ?? 0.0,
