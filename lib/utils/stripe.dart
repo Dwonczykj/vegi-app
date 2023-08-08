@@ -43,7 +43,7 @@ class StripeService {
 
   void init() {
     Stripe.publishableKey =
-        (Env.isDev || Env.isTest) && STRIPE_LIVEMODE != 'true'
+        (Env.isDev || Env.isTest || Env.isQA) && STRIPE_LIVEMODE != 'true'
             ? dotenv.env['STRIPE_API_KEY_TEST']!
             : dotenv.env['STRIPE_API_KEY_LIVE']!;
     // if (Stripe.publishableKey.contains('live')) {
@@ -266,10 +266,7 @@ class StripeService {
           'Stripe Payment ${e.error.code} with StripeErrorType.[${e.error.type}] because of stripe error code StripeErrorCode.[${e.error.stripeErrorCode}]: ${e.error.localizedMessage};',
           stackTrace: s,
         );
-        await Sentry.captureException(
-          'Stripe Payment ${e.error.code} with StripeErrorType.[${e.error.type}] because of stripe error code StripeErrorCode.[${e.error.stripeErrorCode}]: ${e.error.localizedMessage};',
-          stackTrace: s,
-        );
+
         store
           ..dispatch(SetPaymentButtonFlag(false))
           ..dispatch(SetTransferringPayment(flag: false))
@@ -536,10 +533,7 @@ class StripeService {
           'Stripe Payment ${e.error.code} with StripeErrorType.[${e.error.type}] because of stripe error code StripeErrorCode.[${e.error.stripeErrorCode}]: ${e.error.localizedMessage};',
           stackTrace: s,
         );
-        await Sentry.captureException(
-          'Stripe Payment ${e.error.code} with StripeErrorType.[${e.error.type}] because of stripe error code StripeErrorCode.[${e.error.stripeErrorCode}]: ${e.error.localizedMessage};',
-          stackTrace: s,
-        );
+
         store
           ..dispatch(SetPaymentButtonFlag(false))
           ..dispatch(SetTransferringPayment(flag: false))

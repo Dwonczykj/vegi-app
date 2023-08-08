@@ -41,6 +41,7 @@ import 'package:vegan_liverpool/models/restaurant/time_slot.dart';
 import 'package:vegan_liverpool/models/restaurant/userDTO.dart';
 import 'package:vegan_liverpool/models/restaurant/vendorDTO.dart';
 import 'package:vegan_liverpool/models/waitingListFunnel/waitingListEntry.dart';
+import 'package:vegan_liverpool/redux/actions/cart_actions.dart';
 import 'package:vegan_liverpool/redux/actions/user_actions.dart';
 import 'package:vegan_liverpool/services.dart';
 import 'package:vegan_liverpool/services/abstract_apis/httpService.dart';
@@ -331,7 +332,8 @@ class PeeplEatsService extends HttpService {
           ),
         );
       if (userDetails.phoneNoCountry.isNotEmpty &&
-          userDetails.phoneCountryCode != 0 && userDetails.phoneNoCountry.length > 1) {
+          userDetails.phoneCountryCode != 0 &&
+          userDetails.phoneNoCountry.length > 1) {
         final phoneDetails = await getPhoneDetails(
           countryCode: '+${userDetails.phoneCountryCode}',
           phoneNoCountry: userDetails.phoneNoCountry,
@@ -1766,6 +1768,42 @@ class PeeplEatsService extends HttpService {
     );
     if ((response.data?.isEmpty ?? true) ||
         !CreateOrderResponse.canParse(response.data!)) {
+      final store = await reduxStore;
+      if (response.data != null &&
+          response.data!.isNotEmpty &&
+          response.data!.containsKey('error')) {
+        if (response.data!['error']!
+            .toString()
+            .contains('Failed to retrieve stripe from customerId')) {
+          store.dispatch(
+            OrderCreationProcessStatusUpdate(
+              status: OrderCreationProcessStatus.stripeServiceFailedOnServer,
+            ),
+          );
+          return null;
+        }
+      }
+      if (response.extra.isNotEmpty &&
+          response.extra.containsKey('errorMessage')) {
+        if(response.extra['errorMessage'] is Map){
+
+        } else if (response.extra['errorMessage'] is String) {
+          final errorMessage = response.extra['errorMessage'].toString();
+          if (errorMessage.toLowerCase().contains('Invalid slot')){
+            store.dispatch(
+              OrderCreationProcessStatusUpdate(
+                status: OrderCreationProcessStatus.invalidSlot,
+              ),
+            );
+          }
+
+        }
+      }
+      store.dispatch(
+        OrderCreationProcessStatusUpdate(
+          status: OrderCreationProcessStatus.sendOrderCallServerError,
+        ),
+      );
       return null;
     }
     final result = CreateOrderResponse.fromJson(response.data!);

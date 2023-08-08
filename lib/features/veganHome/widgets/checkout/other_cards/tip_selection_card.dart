@@ -8,6 +8,7 @@ import 'package:vegan_liverpool/models/app_state.dart';
 import 'package:vegan_liverpool/models/payments/money.dart';
 import 'package:vegan_liverpool/redux/viewsmodels/checkout/tip_selection_vm.dart';
 import 'package:vegan_liverpool/utils/analytics.dart';
+import 'package:vegan_liverpool/utils/log/log.dart';
 
 class TipSelectionCard extends StatelessWidget {
   const TipSelectionCard({Key? key}) : super(key: key);
@@ -104,14 +105,18 @@ class _TipCardState extends State<TipCard> {
                   'tipAmount': widget.tipAmount,
                 },
               );
+              final _tipAmount = Money(
+                currency: Currency.GBPx,
+                value: widget.tipAmount,
+              );
+              log.verbose('Add tip: $_tipAmount');
               Future.delayed(const Duration(milliseconds: 100), () {
-                viewmodel.selectedUserTip == widget.tipAmount
+                viewmodel.selectedUserTip.inGBPx.value ==
+                        _tipAmount.inGBPx.value
                     ? viewmodel.updateUserTip(tipAmount: Money.zeroGBPx())
                     : viewmodel.updateUserTip(
-                        tipAmount: Money(
-                        currency: Currency.GBPx,
-                        value: widget.tipAmount,
-                      ));
+                        tipAmount: _tipAmount,
+                      );
               });
             },
             child: Padding(

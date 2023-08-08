@@ -3,6 +3,8 @@ import 'dart:ffi';
 import 'dart:io';
 import 'package:auto_route/auto_route.dart';
 import 'package:country_code_picker/country_code_picker.dart';
+import 'package:device_info_plus/device_info_plus.dart';
+import 'package:apple_product_name/apple_product_name.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_auth_platform_interface/firebase_auth_platform_interface.dart';
@@ -675,6 +677,21 @@ class DeviceIdSuccess {
   String toString() => 'DeviceIdSuccess : identifier: $identifier';
 }
 
+class SetDeviceName {
+  SetDeviceName({
+    required this.deviceName,
+    required this.deviceOSName,
+    required this.deviceReleaseName,
+  });
+  final String deviceName;
+  final String deviceOSName;
+  final String deviceReleaseName;
+
+  @override
+  String toString() => 'SetDeviceName : deviceName: $deviceName, '
+      'deviceOSName: $deviceOSName, deviceReleaseName: $deviceReleaseName';
+}
+
 class UpdateListOfDeliveryAddresses {
   UpdateListOfDeliveryAddresses(this.listOfAddresses);
   final List<DeliveryAddresses> listOfAddresses;
@@ -840,8 +857,10 @@ ThunkAction<AppState> updateEmail({
       );
       if (errMsg != null) {
         // onError?.call(errMsg);
-        if (errMsg == 'bad email passed'){
-          store.dispatch(SignUpFailed(error: SignUpErrorDetails(title: 'Bad email format', message: '')));
+        if (errMsg == 'bad email passed') {
+          store.dispatch(SignUpFailed(
+              error:
+                  SignUpErrorDetails(title: 'Bad email format', message: '')));
         }
         log.info(
           errMsg,
@@ -1464,6 +1483,16 @@ ThunkAction<AppState> setDevicePhoneNumberForId(String phoneNumber) {
     // mixpanel.alias(identifier, phoneNumber);
     log.info('device identifier: $identifier');
     store.dispatch(DeviceIdSuccess(identifier));
+    if (Platform.isIOS) {
+      final info = await DeviceInfoPlugin().iosInfo;
+      store.dispatch(
+        SetDeviceName(
+          deviceName: info.utsname.productName,
+          deviceOSName: info.systemName,
+          deviceReleaseName: info.systemVersion,
+        ),
+      );
+    }
   };
 }
 

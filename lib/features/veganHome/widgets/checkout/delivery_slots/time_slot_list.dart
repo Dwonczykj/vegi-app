@@ -3,6 +3,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:vegan_liverpool/constants/theme.dart';
 import 'package:vegan_liverpool/models/app_state.dart';
 import 'package:vegan_liverpool/redux/viewsmodels/checkout/time_slot_list_vm.dart';
+import 'package:vegan_liverpool/utils/log/log.dart';
 
 class TimeSlotListBuilder extends StatefulWidget {
   const TimeSlotListBuilder({Key? key}) : super(key: key);
@@ -32,6 +33,9 @@ class _TimeSlotListBuilderState extends State<TimeSlotListBuilder> {
                 itemBuilder: (_, index) {
                   return InkWell(
                     onTap: () {
+                      log.verbose(
+                        'Update selected fulfilment timeslot to: ${viewmodel.timeSlots[index]}',
+                      );
                       viewmodel
                           .updateSelectedTimeSlot(viewmodel.timeSlots[index]);
                       setState(() {

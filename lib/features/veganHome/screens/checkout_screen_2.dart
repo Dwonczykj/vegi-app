@@ -45,7 +45,9 @@ class CheckoutScreenPt2 extends StatelessWidget {
         ],
         body: StoreConnector<AppState, PaymentMethodViewModel>(
           onInit: (store) {
-            store.dispatch(getNextAvaliableSlot());
+            store
+              ..dispatch(getNextAvaliableSlot())
+              ..dispatch(autoSelectDeliveryAddress());
           },
           converter: PaymentMethodViewModel.fromStore,
           distinct: true,
@@ -113,9 +115,36 @@ class CheckoutScreenPt2 extends StatelessWidget {
                   title: 'This restaurant is not accepting orders below'
                       '${newViewModel.restaurantMinimumOrder.formattedGBPxPrice}',
                 );
-              } else {
+              } else if (newViewModel.orderCreationProcessStatus ==
+                  OrderCreationProcessStatus.orderCancelled) {
+                await showInfoSnack(
+                  context,
+                  title: 'Order creation cancelled',
+                );
+              } else if (newViewModel.orderCreationProcessStatus ==
+                  OrderCreationProcessStatus.stripeServiceFailedOnServer) {
+                await showInfoSnack(
+                  context,
+                  title: 'Stripe service failed on server, please retry now',
+                );
+              } else if (newViewModel.orderCreationProcessStatus ==
+                  OrderCreationProcessStatus.invalidSlot) {
+                await showInfoSnack(
+                  context,
+                  title:
+                      'Whoops, over-subscribed delivery slot, please pick a new slot',
+                );
+              } else if (newViewModel.orderCreationProcessStatus !=
+                  OrderCreationProcessStatus.none) {
+                await showInfoSnack(
+                  context,
+                  title:
+                      'Order creation failed: ${newViewModel.orderCreationProcessStatus.name.capitalizeWordsFromLowerCamelCase()}',
+                );
                 log.info(
-                    'Ignoring OrderCreationProcessStatus update: "${newViewModel.orderCreationProcessStatus.name}"');
+                  'Ignoring OrderCreationProcessStatus update: "${newViewModel.orderCreationProcessStatus.name}"',
+                  stackTrace: StackTrace.current,
+                );
               }
             } else if (newViewModel.stripePaymentStatus !=
                 (previousViewModel?.stripePaymentStatus ??

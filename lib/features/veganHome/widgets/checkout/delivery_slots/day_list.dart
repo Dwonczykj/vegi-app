@@ -5,6 +5,7 @@ import 'package:vegan_liverpool/features/veganHome/Helpers/extensions.dart';
 import 'package:vegan_liverpool/models/app_state.dart';
 import 'package:vegan_liverpool/redux/actions/cart_actions.dart';
 import 'package:vegan_liverpool/redux/viewsmodels/checkout/time_slot_list_vm.dart';
+import 'package:vegan_liverpool/utils/log/log.dart';
 
 class DayListBuilder extends StatefulWidget {
   const DayListBuilder({Key? key}) : super(key: key);
@@ -41,6 +42,7 @@ class _DayListBuilderState extends State<DayListBuilder> {
           itemBuilder: (_, index) {
             return InkWell(
               onTap: () {
+                log.verbose('Set fulfilment time slot to slots on date: ${viewmodel.eligibleOrderDates[index]}');
                 setState(() {
                   _selected = index;
                   viewmodel.getTimeSlots(viewmodel.eligibleOrderDates[index]);

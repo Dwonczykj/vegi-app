@@ -13,9 +13,12 @@ import 'package:redux/redux.dart';
 @module
 abstract class ServicesModule {
   @lazySingleton
-  RootRouter get rootRouter => DebugHelpers.inDebugMode ? RootRouterLogger(
-        authGuard: AuthGuard(),
-      ) :  RootRouter(
+  RootRouter get rootRouter => DebugHelpers.inDebugMode
+      ? RootRouterLogger(
+          authGuard: AuthGuard(),
+        )
+      : RootRouterLogger(
+          // RootRouter(
           authGuard: AuthGuard(),
         );
 

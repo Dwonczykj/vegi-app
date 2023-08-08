@@ -70,6 +70,7 @@ final userReducers = combineReducers<UserState>([
   TypedReducer<UserState, SetVegiSessionCookie>(_setVegiSessionCookie).call,
   TypedReducer<UserState, JustInstalled>(_justInstalled).call,
   TypedReducer<UserState, DeviceIdSuccess>(_deviceIdSuccess).call,
+  TypedReducer<UserState, SetDeviceName>(_deviceNameSuccess).call,
   TypedReducer<UserState, SetSecurityType>(_setSecurityType).call,
   TypedReducer<UserState, SetBiometricallyAuthenticated>(
           _setBiometricallyAuthenticated)
@@ -600,6 +601,17 @@ UserState _deviceIdSuccess(
   DeviceIdSuccess action,
 ) {
   return state.copyWith(identifier: action.identifier);
+}
+
+UserState _deviceNameSuccess(
+  UserState state,
+  SetDeviceName action,
+) {
+  return state.copyWith(
+    deviceName: action.deviceName,
+    deviceOSName: action.deviceOSName,
+    deviceReleaseName: action.deviceReleaseName,
+  );
 }
 
 UserState _addDeliveryAddress(

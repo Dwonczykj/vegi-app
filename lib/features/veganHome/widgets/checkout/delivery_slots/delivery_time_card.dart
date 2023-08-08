@@ -9,6 +9,7 @@ import 'package:vegan_liverpool/features/veganHome/widgets/checkout/delivery_slo
 import 'package:vegan_liverpool/models/app_state.dart';
 import 'package:vegan_liverpool/redux/viewsmodels/checkout/delivery_time_card_vm.dart';
 import 'package:vegan_liverpool/utils/analytics.dart';
+import 'package:vegan_liverpool/utils/log/log.dart';
 
 class DeliveryTimeCard extends StatelessWidget {
   const DeliveryTimeCard({Key? key}) : super(key: key);
@@ -20,6 +21,8 @@ class DeliveryTimeCard extends StatelessWidget {
       builder: (context, viewmodel) {
         return GestureDetector(
           onTap: () {
+            final _fm = viewmodel.isDelivery ? 'delivery' : 'collection';
+            log.verbose('Change $_fm time slot button pressed');
             Analytics.track(
               eventName: AnalyticsEvents.changeTimeSlot,
             );

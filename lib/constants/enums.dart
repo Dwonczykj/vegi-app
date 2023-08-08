@@ -718,7 +718,7 @@ enum OrderCreationProcessStatus {
   orderAlreadyBeingCreated,
   paymentIntentCheckNotFound,
   unableToGetStripeCustomerIdFromCreateOrderRequest,
-  orderPaymentAttemptCreated,
+  orderPaymentAttemptCreated, stripeServiceFailedOnServer, invalidSlot,
 }
 
 enum StripePaymentStatus {

@@ -17,6 +17,7 @@ import 'package:vegan_liverpool/redux/actions/cart_actions.dart';
 import 'package:vegan_liverpool/redux/viewsmodels/checkout/discount_card_vm.dart';
 import 'package:vegan_liverpool/utils/analytics.dart';
 import 'package:vegan_liverpool/utils/constants.dart';
+import 'package:vegan_liverpool/utils/log/log.dart';
 
 class DiscountCards extends StatelessWidget {
   const DiscountCards({Key? key}) : super(key: key);
@@ -50,6 +51,7 @@ class DiscountCards extends StatelessWidget {
                   },
                   allowRemovalAction: true,
                   removeDiscount: () {
+                    log.verbose('remove applied voucher: [${voucher.id}]');
                     viewmodel.removeAppliedVoucher(
                       voucher: voucher,
                     );
@@ -231,6 +233,7 @@ class _DiscountSelectorModalSheetState
           child: StoreConnector<AppState, void Function(String)>(
             converter: (store) {
               return (discountCode) {
+                log.verbose('add voucher: "$discountCode"');
                 store.dispatch(
                   updateCartDiscount(
                     newDiscountCode: discountCode,

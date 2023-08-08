@@ -74,6 +74,9 @@ mixin _$UserState {
   String? get verificationId => throw _privateConstructorUsedError;
   bool get verificationPassed => throw _privateConstructorUsedError;
   String get identifier => throw _privateConstructorUsedError;
+  String get deviceName => throw _privateConstructorUsedError;
+  String get deviceOSName => throw _privateConstructorUsedError;
+  String get deviceReleaseName => throw _privateConstructorUsedError;
   bool get appUpdateNeeded => throw _privateConstructorUsedError;
   @JsonKey(fromJson: Version.fromJson, toJson: Version.toJson)
   Version? get appUpdateNextVersion => throw _privateConstructorUsedError;
@@ -169,6 +172,9 @@ abstract class $UserStateCopyWith<$Res> {
       String? verificationId,
       bool verificationPassed,
       String identifier,
+      String deviceName,
+      String deviceOSName,
+      String deviceReleaseName,
       bool appUpdateNeeded,
       @JsonKey(fromJson: Version.fromJson, toJson: Version.toJson)
           Version? appUpdateNextVersion,
@@ -264,6 +270,9 @@ class _$UserStateCopyWithImpl<$Res, $Val extends UserState>
     Object? verificationId = freezed,
     Object? verificationPassed = null,
     Object? identifier = null,
+    Object? deviceName = null,
+    Object? deviceOSName = null,
+    Object? deviceReleaseName = null,
     Object? appUpdateNeeded = null,
     Object? appUpdateNextVersion = freezed,
     Object? appUpdateNotificationSeenForBuildNumber = freezed,
@@ -424,6 +433,18 @@ class _$UserStateCopyWithImpl<$Res, $Val extends UserState>
       identifier: null == identifier
           ? _value.identifier
           : identifier // ignore: cast_nullable_to_non_nullable
+              as String,
+      deviceName: null == deviceName
+          ? _value.deviceName
+          : deviceName // ignore: cast_nullable_to_non_nullable
+              as String,
+      deviceOSName: null == deviceOSName
+          ? _value.deviceOSName
+          : deviceOSName // ignore: cast_nullable_to_non_nullable
+              as String,
+      deviceReleaseName: null == deviceReleaseName
+          ? _value.deviceReleaseName
+          : deviceReleaseName // ignore: cast_nullable_to_non_nullable
               as String,
       appUpdateNeeded: null == appUpdateNeeded
           ? _value.appUpdateNeeded
@@ -635,6 +656,9 @@ abstract class _$$_UserStateCopyWith<$Res> implements $UserStateCopyWith<$Res> {
       String? verificationId,
       bool verificationPassed,
       String identifier,
+      String deviceName,
+      String deviceOSName,
+      String deviceReleaseName,
       bool appUpdateNeeded,
       @JsonKey(fromJson: Version.fromJson, toJson: Version.toJson)
           Version? appUpdateNextVersion,
@@ -730,6 +754,9 @@ class __$$_UserStateCopyWithImpl<$Res>
     Object? verificationId = freezed,
     Object? verificationPassed = null,
     Object? identifier = null,
+    Object? deviceName = null,
+    Object? deviceOSName = null,
+    Object? deviceReleaseName = null,
     Object? appUpdateNeeded = null,
     Object? appUpdateNextVersion = freezed,
     Object? appUpdateNotificationSeenForBuildNumber = freezed,
@@ -890,6 +917,18 @@ class __$$_UserStateCopyWithImpl<$Res>
       identifier: null == identifier
           ? _value.identifier
           : identifier // ignore: cast_nullable_to_non_nullable
+              as String,
+      deviceName: null == deviceName
+          ? _value.deviceName
+          : deviceName // ignore: cast_nullable_to_non_nullable
+              as String,
+      deviceOSName: null == deviceOSName
+          ? _value.deviceOSName
+          : deviceOSName // ignore: cast_nullable_to_non_nullable
+              as String,
+      deviceReleaseName: null == deviceReleaseName
+          ? _value.deviceReleaseName
+          : deviceReleaseName // ignore: cast_nullable_to_non_nullable
               as String,
       appUpdateNeeded: null == appUpdateNeeded
           ? _value.appUpdateNeeded
@@ -1075,6 +1114,9 @@ class _$_UserState extends _UserState with DiagnosticableTreeMixin {
       this.verificationId,
       this.verificationPassed = false,
       this.identifier = '',
+      this.deviceName = '',
+      this.deviceOSName = '',
+      this.deviceReleaseName = '',
       this.appUpdateNeeded = false,
       @JsonKey(fromJson: Version.fromJson, toJson: Version.toJson)
           this.appUpdateNextVersion = null,
@@ -1233,6 +1275,15 @@ class _$_UserState extends _UserState with DiagnosticableTreeMixin {
   final String identifier;
   @override
   @JsonKey()
+  final String deviceName;
+  @override
+  @JsonKey()
+  final String deviceOSName;
+  @override
+  @JsonKey()
+  final String deviceReleaseName;
+  @override
+  @JsonKey()
   final bool appUpdateNeeded;
   @override
   @JsonKey(fromJson: Version.fromJson, toJson: Version.toJson)
@@ -1339,7 +1390,7 @@ class _$_UserState extends _UserState with DiagnosticableTreeMixin {
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'UserState(wcURI: $wcURI, walletModules: $walletModules, installedAt: $installedAt, isContactsSynced: $isContactsSynced, scrollToTop: $scrollToTop, walletAddress: $walletAddress, privateKey: $privateKey, fuseWalletCredentials: $fuseWalletCredentials, smartWallet: $smartWallet, fuseAuthenticationStatus: $fuseAuthenticationStatus, firebaseAuthenticationStatus: $firebaseAuthenticationStatus, vegiAuthenticationStatus: $vegiAuthenticationStatus, backup: $backup, networks: $networks, mnemonic: $mnemonic, pincode: $pincode, countryCode: $countryCode, phoneNumber: $phoneNumber, phoneNumberNoCountry: $phoneNumberNoCountry, warnSendDialogShowed: $warnSendDialogShowed, isoCode: $isoCode, jwtToken: $jwtToken, displayName: $displayName, avatarUrl: $avatarUrl, avatarTempFilePath: $avatarTempFilePath, preferredSignonMethod: $preferredSignonMethod, email: $email, password: $password, verificationId: $verificationId, verificationPassed: $verificationPassed, identifier: $identifier, appUpdateNeeded: $appUpdateNeeded, appUpdateNextVersion: $appUpdateNextVersion, appUpdateNotificationSeenForBuildNumber: $appUpdateNotificationSeenForBuildNumber, syncedContacts: $syncedContacts, reverseContacts: $reverseContacts, currency: $currency, hasUpgrade: $hasUpgrade, authType: $authType, biometricallyAuthenticated: $biometricallyAuthenticated, locale: $locale, firebaseCredentials: $firebaseCredentials, firebaseSessionToken: $firebaseSessionToken, vegiSessionCookie: $vegiSessionCookie, listOfDeliveryAddresses: $listOfDeliveryAddresses, hasSavedSeedPhrase: $hasSavedSeedPhrase, useLiveLocation: $useLiveLocation, userIsVerified: $userIsVerified, userLocation: $userLocation, isUsingSimulator: $isUsingSimulator, isUsingIosSimulator: $isUsingIosSimulator, initialLoginDateTime: $initialLoginDateTime, showSeedPhraseBanner: $showSeedPhraseBanner, surveyQuestions: $surveyQuestions, surveyCompleted: $surveyCompleted, surveyEmailUsed: $surveyEmailUsed, isVendor: $isVendor, stripeCustomerId: $stripeCustomerId, vegiAccountId: $vegiAccountId, vegiUserId: $vegiUserId, isVegiSuperAdmin: $isVegiSuperAdmin, userVegiRole: $userVegiRole, positionInWaitingList: $positionInWaitingList, subscribedToWaitingListUpdates: $subscribedToWaitingListUpdates, waitingListEntryId: $waitingListEntryId, loginCounter: $loginCounter)';
+    return 'UserState(wcURI: $wcURI, walletModules: $walletModules, installedAt: $installedAt, isContactsSynced: $isContactsSynced, scrollToTop: $scrollToTop, walletAddress: $walletAddress, privateKey: $privateKey, fuseWalletCredentials: $fuseWalletCredentials, smartWallet: $smartWallet, fuseAuthenticationStatus: $fuseAuthenticationStatus, firebaseAuthenticationStatus: $firebaseAuthenticationStatus, vegiAuthenticationStatus: $vegiAuthenticationStatus, backup: $backup, networks: $networks, mnemonic: $mnemonic, pincode: $pincode, countryCode: $countryCode, phoneNumber: $phoneNumber, phoneNumberNoCountry: $phoneNumberNoCountry, warnSendDialogShowed: $warnSendDialogShowed, isoCode: $isoCode, jwtToken: $jwtToken, displayName: $displayName, avatarUrl: $avatarUrl, avatarTempFilePath: $avatarTempFilePath, preferredSignonMethod: $preferredSignonMethod, email: $email, password: $password, verificationId: $verificationId, verificationPassed: $verificationPassed, identifier: $identifier, deviceName: $deviceName, deviceOSName: $deviceOSName, deviceReleaseName: $deviceReleaseName, appUpdateNeeded: $appUpdateNeeded, appUpdateNextVersion: $appUpdateNextVersion, appUpdateNotificationSeenForBuildNumber: $appUpdateNotificationSeenForBuildNumber, syncedContacts: $syncedContacts, reverseContacts: $reverseContacts, currency: $currency, hasUpgrade: $hasUpgrade, authType: $authType, biometricallyAuthenticated: $biometricallyAuthenticated, locale: $locale, firebaseCredentials: $firebaseCredentials, firebaseSessionToken: $firebaseSessionToken, vegiSessionCookie: $vegiSessionCookie, listOfDeliveryAddresses: $listOfDeliveryAddresses, hasSavedSeedPhrase: $hasSavedSeedPhrase, useLiveLocation: $useLiveLocation, userIsVerified: $userIsVerified, userLocation: $userLocation, isUsingSimulator: $isUsingSimulator, isUsingIosSimulator: $isUsingIosSimulator, initialLoginDateTime: $initialLoginDateTime, showSeedPhraseBanner: $showSeedPhraseBanner, surveyQuestions: $surveyQuestions, surveyCompleted: $surveyCompleted, surveyEmailUsed: $surveyEmailUsed, isVendor: $isVendor, stripeCustomerId: $stripeCustomerId, vegiAccountId: $vegiAccountId, vegiUserId: $vegiUserId, isVegiSuperAdmin: $isVegiSuperAdmin, userVegiRole: $userVegiRole, positionInWaitingList: $positionInWaitingList, subscribedToWaitingListUpdates: $subscribedToWaitingListUpdates, waitingListEntryId: $waitingListEntryId, loginCounter: $loginCounter)';
   }
 
   @override
@@ -1381,6 +1432,9 @@ class _$_UserState extends _UserState with DiagnosticableTreeMixin {
       ..add(DiagnosticsProperty('verificationId', verificationId))
       ..add(DiagnosticsProperty('verificationPassed', verificationPassed))
       ..add(DiagnosticsProperty('identifier', identifier))
+      ..add(DiagnosticsProperty('deviceName', deviceName))
+      ..add(DiagnosticsProperty('deviceOSName', deviceOSName))
+      ..add(DiagnosticsProperty('deviceReleaseName', deviceReleaseName))
       ..add(DiagnosticsProperty('appUpdateNeeded', appUpdateNeeded))
       ..add(DiagnosticsProperty('appUpdateNextVersion', appUpdateNextVersion))
       ..add(DiagnosticsProperty('appUpdateNotificationSeenForBuildNumber',
@@ -1483,12 +1537,15 @@ class _$_UserState extends _UserState with DiagnosticableTreeMixin {
                 other.verificationPassed == verificationPassed) &&
             (identical(other.identifier, identifier) ||
                 other.identifier == identifier) &&
-            (identical(other.appUpdateNeeded, appUpdateNeeded) ||
-                other.appUpdateNeeded == appUpdateNeeded) &&
-            (identical(other.appUpdateNextVersion, appUpdateNextVersion) ||
-                other.appUpdateNextVersion == appUpdateNextVersion) &&
-            (identical(other.appUpdateNotificationSeenForBuildNumber, appUpdateNotificationSeenForBuildNumber) ||
-                other.appUpdateNotificationSeenForBuildNumber == appUpdateNotificationSeenForBuildNumber) &&
+            (identical(other.deviceName, deviceName) ||
+                other.deviceName == deviceName) &&
+            (identical(other.deviceOSName, deviceOSName) ||
+                other.deviceOSName == deviceOSName) &&
+            (identical(other.deviceReleaseName, deviceReleaseName) ||
+                other.deviceReleaseName == deviceReleaseName) &&
+            (identical(other.appUpdateNeeded, appUpdateNeeded) || other.appUpdateNeeded == appUpdateNeeded) &&
+            (identical(other.appUpdateNextVersion, appUpdateNextVersion) || other.appUpdateNextVersion == appUpdateNextVersion) &&
+            (identical(other.appUpdateNotificationSeenForBuildNumber, appUpdateNotificationSeenForBuildNumber) || other.appUpdateNotificationSeenForBuildNumber == appUpdateNotificationSeenForBuildNumber) &&
             const DeepCollectionEquality().equals(other.syncedContacts, syncedContacts) &&
             const DeepCollectionEquality().equals(other.reverseContacts, reverseContacts) &&
             (identical(other.currency, currency) || other.currency == currency) &&
@@ -1558,6 +1615,9 @@ class _$_UserState extends _UserState with DiagnosticableTreeMixin {
         verificationId,
         verificationPassed,
         identifier,
+        deviceName,
+        deviceOSName,
+        deviceReleaseName,
         appUpdateNeeded,
         appUpdateNextVersion,
         appUpdateNotificationSeenForBuildNumber,
@@ -1644,6 +1704,9 @@ abstract class _UserState extends UserState {
       final String? verificationId,
       final bool verificationPassed,
       final String identifier,
+      final String deviceName,
+      final String deviceOSName,
+      final String deviceReleaseName,
       final bool appUpdateNeeded,
       @JsonKey(fromJson: Version.fromJson, toJson: Version.toJson)
           final Version? appUpdateNextVersion,
@@ -1775,6 +1838,12 @@ abstract class _UserState extends UserState {
   bool get verificationPassed;
   @override
   String get identifier;
+  @override
+  String get deviceName;
+  @override
+  String get deviceOSName;
+  @override
+  String get deviceReleaseName;
   @override
   bool get appUpdateNeeded;
   @override

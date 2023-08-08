@@ -878,10 +878,10 @@ FutureOr<T>? logFunctionCall<T>({
 }) {
   try {
     final className_ = className ??
-        StackTrace.current.getStackLine(lineNumber: 2)?.className ??
+        StackTrace.current.getStackLine(lineNumberBase1: 2)?.className ??
         '';
     final funcName_ = funcName ??
-        StackTrace.current.getStackLine(lineNumber: 2)?.functionName ??
+        StackTrace.current.getStackLine(lineNumberBase1: 2)?.functionName ??
         '';
     log.info(
       '$funcName_ called in $className_ class. $logMessage',
@@ -896,4 +896,19 @@ FutureOr<T>? logFunctionCall<T>({
     );
   }
   return funcResult;
+}
+
+T Function() withHelloWorld<T>(T Function() function) {
+  return () {
+    log.verbose('The method ${getFunctionName(function)} was called.');
+    return function();
+  };
+}
+
+String getFunctionName(Function function) {
+  // The function.toString() returns something like "Closure: () => dynamic from Function 'functionName'"
+  final stringRepresentation = function.toString();
+  final start = stringRepresentation.indexOf("'") + 1;
+  final end = stringRepresentation.lastIndexOf("'");
+  return stringRepresentation.substring(start, end);
 }

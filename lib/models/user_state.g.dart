@@ -64,6 +64,9 @@ _$_UserState _$$_UserStateFromJson(Map<String, dynamic> json) => _$_UserState(
       verificationId: json['verificationId'] as String?,
       verificationPassed: json['verificationPassed'] as bool? ?? false,
       identifier: json['identifier'] as String? ?? '',
+      deviceName: json['deviceName'] as String? ?? '',
+      deviceOSName: json['deviceOSName'] as String? ?? '',
+      deviceReleaseName: json['deviceReleaseName'] as String? ?? '',
       appUpdateNeeded: json['appUpdateNeeded'] as bool? ?? false,
       appUpdateNextVersion: json['appUpdateNextVersion'] == null
           ? null
@@ -151,6 +154,9 @@ Map<String, dynamic> _$$_UserStateToJson(_$_UserState instance) =>
       'verificationId': instance.verificationId,
       'verificationPassed': instance.verificationPassed,
       'identifier': instance.identifier,
+      'deviceName': instance.deviceName,
+      'deviceOSName': instance.deviceOSName,
+      'deviceReleaseName': instance.deviceReleaseName,
       'appUpdateNeeded': instance.appUpdateNeeded,
       'appUpdateNextVersion': Version.toJson(instance.appUpdateNextVersion),
       'appUpdateNotificationSeenForBuildNumber':

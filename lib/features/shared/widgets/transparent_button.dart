@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vegan_liverpool/features/veganHome/Helpers/helpers.dart';
 
 class TransparentButton extends StatelessWidget {
   const TransparentButton({
@@ -27,7 +28,7 @@ class TransparentButton extends StatelessWidget {
       child: InkWell(
         focusColor: Theme.of(context).canvasColor,
         highlightColor: Theme.of(context).canvasColor,
-        onTap: onPressed,
+        onTap: withHelloWorld(onPressed),
         child: !preload
             ? Container(
                 padding:

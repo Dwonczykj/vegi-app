@@ -1,10 +1,23 @@
 import 'package:flutter/foundation.dart';
 import 'package:logger/logger.dart';
+import 'package:vegan_liverpool/services.dart';
 
 class LogIt {
   LogIt(this.logger);
 
   final Logger logger;
+
+  Map<String, String> deviceMeta = {};
+
+  Future<void> _setDeviceMeta() async {
+    final store = await reduxStore;
+    if (store.state.userState.isLoggedIn ||
+        store.state.userState.identifier.isNotEmpty) {
+      if (store.state.userState.identifier.isNotEmpty) {
+        deviceMeta['identifier'] = store.state.userState.identifier;
+      }
+    }
+  }
 
   /// Log a message at level [Level.verbose].
   void verbose(

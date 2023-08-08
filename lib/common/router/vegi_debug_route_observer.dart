@@ -12,6 +12,7 @@ class VegiDebugRouteObserver extends AutoRouterObserver {
     log.verbose(
       'New route pushed: ${route.settings.name} from ${previousRoute?.settings.name}',
       stackTrace: StackTrace.current,
+      dontLog: true,
     );
   }
 
@@ -21,6 +22,7 @@ class VegiDebugRouteObserver extends AutoRouterObserver {
     log.verbose(
       'New route popped: ${route.settings.name} to ${previousRoute?.settings.name}',
       stackTrace: StackTrace.current,
+      dontLog: true,
     );
   }
 
@@ -30,6 +32,7 @@ class VegiDebugRouteObserver extends AutoRouterObserver {
     log.verbose(
       'Tab route visited: ${route.name}',
       stackTrace: StackTrace.current,
+      dontLog: true,
     );
   }
 
@@ -38,6 +41,7 @@ class VegiDebugRouteObserver extends AutoRouterObserver {
     log.verbose(
       'Tab route re-visited: ${route.name}',
       stackTrace: StackTrace.current,
+      dontLog: true,
     );
   }
 }

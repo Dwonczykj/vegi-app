@@ -7,6 +7,7 @@ import 'package:vegan_liverpool/models/restaurant/productOptionValue.dart';
 import 'package:vegan_liverpool/models/restaurant/restaurantMenuItem.dart';
 import 'package:vegan_liverpool/redux/actions/cart_actions.dart';
 import 'package:vegan_liverpool/redux/actions/menu_item_actions.dart';
+import 'package:vegan_liverpool/utils/log/log.dart';
 
 class DetailMenuItem extends Equatable {
   const DetailMenuItem({
@@ -33,15 +34,32 @@ class DetailMenuItem extends Equatable {
           store.state.menuItemState.selectedProductOptionsForCategory,
       loadingProductOptions: store.state.menuItemState.loadingProductOptions,
       addOrderItems: (itemsToAdd) {
+        final itemNames = itemsToAdd
+            .map(
+              (e) => '${e.menuItem.name}[${e.menuItem.menuItemID}]',
+            )
+            .join(',');
+        log.verbose('Add items to basket: $itemNames');
         store.dispatch(updateCartItems(itemsToAdd));
       },
       setMenuItem: (menuItem) {
+        if (menuItem != null) {
+          log.verbose('Set menu item: ${menuItem.name}');
+        } else {
+          log.verbose('Clear menu item');
+        }
         store.dispatch(setUpMenuItemStructures(menuItem));
       },
       resetMenuItem: () {
+        log.verbose('Reset menu item');
         store.dispatch(ResetMenuItem());
       },
       updateQuantity: (isAdd) {
+        if(isAdd){
+          log.verbose('Increase ${store.state.menuItemState.menuItem?.name} by +1');
+        } else {
+          log.verbose('Decrease ${store.state.menuItemState.menuItem?.name} by -1');
+        }
         store.dispatch(updateComputeQuantity(isAdd: isAdd));
       },
       reCalcTotals: () {

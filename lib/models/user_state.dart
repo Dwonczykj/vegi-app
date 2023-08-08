@@ -148,6 +148,12 @@ class UserState with _$UserState {
         bool verificationPassed,
     @Default('')
         String identifier,
+    @Default('')
+        String deviceName,
+    @Default('')
+        String deviceOSName,
+    @Default('')
+        String deviceReleaseName,
     @Default(false)
         bool appUpdateNeeded,
     @JsonKey(

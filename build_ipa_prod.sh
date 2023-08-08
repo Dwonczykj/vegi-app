@@ -111,7 +111,7 @@ ITMSP_DIR="$HOME/appstore_testflights.itmsp"
 IPA_FILE="build/ios/ipa/vegi.ipa"
 APPLE_ID="<Your Apple ID>"
 APPSTORE_CONNECT_USERNAME="<Your username>"
-APPSTORE_CONNECT_PASSWORD="<Your password>"
+APPSTORE_CONNECT_PASSWORD="<Your password>".
 mkdir "$ITMSP_DIR"
 
 # Move your .ipa file into the .itmsp folder
@@ -135,8 +135,14 @@ echo "    </software_assets>" >> $ITMSP_DIR/metadata.xml
 echo "</package>" >> $ITMSP_DIR/metadata.xml
 
 # Upload the .itmsp folder to iTunes Connect
-/Applications/Xcode.app/Contents/Applications/Application Loader.app/Contents/itms/bin/iTMSTransporter -m upload -u $APPSTORE_CONNECT_USERNAME 
--p $APPSTORE_CONNECT_PASSWORD -f $ITMSP_DIR -t DAV -t Signiant -k 100000 -v eXtreme
+"/Applications/Xcode.app/Contents/Applications/Application Loader.app/Contents/itms/bin/iTMSTransporter" \
+    -m upload \
+    -u $APPSTORE_CONNECT_USERNAME \
+    -p $APPSTORE_CONNECT_PASSWORD \
+    -f $ITMSP_DIR \
+    -t DAV -t Signiant \
+    -k 100000 \
+    -v eXtreme
 
 open build/ios/ipa/
 

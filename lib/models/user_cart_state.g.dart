@@ -231,6 +231,9 @@ const _$OrderCreationProcessStatusEnumMap = {
       'unableToGetStripeCustomerIdFromCreateOrderRequest',
   OrderCreationProcessStatus.orderPaymentAttemptCreated:
       'orderPaymentAttemptCreated',
+  OrderCreationProcessStatus.stripeServiceFailedOnServer:
+      'stripeServiceFailedOnServer',
+  OrderCreationProcessStatus.invalidSlot: 'invalidSlot',
 };
 
 const _$StripePaymentStatusEnumMap = {

@@ -41,6 +41,7 @@ import 'package:vegan_liverpool/models/restaurant/time_slot.dart';
 import 'package:vegan_liverpool/models/waitingListFunnel/waitingListEntry.dart';
 import 'package:vegan_liverpool/redux/actions/home_page_actions.dart';
 import 'package:vegan_liverpool/redux/actions/user_actions.dart';
+import 'package:vegan_liverpool/redux/actions/cart_actions.dart' as cartActions;
 import 'package:vegan_liverpool/redux/viewsmodels/errorDetails.dart';
 import 'package:vegan_liverpool/redux/viewsmodels/signUpErrorDetails.dart';
 import 'package:vegan_liverpool/services.dart';
@@ -563,6 +564,29 @@ ThunkAction<AppState> getTimeSlots({required DateTime newDate}) {
         e,
         stackTrace: s,
       );
+    }
+  };
+}
+
+ThunkAction<AppState> autoSelectDeliveryAddress() {
+  return (Store<AppState> store) async {
+    try {
+      final availableDeliveryAddresses =
+          store.state.userState.listOfDeliveryAddresses
+              .where(
+                (address) => address.deliversTo(
+                    store.state.cartState.fulfilmentPostalDistricts),
+              )
+              .toList();
+      if (availableDeliveryAddresses.isNotEmpty) {
+        store.dispatch(
+          cartActions.setDeliveryAddress(
+            id: availableDeliveryAddresses.first.internalID,
+          ),
+        );
+      }
+    } catch (e, s) {
+      log.error('ERROR - autoSelectDeliveryAddress $e', stackTrace: s);
     }
   };
 }
@@ -1521,6 +1545,8 @@ ThunkAction<AppState> startOrderCreationProcess({
   return (Store<AppState> store) async {
     try {
       final cartState = store.state.cartState;
+      log.verbose(
+          'startOrderCreationProcess: [${cartState.isDelivery ? 'Delivery' : cartState.isInStore ? 'inStore' : 'collection'}]');
       OrderCreationProcessStatus sentryUpdatePipe(
         OrderCreationProcessStatus status,
       ) {
@@ -1924,6 +1950,8 @@ ThunkAction<AppState> startPaymentProcess({
 }) {
   return (Store<AppState> store) async {
     try {
+      log.verbose(
+          'startPaymentProcess called with payment method: ${store.state.cartState.selectedPaymentMethod?.name ?? 'UNKNOWN'}');
       if (store.state.cartState.selectedPaymentMethod == PaymentMethod.stripe) {
         unawaited(
           Analytics.track(
@@ -2377,13 +2405,15 @@ ThunkAction<AppState> startPaymentProcess({
           SetIsLoadingHttpRequest(
             isLoading: false,
           ),
-        )
-        ..dispatch(
+        );
+      if (store.state.cartState.orderID.isNotEmpty) {
+        store.dispatch(
           cancelOrder(
             orderId: int.parse(store.state.cartState.orderID),
             senderWalletAddress: store.state.userState.walletAddress,
           ),
         );
+      }
       log.error(
         'ERROR - sendOrderObject $e',
         stackTrace: s,
@@ -2889,6 +2919,7 @@ ThunkAction<AppState> setDeliveryAddress({
       final address = store.state.userState.listOfDeliveryAddresses
           .where((element) => element.internalID == id)
           .first;
+      log.verbose('Set delivery address with postcode: "${address.outcode}"');
       store.dispatch(UpdateSelectedDeliveryAddress(address));
     } catch (e, s) {
       log.error('ERROR - setDeliveryAddress $e');

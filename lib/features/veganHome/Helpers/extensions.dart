@@ -83,7 +83,8 @@ extension StackTraceFilter on StackTrace {
 
   StackTrace ignore(Pattern ignoreLinesContaining) {
     return StackTraceFilter.fromStackLines(
-        filterCallStack(dontMatch: ignoreLinesContaining),);
+      filterCallStack(dontMatch: ignoreLinesContaining),
+    );
   }
 
   static StackTrace fromStackLines(List<StackLine> stackLines) {
@@ -95,15 +96,19 @@ extension StackTraceFilter on StackTrace {
     );
   }
 
-  /*
-  * lineNumber is the line in the stack to get, first line would be 1
-  */
-  StackLine? getStackLine({required int lineNumber}) {
-    final lineNumberBaseZero = math.max(lineNumber.abs(), 1) - 1;
+  /// lineNumber is the line in the stack to get, first line would be 1
+  StackLine? getStackLine({required int lineNumberBase1}) {
+    final lineNumberBaseZero = math.max(lineNumberBase1.abs(), 1) - 1;
     return _filterStackTrace(
       this,
     ).elementAtSafe(lineNumberBaseZero);
   }
+
+  /// Current function's name
+  String currentFunction([String fallbackName = '']) => getStackLine(lineNumberBase1: 1)?.functionName ?? '';
+  
+  /// Current function's line number
+  String currentLineNumber() => getStackLine(lineNumberBase1: 1)?.lineNumber ?? '';
 }
 
 extension CapitalizeString on String {
