@@ -1745,6 +1745,7 @@ ThunkAction<AppState> sendOrderObject<T extends CreateOrderForFulfilment>({
       }
 
       if (result == null) {
+        log.error('createOrder call returned null', stackTrace: StackTrace.current);
         store
           ..dispatch(
             SetIsLoadingHttpRequest(
@@ -2070,7 +2071,8 @@ ThunkAction<AppState> startPaymentProcess({
           return;
         }
         final orderId = int.parse(store.state.cartState.orderID);
-        await stripeService
+        await (stripeService
+              ..setTestMode(isTester: store.state.userState.isTester))
             .handleStripeCardPayment(
           recipientWalletAddress: store.state.cartState.restaurantWalletAddress,
           senderWalletAddress: store.state.userState.walletAddress,
@@ -2162,7 +2164,8 @@ ThunkAction<AppState> startPaymentProcess({
             );
           return;
         }
-        await stripeService
+        await (stripeService
+              ..setTestMode(isTester: store.state.userState.isTester))
             .handleStripeCardPayment(
           recipientWalletAddress: store.state.cartState.restaurantWalletAddress,
           senderWalletAddress: store.state.userState.walletAddress,
@@ -2272,7 +2275,8 @@ ThunkAction<AppState> startPaymentProcess({
             );
           return;
         }
-        await stripeService
+        await (stripeService
+              ..setTestMode(isTester: store.state.userState.isTester))
             .handleApplePay(
           recipientWalletAddress: store.state.cartState.restaurantWalletAddress,
           senderWalletAddress: store.state.userState.walletAddress,
@@ -2380,7 +2384,8 @@ ThunkAction<AppState> startPaymentProcess({
             );
           return;
         }
-        await stripeService
+        await (stripeService
+              ..setTestMode(isTester: store.state.userState.isTester))
             .handleApplePay(
           recipientWalletAddress: store.state.cartState.restaurantWalletAddress,
           senderWalletAddress: store.state.userState.walletAddress,
@@ -2514,7 +2519,8 @@ ThunkAction<AppState> startPeeplPayProcess() {
         store.dispatch(startTokenPaymentToRestaurant());
       } else {
         // ! This is a topup call
-        await stripeService
+        await (stripeService
+              ..setTestMode(isTester: store.state.userState.isTester))
             .handleStripeTopupForMintingCryptoByCard(
           recipientWalletAddress: store.state.userState.walletAddress,
           senderWalletAddress: store.state.userState.walletAddress,

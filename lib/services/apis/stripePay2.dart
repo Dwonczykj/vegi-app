@@ -24,15 +24,23 @@ class StripePayService {
   Future<StripePaymentIntentCheck?> startPaymentIntentCheck({
     required String paymentIntentID,
     required String paymentIntentClientSecret,
+    bool isTester = false,
   }) async {
     try {
       final Response<dynamic> response = await peeplEatsService.dioGet(
         '/api/v1/payments/check-stripe-payment-intent/$paymentIntentID',
         sendWithAuthCreds: true,
         dontRoute: true,
-        // queryParameters: {
-        //   'client_secret': paymentIntentClientSecret,
-        // },
+        queryParameters: {
+          // 'client_secret': paymentIntentClientSecret,
+          'isTester': isTester,
+        },
+      );
+
+      final store = await reduxStore;
+      log.info(
+        'startPaymentIntentCheck called for ${isTester ? 'tester' : 'live'} user "${store.state.userState.email}" ',
+        stackTrace: StackTrace.current,
       );
 
       final Map<String, dynamic> result = response.data as Map<String, dynamic>;
@@ -59,18 +67,19 @@ class StripePayService {
         'Error: startPaymentIntentCheck $e',
         stackTrace: s,
       );
-      await Sentry.captureException(
-        e,
-        stackTrace: s,
-      );
       return null;
     }
   }
 
   Future<StripePaymentIntent?> createStripePaymentIntent({
     required num amount,
-    required String recipientWalletAddress, required String senderWalletAddress, required num orderId, required num accountId, String? stripeCustomerId,
+    required String recipientWalletAddress,
+    required String senderWalletAddress,
+    required num orderId,
+    required num accountId,
+    String? stripeCustomerId,
     String currency = 'gbp',
+    bool isTester = false,
   }) async {
     try {
       final Response<dynamic> response = await peeplEatsService.dioPost(
@@ -85,18 +94,24 @@ class StripePayService {
           'senderWalletAddress': senderWalletAddress,
           'orderId': orderId,
           'accountId': accountId,
+          'isTester': isTester,
         },
         sendWithAuthCreds: true,
         dontRoute: true,
+      );
+
+      final store = await reduxStore;
+      log.info(
+        'createStripePaymentIntent called for ${isTester ? 'tester' : 'live'} user "${store.state.userState.email}" ',
+        stackTrace: StackTrace.current,
       );
 
       return StripePaymentIntent.fromJson(
         response.data as Map<String, dynamic>,
       );
     } catch (e, s) {
-      log.info('Error createStripePaymentIntent $e');
-      await Sentry.captureException(
-        e,
+      log.info(
+        'Error createStripePaymentIntent $e',
         stackTrace: s,
       );
       return null;
@@ -107,6 +122,7 @@ class StripePayService {
     required int paymentType,
     required int amount,
     required String currency,
+    bool isTester = false,
   }) async {
     throw UnimplementedError();
   }

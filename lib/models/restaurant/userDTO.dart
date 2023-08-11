@@ -26,12 +26,13 @@ class UserDTO with _$UserDTO {
     required int marketingNotificationUtility,
     required String name,
     required bool isSuperAdmin,
+    required bool isTester,
     required VegiRole role,
     required String vendorRole,
     required String deliveryPartnerRole,
     @JsonKey(fromJson: fromJsonVendorDTO) required VendorDTO? vendor,
     @JsonKey(fromJson: fromJsonDeliveryPartnerDTO)
-        required DeliveryPartnerDTO? deliveryPartner,
+    required DeliveryPartnerDTO? deliveryPartner,
   }) = _UserDTO;
 
   const UserDTO._();

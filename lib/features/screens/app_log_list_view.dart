@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:vegan_liverpool/common/router/routes.gr.dart' as routes;
 import 'package:vegan_liverpool/features/shared/widgets/my_scaffold.dart';
 import 'package:equatable/equatable.dart';
 import 'package:redux/redux.dart';
@@ -9,6 +12,7 @@ import 'package:vegan_liverpool/features/veganHome/widgets/shared/appLogDetailDi
 import 'package:vegan_liverpool/features/veganHome/widgets/shared/shareDialog.dart';
 import 'package:vegan_liverpool/models/app_state.dart';
 import 'package:vegan_liverpool/models/log_event.dart';
+import 'package:vegan_liverpool/services.dart';
 
 class AppLogListView extends StatelessWidget {
   const AppLogListView({Key? key}) : super(key: key);
@@ -34,6 +38,13 @@ class AppLogListView extends StatelessWidget {
                 ),
               ),
             ),
+            IconButton(
+              icon: const Icon(
+                Icons.data_object,
+                color: Colors.purple,
+              ),
+              onPressed: () => rootRouter.push(const routes.AppStateViewScreen()),
+            ),
           ],
           body: SingleChildScrollView(
             child: ListView.builder(
@@ -47,10 +58,12 @@ class AppLogListView extends StatelessWidget {
                 return ListTile(
                   title: Text(item.message),
                   leading: Text(item.timestamp.formatToHHmmss),
-                  onTap: withHelloWorld(() => showDialog<Widget>(
-                    context: context,
-                    builder: (context) => AppLogDetailDialog(log: item),
-                  ),),
+                  onTap: withHelloWorld(
+                    () => showDialog<Widget>(
+                      context: context,
+                      builder: (context) => AppLogDetailDialog(log: item),
+                    ),
+                  ),
                 );
               },
             ),
@@ -64,17 +77,22 @@ class AppLogListView extends StatelessWidget {
 class AppLogListViewModel extends Equatable {
   const AppLogListViewModel({
     required this.logs,
+    required this.appState,
   });
 
   factory AppLogListViewModel.fromStore(Store<AppState> store) {
     return AppLogListViewModel(
       logs: store.state.appLogState.logs,
+      appState: store.state,
     );
   }
 
   final List<LogEvent> logs;
+  final AppState appState;
 
-  String get logsAsString => logs.map((e) => e.toString()).join('\n');
+  String get logsAsString => logs.reversed.map((e) => e.toString()).join('\n');
+
+  String get appStateAsString => jsonEncode(appState.toJson());
 
   @override
   List<Object?> get props => [

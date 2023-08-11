@@ -170,11 +170,7 @@ class FirebaseStrategy implements IOnBoardStrategy {
         phoneNumber: phoneNumber,
       ),
     );
-    if (phoneNumber.e164 ==
-        '${Secrets.testPhoneNumberCountryCode}${Secrets.testPhoneNumber}') {
-      log.warn(
-        'Faking send auth code from firebase login call using test details',
-      );
+    if (_isTestDetails(phoneNumber: phoneNumber)) {
       return codeSent('');
     }
     expectingSMSVerificationCode = true;
@@ -217,6 +213,14 @@ class FirebaseStrategy implements IOnBoardStrategy {
         firebaseStatus: FirebaseAuthenticationStatus.loading,
       ),
     );
+    if (store.state.userState.usingTestCredentials) {
+      store.dispatch(
+        SetUserAuthenticationStatus(
+          firebaseStatus: FirebaseAuthenticationStatus.authenticated,
+        ),
+      );
+      return null;
+    }
     AuthCredential? credentials;
     try {
       credentials = store.state.userState.firebaseCredentials;
@@ -312,8 +316,11 @@ class FirebaseStrategy implements IOnBoardStrategy {
       return credential;
     } on FirebaseAuthException catch (e, s) {
       await _catchFirebaseException(e, s);
-      store.dispatch(SignUpLoadingMessage(
-          message: 'Failed to authenticate with email credentials 😳',),);
+      store.dispatch(
+        SignUpLoadingMessage(
+          message: 'Failed to authenticate with email credentials 😳',
+        ),
+      );
     }
     return null;
   }
@@ -432,6 +439,19 @@ class FirebaseStrategy implements IOnBoardStrategy {
     }
   }
 
+  bool _isTestDetails({
+    required PhoneNumber phoneNumber,
+  }) {
+    if (Secrets.testPhoneNumberE164s.contains(phoneNumber.e164)) {
+      log.warn(
+        'Faking send auth code from firebase login call using test details',
+      );
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   Future<UserCredential?> _completeVerificationAndSigninToFirebaseWithCred(
     Store<AppState> store,
     AuthCredential credentials,
@@ -443,8 +463,10 @@ class FirebaseStrategy implements IOnBoardStrategy {
         credentials,
       );
     } on FirebaseAuthException catch (e, s) {
-      log.error(Exception('Error in verify phone number: $e'),
-          stackTrace: s,);
+      log.error(
+        Exception('Error in verify phone number: $e'),
+        stackTrace: s,
+      );
       await Analytics.track(
         eventName: AnalyticsEvents.verify,
         properties: {
@@ -653,7 +675,8 @@ class FirebaseStrategy implements IOnBoardStrategy {
     required String email,
   }) async {
     await firebaseAuth.sendPasswordResetEmail(
-        email: email.toLowerCase().trim(),);
+      email: email.toLowerCase().trim(),
+    );
   }
 
   @override
@@ -663,9 +686,14 @@ class FirebaseStrategy implements IOnBoardStrategy {
   }) async {
     email = email.toLowerCase().trim();
     final store = await reduxStore;
+    if (store.state.userState.usingTestCredentials) {
+      log.info('Not updating user with firebase as using test credentials');
+      return true;
+    }
     if (firebaseAuth.currentUser == null) {
       log.info(
-          'Not able to update email to "$email" on firebase as no firebase user exists yet.',);
+        'Not able to update email to "$email" on firebase as no firebase user exists yet.',
+      );
       return true;
     }
     final existingEmail =
@@ -678,7 +706,8 @@ class FirebaseStrategy implements IOnBoardStrategy {
           : <String>[];
       if (dummySigninMethods.isNotEmpty) {
         log.warn(
-            'Unable to change current user with email: $existingEmail to new email: $email because there is already another user registered to this email: $email',);
+          'Unable to change current user with email: $existingEmail to new email: $email because there is already another user registered to this email: $email',
+        );
         return false;
       }
       // !BUG this line just through as had unsuccesffuly tried to set email on previous attempt so store was out of sync with firebase...
@@ -699,7 +728,8 @@ class FirebaseStrategy implements IOnBoardStrategy {
       if (e.code == 'email-already-in-use') {
         // FirebaseAuth.instance.currentUser?.linkWithCredential(credential)
         log.warn(
-            'Unable to change current user with email: $existingEmail to new email: $email because there is already another user registered to this email: $email',);
+          'Unable to change current user with email: $existingEmail to new email: $email because there is already another user registered to this email: $email',
+        );
         if (!dontComplete) {
           store.dispatch(
             SignUpFailed(
@@ -820,7 +850,8 @@ class FirebaseStrategy implements IOnBoardStrategy {
         store.state.userState.firebaseAuthenticationStatus
             .isNewFailureStatus(FirebaseAuthenticationStatus.unauthenticated)) {
       log.warn(
-          'Failed to reauthenticate firebase as status: FirebaseAuthenticationStatus.[${store.state.userState.firebaseAuthenticationStatus.name}]',);
+        'Failed to reauthenticate firebase as status: FirebaseAuthenticationStatus.[${store.state.userState.firebaseAuthenticationStatus.name}]',
+      );
       return false;
     }
 
@@ -869,96 +900,97 @@ class FirebaseStrategy implements IOnBoardStrategy {
     throw Exception('Not implemented onboardStrategy.verifyRecaptchaToken()');
   }
 
-  @override
-  Future<LoggedInToVegiResult> loginToVegiWithPhone({
-    required Store<AppState> store,
-    required String phoneNumber,
-    required String firebaseSessionToken,
-  }) async {
-    try {
-      if (USE_FIREBASE_EMULATOR) {
-        log.warn(
-            'Will not attempt to login to vegi for now as we are using the firebase emulator and the ${Env.activeEnv} vegi backend server cannot sign verification codes. See https://github.com/firebase/firebase-tools/issues/2764',);
-        store.dispatch(
-          SetUserAuthenticationStatus(
-            vegiStatus: VegiAuthenticationStatus.failed,
-          ),
-        );
-        return LoggedInToVegiResult.failed;
-      }
-      if (store.state.userState.fuseAuthenticationStatus !=
-          FuseAuthenticationStatus.authenticated) {
-        log.warn(
-            'Should not be logging into vegi as fuse is not authenticated',);
-        return LoggedInToVegiResult.failed;
-      }
-      store.dispatch(
-        SetUserAuthenticationStatus(
-          vegiStatus: VegiAuthenticationStatus.loading,
-        ),
-      );
-      // * sets the session cookie on the service class instance.
-      final vegiSession = await peeplEatsService.loginWithPhone(
-        phoneNumber: phoneNumber,
-        firebaseSessionToken: firebaseSessionToken,
-      );
-      final userDetails = vegiSession.user;
-      if (vegiSession.sessionCookie.isNotEmpty) {
-        _complete(
-          store: store,
-          vegiStatus: VegiAuthenticationStatus.authenticated,
-        );
-        store.dispatch(
-          SignUpFailed(
-            error: null,
-          ),
-        );
-        if (store.state.userState.hasNotOnboarded) {
-          log.error(
-              'Should never have userState.hasNotOnboarded here. Please refactor',);
-        }
-        if (store.state.userState.isLoggedIn &&
-            store.state.userState.vegiAccountId != null) {
-          store.dispatch(getVegiWalletAccountDetails());
-        }
-        unawaited(
-          Analytics.track(
-            eventName: AnalyticsEvents.loginWithPhone,
-            properties: {
-              AnalyticsProps.status: AnalyticsProps.success,
-            },
-          ),
-        );
-      } else {
-        log.error('Could not login to vegi...');
-        _complete(
-          store: store,
-          vegiStatus: VegiAuthenticationStatus.failed,
-        );
-      }
-      return vegiSession.sessionCookie.isNotEmpty
-          ? LoggedInToVegiResult.success
-          : LoggedInToVegiResult.failedEmptySessionCookie;
-    } catch (err) {
-      _complete(
-        store: store,
-        firebaseStatus: FirebaseAuthenticationStatus.authenticated,
-        vegiStatus: VegiAuthenticationStatus.failed,
-      );
-      log
-        ..error(
-          err,
-          stackTrace: StackTrace.current,
-        )
-        ..error(err.toString());
-      store.dispatch(
-        SetFirebaseSessionToken(
-          firebaseSessionToken: null,
-        ),
-      );
-      return LoggedInToVegiResult.failed;
-    }
-  }
+  // Future<LoggedInToVegiResult> loginToVegiWithPhone({
+  //   required Store<AppState> store,
+  //   required String phoneNoCountry,
+  //   required int? phoneCountryCode,
+  //   required String firebaseSessionToken,
+  // }) async {
+  //   try {
+  //     if (USE_FIREBASE_EMULATOR) {
+  //       log.warn(
+  //           'Will not attempt to login to vegi for now as we are using the firebase emulator and the ${Env.activeEnv} vegi backend server cannot sign verification codes. See https://github.com/firebase/firebase-tools/issues/2764',);
+  //       store.dispatch(
+  //         SetUserAuthenticationStatus(
+  //           vegiStatus: VegiAuthenticationStatus.failed,
+  //         ),
+  //       );
+  //       return LoggedInToVegiResult.failed;
+  //     }
+  //     if (store.state.userState.fuseAuthenticationStatus !=
+  //         FuseAuthenticationStatus.authenticated) {
+  //       log.warn(
+  //           'Should not be logging into vegi as fuse is not authenticated',);
+  //       return LoggedInToVegiResult.failed;
+  //     }
+  //     store.dispatch(
+  //       SetUserAuthenticationStatus(
+  //         vegiStatus: VegiAuthenticationStatus.loading,
+  //       ),
+  //     );
+  //     // * sets the session cookie on the service class instance.
+  //     final vegiSession = await peeplEatsService.loginWithPhone(
+  //       phoneCountryCode: phoneCountryCode,
+  //       phoneNoCountry: phoneNoCountry,
+  //       firebaseSessionToken: firebaseSessionToken,
+  //     );
+  //     final userDetails = vegiSession.user;
+  //     if (vegiSession.sessionCookie.isNotEmpty) {
+  //       _complete(
+  //         store: store,
+  //         vegiStatus: VegiAuthenticationStatus.authenticated,
+  //       );
+  //       store.dispatch(
+  //         SignUpFailed(
+  //           error: null,
+  //         ),
+  //       );
+  //       if (store.state.userState.hasNotOnboarded) {
+  //         log.error(
+  //             'Should never have userState.hasNotOnboarded here. Please refactor',);
+  //       }
+  //       if (store.state.userState.isLoggedIn &&
+  //           store.state.userState.vegiAccountId != null) {
+  //         store.dispatch(getVegiWalletAccountDetails());
+  //       }
+  //       unawaited(
+  //         Analytics.track(
+  //           eventName: AnalyticsEvents.loginWithPhone,
+  //           properties: {
+  //             AnalyticsProps.status: AnalyticsProps.success,
+  //           },
+  //         ),
+  //       );
+  //     } else {
+  //       log.error('Could not login to vegi...');
+  //       _complete(
+  //         store: store,
+  //         vegiStatus: VegiAuthenticationStatus.failed,
+  //       );
+  //     }
+  //     return vegiSession.sessionCookie.isNotEmpty
+  //         ? LoggedInToVegiResult.success
+  //         : LoggedInToVegiResult.failedEmptySessionCookie;
+  //   } catch (err) {
+  //     _complete(
+  //       store: store,
+  //       firebaseStatus: FirebaseAuthenticationStatus.authenticated,
+  //       vegiStatus: VegiAuthenticationStatus.failed,
+  //     );
+  //     log
+  //       ..error(
+  //         err,
+  //         stackTrace: StackTrace.current,
+  //       )
+  //       ..error(err.toString());
+  //     store.dispatch(
+  //       SetFirebaseSessionToken(
+  //         firebaseSessionToken: null,
+  //       ),
+  //     );
+  //     return LoggedInToVegiResult.failed;
+  //   }
+  // }
 
   // @override
   // Future<LoggedInToVegiResult> loginToVegiWithEmail({

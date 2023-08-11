@@ -1,11 +1,13 @@
 import 'dart:io';
 
+import 'package:country_code_picker/country_code_picker.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http_parser/http_parser.dart';
 import 'package:injectable/injectable.dart';
 import 'package:mime/mime.dart';
+import 'package:phone_number/phone_number.dart';
 import 'package:uuid/uuid.dart';
 import 'package:vegan_liverpool/common/router/routes.gr.dart';
 import 'package:vegan_liverpool/constants/enums.dart';
@@ -76,11 +78,35 @@ class PeeplEatsService extends HttpService {
   String? _getResponseExitDescription(Response<dynamic> response) =>
       response.headers.value('X-Exit-Description');
 
-  bool responseHasErrorStatus(Response<dynamic> response) {
+  bool responseHasErrorStatus(
+    Response<dynamic> response, [
+    List<int> expectErrCodes = const [],
+  ]) {
     if (response.statusCode != null && response.statusCode! >= 400) {
-      log.error(
-        'Received a "exits.${_getResponseExitName(response)}" exit from sails vegi backend with message: "${_getResponseExitDescription(response)}"',
-      );
+      if (expectErrCodes.isNotEmpty &&
+          expectErrCodes.contains(response.statusCode)) {
+        // dont log but return true;
+        log.verbose(
+            'Received expected erroneous response: (status: ${response.statusMessage}) from sails vegi backend [${response.requestOptions.uri}]');
+        return true;
+      }
+      final responseExitName = _getResponseExitName(response);
+      if (responseExitName != null) {
+        log.error(
+          'Received a "exits.$responseExitName" exit (status: ${response.statusMessage}) from sails vegi backend [${response.requestOptions.uri}] with message: "${_getResponseExitDescription(response)}"',
+        );
+      } else if (response.extra.containsKey('message') &&
+          response.extra['message'] is String) {
+        if (!response.extra['message'].toString().contains('Stale session')) {
+          log.warn(
+              'Handling erroneous response [${response.requestOptions.uri}] with message: "${response.extra['message']}"');
+        }
+        return true;
+      } else {
+        log.error(
+          'Received an empty response (status: ${response.statusMessage}) from sails vegi backend [${response.requestOptions.uri}] with message: "${_getResponseExitDescription(response)}"',
+        );
+      }
       return true;
     }
     return false;
@@ -191,10 +217,17 @@ class PeeplEatsService extends HttpService {
   }
 
   Future<VegiSession> loginWithPhone({
-    required String phoneNumber,
+    required String phoneNoCountry,
+    required int? phoneCountryCode,
     required String firebaseSessionToken,
     bool rememberMe = true,
   }) async {
+    if (phoneCountryCode == null) {
+      log.error(
+        'Unable to login to vegi using a null country code with phone: "$phoneNoCountry"',
+        stackTrace: StackTrace.current,
+      );
+    }
     if (hasCookieStored) {
       //todo: Dont login again if have user details already and isCookieExpired is false...
       // if(await isCookieExpired()){
@@ -208,7 +241,8 @@ class PeeplEatsService extends HttpService {
         VegiBackendEndpoints.loginWithPhone,
         sendWithAuthCreds: false,
         data: {
-          'phoneNumber': phoneNumber,
+          'phoneNoCountry': phoneNoCountry,
+          'phoneCountryCode': phoneCountryCode,
           'firebaseSessionToken': firebaseSessionToken,
           'rememberMe': rememberMe
         },
@@ -248,6 +282,7 @@ class PeeplEatsService extends HttpService {
             SetUserRoleOnVegi(
               userRole: userDetails.role,
               isSuperAdmin: userDetails.isSuperAdmin,
+              isTester: userDetails.isTester,
             ),
           );
         if (userDetails.email != null) {
@@ -330,13 +365,14 @@ class PeeplEatsService extends HttpService {
           SetUserRoleOnVegi(
             userRole: userDetails.role,
             isSuperAdmin: userDetails.isSuperAdmin,
+            isTester: userDetails.isTester,
           ),
         );
       if (userDetails.phoneNoCountry.isNotEmpty &&
           userDetails.phoneCountryCode != 0 &&
           userDetails.phoneNoCountry.length > 1) {
         final phoneDetails = await getPhoneDetails(
-          countryCode: '+${userDetails.phoneCountryCode}',
+          countryCodeString: '+${userDetails.phoneCountryCode}',
           phoneNoCountry: userDetails.phoneNoCountry,
         );
         (await reduxStore).dispatch(
@@ -1881,6 +1917,7 @@ class PeeplEatsService extends HttpService {
             );
             break;
           default:
+            break;
         }
       },
     ).timeout(
@@ -1908,12 +1945,27 @@ class PeeplEatsService extends HttpService {
               orderCreationStatusMessage: 'Stripe failed',
             ),
           );
+          log.error('Failed to retrieve stripe from customerId');
           return null;
+        } else {
+          store.dispatch(
+            OrderCreationProcessStatusUpdate(
+              status: OrderCreationProcessStatus.sendOrderCallServerError,
+              orderCreationStatusMessage: response.data!['error']!.toString(),
+            ),
+          );
         }
       }
       if (response.extra.isNotEmpty &&
           response.extra.containsKey('errorCode')) {
         // * handled in the handleErrorCodeHandler above.
+        log.error(
+          'peeplEats.createOrder returning null as response.extra contains errorCode key',
+          additionalDetails: {
+            'response.extra': response.extra,
+          },
+          stackTrace: StackTrace.current,
+        );
         return null;
       }
       if (response.extra.isNotEmpty &&

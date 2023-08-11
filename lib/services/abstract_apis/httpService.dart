@@ -240,6 +240,7 @@ abstract class HttpService {
             'stackTrace': stackTrace.filterCallStack().pretty(),
           },
           statusCode: 401,
+          statusMessage: 'unauthorised',
           requestOptions: RequestOptions(path: '${error.response?.realUri}'),
         );
       }
@@ -278,6 +279,7 @@ abstract class HttpService {
               'stackTrace': stackTrace.filterCallStack().pretty(),
             },
             statusCode: 401,
+            statusMessage: 'unauthorised',
             requestOptions: RequestOptions(path: 'error.response?.realUri'),
           ),
         );
@@ -294,7 +296,8 @@ abstract class HttpService {
           'message': 'Stale session cookie possible caused by server reboot',
           'stackTrace': stackTrace.filterCallStack().pretty(),
         },
-        statusCode: 400,
+        statusCode: 401,
+        statusMessage: 'unauthorised',
         requestOptions:
             RequestOptions(path: '${dio.options.baseUrl}/unknown...'),
       );
@@ -316,6 +319,7 @@ abstract class HttpService {
             'stackTrace': stackTrace.filterCallStack().pretty(),
           },
           statusCode: 401,
+          statusMessage: 'unauthorised',
           requestOptions: RequestOptions(path: 'error.response?.realUri'),
         );
       }

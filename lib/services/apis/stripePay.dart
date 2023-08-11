@@ -30,11 +30,7 @@ class StripePayService {
 
       return result;
     } catch (e, s) {
-      log.info('Error: startPaymentIntentCheck $e');
-      await Sentry.captureException(
-        e,
-        stackTrace: s,
-      );
+      log.info('Error: startPaymentIntentCheck $e', stackTrace: s,);
       return {};
     }
   }
@@ -56,11 +52,7 @@ class StripePayService {
 
       return response.data['data']['paymentIntent']['clientSecret'] as String;
     } catch (e, s) {
-      log.info('Error createStripePaymentIntent $e');
-      await Sentry.captureException(
-        e,
-        stackTrace: s,
-      );
+      log.info('Error createStripePaymentIntent $e', stackTrace: s,);
       return e.toString();
     }
   }

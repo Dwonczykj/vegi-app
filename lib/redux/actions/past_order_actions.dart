@@ -201,11 +201,12 @@ void ongoingOrderCheck(Store<AppState> store) {
   final List<Order> newList = [];
   for (final Order element in store.state.pastOrderState.listOfOngoingOrders) {
     if (!shouldEndOngoing(element.timeSlot)) {
+      log.verbose('Ongoing order check for order: [${element.id}]');
       //check if the order end time slot has passed the current time.
       peeplEatsService.checkOrderStatus(element.orderID).then(
         (orderStatus) {
           //if it has not passed the current time, then check the status of the order
-          if (orderStatus.orderAcceptanceStatus !=
+          if (orderStatus.orderAcceptanceStatus.name !=
               element.orderAcceptanceStatus.name) {
             newList.add(
               //create a new element with status changed, add it to the list, and update the list state.

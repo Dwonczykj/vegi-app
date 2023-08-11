@@ -30,6 +30,7 @@ mixin _$UserDTO {
   int get marketingNotificationUtility => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
   bool get isSuperAdmin => throw _privateConstructorUsedError;
+  bool get isTester => throw _privateConstructorUsedError;
   VegiRole get role => throw _privateConstructorUsedError;
   String get vendorRole => throw _privateConstructorUsedError;
   String get deliveryPartnerRole => throw _privateConstructorUsedError;
@@ -59,6 +60,7 @@ abstract class $UserDTOCopyWith<$Res> {
       int marketingNotificationUtility,
       String name,
       bool isSuperAdmin,
+      bool isTester,
       VegiRole role,
       String vendorRole,
       String deliveryPartnerRole,
@@ -94,6 +96,7 @@ class _$UserDTOCopyWithImpl<$Res, $Val extends UserDTO>
     Object? marketingNotificationUtility = null,
     Object? name = null,
     Object? isSuperAdmin = null,
+    Object? isTester = null,
     Object? role = null,
     Object? vendorRole = null,
     Object? deliveryPartnerRole = null,
@@ -140,6 +143,10 @@ class _$UserDTOCopyWithImpl<$Res, $Val extends UserDTO>
       isSuperAdmin: null == isSuperAdmin
           ? _value.isSuperAdmin
           : isSuperAdmin // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isTester: null == isTester
+          ? _value.isTester
+          : isTester // ignore: cast_nullable_to_non_nullable
               as bool,
       role: null == role
           ? _value.role
@@ -207,6 +214,7 @@ abstract class _$$_UserDTOCopyWith<$Res> implements $UserDTOCopyWith<$Res> {
       int marketingNotificationUtility,
       String name,
       bool isSuperAdmin,
+      bool isTester,
       VegiRole role,
       String vendorRole,
       String deliveryPartnerRole,
@@ -241,6 +249,7 @@ class __$$_UserDTOCopyWithImpl<$Res>
     Object? marketingNotificationUtility = null,
     Object? name = null,
     Object? isSuperAdmin = null,
+    Object? isTester = null,
     Object? role = null,
     Object? vendorRole = null,
     Object? deliveryPartnerRole = null,
@@ -288,6 +297,10 @@ class __$$_UserDTOCopyWithImpl<$Res>
           ? _value.isSuperAdmin
           : isSuperAdmin // ignore: cast_nullable_to_non_nullable
               as bool,
+      isTester: null == isTester
+          ? _value.isTester
+          : isTester // ignore: cast_nullable_to_non_nullable
+              as bool,
       role: null == role
           ? _value.role
           : role // ignore: cast_nullable_to_non_nullable
@@ -327,6 +340,7 @@ class _$_UserDTO extends _UserDTO {
       required this.marketingNotificationUtility,
       required this.name,
       required this.isSuperAdmin,
+      required this.isTester,
       required this.role,
       required this.vendorRole,
       required this.deliveryPartnerRole,
@@ -360,6 +374,8 @@ class _$_UserDTO extends _UserDTO {
   @override
   final bool isSuperAdmin;
   @override
+  final bool isTester;
+  @override
   final VegiRole role;
   @override
   final String vendorRole;
@@ -374,7 +390,7 @@ class _$_UserDTO extends _UserDTO {
 
   @override
   String toString() {
-    return 'UserDTO(id: $id, email: $email, phoneNoCountry: $phoneNoCountry, phoneCountryCode: $phoneCountryCode, marketingEmailContactAllowed: $marketingEmailContactAllowed, marketingPhoneContactAllowed: $marketingPhoneContactAllowed, marketingPushContactAllowed: $marketingPushContactAllowed, marketingNotificationUtility: $marketingNotificationUtility, name: $name, isSuperAdmin: $isSuperAdmin, role: $role, vendorRole: $vendorRole, deliveryPartnerRole: $deliveryPartnerRole, vendor: $vendor, deliveryPartner: $deliveryPartner)';
+    return 'UserDTO(id: $id, email: $email, phoneNoCountry: $phoneNoCountry, phoneCountryCode: $phoneCountryCode, marketingEmailContactAllowed: $marketingEmailContactAllowed, marketingPhoneContactAllowed: $marketingPhoneContactAllowed, marketingPushContactAllowed: $marketingPushContactAllowed, marketingNotificationUtility: $marketingNotificationUtility, name: $name, isSuperAdmin: $isSuperAdmin, isTester: $isTester, role: $role, vendorRole: $vendorRole, deliveryPartnerRole: $deliveryPartnerRole, vendor: $vendor, deliveryPartner: $deliveryPartner)';
   }
 
   @override
@@ -407,6 +423,8 @@ class _$_UserDTO extends _UserDTO {
             (identical(other.name, name) || other.name == name) &&
             (identical(other.isSuperAdmin, isSuperAdmin) ||
                 other.isSuperAdmin == isSuperAdmin) &&
+            (identical(other.isTester, isTester) ||
+                other.isTester == isTester) &&
             (identical(other.role, role) || other.role == role) &&
             (identical(other.vendorRole, vendorRole) ||
                 other.vendorRole == vendorRole) &&
@@ -431,6 +449,7 @@ class _$_UserDTO extends _UserDTO {
       marketingNotificationUtility,
       name,
       isSuperAdmin,
+      isTester,
       role,
       vendorRole,
       deliveryPartnerRole,
@@ -463,6 +482,7 @@ abstract class _UserDTO extends UserDTO {
       required final int marketingNotificationUtility,
       required final String name,
       required final bool isSuperAdmin,
+      required final bool isTester,
       required final VegiRole role,
       required final String vendorRole,
       required final String deliveryPartnerRole,
@@ -494,6 +514,8 @@ abstract class _UserDTO extends UserDTO {
   String get name;
   @override
   bool get isSuperAdmin;
+  @override
+  bool get isTester;
   @override
   VegiRole get role;
   @override

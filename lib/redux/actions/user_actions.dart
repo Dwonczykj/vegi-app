@@ -381,6 +381,15 @@ class SetPhoneNumberSuccess {
       'phoneNumber: ${phoneNumber.e164}, displayName: $displayName, email: $email';
 }
 
+class ResetPhoneNumber {
+  ResetPhoneNumber();
+
+  @override
+  String toString() {
+    return 'ResetPhoneNumber()';
+  }
+}
+
 class LoginRequestSuccess {
   LoginRequestSuccess({
     required this.countryCode,
@@ -518,12 +527,15 @@ class SetUserRoleOnVegi {
   SetUserRoleOnVegi({
     required this.userRole,
     required this.isSuperAdmin,
+    required this.isTester,
   });
   VegiRole userRole;
   bool isSuperAdmin;
+  bool isTester;
 
   @override
-  String toString() => 'SetUserRoleOnVegi : userRole: $userRole';
+  String toString() =>
+      'SetUserRoleOnVegi : userRole: $userRole, isTester: $isTester, isSuperAdmin: $isSuperAdmin';
 }
 
 class SetUserVegiAccountIdSuccess {
@@ -766,66 +778,66 @@ ThunkAction<AppState> logoutRequest() {
   };
 }
 
-ThunkAction<AppState> updateEmailForWaitingListEntry({
-  required String email,
-  void Function(String)? onError,
-}) {
-  return (Store<AppState> store) async {
-    try {
-      store.dispatch(SetEmail(email.toLowerCase().trim()));
+// ThunkAction<AppState> updateEmailForWaitingListEntry({
+//   required String email,
+//   void Function(String)? onError,
+// }) {
+//   return (Store<AppState> store) async {
+//     try {
+//       store.dispatch(SetEmail(email.toLowerCase().trim()));
 
-      if (store.state.userState.waitingListEntryId == null) {
-        const warning =
-            "Can't update user email with vegi as no waiting list entry id is stored in state...";
-        log.error(warning);
-        // onError(warning);
-      } else {
-        final updatedEntry =
-            await peeplEatsService.updateEmailForWaitingListEntry(
-          email: email,
-          waitingListEntryId: store.state.userState.waitingListEntryId!,
-          onError: (errStr) {
-            log.error(errStr);
-            Analytics.track(
-              eventName: AnalyticsEvents.emailWLUpdateEmail,
-              properties: {
-                AnalyticsProps.status: AnalyticsProps.failed,
-                'error': errStr,
-              },
-            );
-            onError?.call(errStr);
-          },
-        );
-        if (updatedEntry != null) {
-          store
-            ..dispatch(
-              EmailWLRegistrationSuccess(
-                entry: updatedEntry,
-              ),
-            )
-            ..dispatch(
-              SetSubscribedToWaitingListUpdates(
-                updatedEntry: updatedEntry,
-              ),
-            );
-          if (updatedEntry.email.toLowerCase() == email.toLowerCase()) {
-            await onBoardStrategy.updateEmail(
-              email: email,
-            );
-          }
-        }
-      }
-    } catch (e, s) {
-      log.error(
-        'ERROR - updateEmailForWaitingListEntry $e',
-        stackTrace: s,
-      );
-      // onError(
-      //   'ERROR - updateEmailForWaitingListEntry $e',
-      // );
-    }
-  };
-}
+//       if (store.state.userState.waitingListEntryId == null) {
+//         const warning =
+//             "Can't update user email with vegi as no waiting list entry id is stored in state...";
+//         log.error(warning);
+//         // onError(warning);
+//       } else {
+//         final updatedEntry =
+//             await peeplEatsService.updateEmailForWaitingListEntry(
+//           email: email,
+//           waitingListEntryId: store.state.userState.waitingListEntryId!,
+//           onError: (errStr) {
+//             log.error(errStr);
+//             Analytics.track(
+//               eventName: AnalyticsEvents.emailWLUpdateEmail,
+//               properties: {
+//                 AnalyticsProps.status: AnalyticsProps.failed,
+//                 'error': errStr,
+//               },
+//             );
+//             onError?.call(errStr);
+//           },
+//         );
+//         if (updatedEntry != null) {
+//           store
+//             ..dispatch(
+//               EmailWLRegistrationSuccess(
+//                 entry: updatedEntry,
+//               ),
+//             )
+//             ..dispatch(
+//               SetSubscribedToWaitingListUpdates(
+//                 updatedEntry: updatedEntry,
+//               ),
+//             );
+//           if (updatedEntry.email.toLowerCase() == email.toLowerCase()) {
+//             await onBoardStrategy.updateEmail(
+//               email: email,
+//             );
+//           }
+//         }
+//       }
+//     } catch (e, s) {
+//       log.error(
+//         'ERROR - updateEmailForWaitingListEntry $e',
+//         stackTrace: s,
+//       );
+//       // onError(
+//       //   'ERROR - updateEmailForWaitingListEntry $e',
+//       // );
+//     }
+//   };
+// }
 
 ThunkAction<AppState> updateEmail({
   required String email,
@@ -856,9 +868,11 @@ ThunkAction<AppState> updateEmail({
       if (errMsg != null) {
         // onError?.call(errMsg);
         if (errMsg == 'bad email passed') {
-          store.dispatch(SignUpFailed(
-              error:
-                  SignUpErrorDetails(title: 'Bad email format', message: ''),),);
+          store.dispatch(
+            SignUpFailed(
+              error: SignUpErrorDetails(title: 'Bad email format', message: ''),
+            ),
+          );
         }
         log.info(
           errMsg,
@@ -866,7 +880,8 @@ ThunkAction<AppState> updateEmail({
         );
         store
           ..dispatch(
-              SignUpLoadingMessage(message: 'Reverting Email as $errMsg.'),)
+            SignUpLoadingMessage(message: 'Reverting Email as $errMsg.'),
+          )
           ..dispatch(SetEmail(oldEmail));
         onError?.call(
           // 'Unable to update users email as another user has that email. Please check if you have previously registered with a different number.',
@@ -1027,7 +1042,8 @@ ThunkAction<AppState> updateAppNeededNotificationSeen() {
 }
 
 ThunkAction<AppState> fetchPositionInWaitingListQueue({
-  required void Function(String) errorHandler, void Function()? successHandler,
+  required void Function(String) errorHandler,
+  void Function()? successHandler,
 }) {
   return (Store<AppState> store) async {
     try {
@@ -1223,6 +1239,14 @@ ThunkAction<AppState> getUserDetails({
 }) {
   return (Store<AppState> store) async {
     try {
+      if (store.state.userState.email.isEmpty) {
+        log.error(
+          'ERROR - getUserDetails - no email set on state so will not fetch user details',
+          stackTrace: StackTrace.current,
+        );
+        onFailed?.call();
+        return;
+      }
       final vegiUser = await peeplEatsService.getUserDetails(
         store.state.userState.email,
         store.state.userState.phoneNumberNoCountry,
@@ -1242,6 +1266,7 @@ ThunkAction<AppState> getUserDetails({
             SetUserRoleOnVegi(
               userRole: vegiUser.role,
               isSuperAdmin: vegiUser.isSuperAdmin,
+              isTester: vegiUser.isTester,
             ),
           )
           ..dispatch(
@@ -1277,6 +1302,7 @@ ThunkAction<AppState> setUserDetails({
         SetUserRoleOnVegi(
           userRole: vegiUser.role,
           isSuperAdmin: vegiUser.isSuperAdmin,
+          isTester: vegiUser.isTester,
         ),
       )
       ..dispatch(
@@ -1567,8 +1593,7 @@ ThunkAction<AppState> identifyCall({String? wallet}) {
 Future<void> updateFirebaseCurrentUser(
   Future<void> Function({
     required User firebaseUser,
-  })
-      userUpdateCallback,
+  }) userUpdateCallback,
 ) async {
   if (FirebaseAuth.instance.currentUser != null) {
     await userUpdateCallback(
@@ -1740,7 +1765,8 @@ ThunkAction<AppState> updateUserAvatarCall(
   return (Store<AppState> store) async {
     if (store.state.userState.vegiAccountId == null) {
       log.error(
-          'No Account is set on vegi for user. Please login and retrieve account details first.',);
+        'No Account is set on vegi for user. Please login and retrieve account details first.',
+      );
       store.dispatch(
         SetIsLoadingHttpRequest(
           isLoading: false,

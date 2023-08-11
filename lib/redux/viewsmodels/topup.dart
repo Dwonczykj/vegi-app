@@ -36,7 +36,7 @@ class TopUpViewModel extends Equatable {
               stackTrace: StackTrace.current, // from catch (e, s)
             );
           }
-          await stripeService.handleApplePay(
+          await (stripeService..setTestMode(isTester: store.state.userState.isTester)).handleApplePay(
             recipientWalletAddress: store.state.userState.walletAddress,
             senderWalletAddress: store.state.userState.walletAddress,
             orderId: num.parse(store.state.cartState.orderID),

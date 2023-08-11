@@ -11,7 +11,8 @@ import 'package:vegan_liverpool/utils/constants.dart';
 
 class BillInvoiceCard extends StatelessWidget {
   const BillInvoiceCard({
-    required this.order, Key? key,
+    required this.order,
+    Key? key,
   }) : super(key: key);
 
   final Order order;
@@ -113,7 +114,7 @@ class BillInvoiceCard extends StatelessWidget {
                       // ),
                       const Spacer(),
                       Text(
-                        '${order.rewardsEarnedInPPLFormatted} ',
+                        '${order.rewardsEarnedInPPLFormatted} 🟢',
                         style: const TextStyle(
                           fontWeight: FontWeight.w700,
                           fontSize: 16,

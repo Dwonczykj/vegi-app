@@ -187,6 +187,7 @@ class UserState with _$UserState {
     @Default(null) String? stripeCustomerId,
     @Default(null) int? vegiAccountId,
     @Default(null) int? vegiUserId,
+    @Default(false) bool isTester,
     @Default(false) bool isVegiSuperAdmin,
     @Default(VegiRole.consumer) VegiRole userVegiRole,
     @Default(null) int? positionInWaitingList,
@@ -248,7 +249,7 @@ class UserState with _$UserState {
 
   bool get usingTestCredentials =>
       countryCode == Secrets.testPhoneNumberCountryCode &&
-      phoneNumberNoCountry == Secrets.testPhoneNumber &&
+      Secrets.testPhoneNumbers.contains(phoneNumberNoCountry) &&
       firebaseSessionToken == Secrets.testFirebaseSessionToken;
 
   bool get hasOnboarded =>

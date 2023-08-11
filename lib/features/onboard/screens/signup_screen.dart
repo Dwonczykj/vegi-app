@@ -405,46 +405,17 @@ class _SignUpScreenState extends State<SignUpScreen> {
     required MainScreenViewModel viewmodel,
   }) async {
     viewmodel.setLoading(true);
-    // // * short circuit for test phone details
-    // if(countryCode.dialCode == Secrets.testPhoneNumberCountryCode && phoneController.text == Secrets.testPhoneNumber){
-    //   viewmodel.setPhoneNumber(
-    //     countryCode: countryCode,
-    //     phoneNumber: Secrets.testPhoneNumber,
-    //   );
-
-    //   viewmodel.signup(
-    //     countryCode: countryCode,
-    //     phoneNumber: Secrets.testPhoneNumber,
-    //   );
-    //   return null;
-    // }
     final String phoneNumber = '${countryCode.dialCode}${phoneController.text}';
-    // setState(() {
-    //   isPreloading = true;
-    // });
-    PhoneNumber? value;
-    try {
-      value = await phoneNumberUtil.parse(
-        phoneNumber,
-      );
-    } catch (e) {
-      // do nothing and try again....
-    }
-    try {
-      value ??= await PhoneNumberUtil().parse(
-        phoneController.text,
-        regionCode: countryCode.code,
-      );
-    } on Exception catch (e, s) {
-      // setState(() {
-      //   isPreloading = false;
-      // });
+    var value = await parsePhoneDetails(
+      countryCode: countryCode,
+      phoneNoCountry: phoneController.text,
+    );
+    final dummyCountryCodeDontUse = await parseCountryCode(
+      countryCode: countryCode.code ?? 'GB',
+    );
+    if (value == null) {
       viewmodel.setLoading(false);
-      log.error(
-        e,
-        stackTrace: s,
-      );
-      return e;
+      return null;
     }
 
     viewmodel.setPhoneNumber(

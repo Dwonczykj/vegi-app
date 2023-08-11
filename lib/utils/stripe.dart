@@ -38,14 +38,18 @@ class StripeCustomResponse {
 }
 
 @lazySingleton
-class StripeService {
+class StripeService extends IStripeService with _StripeServiceMixin {
+  @override
   final Stripe instance = Stripe.instance;
 
+  @override
+  bool useTest =
+      (Env.isDev || Env.isTest || Env.isQA) && STRIPE_LIVEMODE != 'true';
+
+  @override
   void init() {
     Stripe.publishableKey =
-        (Env.isDev || Env.isTest || Env.isQA) && STRIPE_LIVEMODE != 'true'
-            ? dotenv.env['STRIPE_API_KEY_TEST']!
-            : dotenv.env['STRIPE_API_KEY_LIVE']!;
+        useTest ? Secrets.STRIPE_API_KEY_TEST : Secrets.STRIPE_API_KEY_LIVE;
     // if (Stripe.publishableKey.contains('live')) {
     //   final e = Exception('Stripe Instance not ready for production usage.');
     //   Sentry.captureException(
@@ -55,9 +59,94 @@ class StripeService {
     //   );
     //   throw e;
     // }
-    Stripe.merchantIdentifier = 'merchant.com.vegi';
+    Stripe.merchantIdentifier =
+        useTest ? 'testmerchant.com.vegi' : 'merchant.com.vegi';
   }
 
+  void setTestMode({required bool isTester}) {
+    if (isTester ||
+        ((Env.isDev || Env.isTest || Env.isQA) && STRIPE_LIVEMODE != 'true')) {
+      useTest = true;
+      Stripe.publishableKey = Secrets.STRIPE_API_KEY_TEST;
+    } else {
+      useTest = false;
+      Stripe.publishableKey = Secrets.STRIPE_API_KEY_LIVE;
+    }
+  }
+}
+
+@lazySingleton
+// class StripeTESTService with _StripeServiceMixin implements IStripeService {
+class StripeTESTService extends IStripeService with _StripeServiceMixin {
+  @override
+  final Stripe instance = Stripe.instance;
+
+  @override
+  final bool useTest = true;
+
+  @override
+  void init() {
+    Stripe.publishableKey = Secrets.STRIPE_API_KEY_TEST;
+    Stripe.merchantIdentifier = 'testmerchant.com.vegi';
+  }
+}
+
+abstract class IStripeService {
+  abstract final Stripe instance;
+  abstract final bool useTest;
+  void init();
+
+  Future<bool> handleStripeTopupForMintingCryptoByCard({
+    required String recipientWalletAddress,
+    required String senderWalletAddress,
+    required int orderId,
+    required int accountId,
+    required String stripeCustomerId,
+    required Money amount,
+    required bool shouldPushToHome,
+    required Store<AppState> store,
+  });
+
+  Future<bool> handleStripeCardPayment({
+    required String recipientWalletAddress,
+    required String senderWalletAddress,
+    required int orderId,
+    required int accountId,
+    required String paymentIntentClientSecret,
+    required String stripeCustomerId,
+    required Money amount,
+    required bool shouldPushToHome,
+    required Store<AppState> store,
+  });
+
+  Future<bool> handleApplePay({
+    required String productName,
+    required String recipientWalletAddress,
+    required String senderWalletAddress,
+    required num orderId,
+    required num accountId,
+    required String? stripeCustomerId,
+    required String paymentIntentClientSecret,
+    required Money amount,
+    required Store<AppState> store,
+    required bool shouldPushToHome,
+  });
+
+  Future<bool> handleGooglePay({
+    required String productName,
+    required String recipientWalletAddress,
+    required String senderWalletAddress,
+    required num orderId,
+    required num accountId,
+    required String? stripeCustomerId,
+    required String paymentIntentClientSecret,
+    required Money amount,
+    required Store<AppState> store,
+    required bool shouldPushToHome,
+  });
+}
+
+mixin _StripeServiceMixin on IStripeService {
   Future<bool> _handleStripeCardPaymentFlow({
     required Store<AppState> store,
     required StripePaymentIntentInternal paymentIntentClientSecret,
@@ -68,6 +157,10 @@ class StripeService {
     required int orderId,
     required int accountId,
   }) async {
+    log.verbose(
+      '_handleStripeCardPaymentFlow called on $this using ${useTest ? 'test' : 'live'} keys',
+      stackTrace: StackTrace.current,
+    );
     // ~ https://docs.page/flutter-stripe/flutter_stripe/sheet#5-test-the-integration
     final dynamicUrl = '$VEGI_DYNAMIC_APP_URL${rootRouter.currentUrl}';
 
@@ -334,6 +427,7 @@ class StripeService {
     return true;
   }
 
+  @override
   Future<bool> handleStripeTopupForMintingCryptoByCard({
     required String recipientWalletAddress,
     required String senderWalletAddress,
@@ -344,6 +438,10 @@ class StripeService {
     required bool shouldPushToHome,
     required Store<AppState> store,
   }) async {
+    log.verbose(
+      'handleStripeTopupForMintingCryptoByCard called on $this using ${useTest ? 'test' : 'live'} keys',
+      stackTrace: StackTrace.current,
+    );
     try {
       final currency = amount.currency;
       final paymentIntentClientSecret =
@@ -356,12 +454,12 @@ class StripeService {
         orderId: orderId,
         accountId: accountId,
         stripeCustomerId: stripeCustomerId,
+        isTester: useTest,
       );
       if (paymentIntentClientSecret == null) {
-        log.error('Unable to create payment intent from $stripePayService');
-        await Sentry.captureException(
-          Exception('Unable to create payment intent from $stripePayService'),
-          stackTrace: StackTrace.current, // from catch (err, s)
+        log.error(
+          'Unable to create payment intent from $stripePayService',
+          stackTrace: StackTrace.current,
         );
         store.dispatch(
           StripePaymentStatusUpdate(
@@ -370,11 +468,8 @@ class StripeService {
         );
         return false;
       } else if (currency != Currency.GBP && currency != Currency.GBPx) {
-        log.error('Unable to use stripe for currency: $currency');
-        await Sentry.captureException(
-          Exception('Unable to use stripe for currency: $currency'),
-          stackTrace: StackTrace.current, // from catch (err, s)
-        );
+        log.error('Unable to use stripe for currency: $currency',
+            stackTrace: StackTrace.current);
         store.dispatch(
           StripePaymentStatusUpdate(
             status: StripePaymentStatus.paymentFailed,
@@ -431,6 +526,7 @@ class StripeService {
     }
   }
 
+  @override
   Future<bool> handleStripeCardPayment({
     required String recipientWalletAddress,
     required String senderWalletAddress,
@@ -442,6 +538,10 @@ class StripeService {
     required bool shouldPushToHome,
     required Store<AppState> store,
   }) async {
+    log.verbose(
+      'handleStripeCardPayment called on $this using ${useTest ? 'test' : 'live'} keys',
+      stackTrace: StackTrace.current,
+    );
     try {
       store.dispatch(
         StripePaymentStatusUpdate(
@@ -454,6 +554,7 @@ class StripeService {
       final paymentIntent = await stripePayService.startPaymentIntentCheck(
         paymentIntentID: store.state.cartState.paymentIntentID,
         paymentIntentClientSecret: paymentIntentClientSecret,
+        isTester: useTest,
       );
 
       if (paymentIntent == null) {
@@ -601,6 +702,7 @@ class StripeService {
     }
   }
 
+  @override
   Future<bool> handleApplePay({
     required String productName,
     required String recipientWalletAddress,
@@ -613,6 +715,10 @@ class StripeService {
     required Store<AppState> store,
     required bool shouldPushToHome,
   }) async {
+    log.verbose(
+      'handleApplePay called on $this using ${useTest ? 'test' : 'live'} keys',
+      stackTrace: StackTrace.current,
+    );
     try {
       store.dispatch(
         StripePaymentStatusUpdate(
@@ -631,6 +737,7 @@ class StripeService {
           orderId: orderId,
           accountId: accountId,
           stripeCustomerId: stripeCustomerId,
+          isTester: useTest,
         );
         if (paymentIntentClientSecret == null) {
           log.error('Unable to create payment intent from $stripePayService');
@@ -649,12 +756,6 @@ class StripeService {
         } else if (currency != Currency.GBP && currency != Currency.GBPx) {
           log.error(
             'Unable to use apple pay via stripe for currency: $currency',
-          );
-          await Sentry.captureException(
-            Exception(
-              'Unable to use apple pay via stripe for currency: $currency',
-            ),
-            stackTrace: StackTrace.current, // from catch (err, s)
           );
           store.dispatch(
             StripePaymentStatusUpdate(
@@ -776,6 +877,7 @@ class StripeService {
     }
   }
 
+  @override
   Future<bool> handleGooglePay({
     required String productName,
     required String recipientWalletAddress,
@@ -788,6 +890,10 @@ class StripeService {
     required Store<AppState> store,
     required bool shouldPushToHome,
   }) async {
+    log.verbose(
+      'handleGooglePay called on $this',
+      stackTrace: StackTrace.current,
+    );
     try {
       store.dispatch(
         StripePaymentStatusUpdate(
@@ -805,6 +911,7 @@ class StripeService {
           orderId: orderId,
           accountId: accountId,
           stripeCustomerId: stripeCustomerId,
+          isTester: useTest,
         );
         if (paymentIntentClientSecret == null) {
           log.error('Unable to create payment intent from $stripePayService');

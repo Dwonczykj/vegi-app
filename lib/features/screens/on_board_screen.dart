@@ -31,15 +31,28 @@ class _OnBoardScreenState extends State<OnBoardScreen>
 
   final double _bottomRowOpacity = 1;
 
+  int _currentPageNumber = 0;
+
+  void _listenPageMoved() {
+    setState(() {
+      _currentPageNumber = _pageController.positions.isNotEmpty
+          ? _pageController.page?.round() ?? 0
+          : 0;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
     _pageController = PageController();
+    _pageController.addListener(_listenPageMoved);
   }
 
   @override
   void dispose() {
-    _pageController.dispose();
+    _pageController
+      ..removeListener(_listenPageMoved)
+      ..dispose();
     super.dispose();
   }
 
@@ -191,6 +204,10 @@ class _OnBoardScreenState extends State<OnBoardScreen>
               tween: tween, // Pass in tween
               duration: tween.duration, // Obtain duration
               builder: (_, Movie value, child) {
+                // final hideLeftButton = _currentPageNumber == 0;
+                // log.verbose(
+                //   'Build OnBoardScreen widget state with leftButton ${hideLeftButton ? 'hidden' : 'displayed'} at page: $_currentPageNumber',
+                // );
                 return ColoredBox(
                   color: _bottomRowOpacity > 0
                       ? value.get(screenColor)
@@ -232,9 +249,7 @@ class _OnBoardScreenState extends State<OnBoardScreen>
                                       context,
                                       isPointingRight: false,
                                       onTap: previousPage,
-                                      hide: _pageController
-                                              .positions.isNotEmpty &&
-                                          _pageController.page == 0,
+                                      hide: _currentPageNumber == 0,
                                     ),
                                     const Spacer(),
                                     // SizedBox(

@@ -1,6 +1,7 @@
 import 'package:another_flushbar/flushbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:vegan_liverpool/features/veganHome/Helpers/extensions.dart';
 import 'package:vegan_liverpool/generated/l10n.dart';
 
 import 'package:vegan_liverpool/utils/log/log.dart';
@@ -12,6 +13,13 @@ Future<void> showErrorSnack({
   EdgeInsets? margin,
   String? message,
 }) async {
+  log.error(
+    'Error snack shown: "$title"',
+    stackTrace: StackTrace.current.filterCallStackToStack(ignoreLastNCalls: 1),
+    additionalDetails: {
+      'message': message,
+    },
+  );
   if (!context.mounted) {
     return;
   }

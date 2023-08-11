@@ -106,6 +106,7 @@ _$_UserState _$$_UserStateFromJson(Map<String, dynamic> json) => _$_UserState(
       stripeCustomerId: json['stripeCustomerId'] as String? ?? null,
       vegiAccountId: json['vegiAccountId'] as int? ?? null,
       vegiUserId: json['vegiUserId'] as int? ?? null,
+      isTester: json['isTester'] as bool? ?? false,
       isVegiSuperAdmin: json['isVegiSuperAdmin'] as bool? ?? false,
       userVegiRole:
           $enumDecodeNullable(_$VegiRoleEnumMap, json['userVegiRole']) ??
@@ -180,6 +181,7 @@ Map<String, dynamic> _$$_UserStateToJson(_$_UserState instance) =>
       'stripeCustomerId': instance.stripeCustomerId,
       'vegiAccountId': instance.vegiAccountId,
       'vegiUserId': instance.vegiUserId,
+      'isTester': instance.isTester,
       'isVegiSuperAdmin': instance.isVegiSuperAdmin,
       'userVegiRole': _$VegiRoleEnumMap[instance.userVegiRole]!,
       'positionInWaitingList': instance.positionInWaitingList,

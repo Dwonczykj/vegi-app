@@ -78,10 +78,23 @@
             ]
         },
         {
-            "name": "vegi (PROD)",
+            "name": "vegi (PROD) for simulators [flutter=debug]",
             "request": "launch",
             "type": "dart",
             "flutterMode": "debug",
+            "program": "lib/main.dart",
+            "args": [
+                "--dart-define",
+                "ENV=production",
+                "--dart-define",
+                "USE_FIREBASE_EMULATOR=false"
+            ]
+        },
+        {
+            "name": "vegi (PROD)",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release",
             "program": "lib/main.dart",
             "args": [
                 "--dart-define",

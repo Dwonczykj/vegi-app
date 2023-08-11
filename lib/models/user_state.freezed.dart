@@ -120,6 +120,7 @@ mixin _$UserState {
   String? get stripeCustomerId => throw _privateConstructorUsedError;
   int? get vegiAccountId => throw _privateConstructorUsedError;
   int? get vegiUserId => throw _privateConstructorUsedError;
+  bool get isTester => throw _privateConstructorUsedError;
   bool get isVegiSuperAdmin => throw _privateConstructorUsedError;
   VegiRole get userVegiRole => throw _privateConstructorUsedError;
   int? get positionInWaitingList => throw _privateConstructorUsedError;
@@ -215,6 +216,7 @@ abstract class $UserStateCopyWith<$Res> {
       String? stripeCustomerId,
       int? vegiAccountId,
       int? vegiUserId,
+      bool isTester,
       bool isVegiSuperAdmin,
       VegiRole userVegiRole,
       int? positionInWaitingList,
@@ -302,6 +304,7 @@ class _$UserStateCopyWithImpl<$Res, $Val extends UserState>
     Object? stripeCustomerId = freezed,
     Object? vegiAccountId = freezed,
     Object? vegiUserId = freezed,
+    Object? isTester = null,
     Object? isVegiSuperAdmin = null,
     Object? userVegiRole = null,
     Object? positionInWaitingList = freezed,
@@ -563,6 +566,10 @@ class _$UserStateCopyWithImpl<$Res, $Val extends UserState>
           ? _value.vegiUserId
           : vegiUserId // ignore: cast_nullable_to_non_nullable
               as int?,
+      isTester: null == isTester
+          ? _value.isTester
+          : isTester // ignore: cast_nullable_to_non_nullable
+              as bool,
       isVegiSuperAdmin: null == isVegiSuperAdmin
           ? _value.isVegiSuperAdmin
           : isVegiSuperAdmin // ignore: cast_nullable_to_non_nullable
@@ -699,6 +706,7 @@ abstract class _$$_UserStateCopyWith<$Res> implements $UserStateCopyWith<$Res> {
       String? stripeCustomerId,
       int? vegiAccountId,
       int? vegiUserId,
+      bool isTester,
       bool isVegiSuperAdmin,
       VegiRole userVegiRole,
       int? positionInWaitingList,
@@ -786,6 +794,7 @@ class __$$_UserStateCopyWithImpl<$Res>
     Object? stripeCustomerId = freezed,
     Object? vegiAccountId = freezed,
     Object? vegiUserId = freezed,
+    Object? isTester = null,
     Object? isVegiSuperAdmin = null,
     Object? userVegiRole = null,
     Object? positionInWaitingList = freezed,
@@ -1047,6 +1056,10 @@ class __$$_UserStateCopyWithImpl<$Res>
           ? _value.vegiUserId
           : vegiUserId // ignore: cast_nullable_to_non_nullable
               as int?,
+      isTester: null == isTester
+          ? _value.isTester
+          : isTester // ignore: cast_nullable_to_non_nullable
+              as bool,
       isVegiSuperAdmin: null == isVegiSuperAdmin
           ? _value.isVegiSuperAdmin
           : isVegiSuperAdmin // ignore: cast_nullable_to_non_nullable
@@ -1157,6 +1170,7 @@ class _$_UserState extends _UserState with DiagnosticableTreeMixin {
       this.stripeCustomerId = null,
       this.vegiAccountId = null,
       this.vegiUserId = null,
+      this.isTester = false,
       this.isVegiSuperAdmin = false,
       this.userVegiRole = VegiRole.consumer,
       this.positionInWaitingList = null,
@@ -1371,6 +1385,9 @@ class _$_UserState extends _UserState with DiagnosticableTreeMixin {
   final int? vegiUserId;
   @override
   @JsonKey()
+  final bool isTester;
+  @override
+  @JsonKey()
   final bool isVegiSuperAdmin;
   @override
   @JsonKey()
@@ -1390,7 +1407,7 @@ class _$_UserState extends _UserState with DiagnosticableTreeMixin {
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'UserState(wcURI: $wcURI, walletModules: $walletModules, installedAt: $installedAt, isContactsSynced: $isContactsSynced, scrollToTop: $scrollToTop, walletAddress: $walletAddress, privateKey: $privateKey, fuseWalletCredentials: $fuseWalletCredentials, smartWallet: $smartWallet, fuseAuthenticationStatus: $fuseAuthenticationStatus, firebaseAuthenticationStatus: $firebaseAuthenticationStatus, vegiAuthenticationStatus: $vegiAuthenticationStatus, backup: $backup, networks: $networks, mnemonic: $mnemonic, pincode: $pincode, countryCode: $countryCode, phoneNumber: $phoneNumber, phoneNumberNoCountry: $phoneNumberNoCountry, warnSendDialogShowed: $warnSendDialogShowed, isoCode: $isoCode, jwtToken: $jwtToken, displayName: $displayName, avatarUrl: $avatarUrl, avatarTempFilePath: $avatarTempFilePath, preferredSignonMethod: $preferredSignonMethod, email: $email, password: $password, verificationId: $verificationId, verificationPassed: $verificationPassed, identifier: $identifier, deviceName: $deviceName, deviceOSName: $deviceOSName, deviceReleaseName: $deviceReleaseName, appUpdateNeeded: $appUpdateNeeded, appUpdateNextVersion: $appUpdateNextVersion, appUpdateNotificationSeenForBuildNumber: $appUpdateNotificationSeenForBuildNumber, syncedContacts: $syncedContacts, reverseContacts: $reverseContacts, currency: $currency, hasUpgrade: $hasUpgrade, authType: $authType, biometricallyAuthenticated: $biometricallyAuthenticated, locale: $locale, firebaseCredentials: $firebaseCredentials, firebaseSessionToken: $firebaseSessionToken, vegiSessionCookie: $vegiSessionCookie, listOfDeliveryAddresses: $listOfDeliveryAddresses, hasSavedSeedPhrase: $hasSavedSeedPhrase, useLiveLocation: $useLiveLocation, userIsVerified: $userIsVerified, userLocation: $userLocation, isUsingSimulator: $isUsingSimulator, isUsingIosSimulator: $isUsingIosSimulator, initialLoginDateTime: $initialLoginDateTime, showSeedPhraseBanner: $showSeedPhraseBanner, surveyQuestions: $surveyQuestions, surveyCompleted: $surveyCompleted, surveyEmailUsed: $surveyEmailUsed, isVendor: $isVendor, stripeCustomerId: $stripeCustomerId, vegiAccountId: $vegiAccountId, vegiUserId: $vegiUserId, isVegiSuperAdmin: $isVegiSuperAdmin, userVegiRole: $userVegiRole, positionInWaitingList: $positionInWaitingList, subscribedToWaitingListUpdates: $subscribedToWaitingListUpdates, waitingListEntryId: $waitingListEntryId, loginCounter: $loginCounter)';
+    return 'UserState(wcURI: $wcURI, walletModules: $walletModules, installedAt: $installedAt, isContactsSynced: $isContactsSynced, scrollToTop: $scrollToTop, walletAddress: $walletAddress, privateKey: $privateKey, fuseWalletCredentials: $fuseWalletCredentials, smartWallet: $smartWallet, fuseAuthenticationStatus: $fuseAuthenticationStatus, firebaseAuthenticationStatus: $firebaseAuthenticationStatus, vegiAuthenticationStatus: $vegiAuthenticationStatus, backup: $backup, networks: $networks, mnemonic: $mnemonic, pincode: $pincode, countryCode: $countryCode, phoneNumber: $phoneNumber, phoneNumberNoCountry: $phoneNumberNoCountry, warnSendDialogShowed: $warnSendDialogShowed, isoCode: $isoCode, jwtToken: $jwtToken, displayName: $displayName, avatarUrl: $avatarUrl, avatarTempFilePath: $avatarTempFilePath, preferredSignonMethod: $preferredSignonMethod, email: $email, password: $password, verificationId: $verificationId, verificationPassed: $verificationPassed, identifier: $identifier, deviceName: $deviceName, deviceOSName: $deviceOSName, deviceReleaseName: $deviceReleaseName, appUpdateNeeded: $appUpdateNeeded, appUpdateNextVersion: $appUpdateNextVersion, appUpdateNotificationSeenForBuildNumber: $appUpdateNotificationSeenForBuildNumber, syncedContacts: $syncedContacts, reverseContacts: $reverseContacts, currency: $currency, hasUpgrade: $hasUpgrade, authType: $authType, biometricallyAuthenticated: $biometricallyAuthenticated, locale: $locale, firebaseCredentials: $firebaseCredentials, firebaseSessionToken: $firebaseSessionToken, vegiSessionCookie: $vegiSessionCookie, listOfDeliveryAddresses: $listOfDeliveryAddresses, hasSavedSeedPhrase: $hasSavedSeedPhrase, useLiveLocation: $useLiveLocation, userIsVerified: $userIsVerified, userLocation: $userLocation, isUsingSimulator: $isUsingSimulator, isUsingIosSimulator: $isUsingIosSimulator, initialLoginDateTime: $initialLoginDateTime, showSeedPhraseBanner: $showSeedPhraseBanner, surveyQuestions: $surveyQuestions, surveyCompleted: $surveyCompleted, surveyEmailUsed: $surveyEmailUsed, isVendor: $isVendor, stripeCustomerId: $stripeCustomerId, vegiAccountId: $vegiAccountId, vegiUserId: $vegiUserId, isTester: $isTester, isVegiSuperAdmin: $isVegiSuperAdmin, userVegiRole: $userVegiRole, positionInWaitingList: $positionInWaitingList, subscribedToWaitingListUpdates: $subscribedToWaitingListUpdates, waitingListEntryId: $waitingListEntryId, loginCounter: $loginCounter)';
   }
 
   @override
@@ -1467,6 +1484,7 @@ class _$_UserState extends _UserState with DiagnosticableTreeMixin {
       ..add(DiagnosticsProperty('stripeCustomerId', stripeCustomerId))
       ..add(DiagnosticsProperty('vegiAccountId', vegiAccountId))
       ..add(DiagnosticsProperty('vegiUserId', vegiUserId))
+      ..add(DiagnosticsProperty('isTester', isTester))
       ..add(DiagnosticsProperty('isVegiSuperAdmin', isVegiSuperAdmin))
       ..add(DiagnosticsProperty('userVegiRole', userVegiRole))
       ..add(DiagnosticsProperty('positionInWaitingList', positionInWaitingList))
@@ -1572,6 +1590,7 @@ class _$_UserState extends _UserState with DiagnosticableTreeMixin {
             (identical(other.stripeCustomerId, stripeCustomerId) || other.stripeCustomerId == stripeCustomerId) &&
             (identical(other.vegiAccountId, vegiAccountId) || other.vegiAccountId == vegiAccountId) &&
             (identical(other.vegiUserId, vegiUserId) || other.vegiUserId == vegiUserId) &&
+            (identical(other.isTester, isTester) || other.isTester == isTester) &&
             (identical(other.isVegiSuperAdmin, isVegiSuperAdmin) || other.isVegiSuperAdmin == isVegiSuperAdmin) &&
             (identical(other.userVegiRole, userVegiRole) || other.userVegiRole == userVegiRole) &&
             (identical(other.positionInWaitingList, positionInWaitingList) || other.positionInWaitingList == positionInWaitingList) &&
@@ -1647,6 +1666,7 @@ class _$_UserState extends _UserState with DiagnosticableTreeMixin {
         stripeCustomerId,
         vegiAccountId,
         vegiUserId,
+        isTester,
         isVegiSuperAdmin,
         userVegiRole,
         positionInWaitingList,
@@ -1747,6 +1767,7 @@ abstract class _UserState extends UserState {
       final String? stripeCustomerId,
       final int? vegiAccountId,
       final int? vegiUserId,
+      final bool isTester,
       final bool isVegiSuperAdmin,
       final VegiRole userVegiRole,
       final int? positionInWaitingList,
@@ -1913,6 +1934,8 @@ abstract class _UserState extends UserState {
   int? get vegiAccountId;
   @override
   int? get vegiUserId;
+  @override
+  bool get isTester;
   @override
   bool get isVegiSuperAdmin;
   @override

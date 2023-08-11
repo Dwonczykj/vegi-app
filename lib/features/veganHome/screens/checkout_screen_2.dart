@@ -78,7 +78,7 @@ class CheckoutScreenPt2 extends StatelessWidget {
                   OrderCreationProcessStatus.sendOrderCallServerError) {
                 await showErrorSnack(
                   context: context,
-                  title: 'Our servers seem to be down',
+                  title: newViewModel.orderCreationStatusMessage,
                 );
               } else if (newViewModel.orderCreationProcessStatus ==
                   OrderCreationProcessStatus.sendOrderCallClientError) {
@@ -93,7 +93,7 @@ class CheckoutScreenPt2 extends StatelessWidget {
                   OrderCreationProcessStatus.sendOrderCallTimedOut) {
                 await showErrorSnack(
                   context: context,
-                  title: 'Our servers seem to be offline',
+                  title: newViewModel.orderCreationStatusMessage,
                 );
               } else if (newViewModel.orderCreationProcessStatus ==
                   OrderCreationProcessStatus

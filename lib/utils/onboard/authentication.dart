@@ -133,6 +133,17 @@ class Authentication {
       funcName: 'signUp',
     );
     final store = await reduxStore;
+    if (loginDetails is PhoneLoginDetails) {
+      if (store.state.userState.phoneNumberE164 !=
+          loginDetails.phoneNumber.e164) {
+        store.dispatch(SetEmail(''));
+      }
+    } else if (loginDetails is EmailLoginDetails) {
+      if (store.state.userState.email.trim().toLowerCase() !=
+          (loginDetails as EmailLoginDetails).email.trim().toLowerCase()) {
+        store.dispatch(ResetPhoneNumber());
+      }
+    }
     await _signUpFirebaseRequestVerificationCodeStep2(
       loginDetails: loginDetails,
       onCompleteFlow: () {
@@ -159,7 +170,8 @@ class Authentication {
     if (store.state.userState.vegiAuthenticationStatus !=
         VegiAuthenticationStatus.authenticated) {
       log.error(
-          'Unable to call authentcator.reauthenticate and authentiate vegi. So stopping auth flow here',);
+        'Unable to call authentcator.reauthenticate and authentiate vegi. So stopping auth flow here',
+      );
       return;
     }
     // check fuse
@@ -195,6 +207,17 @@ class Authentication {
     );
     final store = await reduxStore;
     store.dispatch(SignupLoading(isLoading: true));
+    if (loginDetails is PhoneLoginDetails) {
+      if (store.state.userState.phoneNumberE164 !=
+          loginDetails.phoneNumber.e164) {
+        store.dispatch(SetEmail(''));
+      }
+    } else if (loginDetails is EmailLoginDetails) {
+      if (store.state.userState.email.trim().toLowerCase() !=
+          loginDetails.email.trim().toLowerCase()) {
+        store.dispatch(ResetPhoneNumber());
+      }
+    }
     await _signInFirebaseRequestVerificationCodeStep2(
       loginDetails: loginDetails,
       onCompleteFlow: () {
@@ -249,7 +272,7 @@ class Authentication {
     final store = await reduxStore;
     store.dispatch(SignupLoading(isLoading: true));
     // * TEST MODE ONLY
-    if (verificationCode == Secrets.testFirebaseSMSVerificationCode) {
+    if (verificationCode == Secrets.testFirebaseSMSVerificationCodesByNumber[store.state.userState.phoneNumberNoCountry]) {
       log.warn(
         'Faking accept test auth code from firebase authenticator.verifySMSVerificationCode call using test details',
       );
@@ -260,11 +283,15 @@ class Authentication {
             // todo: mock login to vegi too by passing none firebaseSessionToken secret to backend with a process.env check in the local.js
           ),
         )
-        ..dispatch(SetFirebaseSessionToken(
-            firebaseSessionToken: Secrets.testFirebaseSessionToken,),);
+        ..dispatch(
+          SetFirebaseSessionToken(
+            firebaseSessionToken: Secrets.testFirebaseSessionToken,
+          ),
+        );
       await _loginToVegiWithPhone(
         store: store,
-        phoneNumber: store.state.userState.phoneNumber,
+        phoneNoCountry: store.state.userState.phoneNumberNoCountry,
+        phoneCountryCode: int.tryParse(store.state.userState.countryCode),
         firebaseSessionToken: Secrets.testFirebaseSessionToken,
       );
       // initFuse
@@ -311,7 +338,8 @@ class Authentication {
     );
     await _loginToVegiWithPhone(
       store: store,
-      phoneNumber: store.state.userState.phoneNumber,
+      phoneNoCountry: store.state.userState.phoneNumberNoCountry,
+      phoneCountryCode: int.tryParse(store.state.userState.countryCode),
       firebaseSessionToken: firebaseSessionToken!,
     );
     if (store.state.userState.vegiAuthenticationStatus ==
@@ -427,7 +455,9 @@ class Authentication {
     final store = await reduxStore;
     store
       ..dispatch(SignupLoading(isLoading: true))
-      ..dispatch(SignUpLoadingMessage(message: 'Deleting users can take up to 30s, please bare with us... 🥵'));
+      ..dispatch(SignUpLoadingMessage(
+          message:
+              'Deleting users can take up to 30s, please bare with us... 🥵'));
     // no need to save seed phrase in this option as user wants all details to be deleted.
     try {
       await peeplEatsService.deleteAllUserDetails();
@@ -439,10 +469,11 @@ class Authentication {
         stackTrace: s,
       );
     }
-    store
-      .dispatch(SignUpLoadingMessage(
-          message:
-              'Almost there now...',),);
+    store.dispatch(
+      SignUpLoadingMessage(
+        message: 'Almost there now...',
+      ),
+    );
     try {
       await peeplEatsService.deleteWalletAddressDetailsFromAccountsList();
     } on Exception catch (e, s) {
@@ -648,24 +679,28 @@ class Authentication {
           PreferredSignonMethod.phone) {
         final vegiAuthResult = await _loginToVegiWithPhone(
           store: store,
-          phoneNumber: store.state.userState.phoneNumber,
+          phoneNoCountry: store.state.userState.phoneNumberNoCountry,
+          phoneCountryCode: int.tryParse(store.state.userState.countryCode),
           firebaseSessionToken: store.state.userState.firebaseSessionToken!,
         );
         if (vegiAuthResult != LoggedInToVegiResult.success) {
           log.warn(
-              'Failed to authenticate with vegi: LoggedInToVegiResult.[${vegiAuthResult.name}]',);
+            'Failed to authenticate with vegi: LoggedInToVegiResult.[${vegiAuthResult.name}]',
+          );
           // finish by navigating to MainScreen regardless
         }
       } else if (store.state.userState.preferredSignonMethod ==
           PreferredSignonMethod.phone) {
         final vegiAuthResult = await _loginToVegiWithPhone(
           store: store,
-          phoneNumber: store.state.userState.phoneNumber,
+          phoneNoCountry: store.state.userState.phoneNumberNoCountry,
+          phoneCountryCode: int.tryParse(store.state.userState.countryCode),
           firebaseSessionToken: store.state.userState.firebaseSessionToken!,
         );
         if (vegiAuthResult != LoggedInToVegiResult.success) {
           log.warn(
-              'Failed to authenticate with vegi: LoggedInToVegiResult.[${vegiAuthResult.name}]',);
+            'Failed to authenticate with vegi: LoggedInToVegiResult.[${vegiAuthResult.name}]',
+          );
           // finish by navigating to MainScreen regardless
         }
       } else if (store.state.userState.preferredSignonMethod ==
@@ -677,7 +712,8 @@ class Authentication {
         );
         if (vegiAuthResult != LoggedInToVegiResult.success) {
           log.warn(
-              'Failed to authenticate with vegi: LoggedInToVegiResult.[${vegiAuthResult.name}]',);
+            'Failed to authenticate with vegi: LoggedInToVegiResult.[${vegiAuthResult.name}]',
+          );
           // finish by navigating to MainScreen regardless
         }
       } else if (store.state.userState.preferredSignonMethod ==
@@ -689,7 +725,8 @@ class Authentication {
         );
         if (vegiAuthResult != LoggedInToVegiResult.success) {
           log.warn(
-              'Failed to authenticate with vegi: LoggedInToVegiResult.[${vegiAuthResult.name}]',);
+            'Failed to authenticate with vegi: LoggedInToVegiResult.[${vegiAuthResult.name}]',
+          );
           // finish by navigating to MainScreen regardless
         }
       } else {
@@ -817,7 +854,8 @@ class Authentication {
     );
     final store = await reduxStore;
     store.dispatch(
-        SignUpLoadingMessage(message: 'Authenticating Email & Password 🚀...'),);
+      SignUpLoadingMessage(message: 'Authenticating Email & Password 🚀...'),
+    );
     // final store = await reduxStore;
     return onBoardStrategy.signInUserWithEmailAndPassword(
       email: email,
@@ -841,7 +879,8 @@ class Authentication {
       await Analytics.setUserId(phoneNumber.e164);
       // * Firebase login -> will route to verify_screen
       store.dispatch(
-          SignUpLoadingMessage(message: 'Sending SMS code to phone 🚀...'),);
+        SignUpLoadingMessage(message: 'Sending SMS code to phone 🚀...'),
+      );
       await firebaseOnboarding.login(
         countryCode: countryCode,
         phoneNumber: phoneNumber,
@@ -917,7 +956,8 @@ class Authentication {
         );
       onCompleteFlow();
       store.dispatch(
-          SignUpLoadingMessage(message: 'vegi authentication failed'),);
+        SignUpLoadingMessage(message: 'vegi authentication failed'),
+      );
       await Analytics.track(
         eventName: AnalyticsEvents.loginWithPhone,
         properties: {
@@ -932,7 +972,8 @@ class Authentication {
   // @override
   Future<LoggedInToVegiResult> _loginToVegiWithPhone({
     required Store<AppState> store,
-    required String phoneNumber,
+    required String phoneNoCountry,
+    required int? phoneCountryCode,
     required String firebaseSessionToken,
   }) async {
     logFunctionCall<void>(
@@ -950,7 +991,8 @@ class Authentication {
 
       // * sets the session cookie on the service class instance.
       final vegiSession = await peeplEatsService.loginWithPhone(
-        phoneNumber: phoneNumber,
+        phoneCountryCode: phoneCountryCode,
+        phoneNoCountry: phoneNoCountry,
         firebaseSessionToken: firebaseSessionToken,
       );
       final userDetails = vegiSession.user;
@@ -969,8 +1011,9 @@ class Authentication {
           );
         } else {
           log.error(
-              'Signed into vegi but failed to receive user details in result',
-              stackTrace: StackTrace.current,);
+            'Signed into vegi but failed to receive user details in result',
+            stackTrace: StackTrace.current,
+          );
         }
         if (store.state.userState.vegiAuthenticationStatus !=
             VegiAuthenticationStatus.authenticated) {
@@ -1040,8 +1083,11 @@ class Authentication {
             vegiStatus: VegiAuthenticationStatus.loading,
           ),
         )
-        ..dispatch(SignUpLoadingMessage(
-            message: 'Authenticating Email & Password on vegi 🥑...',),);
+        ..dispatch(
+          SignUpLoadingMessage(
+            message: 'Authenticating Email & Password on vegi 🥑...',
+          ),
+        );
 
       // * sets the session cookie on the service class instance.
       final vegiSession = await peeplEatsService.loginWithEmail(
@@ -1064,8 +1110,9 @@ class Authentication {
           );
         } else {
           log.error(
-              'Signed into vegi but failed to receive user details in result',
-              stackTrace: StackTrace.current,);
+            'Signed into vegi but failed to receive user details in result',
+            stackTrace: StackTrace.current,
+          );
         }
         store.dispatch(
           SignUpFailed(
@@ -1086,8 +1133,11 @@ class Authentication {
         await _complete(
           vegiStatus: VegiAuthenticationStatus.failed,
         );
-        store.dispatch(SignUpLoadingMessage(
-            message: 'Failed to authenticate email credentials with vegi',),);
+        store.dispatch(
+          SignUpLoadingMessage(
+            message: 'Failed to authenticate email credentials with vegi',
+          ),
+        );
       }
       store.dispatch(SignUpLoadingMessage(message: ''));
       return vegiSession.sessionCookie.isNotEmpty
@@ -1098,14 +1148,20 @@ class Authentication {
         firebaseStatus: FirebaseAuthenticationStatus.authenticated,
         vegiStatus: VegiAuthenticationStatus.failed,
       );
-      store.dispatch(SignUpLoadingMessage(
-          message: 'Failed to authenticate email credentials with vegi',),);
+      store.dispatch(
+        SignUpLoadingMessage(
+          message: 'Failed to authenticate email credentials with vegi',
+        ),
+      );
       log
         ..error(
           err,
           stackTrace: s,
         )
-        ..error(err.toString(), stackTrace: s,);
+        ..error(
+          err.toString(),
+          stackTrace: s,
+        );
       store.dispatch(
         SetFirebaseSessionToken(
           firebaseSessionToken: null,
@@ -1197,7 +1253,8 @@ class Authentication {
       );
     } else {
       log.info(
-          'reauthenticating fuseSDK using existing private key stored against phoneNumber: ${store.state.userState.phoneNumber}',);
+        'reauthenticating fuseSDK using existing private key stored against phoneNumber: ${store.state.userState.phoneNumber}',
+      );
       credentials = EthPrivateKey.fromHex(privateKey);
       if (store.state.userState.mnemonic.isEmpty ||
           store.state.userState.mnemonic.first.isEmpty) {
@@ -1236,8 +1293,9 @@ class Authentication {
     // * FUSE - Fetch/Create Wallet from FuseSDK
     try {
       await _fetchCreateWallet(
-          onWalletInitialised: onWalletInitialised,
-          newPrivateKeyUsed: privateKey?.isEmpty ?? true,);
+        onWalletInitialised: onWalletInitialised,
+        newPrivateKeyUsed: privateKey?.isEmpty ?? true,
+      );
       return;
     } catch (e, s) {
       log.error(
@@ -1304,7 +1362,8 @@ class Authentication {
     if (walletData.hasData) {
       final smartWallet = walletData.data!;
       log.info(
-          'Successfully refetched smart wallet address ${smartWallet.smartWalletAddress}',);
+        'Successfully refetched smart wallet address ${smartWallet.smartWalletAddress}',
+      );
       store
         ..dispatch(
           saveSmartWallet(
@@ -1344,7 +1403,8 @@ class Authentication {
       if (walletDataReFetched.hasData) {
         final smartWallet = walletDataReFetched.data!;
         log.info(
-            'Successfully refetched smart wallet address ${smartWallet.smartWalletAddress}',);
+          'Successfully refetched smart wallet address ${smartWallet.smartWalletAddress}',
+        );
         await _emitWallet(fuseWalletSDK.smartWallet);
       } else if (walletDataReFetched.hasError) {
         final exception = walletDataReFetched.error!;
@@ -1471,7 +1531,8 @@ class Authentication {
               },
               onError: (dynamic error) {
                 log.error(
-                    'Authentication._fetchCreateWallet fuseWalletSDK.createWallet Error occurred: $error',);
+                  'Authentication._fetchCreateWallet fuseWalletSDK.createWallet Error occurred: $error',
+                );
                 store.dispatch(
                   SetUserAuthenticationStatus(
                     fuseStatus: FuseAuthenticationStatus.failedCreate,
@@ -1590,7 +1651,8 @@ class Authentication {
             List<String> networks = <String>[];
             if (event.data.containsKey('networks')) {
               networks = List<String>.from(
-                  event.data['networks'] as Iterable<dynamic>,);
+                event.data['networks'] as Iterable<dynamic>,
+              );
             }
             final fuseSDKVersion = event.data['version'];
             log.info(

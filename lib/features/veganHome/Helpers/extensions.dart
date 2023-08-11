@@ -33,7 +33,8 @@ List<StackLine> _filterStackTrace(
   final lines = stackTrace.toString().split('\n');
   if (removeFirstNLines != null && lines.length < removeFirstNLines) {
     print(
-        'Unable to remove first $removeFirstNLines most recent function call',);
+      'Unable to remove first $removeFirstNLines most recent function call',
+    );
     return [];
   }
 
@@ -81,6 +82,21 @@ extension StackTraceFilter on StackTrace {
     );
   }
 
+  StackTrace filterCallStackToStack({
+    int? ignoreLastNCalls,
+    Pattern? dontMatch,
+    List<Pattern> removeLinesContaining = const <String>[],
+  }) {
+    return fromStackLines(
+      _filterStackTrace(
+        this,
+        removeFirstNLines: ignoreLastNCalls,
+        removeLinesContaining: removeLinesContaining,
+        dontMatch: dontMatch,
+      ),
+    );
+  }
+
   StackTrace ignore(Pattern ignoreLinesContaining) {
     return StackTraceFilter.fromStackLines(
       filterCallStack(dontMatch: ignoreLinesContaining),
@@ -105,10 +121,12 @@ extension StackTraceFilter on StackTrace {
   }
 
   /// Current function's name
-  String currentFunction([String fallbackName = '']) => getStackLine(lineNumberBase1: 1)?.functionName ?? '';
-  
+  String currentFunction([String fallbackName = '']) =>
+      getStackLine(lineNumberBase1: 1)?.functionName ?? '';
+
   /// Current function's line number
-  String currentLineNumber() => getStackLine(lineNumberBase1: 1)?.lineNumber ?? '';
+  String currentLineNumber() =>
+      getStackLine(lineNumberBase1: 1)?.lineNumber ?? '';
 }
 
 extension CapitalizeString on String {
@@ -148,7 +166,8 @@ extension EnumHelpers on Enum {
     return value == null
         ? null
         : values.firstWhereOrNull(
-            (type) => type.toString().split('.').last == value,);
+            (type) => type.toString().split('.').last == value,
+          );
   }
 
   static T? enumFromString<T extends Enum>(Iterable<T> values, String? value) {
@@ -383,7 +402,8 @@ extension NumIterableHelpers<T> on Iterable<T> {
       ) as T;
     } else {
       log.error(
-          'Type of array vals must either extend a num or have a comparitor defined!',);
+        'Type of array vals must either extend a num or have a comparitor defined!',
+      );
       throw TypeError();
     }
   }
@@ -412,7 +432,8 @@ extension NumIterableHelpers<T> on Iterable<T> {
       ) as T;
     } else {
       log.error(
-          'Type of array vals must either extend a num or have a comparitor defined!',);
+        'Type of array vals must either extend a num or have a comparitor defined!',
+      );
       throw TypeError();
     }
   }
@@ -430,8 +451,7 @@ extension NumIterableHelpers<T> on Iterable<T> {
     num Function(
       num previousVal,
       T next,
-    )?
-        sumFunc,
+    )? sumFunc,
   ]) {
     if (sumFunc != null) {
       return fold<num>(
@@ -461,7 +481,8 @@ extension NumIterableHelpers<T> on Iterable<T> {
       return 0.0;
     } else {
       log.error(
-          'Type of array vals must either extend a num or have a comparitor defined!',);
+        'Type of array vals must either extend a num or have a comparitor defined!',
+      );
       throw TypeError();
     }
   }

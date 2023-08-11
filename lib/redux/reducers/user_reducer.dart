@@ -11,12 +11,12 @@ final userReducers = combineReducers<UserState>([
   TypedReducer<UserState, ResetAppState>(_resetApp).call,
   TypedReducer<UserState, SetAppUpdateRequired>(_setAppUpdateRequired).call,
   TypedReducer<UserState, SetAppUpdateAcknowledged>(
-          _setAppUpdateNotificationCheked,)
-      .call,
+    _setAppUpdateNotificationCheked,
+  ).call,
   TypedReducer<UserState, ResetSurveyCompleted>(_resetSurveyCompleted).call,
   TypedReducer<UserState, SetSubscribedToWaitingListUpdates>(
-          _setSubscribedToWaitingListUpdates,)
-      .call,
+    _setSubscribedToWaitingListUpdates,
+  ).call,
   TypedReducer<UserState, SetWalletConnectURI>(_setWalletConnectURI).call,
   TypedReducer<UserState, GotWalletDataSuccess>(_getWalletDataSuccess).call,
   TypedReducer<UserState, SetSmartWalletInMemory>(_setSmartWallet).call,
@@ -31,21 +31,22 @@ final userReducers = combineReducers<UserState>([
   TypedReducer<UserState, CreateSurveyCompletedSuccess>(_completeSurveySuccess)
       .call,
   TypedReducer<UserState, SetPhoneNumberSuccess>(_setPhoneNumber).call,
+  TypedReducer<UserState, ResetPhoneNumber>(_resetPhoneNumber).call,
   TypedReducer<UserState, LoginRequestSuccess>(_loginSuccess).call,
   TypedReducer<UserState, SetJWTSuccess>(_setJWTSuccess).call,
   TypedReducer<UserState, LogoutRequestSuccess>(_logoutSuccess).call,
   TypedReducer<UserState, SetPincodeSuccess>(_setPincode).call,
   TypedReducer<UserState, SetCompletedOnboardingSuccess>(
-          _setCompletedOnboarding,)
-      .call,
+    _setCompletedOnboarding,
+  ).call,
   TypedReducer<UserState, SetDisplayName>(_setDisplayName).call,
   TypedReducer<UserState, SetEmail>(_setEmail).call,
   TypedReducer<UserState, SetEmailPassword>(_setEmailAndPassword).call,
   TypedReducer<UserState, SetPreferredSignOnMethod>(_setPreferredSignonMethod)
       .call,
   TypedReducer<UserState, SetUserAuthenticationStatus>(
-          _setUserAuthenticationStatus,)
-      .call,
+    _setUserAuthenticationStatus,
+  ).call,
   TypedReducer<UserState, EmailWLRegistrationSuccess>(
     _setUserEmailForRegistrationToWaitingList,
   ).call,
@@ -73,8 +74,8 @@ final userReducers = combineReducers<UserState>([
   TypedReducer<UserState, SetDeviceName>(_deviceNameSuccess).call,
   TypedReducer<UserState, SetSecurityType>(_setSecurityType).call,
   TypedReducer<UserState, SetBiometricallyAuthenticated>(
-          _setBiometricallyAuthenticated,)
-      .call,
+    _setBiometricallyAuthenticated,
+  ).call,
   TypedReducer<UserState, WarnSendDialogShowed>(_warnSendDialogShowed).call,
   TypedReducer<UserState, UpdateCurrency>(_updateCurrency).call,
   TypedReducer<UserState, UpdateLocale>(_updateLocale).call,
@@ -156,6 +157,7 @@ UserState _setVegiRole(
   return state.copyWith(
     userVegiRole: action.userRole,
     isVegiSuperAdmin: action.isSuperAdmin,
+    isTester: action.isTester,
   );
 }
 
@@ -358,6 +360,18 @@ UserState _setPhoneNumber(
     isoCode: action.countryCode.code!,
     phoneNumberNoCountry: action.phoneNumber.nationalNumber,
     phoneNumber: action.phoneNumber.e164,
+  );
+}
+
+UserState _resetPhoneNumber(
+  UserState state,
+  ResetPhoneNumber action,
+) {
+  return state.copyWith(
+    countryCode: '',
+    isoCode: '',
+    phoneNumberNoCountry: '',
+    phoneNumber: '',
   );
 }
 

@@ -129,19 +129,34 @@ class Secrets {
   static String get amazonS3Bucket => dotenv.env['amazonS3Bucket']!;
   static String get amazonS3Secret => dotenv.env['amazonS3Secret']!;
   static String get amazonS3AccessKey => dotenv.env['amazonS3AccessKey']!;
-  
+
   // static String get testPhoneNumber => DebugHelpers.inDebugMode && !Env.isProd ? dotenv.env['testPhoneNumber']! : 'TEST_PHONE_NUMBER_NOT_IN_DEBUG';
   // static String get testPhoneNumberCountryCode => DebugHelpers.inDebugMode && !Env.isProd ? dotenv.env['testPhoneNumberCountryCode']! : 'TEST_PHONE_NUMBER_COUNTRY_CODE_NOT_IN_DEBUG';
   // static String get testFirebaseSMSVerificationCode => DebugHelpers.inDebugMode && !Env.isProd ? dotenv.env['testFirebaseSMSVerificationCode']! : 'TEST_FIREBASE_SMS_VERIFICATION_CODE_NOT_IN_DEBUG';
   // static String get testFirebaseSessionToken => DebugHelpers.inDebugMode && !Env.isProd ? dotenv.env['testFirebaseSessionToken']! : 'TEST_FIREBASE_SESSION_TOKEN_NOT_IN_DEBUG';
-  static String get testPhoneNumber => dotenv.env['testPhoneNumber']!;
-  static String get testPhoneNumberCountryCode => dotenv.env['testPhoneNumberCountryCode']!;
-  static String get testFirebaseSMSVerificationCode => dotenv.env['testFirebaseSMSVerificationCode']!;
-  static String get testFirebaseSessionToken =>  dotenv.env['testFirebaseSessionToken']!;
+  static String get testPhoneNumberCountryCode =>
+      dotenv.env['testPhoneNumberCountryCode']!;
+  static List<String> get testPhoneNumbers =>
+      dotenv.env['testPhoneNumbers']!.split(',');
+  static List<String> get testPhoneNumberE164s =>
+      testPhoneNumbers.map((p) => '$testPhoneNumberCountryCode$p').toList();
+  static List<String> get testFirebaseSMSVerificationCodes =>
+      dotenv.env['testFirebaseSMSVerificationCodes']!.split(',');
+  static Map<String, String> get testFirebaseSMSVerificationCodesByNumber =>
+      testPhoneNumbers.length == testFirebaseSMSVerificationCodes.length
+          ? Map.fromEntries(
+              testPhoneNumbers.mapIndexed(
+                (index, element) =>
+                    MapEntry(element, testFirebaseSMSVerificationCodes[index]),
+              ),
+            )
+          : {};
+  static String get testFirebaseSessionToken =>
+      dotenv.env['testFirebaseSessionToken']!;
 
-  static String get VEGI_SERVICE_API_KEY =>  dotenv.env['VEGI_SERVICE_API_KEY']!;
-  static String get VEGI_SERVICE_API_SECRET =>  dotenv.env['VEGI_SERVICE_API_SECRET']!;
-
+  static String get VEGI_SERVICE_API_KEY => dotenv.env['VEGI_SERVICE_API_KEY']!;
+  static String get VEGI_SERVICE_API_SECRET =>
+      dotenv.env['VEGI_SERVICE_API_SECRET']!;
 }
 
 const EMAIL_NOT_PROVIDED = 'email@notprovided.com';
@@ -216,7 +231,7 @@ class CurrencyRateConstants {
   /// @date 25/05/2023 - 09:15:53
   ///
   /// @type {0.01}
-  /// 
+  ///
   /// @value of 1 GBT in GBP
   static const GBTPoundPegValue = 0.01;
 
@@ -224,7 +239,7 @@ class CurrencyRateConstants {
   /// @date 25/05/2023 - 09:15:53
   ///
   /// @type {0.01}
-  /// 
+  ///
   /// @value of 1 GBPx in GBP
   static const GBPxPoundPegValue = 0.01;
 
@@ -232,7 +247,7 @@ class CurrencyRateConstants {
   /// @date 25/05/2023 - 09:15:53
   ///
   /// @type {0.01}
-  /// 
+  ///
   /// @value of 1 PPL in GBP
   static const PPLPoundPegValue = 0.1;
 }

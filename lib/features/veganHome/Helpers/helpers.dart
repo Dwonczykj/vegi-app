@@ -113,14 +113,16 @@ BoolThenRouteResult checkAuth<T extends IAuthViewModel>({
       .isNewFailureStatus(oldFirebaseAuthStatus)) {
     if (routerContext.mounted) {
       log.info(
-          'Push SignUpScreen() due to failed status: FirebaseAuthenticationStatus.[${newViewModel.firebaseAuthenticationStatus.name}]',);
+        'Push SignUpScreen() due to failed status: FirebaseAuthenticationStatus.[${newViewModel.firebaseAuthenticationStatus.name}]',
+      );
       debugPrintStack(
         label:
             'Push SignUpScreen() due to failed status: FirebaseAuthenticationStatus.[${newViewModel.firebaseAuthenticationStatus.name}]',
         maxFrames: 3,
       );
       navigationToRun = () => rootRouter.replace(
-          const SignUpScreen(),); //TODO: Remove this as should be taken care of from authentication action failure inside the thunk
+            const SignUpScreen(),
+          ); //TODO: Remove this as should be taken care of from authentication action failure inside the thunk
     }
     return BoolThenRouteResult(
       succeeded: false,
@@ -130,7 +132,8 @@ BoolThenRouteResult checkAuth<T extends IAuthViewModel>({
   if (newViewModel.vegiAuthenticationStatus
       .isNewFailureStatus(oldVegiAuthStatus)) {
     log.error(
-        'vegi auth has failed, investigate why this is happening...: status: ${newViewModel.vegiAuthenticationStatus.name}',);
+      'vegi auth has failed, investigate why this is happening...: status: ${newViewModel.vegiAuthenticationStatus.name}',
+    );
     return BoolThenRouteResult(
       succeeded: false,
       navigationToRun: navigationToRun,
@@ -267,7 +270,8 @@ double getPoundValueFromPPL(num pplAmount) {
 
 double getPPLRewardsFromPounds(num gBPAmount) {
   return getPPLValueFromPounds(
-      gBPAmount * CurrencyRateConstants.pplRewardsPcntDelivery,);
+    gBPAmount * CurrencyRateConstants.pplRewardsPcntDelivery,
+  );
 }
 
 double getPPLRewardsFromPence(num penceAmount) =>
@@ -279,9 +283,12 @@ int calculateRewardsForPrice({
   required FulfilmentMethodType fulfilmentMethod,
 }) {
   return ((Math.max(
-                  Math.min(
-                      rating?.rating ?? 0, CurrencyRateConstants.maxESCRating,),
-                  CurrencyRateConstants.minESCRating,) /
+                Math.min(
+                  rating?.rating ?? 0,
+                  CurrencyRateConstants.maxESCRating,
+                ),
+                CurrencyRateConstants.minESCRating,
+              ) /
               CurrencyRateConstants.maxESCRating) *
           penceAmount *
           (fulfilmentMethod == FulfilmentMethodType.inStore
@@ -298,9 +305,12 @@ double calculateCartRewardsForPrice({
   final x = items.map(
     (item) {
       return (Math.max(
-                  Math.min(item.menuItem.rating?.rating ?? 0,
-                      CurrencyRateConstants.maxESCRating,),
-                  CurrencyRateConstants.minESCRating,) /
+                Math.min(
+                  item.menuItem.rating?.rating ?? 0,
+                  CurrencyRateConstants.maxESCRating,
+                ),
+                CurrencyRateConstants.minESCRating,
+              ) /
               CurrencyRateConstants.maxESCRating) *
           item.totalItemPrice.inGBPxValue *
           (fulfilmentMethod == FulfilmentMethodType.inStore
@@ -460,7 +470,8 @@ num getInternalCurrencyConversionRateSync({
       return 1.0 / CurrencyRateConstants.PPLPoundPegValue;
     } else if (toCurrency == Currency.USD || toCurrency == Currency.EUR) {
       throw Exception(
-          'Requested a currency conversion from getInternalCurrencyConversionRateSync but toCurrency: $toCurrency is not an internal currency.',);
+        'Requested a currency conversion from getInternalCurrencyConversionRateSync but toCurrency: $toCurrency is not an internal currency.',
+      );
     } else {
       log.error(
         'Unsupported currencies requested from helpers.getCurrencyConversionRate of fromCurrency: $fromCurrency, toCurrency: $toCurrency.',
@@ -764,46 +775,42 @@ List<T> Function(dynamic) fromSailsListOfObjectJson<T>(
 }
 
 Future<SetPhoneNumberSuccess?> getPhoneDetails({
-  required String countryCode,
+  required String countryCodeString,
   required String phoneNoCountry,
 }) async {
-  CountryCode? countryCode;
-  PhoneNumber? phoneNumber;
-  try {
-    String? isoCode = 'GB';
-    if (Platform.isAndroid) {
-      final androidInfo = await CarrierInfo.getAndroidInfo();
-      if ((androidInfo?.telephonyInfo.length ?? 0) >= 1) {
-        isoCode = androidInfo?.telephonyInfo[0].isoCountryCode;
-      }
-    }
-    if (Platform.isIOS) {
-      final iosInfo = await CarrierInfo.getIosInfo();
-      if (iosInfo.carrierData.isNotEmpty) {
-        isoCode = iosInfo.carrierData[0].isoCountryCode;
-      }
-    }
-    final currentCountryCode = isoCode ?? 'GB';
-    final Map<String, String> localeData = codes.firstWhere(
-      (Map<String, String> code) =>
-          code['code'].toString().toLowerCase() ==
-          currentCountryCode.toLowerCase(),
+  final countryCode0 = await parseCountryCode(countryCode: countryCodeString);
+  if (countryCode0 == null) {
+    log.info(
+      'Unable to parse country code from string: "$countryCodeString"',
+      stackTrace: StackTrace.current,
     );
-    if (localeData.containsKey('dial_code') && localeData.containsKey('code')) {
-      countryCode = CountryCode(
-        dialCode: localeData['dial_code'],
-        code: localeData['code'],
-      );
-    }
-  } catch (e, s) {
-    log.error(
-      'Failed to deduce sim country code: $e',
-      stackTrace: s,
+    return null;
+  }
+  final phoneNumber = await parsePhoneDetails(
+    countryCode: countryCode0,
+    phoneNoCountry: phoneNoCountry,
+  );
+  if (phoneNumber == null) {
+    log.info(
+      'Unable to parse phone number from string: "$phoneNoCountry"',
+      stackTrace: StackTrace.current,
     );
     return null;
   }
 
-  final String phoneNumber0 = '${countryCode!.dialCode}$phoneNoCountry';
+  return SetPhoneNumberSuccess(
+    countryCode: countryCode0,
+    phoneNumber: phoneNumber,
+  );
+}
+
+Future<PhoneNumber?> parsePhoneDetails({
+  required CountryCode countryCode,
+  required String phoneNoCountry,
+}) async {
+  PhoneNumber? phoneNumber;
+
+  final String phoneNumber0 = '${countryCode.dialCode}$phoneNoCountry';
 
   try {
     phoneNumber = await phoneNumberUtil.parse(
@@ -813,10 +820,9 @@ Future<SetPhoneNumberSuccess?> getPhoneDetails({
     // do nothing and try again....
   }
   if (phoneNumber != null) {
-    return SetPhoneNumberSuccess(
-      countryCode: countryCode,
-      phoneNumber: phoneNumber,
-    );
+    return phoneNumber;
+  } else {
+    final validation = await phoneNumberUtil.validate(phoneNumber0);
   }
 
   try {
@@ -832,10 +838,57 @@ Future<SetPhoneNumberSuccess?> getPhoneDetails({
     return null;
   }
 
-  return SetPhoneNumberSuccess(
-    countryCode: countryCode,
-    phoneNumber: phoneNumber,
-  );
+  return phoneNumber;
+}
+
+Future<CountryCode?> parseCountryCode({
+  required String countryCode,
+}) async {
+  try {
+    var localeData = codes.firstWhereExists(
+      (element) =>
+          element['code'].toString().toUpperCase() == countryCode.toUpperCase(),
+    );
+    if (localeData != null) {
+      return CountryCode(
+        dialCode: localeData['dial_code'],
+        code: localeData['code'],
+      );
+    }
+    String? isoCode = 'GB';
+    if (Platform.isAndroid) {
+      final androidInfo = await CarrierInfo.getAndroidInfo();
+      if ((androidInfo?.telephonyInfo.length ?? 0) >= 1) {
+        isoCode = androidInfo?.telephonyInfo[0].isoCountryCode;
+      }
+    }
+    if (Platform.isIOS) {
+      final iosInfo = await CarrierInfo.getIosInfo();
+      if (iosInfo.carrierData.isNotEmpty) {
+        isoCode = iosInfo.carrierData[0].isoCountryCode;
+      }
+    }
+    final currentCountryCode = isoCode ?? 'GB';
+    localeData = codes.firstWhere(
+      (Map<String, String> code) =>
+          code['code'].toString().toLowerCase() ==
+          currentCountryCode.toLowerCase(),
+    );
+    if (localeData.containsKey('dial_code') && localeData.containsKey('code')) {
+      // check that country code below is correct for +1
+      return CountryCode(
+        dialCode: localeData['dial_code'],
+        code: localeData['code'],
+      );
+    }
+  } catch (e, s) {
+    log.error(
+      'Failed to deduce sim country code from inputCode: "$countryCode": $e',
+      stackTrace: s,
+    );
+    return null;
+  }
+  return null;
 }
 
 String authEnumToEmoji(Enum value) {
