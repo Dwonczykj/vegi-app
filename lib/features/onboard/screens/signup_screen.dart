@@ -418,12 +418,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       return null;
     }
 
-    viewmodel.setPhoneNumber(
-      countryCode: countryCode,
-      phoneNumber: value,
-    );
-
-    viewmodel.signup(
+    viewmodel.signin(
       countryCode: countryCode,
       phoneNumber: value,
     );

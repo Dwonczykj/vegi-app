@@ -5,11 +5,13 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
+import 'package:vegan_liverpool/common/di/env.dart';
 import 'package:vegan_liverpool/common/router/routes.gr.dart';
 import 'package:vegan_liverpool/constants/analytics_events.dart';
 import 'package:vegan_liverpool/features/shared/widgets/primary_button.dart';
 import 'package:vegan_liverpool/models/app_state.dart';
 import 'package:vegan_liverpool/redux/actions/user_actions.dart';
+import 'package:vegan_liverpool/test/main_test.dart';
 import 'package:vegan_liverpool/utils/analytics.dart';
 import 'package:vegan_liverpool/utils/constants.dart';
 
@@ -25,8 +27,12 @@ class _LogoutConfirmationDialogState extends State<LogoutConfirmationDialog>
     with SingleTickerProviderStateMixin {
   late AnimationController controller;
   late Animation<double> scaleAnimation;
-  Duration theDuration = const Duration(
-    seconds: DebugHelpers.inDebugMode ? 4 : 30,
+  Duration theDuration = Duration(
+    seconds: Env.isTest
+        ? 5
+        : DebugHelpers.inDebugMode
+            ? 4
+            : 30,
   );
   late Timer countdownTimer;
   late DateTime timerFrom;

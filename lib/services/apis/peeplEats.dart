@@ -372,7 +372,7 @@ class PeeplEatsService extends HttpService {
           userDetails.phoneCountryCode != 0 &&
           userDetails.phoneNoCountry.length > 1) {
         final phoneDetails = await getPhoneDetails(
-          countryCodeString: '+${userDetails.phoneCountryCode}',
+          countryCodeString: '${userDetails.phoneCountryCode}',
           phoneNoCountry: userDetails.phoneNoCountry,
         );
         (await reduxStore).dispatch(

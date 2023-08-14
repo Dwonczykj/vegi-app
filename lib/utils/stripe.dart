@@ -60,7 +60,7 @@ class StripeService extends IStripeService with _StripeServiceMixin {
     //   throw e;
     // }
     Stripe.merchantIdentifier =
-        useTest ? 'testmerchant.com.vegi' : 'merchant.com.vegi';
+        STRIPE_MERCHANT_ID_CONST_DONT_CHANGE;
   }
 
   void setTestMode({required bool isTester}) {
@@ -87,7 +87,7 @@ class StripeTESTService extends IStripeService with _StripeServiceMixin {
   @override
   void init() {
     Stripe.publishableKey = Secrets.STRIPE_API_KEY_TEST;
-    Stripe.merchantIdentifier = 'testmerchant.com.vegi';
+    Stripe.merchantIdentifier = STRIPE_MERCHANT_ID_CONST_DONT_CHANGE;
   }
 }
 
@@ -249,8 +249,12 @@ mixin _StripeServiceMixin on IStripeService {
           ),
         );
         log.error(
-          'Stripe Payment ${e.error.code} with StripeErrorType.[${e.error.type}] because of stripe error code StripeErrorCode.[${e.error.stripeErrorCode}]: ${e.error.localizedMessage};',
+          'Stripe Payment Failed with Stripe Error Code: [${e.error.code}] '
+          'and [StripeErrorType.${e.error.type}] because of stripe error code '
+          '[StripeErrorCode.${e.error.stripeErrorCode}]: Error message: "${e.error.localizedMessage}".',
           stackTrace: s,
+          error: e.error,
+          additionalDetails: e.error.toJson(),
         );
         store
           ..dispatch(SetPaymentButtonFlag(false))
@@ -741,12 +745,6 @@ mixin _StripeServiceMixin on IStripeService {
         );
         if (paymentIntentClientSecret == null) {
           log.error('Unable to create payment intent from $stripePayService');
-          await Sentry.captureException(
-            Exception(
-              'Unable to create payment intent from $stripePayService',
-            ),
-            stackTrace: StackTrace.current, // from catch (err, s)
-          );
           store.dispatch(
             StripePaymentStatusUpdate(
               status: StripePaymentStatus.paymentFailed,

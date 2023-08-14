@@ -17,15 +17,15 @@ import 'package:vegan_liverpool/utils/constants.dart';
 import 'package:vegan_liverpool/utils/log/log.dart';
 import 'package:vegan_liverpool/utils/stripe.dart';
 
-abstract class Env {
+abstract class EnvTest {
   static const dev = 'dev';
   static const test = 'test';
   static const qa = 'qa';
   static const prod = 'production';
-  static bool get isDev => Env.activeEnv == Env.dev;
-  static bool get isProd => Env.activeEnv == Env.prod;
-  static bool get isTest => Env.activeEnv == Env.test;
-  static bool get isQA => Env.activeEnv == Env.qa;
+  static bool get isDev => EnvTest.activeEnv == EnvTest.dev;
+  static bool get isProd => EnvTest.activeEnv == EnvTest.prod;
+  static bool get isTest => EnvTest.activeEnv == EnvTest.test;
+  static bool get isQA => EnvTest.activeEnv == EnvTest.qa;
   static const activeEnv = test;
   static const _envFile = activeEnv == dev
       ? '.env_dev'
@@ -44,7 +44,7 @@ Future<void> main() async {
     DeviceOrientation.portraitUp,
   ]);
 
-  const envStr = Env.activeEnv;
+  const envStr = EnvTest.activeEnv;
   expect(
     envStr,
     'test',
@@ -54,7 +54,7 @@ Future<void> main() async {
   // if (DebugHelpers.inDebugMode) {
   //   print('Loading secrets from ${Env.envFile} for Env: ${Env.activeEnv}');
   // }
-  await dotenv.load(fileName: Env.envFile);
+  await dotenv.load(fileName: EnvTest.envFile);
 
   StripeService().init();
   StripeTESTService().init();
@@ -78,7 +78,7 @@ Future<void> main() async {
         options
           ..debug = (!kReleaseMode && DebugHelpers.isVerboseDebugMode)
           ..dsn = '' //dotenv.env['SENTRY_DSN']
-          ..environment = Env.activeEnv;
+          ..environment = EnvTest.activeEnv;
       },
     );
 

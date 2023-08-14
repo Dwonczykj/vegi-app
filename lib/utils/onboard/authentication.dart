@@ -115,11 +115,12 @@ class Authentication {
     );
   }
 
-  Future<void> signUp({
+  Future<void> signUpFirebaseEmail({
     // required iLoginDetails loginDetails,
-    required PhoneLoginDetails loginDetails,
+    required EmailLoginDetails loginDetails,
   }) async {
-    (await reduxStore)
+    final store = await reduxStore;
+    store
       ..dispatch(SignupLoading(isLoading: true))
       ..dispatch(
         SetUserAuthenticationStatus(
@@ -130,21 +131,13 @@ class Authentication {
     // TODO Change signup to require email and register password, then add a phone number and verify code
     logFunctionCall<void>(
       className: 'Authentication',
-      funcName: 'signUp',
+      funcName: 'signUpFirebaseEmail',
     );
-    final store = await reduxStore;
-    if (loginDetails is PhoneLoginDetails) {
-      if (store.state.userState.phoneNumberE164 !=
-          loginDetails.phoneNumber.e164) {
-        store.dispatch(SetEmail(''));
-      }
-    } else if (loginDetails is EmailLoginDetails) {
-      if (store.state.userState.email.trim().toLowerCase() !=
-          (loginDetails as EmailLoginDetails).email.trim().toLowerCase()) {
-        store.dispatch(ResetPhoneNumber());
-      }
+    if (store.state.userState.email.trim().toLowerCase() !=
+        loginDetails.email.trim().toLowerCase()) {
+      store.dispatch(ResetPhoneNumber());
     }
-    await _signUpFirebaseRequestVerificationCodeStep2(
+    await _signUpFirebaseEmail(
       loginDetails: loginDetails,
       onCompleteFlow: () {
         store
@@ -194,31 +187,37 @@ class Authentication {
   Future<void> login({
     required iLoginDetails loginDetails,
   }) async {
-    (await reduxStore).dispatch(
-      SetUserAuthenticationStatus(
-        firebaseStatus: FirebaseAuthenticationStatus.unauthenticated,
-        vegiStatus: VegiAuthenticationStatus.unauthenticated,
-      ),
-    );
-    // TODO Change signup to require email and register password, then add a phone number and verify code
     logFunctionCall<void>(
       className: 'Authentication',
       funcName: 'login',
     );
     final store = await reduxStore;
-    store.dispatch(SignupLoading(isLoading: true));
+    store
+      ..dispatch(SignupLoading(isLoading: true))
+      ..dispatch(
+        SetUserAuthenticationStatus(
+          firebaseStatus: FirebaseAuthenticationStatus.unauthenticated,
+          vegiStatus: VegiAuthenticationStatus.unauthenticated,
+        ),
+      );
     if (loginDetails is PhoneLoginDetails) {
       if (store.state.userState.phoneNumberE164 !=
           loginDetails.phoneNumber.e164) {
         store.dispatch(SetEmail(''));
       }
+      store.dispatch(
+        SetPhoneNumberSuccess(
+          countryCode: loginDetails.countryCode,
+          phoneNumber: loginDetails.phoneNumber,
+        ),
+      );
     } else if (loginDetails is EmailLoginDetails) {
       if (store.state.userState.email.trim().toLowerCase() !=
           loginDetails.email.trim().toLowerCase()) {
         store.dispatch(ResetPhoneNumber());
       }
     }
-    await _signInFirebaseRequestVerificationCodeStep2(
+    await _logInFirebaseRequestVerificationCodeStep2(
       loginDetails: loginDetails,
       onCompleteFlow: () {
         store
@@ -272,7 +271,9 @@ class Authentication {
     final store = await reduxStore;
     store.dispatch(SignupLoading(isLoading: true));
     // * TEST MODE ONLY
-    if (verificationCode == Secrets.testFirebaseSMSVerificationCodesByNumber[store.state.userState.phoneNumberNoCountry]) {
+    if (verificationCode ==
+        Secrets.testFirebaseSMSVerificationCodesByNumber[
+            store.state.userState.phoneNumberNoCountry]) {
       log.warn(
         'Faking accept test auth code from firebase authenticator.verifySMSVerificationCode call using test details',
       );
@@ -555,40 +556,29 @@ class Authentication {
     return firebaseSessionToken;
   }
 
-  Future<bool> _signUpFirebaseRequestVerificationCodeStep2({
+  Future<bool> _signUpFirebaseEmail({
     // required iLoginDetails loginDetails,
-    required PhoneLoginDetails loginDetails,
+    required EmailLoginDetails loginDetails,
     required void Function() onCompleteFlow,
   }) async {
     logFunctionCall<void>(
       className: 'Authentication',
-      funcName: '_signUpFirebaseRequestVerificationCodeStep2',
+      funcName: '_signUpFirebaseEmail',
     );
-    if (loginDetails is PhoneLoginDetails) {
-      return _requestSMSCodeForPhoneNumber(
-        countryCode: loginDetails.countryCode,
-        phoneNumber: loginDetails.phoneNumber,
-        onCompleteFlow: onCompleteFlow,
-      );
-    } else if (loginDetails is EmailLoginDetails) {
-      log.warn(
-        "vegi doesn't currently support registering using an email, only a phone number.",
-      );
-      final store = await reduxStore;
-      return false;
-    } else {
-      log.error('Unknown loginDetails passed');
-      return false;
-    }
+    log.warn(
+      "vegi doesn't currently support registering using an email, only a phone number.",
+    );
+    // final store = await reduxStore;
+    return false;
   }
 
-  Future<bool> _signInFirebaseRequestVerificationCodeStep2({
+  Future<bool> _logInFirebaseRequestVerificationCodeStep2({
     required iLoginDetails loginDetails,
     required void Function() onCompleteFlow,
   }) async {
     logFunctionCall<void>(
       className: 'Authentication',
-      funcName: '_signInFirebaseRequestVerificationCodeStep2',
+      funcName: '_logInFirebaseRequestVerificationCodeStep2',
     );
     if (loginDetails is PhoneLoginDetails) {
       return _requestSMSCodeForPhoneNumber(
@@ -605,7 +595,7 @@ class Authentication {
       if (userCredential == null) {
         await _captureAuthenticationError(
           message: 'Failed to authenticate onboarding via email',
-          methodName: 'login',
+          methodName: '_logInFirebaseRequestVerificationCodeStep2',
         );
         return false;
       }

@@ -159,6 +159,8 @@ class Secrets {
       dotenv.env['VEGI_SERVICE_API_SECRET']!;
 }
 
+const STRIPE_MERCHANT_ID_CONST_DONT_CHANGE = 'merchant.com.vegi';
+
 const EMAIL_NOT_PROVIDED = 'email@notprovided.com';
 
 const VEGI_DOMAIN = 'vegiapp.co.uk';

@@ -702,7 +702,8 @@ class FirebaseStrategy implements IOnBoardStrategy {
       // we are seeing an issue here where we already have 2 different firebase accounts set up for jdwonczyk@gmail.com and joey@vegiapp.co.uk and therefore when we try to update form jdwnoczyk to joey@vegi, we get an error as the email already has a different account registered to it.
       // we need to first check if joey@vegiapp already has a firebase account and if it does, we need to get the user to login with it first to link the account.
       final dummySigninMethods = existingEmail.isNotEmpty
-          ? await FirebaseAuth.instance.fetchSignInMethodsForEmail(email)
+          ? await FirebaseAuth.instance
+              .fetchSignInMethodsForEmail(existingEmail)
           : <String>[];
       if (dummySigninMethods.isNotEmpty) {
         log.warn(
@@ -744,15 +745,36 @@ class FirebaseStrategy implements IOnBoardStrategy {
         }
         return false;
       }
-      await _catchFirebaseException(
-        e,
-        s,
-        additionalMessage:
-            'Error whilst firebaseOnBoarding.updateEmail to email "$email" using firebaseAuth?.currentUser?.verifyBeforeUpdateEmail("$email") $e',
-        firebaseStatusIfNotHandled:
-            FirebaseAuthenticationStatus.updateEmailUsingVerificationFailed,
-        dontComplete: dontComplete,
+      var msg =
+          'Failed to update email for firebaseUser: uid:[${firebaseAuth.currentUser?.uid}]';
+      if (e.message ==
+          'Host platform returned null value for non-null return value.') {
+        msg =
+            'Failed to update email for firebaseUser from "${store.state.userState.email}" likely due to previously being logged in as mock test user';
+      }
+      log.error(
+        msg,
+        error: e,
+        stackTrace: s,
+        additionalDetails: {
+          'credential': e.credential,
+          'email': e.email,
+          'phoneNumber': e.phoneNumber,
+          'code': e.code,
+          'tenantId': e.tenantId,
+          'message': e.message,
+          'stackTrace': e.stackTrace,
+        },
       );
+      // await _catchFirebaseException(
+      //   e,
+      //   s,
+      //   additionalMessage:
+      //       'Error whilst firebaseOnBoarding.updateEmail to email "$email" using firebaseAuth?.currentUser?.verifyBeforeUpdateEmail("$email") $e',
+      //   firebaseStatusIfNotHandled:
+      //       FirebaseAuthenticationStatus.updateEmailUsingVerificationFailed,
+      //   dontComplete: dontComplete,
+      // );
       return false;
     } on Exception catch (e, s) {
       await _catchUnknownException(
@@ -1245,6 +1267,15 @@ class FirebaseStrategy implements IOnBoardStrategy {
       ..error(
         'FirebaseAuth Exception caught:',
         stackTrace: s,
+        additionalDetails: {
+          'credential': e.credential,
+          'email': e.email,
+          'phoneNumber': e.phoneNumber,
+          'code': e.code,
+          'tenantId': e.tenantId,
+          'message': e.message,
+          'stackTrace': e.stackTrace,
+        },
       )
       ..info('Code: ${e.code}.')
       ..info('Message: ${e.message}')
@@ -1515,6 +1546,13 @@ class FirebaseStrategy implements IOnBoardStrategy {
         sentry: true,
       );
       await rootRouter.push(const SetEmailOnboardingScreen());
+    } else if (store.state.userState.phoneNumberNoCountry.isEmpty &&
+        rootRouter.current.name != SignUpScreen.name) {
+      log.info(
+        'nextOnboardingPage push ${SignUpScreen.name} as phonenumber is empty and $currentRouteInd < ${onboardingRoutesOrder.indexOf(SignUpScreen.name)}',
+        sentry: true,
+      );
+      await rootRouter.push(const SignUpScreen());
     } else if (store.state.userState.displayName.isEmpty &&
         currentRouteInd < onboardingRoutesOrder.indexOf(UserNameScreen.name)) {
       log.info(

@@ -45,9 +45,10 @@ class StripePayService {
 
       final Map<String, dynamic> result = response.data as Map<String, dynamic>;
 
-      log.info(
-        'Payment Intent check Result $result',
+      log.verbose(
+        'Payment Intent check Result',
         stackTrace: StackTrace.current,
+        additionalDetails: result,
       );
 
       if (result.isNotEmpty && result.containsKeyAndNotNull('paymentIntent')) {

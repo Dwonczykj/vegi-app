@@ -264,7 +264,7 @@ class UserState with _$UserState {
   EthPrivateKey get fuseWalletCredentialsNotNull {
     if (fuseWalletCredentials == null) {
       final e = Exception(
-        'No user credentials available for current user: "$displayName"',
+        'No user credentials available for current user with displayName: "$displayName"',
       );
       log.error(
         e,

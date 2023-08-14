@@ -45,9 +45,9 @@ class MainScreenViewModel extends Equatable implements IAuthViewModel {
     required this.appUpdateNextVersion,
     required this.appUpdateNotificationSeenForBuildNumber,
     required this.routeToLogin,
-    required this.setPhoneNumber,
+    // required this.setPhoneNumber,
     required this.setEmail,
-    required this.signup,
+    required this.signin,
     required this.setUserSessionExpired,
     required this.setLoading,
     required this.subscribeToEmailToNotifications,
@@ -90,17 +90,17 @@ class MainScreenViewModel extends Equatable implements IAuthViewModel {
       appUpdateNextVersion: store.state.userState.appUpdateNextVersion,
       appUpdateNotificationSeenForBuildNumber:
           store.state.userState.appUpdateNotificationSeenForBuildNumber,
-      setPhoneNumber: ({
-        required CountryCode countryCode,
-        required PhoneNumber phoneNumber,
-      }) {
-        store.dispatch(
-          SetPhoneNumberSuccess(
-            countryCode: countryCode,
-            phoneNumber: phoneNumber,
-          ),
-        );
-      },
+      // setPhoneNumber: ({
+      //   required CountryCode countryCode,
+      //   required PhoneNumber phoneNumber,
+      // }) {
+      //   store.dispatch(
+      //     SetPhoneNumberSuccess(
+      //       countryCode: countryCode,
+      //       phoneNumber: phoneNumber,
+      //     ),
+      //   );
+      // },
       setEmail: ({
         required String email,
         required void Function(String) onError,
@@ -114,22 +114,16 @@ class MainScreenViewModel extends Equatable implements IAuthViewModel {
           ),
         );
       },
-      signup: ({
+      signin: ({
         required CountryCode countryCode,
         required PhoneNumber phoneNumber,
       }) {
-        authenticator.signUp(
+        authenticator.login(
           loginDetails: PhoneLoginDetails(
             countryCode: countryCode,
             phoneNumber: phoneNumber,
           ),
         );
-        // store.dispatch(
-        //   loginHandler(
-        //     countryCode,
-        //     phoneNumber,
-        //   ),
-        // );
       },
       setUserSessionExpired: () {
         store.dispatch(SetFirebaseSessionExpired());
@@ -214,10 +208,10 @@ class MainScreenViewModel extends Equatable implements IAuthViewModel {
     required String email,
     required bool receiveNotifications,
   }) subscribeToEmailToNotifications;
-  final void Function({
-    required CountryCode countryCode,
-    required PhoneNumber phoneNumber,
-  }) setPhoneNumber;
+  // final void Function({
+  //   required CountryCode countryCode,
+  //   required PhoneNumber phoneNumber,
+  // }) setPhoneNumber;
   final Future<void> Function({
     required String email,
     required void Function(String) onError,
@@ -226,7 +220,7 @@ class MainScreenViewModel extends Equatable implements IAuthViewModel {
   final void Function({
     required CountryCode countryCode,
     required PhoneNumber phoneNumber,
-  }) signup;
+  }) signin;
   final void Function() setUserSessionExpired;
   final void Function() routeToLogin;
   final void Function(bool) setLoading;

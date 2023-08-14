@@ -1,6 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:injectable/injectable.dart';
+import 'package:logger/logger.dart';
+import 'package:logging/logging.dart' as logging;
 import 'package:redux_dev_tools/redux_dev_tools.dart';
 import 'package:redux_logging/redux_logging.dart';
 import 'package:redux_persist/redux_persist.dart';
@@ -13,6 +15,7 @@ import 'package:vegan_liverpool/models/app_state.dart';
 import 'package:vegan_liverpool/redux/reducers/app_reducer.dart';
 import 'package:vegan_liverpool/scan_network.dart';
 import 'package:vegan_liverpool/utils/constants.dart';
+import 'package:vegan_liverpool/utils/log/log.dart';
 import 'package:vegan_liverpool/utils/storage.dart';
 import 'package:redux/redux.dart';
 import 'package:redux_remote_devtools/redux_remote_devtools.dart';
@@ -36,6 +39,12 @@ abstract class RegisterModule {
       debug: DebugHelpers.isVerboseDebugMode,
     );
 
+    // ~ https://pub.dev/documentation/redux_logging/latest/redux_logging/LoggingMiddleware-class.html
+    // Create your own Logger
+    final logger = logging.Logger(
+      'Redux Logger',
+    );
+
     // Create a formatter that only prints out the dispatched action
     String onlyLogActionFormatter<State>(
       State state,
@@ -46,8 +55,10 @@ abstract class RegisterModule {
     }
 
     // Create your middleware using the formatter.
-    final reduxLoggingMiddleware =
-        LoggingMiddleware(formatter: onlyLogActionFormatter);
+    final reduxLoggingMiddleware = LoggingMiddleware(
+      formatter: onlyLogActionFormatter<AppState>,
+      logger: logger,
+    );
     // Note: The LoggingMiddleware needs be the LAST middleware in the list.
     final List<Middleware<AppState>> wms = [
       thunkMiddleware,
@@ -55,6 +66,14 @@ abstract class RegisterModule {
       // LoggingMiddleware.printer().call,
       reduxLoggingMiddleware.call,
     ];
+
+    // Note: One quirk about listening to a logger instance is that you're
+    // actually listening to the Singleton instance of *all* loggers.
+    logger.onRecord
+        // Filter down to [LogRecord]s sent to your logger instance
+        .where((record) => record.loggerName == logger.name)
+        // Print them out (or do something more interesting!)
+        .listen((loggingMiddlewareRecord) => print(loggingMiddlewareRecord));
 
     late final Store<AppState> store;
 
