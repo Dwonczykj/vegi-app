@@ -1141,13 +1141,13 @@ class PeeplEatsService extends HttpService {
   }
 
   Future<String> setRandomAvatar({
-    required int accountId,
+    required int userId,
     required void Function(String error) onError,
   }) async {
     try {
       final Response<dynamic> response = await dioPost(
         '/api/v1/users/set-random-avatar',
-        data: {'accountId': accountId},
+        data: {'userId': userId},
         sendWithAuthCreds: true,
       );
 
@@ -1167,7 +1167,7 @@ class PeeplEatsService extends HttpService {
 
   Future<String?> uploadImageForUserAvatar({
     required File image,
-    required int accountId,
+    required int userId,
     required void Function(String error, ProductSuggestionUploadErrCode errCode)
         onError,
     ProgressCallback? onReceiveProgress,
@@ -1180,7 +1180,7 @@ class PeeplEatsService extends HttpService {
         formDataCreator: ({required MultipartFile file}) => FormData.fromMap({
           // 'uid': const Uuid().v4(),
           'image': file,
-          'accountId': accountId
+          'accountId': userId
         }),
         errorResponseData: {'imageUrl': ''},
         onError: (error, errCode) {

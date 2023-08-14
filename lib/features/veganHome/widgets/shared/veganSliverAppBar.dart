@@ -109,7 +109,8 @@ class _VeganSliverAppBarState extends State<VeganSliverAppBar> {
                                   onChanged: (value) {
                                     setState(() {
                                       viewmodel.updateSelectedSearchPostalCode(
-                                          value!,);
+                                        value!,
+                                      );
                                       viewmodel.changeOutCode(value);
                                       Analytics.track(
                                         eventName:
@@ -193,47 +194,46 @@ class _VeganSliverAppBarState extends State<VeganSliverAppBar> {
                         4,
                         0,
                       ),
-                      child: Material(
-                        borderRadius: BorderRadius.circular(50),
-                        elevation: 3,
-                        child: GestureDetector(
-                          onTap: () {
-                            Analytics.track(
-                              eventName: AnalyticsEvents.openDrawer,
-                            );
-                            Scaffold.of(context).openDrawer();
-                          },
-                          child: Stack(
-                            children: [
-                              const VegiAvatar(isEditable: false, avatarSquareSize: 40,),
-                              // if (viewmodel.avatarUrl == '')
-                              //   const CircleAvatar(
-                              //     backgroundImage:
-                              //         AssetImage('assets/images/anom.png'),
-                              //     radius: 23,
-                              //   )
-                              // else
-                              //   UserAvatar(
-                              //     avatarUrl: viewmodel.avatarUrl,
-                              //     avatarSquareSize: 40,
-                              //     showAdminBanner: viewmodel.userIsVegiAdmin,
-                              //   ),
-                              if (viewmodel.listOfScheduledOrders.isNotEmpty)
-                                Positioned(
-                                  right: 0,
-                                  child: Container(
-                                    decoration: const BoxDecoration(
-                                      color: themeAccent500,
-                                      shape: BoxShape.circle,
-                                    ),
-                                    width: 10,
-                                    height: 10,
+                      child: GestureDetector(
+                        onTap: () {
+                          Analytics.track(
+                            eventName: AnalyticsEvents.openDrawer,
+                          );
+                          Scaffold.of(context).openDrawer();
+                        },
+                        child: Stack(
+                          children: [
+                            const VegiAvatar(
+                              isEditable: false,
+                              avatarSquareSize: 40,
+                            ),
+                            // if (viewmodel.avatarUrl == '')
+                            //   const CircleAvatar(
+                            //     backgroundImage:
+                            //         AssetImage('assets/images/anom.png'),
+                            //     radius: 23,
+                            //   )
+                            // else
+                            //   UserAvatar(
+                            //     avatarUrl: viewmodel.avatarUrl,
+                            //     avatarSquareSize: 40,
+                            //     showAdminBanner: viewmodel.userIsVegiAdmin,
+                            //   ),
+                            if (viewmodel.listOfScheduledOrders.isNotEmpty)
+                              Positioned(
+                                right: 0,
+                                child: Container(
+                                  decoration: const BoxDecoration(
+                                    color: themeAccent500,
+                                    shape: BoxShape.circle,
                                   ),
-                                )
-                              else
-                                const SizedBox.shrink(),
-                            ],
-                          ),
+                                  width: 10,
+                                  height: 10,
+                                ),
+                              )
+                            else
+                              const SizedBox.shrink(),
+                          ],
                         ),
                       ),
                     ),

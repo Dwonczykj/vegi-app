@@ -41,9 +41,10 @@ void main() {
         const Duration(seconds: 1),
         (Timer timer) async {
           expect(
-              store.state.userState.fuseAuthenticationStatus
-                  .isNewFailureStatus(currentFuseStatus),
-              false,);
+            store.state.userState.fuseAuthenticationStatus
+                .isNewFailureStatus(currentFuseStatus),
+            false,
+          );
           currentFuseStatus = store.state.userState.fuseAuthenticationStatus;
           if (currentFuseStatus == FuseAuthenticationStatus.authenticated) {
             expect(

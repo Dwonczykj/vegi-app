@@ -385,7 +385,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 GestureDetector(
                   onTap: () => _showAlternativeSignonPicker(context, viewmodel),
                   child: Text(
-                    'Alternative sign-in methods',
+                    'Alternative sign-in methods [DEBUG]',
                     style: TextStyle(
                       color: Colors.blue[500],
                       fontStyle: FontStyle.italic,

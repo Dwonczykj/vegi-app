@@ -14,7 +14,6 @@ _$_VegiAccount _$$_VegiAccountFromJson(Map<String, dynamic> json) =>
       accountType:
           $enumDecodeNullable(_$VegiAccountTypeEnumMap, json['accountType']) ??
               null,
-      imageUrl: json['imageUrl'] as String? ?? '',
       stripeCustomerId: json['stripeCustomerId'] as String? ?? null,
       stripeAccountId: json['stripeAccountId'] as String? ?? null,
       bankCardNumber: json['bankCardNumber'] as String? ?? null,
@@ -29,7 +28,6 @@ Map<String, dynamic> _$$_VegiAccountToJson(_$_VegiAccount instance) =>
       'verified': instance.verified,
       'walletAddress': instance.walletAddress,
       'accountType': _$VegiAccountTypeEnumMap[instance.accountType],
-      'imageUrl': instance.imageUrl,
       'stripeCustomerId': instance.stripeCustomerId,
       'stripeAccountId': instance.stripeAccountId,
       'bankCardNumber': instance.bankCardNumber,

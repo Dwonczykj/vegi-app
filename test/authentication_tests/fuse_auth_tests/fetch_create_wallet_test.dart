@@ -58,7 +58,7 @@ void main() async {
 
     setUp(() async {
       await dotenv.load(fileName: Env.envFile);
-      store = initStoreForTests();
+      store = initStoreForTests() as Store<AppState>;
       // final _baseLogger = Logger();
       // log = LogIt(_baseLogger);
       // await configureDependencies(

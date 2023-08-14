@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 import 'dart:ui' as ui;
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:vegan_liverpool/constants/theme.dart';
+import 'package:vegan_liverpool/features/veganHome/Helpers/helpers.dart';
 import 'package:vegan_liverpool/utils/constants.dart';
 
 class UserAvatar extends StatelessWidget {
   const UserAvatar({
-    required this.avatarUrl, Key? key,
-    this.avatarSquareSize = 50.0,
+    required this.avatarUrl,
+    Key? key,
+    this.avatarSquareSize = 40.0,
     this.showAdminBanner = false,
     this.isUpdating = false,
   }) : super(key: key);
@@ -27,20 +29,51 @@ class UserAvatar extends StatelessWidget {
       child: Stack(
         alignment: Alignment.center,
         children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(50),
-            child: CachedNetworkImage(
-              width: avatarSquareSize,
-              height: avatarSquareSize,
-              imageUrl: avatarUrl,
-              placeholder: (context, url) => const CircularProgressIndicator(),
-              errorWidget: (context, url, error) => const CircleAvatar(
-                backgroundImage: AssetImage('assets/images/anom.png'),
-                radius: 30,
-              ),
-              imageBuilder: (context, imageProvider) => Image(
-                image: imageProvider,
-                fit: BoxFit.fill,
+          Container(
+            // decoration: BoxDecoration(
+            //     color: Colors.transparent,
+            //     borderRadius: const BorderRadius.only(
+            //       topLeft: Radius.circular(16),
+            //       topRight: Radius.circular(16),
+            //     ),
+            //     border: Border.all(
+            //       color: Colors.red,
+            //       width: 2,
+            //       style: BorderStyle.solid,
+            //     )),
+            padding: EdgeInsets.all(0),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(50),
+              child: Container(
+                // decoration: BoxDecoration(
+                //   color: Colors.yellow,
+                //   borderRadius: const BorderRadius.only(
+                //     topLeft: Radius.circular(16),
+                //     topRight: Radius.circular(16),
+                //   ),
+                // ),
+                child: FutureBuilder<Size>(
+                  future: calculateImageDimensionFromUrl(
+                    imageUrl: avatarUrl,
+                  ),
+                  builder: (context, snapshot) {
+                    return CachedNetworkImage(
+                      width: avatarSquareSize,
+                      height: avatarSquareSize,
+                      imageUrl: avatarUrl,
+                      placeholder: (context, url) =>
+                          const CircularProgressIndicator(),
+                      errorWidget: (context, url, error) => const CircleAvatar(
+                        backgroundImage: AssetImage('assets/images/anom.png'),
+                        radius: 30,
+                      ),
+                      imageBuilder: (context, imageProvider) => Image(
+                        image: imageProvider,
+                        fit: BoxFit.cover,
+                      ),
+                    );
+                  },
+                ),
               ),
             ),
           ),

@@ -6,7 +6,7 @@ import 'package:vegan_liverpool/models/app_state.dart';
 import 'package:vegan_liverpool/redux/reducers/app_reducer.dart';
 import 'package:vegan_liverpool/utils/log/log.dart';
 
-Store<AppState> initStoreForTests() => DevToolsStore<AppState>(
+Future<Store<AppState>> initStoreForTests() async => DevToolsStore<AppState>(
       appReducer,
       initialState: AppState.initial(),
       middleware: [thunkMiddleware],

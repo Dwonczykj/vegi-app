@@ -10,6 +10,7 @@ import 'package:redux_thunk/redux_thunk.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:vegan_liverpool/common/di/di.dart';
 import 'package:vegan_liverpool/common/di/env.dart';
+import 'package:vegan_liverpool/features/veganHome/Helpers/extensions.dart';
 import 'package:vegan_liverpool/loadAppState.dart';
 import 'package:vegan_liverpool/models/app_state.dart';
 import 'package:vegan_liverpool/redux/reducers/app_reducer.dart';
@@ -51,7 +52,8 @@ abstract class RegisterModule {
       dynamic action,
       DateTime timestamp,
     ) {
-      return '{Action: $action}';
+      print(action.runtimeType);
+      return '{ts: ${timestamp.formatToHHmmss}, Action: $action}';
     }
 
     // Create your middleware using the formatter.

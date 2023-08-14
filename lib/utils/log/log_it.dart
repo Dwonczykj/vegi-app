@@ -25,7 +25,7 @@ class LogIt {
 
   final LogLevel logLevel = Env.isProd ? LogLevel.wtf : LogLevel.wtf;
 
-  Future<void> connectReduxLogs() async {
+  Future<void> connectReduxStoreToLogs() async {
     store = await reduxStore;
     if (store == null) {
       return;

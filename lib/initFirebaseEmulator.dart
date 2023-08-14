@@ -19,9 +19,11 @@ Future<void> connectToFirebaseEmulator() async {
       const firebaseAuthEmulatorPort = FIREBASE_AUTH_EMULATOR_PORT;
       try {
         // ~ https://firebase.google.com/codelabs/get-started-firebase-emulators-and-flutter#4
-        log.info('Connecting to FirebaseAuth emulator');
+        log.info(
+          'Connecting to FirebaseAuth emulator on port: [$firebaseAuthEmulatorPort]',
+        );
         await FirebaseAuth.instance.useAuthEmulator(
-          'localhost',
+          '10.0.2.2',
           firebaseAuthEmulatorPort,
         );
       } catch (e, s) {

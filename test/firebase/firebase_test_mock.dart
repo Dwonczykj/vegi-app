@@ -15,7 +15,7 @@ typedef Callback = void Function(MethodCall call);
 final List<MethodCall> methodCallLog = <MethodCall>[];
 
 void setupFirebaseAnalyticsMocks([Callback? customHandlers]) {
-  TestWidgetsFlutterBinding.ensureInitialized();
+  
 
   setupFirebaseCoreMocks();
 

@@ -27,6 +27,7 @@ class UserDTO with _$UserDTO {
     required String name,
     required bool isSuperAdmin,
     required bool isTester,
+    @Default('') String imageUrl,
     required VegiRole role,
     required String vendorRole,
     required String deliveryPartnerRole,

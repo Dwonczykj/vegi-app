@@ -314,13 +314,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 helper: viewmodel.useLiveLocation
                                     ? Text(
                                         'Using location to see nearest vendors to you!',
-                                        style:
-                                            Theme.of(context).textTheme.bodySmall,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodySmall,
                                       )
                                     : Text(
                                         'Enable location to see nearest vendors to you!',
-                                        style:
-                                            Theme.of(context).textTheme.bodySmall,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .bodySmall,
                                       ),
                                 child: CupertinoSwitch(
                                   // This bool value toggles the switch.
@@ -637,13 +639,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ListTile(
                   title: const Text('Refresh'),
                   onTap: () async {
-                    final vegiAccountId = StoreProvider.of<AppState>(context)
+                    final vegiUserId = StoreProvider.of<AppState>(context)
                         .state
                         .userState
-                        .vegiAccountId;
-                    if (vegiAccountId != null) {
-                      (await reduxStore).dispatch(
-                        setRandomUserAvatar(vegiAccountId: vegiAccountId),
+                        .vegiUserId;
+                    if (vegiUserId != null) {
+                      StoreProvider.of<AppState>(context).dispatch(
+                        setRandomUserAvatar(vegiUserId: vegiUserId),
                       );
                       Navigator.pop(context);
                     } else {

@@ -18,7 +18,7 @@ import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:uni_links/uni_links.dart';
 import 'package:vegan_liverpool/common/di/di.dart';
 import 'package:vegan_liverpool/common/di/env.dart';
-import 'package:vegan_liverpool/common/di/package_info.dart';
+// import 'package:vegan_liverpool/common/di/package_info.dart';
 import 'package:vegan_liverpool/common/router/route_guards.dart';
 import 'package:vegan_liverpool/common/router/vegi_debug_route_observer.dart';
 import 'package:vegan_liverpool/constants/strings.dart';

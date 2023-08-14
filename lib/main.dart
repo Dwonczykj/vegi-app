@@ -34,6 +34,8 @@ void main() async {
   await runZonedGuarded(() async {
     WidgetsFlutterBinding.ensureInitialized();
 
+    print('RUNNING lib/main.dart');
+
     await SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
     ]);
@@ -46,7 +48,7 @@ void main() async {
     await dotenv.load(fileName: Env.envFile);
 
     StripeService().init();
-    StripeTESTService().init();
+    // StripeTESTService().init();
 
     await initWeb3AuthService();
 
@@ -54,7 +56,7 @@ void main() async {
 
     await initFirebaseRemote();
 
-    if (kDebugMode || USE_FIREBASE_EMULATOR) {
+    if (kDebugMode && (USE_FIREBASE_EMULATOR || DebugHelpers.isTest)) {
       // Dont put below condition in above as above is compile time and allows all this to be left out of production apps.
       await connectToFirebaseEmulator();
     }
@@ -69,7 +71,7 @@ void main() async {
       },
     );
 
-    await log.connectReduxLogs();
+    await log.connectReduxStoreToLogs();
 
     //Pass the store to the Main App which injects it into the entire tree.
     final store = await reduxStore;

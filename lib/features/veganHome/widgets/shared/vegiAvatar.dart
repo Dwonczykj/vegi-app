@@ -17,7 +17,8 @@ import 'package:vegan_liverpool/utils/constants.dart';
 
 class VegiAvatar extends StatelessWidget {
   const VegiAvatar({
-    required this.isEditable, Key? key,
+    required this.isEditable,
+    Key? key,
     this.avatarSquareSize = 50.0,
     this.showAdminBanner = false,
   }) : super(key: key);
@@ -137,7 +138,8 @@ class VegiAvatar extends StatelessWidget {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(50),
                     child: ColoredBox(
-                      color: Colors.grey.shade400,
+                      // color: Colors.grey.shade400,
+                      color: Colors.transparent,
                       child: Stack(
                         children: [
                           UserAvatar(
@@ -185,7 +187,8 @@ class VegiAvatar extends StatelessWidget {
                                 children: [
                                   CircleAvatar(
                                     backgroundImage: AssetImage(
-                                        viewmodel.avatarTempFilePath,),
+                                      viewmodel.avatarTempFilePath,
+                                    ),
                                     // radius: 23,
                                     radius: avatarSquareSize / 2.0 +
                                         (avatarSquareSize * 0.1),
@@ -301,13 +304,13 @@ class VegiAvatar extends StatelessWidget {
                 ListTile(
                   title: const Text('Refresh'),
                   onTap: () async {
-                    final vegiAccountId = StoreProvider.of<AppState>(context)
+                    final vegiUserId = StoreProvider.of<AppState>(context)
                         .state
                         .userState
-                        .vegiAccountId;
-                    if (vegiAccountId != null) {
-                      (await reduxStore).dispatch(
-                        setRandomUserAvatar(vegiAccountId: vegiAccountId),
+                        .vegiUserId;
+                    if (vegiUserId != null) {
+                      StoreProvider.of<AppState>(context).dispatch(
+                        setRandomUserAvatar(vegiUserId: vegiUserId),
                       );
                       Navigator.pop(context);
                     } else {
