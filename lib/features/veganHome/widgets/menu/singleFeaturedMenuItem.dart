@@ -85,7 +85,7 @@ class SingleFeaturedMenuItem extends StatelessWidget {
                             style: const TextStyle(
                               color: Colors.black54,
                               fontWeight: FontWeight.w700,
-                              fontSize: 15,
+                              fontSize: 14,
                             ),
                           ),
                       ],

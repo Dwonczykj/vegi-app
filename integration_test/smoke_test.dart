@@ -4,7 +4,10 @@ import 'package:flutter/scheduler.dart';
 // import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
-import 'package:vegan_liverpool/app2.dart';
+import 'package:vegan_liverpool/app.dart';
+import 'package:vegan_liverpool/services.dart';
+
+import '../test/register_dependencies.dart';
 // import 'package:vegan_liverpool/app.dart';
 // import 'package:vegan_liverpool/common/di/di.dart';
 // import 'package:vegan_liverpool/common/network/web3auth.dart';
@@ -22,37 +25,12 @@ void main() async {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
   WidgetsFlutterBinding.ensureInitialized();
 
-  // const envStr = EnvTest.activeEnv;
-
-  // // if (DebugHelpers.inDebugMode) {
-  // //   print('Loading secrets from ${Env.envFile} for Env: ${Env.activeEnv}');
-  // // }
-  // await dotenv.load(fileName: EnvTest.envFile);
-
-  // StripeService()
-  //   ..init()
-  //   ..setTestMode(isTester: true);
-  // // StripeTESTService().init();
-
-  // await initWeb3AuthService();
-
-  // await configureDependencies(environment: envStr);
-
-  // await initFirebaseRemote();
-
-  // if (kDebugMode && (USE_FIREBASE_EMULATOR || DebugHelpers.isTest)) {
-  //   // Dont put below condition in above as above is compile time and allows all this to be left out of production apps.
-  //   await connectToFirebaseEmulator();
-  // }
-
-  // await log.connectReduxStoreToLogs();
-
-  // //Pass the store to the Main App which injects it into the entire tree.
-  // final store = await reduxStore;
-
   testWidgets('Smoke test', (WidgetTester tester) async {
     // Run app
-    await tester.pumpWidget(MyApp()); // Create main app
+    await registerDependencies();
+    final store = await reduxStore;
+    // Run app
+    await tester.pumpWidget(MyApp(store)); // Create main app
     // await tester.pumpWidget(MyApp(store)); // Create main app
     await tester.pumpAndSettle(); // Finish animations and scheduled microtasks
     await tester.pump(Duration(seconds: 2)); // Wait some time

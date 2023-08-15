@@ -128,7 +128,6 @@ extension GetItInjectableX on _i1.GetIt {
         () => _i27.StripePayService(gh<_i4.Dio>()));
     gh.lazySingleton<_i28.StripePayService>(() => _i28.StripePayService());
     gh.lazySingleton<_i29.StripeService>(() => _i29.StripeService());
-    gh.lazySingleton<_i29.StripeTESTService>(() => _i29.StripeTESTService());
     gh.lazySingleton<_i30.LogIt>(() => _i30.LogIt(gh<_i16.Logger>()));
     return this;
   }

@@ -41,7 +41,6 @@ Future<void> main() async {
   await dotenv.load(fileName: EnvTest.envFile);
 
   StripeService().init();
-  // StripeTESTService().init();
 
   await initWeb3AuthService();
 

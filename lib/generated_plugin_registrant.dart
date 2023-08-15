@@ -12,9 +12,9 @@ import 'package:firebase_messaging_web/firebase_messaging_web.dart';
 import 'package:flutter_keyboard_visibility_web/flutter_keyboard_visibility_web.dart';
 import 'package:flutter_native_splash/flutter_native_splash_web.dart';
 import 'package:flutter_secure_storage_web/flutter_secure_storage_web.dart';
-import 'package:flutter_segment/src/segment_web.dart';
+// import 'package:flutter_segment/src/segment_web.dart';
 import 'package:image_picker_for_web/image_picker_for_web.dart';
-import 'package:package_info_plus_web/package_info_plus_web.dart';
+// import 'package:package_info_plus_web/package_info_plus_web.dart';
 import 'package:sentry_flutter/sentry_flutter_web.dart';
 import 'package:url_launcher_web/url_launcher_web.dart';
 
@@ -28,9 +28,9 @@ void registerPlugins(Registrar registrar) {
   FlutterKeyboardVisibilityPlugin.registerWith(registrar);
   FlutterNativeSplashWeb.registerWith(registrar);
   FlutterSecureStorageWeb.registerWith(registrar);
-  SegmentWeb.registerWith(registrar);
+  // SegmentWeb.registerWith(registrar);
   ImagePickerPlugin.registerWith(registrar);
-  PackageInfoPlugin.registerWith(registrar);
+  // PackageInfoPlugin.registerWith(registrar);
   SentryFlutterWeb.registerWith(registrar);
   UrlLauncherPlugin.registerWith(registrar);
   registrar.registerMessageHandler();

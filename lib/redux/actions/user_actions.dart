@@ -1697,7 +1697,13 @@ ThunkAction<AppState> setRandomUserAvatar({
           );
         },
       );
-      store.dispatch(SetUserAvatar(imageUrl));
+      store
+        ..dispatch(SetUserAvatar(imageUrl))
+        ..dispatch(
+          SetIsLoadingHttpRequest(
+            isLoading: false,
+          ),
+        );
       await updateFirebaseCurrentUser(({required User firebaseUser}) async {
         if (imageUrl.isNotEmpty) {
           await firebaseUser.updatePhotoURL(imageUrl);

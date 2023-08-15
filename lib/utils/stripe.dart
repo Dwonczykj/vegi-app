@@ -59,8 +59,7 @@ class StripeService extends IStripeService with _StripeServiceMixin {
     //   );
     //   throw e;
     // }
-    Stripe.merchantIdentifier =
-        STRIPE_MERCHANT_ID_CONST_DONT_CHANGE;
+    Stripe.merchantIdentifier = STRIPE_MERCHANT_ID_CONST_DONT_CHANGE;
   }
 
   void setTestMode({required bool isTester}) {
@@ -72,22 +71,6 @@ class StripeService extends IStripeService with _StripeServiceMixin {
       useTest = false;
       Stripe.publishableKey = Secrets.STRIPE_API_KEY_LIVE;
     }
-  }
-}
-
-@lazySingleton
-// class StripeTESTService with _StripeServiceMixin implements IStripeService {
-class StripeTESTService extends IStripeService with _StripeServiceMixin {
-  @override
-  final Stripe instance = Stripe.instance;
-
-  @override
-  final bool useTest = true;
-
-  @override
-  void init() {
-    Stripe.publishableKey = Secrets.STRIPE_API_KEY_TEST;
-    Stripe.merchantIdentifier = STRIPE_MERCHANT_ID_CONST_DONT_CHANGE;
   }
 }
 
@@ -158,7 +141,7 @@ mixin _StripeServiceMixin on IStripeService {
     required int accountId,
   }) async {
     log.verbose(
-      '_handleStripeCardPaymentFlow called on $this using ${useTest ? 'test' : 'live'} keys',
+      '_handleStripeCardPaymentFlow called on $this using ${useTest ? 'test' : 'live'} keys starting: "${Stripe.publishableKey.substring(0, 8)}"',
       stackTrace: StackTrace.current,
     );
     // ~ https://docs.page/flutter-stripe/flutter_stripe/sheet#5-test-the-integration
@@ -443,7 +426,7 @@ mixin _StripeServiceMixin on IStripeService {
     required Store<AppState> store,
   }) async {
     log.verbose(
-      'handleStripeTopupForMintingCryptoByCard called on $this using ${useTest ? 'test' : 'live'} keys',
+      'handleStripeTopupForMintingCryptoByCard called on $this using ${useTest ? 'test' : 'live'} keys starting: "${Stripe.publishableKey.substring(0, 8)}"',
       stackTrace: StackTrace.current,
     );
     try {
@@ -720,7 +703,7 @@ mixin _StripeServiceMixin on IStripeService {
     required bool shouldPushToHome,
   }) async {
     log.verbose(
-      'handleApplePay called on $this using ${useTest ? 'test' : 'live'} keys',
+      'handleApplePay called on $this using ${useTest ? 'test' : 'live'} keys starting: "${Stripe.publishableKey.substring(0, 8)}"',
       stackTrace: StackTrace.current,
     );
     try {

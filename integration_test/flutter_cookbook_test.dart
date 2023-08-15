@@ -31,7 +31,6 @@
 //   StripeService()
 //     ..init()
 //     ..setTestMode(isTester: true);
-//   // StripeTESTService().init();
 
 //   await initWeb3AuthService();
 

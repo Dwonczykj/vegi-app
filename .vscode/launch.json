@@ -163,5 +163,34 @@
             "program": "${command:SelectScriptName}",
             "args": []
         },
+        {
+            "name": "Run/Debug Integration Tests",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "debug",
+            "program": "integration_test/smoke_test.dart",
+            "args": [
+                "--dart-define",
+                "ENV=development",
+                "--dart-define",
+                "USE_FIREBASE_EMULATOR=false"
+            ],
+            "env": {
+                // if we need env vars        
+            },
+            // toolArgs to always be set when running tests
+            "toolArgs": [
+                "--dart-define=ENV=test",
+                "--dart-define=USE_FIREBASE_EMULATOR=false",
+                "--dart-define=DEVELOPMENT_MODE=true",
+                "--dart-define=FLUTTER_TEST=true",
+                "--dart-define=FIREBASE_EMULATOR_HOST=192.168.1.246",
+                "--dart-define=API_URI=http://192.168.1.246:1337"
+            ],
+            // A path that indicates this is the default launch config for files within that path. 
+            // Used for the default 'Run' and 'Debug' CodeLens configs, as well as running tests through the test runner. 
+            // Setting to an empty string will apply to all files.
+            "templateFor": "integration_test"
+        },
     ]
 }

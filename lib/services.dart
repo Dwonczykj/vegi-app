@@ -53,10 +53,5 @@ final FirebaseStrategy firebaseOnboarding = getIt<FirebaseStrategy>();
 final Authentication authenticator = getIt<Authentication>();
 
 final StripeService stripeService = getIt<StripeService>();
-// final StripeTESTService stripeTestService = getIt<StripeTESTService>();
-// IStripeService stripeService({
-//   bool isTester = false,
-// }) =>
-//     isTester ? getIt<StripeTESTService>() : getIt<StripeService>();
 
 final NewVersion newVersion = getIt<NewVersion>();

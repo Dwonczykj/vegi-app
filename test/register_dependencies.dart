@@ -3,6 +3,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:fuse_wallet_sdk/fuse_wallet_sdk.dart';
 import 'package:get_it/get_it.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:logger/logger.dart';
 import 'package:phone_number/phone_number.dart';
 import 'package:vegan_liverpool/common/di/di.dart';
@@ -22,6 +23,7 @@ import 'package:vegan_liverpool/services/apis/locationService.dart';
 import 'package:vegan_liverpool/services/apis/peeplEats.dart';
 import 'package:vegan_liverpool/services/apis/peeplPay2.dart';
 import 'package:vegan_liverpool/services/apis/stripePay2.dart';
+import 'package:vegan_liverpool/utils/connectionChecker.dart';
 import 'package:vegan_liverpool/utils/constants.dart';
 import 'package:vegan_liverpool/utils/log/log.dart';
 import 'package:vegan_liverpool/utils/log/log_it.dart';
@@ -77,6 +79,9 @@ Future<void> registerDependencies() async {
       androidId: PackageConstants.bundleIdentifierHardCoded,
     ),
   );
+  final ic = InternetConnectionChecker();
+  GetIt.instance.registerFactory<InternetConnectionChecker>(() => ic);
+  GetIt.instance.registerFactory<NetworkInfo>(() => NetworkInfo(ic));
 
   // * other services
 

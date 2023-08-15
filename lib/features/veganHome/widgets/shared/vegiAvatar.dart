@@ -286,21 +286,21 @@ class VegiAvatar extends StatelessWidget {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                ListTile(
-                  title: Text(I10n.of(context).camera),
-                  onTap: () {
-                    callback(ImageSource.camera);
-                    Navigator.pop(context);
-                  },
-                ),
-                ListTile(
-                  // title: Text(I10n.of(context).gallery),
-                  title: const Text('Camera roll'),
-                  onTap: () {
-                    callback(ImageSource.gallery);
-                    Navigator.pop(context);
-                  },
-                ),
+                // ListTile(
+                //   title: Text(I10n.of(context).camera),
+                //   onTap: () {
+                //     callback(ImageSource.camera);
+                //     Navigator.pop(context);
+                //   },
+                // ),
+                // ListTile(
+                //   // title: Text(I10n.of(context).gallery),
+                //   title: const Text('Camera roll'),
+                //   onTap: () {
+                //     callback(ImageSource.gallery);
+                //     Navigator.pop(context);
+                //   },
+                // ),
                 ListTile(
                   title: const Text('Refresh'),
                   onTap: () async {

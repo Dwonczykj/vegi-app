@@ -1341,6 +1341,7 @@ class Authentication {
         ),
       )
       ..dispatch(SignupLoading(isLoading: false))
+      ..dispatch(getVegiWalletAccountDetails())
       ..dispatch(setRandomUserAvatarIfNone());
 
     await firebaseOnboarding.nextOnboardingPage();
