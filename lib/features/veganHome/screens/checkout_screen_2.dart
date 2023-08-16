@@ -113,7 +113,7 @@ class CheckoutScreenPt2 extends StatelessWidget {
                   OrderCreationProcessStatus.orderIsBelowVendorMinimumOrder) {
                 await showErrorSnack(
                   context: context,
-                  title: 'This restaurant is not accepting orders below'
+                  title: 'This restaurant is not accepting orders below '
                       '${newViewModel.restaurantMinimumOrder.formattedGBPxPrice}',
                 );
               } else if (newViewModel.orderCreationProcessStatus ==
@@ -146,78 +146,89 @@ class CheckoutScreenPt2 extends StatelessWidget {
                   OrderCreationProcessStatus.invalidDiscountCode) {
                 await showInfoSnack(
                   context,
-                  title:
-                      newViewModel.orderCreationStatusMessage.isNotEmpty ? newViewModel.orderCreationStatusMessage : 'Whoops, ${newViewModel.orderCreationProcessStatus.name.capitalizeWordsFromLowerCamelCase()}',
+                  title: newViewModel.orderCreationStatusMessage.isNotEmpty
+                      ? newViewModel.orderCreationStatusMessage
+                      : 'Whoops, ${newViewModel.orderCreationProcessStatus.name.capitalizeWordsFromLowerCamelCase()}',
                 );
               } else if (newViewModel.orderCreationProcessStatus ==
                   OrderCreationProcessStatus.badItemsRequest) {
                 await showInfoSnack(
                   context,
-                  title:
-                      newViewModel.orderCreationStatusMessage.isNotEmpty ? newViewModel.orderCreationStatusMessage : 'Whoops, ${newViewModel.orderCreationProcessStatus.name.capitalizeWordsFromLowerCamelCase()}',
+                  title: newViewModel.orderCreationStatusMessage.isNotEmpty
+                      ? newViewModel.orderCreationStatusMessage
+                      : 'Whoops, ${newViewModel.orderCreationProcessStatus.name.capitalizeWordsFromLowerCamelCase()}',
                 );
               } else if (newViewModel.orderCreationProcessStatus ==
                   OrderCreationProcessStatus.allItemsUnavailable) {
                 await showInfoSnack(
                   context,
-                  title:
-                      newViewModel.orderCreationStatusMessage.isNotEmpty ? newViewModel.orderCreationStatusMessage : 'Whoops, ${newViewModel.orderCreationProcessStatus.name.capitalizeWordsFromLowerCamelCase()}',
+                  title: newViewModel.orderCreationStatusMessage.isNotEmpty
+                      ? newViewModel.orderCreationStatusMessage
+                      : 'Whoops, ${newViewModel.orderCreationProcessStatus.name.capitalizeWordsFromLowerCamelCase()}',
                 );
               } else if (newViewModel.orderCreationProcessStatus ==
                   OrderCreationProcessStatus.minimumOrderAmount) {
                 await showInfoSnack(
                   context,
-                  title:
-                      newViewModel.orderCreationStatusMessage.isNotEmpty ? newViewModel.orderCreationStatusMessage : 'Whoops, ${newViewModel.orderCreationProcessStatus.name.capitalizeWordsFromLowerCamelCase()}',
+                  title: newViewModel.orderCreationStatusMessage.isNotEmpty
+                      ? newViewModel.orderCreationStatusMessage
+                      : 'Whoops, ${newViewModel.orderCreationProcessStatus.name.capitalizeWordsFromLowerCamelCase()}',
                 );
               } else if (newViewModel.orderCreationProcessStatus ==
                   OrderCreationProcessStatus.deliveryPartnerUnavailable) {
                 await showInfoSnack(
                   context,
-                  title:
-                      newViewModel.orderCreationStatusMessage.isNotEmpty ? newViewModel.orderCreationStatusMessage : 'Whoops, ${newViewModel.orderCreationProcessStatus.name.capitalizeWordsFromLowerCamelCase()}',
+                  title: newViewModel.orderCreationStatusMessage.isNotEmpty
+                      ? newViewModel.orderCreationStatusMessage
+                      : 'Whoops, ${newViewModel.orderCreationProcessStatus.name.capitalizeWordsFromLowerCamelCase()}',
                 );
               } else if (newViewModel.orderCreationProcessStatus ==
                   OrderCreationProcessStatus.invalidUserAddress) {
                 await showInfoSnack(
                   context,
-                  title:
-                      newViewModel.orderCreationStatusMessage.isNotEmpty ? newViewModel.orderCreationStatusMessage : 'Whoops, ${newViewModel.orderCreationProcessStatus.name.capitalizeWordsFromLowerCamelCase()}',
+                  title: newViewModel.orderCreationStatusMessage.isNotEmpty
+                      ? newViewModel.orderCreationStatusMessage
+                      : 'Whoops, ${newViewModel.orderCreationProcessStatus.name.capitalizeWordsFromLowerCamelCase()}',
                 );
               } else if (newViewModel.orderCreationProcessStatus ==
                   OrderCreationProcessStatus.invalidProductOption) {
                 await showInfoSnack(
                   context,
-                  title:
-                      newViewModel.orderCreationStatusMessage.isNotEmpty ? newViewModel.orderCreationStatusMessage : 'Whoops, ${newViewModel.orderCreationProcessStatus.name.capitalizeWordsFromLowerCamelCase()}',
+                  title: newViewModel.orderCreationStatusMessage.isNotEmpty
+                      ? newViewModel.orderCreationStatusMessage
+                      : 'Whoops, ${newViewModel.orderCreationProcessStatus.name.capitalizeWordsFromLowerCamelCase()}',
                 );
               } else if (newViewModel.orderCreationProcessStatus ==
                   OrderCreationProcessStatus.invalidProduct) {
                 await showInfoSnack(
                   context,
-                  title:
-                      newViewModel.orderCreationStatusMessage.isNotEmpty ? newViewModel.orderCreationStatusMessage : 'Whoops, ${newViewModel.orderCreationProcessStatus.name.capitalizeWordsFromLowerCamelCase()}',
+                  title: newViewModel.orderCreationStatusMessage.isNotEmpty
+                      ? newViewModel.orderCreationStatusMessage
+                      : 'Whoops, ${newViewModel.orderCreationProcessStatus.name.capitalizeWordsFromLowerCamelCase()}',
                 );
               } else if (newViewModel.orderCreationProcessStatus ==
                   OrderCreationProcessStatus.invalidFulfilmentMethod) {
                 await showInfoSnack(
                   context,
-                  title:
-                      newViewModel.orderCreationStatusMessage.isNotEmpty ? newViewModel.orderCreationStatusMessage : 'Whoops, ${newViewModel.orderCreationProcessStatus.name.capitalizeWordsFromLowerCamelCase()}',
+                  title: newViewModel.orderCreationStatusMessage.isNotEmpty
+                      ? newViewModel.orderCreationStatusMessage
+                      : 'Whoops, ${newViewModel.orderCreationProcessStatus.name.capitalizeWordsFromLowerCamelCase()}',
                 );
               } else if (newViewModel.orderCreationProcessStatus ==
                   OrderCreationProcessStatus.invalidVendor) {
                 await showInfoSnack(
                   context,
-                  title:
-                      newViewModel.orderCreationStatusMessage.isNotEmpty ? newViewModel.orderCreationStatusMessage : 'Whoops, ${newViewModel.orderCreationProcessStatus.name.capitalizeWordsFromLowerCamelCase()}',
+                  title: newViewModel.orderCreationStatusMessage.isNotEmpty
+                      ? newViewModel.orderCreationStatusMessage
+                      : 'Whoops, ${newViewModel.orderCreationProcessStatus.name.capitalizeWordsFromLowerCamelCase()}',
                 );
               } else if (newViewModel.orderCreationProcessStatus ==
                   OrderCreationProcessStatus.noItemsFound) {
                 await showInfoSnack(
                   context,
-                  title:
-                      newViewModel.orderCreationStatusMessage.isNotEmpty ? newViewModel.orderCreationStatusMessage : 'Whoops, ${newViewModel.orderCreationProcessStatus.name.capitalizeWordsFromLowerCamelCase()}',
+                  title: newViewModel.orderCreationStatusMessage.isNotEmpty
+                      ? newViewModel.orderCreationStatusMessage
+                      : 'Whoops, ${newViewModel.orderCreationProcessStatus.name.capitalizeWordsFromLowerCamelCase()}',
                 );
               } else if (newViewModel.orderCreationProcessStatus !=
                   OrderCreationProcessStatus.none) {

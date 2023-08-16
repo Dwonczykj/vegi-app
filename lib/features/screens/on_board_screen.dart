@@ -240,7 +240,7 @@ class _OnBoardScreenState extends State<OnBoardScreen>
                               left: buttonsPaddingFromSideEdge,
                               right: buttonsPaddingFromSideEdge,
                               child: AnimatedOpacity(
-                                duration: const Duration(seconds: 1),
+                                duration: const Duration(seconds: 0),
                                 opacity: _bottomRowOpacity,
                                 child: Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -359,6 +359,8 @@ class _OnBoardScreenState extends State<OnBoardScreen>
     bool hide = false,
   }) =>
       GestureDetector(
+        key: ValueKey(
+            "onboarding${isPointingRight ? 'Right' : 'Left'}ArrowButton"),
         onTap: onTap,
         // child: CustomPaint(
         //   painter: CustomButton2(),

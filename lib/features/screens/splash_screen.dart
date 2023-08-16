@@ -63,9 +63,9 @@ class _SplashScreenState extends State<SplashScreen> {
           'Push OnBoardScreen() from ${rootRouter.current.name} at splash_screen.dart',);
       const navTo = OnBoardScreen();
       if (mounted) {
-        await context.router.push(navTo);
+        await context.router.replace(navTo);
       } else {
-        await rootRouter.push(navTo);
+        await rootRouter.replace(navTo);
       }
       widget.onLoginResult?.call(false);
       return;
@@ -74,9 +74,9 @@ class _SplashScreenState extends State<SplashScreen> {
     if (userState.isLoggedIn && userState.authType != BiometricAuth.none) {
       const navTo = PinCodeScreen();
       if (mounted) {
-        await context.router.push(navTo);
+        await context.router.replace(navTo);
       } else {
-        await rootRouter.push(navTo);
+        await rootRouter.replace(navTo);
       }
       log.info(
         'User is already authenticated so push the PinCodeScreen and check user details on vegi backend',
@@ -88,9 +88,9 @@ class _SplashScreenState extends State<SplashScreen> {
     } else {
       const navTo = OnBoardScreen();
       if (mounted) {
-        await context.router.push(navTo);
+        await context.router.replace(navTo);
       } else {
-        await rootRouter.push(navTo);
+        await rootRouter.replace(navTo);
       }
       log.info(
         'Navigate to OnBoardScreen from splash_screen because user has authState: ${store.state.userState.authState} and biometricAuth: [${userState.authType}]',

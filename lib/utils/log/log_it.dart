@@ -169,14 +169,18 @@ class LogIt {
     //   );
     // }
     if (!dontLog) {
+      var logMetaData = {
+        'stackTrace': stackTrace.toString(),
+        'meta': deviceMeta,
+        'level': level.name,
+        'detail': additionalDetails,
+      };
+      if (level == LogLevel.error) {
+        logMetaData.addAll({'AppState': store?.state.toJson() ?? {}});
+      }
       peeplEatsService.writeLog(
         message: '$message [${DateTime.now()}]',
-        details: {
-          'stackTrace': stackTrace.toString(),
-          'meta': deviceMeta,
-          'level': level.name,
-          'detail': additionalDetails,
-        },
+        details: logMetaData,
       );
 
       store?.dispatch(

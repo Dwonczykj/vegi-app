@@ -1,4 +1,13 @@
-include: package:very_good_analysis/analysis_options.yaml
+# This file configures the analyzer, which statically analyzes Dart code to
+# check for errors, warnings, and lints.
+#
+# The issues identified by the analyzer are surfaced in the UI of Dart-enabled
+# IDEs (https://dart.dev/tools#ides-and-editors). The analyzer can also be
+# invoked from the command line by running `flutter analyze`.
+
+# The following line activates a set of recommended lints for Flutter apps,
+# packages, and plugins designed to encourage good coding practices.
+include: package:flutter_lints/flutter.yaml
 
 linter:
   # The lint rules applied to this project can be customized in the
@@ -30,6 +39,10 @@ analyzer:
   errors:
     todo: ignore
     invalid_annotation_target: ignore
-    unused_import: false
+    # unused_import: false
     file_names: false
     directives_ordering: ignore
+
+
+# Additional information about this file can be found at
+# https://dart.dev/guides/language/analysis-options

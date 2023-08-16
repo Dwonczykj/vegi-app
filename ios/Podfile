@@ -1,5 +1,6 @@
 # Uncomment this line to define a global platform for your project
-platform :ios, '15.0'
+ios_deployment_target = '13.0'
+platform :ios, ios_deployment_target
 
 # CocoaPods analytics sends network stats synchronously affecting flutter build latency.
 ENV['COCOAPODS_DISABLE_STATS'] = 'true'
@@ -30,17 +31,32 @@ flutter_ios_podfile_setup
 target 'Runner' do
   use_frameworks!
   use_modular_headers!
-  pod 'Firebase/Analytics'
+
+  target 'RunnerTests' do
+    inherit! :search_paths
+  end
+  
+  target 'RunnerUITests' do
+    inherit! :complete
+  end
+
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
 end
 
 post_install do |installer|
   installer.pods_project.targets.each do |target|
     flutter_additional_ios_build_settings(target)
+
     target.build_configurations.each do |config|
-      config.build_settings["EXCLUDED_ARCHS[sdk=iphonesimulator*]"] = "arm64"
+      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = ios_deployment_target
       config.build_settings['GCC_PREPROCESSOR_DEFINITIONS'] ||= [
         '$(inherited)',
+
+        ## dart: PermissionGroup.calendar
+        # 'PERMISSION_EVENTS=1',
+
+        ## dart: PermissionGroup.reminders
+        # 'PERMISSION_REMINDERS=1',
 
         ## dart: PermissionGroup.contacts
         'PERMISSION_CONTACTS=1',
@@ -51,31 +67,33 @@ post_install do |installer|
         ## dart: PermissionGroup.microphone
         'PERMISSION_MICROPHONE=1',
 
+        ## dart: PermissionGroup.speech
+        # 'PERMISSION_SPEECH_RECOGNIZER=1',
+
         ## dart: PermissionGroup.photos
-        'PERMISSION_PHOTOS=1',
+        # 'PERMISSION_PHOTOS=1',
 
         ## dart: [PermissionGroup.location, PermissionGroup.locationAlways, PermissionGroup.locationWhenInUse]
-        # 'PERMISSION_LOCATION=1',
+        'PERMISSION_LOCATION=1',
 
         ## dart: PermissionGroup.notification
-        'PERMISSION_NOTIFICATIONS=1',
+        # 'PERMISSION_NOTIFICATIONS=1',
 
         ## dart: PermissionGroup.mediaLibrary
         # 'PERMISSION_MEDIA_LIBRARY=1',
+
+        ## dart: PermissionGroup.sensors
+        # 'PERMISSION_SENSORS=1',
 
         ## dart: PermissionGroup.bluetooth
         # 'PERMISSION_BLUETOOTH=1',
 
         ## dart: PermissionGroup.appTrackingTransparency
-        'PERMISSION_APP_TRACKING_TRANSPARENCY=1',
+        # 'PERMISSION_APP_TRACKING_TRANSPARENCY=1',
+
+        ## dart: PermissionGroup.criticalAlerts
+        # 'PERMISSION_CRITICAL_ALERTS=1'
       ]
-      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '13.0'
     end
   end
 end
-
-# post_install do |installer| 
-#   installer.pods_project.targets.each do |target| 
-#     flutter_additional_ios_build_settings(target) 
-#   end 
-# end

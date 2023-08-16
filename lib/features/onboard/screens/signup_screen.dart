@@ -284,6 +284,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 ),
                                 Expanded(
                                   child: TextFormField(
+                                    key: ValueKey("SignUpScreenPhoneNoCountryField"),
                                     controller: phoneController,
                                     keyboardType: TextInputType.number,
                                     autofocus: true,

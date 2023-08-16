@@ -1,5 +1,5 @@
 name: vegan_liverpool
-version: 1.5.0+27
+version: 1.5.0+202
 publish_to: none
 description: Food, Grocery delivery platform for Vegan products and food, with a built in wallet running on the Fuse network
 environment:
@@ -45,15 +45,15 @@ dependencies:
   font_awesome_flutter: ^10.2.1
   form_builder_extra_fields: ^10.0.0
   form_builder_validators: ^9.0.0
-  freezed_annotation: ^2.2.0
+  freezed_annotation: 2.2.0
   geolocator: ^9.0.2
   get_it: ^7.2.0
   google_api_headers: ^1.4.0
   html: ^0.15.0
   image_picker: ^0.8.6
-  injectable: ^2.1.1
+  injectable: 2.1.1
   internet_connection_checker: ^1.0.0+1
-  json_annotation: ^4.3.0
+  json_annotation: 4.8.0
   local_auth: ^2.1.2
   logger: ^1.0.0
   # mobile_scanner: ^3.0.0 # ~ to be added when this issue is fixed with pods -> https://stackoverflow.com/a/74288202
@@ -87,8 +87,8 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   qr_code_scanner: ^1.0.1
-  flutter_barcode_scanner: ^2.0.0
-  qr_flutter: ^4.0.0
+  # flutter_barcode_scanner: ^2.0.0
+  qr_flutter: 4.0.0
   uni_links: ^0.5.1
   fuse_wallet_sdk: ^0.1.0+1
   google_sign_in: ^6.1.0
@@ -112,17 +112,18 @@ dev_dependencies:
   integration_test:
     sdk: flutter
   auto_route_generator: ^5.0.2 # update required
-  build_runner: ^2.1.8
+  build_runner: 2.3.3
   dependency_validator: ^3.1.0
   flutter_launcher_icons: ^0.12.0
   flutter_native_splash: ^2.1.1
-  freezed: ^2.0.3+1
-  injectable_generator: ^2.1.5
-  json_serializable: ^6.1.3
+  freezed: 2.2.0
+  injectable_generator: 2.1.5
+  json_serializable: 6.6.1
   network_info_plus: ^4.0.0
   redux_remote_devtools: ^3.0.0
   very_good_analysis: ^4.0.0+1
   mockito: ^5.0.0
+  patrol: ^2.2.2
 flutter:
   assets:
     - environment/.env
@@ -162,3 +163,10 @@ flutter_intl:
   enabled: true
   class_name: I10n
   main_locale: en_US
+# ~ 
+patrol:
+  app_name: vegi
+  android:
+    package_name: com.vegiapp.vegi
+  ios:
+    bundle_id: com.vegiapp.vegi

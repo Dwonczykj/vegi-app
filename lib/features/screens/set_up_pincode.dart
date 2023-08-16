@@ -73,6 +73,7 @@ class _SetUpPinCodeScreenState extends State<SetUpPinCodeScreen> {
                   child: SizedBox(
                     width: 250,
                     child: PinCodeTextField(
+                      key: ValueKey("SetUpPincodeTextField"),
                       length: 6,
                       showCursor: false,
                       appContext: context,

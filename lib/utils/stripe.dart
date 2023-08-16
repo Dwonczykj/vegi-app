@@ -689,6 +689,13 @@ mixin _StripeServiceMixin on IStripeService {
     }
   }
 
+  /// Testing Apple Pay for iOS
+  ///
+  /// Once Apple Pay is set up to be used on mobile iOS devices, you can use your test API keys in your application to initialize Apple Pay. You will need to enter a real credit card number to your Apple Pay wallet, as the wallet does not allow Stripe's test cards. However, if you are in test mode and using your test API keys, Stripe will tokenize the real card to the fake test card and you can move forward using that for testing.
+  ///
+  /// Note: You can test your Apple Pay mobile integration using an iOS simulator as well as on a physical iOS device.
+  ///
+  /// ~ https://support.stripe.com/questions/testing-apple-pay-with-stripe?locale=en-GB
   @override
   Future<bool> handleApplePay({
     required String productName,
@@ -703,7 +710,7 @@ mixin _StripeServiceMixin on IStripeService {
     required bool shouldPushToHome,
   }) async {
     log.verbose(
-      'handleApplePay called on $this using ${useTest ? 'test' : 'live'} keys starting: "${Stripe.publishableKey.substring(0, 8)}"',
+      'handleApplePay called on $this using ${useTest ? 'test' : 'live'} keys starting: "${Stripe.publishableKey.substring(0, 8)}". To use on real device, submit realcard details which will be tokenized to stripe test card on stripe test dashboard and will not charge you.',
       stackTrace: StackTrace.current,
     );
     try {
