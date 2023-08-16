@@ -1,65 +1,58 @@
 import 'package:flutter/material.dart';
+import 'dart:math' as Math;
 
 class JsonViewer extends StatefulWidget {
-  const JsonViewer({required this.json, Key? key}) : super(key: key);
+  const JsonViewer(
+      {required this.json, required this.level, Key? key, this.padding = 8.0})
+      : super(key: key);
 
   final dynamic json;
+  final double padding;
+  final int level;
 
   @override
   _JsonViewerState createState() => _JsonViewerState();
 }
 
-// class _JsonViewerState extends State<JsonViewer> {
-//   @override
-//   Widget build(BuildContext context) {
-//     return Padding(
-//       padding: const EdgeInsets.all(8.0),
-//       child: _renderJson(widget.json),
-//     );
-//   }
-
-//   Widget _renderJson(dynamic json) {
-//     if (json is Map) {
-//       return JsonMap(map: json);
-//     } else if (json is List) {
-//       return JsonList(list: json);
-//     } else {
-//       return Text(json.toString());
-//     }
-//   }
-// }
-
 class _JsonViewerState extends State<JsonViewer> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Row(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: _renderJson(widget.json),
-          ),
-        ],
+      child: Padding(
+        padding: EdgeInsets.all(widget.padding),
+        child: _renderJson(widget.json),
       ),
     );
   }
 
   Widget _renderJson(dynamic json) {
     if (json is Map) {
-      return JsonMap(map: json);
+      return JsonMap(
+        map: json,
+        level: widget.level,
+      );
     } else if (json is List) {
-      return JsonList(list: json);
+      return JsonList(
+        list: json,
+        level: widget.level,
+      );
     } else {
-      return Text(json.toString());
+      return ConstrainedBox(
+        constraints: BoxConstraints(
+            maxWidth:
+                MediaQuery.of(context).size.width - (widget.padding * 2.0)),
+        child: Text(json.toString()),
+      );
     }
   }
 }
 
 class JsonMap extends StatefulWidget {
-  const JsonMap({required this.map, Key? key}) : super(key: key);
+  const JsonMap({required this.map, required this.level, Key? key})
+      : super(key: key);
 
   final Map map;
+  final int level;
 
   @override
   _JsonMapState createState() => _JsonMapState();
@@ -71,17 +64,46 @@ class _JsonMapState extends State<JsonMap> {
   @override
   Widget build(BuildContext context) {
     List<Widget> children = [];
-
+    const keyWidth = 0.2;
+    const spaceWidth = 0.1;
     widget.map.forEach((key, value) {
-      children.add(Row(
-        children: [
-          Expanded(child: Text('$key:')),
-          Expanded(child: JsonViewer(json: value)),
-        ],
-      ));
+      children.add(
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxWidth: MediaQuery.of(context).size.width *
+                      keyWidth, // 30% of screen width
+                ),
+                child: Text("$key:"),
+              ),
+              SizedBox(
+                  width: Math.min(
+                MediaQuery.of(context).size.width * spaceWidth,
+                10,
+              )), // You can adjust this value for spacing
+              ConstrainedBox(
+                constraints: BoxConstraints(
+                  maxWidth: MediaQuery.of(context).size.width *
+                      (1 - keyWidth - 0.1), // 60% of screen width
+                ),
+                child: JsonViewer(
+                  json: value,
+                  padding: 0.0,
+                  level: widget.level + 1,
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
     });
 
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         GestureDetector(
           onTap: () => setState(() {
@@ -90,20 +112,30 @@ class _JsonMapState extends State<JsonMap> {
           child: Row(
             children: [
               Icon(_isExpanded ? Icons.arrow_drop_down : Icons.arrow_right),
-              Text('Object (${widget.map.length})'),
+              Text("Object (${widget.map.length})"),
             ],
           ),
         ),
-        if (_isExpanded) ...children
+        if (_isExpanded)
+          Padding(
+            padding: EdgeInsets.only(left: 8.0 * (widget.level + 1)),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: children,
+            ),
+          )
+        // if (_isExpanded) ...children
       ],
     );
   }
 }
 
 class JsonList extends StatefulWidget {
-  const JsonList({required this.list, Key? key}) : super(key: key);
+  const JsonList({required this.list, required this.level, Key? key})
+      : super(key: key);
 
   final List list;
+  final int level;
 
   @override
   _JsonListState createState() => _JsonListState();
@@ -128,9 +160,19 @@ class _JsonListState extends State<JsonList> {
           ),
         ),
         if (_isExpanded)
-          for (var item in widget.list) ...[
-            JsonViewer(json: item),
-          ]
+          Padding(
+            padding: EdgeInsets.only(left: 8.0 * (widget.level + 1)),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                for (final item in widget.list)
+                  JsonViewer(
+                    json: item,
+                    level: widget.level + 1,
+                  ),
+              ],
+            ),
+          )
       ],
     );
   }

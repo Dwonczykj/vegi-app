@@ -43,7 +43,7 @@ abstract class $ProductOptionCopyWith<$Res> {
       String name,
       bool isRequired,
       @JsonKey(fromJson: fromJsonProductOptionValueList)
-          List<ProductOptionValue> values});
+      List<ProductOptionValue> values});
 }
 
 /// @nodoc
@@ -98,7 +98,7 @@ abstract class _$$_ProductOptionCopyWith<$Res>
       String name,
       bool isRequired,
       @JsonKey(fromJson: fromJsonProductOptionValueList)
-          List<ProductOptionValue> values});
+      List<ProductOptionValue> values});
 }
 
 /// @nodoc
@@ -204,7 +204,7 @@ abstract class _ProductOption extends ProductOption {
       required final String name,
       required final bool isRequired,
       @JsonKey(fromJson: fromJsonProductOptionValueList)
-          required final List<ProductOptionValue> values}) = _$_ProductOption;
+      required final List<ProductOptionValue> values}) = _$_ProductOption;
   _ProductOption._() : super._();
 
   factory _ProductOption.fromJson(Map<String, dynamic> json) =

@@ -66,10 +66,9 @@ abstract class $UserDTOCopyWith<$Res> {
       VegiRole role,
       String vendorRole,
       String deliveryPartnerRole,
-      @JsonKey(fromJson: fromJsonVendorDTO)
-          VendorDTO? vendor,
+      @JsonKey(fromJson: fromJsonVendorDTO) VendorDTO? vendor,
       @JsonKey(fromJson: fromJsonDeliveryPartnerDTO)
-          DeliveryPartnerDTO? deliveryPartner});
+      DeliveryPartnerDTO? deliveryPartner});
 
   $VendorDTOCopyWith<$Res>? get vendor;
   $DeliveryPartnerDTOCopyWith<$Res>? get deliveryPartner;
@@ -226,10 +225,9 @@ abstract class _$$_UserDTOCopyWith<$Res> implements $UserDTOCopyWith<$Res> {
       VegiRole role,
       String vendorRole,
       String deliveryPartnerRole,
-      @JsonKey(fromJson: fromJsonVendorDTO)
-          VendorDTO? vendor,
+      @JsonKey(fromJson: fromJsonVendorDTO) VendorDTO? vendor,
       @JsonKey(fromJson: fromJsonDeliveryPartnerDTO)
-          DeliveryPartnerDTO? deliveryPartner});
+      DeliveryPartnerDTO? deliveryPartner});
 
   @override
   $VendorDTOCopyWith<$Res>? get vendor;
@@ -358,10 +356,9 @@ class _$_UserDTO extends _UserDTO {
       required this.role,
       required this.vendorRole,
       required this.deliveryPartnerRole,
-      @JsonKey(fromJson: fromJsonVendorDTO)
-          required this.vendor,
+      @JsonKey(fromJson: fromJsonVendorDTO) required this.vendor,
       @JsonKey(fromJson: fromJsonDeliveryPartnerDTO)
-          required this.deliveryPartner})
+      required this.deliveryPartner})
       : super._();
 
   factory _$_UserDTO.fromJson(Map<String, dynamic> json) =>
@@ -507,10 +504,9 @@ abstract class _UserDTO extends UserDTO {
       required final VegiRole role,
       required final String vendorRole,
       required final String deliveryPartnerRole,
-      @JsonKey(fromJson: fromJsonVendorDTO)
-          required final VendorDTO? vendor,
+      @JsonKey(fromJson: fromJsonVendorDTO) required final VendorDTO? vendor,
       @JsonKey(fromJson: fromJsonDeliveryPartnerDTO)
-          required final DeliveryPartnerDTO? deliveryPartner}) = _$_UserDTO;
+      required final DeliveryPartnerDTO? deliveryPartner}) = _$_UserDTO;
   _UserDTO._() : super._();
 
   factory _UserDTO.fromJson(Map<String, dynamic> json) = _$_UserDTO.fromJson;

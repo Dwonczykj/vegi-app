@@ -9,6 +9,9 @@ import 'package:vegan_liverpool/features/shared/widgets/primary_button.dart';
 import 'package:vegan_liverpool/features/veganHome/widgets/shared/logoutConfirmationDialog.dart';
 import 'package:vegan_liverpool/models/app_state.dart';
 
+import 'package:auto_route/annotations.dart';
+
+@RoutePage()
 class ShowUserMnemonicScreen extends StatefulWidget {
   const ShowUserMnemonicScreen({Key? key}) : super(key: key);
 

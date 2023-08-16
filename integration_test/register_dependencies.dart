@@ -15,7 +15,7 @@ import 'package:vegan_liverpool/common/di/di.dart';
 import 'package:vegan_liverpool/common/di/env.dart';
 import 'package:vegan_liverpool/common/network/web3auth.dart';
 import 'package:vegan_liverpool/common/router/route_guards.dart';
-import 'package:vegan_liverpool/common/router/routes.gr.dart';
+import 'package:vegan_liverpool/common/router/routes.dart';
 import 'package:vegan_liverpool/common/router/vegi_debug_route_observer.dart';
 import 'package:vegan_liverpool/features/veganHome/widgets/shared/redux_state_viewer.dart';
 import 'package:vegan_liverpool/firebase_options.dart';

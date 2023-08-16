@@ -13,6 +13,9 @@ import 'package:vegan_liverpool/redux/viewsmodels/topup.dart';
 import 'package:vegan_liverpool/services.dart';
 import 'package:vegan_liverpool/utils/log/log.dart';
 
+import 'package:auto_route/annotations.dart';
+
+@RoutePage()
 class TopupScreen extends StatefulWidget {
   const TopupScreen({Key? key}) : super(key: key);
 

@@ -121,7 +121,20 @@ mixin _$WalletAction {
             String? txHash,
             int? blockNumber)
         receive,
-    required TResult Function(@JsonKey(name: '_id') String id, String status, String tokenAddress, String from, String to, String tokenName, String tokenSymbol, int tokenDecimal, int timestamp, String name, String? txHash, int? blockNumber) receiveNFT,
+    required TResult Function(
+            @JsonKey(name: '_id') String id,
+            String status,
+            String tokenAddress,
+            String from,
+            String to,
+            String tokenName,
+            String tokenSymbol,
+            int tokenDecimal,
+            int timestamp,
+            String name,
+            String? txHash,
+            int? blockNumber)
+        receiveNFT,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -199,7 +212,20 @@ mixin _$WalletAction {
             String? txHash,
             int? blockNumber)?
         receive,
-    TResult? Function(@JsonKey(name: '_id') String id, String status, String tokenAddress, String from, String to, String tokenName, String tokenSymbol, int tokenDecimal, int timestamp, String name, String? txHash, int? blockNumber)? receiveNFT,
+    TResult? Function(
+            @JsonKey(name: '_id') String id,
+            String status,
+            String tokenAddress,
+            String from,
+            String to,
+            String tokenName,
+            String tokenSymbol,
+            int tokenDecimal,
+            int timestamp,
+            String name,
+            String? txHash,
+            int? blockNumber)?
+        receiveNFT,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -277,7 +303,20 @@ mixin _$WalletAction {
             String? txHash,
             int? blockNumber)?
         receive,
-    TResult Function(@JsonKey(name: '_id') String id, String status, String tokenAddress, String from, String to, String tokenName, String tokenSymbol, int tokenDecimal, int timestamp, String name, String? txHash, int? blockNumber)? receiveNFT,
+    TResult Function(
+            @JsonKey(name: '_id') String id,
+            String status,
+            String tokenAddress,
+            String from,
+            String to,
+            String tokenName,
+            String tokenSymbol,
+            int tokenDecimal,
+            int timestamp,
+            String name,
+            String? txHash,
+            int? blockNumber)?
+        receiveNFT,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -704,7 +743,20 @@ class _$Bonus extends Bonus with DiagnosticableTreeMixin {
             String? txHash,
             int? blockNumber)
         receive,
-    required TResult Function(@JsonKey(name: '_id') String id, String status, String tokenAddress, String from, String to, String tokenName, String tokenSymbol, int tokenDecimal, int timestamp, String name, String? txHash, int? blockNumber) receiveNFT,
+    required TResult Function(
+            @JsonKey(name: '_id') String id,
+            String status,
+            String tokenAddress,
+            String from,
+            String to,
+            String tokenName,
+            String tokenSymbol,
+            int tokenDecimal,
+            int timestamp,
+            String name,
+            String? txHash,
+            int? blockNumber)
+        receiveNFT,
   }) {
     return bonus(id, status, tokenAddress, to, value, tokenName, tokenSymbol,
         tokenDecimal, timestamp, name, txHash, blockNumber, from, bonusType);
@@ -786,7 +838,20 @@ class _$Bonus extends Bonus with DiagnosticableTreeMixin {
             String? txHash,
             int? blockNumber)?
         receive,
-    TResult? Function(@JsonKey(name: '_id') String id, String status, String tokenAddress, String from, String to, String tokenName, String tokenSymbol, int tokenDecimal, int timestamp, String name, String? txHash, int? blockNumber)? receiveNFT,
+    TResult? Function(
+            @JsonKey(name: '_id') String id,
+            String status,
+            String tokenAddress,
+            String from,
+            String to,
+            String tokenName,
+            String tokenSymbol,
+            int tokenDecimal,
+            int timestamp,
+            String name,
+            String? txHash,
+            int? blockNumber)?
+        receiveNFT,
   }) {
     return bonus?.call(
         id,
@@ -881,7 +946,20 @@ class _$Bonus extends Bonus with DiagnosticableTreeMixin {
             String? txHash,
             int? blockNumber)?
         receive,
-    TResult Function(@JsonKey(name: '_id') String id, String status, String tokenAddress, String from, String to, String tokenName, String tokenSymbol, int tokenDecimal, int timestamp, String name, String? txHash, int? blockNumber)? receiveNFT,
+    TResult Function(
+            @JsonKey(name: '_id') String id,
+            String status,
+            String tokenAddress,
+            String from,
+            String to,
+            String tokenName,
+            String tokenSymbol,
+            int tokenDecimal,
+            int timestamp,
+            String name,
+            String? txHash,
+            int? blockNumber)?
+        receiveNFT,
     required TResult orElse(),
   }) {
     if (bonus != null) {
@@ -1297,7 +1375,20 @@ class _$Send extends Send with DiagnosticableTreeMixin {
             String? txHash,
             int? blockNumber)
         receive,
-    required TResult Function(@JsonKey(name: '_id') String id, String status, String tokenAddress, String from, String to, String tokenName, String tokenSymbol, int tokenDecimal, int timestamp, String name, String? txHash, int? blockNumber) receiveNFT,
+    required TResult Function(
+            @JsonKey(name: '_id') String id,
+            String status,
+            String tokenAddress,
+            String from,
+            String to,
+            String tokenName,
+            String tokenSymbol,
+            int tokenDecimal,
+            int timestamp,
+            String name,
+            String? txHash,
+            int? blockNumber)
+        receiveNFT,
   }) {
     return send(id, status, tokenAddress, from, to, value, tokenName,
         tokenSymbol, tokenDecimal, timestamp, name, txHash, blockNumber);
@@ -1379,7 +1470,20 @@ class _$Send extends Send with DiagnosticableTreeMixin {
             String? txHash,
             int? blockNumber)?
         receive,
-    TResult? Function(@JsonKey(name: '_id') String id, String status, String tokenAddress, String from, String to, String tokenName, String tokenSymbol, int tokenDecimal, int timestamp, String name, String? txHash, int? blockNumber)? receiveNFT,
+    TResult? Function(
+            @JsonKey(name: '_id') String id,
+            String status,
+            String tokenAddress,
+            String from,
+            String to,
+            String tokenName,
+            String tokenSymbol,
+            int tokenDecimal,
+            int timestamp,
+            String name,
+            String? txHash,
+            int? blockNumber)?
+        receiveNFT,
   }) {
     return send?.call(id, status, tokenAddress, from, to, value, tokenName,
         tokenSymbol, tokenDecimal, timestamp, name, txHash, blockNumber);
@@ -1461,7 +1565,20 @@ class _$Send extends Send with DiagnosticableTreeMixin {
             String? txHash,
             int? blockNumber)?
         receive,
-    TResult Function(@JsonKey(name: '_id') String id, String status, String tokenAddress, String from, String to, String tokenName, String tokenSymbol, int tokenDecimal, int timestamp, String name, String? txHash, int? blockNumber)? receiveNFT,
+    TResult Function(
+            @JsonKey(name: '_id') String id,
+            String status,
+            String tokenAddress,
+            String from,
+            String to,
+            String tokenName,
+            String tokenSymbol,
+            int tokenDecimal,
+            int timestamp,
+            String name,
+            String? txHash,
+            int? blockNumber)?
+        receiveNFT,
     required TResult orElse(),
   }) {
     if (send != null) {
@@ -1879,7 +1996,20 @@ class _$FiatDeposit extends FiatDeposit with DiagnosticableTreeMixin {
             String? txHash,
             int? blockNumber)
         receive,
-    required TResult Function(@JsonKey(name: '_id') String id, String status, String tokenAddress, String from, String to, String tokenName, String tokenSymbol, int tokenDecimal, int timestamp, String name, String? txHash, int? blockNumber) receiveNFT,
+    required TResult Function(
+            @JsonKey(name: '_id') String id,
+            String status,
+            String tokenAddress,
+            String from,
+            String to,
+            String tokenName,
+            String tokenSymbol,
+            int tokenDecimal,
+            int timestamp,
+            String name,
+            String? txHash,
+            int? blockNumber)
+        receiveNFT,
   }) {
     return fiatDeposit(id, status, tokenAddress, to, value, tokenName,
         tokenSymbol, tokenDecimal, timestamp, name, txHash, blockNumber, from);
@@ -1961,7 +2091,20 @@ class _$FiatDeposit extends FiatDeposit with DiagnosticableTreeMixin {
             String? txHash,
             int? blockNumber)?
         receive,
-    TResult? Function(@JsonKey(name: '_id') String id, String status, String tokenAddress, String from, String to, String tokenName, String tokenSymbol, int tokenDecimal, int timestamp, String name, String? txHash, int? blockNumber)? receiveNFT,
+    TResult? Function(
+            @JsonKey(name: '_id') String id,
+            String status,
+            String tokenAddress,
+            String from,
+            String to,
+            String tokenName,
+            String tokenSymbol,
+            int tokenDecimal,
+            int timestamp,
+            String name,
+            String? txHash,
+            int? blockNumber)?
+        receiveNFT,
   }) {
     return fiatDeposit?.call(id, status, tokenAddress, to, value, tokenName,
         tokenSymbol, tokenDecimal, timestamp, name, txHash, blockNumber, from);
@@ -2043,7 +2186,20 @@ class _$FiatDeposit extends FiatDeposit with DiagnosticableTreeMixin {
             String? txHash,
             int? blockNumber)?
         receive,
-    TResult Function(@JsonKey(name: '_id') String id, String status, String tokenAddress, String from, String to, String tokenName, String tokenSymbol, int tokenDecimal, int timestamp, String name, String? txHash, int? blockNumber)? receiveNFT,
+    TResult Function(
+            @JsonKey(name: '_id') String id,
+            String status,
+            String tokenAddress,
+            String from,
+            String to,
+            String tokenName,
+            String tokenSymbol,
+            int tokenDecimal,
+            int timestamp,
+            String name,
+            String? txHash,
+            int? blockNumber)?
+        receiveNFT,
     required TResult orElse(),
   }) {
     if (fiatDeposit != null) {
@@ -2381,7 +2537,20 @@ class _$CreateWallet extends CreateWallet with DiagnosticableTreeMixin {
             String? txHash,
             int? blockNumber)
         receive,
-    required TResult Function(@JsonKey(name: '_id') String id, String status, String tokenAddress, String from, String to, String tokenName, String tokenSymbol, int tokenDecimal, int timestamp, String name, String? txHash, int? blockNumber) receiveNFT,
+    required TResult Function(
+            @JsonKey(name: '_id') String id,
+            String status,
+            String tokenAddress,
+            String from,
+            String to,
+            String tokenName,
+            String tokenSymbol,
+            int tokenDecimal,
+            int timestamp,
+            String name,
+            String? txHash,
+            int? blockNumber)
+        receiveNFT,
   }) {
     return createWallet(id, status, timestamp, name, txHash, blockNumber);
   }
@@ -2462,7 +2631,20 @@ class _$CreateWallet extends CreateWallet with DiagnosticableTreeMixin {
             String? txHash,
             int? blockNumber)?
         receive,
-    TResult? Function(@JsonKey(name: '_id') String id, String status, String tokenAddress, String from, String to, String tokenName, String tokenSymbol, int tokenDecimal, int timestamp, String name, String? txHash, int? blockNumber)? receiveNFT,
+    TResult? Function(
+            @JsonKey(name: '_id') String id,
+            String status,
+            String tokenAddress,
+            String from,
+            String to,
+            String tokenName,
+            String tokenSymbol,
+            int tokenDecimal,
+            int timestamp,
+            String name,
+            String? txHash,
+            int? blockNumber)?
+        receiveNFT,
   }) {
     return createWallet?.call(id, status, timestamp, name, txHash, blockNumber);
   }
@@ -2543,7 +2725,20 @@ class _$CreateWallet extends CreateWallet with DiagnosticableTreeMixin {
             String? txHash,
             int? blockNumber)?
         receive,
-    TResult Function(@JsonKey(name: '_id') String id, String status, String tokenAddress, String from, String to, String tokenName, String tokenSymbol, int tokenDecimal, int timestamp, String name, String? txHash, int? blockNumber)? receiveNFT,
+    TResult Function(
+            @JsonKey(name: '_id') String id,
+            String status,
+            String tokenAddress,
+            String from,
+            String to,
+            String tokenName,
+            String tokenSymbol,
+            int tokenDecimal,
+            int timestamp,
+            String name,
+            String? txHash,
+            int? blockNumber)?
+        receiveNFT,
     required TResult orElse(),
   }) {
     if (createWallet != null) {
@@ -2877,7 +3072,20 @@ class _$Swap extends Swap with DiagnosticableTreeMixin {
             String? txHash,
             int? blockNumber)
         receive,
-    required TResult Function(@JsonKey(name: '_id') String id, String status, String tokenAddress, String from, String to, String tokenName, String tokenSymbol, int tokenDecimal, int timestamp, String name, String? txHash, int? blockNumber) receiveNFT,
+    required TResult Function(
+            @JsonKey(name: '_id') String id,
+            String status,
+            String tokenAddress,
+            String from,
+            String to,
+            String tokenName,
+            String tokenSymbol,
+            int tokenDecimal,
+            int timestamp,
+            String name,
+            String? txHash,
+            int? blockNumber)
+        receiveNFT,
   }) {
     return swap(id, status, timestamp, name, txHash, blockNumber, tradeInfo);
   }
@@ -2958,7 +3166,20 @@ class _$Swap extends Swap with DiagnosticableTreeMixin {
             String? txHash,
             int? blockNumber)?
         receive,
-    TResult? Function(@JsonKey(name: '_id') String id, String status, String tokenAddress, String from, String to, String tokenName, String tokenSymbol, int tokenDecimal, int timestamp, String name, String? txHash, int? blockNumber)? receiveNFT,
+    TResult? Function(
+            @JsonKey(name: '_id') String id,
+            String status,
+            String tokenAddress,
+            String from,
+            String to,
+            String tokenName,
+            String tokenSymbol,
+            int tokenDecimal,
+            int timestamp,
+            String name,
+            String? txHash,
+            int? blockNumber)?
+        receiveNFT,
   }) {
     return swap?.call(
         id, status, timestamp, name, txHash, blockNumber, tradeInfo);
@@ -3040,7 +3261,20 @@ class _$Swap extends Swap with DiagnosticableTreeMixin {
             String? txHash,
             int? blockNumber)?
         receive,
-    TResult Function(@JsonKey(name: '_id') String id, String status, String tokenAddress, String from, String to, String tokenName, String tokenSymbol, int tokenDecimal, int timestamp, String name, String? txHash, int? blockNumber)? receiveNFT,
+    TResult Function(
+            @JsonKey(name: '_id') String id,
+            String status,
+            String tokenAddress,
+            String from,
+            String to,
+            String tokenName,
+            String tokenSymbol,
+            int tokenDecimal,
+            int timestamp,
+            String name,
+            String? txHash,
+            int? blockNumber)?
+        receiveNFT,
     required TResult orElse(),
   }) {
     if (swap != null) {
@@ -3443,7 +3677,20 @@ class _$Receive extends Receive with DiagnosticableTreeMixin {
             String? txHash,
             int? blockNumber)
         receive,
-    required TResult Function(@JsonKey(name: '_id') String id, String status, String tokenAddress, String from, String to, String tokenName, String tokenSymbol, int tokenDecimal, int timestamp, String name, String? txHash, int? blockNumber) receiveNFT,
+    required TResult Function(
+            @JsonKey(name: '_id') String id,
+            String status,
+            String tokenAddress,
+            String from,
+            String to,
+            String tokenName,
+            String tokenSymbol,
+            int tokenDecimal,
+            int timestamp,
+            String name,
+            String? txHash,
+            int? blockNumber)
+        receiveNFT,
   }) {
     return receive(id, status, tokenAddress, from, to, value, tokenName,
         tokenSymbol, tokenDecimal, timestamp, name, txHash, blockNumber);
@@ -3525,7 +3772,20 @@ class _$Receive extends Receive with DiagnosticableTreeMixin {
             String? txHash,
             int? blockNumber)?
         receive,
-    TResult? Function(@JsonKey(name: '_id') String id, String status, String tokenAddress, String from, String to, String tokenName, String tokenSymbol, int tokenDecimal, int timestamp, String name, String? txHash, int? blockNumber)? receiveNFT,
+    TResult? Function(
+            @JsonKey(name: '_id') String id,
+            String status,
+            String tokenAddress,
+            String from,
+            String to,
+            String tokenName,
+            String tokenSymbol,
+            int tokenDecimal,
+            int timestamp,
+            String name,
+            String? txHash,
+            int? blockNumber)?
+        receiveNFT,
   }) {
     return receive?.call(id, status, tokenAddress, from, to, value, tokenName,
         tokenSymbol, tokenDecimal, timestamp, name, txHash, blockNumber);
@@ -3607,7 +3867,20 @@ class _$Receive extends Receive with DiagnosticableTreeMixin {
             String? txHash,
             int? blockNumber)?
         receive,
-    TResult Function(@JsonKey(name: '_id') String id, String status, String tokenAddress, String from, String to, String tokenName, String tokenSymbol, int tokenDecimal, int timestamp, String name, String? txHash, int? blockNumber)? receiveNFT,
+    TResult Function(
+            @JsonKey(name: '_id') String id,
+            String status,
+            String tokenAddress,
+            String from,
+            String to,
+            String tokenName,
+            String tokenSymbol,
+            int tokenDecimal,
+            int timestamp,
+            String name,
+            String? txHash,
+            int? blockNumber)?
+        receiveNFT,
     required TResult orElse(),
   }) {
     if (receive != null) {
@@ -4014,7 +4287,20 @@ class _$ReceiveNFT extends ReceiveNFT with DiagnosticableTreeMixin {
             String? txHash,
             int? blockNumber)
         receive,
-    required TResult Function(@JsonKey(name: '_id') String id, String status, String tokenAddress, String from, String to, String tokenName, String tokenSymbol, int tokenDecimal, int timestamp, String name, String? txHash, int? blockNumber) receiveNFT,
+    required TResult Function(
+            @JsonKey(name: '_id') String id,
+            String status,
+            String tokenAddress,
+            String from,
+            String to,
+            String tokenName,
+            String tokenSymbol,
+            int tokenDecimal,
+            int timestamp,
+            String name,
+            String? txHash,
+            int? blockNumber)
+        receiveNFT,
   }) {
     return receiveNFT(id, status, tokenAddress, from, to, tokenName,
         tokenSymbol, tokenDecimal, timestamp, name, txHash, blockNumber);
@@ -4096,7 +4382,20 @@ class _$ReceiveNFT extends ReceiveNFT with DiagnosticableTreeMixin {
             String? txHash,
             int? blockNumber)?
         receive,
-    TResult? Function(@JsonKey(name: '_id') String id, String status, String tokenAddress, String from, String to, String tokenName, String tokenSymbol, int tokenDecimal, int timestamp, String name, String? txHash, int? blockNumber)? receiveNFT,
+    TResult? Function(
+            @JsonKey(name: '_id') String id,
+            String status,
+            String tokenAddress,
+            String from,
+            String to,
+            String tokenName,
+            String tokenSymbol,
+            int tokenDecimal,
+            int timestamp,
+            String name,
+            String? txHash,
+            int? blockNumber)?
+        receiveNFT,
   }) {
     return receiveNFT?.call(id, status, tokenAddress, from, to, tokenName,
         tokenSymbol, tokenDecimal, timestamp, name, txHash, blockNumber);
@@ -4178,7 +4477,20 @@ class _$ReceiveNFT extends ReceiveNFT with DiagnosticableTreeMixin {
             String? txHash,
             int? blockNumber)?
         receive,
-    TResult Function(@JsonKey(name: '_id') String id, String status, String tokenAddress, String from, String to, String tokenName, String tokenSymbol, int tokenDecimal, int timestamp, String name, String? txHash, int? blockNumber)? receiveNFT,
+    TResult Function(
+            @JsonKey(name: '_id') String id,
+            String status,
+            String tokenAddress,
+            String from,
+            String to,
+            String tokenName,
+            String tokenSymbol,
+            int tokenDecimal,
+            int timestamp,
+            String name,
+            String? txHash,
+            int? blockNumber)?
+        receiveNFT,
     required TResult orElse(),
   }) {
     if (receiveNFT != null) {

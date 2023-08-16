@@ -12,6 +12,7 @@ import 'package:vegan_liverpool/models/cart/order.dart';
 import 'package:vegan_liverpool/models/cart/view_item.dart';
 import 'package:vegan_liverpool/models/restaurant/orderDetails.dart';
 
+@RoutePage()
 class PreparingOrderPage extends StatelessWidget {
   const PreparingOrderPage({required this.order, Key? key}) : super(key: key);
 

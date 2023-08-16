@@ -46,15 +46,15 @@ abstract class $OnboardingStateCopyWith<$Res> {
   @useResult
   $Res call(
       {@JsonKey(includeFromJson: false, includeToJson: false)
-          bool signupIsInFlux,
+      bool signupIsInFlux,
       @JsonKey(includeFromJson: false, includeToJson: false)
-          SignUpErrorDetails? signupError,
+      SignUpErrorDetails? signupError,
       @JsonKey(includeFromJson: false, includeToJson: false)
-          String signupStatusMessage,
+      String signupStatusMessage,
       @JsonKey(includeFromJson: false, includeToJson: false)
-          AuthCredential? conflictingCredentials,
+      AuthCredential? conflictingCredentials,
       @JsonKey(includeFromJson: false, includeToJson: false)
-          String? conflictingEmail});
+      String? conflictingEmail});
 
   $SignUpErrorDetailsCopyWith<$Res>? get signupError;
 }
@@ -125,15 +125,15 @@ abstract class _$$_OnboardingStateCopyWith<$Res>
   @useResult
   $Res call(
       {@JsonKey(includeFromJson: false, includeToJson: false)
-          bool signupIsInFlux,
+      bool signupIsInFlux,
       @JsonKey(includeFromJson: false, includeToJson: false)
-          SignUpErrorDetails? signupError,
+      SignUpErrorDetails? signupError,
       @JsonKey(includeFromJson: false, includeToJson: false)
-          String signupStatusMessage,
+      String signupStatusMessage,
       @JsonKey(includeFromJson: false, includeToJson: false)
-          AuthCredential? conflictingCredentials,
+      AuthCredential? conflictingCredentials,
       @JsonKey(includeFromJson: false, includeToJson: false)
-          String? conflictingEmail});
+      String? conflictingEmail});
 
   @override
   $SignUpErrorDetailsCopyWith<$Res>? get signupError;
@@ -187,15 +187,15 @@ class __$$_OnboardingStateCopyWithImpl<$Res>
 class _$_OnboardingState extends _OnboardingState {
   _$_OnboardingState(
       {@JsonKey(includeFromJson: false, includeToJson: false)
-          this.signupIsInFlux = false,
+      this.signupIsInFlux = false,
       @JsonKey(includeFromJson: false, includeToJson: false)
-          this.signupError = null,
+      this.signupError = null,
       @JsonKey(includeFromJson: false, includeToJson: false)
-          this.signupStatusMessage = '',
+      this.signupStatusMessage = '',
       @JsonKey(includeFromJson: false, includeToJson: false)
-          this.conflictingCredentials,
+      this.conflictingCredentials,
       @JsonKey(includeFromJson: false, includeToJson: false)
-          this.conflictingEmail})
+      this.conflictingEmail})
       : super._();
 
   factory _$_OnboardingState.fromJson(Map<String, dynamic> json) =>
@@ -261,15 +261,15 @@ class _$_OnboardingState extends _OnboardingState {
 abstract class _OnboardingState extends OnboardingState {
   factory _OnboardingState(
       {@JsonKey(includeFromJson: false, includeToJson: false)
-          final bool signupIsInFlux,
+      final bool signupIsInFlux,
       @JsonKey(includeFromJson: false, includeToJson: false)
-          final SignUpErrorDetails? signupError,
+      final SignUpErrorDetails? signupError,
       @JsonKey(includeFromJson: false, includeToJson: false)
-          final String signupStatusMessage,
+      final String signupStatusMessage,
       @JsonKey(includeFromJson: false, includeToJson: false)
-          final AuthCredential? conflictingCredentials,
+      final AuthCredential? conflictingCredentials,
       @JsonKey(includeFromJson: false, includeToJson: false)
-          final String? conflictingEmail}) = _$_OnboardingState;
+      final String? conflictingEmail}) = _$_OnboardingState;
   _OnboardingState._() : super._();
 
   factory _OnboardingState.fromJson(Map<String, dynamic> json) =

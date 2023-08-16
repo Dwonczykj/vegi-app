@@ -48,7 +48,7 @@ class VegiDebugRouteObserver extends AutoRouterObserver {
 
 class RootRouterLogger extends RootRouter {
   RootRouterLogger({required AuthGuard authGuard})
-      : super(authGuard: authGuard);
+      : super();
 
   @override
   Future<T?> push<T extends Object?>(PageRouteInfo<dynamic> route,
@@ -63,7 +63,7 @@ class RootRouterLogger extends RootRouter {
       ],
     );
     log.info(
-      '🚀 rootRouter.push: ${route.routeName} from ${current.route.name}: ${filteredStack.pretty()}',
+      '🚀 rootRouter.push: ${route.routeName} from ${this.current.route.name}: ${filteredStack.pretty()}',
       stackTraceLines: filteredStack,
     );
     return super.push(
@@ -103,10 +103,7 @@ class RootRouterLogger extends RootRouter {
   }
 
   @override
-  Future<void> replaceAll(
-    List<PageRouteInfo<dynamic>> routes, {
-    void Function(NavigationFailure)? onFailure,
-  }) {
+  Future<void> replaceAll(List<PageRouteInfo<dynamic>> routes, {void Function(NavigationFailure)? onFailure, bool? updateExistingRoutes,}) {
     final filteredStack = StackTrace.current.filterCallStack(
       dontMatch: RegExp(
           r'([A-Za-z_]+)\.([A-Za-z_. <>]+)\s\((package:vegan_liverpool)\/(common\/router\/)(vegi_debug_route_observer\.dart):(\d+):(\d+)\)',),

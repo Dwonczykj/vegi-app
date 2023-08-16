@@ -112,10 +112,10 @@ abstract class $OrderCopyWith<$Res> {
       num total,
       num subtotal,
       @JsonKey(fromJson: jsonToTimeStamp, toJson: timeStampToJsonInt)
-          DateTime orderedDateTime,
+      DateTime orderedDateTime,
       @JsonEnum()
       @JsonKey(unknownEnumValue: OrderPaidStatus.unpaid)
-          OrderPaidStatus paymentStatus,
+      OrderPaidStatus paymentStatus,
       String paymentIntentId,
       String? firebaseRegistrationToken,
       String? deliveryName,
@@ -134,45 +134,45 @@ abstract class $OrderCopyWith<$Res> {
       String customerWalletAddress,
       String publicId,
       @JsonKey(unknownEnumValue: RestaurantAcceptanceStatus.pending)
-          RestaurantAcceptanceStatus restaurantAcceptanceStatus,
+      RestaurantAcceptanceStatus restaurantAcceptanceStatus,
       @JsonKey(unknownEnumValue: OrderAcceptanceStatus.pending)
-          OrderAcceptanceStatus orderAcceptanceStatus,
+      OrderAcceptanceStatus orderAcceptanceStatus,
       int tipAmount,
       double rewardsIssued,
       bool sentToDeliveryPartner,
-      @JsonKey(fromJson: orderCompletedFlagFromJson, toJson: orderCompletedFlagToJson)
-          OrderCompletedFlag completedFlag,
+      @JsonKey(
+          fromJson: orderCompletedFlagFromJson,
+          toJson: orderCompletedFlagToJson)
+      OrderCompletedFlag completedFlag,
       String? completedOrderFeedback,
       int? deliveryPunctuality,
       int? orderCondition,
       DateTime fulfilmentSlotFrom,
       DateTime fulfilmentSlotTo,
       @JsonKey(fromJson: fromJsonFulfilmentMethod)
-          FulfilmentMethod? fulfilmentMethod,
-      @JsonKey(fromJson: fromJsonVendorDTO)
-          VendorDTO? vendor,
+      FulfilmentMethod? fulfilmentMethod,
+      @JsonKey(fromJson: fromJsonVendorDTO) VendorDTO? vendor,
       @JsonKey(fromJson: fromJsonDeliveryPartnerDTO)
-          DeliveryPartnerDTO? deliveryPartner,
-      @JsonKey(fromJson: fromJsonOrderItemList)
-          List<OrderItem> items,
+      DeliveryPartnerDTO? deliveryPartner,
+      @JsonKey(fromJson: fromJsonOrderItemList) List<OrderItem> items,
       num fulfilmentCharge,
       num platformFee,
       Currency currency,
-      @JsonKey(fromJson: jsonToTimeStampNullable, toJson: timeStampToJsonIntNullable)
-          DateTime? paidDateTime,
-      @JsonKey(fromJson: jsonToTimeStampNullable, toJson: timeStampToJsonIntNullable)
-          DateTime? refundDateTime,
+      @JsonKey(
+          fromJson: jsonToTimeStampNullable, toJson: timeStampToJsonIntNullable)
+      DateTime? paidDateTime,
+      @JsonKey(
+          fromJson: jsonToTimeStampNullable, toJson: timeStampToJsonIntNullable)
+      DateTime? refundDateTime,
       bool paymentAttempted,
       String deliveryAddressCountry,
       String deliveryAddressCounty,
-      @JsonKey(fromJson: fromJsonDiscountList)
-          List<Discount> discounts,
-      @JsonKey(fromJson: fromJsonOrder)
-          Order? parentOrder,
+      @JsonKey(fromJson: fromJsonDiscountList) List<Discount> discounts,
+      @JsonKey(fromJson: fromJsonOrder) Order? parentOrder,
       @JsonKey(fromJson: fromJsonOrderItemList)
-          List<OrderItem> unfulfilledItems,
+      List<OrderItem> unfulfilledItems,
       @JsonKey(fromJson: fromJsonTransactionItemList)
-          List<TransactionItem> transactions});
+      List<TransactionItem> transactions});
 
   $FulfilmentMethodCopyWith<$Res>? get fulfilmentMethod;
   $VendorDTOCopyWith<$Res>? get vendor;
@@ -503,10 +503,10 @@ abstract class _$$_OrderCopyWith<$Res> implements $OrderCopyWith<$Res> {
       num total,
       num subtotal,
       @JsonKey(fromJson: jsonToTimeStamp, toJson: timeStampToJsonInt)
-          DateTime orderedDateTime,
+      DateTime orderedDateTime,
       @JsonEnum()
       @JsonKey(unknownEnumValue: OrderPaidStatus.unpaid)
-          OrderPaidStatus paymentStatus,
+      OrderPaidStatus paymentStatus,
       String paymentIntentId,
       String? firebaseRegistrationToken,
       String? deliveryName,
@@ -525,45 +525,45 @@ abstract class _$$_OrderCopyWith<$Res> implements $OrderCopyWith<$Res> {
       String customerWalletAddress,
       String publicId,
       @JsonKey(unknownEnumValue: RestaurantAcceptanceStatus.pending)
-          RestaurantAcceptanceStatus restaurantAcceptanceStatus,
+      RestaurantAcceptanceStatus restaurantAcceptanceStatus,
       @JsonKey(unknownEnumValue: OrderAcceptanceStatus.pending)
-          OrderAcceptanceStatus orderAcceptanceStatus,
+      OrderAcceptanceStatus orderAcceptanceStatus,
       int tipAmount,
       double rewardsIssued,
       bool sentToDeliveryPartner,
-      @JsonKey(fromJson: orderCompletedFlagFromJson, toJson: orderCompletedFlagToJson)
-          OrderCompletedFlag completedFlag,
+      @JsonKey(
+          fromJson: orderCompletedFlagFromJson,
+          toJson: orderCompletedFlagToJson)
+      OrderCompletedFlag completedFlag,
       String? completedOrderFeedback,
       int? deliveryPunctuality,
       int? orderCondition,
       DateTime fulfilmentSlotFrom,
       DateTime fulfilmentSlotTo,
       @JsonKey(fromJson: fromJsonFulfilmentMethod)
-          FulfilmentMethod? fulfilmentMethod,
-      @JsonKey(fromJson: fromJsonVendorDTO)
-          VendorDTO? vendor,
+      FulfilmentMethod? fulfilmentMethod,
+      @JsonKey(fromJson: fromJsonVendorDTO) VendorDTO? vendor,
       @JsonKey(fromJson: fromJsonDeliveryPartnerDTO)
-          DeliveryPartnerDTO? deliveryPartner,
-      @JsonKey(fromJson: fromJsonOrderItemList)
-          List<OrderItem> items,
+      DeliveryPartnerDTO? deliveryPartner,
+      @JsonKey(fromJson: fromJsonOrderItemList) List<OrderItem> items,
       num fulfilmentCharge,
       num platformFee,
       Currency currency,
-      @JsonKey(fromJson: jsonToTimeStampNullable, toJson: timeStampToJsonIntNullable)
-          DateTime? paidDateTime,
-      @JsonKey(fromJson: jsonToTimeStampNullable, toJson: timeStampToJsonIntNullable)
-          DateTime? refundDateTime,
+      @JsonKey(
+          fromJson: jsonToTimeStampNullable, toJson: timeStampToJsonIntNullable)
+      DateTime? paidDateTime,
+      @JsonKey(
+          fromJson: jsonToTimeStampNullable, toJson: timeStampToJsonIntNullable)
+      DateTime? refundDateTime,
       bool paymentAttempted,
       String deliveryAddressCountry,
       String deliveryAddressCounty,
-      @JsonKey(fromJson: fromJsonDiscountList)
-          List<Discount> discounts,
-      @JsonKey(fromJson: fromJsonOrder)
-          Order? parentOrder,
+      @JsonKey(fromJson: fromJsonDiscountList) List<Discount> discounts,
+      @JsonKey(fromJson: fromJsonOrder) Order? parentOrder,
       @JsonKey(fromJson: fromJsonOrderItemList)
-          List<OrderItem> unfulfilledItems,
+      List<OrderItem> unfulfilledItems,
       @JsonKey(fromJson: fromJsonTransactionItemList)
-          List<TransactionItem> transactions});
+      List<TransactionItem> transactions});
 
   @override
   $FulfilmentMethodCopyWith<$Res>? get fulfilmentMethod;
@@ -844,10 +844,10 @@ class _$_Order extends _Order {
       required this.total,
       required this.subtotal,
       @JsonKey(fromJson: jsonToTimeStamp, toJson: timeStampToJsonInt)
-          required this.orderedDateTime,
+      required this.orderedDateTime,
       @JsonEnum()
       @JsonKey(unknownEnumValue: OrderPaidStatus.unpaid)
-          required this.paymentStatus,
+      required this.paymentStatus,
       required this.paymentIntentId,
       required this.firebaseRegistrationToken,
       required this.deliveryName,
@@ -866,45 +866,45 @@ class _$_Order extends _Order {
       required this.customerWalletAddress,
       required this.publicId,
       @JsonKey(unknownEnumValue: RestaurantAcceptanceStatus.pending)
-          required this.restaurantAcceptanceStatus,
+      required this.restaurantAcceptanceStatus,
       @JsonKey(unknownEnumValue: OrderAcceptanceStatus.pending)
-          required this.orderAcceptanceStatus,
+      required this.orderAcceptanceStatus,
       required this.tipAmount,
       required this.rewardsIssued,
       required this.sentToDeliveryPartner,
-      @JsonKey(fromJson: orderCompletedFlagFromJson, toJson: orderCompletedFlagToJson)
-          required this.completedFlag,
+      @JsonKey(
+          fromJson: orderCompletedFlagFromJson,
+          toJson: orderCompletedFlagToJson)
+      required this.completedFlag,
       required this.completedOrderFeedback,
       required this.deliveryPunctuality,
       required this.orderCondition,
       required this.fulfilmentSlotFrom,
       required this.fulfilmentSlotTo,
       @JsonKey(fromJson: fromJsonFulfilmentMethod)
-          required this.fulfilmentMethod,
-      @JsonKey(fromJson: fromJsonVendorDTO)
-          required this.vendor,
+      required this.fulfilmentMethod,
+      @JsonKey(fromJson: fromJsonVendorDTO) required this.vendor,
       @JsonKey(fromJson: fromJsonDeliveryPartnerDTO)
-          required this.deliveryPartner,
-      @JsonKey(fromJson: fromJsonOrderItemList)
-          required this.items,
+      required this.deliveryPartner,
+      @JsonKey(fromJson: fromJsonOrderItemList) required this.items,
       required this.fulfilmentCharge,
       required this.platformFee,
       this.currency = Currency.GBPx,
-      @JsonKey(fromJson: jsonToTimeStampNullable, toJson: timeStampToJsonIntNullable)
-          this.paidDateTime,
-      @JsonKey(fromJson: jsonToTimeStampNullable, toJson: timeStampToJsonIntNullable)
-          this.refundDateTime,
+      @JsonKey(
+          fromJson: jsonToTimeStampNullable, toJson: timeStampToJsonIntNullable)
+      this.paidDateTime,
+      @JsonKey(
+          fromJson: jsonToTimeStampNullable, toJson: timeStampToJsonIntNullable)
+      this.refundDateTime,
       this.paymentAttempted = false,
       this.deliveryAddressCountry = 'GB',
       this.deliveryAddressCounty = '',
-      @JsonKey(fromJson: fromJsonDiscountList)
-          this.discounts = const [],
-      @JsonKey(fromJson: fromJsonOrder)
-          this.parentOrder = null,
+      @JsonKey(fromJson: fromJsonDiscountList) this.discounts = const [],
+      @JsonKey(fromJson: fromJsonOrder) this.parentOrder = null,
       @JsonKey(fromJson: fromJsonOrderItemList)
-          this.unfulfilledItems = const [],
+      this.unfulfilledItems = const [],
       @JsonKey(fromJson: fromJsonTransactionItemList)
-          this.transactions = const []})
+      this.transactions = const []})
       : super._();
 
   factory _$_Order.fromJson(Map<String, dynamic> json) =>
@@ -1200,10 +1200,10 @@ abstract class _Order extends Order {
       required final num total,
       required final num subtotal,
       @JsonKey(fromJson: jsonToTimeStamp, toJson: timeStampToJsonInt)
-          required final DateTime orderedDateTime,
+      required final DateTime orderedDateTime,
       @JsonEnum()
       @JsonKey(unknownEnumValue: OrderPaidStatus.unpaid)
-          required final OrderPaidStatus paymentStatus,
+      required final OrderPaidStatus paymentStatus,
       required final String paymentIntentId,
       required final String? firebaseRegistrationToken,
       required final String? deliveryName,
@@ -1222,45 +1222,46 @@ abstract class _Order extends Order {
       required final String customerWalletAddress,
       required final String publicId,
       @JsonKey(unknownEnumValue: RestaurantAcceptanceStatus.pending)
-          required final RestaurantAcceptanceStatus restaurantAcceptanceStatus,
+      required final RestaurantAcceptanceStatus restaurantAcceptanceStatus,
       @JsonKey(unknownEnumValue: OrderAcceptanceStatus.pending)
-          required final OrderAcceptanceStatus orderAcceptanceStatus,
+      required final OrderAcceptanceStatus orderAcceptanceStatus,
       required final int tipAmount,
       required final double rewardsIssued,
       required final bool sentToDeliveryPartner,
-      @JsonKey(fromJson: orderCompletedFlagFromJson, toJson: orderCompletedFlagToJson)
-          required final OrderCompletedFlag completedFlag,
+      @JsonKey(
+          fromJson: orderCompletedFlagFromJson,
+          toJson: orderCompletedFlagToJson)
+      required final OrderCompletedFlag completedFlag,
       required final String? completedOrderFeedback,
       required final int? deliveryPunctuality,
       required final int? orderCondition,
       required final DateTime fulfilmentSlotFrom,
       required final DateTime fulfilmentSlotTo,
       @JsonKey(fromJson: fromJsonFulfilmentMethod)
-          required final FulfilmentMethod? fulfilmentMethod,
-      @JsonKey(fromJson: fromJsonVendorDTO)
-          required final VendorDTO? vendor,
+      required final FulfilmentMethod? fulfilmentMethod,
+      @JsonKey(fromJson: fromJsonVendorDTO) required final VendorDTO? vendor,
       @JsonKey(fromJson: fromJsonDeliveryPartnerDTO)
-          required final DeliveryPartnerDTO? deliveryPartner,
+      required final DeliveryPartnerDTO? deliveryPartner,
       @JsonKey(fromJson: fromJsonOrderItemList)
-          required final List<OrderItem> items,
+      required final List<OrderItem> items,
       required final num fulfilmentCharge,
       required final num platformFee,
       final Currency currency,
-      @JsonKey(fromJson: jsonToTimeStampNullable, toJson: timeStampToJsonIntNullable)
-          final DateTime? paidDateTime,
-      @JsonKey(fromJson: jsonToTimeStampNullable, toJson: timeStampToJsonIntNullable)
-          final DateTime? refundDateTime,
+      @JsonKey(
+          fromJson: jsonToTimeStampNullable, toJson: timeStampToJsonIntNullable)
+      final DateTime? paidDateTime,
+      @JsonKey(
+          fromJson: jsonToTimeStampNullable, toJson: timeStampToJsonIntNullable)
+      final DateTime? refundDateTime,
       final bool paymentAttempted,
       final String deliveryAddressCountry,
       final String deliveryAddressCounty,
-      @JsonKey(fromJson: fromJsonDiscountList)
-          final List<Discount> discounts,
-      @JsonKey(fromJson: fromJsonOrder)
-          final Order? parentOrder,
+      @JsonKey(fromJson: fromJsonDiscountList) final List<Discount> discounts,
+      @JsonKey(fromJson: fromJsonOrder) final Order? parentOrder,
       @JsonKey(fromJson: fromJsonOrderItemList)
-          final List<OrderItem> unfulfilledItems,
+      final List<OrderItem> unfulfilledItems,
       @JsonKey(fromJson: fromJsonTransactionItemList)
-          final List<TransactionItem> transactions}) = _$_Order;
+      final List<TransactionItem> transactions}) = _$_Order;
   _Order._() : super._();
 
   factory _Order.fromJson(Map<String, dynamic> json) = _$_Order.fromJson;

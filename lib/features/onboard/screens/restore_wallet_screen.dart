@@ -11,6 +11,9 @@ import 'package:vegan_liverpool/redux/viewsmodels/recovery.dart';
 import 'package:vegan_liverpool/services.dart';
 import 'package:vegan_liverpool/utils/log/log.dart';
 
+import 'package:auto_route/annotations.dart';
+
+@RoutePage()
 class RestoreFromBackupScreen extends StatefulWidget {
   const RestoreFromBackupScreen({Key? key}) : super(key: key);
 

@@ -23,7 +23,7 @@ class BackupWalletAppBar extends StatelessWidget {
                 expandedHeight: MediaQuery.of(context).size.height * 0.01,
                 flexibleSpace: FlexibleSpaceBar(
                   title: GestureDetector(
-                    onTap: () => context.router.push(const ShowUserMnemonic()),
+                    onTap: () => context.router.push(const ShowUserMnemonicScreen()),
                     child: Card(
                       margin: const EdgeInsets.symmetric(horizontal: 20),
                       color: themeShade200,

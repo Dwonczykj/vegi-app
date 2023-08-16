@@ -1,20 +1,21 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:auto_route/empty_router_widgets.dart';
-import 'package:vegan_liverpool/features/topup/screens/topup.dart';
-import 'package:vegan_liverpool/features/topup/screens/topup_explained.dart';
 
-const topupTab = AutoRoute(
+import '../../../common/router/routes.gr.dart';
+
+@RoutePage(name: 'TopUpRouter')
+class TopUpRouterPage extends AutoRouter {}
+
+final topupTab = AutoRoute(
   path: 'topup',
-  name: 'topupTab',
-  page: EmptyRouterPage,
+  page: TopUpRouter.page,
   children: [
     AutoRoute(
       initial: true,
       path: 'topUp',
-      page: TopupScreen,
+      page: TopupScreen.page,
     ),
     AutoRoute(
-      page: TopupExplained,
+      page: TopupExplained.page,
     ),
   ],
 );

@@ -42,7 +42,7 @@ abstract class $SignUpErrorDetailsCopyWith<$Res> {
       {String title,
       String message,
       @JsonKey(fromJson: stackTraceFromString, toJson: stackTraceToString)
-          StackTrace? stackTrace,
+      StackTrace? stackTrace,
       SignUpErrCode? code});
 }
 
@@ -97,7 +97,7 @@ abstract class _$$_SignUpErrorDetailsCopyWith<$Res>
       {String title,
       String message,
       @JsonKey(fromJson: stackTraceFromString, toJson: stackTraceToString)
-          StackTrace? stackTrace,
+      StackTrace? stackTrace,
       SignUpErrCode? code});
 }
 
@@ -146,7 +146,7 @@ class _$_SignUpErrorDetails extends _SignUpErrorDetails {
       {required this.title,
       required this.message,
       @JsonKey(fromJson: stackTraceFromString, toJson: stackTraceToString)
-          this.stackTrace,
+      this.stackTrace,
       this.code})
       : super._();
 
@@ -183,7 +183,7 @@ abstract class _SignUpErrorDetails extends SignUpErrorDetails {
       {required final String title,
       required final String message,
       @JsonKey(fromJson: stackTraceFromString, toJson: stackTraceToString)
-          final StackTrace? stackTrace,
+      final StackTrace? stackTrace,
       final SignUpErrCode? code}) = _$_SignUpErrorDetails;
   _SignUpErrorDetails._() : super._();
 

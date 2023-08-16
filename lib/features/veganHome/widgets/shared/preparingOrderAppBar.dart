@@ -31,7 +31,7 @@ class PreparingOrderAppBar extends StatelessWidget {
       flexibleSpace: FlexibleSpaceBar(
         title: GestureDetector(
           onTap: () => context.router.push(
-            PreparingOrderPage(order: order),
+            PreparingOrderRoute(order: order),
           ),
           child: Card(
             color: barColor,

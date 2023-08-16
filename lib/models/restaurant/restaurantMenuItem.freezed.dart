@@ -70,7 +70,7 @@ abstract class $RestaurantMenuItemCopyWith<$Res> {
       String categoryName,
       int categoryId,
       @JsonKey(fromJson: gbpxPriceFromJson, toJson: gbpxPriceToJson)
-          Money price,
+      Money price,
       String description,
       Map<String, int> extras,
       List<ProductOptionsCategory> listOfProductOptionCategories,
@@ -265,7 +265,7 @@ abstract class _$$_RestaurantMenuItemCopyWith<$Res>
       String categoryName,
       int categoryId,
       @JsonKey(fromJson: gbpxPriceFromJson, toJson: gbpxPriceToJson)
-          Money price,
+      Money price,
       String description,
       Map<String, int> extras,
       List<ProductOptionsCategory> listOfProductOptionCategories,
@@ -443,7 +443,7 @@ class _$_RestaurantMenuItem extends _RestaurantMenuItem {
       required this.categoryName,
       required this.categoryId,
       @JsonKey(fromJson: gbpxPriceFromJson, toJson: gbpxPriceToJson)
-          required this.price,
+      required this.price,
       required this.description,
       required this.extras,
       required this.listOfProductOptionCategories,
@@ -642,7 +642,7 @@ abstract class _RestaurantMenuItem extends RestaurantMenuItem {
       required final String categoryName,
       required final int categoryId,
       @JsonKey(fromJson: gbpxPriceFromJson, toJson: gbpxPriceToJson)
-          required final Money price,
+      required final Money price,
       required final String description,
       required final Map<String, int> extras,
       required final List<ProductOptionsCategory> listOfProductOptionCategories,

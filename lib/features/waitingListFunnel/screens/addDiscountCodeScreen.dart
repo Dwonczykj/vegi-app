@@ -1,3 +1,4 @@
+import 'package:auto_route/annotations.dart';
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -26,6 +27,7 @@ typedef AddDiscountCode = void Function(
   void Function(dynamic error) onError,
 );
 
+@RoutePage()
 class AddDiscountCodeScreen extends StatefulWidget {
   const AddDiscountCodeScreen({
     required this.onVerifyDiscountCode, Key? key,

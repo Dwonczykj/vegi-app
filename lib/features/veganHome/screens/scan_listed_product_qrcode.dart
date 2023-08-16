@@ -8,6 +8,9 @@ import 'package:vegan_liverpool/features/veganHome/widgets/shared/scan_qrcode_co
 import 'package:vegan_liverpool/models/app_state.dart';
 import 'package:vegan_liverpool/redux/viewsmodels/scanProductQRCodeViewModel.dart';
 
+import 'package:auto_route/annotations.dart';
+
+@RoutePage()
 class ScanListedProductQRCodeScreen extends StatelessWidget {
   const ScanListedProductQRCodeScreen({Key? key}) : super(key: key);
 

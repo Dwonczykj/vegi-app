@@ -46,7 +46,7 @@ abstract class $CartItemCopyWith<$Res> {
       {int id,
       RestaurantMenuItem menuItem,
       @JsonKey(fromJson: gbpxPriceFromJson, toJson: gbpxPriceToJson)
-          Money totalItemPrice,
+      Money totalItemPrice,
       int itemQuantity,
       Map<int, ProductOptionValue> selectedProductOptions,
       Currency itemCurrency});
@@ -122,7 +122,7 @@ abstract class _$$_CartItemCopyWith<$Res> implements $CartItemCopyWith<$Res> {
       {int id,
       RestaurantMenuItem menuItem,
       @JsonKey(fromJson: gbpxPriceFromJson, toJson: gbpxPriceToJson)
-          Money totalItemPrice,
+      Money totalItemPrice,
       int itemQuantity,
       Map<int, ProductOptionValue> selectedProductOptions,
       Currency itemCurrency});
@@ -186,7 +186,7 @@ class _$_CartItem extends _CartItem {
       {required this.id,
       required this.menuItem,
       @JsonKey(fromJson: gbpxPriceFromJson, toJson: gbpxPriceToJson)
-          required this.totalItemPrice,
+      required this.totalItemPrice,
       required this.itemQuantity,
       required this.selectedProductOptions,
       this.itemCurrency = Currency.GBPx})
@@ -265,7 +265,7 @@ abstract class _CartItem extends CartItem {
       {required final int id,
       required final RestaurantMenuItem menuItem,
       @JsonKey(fromJson: gbpxPriceFromJson, toJson: gbpxPriceToJson)
-          required final Money totalItemPrice,
+      required final Money totalItemPrice,
       required final int itemQuantity,
       required final Map<int, ProductOptionValue> selectedProductOptions,
       final Currency itemCurrency}) = _$_CartItem;

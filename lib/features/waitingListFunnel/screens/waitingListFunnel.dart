@@ -13,6 +13,9 @@ import 'package:vegan_liverpool/models/app_state.dart';
 import 'package:vegan_liverpool/redux/actions/user_actions.dart';
 import 'package:vegan_liverpool/redux/viewsmodels/waitingListFunnel/waitingListFunnelViewModel.dart';
 
+import 'package:auto_route/annotations.dart';
+
+@RoutePage()
 class WaitingListFunnelScreen extends StatefulWidget {
   const WaitingListFunnelScreen({Key? key}) : super(key: key);
 

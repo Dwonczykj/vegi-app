@@ -14,6 +14,9 @@ import 'package:vegan_liverpool/redux/viewsmodels/scanPaymentRecipientQRViewMode
 
 /// Screen Route to Scan a Cashier's QR Code to receive the basket to Consumers phone
 /// along with the cashier's address and allow the user to accept the basket and pay for it.
+import 'package:auto_route/annotations.dart';
+
+@RoutePage()
 class ScanPaymentRecipientQR extends StatelessWidget {
   const ScanPaymentRecipientQR({Key? key}) : super(key: key);
 

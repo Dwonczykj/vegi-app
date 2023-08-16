@@ -20,6 +20,9 @@ import 'package:vegan_liverpool/utils/log/log.dart';
 
 import 'package:vegan_liverpool/features/veganHome/Helpers/helpers.dart';
 
+import 'package:auto_route/annotations.dart';
+
+@RoutePage()
 class ImageFromGalleryEx extends StatefulWidget {
   const ImageFromGalleryEx(
     this.type, {

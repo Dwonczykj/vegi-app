@@ -6,6 +6,9 @@ import 'package:vegan_liverpool/features/shared/widgets/my_scaffold.dart';
 import 'package:vegan_liverpool/utils/constants.dart';
 import 'package:vegan_liverpool/utils/url.dart';
 
+import 'package:auto_route/annotations.dart';
+
+@RoutePage()
 class AboutScreen extends StatelessWidget {
   const AboutScreen({Key? key}) : super(key: key);
 

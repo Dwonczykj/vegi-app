@@ -7,6 +7,9 @@ import 'package:vegan_liverpool/features/shared/widgets/primary_button.dart';
 import 'package:vegan_liverpool/models/app_state.dart';
 import 'package:vegan_liverpool/redux/viewsmodels/account.dart';
 
+import 'package:auto_route/annotations.dart';
+
+@RoutePage()
 class VerifyUserMnemonic extends StatefulWidget {
   const VerifyUserMnemonic({Key? key}) : super(key: key);
 

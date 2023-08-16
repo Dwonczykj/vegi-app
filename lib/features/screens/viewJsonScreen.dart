@@ -1,4 +1,5 @@
-import 'package:auto_route/auto_route.dart';
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:vegan_liverpool/features/screens/app_log_list_view.dart';
@@ -6,13 +7,15 @@ import 'package:vegan_liverpool/features/shared/widgets/jsonView.dart';
 import 'package:vegan_liverpool/features/shared/widgets/my_scaffold.dart';
 import 'package:vegan_liverpool/features/veganHome/widgets/shared/shareDialog.dart';
 import 'package:vegan_liverpool/models/app_state.dart';
+import 'package:auto_route/annotations.dart';
 
 @RoutePage()
-class AppStateViewScreen extends StatelessWidget {
-  const AppStateViewScreen({
+class ViewJsonScreen extends StatelessWidget {
+  const ViewJsonScreen({
+    required this.data,
     Key? key,
   }) : super(key: key);
-  
+  final Map<String, dynamic> data;
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +24,7 @@ class AppStateViewScreen extends StatelessWidget {
       distinct: true,
       builder: (context, viewModel) {
         return MyScaffold(
-          title: 'App state viewer',
+          title: 'JSON Viewer',
           actions: [
             IconButton(
               icon: const Icon(
@@ -31,14 +34,14 @@ class AppStateViewScreen extends StatelessWidget {
               onPressed: () => showDialog<Widget>(
                 context: context,
                 builder: (context) => ShareDialog(
-                  data: viewModel.appStateAsString,
+                  data: jsonEncode(data),
                 ),
               ),
             ),
           ],
           body: SingleChildScrollView(
             child: JsonViewer(
-              json: viewModel.appStateJson,
+              json: data,
               level: 0,
             ),
           ),
@@ -47,4 +50,3 @@ class AppStateViewScreen extends StatelessWidget {
     );
   }
 }
-

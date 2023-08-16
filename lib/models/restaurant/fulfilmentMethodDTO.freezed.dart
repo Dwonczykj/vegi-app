@@ -53,19 +53,16 @@ abstract class $FulfilmentMethodDTOCopyWith<$Res> {
       {int id,
       FulfilmentMethodType methodType,
       num slotLength,
-      @JsonKey(fromJson: fromJsonVendorDTO)
-          VendorDTO? vendor,
+      @JsonKey(fromJson: fromJsonVendorDTO) VendorDTO? vendor,
       @JsonKey(fromJson: fromJsonDeliveryPartnerDTO)
-          DeliveryPartnerDTO? deliveryPartner,
+      DeliveryPartnerDTO? deliveryPartner,
       num? bufferLength,
       String? orderCutoff,
       int? maxOrders,
       num? maxDeliveryDistance,
       num? priceModifier,
-      @JsonKey(fromJson: fromJsonAddressDTO)
-          AddressDTO? fulfilmentOrigin,
-      @JsonKey(fromJson: fromJsonOpeningHours)
-          OpeningHours? openingHours});
+      @JsonKey(fromJson: fromJsonAddressDTO) AddressDTO? fulfilmentOrigin,
+      @JsonKey(fromJson: fromJsonOpeningHours) OpeningHours? openingHours});
 
   $VendorDTOCopyWith<$Res>? get vendor;
   $DeliveryPartnerDTOCopyWith<$Res>? get deliveryPartner;
@@ -212,19 +209,16 @@ abstract class _$$_FulfilmentMethodDTOCopyWith<$Res>
       {int id,
       FulfilmentMethodType methodType,
       num slotLength,
-      @JsonKey(fromJson: fromJsonVendorDTO)
-          VendorDTO? vendor,
+      @JsonKey(fromJson: fromJsonVendorDTO) VendorDTO? vendor,
       @JsonKey(fromJson: fromJsonDeliveryPartnerDTO)
-          DeliveryPartnerDTO? deliveryPartner,
+      DeliveryPartnerDTO? deliveryPartner,
       num? bufferLength,
       String? orderCutoff,
       int? maxOrders,
       num? maxDeliveryDistance,
       num? priceModifier,
-      @JsonKey(fromJson: fromJsonAddressDTO)
-          AddressDTO? fulfilmentOrigin,
-      @JsonKey(fromJson: fromJsonOpeningHours)
-          OpeningHours? openingHours});
+      @JsonKey(fromJson: fromJsonAddressDTO) AddressDTO? fulfilmentOrigin,
+      @JsonKey(fromJson: fromJsonOpeningHours) OpeningHours? openingHours});
 
   @override
   $VendorDTOCopyWith<$Res>? get vendor;
@@ -321,19 +315,16 @@ class _$_FulfilmentMethodDTO extends _FulfilmentMethodDTO {
       {required this.id,
       required this.methodType,
       required this.slotLength,
-      @JsonKey(fromJson: fromJsonVendorDTO)
-          required this.vendor,
+      @JsonKey(fromJson: fromJsonVendorDTO) required this.vendor,
       @JsonKey(fromJson: fromJsonDeliveryPartnerDTO)
-          required this.deliveryPartner,
+      required this.deliveryPartner,
       this.bufferLength,
       this.orderCutoff,
       this.maxOrders,
       this.maxDeliveryDistance,
       this.priceModifier,
-      @JsonKey(fromJson: fromJsonAddressDTO)
-          this.fulfilmentOrigin,
-      @JsonKey(fromJson: fromJsonOpeningHours)
-          this.openingHours})
+      @JsonKey(fromJson: fromJsonAddressDTO) this.fulfilmentOrigin,
+      @JsonKey(fromJson: fromJsonOpeningHours) this.openingHours})
       : super._();
 
   factory _$_FulfilmentMethodDTO.fromJson(Map<String, dynamic> json) =>
@@ -439,19 +430,17 @@ abstract class _FulfilmentMethodDTO extends FulfilmentMethodDTO {
       {required final int id,
       required final FulfilmentMethodType methodType,
       required final num slotLength,
-      @JsonKey(fromJson: fromJsonVendorDTO)
-          required final VendorDTO? vendor,
+      @JsonKey(fromJson: fromJsonVendorDTO) required final VendorDTO? vendor,
       @JsonKey(fromJson: fromJsonDeliveryPartnerDTO)
-          required final DeliveryPartnerDTO? deliveryPartner,
+      required final DeliveryPartnerDTO? deliveryPartner,
       final num? bufferLength,
       final String? orderCutoff,
       final int? maxOrders,
       final num? maxDeliveryDistance,
       final num? priceModifier,
-      @JsonKey(fromJson: fromJsonAddressDTO)
-          final AddressDTO? fulfilmentOrigin,
+      @JsonKey(fromJson: fromJsonAddressDTO) final AddressDTO? fulfilmentOrigin,
       @JsonKey(fromJson: fromJsonOpeningHours)
-          final OpeningHours? openingHours}) = _$_FulfilmentMethodDTO;
+      final OpeningHours? openingHours}) = _$_FulfilmentMethodDTO;
   _FulfilmentMethodDTO._() : super._();
 
   factory _FulfilmentMethodDTO.fromJson(Map<String, dynamic> json) =

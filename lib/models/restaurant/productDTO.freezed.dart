@@ -656,10 +656,9 @@ abstract class _ProductDTO extends ProductDTO {
       required final bool isFeatured,
       required final ProductDiscontinuedStatus status,
       required final String productBarCode,
-      @JsonKey(fromJson: fromJsonVendorDTO)
-          required final VendorDTO? vendor,
+      @JsonKey(fromJson: fromJsonVendorDTO) required final VendorDTO? vendor,
       @JsonKey(fromJson: fromJsonProductCategory)
-          required final ProductCategory? category,
+      required final ProductCategory? category,
       final String description,
       final String shortDescription,
       final String imageURL,
@@ -673,9 +672,9 @@ abstract class _ProductDTO extends ProductDTO {
       final String brandName,
       final String taxGroup,
       @JsonKey(fromJson: fromJsonProductOptionList)
-          final List<ProductOption> options,
+      final List<ProductOption> options,
       @JsonKey(fromJson: fromJsonESCRating)
-          final ESCRating? rating}) = _$_ProductDTO;
+      final ESCRating? rating}) = _$_ProductDTO;
   _ProductDTO._() : super._();
 
   factory _ProductDTO.fromJson(Map<String, dynamic> json) =

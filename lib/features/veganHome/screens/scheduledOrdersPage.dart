@@ -14,6 +14,9 @@ import 'package:vegan_liverpool/models/restaurant/cartItem.dart';
 import 'package:vegan_liverpool/models/restaurant/orderDetails.dart';
 import 'package:vegan_liverpool/redux/viewsmodels/pastOrders.dart';
 
+import 'package:auto_route/annotations.dart';
+
+@RoutePage()
 class ScheduledOrdersPage extends StatelessWidget {
   const ScheduledOrdersPage({Key? key}) : super(key: key);
 

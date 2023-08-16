@@ -27,6 +27,9 @@ import 'package:vegan_liverpool/redux/viewsmodels/checkout/payment_method_vm.dar
 import 'package:vegan_liverpool/services.dart';
 import 'package:vegan_liverpool/utils/log/log.dart';
 
+import 'package:auto_route/annotations.dart';
+
+@RoutePage()
 class CheckoutScreenPt2 extends StatelessWidget {
   const CheckoutScreenPt2({Key? key}) : super(key: key);
 

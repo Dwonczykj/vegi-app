@@ -326,7 +326,7 @@ abstract class _StripePaymentMethodInternal
       required final StripePaymentMethodType type,
       required final bool livemode,
       @JsonKey(name: 'billing_details')
-          final StripeBillingDetails? billingDetails,
+      final StripeBillingDetails? billingDetails,
       final StripePaymentMethodCard? card,
       final String? customer,
       final num created,

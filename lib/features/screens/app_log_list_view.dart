@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:auto_route/annotations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:vegan_liverpool/common/router/routes.gr.dart' as routes;
@@ -14,6 +15,7 @@ import 'package:vegan_liverpool/models/app_state.dart';
 import 'package:vegan_liverpool/models/log_event.dart';
 import 'package:vegan_liverpool/services.dart';
 
+@RoutePage()
 class AppLogListView extends StatelessWidget {
   const AppLogListView({Key? key}) : super(key: key);
 
@@ -92,7 +94,8 @@ class AppLogListViewModel extends Equatable {
 
   String get logsAsString => logs.reversed.map((e) => e.toString()).join('\n');
 
-  String get appStateAsString => jsonEncode(appState.toJson());
+  Map<String,dynamic> get appStateJson => appState.toJson();
+  String get appStateAsString => jsonEncode(appStateJson);
 
   @override
   List<Object?> get props => [

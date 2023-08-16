@@ -227,7 +227,7 @@ class _RestaurantMenuAppBarState extends State<RestaurantMenuAppBar> {
                         onPressed: () async {
                           // await context.router
                           //     .push(const ScanPaymentRecipientQR());
-                          await context.router.push(const ScanProductQRCode());
+                          await context.router.push(const ScanListedProductQRCodeScreen());
                           // await showModalBottomSheet<Widget>(
                           //   isScrollControlled: true,
                           //   backgroundColor: Color.fromARGB(255, 44, 42, 39),

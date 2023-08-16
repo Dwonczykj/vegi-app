@@ -171,7 +171,7 @@ class _$_CreateOrderResponse extends _CreateOrderResponse {
       {required this.orderId,
       required this.orderCreationStatus,
       @JsonKey(fromJson: Order.fromJson, toJson: orderToJson)
-          required this.order,
+      required this.order,
       required this.stripePaymentIntent})
       : super._();
 
@@ -231,7 +231,7 @@ abstract class _CreateOrderResponse extends CreateOrderResponse {
           {required final int orderId,
           required final OrderCreationStatus orderCreationStatus,
           @JsonKey(fromJson: Order.fromJson, toJson: orderToJson)
-              required final Order order,
+          required final Order order,
           required final StripePaymentIntent stripePaymentIntent}) =
       _$_CreateOrderResponse;
   _CreateOrderResponse._() : super._();

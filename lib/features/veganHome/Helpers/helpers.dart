@@ -962,5 +962,8 @@ String getFunctionName(Function function) {
   final stringRepresentation = function.toString();
   final start = stringRepresentation.indexOf("'") + 1;
   final end = stringRepresentation.lastIndexOf("'");
+  if (end <= start) {
+    return stringRepresentation;
+  }
   return stringRepresentation.substring(start, end);
 }

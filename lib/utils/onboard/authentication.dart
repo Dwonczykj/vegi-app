@@ -443,7 +443,7 @@ class Authentication {
     if (rootRouter.current.name.toLowerCase().contains('dialog')) {
       await rootRouter.pop();
     }
-    await rootRouter.push(const ShowUserMnemonic());
+    await rootRouter.push(const ShowUserMnemonicScreen());
     store.dispatch(SignupLoading(isLoading: false));
     return;
   }

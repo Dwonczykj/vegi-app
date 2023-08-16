@@ -18,6 +18,7 @@ import 'package:vegan_liverpool/services.dart';
 import 'package:vegan_liverpool/utils/constants.dart';
 import 'package:vegan_liverpool/utils/log/log.dart';
 
+@RoutePage()
 class SplashScreen extends StatefulWidget {
   const SplashScreen({
     Key? key,

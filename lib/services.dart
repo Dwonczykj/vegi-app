@@ -1,14 +1,13 @@
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:fuse_wallet_sdk/fuse_wallet_sdk.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:vegan_liverpool/common/router/routes.dart';
 import 'package:vegan_liverpool/models/app_state.dart';
 import 'package:vegan_liverpool/new_version.dart';
 import 'package:vegan_liverpool/services/apis/fxService.dart';
-import 'package:vegan_liverpool/utils/constants.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:phone_number/phone_number.dart';
 import 'package:vegan_liverpool/common/di/di.dart';
-import 'package:vegan_liverpool/common/router/routes.gr.dart';
 import 'package:vegan_liverpool/services/apis/blueBeaconService.dart';
 import 'package:vegan_liverpool/services/apis/peeplEats.dart';
 import 'package:vegan_liverpool/services/apis/locationService.dart';

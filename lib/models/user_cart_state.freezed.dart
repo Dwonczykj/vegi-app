@@ -105,30 +105,28 @@ abstract class $UserCartStateCopyWith<$Res> {
   $Res call(
       {List<CartItem> cartItems,
       @JsonKey(fromJson: Money.fromJson, toJson: Money.toJson)
-          Money cartSubTotal,
-      @JsonKey(fromJson: Money.fromJson, toJson: Money.toJson)
-          Money cartTax,
-      @JsonKey(fromJson: Money.fromJson, toJson: Money.toJson)
-          Money cartTotal,
+      Money cartSubTotal,
+      @JsonKey(fromJson: Money.fromJson, toJson: Money.toJson) Money cartTax,
+      @JsonKey(fromJson: Money.fromJson, toJson: Money.toJson) Money cartTotal,
       Currency cartCurrency,
       num cartDiscountPercent,
       @JsonKey(fromJson: Money.fromJson, toJson: Money.toJson)
-          Money cartDiscountComputed,
+      Money cartDiscountComputed,
       @JsonKey(fromJson: Money.fromJson, toJson: Money.toJson)
-          Money voucherPotValue,
+      Money voucherPotValue,
       List<Discount> appliedVouchers,
       List<TimeSlot> deliverySlots,
       List<TimeSlot> collectionSlots,
       DeliveryAddresses? selectedDeliveryAddress,
       TimeSlot? selectedTimeSlot,
       @JsonKey(fromJson: Money.fromJson, toJson: Money.toJson)
-          Money selectedTipAmount,
+      Money selectedTipAmount,
       String discountCode,
       String paymentIntentID,
       @JsonKey(includeFromJson: false, includeToJson: false)
-          String paymentIntentClientSecret,
+      String paymentIntentClientSecret,
       @JsonKey(includeFromJson: false, includeToJson: false)
-          StripePaymentIntent? paymentIntent,
+      StripePaymentIntent? paymentIntent,
       String ephemeralKey,
       String publishableKey,
       Order? order,
@@ -146,7 +144,7 @@ abstract class $UserCartStateCopyWith<$Res> {
       FulfilmentMethodType fulfilmentMethod,
       int restaurantMinimumOrder,
       @JsonKey(fromJson: Money.fromJson, toJson: Money.toJson)
-          Money restaurantPlatformFee,
+      Money restaurantPlatformFee,
       String deliveryInstructions,
       PaymentMethod? selectedPaymentMethod,
       List<String> fulfilmentPostalDistricts,
@@ -158,11 +156,11 @@ abstract class $UserCartStateCopyWith<$Res> {
       String orderCreationStatusMessage,
       StripePaymentStatus stripePaymentStatus,
       @JsonKey(fromJson: LivePayment.fromJson, toJson: paymentInProcessToJson)
-          LivePayment? paymentInProcess,
+      LivePayment? paymentInProcess,
       @JsonKey(includeFromJson: false, includeToJson: false)
-          bool isLoadingCartState,
+      bool isLoadingCartState,
       @JsonKey(includeFromJson: false, includeToJson: false)
-          ErrorDetails<CartErrCode>? errorDetails});
+      ErrorDetails<CartErrCode>? errorDetails});
 
   $DeliveryAddressesCopyWith<$Res>? get selectedDeliveryAddress;
   $TimeSlotCopyWith<$Res>? get selectedTimeSlot;
@@ -568,30 +566,28 @@ abstract class _$$_UserCartStateCopyWith<$Res>
   $Res call(
       {List<CartItem> cartItems,
       @JsonKey(fromJson: Money.fromJson, toJson: Money.toJson)
-          Money cartSubTotal,
-      @JsonKey(fromJson: Money.fromJson, toJson: Money.toJson)
-          Money cartTax,
-      @JsonKey(fromJson: Money.fromJson, toJson: Money.toJson)
-          Money cartTotal,
+      Money cartSubTotal,
+      @JsonKey(fromJson: Money.fromJson, toJson: Money.toJson) Money cartTax,
+      @JsonKey(fromJson: Money.fromJson, toJson: Money.toJson) Money cartTotal,
       Currency cartCurrency,
       num cartDiscountPercent,
       @JsonKey(fromJson: Money.fromJson, toJson: Money.toJson)
-          Money cartDiscountComputed,
+      Money cartDiscountComputed,
       @JsonKey(fromJson: Money.fromJson, toJson: Money.toJson)
-          Money voucherPotValue,
+      Money voucherPotValue,
       List<Discount> appliedVouchers,
       List<TimeSlot> deliverySlots,
       List<TimeSlot> collectionSlots,
       DeliveryAddresses? selectedDeliveryAddress,
       TimeSlot? selectedTimeSlot,
       @JsonKey(fromJson: Money.fromJson, toJson: Money.toJson)
-          Money selectedTipAmount,
+      Money selectedTipAmount,
       String discountCode,
       String paymentIntentID,
       @JsonKey(includeFromJson: false, includeToJson: false)
-          String paymentIntentClientSecret,
+      String paymentIntentClientSecret,
       @JsonKey(includeFromJson: false, includeToJson: false)
-          StripePaymentIntent? paymentIntent,
+      StripePaymentIntent? paymentIntent,
       String ephemeralKey,
       String publishableKey,
       Order? order,
@@ -609,7 +605,7 @@ abstract class _$$_UserCartStateCopyWith<$Res>
       FulfilmentMethodType fulfilmentMethod,
       int restaurantMinimumOrder,
       @JsonKey(fromJson: Money.fromJson, toJson: Money.toJson)
-          Money restaurantPlatformFee,
+      Money restaurantPlatformFee,
       String deliveryInstructions,
       PaymentMethod? selectedPaymentMethod,
       List<String> fulfilmentPostalDistricts,
@@ -621,11 +617,11 @@ abstract class _$$_UserCartStateCopyWith<$Res>
       String orderCreationStatusMessage,
       StripePaymentStatus stripePaymentStatus,
       @JsonKey(fromJson: LivePayment.fromJson, toJson: paymentInProcessToJson)
-          LivePayment? paymentInProcess,
+      LivePayment? paymentInProcess,
       @JsonKey(includeFromJson: false, includeToJson: false)
-          bool isLoadingCartState,
+      bool isLoadingCartState,
       @JsonKey(includeFromJson: false, includeToJson: false)
-          ErrorDetails<CartErrCode>? errorDetails});
+      ErrorDetails<CartErrCode>? errorDetails});
 
   @override
   $DeliveryAddressesCopyWith<$Res>? get selectedDeliveryAddress;
@@ -913,30 +909,30 @@ class _$_UserCartState extends _UserCartState with DiagnosticableTreeMixin {
   _$_UserCartState(
       {this.cartItems = const [],
       @JsonKey(fromJson: Money.fromJson, toJson: Money.toJson)
-          this.cartSubTotal = const Money.zeroGBP(),
+      this.cartSubTotal = const Money.zeroGBP(),
       @JsonKey(fromJson: Money.fromJson, toJson: Money.toJson)
-          this.cartTax = const Money.zeroGBP(),
+      this.cartTax = const Money.zeroGBP(),
       @JsonKey(fromJson: Money.fromJson, toJson: Money.toJson)
-          this.cartTotal = const Money.zeroGBP(),
+      this.cartTotal = const Money.zeroGBP(),
       this.cartCurrency = Currency.GBP,
       this.cartDiscountPercent = 0,
       @JsonKey(fromJson: Money.fromJson, toJson: Money.toJson)
-          this.cartDiscountComputed = const Money.zeroGBP(),
+      this.cartDiscountComputed = const Money.zeroGBP(),
       @JsonKey(fromJson: Money.fromJson, toJson: Money.toJson)
-          this.voucherPotValue = const Money.zeroGBP(),
+      this.voucherPotValue = const Money.zeroGBP(),
       this.appliedVouchers = const [],
       this.deliverySlots = const [],
       this.collectionSlots = const [],
       this.selectedDeliveryAddress = null,
       this.selectedTimeSlot = null,
       @JsonKey(fromJson: Money.fromJson, toJson: Money.toJson)
-          this.selectedTipAmount = const Money.zeroGBP(),
+      this.selectedTipAmount = const Money.zeroGBP(),
       this.discountCode = '',
       this.paymentIntentID = '',
       @JsonKey(includeFromJson: false, includeToJson: false)
-          this.paymentIntentClientSecret = '',
+      this.paymentIntentClientSecret = '',
       @JsonKey(includeFromJson: false, includeToJson: false)
-          this.paymentIntent = null,
+      this.paymentIntent = null,
       this.ephemeralKey = '',
       this.publishableKey = '',
       this.order = null,
@@ -954,7 +950,7 @@ class _$_UserCartState extends _UserCartState with DiagnosticableTreeMixin {
       this.fulfilmentMethod = FulfilmentMethodType.delivery,
       this.restaurantMinimumOrder = 0,
       @JsonKey(fromJson: Money.fromJson, toJson: Money.toJson)
-          this.restaurantPlatformFee = const Money.zeroGBP(),
+      this.restaurantPlatformFee = const Money.zeroGBP(),
       this.deliveryInstructions = '',
       this.selectedPaymentMethod = null,
       this.fulfilmentPostalDistricts = const [],
@@ -966,11 +962,11 @@ class _$_UserCartState extends _UserCartState with DiagnosticableTreeMixin {
       this.orderCreationStatusMessage = '',
       this.stripePaymentStatus = StripePaymentStatus.none,
       @JsonKey(fromJson: LivePayment.fromJson, toJson: paymentInProcessToJson)
-          this.paymentInProcess = null,
+      this.paymentInProcess = null,
       @JsonKey(includeFromJson: false, includeToJson: false)
-          this.isLoadingCartState = false,
+      this.isLoadingCartState = false,
       @JsonKey(includeFromJson: false, includeToJson: false)
-          this.errorDetails = null})
+      this.errorDetails = null})
       : super._();
 
   factory _$_UserCartState.fromJson(Map<String, dynamic> json) =>
@@ -1347,30 +1343,30 @@ abstract class _UserCartState extends UserCartState {
   factory _UserCartState(
       {final List<CartItem> cartItems,
       @JsonKey(fromJson: Money.fromJson, toJson: Money.toJson)
-          final Money cartSubTotal,
+      final Money cartSubTotal,
       @JsonKey(fromJson: Money.fromJson, toJson: Money.toJson)
-          final Money cartTax,
+      final Money cartTax,
       @JsonKey(fromJson: Money.fromJson, toJson: Money.toJson)
-          final Money cartTotal,
+      final Money cartTotal,
       final Currency cartCurrency,
       final num cartDiscountPercent,
       @JsonKey(fromJson: Money.fromJson, toJson: Money.toJson)
-          final Money cartDiscountComputed,
+      final Money cartDiscountComputed,
       @JsonKey(fromJson: Money.fromJson, toJson: Money.toJson)
-          final Money voucherPotValue,
+      final Money voucherPotValue,
       final List<Discount> appliedVouchers,
       final List<TimeSlot> deliverySlots,
       final List<TimeSlot> collectionSlots,
       final DeliveryAddresses? selectedDeliveryAddress,
       final TimeSlot? selectedTimeSlot,
       @JsonKey(fromJson: Money.fromJson, toJson: Money.toJson)
-          final Money selectedTipAmount,
+      final Money selectedTipAmount,
       final String discountCode,
       final String paymentIntentID,
       @JsonKey(includeFromJson: false, includeToJson: false)
-          final String paymentIntentClientSecret,
+      final String paymentIntentClientSecret,
       @JsonKey(includeFromJson: false, includeToJson: false)
-          final StripePaymentIntent? paymentIntent,
+      final StripePaymentIntent? paymentIntent,
       final String ephemeralKey,
       final String publishableKey,
       final Order? order,
@@ -1388,7 +1384,7 @@ abstract class _UserCartState extends UserCartState {
       final FulfilmentMethodType fulfilmentMethod,
       final int restaurantMinimumOrder,
       @JsonKey(fromJson: Money.fromJson, toJson: Money.toJson)
-          final Money restaurantPlatformFee,
+      final Money restaurantPlatformFee,
       final String deliveryInstructions,
       final PaymentMethod? selectedPaymentMethod,
       final List<String> fulfilmentPostalDistricts,
@@ -1400,11 +1396,11 @@ abstract class _UserCartState extends UserCartState {
       final String orderCreationStatusMessage,
       final StripePaymentStatus stripePaymentStatus,
       @JsonKey(fromJson: LivePayment.fromJson, toJson: paymentInProcessToJson)
-          final LivePayment? paymentInProcess,
+      final LivePayment? paymentInProcess,
       @JsonKey(includeFromJson: false, includeToJson: false)
-          final bool isLoadingCartState,
+      final bool isLoadingCartState,
       @JsonKey(includeFromJson: false, includeToJson: false)
-          final ErrorDetails<CartErrCode>? errorDetails}) = _$_UserCartState;
+      final ErrorDetails<CartErrCode>? errorDetails}) = _$_UserCartState;
   _UserCartState._() : super._();
 
   factory _UserCartState.fromJson(Map<String, dynamic> json) =

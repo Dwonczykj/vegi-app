@@ -52,13 +52,12 @@ abstract class $DiscountCopyWith<$Res> {
       Currency currency,
       DiscountType discountType,
       @JsonKey(fromJson: jsonToTimeStamp, toJson: timeStampToJsonInt)
-          DateTime expiryDateTime,
+      DateTime expiryDateTime,
       int? timesUsed,
       int? maxUses,
       String? linkedWalletAddress,
       bool isEnabled,
-      @JsonKey()
-          VendorDTO? vendor});
+      @JsonKey() VendorDTO? vendor});
 
   $VendorDTOCopyWith<$Res>? get vendor;
 }
@@ -163,13 +162,12 @@ abstract class _$$_DiscountCopyWith<$Res> implements $DiscountCopyWith<$Res> {
       Currency currency,
       DiscountType discountType,
       @JsonKey(fromJson: jsonToTimeStamp, toJson: timeStampToJsonInt)
-          DateTime expiryDateTime,
+      DateTime expiryDateTime,
       int? timesUsed,
       int? maxUses,
       String? linkedWalletAddress,
       bool isEnabled,
-      @JsonKey()
-          VendorDTO? vendor});
+      @JsonKey() VendorDTO? vendor});
 
   @override
   $VendorDTOCopyWith<$Res>? get vendor;
@@ -258,13 +256,12 @@ class _$_Discount extends _Discount {
       required this.currency,
       required this.discountType,
       @JsonKey(fromJson: jsonToTimeStamp, toJson: timeStampToJsonInt)
-          required this.expiryDateTime,
+      required this.expiryDateTime,
       required this.timesUsed,
       required this.maxUses,
       required this.linkedWalletAddress,
       this.isEnabled = false,
-      @JsonKey()
-          this.vendor = null})
+      @JsonKey() this.vendor = null})
       : super._();
 
   factory _$_Discount.fromJson(Map<String, dynamic> json) =>
@@ -363,13 +360,12 @@ abstract class _Discount extends Discount {
       required final Currency currency,
       required final DiscountType discountType,
       @JsonKey(fromJson: jsonToTimeStamp, toJson: timeStampToJsonInt)
-          required final DateTime expiryDateTime,
+      required final DateTime expiryDateTime,
       required final int? timesUsed,
       required final int? maxUses,
       required final String? linkedWalletAddress,
       final bool isEnabled,
-      @JsonKey()
-          final VendorDTO? vendor}) = _$_Discount;
+      @JsonKey() final VendorDTO? vendor}) = _$_Discount;
   _Discount._() : super._();
 
   factory _Discount.fromJson(Map<String, dynamic> json) = _$_Discount.fromJson;

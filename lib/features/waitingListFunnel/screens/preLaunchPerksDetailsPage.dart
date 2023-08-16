@@ -8,6 +8,9 @@ import 'package:vegan_liverpool/features/shared/widgets/my_scaffold.dart';
 import 'package:vegan_liverpool/services.dart';
 import 'package:vegan_liverpool/utils/constants.dart';
 
+import 'package:auto_route/annotations.dart';
+
+@RoutePage()
 class PreLaunchPerksDetailsPage extends StatelessWidget {
   const PreLaunchPerksDetailsPage({Key? key}) : super(key: key);
 

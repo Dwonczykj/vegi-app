@@ -20,6 +20,9 @@ import 'package:vegan_liverpool/utils/analytics.dart';
 import 'package:vegan_liverpool/utils/config.dart';
 import 'package:vegan_liverpool/utils/constants.dart';
 
+import 'package:auto_route/annotations.dart';
+
+@RoutePage()
 class VerifyEmailLinkPage extends StatelessWidget {
   const VerifyEmailLinkPage({
     required this.emailAddress,

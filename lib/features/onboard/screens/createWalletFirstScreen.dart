@@ -4,6 +4,9 @@ import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:vegan_liverpool/features/onboard/widgets/createWalletButtons.dart';
 import 'package:vegan_liverpool/features/shared/widgets/my_scaffold.dart';
 
+import 'package:auto_route/annotations.dart';
+
+@RoutePage()
 class CreateWalletFirstOnboardingScreen extends StatelessWidget {
   const CreateWalletFirstOnboardingScreen({Key? key}) : super(key: key);
 

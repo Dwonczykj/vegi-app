@@ -21,7 +21,9 @@ import 'package:vegan_liverpool/redux/viewsmodels/orders/allOrdersPageViewModel.
 import 'package:vegan_liverpool/services.dart';
 import 'package:vegan_liverpool/utils/constants.dart';
 import 'package:redux/redux.dart';
+import 'package:auto_route/annotations.dart';
 
+@RoutePage()
 class AllOrdersPage extends StatefulWidget {
   const AllOrdersPage({Key? key}) : super(key: key);
 
@@ -39,13 +41,14 @@ class _AllOrdersPageState extends State<AllOrdersPage> {
 
   @override
   void initState() {
-    categoryItemsControllers =
-        { for (var cat in categoryNames.keys) cat : ExpandableSliverListController(
-        initialStatus:
-            cat.toLowerCase() != scheduledOrders.toLowerCase()
-                ? ExpandableSliverListStatus.collapsed
-                : ExpandableSliverListStatus.expanded,
-      ) };
+    categoryItemsControllers = {
+      for (var cat in categoryNames.keys)
+        cat: ExpandableSliverListController(
+          initialStatus: cat.toLowerCase() != scheduledOrders.toLowerCase()
+              ? ExpandableSliverListStatus.collapsed
+              : ExpandableSliverListStatus.expanded,
+        )
+    };
     super.initState();
   }
 
@@ -217,7 +220,8 @@ class _AllOrdersPageState extends State<AllOrdersPage> {
                       : CustomScrollView(
                           slivers: [
                             const SliverPadding(
-                                padding: EdgeInsets.only(bottom: 10),),
+                              padding: EdgeInsets.only(bottom: 10),
+                            ),
                             // SliverStickyHeader(
                             //   header: MenuStickyHeader(
                             //     title: 'Featured Items',

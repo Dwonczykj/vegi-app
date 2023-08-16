@@ -17,6 +17,9 @@ import 'package:vegan_liverpool/utils/constants.dart';
 import 'package:vegan_liverpool/utils/url.dart';
 
 
+import 'package:auto_route/annotations.dart';
+
+@RoutePage()
 class RegisterEmailNotificationsScreen extends StatefulWidget {
   const RegisterEmailNotificationsScreen({
     Key? key,

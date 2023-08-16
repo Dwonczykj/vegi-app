@@ -431,24 +431,17 @@ class _$_AppState extends _AppState with DiagnosticableTreeMixin {
 
 abstract class _AppState extends AppState {
   factory _AppState(
-      {@AuthStateConverter()
-          required final AuthState authState,
-      @AppLogStateConverter()
-          required final AppLogState appLogState,
-      @UserStateConverter()
-          required final UserState userState,
+      {@AuthStateConverter() required final AuthState authState,
+      @AppLogStateConverter() required final AppLogState appLogState,
+      @UserStateConverter() required final UserState userState,
       @CashWalletStateConverter()
-          required final CashWalletState cashWalletState,
-      @HomePageStateConverter()
-          required final HomePageState homePageState,
-      @UserCartStateConverter()
-          required final UserCartState cartState,
-      @MenuItemStateConverter()
-          required final MenuItemState menuItemState,
-      @PastOrderStateConverter()
-          required final PastOrderState pastOrderState,
+      required final CashWalletState cashWalletState,
+      @HomePageStateConverter() required final HomePageState homePageState,
+      @UserCartStateConverter() required final UserCartState cartState,
+      @MenuItemStateConverter() required final MenuItemState menuItemState,
+      @PastOrderStateConverter() required final PastOrderState pastOrderState,
       @OnboardingStateConverter()
-          required final OnboardingState onboardingState}) = _$_AppState;
+      required final OnboardingState onboardingState}) = _$_AppState;
   _AppState._() : super._();
 
   factory _AppState.fromJson(Map<String, dynamic> json) = _$_AppState.fromJson;

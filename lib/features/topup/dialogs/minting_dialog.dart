@@ -84,7 +84,7 @@ class _MintingDialogState extends State<MintingDialog>
               context.router.pop();
 
               if (widget.shouldPushToHome) {
-                context.router.navigate(const VeganHomeTab());
+                context.router.navigate(const VeganHomeRouter());
               }
             },
           );

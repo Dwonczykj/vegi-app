@@ -24,6 +24,9 @@ import 'package:vegan_liverpool/utils/constants.dart' as VegiConstants;
 import 'package:redux/redux.dart';
 import 'package:vegan_liverpool/utils/log/log.dart';
 
+import 'package:auto_route/annotations.dart';
+
+@RoutePage()
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
   @override
@@ -149,10 +152,10 @@ class _MainScreenState extends State<MainScreen> {
               return Future.value(false);
             }
           },
-          child: const AutoTabsScaffold(
+          child: AutoTabsScaffold(
             animationDuration: Duration.zero,
             routes: [
-              VeganHomeTab(),
+              VeganHomeRouter(),
             ],
           ),
         );
@@ -234,7 +237,7 @@ Future<void> handleFCM(
         successHandler: () {},
       ),
     );
-    await rootRouter.push(const AllOrdersPage());
+    await rootRouter.push(const AllOrdersRoute());
   } else if (messageCategory ==
       FirebaseMessagingCategoriesEnum.payment_failed) {
     store.dispatch(
@@ -278,7 +281,7 @@ Future<void> handleFCMOpenedApp(
         successHandler: () {},
       ),
     );
-    await rootRouter.push(const AllOrdersPage());
+    await rootRouter.push(const AllOrdersRoute());
   } else if (messageCategory ==
       FirebaseMessagingCategoriesEnum.payment_failed) {
     store.dispatch(
@@ -290,6 +293,6 @@ Future<void> handleFCMOpenedApp(
         successHandler: () {},
       ),
     );
-    await rootRouter.push(const AllOrdersPage());
+    await rootRouter.push(const AllOrdersRoute());
   }
 }

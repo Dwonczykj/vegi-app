@@ -25,6 +25,9 @@ import 'package:vegan_liverpool/utils/config.dart';
 import 'package:vegan_liverpool/utils/constants.dart';
 import 'package:vegan_liverpool/utils/log/log.dart';
 
+import 'package:auto_route/annotations.dart';
+
+@RoutePage()
 class FirebaseAuthLinkPage extends StatelessWidget {
   const FirebaseAuthLinkPage({
     this.recaptchaToken,

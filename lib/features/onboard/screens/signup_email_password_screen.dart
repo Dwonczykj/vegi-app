@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:auto_route/annotations.dart';
 import 'package:carrier_info/carrier_info.dart';
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
@@ -35,6 +36,7 @@ typedef SignUp = void Function(
   void Function(dynamic error) onError,
 );
 
+@RoutePage()
 class SignUpWithEmailAndPasswordScreen extends StatefulWidget {
   const SignUpWithEmailAndPasswordScreen({Key? key}) : super(key: key);
 

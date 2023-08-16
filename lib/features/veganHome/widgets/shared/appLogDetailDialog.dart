@@ -30,38 +30,55 @@ class AppLogDetailDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return VegiDialog(
       storeConverter: (store) {},
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Text(
-            log.message,
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.w600,
-              color: themeAccent600,
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'Log message',
+
+              /// `textAlign` is a property of the `Text` widget in Flutter that determines how the text
+              /// should be aligned within its container. It accepts a `TextAlign` enum value, which can
+              /// be set to `TextAlign.left`, `TextAlign.right`, `TextAlign.center`, or
+              /// `TextAlign.justify`.
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.w600,
+                color: themeAccent600,
+              ),
             ),
-          ),
-          const SizedBox(height: 15),
-          Text(
-            '${log.timestamp}',
-            textAlign: TextAlign.center,
-            style: const TextStyle(
-              // fontSize: 20,
-              // fontWeight: FontWeight.w600,
-              color: Colors.grey,
+            const SizedBox(height: 15),
+            Text(
+              log.message,
+              textAlign: TextAlign.center,
             ),
-          ),
-          const SizedBox(height: 15),
-          Text(log.information.toString()),
-          // _dialogButton(
-          //   context: context,
-          //   label: instaDMContactVegiSupportUrlButtonLabel,
-          //   icon: FontAwesomeIcons.instagram,
-          //   onPressed: () => launchUrl(VEGI_INSTA_PROFILE_URL),
-          // ),
-        ],
+            const SizedBox(height: 15),
+            Text(
+              '${log.timestamp}',
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                // fontSize: 20,
+                // fontWeight: FontWeight.w600,
+                color: Colors.grey,
+              ),
+            ),
+            const SizedBox(height: 15),
+            GestureDetector(
+              child: Text(log.information.toString()),
+              onTap: () => context.router.push(
+                ViewJsonScreen(data: log.information,)
+              ),
+            ),
+            // _dialogButton(
+            //   context: context,
+            //   label: instaDMContactVegiSupportUrlButtonLabel,
+            //   icon: FontAwesomeIcons.instagram,
+            //   onPressed: () => launchUrl(VEGI_INSTA_PROFILE_URL),
+            // ),
+          ],
+        ),
       ),
     );
   }

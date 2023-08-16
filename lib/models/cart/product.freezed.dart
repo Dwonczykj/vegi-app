@@ -41,7 +41,7 @@ abstract class $ProductCopyWith<$Res> {
       {String name,
       int basePrice,
       @JsonKey(fromJson: fromJsonOrderProductOptionValueList)
-          List<OrderProductOptionValue> options});
+      List<OrderProductOptionValue> options});
 }
 
 /// @nodoc
@@ -89,7 +89,7 @@ abstract class _$$_ProductCopyWith<$Res> implements $ProductCopyWith<$Res> {
       {String name,
       int basePrice,
       @JsonKey(fromJson: fromJsonOrderProductOptionValueList)
-          List<OrderProductOptionValue> options});
+      List<OrderProductOptionValue> options});
 }
 
 /// @nodoc
@@ -131,7 +131,7 @@ class _$_Product extends _Product {
       {required this.name,
       required this.basePrice,
       @JsonKey(fromJson: fromJsonOrderProductOptionValueList)
-          this.options = const []})
+      this.options = const []})
       : super._();
 
   factory _$_Product.fromJson(Map<String, dynamic> json) =>
@@ -186,7 +186,7 @@ abstract class _Product extends Product {
       {required final String name,
       required final int basePrice,
       @JsonKey(fromJson: fromJsonOrderProductOptionValueList)
-          final List<OrderProductOptionValue> options}) = _$_Product;
+      final List<OrderProductOptionValue> options}) = _$_Product;
   _Product._() : super._();
 
   factory _Product.fromJson(Map<String, dynamic> json) = _$_Product.fromJson;

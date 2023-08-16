@@ -311,14 +311,13 @@ abstract class _StripePaymentIntentInternal
     extends StripePaymentIntentInternal {
   factory _StripePaymentIntentInternal(
       {required final String id,
-      @JsonKey(name: 'client_secret')
-          required final String clientSecret,
+      @JsonKey(name: 'client_secret') required final String clientSecret,
       required final num amount,
       required final String currency,
       final String? customer,
       final Map<String, dynamic> metadata,
       @JsonKey(name: 'payment_method_types')
-          final List<String> paymentMethodTypes,
+      final List<String> paymentMethodTypes,
       final Map<String, dynamic> shipping,
       final String status}) = _$_StripePaymentIntentInternal;
   _StripePaymentIntentInternal._() : super._();

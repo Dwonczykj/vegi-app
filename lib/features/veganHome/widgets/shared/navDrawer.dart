@@ -103,7 +103,7 @@ class _NavDrawerState extends State<NavDrawer> {
                           onTap: () {
                             Analytics.track(
                                 eventName: AnalyticsEvents.viewSchOrders,);
-                            context.router.push(const ScheduledOrdersPage());
+                            context.router.push(const ScheduledOrdersRoute());
                           },
                         ),
                       if (DebugHelpers.inDebugMode)
@@ -111,7 +111,7 @@ class _NavDrawerState extends State<NavDrawer> {
                           leading: const Icon(Icons.money),
                           title: const Text('Top Up Wallet [Debug]'),
                           onTap: () {
-                            context.router.push(const TopUpScreen());
+                            context.router.push(const TopupScreen());
                           },
                         ),
                       ListTile(
@@ -133,7 +133,7 @@ class _NavDrawerState extends State<NavDrawer> {
                         onTap: () {
                           Analytics.track(
                               eventName: AnalyticsEvents.viewAllOrders,);
-                          context.router.push(const AllOrdersPage());
+                          context.router.push(const AllOrdersRoute());
                         },
                       ),
                       ListTile(

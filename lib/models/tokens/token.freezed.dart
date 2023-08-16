@@ -455,7 +455,7 @@ abstract class _Token extends Token {
       final num priceChange,
       final List<IntervalStats> intervalStats,
       @JsonKey(fromJson: walletActionsFromJson)
-          final WalletActions? walletActions}) = _$_Token;
+      final WalletActions? walletActions}) = _$_Token;
   _Token._() : super._();
 
   factory _Token.fromJson(Map<String, dynamic> json) = _$_Token.fromJson;

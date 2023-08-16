@@ -10,6 +10,9 @@ import 'package:vegan_liverpool/redux/viewsmodels/paymentSheet.dart';
 import 'package:vegan_liverpool/utils/constants.dart';
 import 'package:vegan_liverpool/utils/copy.dart';
 
+import 'package:auto_route/annotations.dart';
+
+@RoutePage()
 class GenerateQRFromCartScreen extends StatelessWidget {
   GenerateQRFromCartScreen({Key? key}) : super(key: key);
 

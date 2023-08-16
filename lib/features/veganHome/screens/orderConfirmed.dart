@@ -12,6 +12,9 @@ import 'package:vegan_liverpool/models/cart/view_item.dart';
 import 'package:vegan_liverpool/redux/actions/past_order_actions.dart';
 import 'package:vegan_liverpool/redux/viewsmodels/orderConfirmed.dart';
 
+import 'package:auto_route/annotations.dart';
+
+@RoutePage()
 class OrderConfirmedScreen extends StatelessWidget {
   const OrderConfirmedScreen({Key? key}) : super(key: key);
 

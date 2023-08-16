@@ -14,6 +14,9 @@ import 'package:vegan_liverpool/models/restaurant/restaurantMenuItem.dart';
 import 'package:vegan_liverpool/redux/actions/home_page_actions.dart';
 import 'package:vegan_liverpool/redux/viewsmodels/restaurantItem.dart';
 
+import 'package:auto_route/annotations.dart';
+
+@RoutePage()
 class RestaurantMenuScreen extends StatelessWidget {
   const RestaurantMenuScreen({
     Key? key,

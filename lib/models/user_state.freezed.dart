@@ -140,8 +140,7 @@ abstract class $UserStateCopyWith<$Res> {
       _$UserStateCopyWithImpl<$Res, UserState>;
   @useResult
   $Res call(
-      {@JsonKey(includeFromJson: false, includeToJson: false)
-          String? wcURI,
+      {@JsonKey(includeFromJson: false, includeToJson: false) String? wcURI,
       WalletModules? walletModules,
       DateTime? installedAt,
       bool? isContactsSynced,
@@ -149,7 +148,7 @@ abstract class $UserStateCopyWith<$Res> {
       String walletAddress,
       String privateKey,
       @JsonKey(fromJson: ethPrivateKeyFromJson, toJson: ethPrivateKeyToJson)
-          EthPrivateKey? fuseWalletCredentials,
+      EthPrivateKey? fuseWalletCredentials,
       SmartWallet? smartWallet,
       FuseAuthenticationStatus fuseAuthenticationStatus,
       FirebaseAuthenticationStatus firebaseAuthenticationStatus,
@@ -178,38 +177,35 @@ abstract class $UserStateCopyWith<$Res> {
       String deviceReleaseName,
       bool appUpdateNeeded,
       @JsonKey(fromJson: Version.fromJson, toJson: Version.toJson)
-          Version? appUpdateNextVersion,
+      Version? appUpdateNextVersion,
       @JsonKey(fromJson: Version.fromJson, toJson: Version.toJson)
-          Version? appUpdateNotificationSeenForBuildNumber,
+      Version? appUpdateNotificationSeenForBuildNumber,
       List<String> syncedContacts,
       Map<String, String> reverseContacts,
       String currency,
-      @JsonKey(includeFromJson: false, includeToJson: false)
-          bool hasUpgrade,
+      @JsonKey(includeFromJson: false, includeToJson: false) bool hasUpgrade,
       BiometricAuth authType,
       @JsonKey(includeFromJson: false, includeToJson: false)
-          bool biometricallyAuthenticated,
-      @JsonKey(fromJson: localeFromJson, toJson: localeToJson)
-          Locale? locale,
-      @JsonKey(ignore: true)
-          AuthCredential? firebaseCredentials,
+      bool biometricallyAuthenticated,
+      @JsonKey(fromJson: localeFromJson, toJson: localeToJson) Locale? locale,
+      @JsonKey(ignore: true) AuthCredential? firebaseCredentials,
       String? firebaseSessionToken,
       String? vegiSessionCookie,
       List<DeliveryAddresses> listOfDeliveryAddresses,
       bool hasSavedSeedPhrase,
       bool useLiveLocation,
       @JsonKey(includeFromJson: false, includeToJson: false)
-          bool userIsVerified,
+      bool userIsVerified,
       @JsonKey(includeFromJson: false, includeToJson: false)
-          Position? userLocation,
+      Position? userLocation,
       @JsonKey(includeFromJson: false, includeToJson: false)
-          bool isUsingSimulator,
+      bool isUsingSimulator,
       @JsonKey(includeFromJson: false, includeToJson: false)
-          bool isUsingIosSimulator,
+      bool isUsingIosSimulator,
       String initialLoginDateTime,
       bool showSeedPhraseBanner,
       @JsonKey(includeFromJson: false, includeToJson: false)
-          List<SurveyQuestion> surveyQuestions,
+      List<SurveyQuestion> surveyQuestions,
       bool surveyCompleted,
       String surveyEmailUsed,
       bool isVendor,
@@ -284,7 +280,7 @@ class _$UserStateCopyWithImpl<$Res, $Val extends UserState>
     Object? hasUpgrade = null,
     Object? authType = null,
     Object? biometricallyAuthenticated = null,
-    Object? locale = null,
+    Object? locale = freezed,
     Object? firebaseCredentials = freezed,
     Object? firebaseSessionToken = freezed,
     Object? vegiSessionCookie = freezed,
@@ -486,7 +482,7 @@ class _$UserStateCopyWithImpl<$Res, $Val extends UserState>
           ? _value.biometricallyAuthenticated
           : biometricallyAuthenticated // ignore: cast_nullable_to_non_nullable
               as bool,
-      locale: null == locale
+      locale: freezed == locale
           ? _value.locale
           : locale // ignore: cast_nullable_to_non_nullable
               as Locale?,
@@ -630,8 +626,7 @@ abstract class _$$_UserStateCopyWith<$Res> implements $UserStateCopyWith<$Res> {
   @override
   @useResult
   $Res call(
-      {@JsonKey(includeFromJson: false, includeToJson: false)
-          String? wcURI,
+      {@JsonKey(includeFromJson: false, includeToJson: false) String? wcURI,
       WalletModules? walletModules,
       DateTime? installedAt,
       bool? isContactsSynced,
@@ -639,7 +634,7 @@ abstract class _$$_UserStateCopyWith<$Res> implements $UserStateCopyWith<$Res> {
       String walletAddress,
       String privateKey,
       @JsonKey(fromJson: ethPrivateKeyFromJson, toJson: ethPrivateKeyToJson)
-          EthPrivateKey? fuseWalletCredentials,
+      EthPrivateKey? fuseWalletCredentials,
       SmartWallet? smartWallet,
       FuseAuthenticationStatus fuseAuthenticationStatus,
       FirebaseAuthenticationStatus firebaseAuthenticationStatus,
@@ -668,38 +663,35 @@ abstract class _$$_UserStateCopyWith<$Res> implements $UserStateCopyWith<$Res> {
       String deviceReleaseName,
       bool appUpdateNeeded,
       @JsonKey(fromJson: Version.fromJson, toJson: Version.toJson)
-          Version? appUpdateNextVersion,
+      Version? appUpdateNextVersion,
       @JsonKey(fromJson: Version.fromJson, toJson: Version.toJson)
-          Version? appUpdateNotificationSeenForBuildNumber,
+      Version? appUpdateNotificationSeenForBuildNumber,
       List<String> syncedContacts,
       Map<String, String> reverseContacts,
       String currency,
-      @JsonKey(includeFromJson: false, includeToJson: false)
-          bool hasUpgrade,
+      @JsonKey(includeFromJson: false, includeToJson: false) bool hasUpgrade,
       BiometricAuth authType,
       @JsonKey(includeFromJson: false, includeToJson: false)
-          bool biometricallyAuthenticated,
-      @JsonKey(fromJson: localeFromJson, toJson: localeToJson)
-          Locale? locale,
-      @JsonKey(ignore: true)
-          AuthCredential? firebaseCredentials,
+      bool biometricallyAuthenticated,
+      @JsonKey(fromJson: localeFromJson, toJson: localeToJson) Locale? locale,
+      @JsonKey(ignore: true) AuthCredential? firebaseCredentials,
       String? firebaseSessionToken,
       String? vegiSessionCookie,
       List<DeliveryAddresses> listOfDeliveryAddresses,
       bool hasSavedSeedPhrase,
       bool useLiveLocation,
       @JsonKey(includeFromJson: false, includeToJson: false)
-          bool userIsVerified,
+      bool userIsVerified,
       @JsonKey(includeFromJson: false, includeToJson: false)
-          Position? userLocation,
+      Position? userLocation,
       @JsonKey(includeFromJson: false, includeToJson: false)
-          bool isUsingSimulator,
+      bool isUsingSimulator,
       @JsonKey(includeFromJson: false, includeToJson: false)
-          bool isUsingIosSimulator,
+      bool isUsingIosSimulator,
       String initialLoginDateTime,
       bool showSeedPhraseBanner,
       @JsonKey(includeFromJson: false, includeToJson: false)
-          List<SurveyQuestion> surveyQuestions,
+      List<SurveyQuestion> surveyQuestions,
       bool surveyCompleted,
       String surveyEmailUsed,
       bool isVendor,
@@ -774,7 +766,7 @@ class __$$_UserStateCopyWithImpl<$Res>
     Object? hasUpgrade = null,
     Object? authType = null,
     Object? biometricallyAuthenticated = null,
-    Object? locale = null,
+    Object? locale = freezed,
     Object? firebaseCredentials = freezed,
     Object? firebaseSessionToken = freezed,
     Object? vegiSessionCookie = freezed,
@@ -976,7 +968,7 @@ class __$$_UserStateCopyWithImpl<$Res>
           ? _value.biometricallyAuthenticated
           : biometricallyAuthenticated // ignore: cast_nullable_to_non_nullable
               as bool,
-      locale: null == locale
+      locale: freezed == locale
           ? _value.locale
           : locale // ignore: cast_nullable_to_non_nullable
               as Locale?,
@@ -1093,8 +1085,7 @@ class __$$_UserStateCopyWithImpl<$Res>
 @JsonSerializable()
 class _$_UserState extends _UserState with DiagnosticableTreeMixin {
   _$_UserState(
-      {@JsonKey(includeFromJson: false, includeToJson: false)
-          this.wcURI,
+      {@JsonKey(includeFromJson: false, includeToJson: false) this.wcURI,
       this.walletModules,
       this.installedAt,
       this.isContactsSynced,
@@ -1102,7 +1093,7 @@ class _$_UserState extends _UserState with DiagnosticableTreeMixin {
       this.walletAddress = '',
       this.privateKey = '',
       @JsonKey(fromJson: ethPrivateKeyFromJson, toJson: ethPrivateKeyToJson)
-          this.fuseWalletCredentials = null,
+      this.fuseWalletCredentials = null,
       this.smartWallet = null,
       this.fuseAuthenticationStatus = FuseAuthenticationStatus.unauthenticated,
       this.firebaseAuthenticationStatus =
@@ -1132,38 +1123,36 @@ class _$_UserState extends _UserState with DiagnosticableTreeMixin {
       this.deviceReleaseName = '',
       this.appUpdateNeeded = false,
       @JsonKey(fromJson: Version.fromJson, toJson: Version.toJson)
-          this.appUpdateNextVersion = null,
+      this.appUpdateNextVersion = null,
       @JsonKey(fromJson: Version.fromJson, toJson: Version.toJson)
-          this.appUpdateNotificationSeenForBuildNumber = null,
+      this.appUpdateNotificationSeenForBuildNumber = null,
       this.syncedContacts = const [],
       this.reverseContacts = const {},
       this.currency = 'usd',
       @JsonKey(includeFromJson: false, includeToJson: false)
-          this.hasUpgrade = false,
+      this.hasUpgrade = false,
       this.authType = BiometricAuth.none,
       @JsonKey(includeFromJson: false, includeToJson: false)
-          this.biometricallyAuthenticated = false,
-      @JsonKey(fromJson: localeFromJson, toJson: localeToJson)
-          this.locale,
-      @JsonKey(ignore: true)
-          this.firebaseCredentials = null,
+      this.biometricallyAuthenticated = false,
+      @JsonKey(fromJson: localeFromJson, toJson: localeToJson) this.locale,
+      @JsonKey(ignore: true) this.firebaseCredentials = null,
       this.firebaseSessionToken = null,
       this.vegiSessionCookie = null,
       this.listOfDeliveryAddresses = const [],
       this.hasSavedSeedPhrase = false,
       this.useLiveLocation = false,
       @JsonKey(includeFromJson: false, includeToJson: false)
-          this.userIsVerified = false,
+      this.userIsVerified = false,
       @JsonKey(includeFromJson: false, includeToJson: false)
-          this.userLocation = null,
+      this.userLocation = null,
       @JsonKey(includeFromJson: false, includeToJson: false)
-          this.isUsingSimulator = false,
+      this.isUsingSimulator = false,
       @JsonKey(includeFromJson: false, includeToJson: false)
-          this.isUsingIosSimulator = false,
+      this.isUsingIosSimulator = false,
       this.initialLoginDateTime = '',
       this.showSeedPhraseBanner = false,
       @JsonKey(includeFromJson: false, includeToJson: false)
-          this.surveyQuestions = const [],
+      this.surveyQuestions = const [],
       this.surveyCompleted = false,
       this.surveyEmailUsed = '',
       this.isVendor = false,
@@ -1570,7 +1559,7 @@ class _$_UserState extends _UserState with DiagnosticableTreeMixin {
             (identical(other.hasUpgrade, hasUpgrade) || other.hasUpgrade == hasUpgrade) &&
             (identical(other.authType, authType) || other.authType == authType) &&
             (identical(other.biometricallyAuthenticated, biometricallyAuthenticated) || other.biometricallyAuthenticated == biometricallyAuthenticated) &&
-            const DeepCollectionEquality().equals(other.locale, locale) &&
+            (identical(other.locale, locale) || other.locale == locale) &&
             (identical(other.firebaseCredentials, firebaseCredentials) || other.firebaseCredentials == firebaseCredentials) &&
             (identical(other.firebaseSessionToken, firebaseSessionToken) || other.firebaseSessionToken == firebaseSessionToken) &&
             (identical(other.vegiSessionCookie, vegiSessionCookie) || other.vegiSessionCookie == vegiSessionCookie) &&
@@ -1646,7 +1635,7 @@ class _$_UserState extends _UserState with DiagnosticableTreeMixin {
         hasUpgrade,
         authType,
         biometricallyAuthenticated,
-        const DeepCollectionEquality().hash(locale),
+        locale,
         firebaseCredentials,
         firebaseSessionToken,
         vegiSessionCookie,
@@ -1692,7 +1681,7 @@ class _$_UserState extends _UserState with DiagnosticableTreeMixin {
 abstract class _UserState extends UserState {
   factory _UserState(
       {@JsonKey(includeFromJson: false, includeToJson: false)
-          final String? wcURI,
+      final String? wcURI,
       final WalletModules? walletModules,
       final DateTime? installedAt,
       final bool? isContactsSynced,
@@ -1700,7 +1689,7 @@ abstract class _UserState extends UserState {
       final String walletAddress,
       final String privateKey,
       @JsonKey(fromJson: ethPrivateKeyFromJson, toJson: ethPrivateKeyToJson)
-          final EthPrivateKey? fuseWalletCredentials,
+      final EthPrivateKey? fuseWalletCredentials,
       final SmartWallet? smartWallet,
       final FuseAuthenticationStatus fuseAuthenticationStatus,
       final FirebaseAuthenticationStatus firebaseAuthenticationStatus,
@@ -1729,38 +1718,37 @@ abstract class _UserState extends UserState {
       final String deviceReleaseName,
       final bool appUpdateNeeded,
       @JsonKey(fromJson: Version.fromJson, toJson: Version.toJson)
-          final Version? appUpdateNextVersion,
+      final Version? appUpdateNextVersion,
       @JsonKey(fromJson: Version.fromJson, toJson: Version.toJson)
-          final Version? appUpdateNotificationSeenForBuildNumber,
+      final Version? appUpdateNotificationSeenForBuildNumber,
       final List<String> syncedContacts,
       final Map<String, String> reverseContacts,
       final String currency,
       @JsonKey(includeFromJson: false, includeToJson: false)
-          final bool hasUpgrade,
+      final bool hasUpgrade,
       final BiometricAuth authType,
       @JsonKey(includeFromJson: false, includeToJson: false)
-          final bool biometricallyAuthenticated,
+      final bool biometricallyAuthenticated,
       @JsonKey(fromJson: localeFromJson, toJson: localeToJson)
-          final Locale? locale,
-      @JsonKey(ignore: true)
-          final AuthCredential? firebaseCredentials,
+      final Locale? locale,
+      @JsonKey(ignore: true) final AuthCredential? firebaseCredentials,
       final String? firebaseSessionToken,
       final String? vegiSessionCookie,
       final List<DeliveryAddresses> listOfDeliveryAddresses,
       final bool hasSavedSeedPhrase,
       final bool useLiveLocation,
       @JsonKey(includeFromJson: false, includeToJson: false)
-          final bool userIsVerified,
+      final bool userIsVerified,
       @JsonKey(includeFromJson: false, includeToJson: false)
-          final Position? userLocation,
+      final Position? userLocation,
       @JsonKey(includeFromJson: false, includeToJson: false)
-          final bool isUsingSimulator,
+      final bool isUsingSimulator,
       @JsonKey(includeFromJson: false, includeToJson: false)
-          final bool isUsingIosSimulator,
+      final bool isUsingIosSimulator,
       final String initialLoginDateTime,
       final bool showSeedPhraseBanner,
       @JsonKey(includeFromJson: false, includeToJson: false)
-          final List<SurveyQuestion> surveyQuestions,
+      final List<SurveyQuestion> surveyQuestions,
       final bool surveyCompleted,
       final String surveyEmailUsed,
       final bool isVendor,

@@ -6,6 +6,9 @@ import 'package:vegan_liverpool/features/shared/widgets/my_scaffold.dart';
 import 'package:vegan_liverpool/features/veganHome/Helpers/extensions.dart';
 import 'package:vegan_liverpool/models/app_state.dart';
 
+import 'package:auto_route/annotations.dart';
+
+@RoutePage()
 class ReduxStateViewer extends StatefulWidget {
   const ReduxStateViewer(
     this.store, {

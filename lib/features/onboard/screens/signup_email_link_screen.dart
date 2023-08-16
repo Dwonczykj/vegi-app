@@ -18,6 +18,9 @@ import 'package:vegan_liverpool/utils/constants.dart';
 import 'package:vegan_liverpool/utils/log/log.dart';
 import 'package:vegan_liverpool/utils/url.dart';
 
+import 'package:auto_route/annotations.dart';
+
+@RoutePage()
 class SignUpEmailLinkScreen extends StatefulWidget {
   const SignUpEmailLinkScreen({Key? key}) : super(key: key);
 

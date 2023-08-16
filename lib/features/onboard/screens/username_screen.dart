@@ -23,6 +23,9 @@ import 'package:vegan_liverpool/services.dart';
 import 'package:vegan_liverpool/utils/analytics.dart';
 import 'package:vegan_liverpool/utils/constants.dart';
 
+import 'package:auto_route/annotations.dart';
+
+@RoutePage()
 class UserNameScreen extends StatelessWidget {
   UserNameScreen({Key? key}) : super(key: key);
 

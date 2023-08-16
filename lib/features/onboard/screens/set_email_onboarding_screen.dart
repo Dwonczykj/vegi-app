@@ -22,6 +22,9 @@ import 'package:vegan_liverpool/utils/constants.dart';
 import 'package:vegan_liverpool/utils/log/log.dart';
 import 'package:vegan_liverpool/utils/url.dart';
 
+import 'package:auto_route/annotations.dart';
+
+@RoutePage()
 class SetEmailOnboardingScreen extends StatefulWidget {
   const SetEmailOnboardingScreen({Key? key}) : super(key: key);
 

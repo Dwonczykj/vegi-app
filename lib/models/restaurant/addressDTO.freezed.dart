@@ -58,12 +58,10 @@ abstract class $AddressDTOCopyWith<$Res> {
       String addressCountryCode,
       double? latitude,
       double? longitude,
-      @JsonKey(fromJson: fromJsonVendorDTO)
-          VendorDTO? vendor,
+      @JsonKey(fromJson: fromJsonVendorDTO) VendorDTO? vendor,
       @JsonKey(fromJson: fromJsonDeliveryPartnerDTO)
-          DeliveryPartnerDTO? deliveryPartner,
-      @JsonKey(fromJson: fromJsonUserDTO)
-          UserDTO? user});
+      DeliveryPartnerDTO? deliveryPartner,
+      @JsonKey(fromJson: fromJsonUserDTO) UserDTO? user});
 
   $VendorDTOCopyWith<$Res>? get vendor;
   $DeliveryPartnerDTOCopyWith<$Res>? get deliveryPartner;
@@ -203,12 +201,10 @@ abstract class _$$_AddressDTOCopyWith<$Res>
       String addressCountryCode,
       double? latitude,
       double? longitude,
-      @JsonKey(fromJson: fromJsonVendorDTO)
-          VendorDTO? vendor,
+      @JsonKey(fromJson: fromJsonVendorDTO) VendorDTO? vendor,
       @JsonKey(fromJson: fromJsonDeliveryPartnerDTO)
-          DeliveryPartnerDTO? deliveryPartner,
-      @JsonKey(fromJson: fromJsonUserDTO)
-          UserDTO? user});
+      DeliveryPartnerDTO? deliveryPartner,
+      @JsonKey(fromJson: fromJsonUserDTO) UserDTO? user});
 
   @override
   $VendorDTOCopyWith<$Res>? get vendor;
@@ -309,12 +305,10 @@ class _$_AddressDTO extends _AddressDTO {
       required this.addressCountryCode,
       required this.latitude,
       required this.longitude,
-      @JsonKey(fromJson: fromJsonVendorDTO)
-          required this.vendor,
+      @JsonKey(fromJson: fromJsonVendorDTO) required this.vendor,
       @JsonKey(fromJson: fromJsonDeliveryPartnerDTO)
-          required this.deliveryPartner,
-      @JsonKey(fromJson: fromJsonUserDTO)
-          required this.user})
+      required this.deliveryPartner,
+      @JsonKey(fromJson: fromJsonUserDTO) required this.user})
       : super._();
 
   factory _$_AddressDTO.fromJson(Map<String, dynamic> json) =>
@@ -422,12 +416,11 @@ abstract class _AddressDTO extends AddressDTO {
       required final String addressCountryCode,
       required final double? latitude,
       required final double? longitude,
-      @JsonKey(fromJson: fromJsonVendorDTO)
-          required final VendorDTO? vendor,
+      @JsonKey(fromJson: fromJsonVendorDTO) required final VendorDTO? vendor,
       @JsonKey(fromJson: fromJsonDeliveryPartnerDTO)
-          required final DeliveryPartnerDTO? deliveryPartner,
+      required final DeliveryPartnerDTO? deliveryPartner,
       @JsonKey(fromJson: fromJsonUserDTO)
-          required final UserDTO? user}) = _$_AddressDTO;
+      required final UserDTO? user}) = _$_AddressDTO;
   _AddressDTO._() : super._();
 
   factory _AddressDTO.fromJson(Map<String, dynamic> json) =

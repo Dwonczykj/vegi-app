@@ -56,7 +56,7 @@ class _LogoutDialogState extends State<LogoutDialog>
             Analytics.track(eventName: AnalyticsEvents.logout);
           }
           context.router.pop();
-          context.router.push(const ShowUserMnemonic());
+          context.router.push(const ShowUserMnemonicScreen());
         };
       },
       builder: (_, viewmodel) {

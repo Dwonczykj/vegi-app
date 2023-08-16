@@ -186,7 +186,7 @@ class LogIt {
       store?.dispatch(
         AddAppLog(
           message: '$emoji $message',
-          additionalInfo: {},
+          additionalInfo: logMetaData,
         ),
       );
     }

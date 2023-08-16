@@ -34,6 +34,7 @@ typedef SignUp = void Function(
   void Function(dynamic error) onError,
 );
 
+@RoutePage()
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({Key? key}) : super(key: key);
 

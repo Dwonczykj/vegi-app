@@ -76,26 +76,24 @@ abstract class $VendorDTOCopyWith<$Res> {
       bool isVegan,
       VendorStatus status,
       String walletAddress,
-      @JsonKey(fromJson: fromJsonAddressDTO)
-          AddressDTO? pickupAddress,
+      @JsonKey(fromJson: fromJsonAddressDTO) AddressDTO? pickupAddress,
       @JsonKey(fromJson: fromJsonVendorCategoryList)
-          List<VendorCategory> vendorCategories,
+      List<VendorCategory> vendorCategories,
       @JsonKey(fromJson: fromJsonProductCategoryList)
-          List<ProductCategory> productCategories,
+      List<ProductCategory> productCategories,
       num minimumOrderAmount,
       num platformFee,
       String description,
       String imageUrl,
       @JsonKey(fromJson: fromJsonDeliveryPartnerDTO)
-          DeliveryPartnerDTO? deliveryPartner,
+      DeliveryPartnerDTO? deliveryPartner,
       @JsonKey(fromJson: fromJsonFulfilmentMethodDTO)
-          FulfilmentMethodDTO? deliveryFulfilmentMethod,
+      FulfilmentMethodDTO? deliveryFulfilmentMethod,
       @JsonKey(fromJson: fromJsonFulfilmentMethodDTO)
-          FulfilmentMethodDTO? collectionFulfilmentMethod,
-      @JsonKey(fromJson: fromJsonProductDTOList)
-          List<ProductDTO> products,
+      FulfilmentMethodDTO? collectionFulfilmentMethod,
+      @JsonKey(fromJson: fromJsonProductDTOList) List<ProductDTO> products,
       @JsonKey(fromJson: fromJsonPostalDistrictList)
-          List<PostalDistrict> fulfilmentPostalDistricts});
+      List<PostalDistrict> fulfilmentPostalDistricts});
 
   $AddressDTOCopyWith<$Res>? get pickupAddress;
   $DeliveryPartnerDTOCopyWith<$Res>? get deliveryPartner;
@@ -294,26 +292,24 @@ abstract class _$$_VendorDTOCopyWith<$Res> implements $VendorDTOCopyWith<$Res> {
       bool isVegan,
       VendorStatus status,
       String walletAddress,
-      @JsonKey(fromJson: fromJsonAddressDTO)
-          AddressDTO? pickupAddress,
+      @JsonKey(fromJson: fromJsonAddressDTO) AddressDTO? pickupAddress,
       @JsonKey(fromJson: fromJsonVendorCategoryList)
-          List<VendorCategory> vendorCategories,
+      List<VendorCategory> vendorCategories,
       @JsonKey(fromJson: fromJsonProductCategoryList)
-          List<ProductCategory> productCategories,
+      List<ProductCategory> productCategories,
       num minimumOrderAmount,
       num platformFee,
       String description,
       String imageUrl,
       @JsonKey(fromJson: fromJsonDeliveryPartnerDTO)
-          DeliveryPartnerDTO? deliveryPartner,
+      DeliveryPartnerDTO? deliveryPartner,
       @JsonKey(fromJson: fromJsonFulfilmentMethodDTO)
-          FulfilmentMethodDTO? deliveryFulfilmentMethod,
+      FulfilmentMethodDTO? deliveryFulfilmentMethod,
       @JsonKey(fromJson: fromJsonFulfilmentMethodDTO)
-          FulfilmentMethodDTO? collectionFulfilmentMethod,
-      @JsonKey(fromJson: fromJsonProductDTOList)
-          List<ProductDTO> products,
+      FulfilmentMethodDTO? collectionFulfilmentMethod,
+      @JsonKey(fromJson: fromJsonProductDTOList) List<ProductDTO> products,
       @JsonKey(fromJson: fromJsonPostalDistrictList)
-          List<PostalDistrict> fulfilmentPostalDistricts});
+      List<PostalDistrict> fulfilmentPostalDistricts});
 
   @override
   $AddressDTOCopyWith<$Res>? get pickupAddress;
@@ -461,26 +457,23 @@ class _$_VendorDTO extends _VendorDTO {
       required this.isVegan,
       required this.status,
       required this.walletAddress,
-      @JsonKey(fromJson: fromJsonAddressDTO)
-          required this.pickupAddress,
+      @JsonKey(fromJson: fromJsonAddressDTO) required this.pickupAddress,
       @JsonKey(fromJson: fromJsonVendorCategoryList)
-          required this.vendorCategories,
+      required this.vendorCategories,
       @JsonKey(fromJson: fromJsonProductCategoryList)
-          required this.productCategories,
+      required this.productCategories,
       this.minimumOrderAmount = 0,
       this.platformFee = 0,
       this.description = '',
       this.imageUrl = '',
-      @JsonKey(fromJson: fromJsonDeliveryPartnerDTO)
-          this.deliveryPartner,
+      @JsonKey(fromJson: fromJsonDeliveryPartnerDTO) this.deliveryPartner,
       @JsonKey(fromJson: fromJsonFulfilmentMethodDTO)
-          this.deliveryFulfilmentMethod,
+      this.deliveryFulfilmentMethod,
       @JsonKey(fromJson: fromJsonFulfilmentMethodDTO)
-          this.collectionFulfilmentMethod,
-      @JsonKey(fromJson: fromJsonProductDTOList)
-          this.products = const [],
+      this.collectionFulfilmentMethod,
+      @JsonKey(fromJson: fromJsonProductDTOList) this.products = const [],
       @JsonKey(fromJson: fromJsonPostalDistrictList)
-          this.fulfilmentPostalDistricts = const []})
+      this.fulfilmentPostalDistricts = const []})
       : super._();
 
   factory _$_VendorDTO.fromJson(Map<String, dynamic> json) =>
@@ -644,25 +637,25 @@ abstract class _VendorDTO extends VendorDTO {
       required final VendorStatus status,
       required final String walletAddress,
       @JsonKey(fromJson: fromJsonAddressDTO)
-          required final AddressDTO? pickupAddress,
+      required final AddressDTO? pickupAddress,
       @JsonKey(fromJson: fromJsonVendorCategoryList)
-          required final List<VendorCategory> vendorCategories,
+      required final List<VendorCategory> vendorCategories,
       @JsonKey(fromJson: fromJsonProductCategoryList)
-          required final List<ProductCategory> productCategories,
+      required final List<ProductCategory> productCategories,
       final num minimumOrderAmount,
       final num platformFee,
       final String description,
       final String imageUrl,
       @JsonKey(fromJson: fromJsonDeliveryPartnerDTO)
-          final DeliveryPartnerDTO? deliveryPartner,
+      final DeliveryPartnerDTO? deliveryPartner,
       @JsonKey(fromJson: fromJsonFulfilmentMethodDTO)
-          final FulfilmentMethodDTO? deliveryFulfilmentMethod,
+      final FulfilmentMethodDTO? deliveryFulfilmentMethod,
       @JsonKey(fromJson: fromJsonFulfilmentMethodDTO)
-          final FulfilmentMethodDTO? collectionFulfilmentMethod,
+      final FulfilmentMethodDTO? collectionFulfilmentMethod,
       @JsonKey(fromJson: fromJsonProductDTOList)
-          final List<ProductDTO> products,
+      final List<ProductDTO> products,
       @JsonKey(fromJson: fromJsonPostalDistrictList)
-          final List<PostalDistrict> fulfilmentPostalDistricts}) = _$_VendorDTO;
+      final List<PostalDistrict> fulfilmentPostalDistricts}) = _$_VendorDTO;
   _VendorDTO._() : super._();
 
   factory _VendorDTO.fromJson(Map<String, dynamic> json) =

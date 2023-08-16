@@ -1,7 +1,9 @@
 import 'dart:core';
 import 'package:flutter/material.dart';
 import 'package:vegan_liverpool/features/shared/widgets/primary_button.dart';
+import 'package:auto_route/annotations.dart';
 
+@RoutePage()
 class TopupExplained extends StatefulWidget {
   const TopupExplained({
     Key? key,

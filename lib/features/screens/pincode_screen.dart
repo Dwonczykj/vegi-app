@@ -18,6 +18,9 @@ import 'package:vegan_liverpool/utils/biometric_local_auth.dart';
 import 'package:vegan_liverpool/utils/constants.dart';
 import 'package:vegan_liverpool/utils/log/log.dart';
 
+import 'package:auto_route/annotations.dart';
+
+@RoutePage()
 class PinCodeScreen extends StatefulWidget {
   const PinCodeScreen({Key? key}) : super(key: key);
 
