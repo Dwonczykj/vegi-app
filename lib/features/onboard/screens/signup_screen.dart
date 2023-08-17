@@ -5,6 +5,7 @@ import 'package:carrier_info/carrier_info.dart';
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:phone_number/phone_number.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:vegan_liverpool/common/router/routes.gr.dart';
@@ -59,6 +60,30 @@ class _SignUpScreenState extends State<SignUpScreen> {
     try {
       String? isoCode;
       if (Platform.isAndroid) {
+        if (await Permission.location.isPermanentlyDenied) {
+          // The user opted to never again see the permission request dialog for this
+          // app. The only way to change the permission's status now is to let the
+          // user manually enable it in the system settings.
+
+          bool isShown = await Permission.location.shouldShowRequestRationale;
+          final userOpennedAppSettings = await openAppSettings();
+          if (!userOpennedAppSettings) {
+            log.info(
+              'Android user decided not to reneable location permission using app settings for looking up the carrier code on the signup_screen',
+              stackTrace: StackTrace.current,
+            );
+          }
+        } else if (await Permission.location.isGranted) {
+          // Access the cell location or carrier information here
+        } else {
+          // Request permission if not granted
+          final status = await Permission.location.request();
+          if (status.isGranted) {
+            // Permission granted, access the information
+          } else {
+            // Permission denied, handle accordingly
+          }
+        }
         final androidInfo = await CarrierInfo.getAndroidInfo();
         if ((androidInfo?.telephonyInfo.length ?? 0) >= 1) {
           isoCode = androidInfo?.telephonyInfo[0].isoCountryCode;
@@ -285,7 +310,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 ),
                                 Expanded(
                                   child: TextFormField(
-                                    key: ValueKey("SignUpScreenPhoneNoCountryField"),
+                                    key: ValueKey(
+                                        "SignUpScreenPhoneNoCountryField"),
                                     controller: phoneController,
                                     keyboardType: TextInputType.number,
                                     autofocus: true,

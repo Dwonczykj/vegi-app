@@ -639,9 +639,9 @@ class PackageConstants {
       'com.vegi.vegiAppTest'; // i.e. 1600049497
   static String iosBuildVersion =
       '${packageInfo.version}.${packageInfo.buildNumber}';
-  static Version? buildVersionInfo = Version.tryParse(iosBuildVersion);
+  static Version? buildVersionInfo = Version.tryParse(iosBuildVersion); // i.e. 1.5.202
   static String androidBuildVersion =
-      '${packageInfo.version}.${packageInfo.buildNumber}';
+      '${packageInfo.version}+${packageInfo.buildNumber}'; // i.e. 1.5.0+202
   static String buildVersionMajor =
       packageInfo.version;
   static String buildVersionMinor =

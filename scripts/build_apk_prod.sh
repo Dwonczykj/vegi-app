@@ -87,7 +87,7 @@ echo "# xcrun agvtool next-version -all"
 
 cd ..
 
-fvm flutter build ipa --dart-define ENV=production --release
+fvm flutter build apk --dart-define ENV=production --release
 
 cd ./ios
 

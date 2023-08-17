@@ -60,6 +60,7 @@ dependencies:
   number_display: ^3.0.0
   package_info: ^2.0.2 #Gets application info, used to show application and build version
   pay: ^1.1.1
+  permission_handler: ^10.4.3
   phone_number: ^1.0.0
   pin_code_fields: ^7.2.0
   # redux: ^5.0.0

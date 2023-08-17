@@ -159,20 +159,36 @@ class PaymentMethodSelectorModalSheet extends StatelessWidget {
                 //     size: 14,
                 //   ),
                 // ),
-                ListTile(
-                  onTap: () {
-                    viewmodel.setPaymentMethod(
-                      paymentMethod: PaymentMethod.applePay,
-                    );
-                    context.router.pop();
-                  },
-                  leading: const Icon(FontAwesomeIcons.applePay),
-                  title: Text(PaymentMethod.applePay.formattedName),
-                  trailing: const Icon(
-                    Icons.arrow_forward_ios,
-                    size: 14,
+                if (Platform.isIOS)
+                  ListTile(
+                    onTap: () {
+                      viewmodel.setPaymentMethod(
+                        paymentMethod: PaymentMethod.applePay,
+                      );
+                      context.router.pop();
+                    },
+                    leading: const Icon(FontAwesomeIcons.applePay),
+                    title: Text(PaymentMethod.applePay.formattedName),
+                    trailing: const Icon(
+                      Icons.arrow_forward_ios,
+                      size: 14,
+                    ),
+                  )
+                else if (Platform.isAndroid)
+                  ListTile(
+                    onTap: () {
+                      viewmodel.setPaymentMethod(
+                        paymentMethod: PaymentMethod.googlePay,
+                      );
+                      context.router.pop();
+                    },
+                    leading: const Icon(FontAwesomeIcons.googlePay),
+                    title: Text(PaymentMethod.googlePay.formattedName),
+                    trailing: const Icon(
+                      Icons.arrow_forward_ios,
+                      size: 14,
+                    ),
                   ),
-                ),
                 if (viewmodel.isSuperAdmin)
                   if (Platform.isIOS && AppConfig.useFusePayments)
                     ListTile(

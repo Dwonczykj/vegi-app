@@ -2237,10 +2237,9 @@ ThunkAction<AppState> startPaymentProcess({
         );
         if (store.state.userState.vegiAccountId == null) {
           const e = 'Vegi AccountId not set on state... Cannot start payment';
-          log.error(e);
-          await Sentry.captureException(
-            Exception(e),
-            stackTrace: StackTrace.current, // from catch (e, s)
+          log.error(
+            e,
+            stackTrace: StackTrace.current,
           );
           store
             ..dispatch(SetPaymentButtonFlag(false))
@@ -2338,6 +2337,111 @@ ThunkAction<AppState> startPaymentProcess({
           throw Exception('Apple Pay Failed - $error');
         });
       } else if (store.state.cartState.selectedPaymentMethod ==
+          PaymentMethod.googlePay) {
+        unawaited(
+          Analytics.track(
+            eventName: AnalyticsEvents.payStripe,
+          ),
+        );
+        if (store.state.userState.vegiAccountId == null) {
+          const e = 'Vegi AccountId not set on state... Cannot start payment';
+          log.error(e, stackTrace: StackTrace.current,);
+          store
+            ..dispatch(SetPaymentButtonFlag(false))
+            ..dispatch(
+              SetIsLoadingHttpRequest(
+                isLoading: false,
+              ),
+            )
+            ..dispatch(
+              cancelOrder(
+                orderId: int.parse(store.state.cartState.orderID),
+                senderWalletAddress: store.state.userState.walletAddress,
+              ),
+            );
+        } else if (store.state.cartState.orderCreationProcessStatus !=
+            OrderCreationProcessStatus.none) {
+          final e =
+              'orderCreationProcess in state: ${store.state.cartState.orderCreationProcessStatus.name}... Cannot start payment';
+          log.error(e, stackTrace: StackTrace.current);
+          store
+            ..dispatch(SetPaymentButtonFlag(false))
+            ..dispatch(
+              SetIsLoadingHttpRequest(
+                isLoading: false,
+              ),
+            )
+            ..dispatch(
+              cancelOrder(
+                orderId: int.parse(store.state.cartState.orderID),
+                senderWalletAddress: store.state.userState.walletAddress,
+              ),
+            );
+          return;
+        }
+        await (stripeService
+              ..setTestMode(isTester: store.state.userState.isTester))
+            .handleGooglePay(
+          recipientWalletAddress: store.state.cartState.restaurantWalletAddress,
+          senderWalletAddress: store.state.userState.walletAddress,
+          orderId: num.parse(store.state.cartState.orderID),
+          accountId: store.state.userState.vegiAccountId!,
+          store: store,
+          amount: store.state.cartState.cartTotal,
+          stripeCustomerId: store.state.userState.stripeCustomerId,
+          paymentIntentClientSecret:
+              store.state.cartState.paymentIntentClientSecret,
+          shouldPushToHome: false,
+          productName: Labels.stripeVegiProductName,
+        )
+            .then(
+          (value) {
+            if (!value) {
+              store
+                ..dispatch(SetPaymentButtonFlag(false))
+                ..dispatch(
+                  SetIsLoadingHttpRequest(
+                    isLoading: false,
+                  ),
+                )
+                ..dispatch(
+                  cancelOrder(
+                    orderId: int.parse(store.state.cartState.orderID),
+                    senderWalletAddress: store.state.userState.walletAddress,
+                  ),
+                )
+                ..dispatch(SetTransferringPayment(flag: value))
+                ..dispatch(
+                  OrderCreationProcessStatusUpdate(
+                    status: value
+                        ? OrderCreationProcessStatus.success
+                        : OrderCreationProcessStatus.orderCancelled,
+                    orderCreationStatusMessage:
+                        value ? 'Order success' : 'Order cancelled',
+                  ),
+                )
+                ..dispatch(
+                  SetConfirmed(
+                    flag: value,
+                    orderId: int.parse(store.state.cartState.orderID),
+                  ),
+                );
+              return;
+            }
+            unawaited(
+              Analytics.track(
+                eventName: AnalyticsEvents.payStripe,
+                properties: {
+                  'status': 'success',
+                },
+              ),
+            );
+            store.dispatch(subscribeToOrderUpdates());
+          },
+        ).catchError((dynamic error) {
+          throw Exception('Google Pay Failed - $error');
+        });
+      } else if (store.state.cartState.selectedPaymentMethod ==
           PaymentMethod.applePayToFuse) {
         unawaited(
           Analytics.track(
@@ -2433,7 +2537,101 @@ ThunkAction<AppState> startPaymentProcess({
               );
           },
         ).catchError((error) {
-          throw Exception('Apple Pay Failed - $error');
+          throw Exception('Apple Pay topup Failed - $error');
+        });
+      } else if (store.state.cartState.selectedPaymentMethod ==
+          PaymentMethod.googlePayToFuse) {
+        unawaited(
+          Analytics.track(
+            eventName: AnalyticsEvents.mint,
+          ),
+        );
+        if (store.state.userState.vegiAccountId == null) {
+          const e = 'Vegi AccountId not set on state... Cannot start payment';
+          log.error(e, stackTrace: StackTrace.current);
+          store
+            ..dispatch(SetPaymentButtonFlag(false))
+            ..dispatch(
+              SetIsLoadingHttpRequest(
+                isLoading: false,
+              ),
+            )
+            ..dispatch(
+              cancelOrder(
+                orderId: int.parse(store.state.cartState.orderID),
+                senderWalletAddress: store.state.userState.walletAddress,
+              ),
+            );
+        } else if (store.state.cartState.orderCreationProcessStatus !=
+            OrderCreationProcessStatus.none) {
+          final e =
+              'orderCreationProcess in state: ${store.state.cartState.orderCreationProcessStatus.name}... Cannot start payment';
+          log.error(e, stackTrace: StackTrace.current);
+          store
+            ..dispatch(SetPaymentButtonFlag(false))
+            ..dispatch(
+              SetIsLoadingHttpRequest(
+                isLoading: false,
+              ),
+            )
+            ..dispatch(
+              cancelOrder(
+                orderId: int.parse(store.state.cartState.orderID),
+                senderWalletAddress: store.state.userState.walletAddress,
+              ),
+            );
+          return;
+        }
+        await (stripeService
+              ..setTestMode(isTester: store.state.userState.isTester))
+            .handleGooglePay(
+          recipientWalletAddress: store.state.cartState.restaurantWalletAddress,
+          senderWalletAddress: store.state.userState.walletAddress,
+          orderId: num.parse(store.state.cartState.orderID),
+          accountId: store.state.userState.vegiAccountId!,
+          stripeCustomerId: store.state.userState.stripeCustomerId,
+          paymentIntentClientSecret:
+              store.state.cartState.paymentIntentClientSecret,
+          amount: store.state.cartState.cartTotal,
+          store: store,
+          shouldPushToHome: false,
+          productName: Labels.stripeVegiProductName,
+        )
+            .then(
+          (value) {
+            if (!value) {
+              store
+                ..dispatch(SetTransferringPayment(flag: value))
+                ..dispatch(
+                  cancelOrder(
+                    orderId: int.parse(store.state.cartState.orderID),
+                    senderWalletAddress: store.state.userState.walletAddress,
+                  ),
+                );
+              return;
+            }
+            unawaited(
+              Analytics.track(
+                eventName: AnalyticsEvents.mint,
+                properties: {
+                  'status': 'success',
+                },
+              ),
+            );
+            store
+              ..dispatch(
+                UpdateSelectedAmounts(
+                  gbpxAmount:
+                      store.state.cartState.cartTotal.inGBPxValue.toDouble(),
+                  pplAmount: 0,
+                ),
+              )
+              ..dispatch(
+                startTokenPaymentToRestaurant(),
+              );
+          },
+        ).catchError((error) {
+          throw Exception('Google Pay topup Failed - $error');
         });
       } else if (store.state.cartState.selectedPaymentMethod ==
           PaymentMethod.peeplPay) {
