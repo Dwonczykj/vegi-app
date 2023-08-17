@@ -4,11 +4,18 @@ import 'package:vegan_liverpool/models/actions/actions.dart';
 import 'package:vegan_liverpool/models/actions/wallet_action.dart';
 import 'package:vegan_liverpool/models/cash_wallet_state.dart';
 import 'package:vegan_liverpool/models/tokens/token.dart';
+import 'package:vegan_liverpool/redux/actions/app_env_actions.dart';
 import 'package:vegan_liverpool/redux/actions/cash_wallet_actions.dart';
 import 'package:vegan_liverpool/redux/actions/user_actions.dart';
 import 'package:wallet_connect/wc_session_store.dart';
 
 final cashWalletReducers = combineReducers<CashWalletState>([
+  TypedReducer<CashWalletState, LogoutRequestSuccess>(
+          _logoutSuccess<LogoutRequestSuccess>)
+      .call,
+  TypedReducer<CashWalletState, UpdateEnvInAppState>(
+          _logoutSuccess<UpdateEnvInAppState>)
+      .call,
   TypedReducer<CashWalletState, ResetAppState>(_resetApp).call,
   TypedReducer<CashWalletState, GetTokenIntervalStatsSuccess>(
     _getTokenIntervalStatsSuccess,
@@ -39,6 +46,11 @@ final cashWalletReducers = combineReducers<CashWalletState>([
   ).call,
   TypedReducer<CashWalletState, SetIsFetchingBalances>(_setIsFetchingBalances).call,
 ]);
+
+CashWalletState _logoutSuccess<TAction>(
+  CashWalletState state,
+  TAction action,
+) => CashWalletState.initial();
 
 CashWalletState _resetApp(
   CashWalletState state,

@@ -40,8 +40,8 @@ import 'package:vegan_liverpool/new_version.dart' as _i18;
 import 'package:vegan_liverpool/services/apis/fxService.dart' as _i5;
 import 'package:vegan_liverpool/services/apis/locationService.dart' as _i15;
 import 'package:vegan_liverpool/services/apis/peeplEats.dart' as _i20;
-import 'package:vegan_liverpool/services/apis/peeplPay.dart' as _i22;
-import 'package:vegan_liverpool/services/apis/peeplPay2.dart' as _i21;
+import 'package:vegan_liverpool/services/apis/peeplPay.dart' as _i21;
+import 'package:vegan_liverpool/services/apis/peeplPay2.dart' as _i22;
 import 'package:vegan_liverpool/services/apis/stripePay.dart' as _i27;
 import 'package:vegan_liverpool/services/apis/stripePay2.dart' as _i28;
 import 'package:vegan_liverpool/utils/connectionChecker.dart' as _i17;
@@ -118,9 +118,9 @@ extension GetItInjectableX on _i1.GetIt {
     );
     gh.lazySingleton<_i20.PeeplEatsService>(
         () => _i20.PeeplEatsService(gh<_i4.Dio>()));
-    gh.lazySingleton<_i21.PeeplPayService>(() => _i21.PeeplPayService());
-    gh.lazySingleton<_i22.PeeplPayService>(
-        () => _i22.PeeplPayService(gh<_i4.Dio>()));
+    gh.lazySingleton<_i21.PeeplPayService>(
+        () => _i21.PeeplPayService(gh<_i4.Dio>()));
+    gh.lazySingleton<_i22.PeeplPayService>(() => _i22.PeeplPayService());
     gh.lazySingleton<_i23.PhoneNumberUtil>(() => phone.phoneNumberUtil);
     gh.lazySingleton<_i24.RootRouter>(() => servicesModule.rootRouter);
     gh.singletonAsync<_i25.Store<_i26.AppState>>(() => registerModule.store());

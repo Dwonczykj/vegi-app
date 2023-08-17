@@ -64,7 +64,7 @@ class _JsonMapState extends State<JsonMap> {
   @override
   Widget build(BuildContext context) {
     List<Widget> children = [];
-    const keyWidth = 0.2;
+    const keyWidth = 0.45;
     const spaceWidth = 0.1;
     widget.map.forEach((key, value) {
       children.add(
@@ -78,7 +78,18 @@ class _JsonMapState extends State<JsonMap> {
                   maxWidth: MediaQuery.of(context).size.width *
                       keyWidth, // 30% of screen width
                 ),
-                child: Text("$key:"),
+                child: Padding(
+                  padding: EdgeInsets.only(
+                      top: value is Map
+                          ? 3.0
+                          : value is List
+                              ? 3.0
+                              : 0.0),
+                  child: Text(
+                    "$key:",
+                    // style: TextStyle(),
+                  ),
+                ),
               ),
               SizedBox(
                   width: Math.min(
@@ -87,8 +98,8 @@ class _JsonMapState extends State<JsonMap> {
               )), // You can adjust this value for spacing
               ConstrainedBox(
                 constraints: BoxConstraints(
-                  maxWidth: MediaQuery.of(context).size.width *
-                      (1 - keyWidth - 0.1), // 60% of screen width
+                  maxWidth:
+                      MediaQuery.of(context).size.width, // 60% of screen width
                 ),
                 child: JsonViewer(
                   json: value,
@@ -106,9 +117,11 @@ class _JsonMapState extends State<JsonMap> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         GestureDetector(
-          onTap: () => setState(() {
-            _isExpanded = !_isExpanded;
-          }),
+          onTap: () {
+            setState(() {
+              _isExpanded = !_isExpanded;
+            });
+          },
           child: Row(
             children: [
               Icon(_isExpanded ? Icons.arrow_drop_down : Icons.arrow_right),
@@ -121,7 +134,34 @@ class _JsonMapState extends State<JsonMap> {
             padding: EdgeInsets.only(left: 8.0 * (widget.level + 1)),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: children,
+              children: [
+                ConstrainedBox(
+                  constraints: BoxConstraints(
+                    maxWidth: MediaQuery.of(context).size.width *
+                        keyWidth, // 30% of screen width
+                  ),
+                  child: Text(
+                    _isExpanded ? '{' : '',
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 24.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: children,
+                  ),
+                ),
+                // ...children,
+                ConstrainedBox(
+                  constraints: BoxConstraints(
+                    maxWidth: MediaQuery.of(context).size.width *
+                        keyWidth, // 30% of screen width
+                  ),
+                  child: Text(
+                    _isExpanded ? '}' : '',
+                  ),
+                ),
+              ],
             ),
           )
         // if (_isExpanded) ...children

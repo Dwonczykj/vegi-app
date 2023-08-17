@@ -3,6 +3,8 @@ import 'package:flutter/foundation.dart';
 import 'package:vegan_liverpool/common/router/route_guards.dart';
 import 'package:vegan_liverpool/common/router/routes.gr.dart';
 import 'package:vegan_liverpool/features/account/router/router.dart';
+import 'package:vegan_liverpool/features/topup/router/topup_router.dart';
+import 'package:vegan_liverpool/features/veganHome/router/router.dart';
 // import 'package:vegan_liverpool/features/account/screens/profile.dart';
 // import 'package:vegan_liverpool/features/onboard/screens/createWalletFirstScreen.dart';
 // import 'package:vegan_liverpool/features/onboard/screens/create_email_password_screen.dart';
@@ -60,20 +62,20 @@ class RootRouter extends $RootRouter {
     AutoRoute(page: ViewJsonScreen.page),
     AutoRoute(page: ChooseSecurityOption.page),
     AutoRoute(page: VerifyEmailLinkRoute.page),
-    AutoRoute(page: FirebaseAuthLinkRoute.page, path: 'firebaseauth/link'),
+    AutoRoute(page: FirebaseAuthLinkRoute.page, path: '/firebaseauth/link'), // routes at the route of the router have to start with a '/'
     AutoRoute(page: PinCodeScreen.page),
     AutoRoute(page: RestoreFromBackupScreen.page),
-    AutoRoute(page: OnBoardScreen.page, children: [accountTab]),
+    AutoRoute(page: OnBoardScreen.page),
     AutoRoute(page: ProfileScreen.page),
-    AutoRoute(page: SignUpScreen.page, children: [accountTab]),
+    AutoRoute(page: SignUpScreen.page),
     AutoRoute(
-        page: SignUpWithEmailAndPasswordScreen.page, children: [accountTab]),
-    AutoRoute(page: SignUpEmailLinkScreen.page, children: [accountTab]),
+        page: SignUpWithEmailAndPasswordScreen.page),
+    AutoRoute(page: SignUpEmailLinkScreen.page),
     AutoRoute(page: SetEmailOnboardingScreen.page),
     AutoRoute(page: CreateWithEmailAndPasswordScreen.page),
     AutoRoute(page: VerifyPhoneNumber.page),
     AutoRoute(page: UserNameScreen.page),
-    AutoRoute(page: WaitingListFunnelScreen.page, children: [accountTab]),
+    AutoRoute(page: WaitingListFunnelScreen.page),
     AutoRoute(page: RegisterEmailOnBoardingScreen.page),
     AutoRoute(page: RegisterEmailNotificationsScreen.page),
     AutoRoute(page: CreateWalletFirstOnboardingScreen.page),
@@ -89,7 +91,9 @@ class RootRouter extends $RootRouter {
         page: MainScreen.page,
         // guards: [AuthGuard],
         children: [
-          AutoRoute(page: VeganHomeRouter.page),
+          // AutoRoute(page: VeganHomeRouter.page),
+          veganHomeTab,
+          topUpRoute,
         ]
     ),
     AutoRoute(

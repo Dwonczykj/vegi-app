@@ -5,10 +5,18 @@ import 'package:vegan_liverpool/models/auth_state.dart';
 import 'package:vegan_liverpool/models/log_event.dart';
 import 'package:vegan_liverpool/redux/actions/app_log_actions.dart';
 import 'package:vegan_liverpool/redux/actions/auth_actions.dart';
+import 'package:vegan_liverpool/redux/actions/user_actions.dart';
 
 final appLogReducer = combineReducers<AppLogState>([
+  TypedReducer<AppLogState, LogoutRequestSuccess>(_logoutSuccess).call,
   TypedReducer<AppLogState, AddAppLog>(_addLogEvent).call,
 ]);
+
+AppLogState _logoutSuccess(
+  AppLogState state,
+  LogoutRequestSuccess action,
+) =>
+    AppLogState.initial();
 
 AppLogState _addLogEvent(
   AppLogState state,

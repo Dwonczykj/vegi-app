@@ -7,6 +7,8 @@ part of 'app_state.dart';
 // **************************************************************************
 
 _$_AppState _$$_AppStateFromJson(Map<String, dynamic> json) => _$_AppState(
+      appEnvState: const AppEnvStateConverter()
+          .fromJson(json['appEnvState'] as Map<String, dynamic>?),
       authState: const AuthStateConverter()
           .fromJson(json['authState'] as Map<String, dynamic>?),
       appLogState: const AppLogStateConverter()
@@ -29,6 +31,7 @@ _$_AppState _$$_AppStateFromJson(Map<String, dynamic> json) => _$_AppState(
 
 Map<String, dynamic> _$$_AppStateToJson(_$_AppState instance) =>
     <String, dynamic>{
+      'appEnvState': const AppEnvStateConverter().toJson(instance.appEnvState),
       'authState': const AuthStateConverter().toJson(instance.authState),
       'appLogState': const AppLogStateConverter().toJson(instance.appLogState),
       'userState': const UserStateConverter().toJson(instance.userState),

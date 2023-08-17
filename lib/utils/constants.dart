@@ -22,6 +22,7 @@ import 'package:vegan_liverpool/models/tokens/token.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:vegan_liverpool/utils/url.dart';
+import 'package:vegan_liverpool/version.dart';
 
 const onboardingAuthRoutesOrder = [
   SignUpScreen.name,
@@ -633,12 +634,21 @@ class DebugHelpers {
 class PackageConstants {
   static const String iosAppIdVegiTest = '1643896043'; // i.e. 1600049497
   static const String iosAppIdVegiProd = '1608208174'; // i.e. 1600049497
+  
   static const String androidAppIdVegiProd =
       'com.vegi.vegiAppTest'; // i.e. 1600049497
   static String iosBuildVersion =
       '${packageInfo.version}.${packageInfo.buildNumber}';
+  static Version? buildVersionInfo = Version.tryParse(iosBuildVersion);
   static String androidBuildVersion =
       '${packageInfo.version}.${packageInfo.buildNumber}';
+  static String buildVersionMajor =
+      packageInfo.version;
+  static String buildVersionMinor =
+      packageInfo.buildNumber;
+  static String versionString = 'Version ${packageInfo.version},'
+      ' Build ${packageInfo.buildNumber},'
+      ' Env ${Env.activeEnv}';
   static bool isTestFlightVersion =
       packageInfo.appName.toLowerCase().contains('test');
   static String buildVersion() => Platform.isIOS
@@ -646,6 +656,7 @@ class PackageConstants {
       : Platform.isAndroid
           ? PackageConstants.androidBuildVersion
           : '';
+
   static const String bundleIdentifierHardCoded =
       'com.vegi.vegiAppTest'; // Runner.xcodeproj/project.pbxproj => PRODUCT_BUNDLE_IDENTIFIER = com.example.appname;
   static String iosBundleIdentifier = packageInfo

@@ -5,13 +5,12 @@ import '../../../common/router/routes.gr.dart';
 @RoutePage(name: 'TopUpRouter')
 class TopUpRouterPage extends AutoRouter {}
 
-final topupTab = AutoRoute(
+final topUpRoute = AutoRoute(
   path: 'topup',
   page: TopUpRouter.page,
   children: [
     AutoRoute(
-      initial: true,
-      path: 'topUp',
+      path: '',
       page: TopupScreen.page,
     ),
     AutoRoute(

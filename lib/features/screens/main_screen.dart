@@ -10,6 +10,7 @@ import 'package:vegan_liverpool/constants/enums.dart';
 import 'package:vegan_liverpool/features/shared/widgets/my_scaffold.dart';
 import 'package:vegan_liverpool/features/shared/widgets/snackbars.dart';
 import 'package:vegan_liverpool/features/veganHome/Helpers/helpers.dart';
+import 'package:vegan_liverpool/features/veganHome/router/router.dart';
 import 'package:vegan_liverpool/features/veganHome/widgets/shared/dialogs/appUpdateNeededDialog.dart';
 import 'package:vegan_liverpool/features/waitingListFunnel/screens/waitingListFunnel.dart';
 import 'package:vegan_liverpool/firebase_options.dart';
@@ -152,10 +153,11 @@ class _MainScreenState extends State<MainScreen> {
               return Future.value(false);
             }
           },
+          // child: VeganHomeScreen(),
           child: AutoTabsScaffold(
             animationDuration: Duration.zero,
             routes: [
-              VeganHomeRouter(),
+              VeganHomeScreen(),
             ],
           ),
         );

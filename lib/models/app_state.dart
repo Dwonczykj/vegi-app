@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:vegan_liverpool/features/veganHome/Helpers/helpers.dart';
+import 'package:vegan_liverpool/models/app_env_state.dart';
 import 'package:vegan_liverpool/models/app_log_state.dart';
 import 'package:vegan_liverpool/models/auth_state.dart';
 import 'package:vegan_liverpool/models/cash_wallet_state.dart';
@@ -19,6 +20,7 @@ part 'app_state.g.dart';
 class AppState with _$AppState {
   @JsonSerializable()
   factory AppState({
+    @AppEnvStateConverter() required AppEnvState appEnvState,
     @AuthStateConverter() required AuthState authState,
     @AppLogStateConverter() required AppLogState appLogState,
     @UserStateConverter() required UserState userState,
@@ -34,6 +36,7 @@ class AppState with _$AppState {
 
   factory AppState.initial() {
     return AppState(
+      appEnvState: AppEnvState.initial(),
       authState: AuthState.initial(),
       appLogState: AppLogState.initial(),
       userState: UserState.initial(),
@@ -48,6 +51,8 @@ class AppState with _$AppState {
 
   factory AppState.fromJsonForPersistor(dynamic json) {
     return AppState(
+      appEnvState: const AppEnvStateConverter()
+          .fromJson(json['appEnvState'] as Map<String, dynamic>?),
       authState: const AuthStateConverter()
           .fromJson(json['authState'] as Map<String, dynamic>?),
       appLogState: const AppLogStateConverter()

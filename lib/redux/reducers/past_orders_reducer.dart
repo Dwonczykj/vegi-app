@@ -3,23 +3,45 @@ import 'package:vegan_liverpool/constants/enums.dart';
 import 'package:vegan_liverpool/features/veganHome/Helpers/extensions.dart';
 import 'package:vegan_liverpool/models/cart/order.dart';
 import 'package:vegan_liverpool/models/past_order_state.dart';
+import 'package:vegan_liverpool/redux/actions/app_env_actions.dart';
 import 'package:vegan_liverpool/redux/actions/cart_actions.dart';
 import 'package:vegan_liverpool/redux/actions/past_order_actions.dart';
 import 'package:vegan_liverpool/redux/actions/user_actions.dart';
 
 final pastOrdersReducer = combineReducers<PastOrderState>([
+  TypedReducer<PastOrderState, LogoutRequestSuccess>(_logoutSuccess<LogoutRequestSuccess>).call,
+  TypedReducer<PastOrderState, UpdateEnvInAppState>(_logoutSuccess<UpdateEnvInAppState>).call,
   TypedReducer<PastOrderState, ResetAppState>(_resetApp).call,
   TypedReducer<PastOrderState, CreateOrder>(_createOrder).call,
   TypedReducer<PastOrderState, CancelOrder>(_cancelOrder).call,
   TypedReducer<PastOrderState, OrderPaymentAttemptCreated>(
-      _orderPaymentAttemptCreated,).call,
-  TypedReducer<PastOrderState, UpdateOngoingOrderList>(_updateOngoingOrderList).call,
-  TypedReducer<PastOrderState, UpdateScheduledOrders>(_updateScheduledOrders).call,
+    _orderPaymentAttemptCreated,
+  ).call,
+  TypedReducer<PastOrderState, UpdateOngoingOrderList>(_updateOngoingOrderList)
+      .call,
+  TypedReducer<PastOrderState, UpdateScheduledOrders>(_updateScheduledOrders)
+      .call,
   TypedReducer<PastOrderState, AddAllPastOrdersList>(_updatePastOrders).call,
   TypedReducer<PastOrderState, SetConfirmed>(_toggleConfirmed).call,
   TypedReducer<PastOrderState, UpdateTransactionHistory>(
-      _updateTransactionHistory,).call,
+    _updateTransactionHistory,
+  ).call,
 ]);
+
+PastOrderState _logoutSuccess<TAction>(
+  PastOrderState state,
+  TAction action,
+) {
+  // return state.copyWith(
+  //   allPastOrders: [],
+  //   allUnpaidOrders: [],
+  //   listOfOngoingOrders: [],
+  //   listOfScheduledOrders: [],
+  //   transactionHistory: [],
+  //   lastRefreshTime: DateTime.now(),
+  // );
+  return PastOrderState.initial();
+}
 
 PastOrderState _resetApp(
   PastOrderState state,
@@ -145,7 +167,11 @@ PastOrderState _orderPaymentAttemptCreated(
         (element) => element.id != action.orderId,
       )
       .toList()
-      ..add(order.copyWith(paymentAttempted: true,),);
+    ..add(
+      order.copyWith(
+        paymentAttempted: true,
+      ),
+    );
   return state.copyWith(
     listOfScheduledOrders: existingScheduledOrders,
   );

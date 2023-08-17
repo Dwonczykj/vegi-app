@@ -22,16 +22,98 @@ import 'package:vegan_liverpool/common/router/routes.gr.dart';
 @RoutePage(name: 'VeganHomeRouter')
 class VeganHomeRouterPage extends AutoRouter {}
 
+// final veganHomeTabs = [
+//   VeganHomeScreen(),
+//   RestaurantMenuScreen(),
+//   OrderConfirmedScreen(),
+//   // ProfileScreen(),
+//   TopupScreen(),
+//   AllOrdersRoute(),
+//   ScheduledOrdersRoute(),
+//   FAQScreen(),
+//   AboutScreen(),
+//   PreparingOrderRoute(),
+//   // AutoRoute(
+//   //   page: ShowUserMnemonicScreen.page,
+//   //   name: 'showUserMnemonic',
+//   //   // guards: [AuthGuard],
+//   // ),
+//   // AutoRoute(
+//   //   page: VerifyUserMnemonic.page,
+//   //   name: 'verifyUserMnemonic',
+//   //   // guards: [AuthGuard],
+//   // ),
+//   CheckoutScreenPt2(),
+//   GenerateQRFromCartScreen(),
+//   ScanPaymentRecipientQR(),
+//   ScanListedProductQRCodeScreen(),
+// ];
+
+/// ~ https://pub.dev/packages/auto_route#nested-navigation
+/// STEP 1:
+/// - To render/build nested routes we need an AutoRouter widget that works as an outlet or a nested router-view inside of our dashboard page. (~ https://pub.dev/packages/auto_route#nested-navigation:~:text=To%20render/build%20nested%20routes%20we%20need%20an%20AutoRouter%20widget%20that%20works%20as%20an%20outlet%20or%20a%20nested%20router%2Dview%20inside%20of%20our%20dashboard%20page.)
+/// The key is including this nested AutoRouter widget in the home-screen empty page component so that AutoRoute can populate it
+/// ```dart
+/// Expanded(
+///  // nested routes will be rendered here
+///  child: AutoRouter(),
+/// );
+/// ```
+/// within:
+/// ```dart
+/// class DashboardPage extends StatelessWidget {
+///   @override
+///   Widget build(BuildContext context) {
+///     return Row(
+///       children: [
+///         Column(
+///           children: [
+///             NavLink(label: 'Users', destination: const UsersRoute()),
+///             NavLink(label: 'Posts', destination: const PostsRoute()),
+///             NavLink(label: 'Settings', destination: const SettingsRoute()),
+///           ],
+///         ),
+///         Expanded(
+///           // nested routes will be rendered here
+///           child: AutoRouter(),
+///         )
+///       ],
+///     );
+///   }
+/// }
+/// ```
+///
+/// Step 2:
+/// To force showing child routes at vegi-home path, ->
+/// we can simply do that by giving the child routes an empty path '' to make initial or by setting initial to true.
+/// ~ https://pub.dev/packages/auto_route#nested-navigation:~:text=we%20can%20simply%20do%20that%20by%20giving%20the%20child%20routes%20an%20empty%20path%20%27%27%20to%20make%20initial%20or%20by%20setting%20initial%20to%20true.
+/// or by using a RedirectRoute
+/// ~ https://pub.dev/packages/auto_route#nested-navigation:~:text=or%20by%20using%20a%20RedirectRoute
 final veganHomeTab = AutoRoute(
-  path: 'vegi-home',
+  path:
+      'vegi', // ! AutoRouter -> FlutterError(Sub-paths can not start with a "/")
   // name: 'veganHomeTab',
-  page: VeganHomeRouter.page,
+  page: VegiHomeRoute
+      .page, // needs to be defined from a widget screeen that contains an auto_route placeholder.
   children: [
+    // Can either use a default route with an empty child path to make it the default first route
+    // AutoRoute(
+    //   initial: true,
+    //   path: '', // * if want to show one of the child pages at /vegi-home default route
+    //   page: VeganHomeScreen.page,
+    //   // name: 'veganHomeScreen',
+    //   // guards: [AuthGuard],
+    // ),
+    // alterntatively can use a redirect route and actual home route path with empty default child path to do the same and create the initiail child route
+    RedirectRoute(
+      path: '',
+      redirectTo: 'home',
+    ), // ! child routes do NOT have to start with a '/'
     AutoRoute(
-      initial: true,
+      path:
+          'home', // * if want to show one of the child pages at /vegi-home default route
       page: VeganHomeScreen.page,
       // name: 'veganHomeScreen',
-      path: 'home',
       // guards: [AuthGuard],
     ),
     CustomRoute(

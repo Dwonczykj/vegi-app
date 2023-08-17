@@ -27,6 +27,7 @@ import 'package:vegan_liverpool/dismiss_keyboard.dart';
 import 'package:vegan_liverpool/features/shared/widgets/snackbars.dart';
 import 'package:vegan_liverpool/generated/l10n.dart';
 import 'package:vegan_liverpool/models/app_state.dart';
+import 'package:vegan_liverpool/redux/actions/app_env_actions.dart';
 import 'package:vegan_liverpool/redux/actions/home_page_actions.dart';
 import 'package:vegan_liverpool/redux/actions/user_actions.dart';
 import 'package:vegan_liverpool/services.dart';
@@ -91,7 +92,9 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
       //         : null,
       //   ),
       // )
-      ..dispatch(fetchDeviceType());
+      ..dispatch(fetchDeviceType())
+      ..dispatch(checkIfAppEnvChanged())
+      ..dispatch(checkIfAppVersionWasUpdated());
     _locale = widget.store.state.userState.locale;
     initPlatformState();
     // screenListener.addScreenRecordListener((recorded) {
@@ -121,6 +124,8 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
   }
 
   // Platform messages are asynchronous, so we initialize in an async method.
+  /// See auto_router docs for mapping to existing routes
+  /// ~ https://pub.dev/packages/auto_route#navigating-between-screens
   Future<void> initPlatformState() async {
     // ~ https://stackoverflow.com/a/59979431
     if (_type == UniLinksType.string) {
@@ -154,6 +159,8 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
   // }
 
   /// An implementation using a [String] link
+  /// See auto_router docs for mapping to existing routes
+  /// ~ https://pub.dev/packages/auto_route#navigating-between-screens
   Future<void> initPlatformStateForStringUniLinks() async {
     // Platform messages may fail, so we use a try/catch PlatformException.
     try {
@@ -161,7 +168,7 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
       _latestLink = latestLink ?? 'Unknown';
       _latestUri = null;
       try {
- _latestUri = Uri.parse(_latestLink);
+        _latestUri = Uri.parse(_latestLink);
       } on FormatException {}
       // Parse the link and warn the user, if it is not correct,
       // but keep in mind it could be `null`.
@@ -248,6 +255,8 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
   }
 
   /// An implementation using the [Uri] convenience helpers
+  /// See auto_router docs for mapping to existing routes
+  /// ~ https://pub.dev/packages/auto_route#navigating-between-screens
   Future<void> initPlatformStateForUriUniLinks() async {
     // Attach a listener to the Uri links stream
     _sub = uriLinkStream.listen(

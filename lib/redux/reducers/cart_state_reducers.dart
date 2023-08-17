@@ -9,6 +9,7 @@ import 'package:vegan_liverpool/redux/actions/cart_actions.dart';
 import 'package:vegan_liverpool/redux/actions/user_actions.dart';
 
 final cartStateReducers = combineReducers<UserCartState>([
+  TypedReducer<UserCartState, LogoutRequestSuccess>(_logoutSuccess).call,
   TypedReducer<UserCartState, ResetAppState>(_resetApp).call,
   TypedReducer<UserCartState, UpdateCartItems>(_updateCartItems).call,
   TypedReducer<UserCartState, UpdateCartItem>(_updateCartItem).call,
@@ -70,6 +71,12 @@ final cartStateReducers = combineReducers<UserCartState>([
     _orderPaymentAttemptCreated,
   ).call,
 ]);
+
+UserCartState _logoutSuccess(
+  UserCartState state,
+  LogoutRequestSuccess action,
+) =>
+    UserCartState.initial();
 
 UserCartState _resetApp(
   UserCartState state,
