@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:vegan_liverpool/features/veganHome/Helpers/helpers.dart';
+import 'package:vegan_liverpool/services.dart';
 
 class TransparentButton extends StatelessWidget {
   const TransparentButton({
@@ -26,7 +27,13 @@ class TransparentButton extends StatelessWidget {
       child: InkWell(
         focusColor: Theme.of(context).canvasColor,
         highlightColor: Theme.of(context).canvasColor,
-        onTap: withHelloWorld(onPressed),
+        onTap: logAndPipe(
+          onPressed,
+          funcName: 'onPressed',
+          className: "$this",
+          logMessage:
+              'onPressed handler called for $this on ${rootRouter.current.name}',
+        ),
         child: !preload
             ? Container(
                 padding:

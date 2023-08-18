@@ -907,6 +907,19 @@ String authEnumToEmoji(Enum value) {
   }
 }
 
+FutureOr<T>? Function() logAndPipe<T>(
+  FutureOr<T>? Function() fn, {
+  String? funcName,
+  String? className,
+  String logMessage = '',
+}) =>
+    () => logFunctionCall(
+          className: className,
+          funcName: funcName,
+          logMessage: logMessage,
+          funcResult: fn(),
+        );
+
 /// The `logFunctionCall` function logs the name of a function and the class it belongs to, along with
 /// an optional message, and returns the result of the function.
 ///

@@ -3,9 +3,11 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:vegan_liverpool/constants/analytics_events.dart';
 import 'package:vegan_liverpool/constants/theme.dart';
 import 'package:vegan_liverpool/features/veganHome/Helpers/extensions.dart';
+import 'package:vegan_liverpool/features/veganHome/Helpers/helpers.dart';
 import 'package:vegan_liverpool/features/veganHome/widgets/checkout/delivery_address/delivery_address_selector.dart';
 import 'package:vegan_liverpool/models/app_state.dart';
 import 'package:vegan_liverpool/redux/viewsmodels/checkout/delivery_address_vm.dart';
+import 'package:vegan_liverpool/services.dart';
 import 'package:vegan_liverpool/utils/analytics.dart';
 
 class DeliveryAddressSelectorButton extends StatelessWidget {
@@ -20,22 +22,28 @@ class DeliveryAddressSelectorButton extends StatelessWidget {
         return InkWell(
           highlightColor: themeShade200,
           splashColor: themeShade200,
-          onTap: () {
-            if (viewmodel.isDelivery) {
-              Analytics.track(
-                eventName: AnalyticsEvents.changeAddress,
-              );
-              showModalBottomSheet<Widget>(
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.vertical(
-                    top: Radius.circular(20),
+          onTap: logAndPipe(
+            () {
+              if (viewmodel.isDelivery) {
+                Analytics.track(
+                  eventName: AnalyticsEvents.changeAddress,
+                );
+                showModalBottomSheet<Widget>(
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.vertical(
+                      top: Radius.circular(20),
+                    ),
                   ),
-                ),
-                context: context,
-                builder: (_) => const DeliveryAddressModalSheet(),
-              );
-            }
-          },
+                  context: context,
+                  builder: (_) => const DeliveryAddressModalSheet(),
+                );
+              }
+            },
+            funcName: 'onTap',
+            className: "$this",
+            logMessage:
+                'onTap handler called for button on ${rootRouter.current.name}',
+          ),
           child: DecoratedBox(
             decoration: BoxDecoration(
               color: themeShade300,

@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:vegan_liverpool/constants/theme.dart';
+import 'package:vegan_liverpool/features/veganHome/Helpers/helpers.dart';
+import 'package:vegan_liverpool/services.dart';
 
 class VegiDialogButton extends StatelessWidget {
   const VegiDialogButton({
-    required this.label, required this.onPressed, Key? key,
+    required this.label,
+    required this.onPressed,
+    Key? key,
     this.icon,
     this.disabled = false,
     this.dangerButton = false,
@@ -17,8 +21,7 @@ class VegiDialogButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final buttonLabelColour =
-        disabled ? const Color(0xFF797979) : Colors.white;
+    final buttonLabelColour = disabled ? const Color(0xFF797979) : Colors.white;
     const buttonLabelFontSize = 30.0;
     final buttonBackgroundColor = dangerButton
         ? disabled
@@ -31,7 +34,13 @@ class VegiDialogButton extends StatelessWidget {
       width: 255,
       padding: const EdgeInsets.all(16),
       child: ElevatedButton(
-        onPressed: disabled ? () {} : onPressed,
+        onPressed: logAndPipe(
+          disabled ? () {} : onPressed,
+          funcName: 'onPressed',
+          className: "$this",
+          logMessage:
+              'onPressed handler ${disabled ? 'tapped but disabled' : 'was called'} for $this on ${rootRouter.current.name}',
+        ),
         style: dangerButton
             ? ElevatedButton.styleFrom(backgroundColor: themeShade1100)
             : ElevatedButton.styleFrom(backgroundColor: themeShade600),
@@ -54,7 +63,7 @@ class VegiDialogButton extends StatelessWidget {
             // const SizedBox(
             //   width: 16,
             // ),
-            if(icon != null)
+            if (icon != null)
               Icon(
                 icon, //Icons.sms
                 color: buttonLabelColour,

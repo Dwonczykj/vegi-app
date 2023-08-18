@@ -1,9 +1,13 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:vegan_liverpool/features/veganHome/Helpers/helpers.dart';
+import 'package:vegan_liverpool/services.dart';
 
 class PrimaryButton extends StatelessWidget {
   const PrimaryButton({
-    required this.onPressed, required this.label, Key? key,
+    required this.onPressed,
+    required this.label,
+    Key? key,
     this.fontSize = 20,
     this.onPressedDisabled,
     this.width = 255.0,
@@ -49,7 +53,15 @@ class PrimaryButton extends StatelessWidget {
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          onTap: disabled ? onPressedDisabled?.call : onPressed,
+          onTap: disabled
+              ? onPressedDisabled?.call
+              : logAndPipe(
+                  onPressed,
+                  funcName: 'onPressed',
+                  className: "$this",
+                  logMessage:
+                      'onPressed handler called for button on ${rootRouter.current.name}',
+                ),
           borderRadius: const BorderRadius.all(Radius.circular(30)),
           highlightColor:
               Theme.of(context).scaffoldBackgroundColor.withOpacity(0.3),

@@ -1,6 +1,8 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:vegan_liverpool/features/veganHome/Helpers/helpers.dart';
+import 'package:vegan_liverpool/services.dart';
 
 class Button extends StatelessWidget {
   const Button({
@@ -16,7 +18,13 @@ class Button extends StatelessWidget {
     return SizedBox(
       width: width ?? MediaQuery.of(context).size.width * .425,
       child: TextButton(
-        onPressed: onPressed,
+        onPressed: logAndPipe(
+          onPressed,
+          funcName: 'onPressed',
+          className: "$this []",
+          logMessage:
+              'onPressed handler called for button on ${rootRouter.current.name}',
+        ),
         style: TextButton.styleFrom(
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(

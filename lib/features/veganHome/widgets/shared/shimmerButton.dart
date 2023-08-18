@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:vegan_liverpool/constants/theme.dart';
+import 'package:vegan_liverpool/features/veganHome/Helpers/helpers.dart';
+import 'package:vegan_liverpool/services.dart';
 
 class ShimmerButton extends StatelessWidget {
   const ShimmerButton({
@@ -25,7 +27,20 @@ class ShimmerButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => disabled ? showPopupOnDisabledButtonTapped == null ? null : showDialog<void>(context: context, builder: (context) => showPopupOnDisabledButtonTapped!,) : buttonAction(),
+      onTap: logAndPipe(
+        () => disabled
+            ? showPopupOnDisabledButtonTapped == null
+                ? null
+                : showDialog<void>(
+                    context: context,
+                    builder: (context) => showPopupOnDisabledButtonTapped!,
+                  )
+            : buttonAction(),
+        funcName: 'onTap',
+        className: "$this",
+        logMessage:
+            'onTap handler called for $this on ${rootRouter.current.name}',
+      ),
       child: Stack(
         children: [
           Material(

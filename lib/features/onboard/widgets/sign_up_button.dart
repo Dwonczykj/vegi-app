@@ -1,5 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:vegan_liverpool/features/veganHome/Helpers/helpers.dart';
+import 'package:vegan_liverpool/services.dart';
 
 class SignUpButton extends StatelessWidget {
   const SignUpButton({
@@ -68,7 +70,13 @@ class SignUpButton extends StatelessWidget {
             borderRadius: BorderRadius.circular(10),
           ),
         ),
-        onPressed: onPressed,
+        onPressed: logAndPipe(
+          onPressed,
+          funcName: 'onPressed',
+          className: "$this",
+          logMessage:
+              'onPressed handler called for $this on ${rootRouter.current.name}',
+        ),
         child: Material(
           color: Colors.transparent,
           child: Center(

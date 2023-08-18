@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:vegan_liverpool/features/veganHome/Helpers/helpers.dart';
 import 'package:vegan_liverpool/models/app_state.dart';
 import 'package:vegan_liverpool/redux/viewsmodels/detailMenuItem.dart';
+import 'package:vegan_liverpool/services.dart';
 
 class DetailMenuViewQuantityButton extends StatefulWidget {
   const DetailMenuViewQuantityButton({Key? key}) : super(key: key);
@@ -39,7 +41,13 @@ class _DetailMenuViewQuantityButtonState
                 ],
               ),
               child: IconButton(
-                onPressed: () => viewmodel.updateQuantity(false),
+                onPressed: logAndPipe(
+                  () => viewmodel.updateQuantity(false),
+                  funcName: 'onPressed',
+                  className: "$this",
+                  logMessage:
+                      'onPressed handler was called for $this on ${rootRouter.current.name} to remove one item to reduce quantity from (${viewmodel.quantity}) for product: "${viewmodel.menuItem?.name ?? 'menu item'}"',
+                ),
                 icon: const Icon(Icons.remove),
               ),
             ),
@@ -88,7 +96,13 @@ class _DetailMenuViewQuantityButtonState
                 ],
               ),
               child: IconButton(
-                onPressed: () => viewmodel.updateQuantity(true),
+                onPressed: logAndPipe(
+                  () => viewmodel.updateQuantity(true),
+                  funcName: 'onPressed',
+                  className: "$this",
+                  logMessage:
+                      'onPressed handler was called for $this on ${rootRouter.current.name} to remove one item to increase quantity from (${viewmodel.quantity}) for product: "${viewmodel.menuItem?.name ?? 'menu item'}"',
+                ),
                 icon: const Icon(Icons.add),
               ),
             ),
