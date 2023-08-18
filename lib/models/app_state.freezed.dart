@@ -32,8 +32,8 @@ mixin _$AppState {
   CashWalletState get cashWalletState => throw _privateConstructorUsedError;
   @HomePageStateConverter()
   HomePageState get homePageState => throw _privateConstructorUsedError;
-  @UserCartStateConverter()
-  UserCartState get cartState => throw _privateConstructorUsedError;
+  @CartStateConverter()
+  CartState get cartState => throw _privateConstructorUsedError;
   @MenuItemStateConverter()
   MenuItemState get menuItemState => throw _privateConstructorUsedError;
   @PastOrderStateConverter()
@@ -59,7 +59,7 @@ abstract class $AppStateCopyWith<$Res> {
       @UserStateConverter() UserState userState,
       @CashWalletStateConverter() CashWalletState cashWalletState,
       @HomePageStateConverter() HomePageState homePageState,
-      @UserCartStateConverter() UserCartState cartState,
+      @CartStateConverter() CartState cartState,
       @MenuItemStateConverter() MenuItemState menuItemState,
       @PastOrderStateConverter() PastOrderState pastOrderState,
       @OnboardingStateConverter() OnboardingState onboardingState});
@@ -70,7 +70,7 @@ abstract class $AppStateCopyWith<$Res> {
   $UserStateCopyWith<$Res> get userState;
   $CashWalletStateCopyWith<$Res> get cashWalletState;
   $HomePageStateCopyWith<$Res> get homePageState;
-  $UserCartStateCopyWith<$Res> get cartState;
+  $CartStateCopyWith<$Res> get cartState;
   $MenuItemStateCopyWith<$Res> get menuItemState;
   $PastOrderStateCopyWith<$Res> get pastOrderState;
   $OnboardingStateCopyWith<$Res> get onboardingState;
@@ -128,7 +128,7 @@ class _$AppStateCopyWithImpl<$Res, $Val extends AppState>
       cartState: null == cartState
           ? _value.cartState
           : cartState // ignore: cast_nullable_to_non_nullable
-              as UserCartState,
+              as CartState,
       menuItemState: null == menuItemState
           ? _value.menuItemState
           : menuItemState // ignore: cast_nullable_to_non_nullable
@@ -194,8 +194,8 @@ class _$AppStateCopyWithImpl<$Res, $Val extends AppState>
 
   @override
   @pragma('vm:prefer-inline')
-  $UserCartStateCopyWith<$Res> get cartState {
-    return $UserCartStateCopyWith<$Res>(_value.cartState, (value) {
+  $CartStateCopyWith<$Res> get cartState {
+    return $CartStateCopyWith<$Res>(_value.cartState, (value) {
       return _then(_value.copyWith(cartState: value) as $Val);
     });
   }
@@ -239,7 +239,7 @@ abstract class _$$_AppStateCopyWith<$Res> implements $AppStateCopyWith<$Res> {
       @UserStateConverter() UserState userState,
       @CashWalletStateConverter() CashWalletState cashWalletState,
       @HomePageStateConverter() HomePageState homePageState,
-      @UserCartStateConverter() UserCartState cartState,
+      @CartStateConverter() CartState cartState,
       @MenuItemStateConverter() MenuItemState menuItemState,
       @PastOrderStateConverter() PastOrderState pastOrderState,
       @OnboardingStateConverter() OnboardingState onboardingState});
@@ -257,7 +257,7 @@ abstract class _$$_AppStateCopyWith<$Res> implements $AppStateCopyWith<$Res> {
   @override
   $HomePageStateCopyWith<$Res> get homePageState;
   @override
-  $UserCartStateCopyWith<$Res> get cartState;
+  $CartStateCopyWith<$Res> get cartState;
   @override
   $MenuItemStateCopyWith<$Res> get menuItemState;
   @override
@@ -316,7 +316,7 @@ class __$$_AppStateCopyWithImpl<$Res>
       cartState: null == cartState
           ? _value.cartState
           : cartState // ignore: cast_nullable_to_non_nullable
-              as UserCartState,
+              as CartState,
       menuItemState: null == menuItemState
           ? _value.menuItemState
           : menuItemState // ignore: cast_nullable_to_non_nullable
@@ -344,7 +344,7 @@ class _$_AppState extends _AppState with DiagnosticableTreeMixin {
       @UserStateConverter() required this.userState,
       @CashWalletStateConverter() required this.cashWalletState,
       @HomePageStateConverter() required this.homePageState,
-      @UserCartStateConverter() required this.cartState,
+      @CartStateConverter() required this.cartState,
       @MenuItemStateConverter() required this.menuItemState,
       @PastOrderStateConverter() required this.pastOrderState,
       @OnboardingStateConverter() required this.onboardingState})
@@ -372,8 +372,8 @@ class _$_AppState extends _AppState with DiagnosticableTreeMixin {
   @HomePageStateConverter()
   final HomePageState homePageState;
   @override
-  @UserCartStateConverter()
-  final UserCartState cartState;
+  @CartStateConverter()
+  final CartState cartState;
   @override
   @MenuItemStateConverter()
   final MenuItemState menuItemState;
@@ -471,7 +471,7 @@ abstract class _AppState extends AppState {
       @CashWalletStateConverter()
       required final CashWalletState cashWalletState,
       @HomePageStateConverter() required final HomePageState homePageState,
-      @UserCartStateConverter() required final UserCartState cartState,
+      @CartStateConverter() required final CartState cartState,
       @MenuItemStateConverter() required final MenuItemState menuItemState,
       @PastOrderStateConverter() required final PastOrderState pastOrderState,
       @OnboardingStateConverter()
@@ -499,8 +499,8 @@ abstract class _AppState extends AppState {
   @HomePageStateConverter()
   HomePageState get homePageState;
   @override
-  @UserCartStateConverter()
-  UserCartState get cartState;
+  @CartStateConverter()
+  CartState get cartState;
   @override
   @MenuItemStateConverter()
   MenuItemState get menuItemState;

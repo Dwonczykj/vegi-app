@@ -42,7 +42,8 @@ class PaymentMethodViewModel extends Equatable {
 
     return PaymentMethodViewModel(
       selectedPaymentMethod:
-          store.state.cartState.selectedPaymentMethod ?? PaymentMethod.stripe,
+          store.state.cartState.selectedPaymentMethod ?? store.state.cartState.preferredPaymentMethod ??
+          PaymentMethod.stripe,
       pplBalance: '£${getPoundValueFormattedFromPPL(pplBalance)}',
       isLoading: store.state.cartState.payButtonLoading,
       isDelivery: store.state.cartState.isDelivery,

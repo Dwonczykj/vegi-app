@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target
 
-part of 'user_cart_state.dart';
+part of 'cart_state.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -14,12 +14,12 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
-UserCartState _$UserCartStateFromJson(Map<String, dynamic> json) {
-  return _UserCartState.fromJson(json);
+CartState _$CartStateFromJson(Map<String, dynamic> json) {
+  return _CartState.fromJson(json);
 }
 
 /// @nodoc
-mixin _$UserCartState {
+mixin _$CartState {
   List<CartItem> get cartItems => throw _privateConstructorUsedError;
   @JsonKey(fromJson: Money.fromJson, toJson: Money.toJson)
   Money get cartSubTotal => throw _privateConstructorUsedError;
@@ -70,6 +70,8 @@ mixin _$UserCartState {
   String get deliveryInstructions => throw _privateConstructorUsedError;
   PaymentMethod? get selectedPaymentMethod =>
       throw _privateConstructorUsedError;
+  PaymentMethod? get preferredPaymentMethod =>
+      throw _privateConstructorUsedError;
   List<String> get fulfilmentPostalDistricts =>
       throw _privateConstructorUsedError;
   List<DateTime> get eligibleOrderDates => throw _privateConstructorUsedError;
@@ -92,15 +94,14 @@ mixin _$UserCartState {
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $UserCartStateCopyWith<UserCartState> get copyWith =>
+  $CartStateCopyWith<CartState> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $UserCartStateCopyWith<$Res> {
-  factory $UserCartStateCopyWith(
-          UserCartState value, $Res Function(UserCartState) then) =
-      _$UserCartStateCopyWithImpl<$Res, UserCartState>;
+abstract class $CartStateCopyWith<$Res> {
+  factory $CartStateCopyWith(CartState value, $Res Function(CartState) then) =
+      _$CartStateCopyWithImpl<$Res, CartState>;
   @useResult
   $Res call(
       {List<CartItem> cartItems,
@@ -147,6 +148,7 @@ abstract class $UserCartStateCopyWith<$Res> {
       Money restaurantPlatformFee,
       String deliveryInstructions,
       PaymentMethod? selectedPaymentMethod,
+      PaymentMethod? preferredPaymentMethod,
       List<String> fulfilmentPostalDistricts,
       List<DateTime> eligibleOrderDates,
       TimeSlot? nextCollectionSlot,
@@ -175,9 +177,9 @@ abstract class $UserCartStateCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$UserCartStateCopyWithImpl<$Res, $Val extends UserCartState>
-    implements $UserCartStateCopyWith<$Res> {
-  _$UserCartStateCopyWithImpl(this._value, this._then);
+class _$CartStateCopyWithImpl<$Res, $Val extends CartState>
+    implements $CartStateCopyWith<$Res> {
+  _$CartStateCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -224,6 +226,7 @@ class _$UserCartStateCopyWithImpl<$Res, $Val extends UserCartState>
     Object? restaurantPlatformFee = null,
     Object? deliveryInstructions = null,
     Object? selectedPaymentMethod = freezed,
+    Object? preferredPaymentMethod = freezed,
     Object? fulfilmentPostalDistricts = null,
     Object? eligibleOrderDates = null,
     Object? nextCollectionSlot = freezed,
@@ -384,6 +387,10 @@ class _$UserCartStateCopyWithImpl<$Res, $Val extends UserCartState>
       selectedPaymentMethod: freezed == selectedPaymentMethod
           ? _value.selectedPaymentMethod
           : selectedPaymentMethod // ignore: cast_nullable_to_non_nullable
+              as PaymentMethod?,
+      preferredPaymentMethod: freezed == preferredPaymentMethod
+          ? _value.preferredPaymentMethod
+          : preferredPaymentMethod // ignore: cast_nullable_to_non_nullable
               as PaymentMethod?,
       fulfilmentPostalDistricts: null == fulfilmentPostalDistricts
           ? _value.fulfilmentPostalDistricts
@@ -556,11 +563,10 @@ class _$UserCartStateCopyWithImpl<$Res, $Val extends UserCartState>
 }
 
 /// @nodoc
-abstract class _$$_UserCartStateCopyWith<$Res>
-    implements $UserCartStateCopyWith<$Res> {
-  factory _$$_UserCartStateCopyWith(
-          _$_UserCartState value, $Res Function(_$_UserCartState) then) =
-      __$$_UserCartStateCopyWithImpl<$Res>;
+abstract class _$$_CartStateCopyWith<$Res> implements $CartStateCopyWith<$Res> {
+  factory _$$_CartStateCopyWith(
+          _$_CartState value, $Res Function(_$_CartState) then) =
+      __$$_CartStateCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -608,6 +614,7 @@ abstract class _$$_UserCartStateCopyWith<$Res>
       Money restaurantPlatformFee,
       String deliveryInstructions,
       PaymentMethod? selectedPaymentMethod,
+      PaymentMethod? preferredPaymentMethod,
       List<String> fulfilmentPostalDistricts,
       List<DateTime> eligibleOrderDates,
       TimeSlot? nextCollectionSlot,
@@ -646,11 +653,11 @@ abstract class _$$_UserCartStateCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$_UserCartStateCopyWithImpl<$Res>
-    extends _$UserCartStateCopyWithImpl<$Res, _$_UserCartState>
-    implements _$$_UserCartStateCopyWith<$Res> {
-  __$$_UserCartStateCopyWithImpl(
-      _$_UserCartState _value, $Res Function(_$_UserCartState) _then)
+class __$$_CartStateCopyWithImpl<$Res>
+    extends _$CartStateCopyWithImpl<$Res, _$_CartState>
+    implements _$$_CartStateCopyWith<$Res> {
+  __$$_CartStateCopyWithImpl(
+      _$_CartState _value, $Res Function(_$_CartState) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -693,6 +700,7 @@ class __$$_UserCartStateCopyWithImpl<$Res>
     Object? restaurantPlatformFee = null,
     Object? deliveryInstructions = null,
     Object? selectedPaymentMethod = freezed,
+    Object? preferredPaymentMethod = freezed,
     Object? fulfilmentPostalDistricts = null,
     Object? eligibleOrderDates = null,
     Object? nextCollectionSlot = freezed,
@@ -705,7 +713,7 @@ class __$$_UserCartStateCopyWithImpl<$Res>
     Object? isLoadingCartState = null,
     Object? errorDetails = freezed,
   }) {
-    return _then(_$_UserCartState(
+    return _then(_$_CartState(
       cartItems: null == cartItems
           ? _value.cartItems
           : cartItems // ignore: cast_nullable_to_non_nullable
@@ -854,6 +862,10 @@ class __$$_UserCartStateCopyWithImpl<$Res>
           ? _value.selectedPaymentMethod
           : selectedPaymentMethod // ignore: cast_nullable_to_non_nullable
               as PaymentMethod?,
+      preferredPaymentMethod: freezed == preferredPaymentMethod
+          ? _value.preferredPaymentMethod
+          : preferredPaymentMethod // ignore: cast_nullable_to_non_nullable
+              as PaymentMethod?,
       fulfilmentPostalDistricts: null == fulfilmentPostalDistricts
           ? _value.fulfilmentPostalDistricts
           : fulfilmentPostalDistricts // ignore: cast_nullable_to_non_nullable
@@ -905,8 +917,8 @@ class __$$_UserCartStateCopyWithImpl<$Res>
 /// @nodoc
 
 @JsonSerializable()
-class _$_UserCartState extends _UserCartState with DiagnosticableTreeMixin {
-  _$_UserCartState(
+class _$_CartState extends _CartState with DiagnosticableTreeMixin {
+  _$_CartState(
       {this.cartItems = const [],
       @JsonKey(fromJson: Money.fromJson, toJson: Money.toJson)
       this.cartSubTotal = const Money.zeroGBP(),
@@ -953,6 +965,7 @@ class _$_UserCartState extends _UserCartState with DiagnosticableTreeMixin {
       this.restaurantPlatformFee = const Money.zeroGBP(),
       this.deliveryInstructions = '',
       this.selectedPaymentMethod = null,
+      this.preferredPaymentMethod = null,
       this.fulfilmentPostalDistricts = const [],
       this.eligibleOrderDates = const [],
       this.nextCollectionSlot = null,
@@ -969,8 +982,8 @@ class _$_UserCartState extends _UserCartState with DiagnosticableTreeMixin {
       this.errorDetails = null})
       : super._();
 
-  factory _$_UserCartState.fromJson(Map<String, dynamic> json) =>
-      _$$_UserCartStateFromJson(json);
+  factory _$_CartState.fromJson(Map<String, dynamic> json) =>
+      _$$_CartStateFromJson(json);
 
   @override
   @JsonKey()
@@ -1085,6 +1098,9 @@ class _$_UserCartState extends _UserCartState with DiagnosticableTreeMixin {
   final PaymentMethod? selectedPaymentMethod;
   @override
   @JsonKey()
+  final PaymentMethod? preferredPaymentMethod;
+  @override
+  @JsonKey()
   final List<String> fulfilmentPostalDistricts;
   @override
   @JsonKey()
@@ -1119,14 +1135,14 @@ class _$_UserCartState extends _UserCartState with DiagnosticableTreeMixin {
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'UserCartState(cartItems: $cartItems, cartSubTotal: $cartSubTotal, cartTax: $cartTax, cartTotal: $cartTotal, cartCurrency: $cartCurrency, cartDiscountPercent: $cartDiscountPercent, cartDiscountComputed: $cartDiscountComputed, voucherPotValue: $voucherPotValue, appliedVouchers: $appliedVouchers, deliverySlots: $deliverySlots, collectionSlots: $collectionSlots, selectedDeliveryAddress: $selectedDeliveryAddress, selectedTimeSlot: $selectedTimeSlot, selectedTipAmount: $selectedTipAmount, discountCode: $discountCode, paymentIntentID: $paymentIntentID, paymentIntentClientSecret: $paymentIntentClientSecret, paymentIntent: $paymentIntent, ephemeralKey: $ephemeralKey, publishableKey: $publishableKey, order: $order, selectedGBPxAmount: $selectedGBPxAmount, selectedPPLAmount: $selectedPPLAmount, payButtonLoading: $payButtonLoading, transferringTokens: $transferringTokens, errorCompletingPayment: $errorCompletingPayment, confirmedPayment: $confirmedPayment, restaurantName: $restaurantName, restaurantID: $restaurantID, restaurantIsLive: $restaurantIsLive, restaurantAddress: $restaurantAddress, restaurantWalletAddress: $restaurantWalletAddress, fulfilmentMethod: $fulfilmentMethod, restaurantMinimumOrder: $restaurantMinimumOrder, restaurantPlatformFee: $restaurantPlatformFee, deliveryInstructions: $deliveryInstructions, selectedPaymentMethod: $selectedPaymentMethod, fulfilmentPostalDistricts: $fulfilmentPostalDistricts, eligibleOrderDates: $eligibleOrderDates, nextCollectionSlot: $nextCollectionSlot, nextDeliverySlot: $nextDeliverySlot, productSuggestion: $productSuggestion, orderCreationProcessStatus: $orderCreationProcessStatus, orderCreationStatusMessage: $orderCreationStatusMessage, stripePaymentStatus: $stripePaymentStatus, paymentInProcess: $paymentInProcess, isLoadingCartState: $isLoadingCartState, errorDetails: $errorDetails)';
+    return 'CartState(cartItems: $cartItems, cartSubTotal: $cartSubTotal, cartTax: $cartTax, cartTotal: $cartTotal, cartCurrency: $cartCurrency, cartDiscountPercent: $cartDiscountPercent, cartDiscountComputed: $cartDiscountComputed, voucherPotValue: $voucherPotValue, appliedVouchers: $appliedVouchers, deliverySlots: $deliverySlots, collectionSlots: $collectionSlots, selectedDeliveryAddress: $selectedDeliveryAddress, selectedTimeSlot: $selectedTimeSlot, selectedTipAmount: $selectedTipAmount, discountCode: $discountCode, paymentIntentID: $paymentIntentID, paymentIntentClientSecret: $paymentIntentClientSecret, paymentIntent: $paymentIntent, ephemeralKey: $ephemeralKey, publishableKey: $publishableKey, order: $order, selectedGBPxAmount: $selectedGBPxAmount, selectedPPLAmount: $selectedPPLAmount, payButtonLoading: $payButtonLoading, transferringTokens: $transferringTokens, errorCompletingPayment: $errorCompletingPayment, confirmedPayment: $confirmedPayment, restaurantName: $restaurantName, restaurantID: $restaurantID, restaurantIsLive: $restaurantIsLive, restaurantAddress: $restaurantAddress, restaurantWalletAddress: $restaurantWalletAddress, fulfilmentMethod: $fulfilmentMethod, restaurantMinimumOrder: $restaurantMinimumOrder, restaurantPlatformFee: $restaurantPlatformFee, deliveryInstructions: $deliveryInstructions, selectedPaymentMethod: $selectedPaymentMethod, preferredPaymentMethod: $preferredPaymentMethod, fulfilmentPostalDistricts: $fulfilmentPostalDistricts, eligibleOrderDates: $eligibleOrderDates, nextCollectionSlot: $nextCollectionSlot, nextDeliverySlot: $nextDeliverySlot, productSuggestion: $productSuggestion, orderCreationProcessStatus: $orderCreationProcessStatus, orderCreationStatusMessage: $orderCreationStatusMessage, stripePaymentStatus: $stripePaymentStatus, paymentInProcess: $paymentInProcess, isLoadingCartState: $isLoadingCartState, errorDetails: $errorDetails)';
   }
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties
-      ..add(DiagnosticsProperty('type', 'UserCartState'))
+      ..add(DiagnosticsProperty('type', 'CartState'))
       ..add(DiagnosticsProperty('cartItems', cartItems))
       ..add(DiagnosticsProperty('cartSubTotal', cartSubTotal))
       ..add(DiagnosticsProperty('cartTax', cartTax))
@@ -1169,6 +1185,8 @@ class _$_UserCartState extends _UserCartState with DiagnosticableTreeMixin {
       ..add(DiagnosticsProperty('restaurantPlatformFee', restaurantPlatformFee))
       ..add(DiagnosticsProperty('deliveryInstructions', deliveryInstructions))
       ..add(DiagnosticsProperty('selectedPaymentMethod', selectedPaymentMethod))
+      ..add(
+          DiagnosticsProperty('preferredPaymentMethod', preferredPaymentMethod))
       ..add(DiagnosticsProperty(
           'fulfilmentPostalDistricts', fulfilmentPostalDistricts))
       ..add(DiagnosticsProperty('eligibleOrderDates', eligibleOrderDates))
@@ -1189,7 +1207,7 @@ class _$_UserCartState extends _UserCartState with DiagnosticableTreeMixin {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$_UserCartState &&
+            other is _$_CartState &&
             const DeepCollectionEquality().equals(other.cartItems, cartItems) &&
             (identical(other.cartSubTotal, cartSubTotal) ||
                 other.cartSubTotal == cartSubTotal) &&
@@ -1258,6 +1276,7 @@ class _$_UserCartState extends _UserCartState with DiagnosticableTreeMixin {
             (identical(other.restaurantPlatformFee, restaurantPlatformFee) || other.restaurantPlatformFee == restaurantPlatformFee) &&
             (identical(other.deliveryInstructions, deliveryInstructions) || other.deliveryInstructions == deliveryInstructions) &&
             (identical(other.selectedPaymentMethod, selectedPaymentMethod) || other.selectedPaymentMethod == selectedPaymentMethod) &&
+            (identical(other.preferredPaymentMethod, preferredPaymentMethod) || other.preferredPaymentMethod == preferredPaymentMethod) &&
             const DeepCollectionEquality().equals(other.fulfilmentPostalDistricts, fulfilmentPostalDistricts) &&
             const DeepCollectionEquality().equals(other.eligibleOrderDates, eligibleOrderDates) &&
             (identical(other.nextCollectionSlot, nextCollectionSlot) || other.nextCollectionSlot == nextCollectionSlot) &&
@@ -1312,6 +1331,7 @@ class _$_UserCartState extends _UserCartState with DiagnosticableTreeMixin {
         restaurantPlatformFee,
         deliveryInstructions,
         selectedPaymentMethod,
+        preferredPaymentMethod,
         const DeepCollectionEquality().hash(fulfilmentPostalDistricts),
         const DeepCollectionEquality().hash(eligibleOrderDates),
         nextCollectionSlot,
@@ -1328,19 +1348,19 @@ class _$_UserCartState extends _UserCartState with DiagnosticableTreeMixin {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$_UserCartStateCopyWith<_$_UserCartState> get copyWith =>
-      __$$_UserCartStateCopyWithImpl<_$_UserCartState>(this, _$identity);
+  _$$_CartStateCopyWith<_$_CartState> get copyWith =>
+      __$$_CartStateCopyWithImpl<_$_CartState>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$_UserCartStateToJson(
+    return _$$_CartStateToJson(
       this,
     );
   }
 }
 
-abstract class _UserCartState extends UserCartState {
-  factory _UserCartState(
+abstract class _CartState extends CartState {
+  factory _CartState(
       {final List<CartItem> cartItems,
       @JsonKey(fromJson: Money.fromJson, toJson: Money.toJson)
       final Money cartSubTotal,
@@ -1387,6 +1407,7 @@ abstract class _UserCartState extends UserCartState {
       final Money restaurantPlatformFee,
       final String deliveryInstructions,
       final PaymentMethod? selectedPaymentMethod,
+      final PaymentMethod? preferredPaymentMethod,
       final List<String> fulfilmentPostalDistricts,
       final List<DateTime> eligibleOrderDates,
       final TimeSlot? nextCollectionSlot,
@@ -1400,11 +1421,11 @@ abstract class _UserCartState extends UserCartState {
       @JsonKey(includeFromJson: false, includeToJson: false)
       final bool isLoadingCartState,
       @JsonKey(includeFromJson: false, includeToJson: false)
-      final ErrorDetails<CartErrCode>? errorDetails}) = _$_UserCartState;
-  _UserCartState._() : super._();
+      final ErrorDetails<CartErrCode>? errorDetails}) = _$_CartState;
+  _CartState._() : super._();
 
-  factory _UserCartState.fromJson(Map<String, dynamic> json) =
-      _$_UserCartState.fromJson;
+  factory _CartState.fromJson(Map<String, dynamic> json) =
+      _$_CartState.fromJson;
 
   @override
   List<CartItem> get cartItems;
@@ -1490,6 +1511,8 @@ abstract class _UserCartState extends UserCartState {
   @override
   PaymentMethod? get selectedPaymentMethod;
   @override
+  PaymentMethod? get preferredPaymentMethod;
+  @override
   List<String> get fulfilmentPostalDistricts;
   @override
   List<DateTime> get eligibleOrderDates;
@@ -1516,6 +1539,6 @@ abstract class _UserCartState extends UserCartState {
   ErrorDetails<CartErrCode>? get errorDetails;
   @override
   @JsonKey(ignore: true)
-  _$$_UserCartStateCopyWith<_$_UserCartState> get copyWith =>
+  _$$_CartStateCopyWith<_$_CartState> get copyWith =>
       throw _privateConstructorUsedError;
 }

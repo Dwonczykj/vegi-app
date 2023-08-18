@@ -4,96 +4,100 @@ import 'package:vegan_liverpool/constants/envService.dart';
 import 'package:vegan_liverpool/features/veganHome/Helpers/extensions.dart';
 import 'package:vegan_liverpool/models/admin/uploadProductSuggestionImageResponse.dart';
 import 'package:vegan_liverpool/models/payments/money.dart';
-import 'package:vegan_liverpool/models/user_cart_state.dart';
+import 'package:vegan_liverpool/models/cart_state.dart';
 import 'package:vegan_liverpool/redux/actions/cart_actions.dart';
 import 'package:vegan_liverpool/redux/actions/user_actions.dart';
 
-final cartStateReducers = combineReducers<UserCartState>([
-  TypedReducer<UserCartState, LogoutRequestSuccess>(_logoutSuccess).call,
-  TypedReducer<UserCartState, ResetAppState>(_resetApp).call,
-  TypedReducer<UserCartState, UpdateCartItems>(_updateCartItems).call,
-  TypedReducer<UserCartState, UpdateCartItem>(_updateCartItem).call,
-  TypedReducer<UserCartState, UpdateComputedCartValues>(_computeCartTotals).call,
-  TypedReducer<UserCartState, UpdateCartDiscount>(_updateCartDiscount).call,
-  TypedReducer<UserCartState, AddValidVoucherCodeToCart>(
-      _addValidVoucherCodeToCart,).call,
-  TypedReducer<UserCartState, RemoveVoucherCodeFromCart>(
-      _removeVoucherCodeFromCart,).call,
-  TypedReducer<UserCartState, ClearCart>(_clearCart).call,
-  TypedReducer<UserCartState, UpdateSlots>(_updateSlots).call,
-  TypedReducer<UserCartState, OrderCreationProcessStatusUpdate>(
-      _updateOrderCreationProcessStatus,).call,
-  TypedReducer<UserCartState, StripePaymentStatusUpdate>(
-      _updateStripePaymentStatus,).call,
-  TypedReducer<UserCartState, UpdateSelectedTimeSlot>(_updateSelectedTimeSlot).call,
-  TypedReducer<UserCartState, UpdateTipAmount>(_updateTipAmount).call,
-  TypedReducer<UserCartState, UpdateSelectedDeliveryAddress>(
+final cartStateReducers = combineReducers<CartState>([
+  TypedReducer<CartState, LogoutRequestSuccess>(_logoutSuccess).call,
+  TypedReducer<CartState, ResetAppState>(_resetApp).call,
+  TypedReducer<CartState, UpdateCartItems>(_updateCartItems).call,
+  TypedReducer<CartState, UpdateCartItem>(_updateCartItem).call,
+  TypedReducer<CartState, UpdateComputedCartValues>(_computeCartTotals).call,
+  TypedReducer<CartState, UpdateCartDiscount>(_updateCartDiscount).call,
+  TypedReducer<CartState, AddValidVoucherCodeToCart>(
+    _addValidVoucherCodeToCart,
+  ).call,
+  TypedReducer<CartState, RemoveVoucherCodeFromCart>(
+    _removeVoucherCodeFromCart,
+  ).call,
+  TypedReducer<CartState, ClearCart>(_clearCart).call,
+  TypedReducer<CartState, UpdateSlots>(_updateSlots).call,
+  TypedReducer<CartState, OrderCreationProcessStatusUpdate>(
+    _updateOrderCreationProcessStatus,
+  ).call,
+  TypedReducer<CartState, StripePaymentStatusUpdate>(
+    _updateStripePaymentStatus,
+  ).call,
+  TypedReducer<CartState, UpdateSelectedTimeSlot>(_updateSelectedTimeSlot).call,
+  TypedReducer<CartState, UpdateTipAmount>(_updateTipAmount).call,
+  TypedReducer<CartState, UpdateSelectedDeliveryAddress>(
     _updateSelectedDeliveryAddress,
   ).call,
-  TypedReducer<UserCartState, CreateOrder>(_createOrder).call,
-  TypedReducer<UserCartState, CancelOrder>(_cancelOrder).call,
-  TypedReducer<UserCartState, SetTransferringPayment>(_toggleTransfer).call,
-  TypedReducer<UserCartState, SetError>(_toggleError).call,
-  TypedReducer<UserCartState, SetCartErrorResolved>(_setCartErrorResolved).call,
-  TypedReducer<UserCartState, SetCartError>(_setCartError).call,
-  TypedReducer<UserCartState, SetCartIsLoading>(_setCartIsLoading).call,
-  TypedReducer<UserCartState, SetConfirmed>(_toggleConfirmed).call,
-  TypedReducer<UserCartState, UpdateSelectedAmounts>(_updateSelectedAmounts).call,
-  TypedReducer<UserCartState, SetRestaurantDetails>(_setRestaurantDetails).call,
-  TypedReducer<UserCartState, SetFulfilmentMethod>(_setFulfilmentMethodType).call,
-  TypedReducer<UserCartState, SetDeliveryInstructions>(
+  TypedReducer<CartState, CreateOrder>(_createOrder).call,
+  TypedReducer<CartState, CancelOrder>(_cancelOrder).call,
+  TypedReducer<CartState, SetTransferringPayment>(_toggleTransfer).call,
+  TypedReducer<CartState, SetError>(_toggleError).call,
+  TypedReducer<CartState, SetCartErrorResolved>(_setCartErrorResolved).call,
+  TypedReducer<CartState, SetCartError>(_setCartError).call,
+  TypedReducer<CartState, SetCartIsLoading>(_setCartIsLoading).call,
+  TypedReducer<CartState, SetConfirmed>(_toggleConfirmed).call,
+  TypedReducer<CartState, UpdateSelectedAmounts>(_updateSelectedAmounts).call,
+  TypedReducer<CartState, SetRestaurantDetails>(_setRestaurantDetails).call,
+  TypedReducer<CartState, SetFulfilmentMethod>(_setFulfilmentMethodType).call,
+  TypedReducer<CartState, SetDeliveryInstructions>(
     _setDeliveryInstructions,
   ).call,
-  TypedReducer<UserCartState, SetPaymentMethod>(_setPaymentMethod).call,
-  TypedReducer<UserCartState, SetPaymentButtonFlag>(_setPaymentButtonFlag).call,
-  TypedReducer<UserCartState, UpdateEligibleOrderDates>(
+  TypedReducer<CartState, SetPaymentMethod>(_setPaymentMethod).call,
+  TypedReducer<CartState, SetPaymentButtonFlag>(_setPaymentButtonFlag).call,
+  TypedReducer<CartState, UpdateEligibleOrderDates>(
     _updateEligibleOrderDates,
   ).call,
-  TypedReducer<UserCartState, UpdateNextAvaliableTimeSlots>(
+  TypedReducer<CartState, UpdateNextAvaliableTimeSlots>(
     _updateNextAvaliableSlots,
   ).call,
-  TypedReducer<UserCartState, AddImageToProductSuggestionRTO>(
+  TypedReducer<CartState, AddImageToProductSuggestionRTO>(
     _addImageToProductSuggestion,
   ).call,
-  TypedReducer<UserCartState, AddQRCodeToProductSuggestionRTO>(
+  TypedReducer<CartState, AddQRCodeToProductSuggestionRTO>(
     _addQRCodeToProductSuggestion,
   ).call,
-  TypedReducer<UserCartState, AddAdditionalInformationToProductSuggestionRTO>(
+  TypedReducer<CartState, AddAdditionalInformationToProductSuggestionRTO>(
     _addAdditionalInfoToProductSuggestion,
   ).call,
-  TypedReducer<UserCartState, AddProductNameToProductSuggestionRTO>(
+  TypedReducer<CartState, AddProductNameToProductSuggestionRTO>(
     _addProductNameToProductSuggestion,
   ).call,
-  TypedReducer<UserCartState, CreateProductSuggestion>(
+  TypedReducer<CartState, CreateProductSuggestion>(
     _createProductSuggestion,
   ).call,
-  TypedReducer<UserCartState, OrderPaymentAttemptCreated>(
+  TypedReducer<CartState, OrderPaymentAttemptCreated>(
     _orderPaymentAttemptCreated,
   ).call,
 ]);
 
-UserCartState _logoutSuccess(
-  UserCartState state,
+CartState _logoutSuccess(
+  CartState state,
   LogoutRequestSuccess action,
 ) =>
-    UserCartState.initial();
+    CartState.initial();
 
-UserCartState _resetApp(
-  UserCartState state,
+CartState _resetApp(
+  CartState state,
   ResetAppState action,
 ) {
-  return UserCartState.initial();
+  return CartState.initial();
 }
 
-UserCartState _updateCartItems(
-  UserCartState state,
+CartState _updateCartItems(
+  CartState state,
   UpdateCartItems action,
 ) {
   return state.copyWith(cartItems: action.cartItems);
 }
 
-UserCartState _updateCartItem(
-  UserCartState state,
+CartState _updateCartItem(
+  CartState state,
   UpdateCartItem action,
 ) {
   return state.copyWith(
@@ -106,8 +110,8 @@ UserCartState _updateCartItem(
   );
 }
 
-UserCartState _computeCartTotals(
-  UserCartState state,
+CartState _computeCartTotals(
+  CartState state,
   UpdateComputedCartValues action,
 ) {
   return state.copyWith(
@@ -119,8 +123,8 @@ UserCartState _computeCartTotals(
   );
 }
 
-UserCartState _clearCart(
-  UserCartState state,
+CartState _clearCart(
+  CartState state,
   ClearCart action,
 ) {
   return state.copyWith(
@@ -153,8 +157,8 @@ UserCartState _clearCart(
   );
 }
 
-UserCartState _updateCartDiscount(
-  UserCartState state,
+CartState _updateCartDiscount(
+  CartState state,
   UpdateCartDiscount action,
 ) {
   return state.copyWith(
@@ -163,8 +167,8 @@ UserCartState _updateCartDiscount(
   );
 }
 
-UserCartState _addValidVoucherCodeToCart(
-  UserCartState state,
+CartState _addValidVoucherCodeToCart(
+  CartState state,
   AddValidVoucherCodeToCart action,
 ) {
   final appliedVouchers = [
@@ -196,8 +200,8 @@ UserCartState _addValidVoucherCodeToCart(
   );
 }
 
-UserCartState _removeVoucherCodeFromCart(
-  UserCartState state,
+CartState _removeVoucherCodeFromCart(
+  CartState state,
   RemoveVoucherCodeFromCart action,
 ) {
   final appliedVouchers = state.appliedVouchers
@@ -230,8 +234,8 @@ UserCartState _removeVoucherCodeFromCart(
   );
 }
 
-UserCartState _updateSlots(
-  UserCartState state,
+CartState _updateSlots(
+  CartState state,
   UpdateSlots action,
 ) {
   return state.copyWith(
@@ -240,8 +244,8 @@ UserCartState _updateSlots(
   );
 }
 
-UserCartState _updateOrderCreationProcessStatus(
-  UserCartState state,
+CartState _updateOrderCreationProcessStatus(
+  CartState state,
   OrderCreationProcessStatusUpdate action,
 ) {
   return state.copyWith(
@@ -251,8 +255,8 @@ UserCartState _updateOrderCreationProcessStatus(
   );
 }
 
-UserCartState _updateStripePaymentStatus(
-  UserCartState state,
+CartState _updateStripePaymentStatus(
+  CartState state,
   StripePaymentStatusUpdate action,
 ) {
   return state.copyWith(
@@ -260,43 +264,44 @@ UserCartState _updateStripePaymentStatus(
   );
 }
 
-UserCartState _updateSelectedTimeSlot(
-  UserCartState state,
+CartState _updateSelectedTimeSlot(
+  CartState state,
   UpdateSelectedTimeSlot action,
 ) {
   return state.copyWith(selectedTimeSlot: action.selectedTimeSlot);
 }
 
-UserCartState _updateTipAmount(
-  UserCartState state,
+CartState _updateTipAmount(
+  CartState state,
   UpdateTipAmount action,
 ) {
   return state.copyWith(selectedTipAmount: action.tipAmount);
 }
 
-UserCartState _updateSelectedDeliveryAddress(
-  UserCartState state,
+CartState _updateSelectedDeliveryAddress(
+  CartState state,
   UpdateSelectedDeliveryAddress action,
 ) {
   return state.copyWith(selectedDeliveryAddress: action.selectedAddress);
 }
 
-UserCartState _createOrder(
-  UserCartState state,
+CartState _createOrder(
+  CartState state,
   CreateOrder action,
 ) {
   return state.copyWith(
     order: action.order,
     paymentIntentID: action.paymentIntentId,
     paymentIntent: action.stripePaymentIntent,
-    paymentIntentClientSecret: action.stripePaymentIntent.paymentIntent.clientSecret,
+    paymentIntentClientSecret:
+        action.stripePaymentIntent.paymentIntent.clientSecret,
     ephemeralKey: action.stripePaymentIntent.ephemeralKey,
     publishableKey: action.stripePaymentIntent.publishableKey,
   );
 }
 
-UserCartState _cancelOrder(
-  UserCartState state,
+CartState _cancelOrder(
+  CartState state,
   CancelOrder action,
 ) {
   return state.copyWith(
@@ -305,8 +310,8 @@ UserCartState _cancelOrder(
   );
 }
 
-UserCartState _orderPaymentAttemptCreated(
-  UserCartState state,
+CartState _orderPaymentAttemptCreated(
+  CartState state,
   OrderPaymentAttemptCreated action,
 ) {
   return state.copyWith(
@@ -315,43 +320,43 @@ UserCartState _orderPaymentAttemptCreated(
   );
 }
 
-UserCartState _toggleTransfer(
-  UserCartState state,
+CartState _toggleTransfer(
+  CartState state,
   SetTransferringPayment action,
 ) {
   return state.copyWith(transferringTokens: action.flag);
 }
 
-UserCartState _toggleError(
-  UserCartState state,
+CartState _toggleError(
+  CartState state,
   SetError action,
 ) {
   return state.copyWith(errorCompletingPayment: action.flag);
 }
 
-UserCartState _setCartErrorResolved(
-  UserCartState state,
+CartState _setCartErrorResolved(
+  CartState state,
   SetCartErrorResolved action,
 ) {
   return state.copyWith(errorDetails: null);
 }
 
-UserCartState _setCartIsLoading(
-  UserCartState state,
+CartState _setCartIsLoading(
+  CartState state,
   SetCartIsLoading action,
 ) {
   return state.copyWith(isLoadingCartState: action.isLoading);
 }
 
-UserCartState _setCartError(
-  UserCartState state,
+CartState _setCartError(
+  CartState state,
   SetCartError action,
 ) {
   return state.copyWith(errorDetails: action.error);
 }
 
-UserCartState _toggleConfirmed(
-  UserCartState state,
+CartState _toggleConfirmed(
+  CartState state,
   SetConfirmed action,
 ) {
   return state.copyWith(
@@ -360,8 +365,8 @@ UserCartState _toggleConfirmed(
   );
 }
 
-UserCartState _updateSelectedAmounts(
-  UserCartState state,
+CartState _updateSelectedAmounts(
+  CartState state,
   UpdateSelectedAmounts action,
 ) {
   return state.copyWith(
@@ -370,8 +375,8 @@ UserCartState _updateSelectedAmounts(
   );
 }
 
-UserCartState _setRestaurantDetails(
-  UserCartState state,
+CartState _setRestaurantDetails(
+  CartState state,
   SetRestaurantDetails action,
 ) {
   return state.copyWith(
@@ -386,8 +391,8 @@ UserCartState _setRestaurantDetails(
   );
 }
 
-UserCartState _setFulfilmentMethodType(
-  UserCartState state,
+CartState _setFulfilmentMethodType(
+  CartState state,
   SetFulfilmentMethod action,
 ) {
   return state.copyWith(
@@ -395,33 +400,36 @@ UserCartState _setFulfilmentMethodType(
   );
 }
 
-UserCartState _setDeliveryInstructions(
-  UserCartState state,
+CartState _setDeliveryInstructions(
+  CartState state,
   SetDeliveryInstructions action,
 ) {
   return state.copyWith(deliveryInstructions: action.deliveryInstructions);
 }
 
-UserCartState _setPaymentMethod(UserCartState state, SetPaymentMethod action) {
-  return state.copyWith(selectedPaymentMethod: action.paymentMethod);
+CartState _setPaymentMethod(CartState state, SetPaymentMethod action) {
+  return state.copyWith(
+    selectedPaymentMethod: action.paymentMethod,
+    preferredPaymentMethod: action.paymentMethod,
+  );
 }
 
-UserCartState _setPaymentButtonFlag(
-  UserCartState state,
+CartState _setPaymentButtonFlag(
+  CartState state,
   SetPaymentButtonFlag action,
 ) {
   return state.copyWith(payButtonLoading: action.flag);
 }
 
-UserCartState _updateEligibleOrderDates(
-  UserCartState state,
+CartState _updateEligibleOrderDates(
+  CartState state,
   UpdateEligibleOrderDates action,
 ) {
   return state.copyWith(eligibleOrderDates: action.eligibleOrderDates);
 }
 
-UserCartState _updateNextAvaliableSlots(
-  UserCartState state,
+CartState _updateNextAvaliableSlots(
+  CartState state,
   UpdateNextAvaliableTimeSlots action,
 ) {
   return state.copyWith(
@@ -430,8 +438,8 @@ UserCartState _updateNextAvaliableSlots(
   );
 }
 
-UserCartState _createProductSuggestion(
-  UserCartState state,
+CartState _createProductSuggestion(
+  CartState state,
   CreateProductSuggestion action,
 ) {
   return state.copyWith(
@@ -439,15 +447,14 @@ UserCartState _createProductSuggestion(
   );
 }
 
-UserCartState _addImageToProductSuggestion(
-  UserCartState state,
+CartState _addImageToProductSuggestion(
+  CartState state,
   AddImageToProductSuggestionRTO action,
 ) {
   return state.copyWith(
     productSuggestion: state.productSuggestion?.copyWith(
-      images: Map.fromEntries(<
-          MapEntry<ProductSuggestionImageType,
-              UploadProductSuggestionImageResponse>>[
+      images: Map.fromEntries(<MapEntry<ProductSuggestionImageType,
+          UploadProductSuggestionImageResponse>>[
         ...state.productSuggestion!.images.entries,
         MapEntry(action.imageType, action.image),
       ]),
@@ -455,8 +462,8 @@ UserCartState _addImageToProductSuggestion(
   );
 }
 
-UserCartState _addQRCodeToProductSuggestion(
-  UserCartState state,
+CartState _addQRCodeToProductSuggestion(
+  CartState state,
   AddQRCodeToProductSuggestionRTO action,
 ) {
   return state.copyWith(
@@ -466,8 +473,8 @@ UserCartState _addQRCodeToProductSuggestion(
   );
 }
 
-UserCartState _addAdditionalInfoToProductSuggestion(
-  UserCartState state,
+CartState _addAdditionalInfoToProductSuggestion(
+  CartState state,
   AddAdditionalInformationToProductSuggestionRTO action,
 ) {
   return state.copyWith(
@@ -476,8 +483,8 @@ UserCartState _addAdditionalInfoToProductSuggestion(
   );
 }
 
-UserCartState _addProductNameToProductSuggestion(
-  UserCartState state,
+CartState _addProductNameToProductSuggestion(
+  CartState state,
   AddProductNameToProductSuggestionRTO action,
 ) {
   return state.copyWith(

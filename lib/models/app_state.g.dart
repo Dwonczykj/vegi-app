@@ -19,7 +19,7 @@ _$_AppState _$$_AppStateFromJson(Map<String, dynamic> json) => _$_AppState(
           .fromJson(json['cashWalletState'] as Map<String, dynamic>?),
       homePageState: const HomePageStateConverter()
           .fromJson(json['homePageState'] as Map<String, dynamic>?),
-      cartState: const UserCartStateConverter()
+      cartState: const CartStateConverter()
           .fromJson(json['cartState'] as Map<String, dynamic>?),
       menuItemState: const MenuItemStateConverter()
           .fromJson(json['menuItemState'] as Map<String, dynamic>?),
@@ -39,7 +39,7 @@ Map<String, dynamic> _$$_AppStateToJson(_$_AppState instance) =>
           const CashWalletStateConverter().toJson(instance.cashWalletState),
       'homePageState':
           const HomePageStateConverter().toJson(instance.homePageState),
-      'cartState': const UserCartStateConverter().toJson(instance.cartState),
+      'cartState': const CartStateConverter().toJson(instance.cartState),
       'menuItemState':
           const MenuItemStateConverter().toJson(instance.menuItemState),
       'pastOrderState':

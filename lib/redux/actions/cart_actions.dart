@@ -562,34 +562,59 @@ ThunkAction<AppState> getTimeSlots({required DateTime newDate}) {
       );
     } catch (e, s) {
       log.error('ERROR - getFullfillmentMethods $e');
-      await Sentry.captureException(
-        e,
-        stackTrace: s,
-      );
     }
   };
 }
 
-ThunkAction<AppState> autoSelectDeliveryAddress() {
+ThunkAction<AppState> checkFulfilmentSlotsAreStillValid() {
   return (Store<AppState> store) async {
     try {
-      final availableDeliveryAddresses =
-          store.state.userState.listOfDeliveryAddresses
-              .where(
-                (address) => address.deliversTo(
-                  store.state.cartState.fulfilmentPostalDistricts,
-                ),
-              )
-              .toList();
-      if (availableDeliveryAddresses.isNotEmpty) {
+      if (store.state.cartState.selectedTimeSlot != null) {
+        final DateFormat formatter = DateFormat('yyyy-MM-dd');
+        final Map<String, List<TimeSlot>> timeSlots =
+            await peeplEatsService.getFulfilmentSlots(
+          vendorID: store.state.cartState.restaurantID,
+          dateRequired: formatter
+              .format(store.state.cartState.selectedTimeSlot!.startTime),
+        );
+
         store.dispatch(
-          cartActions.setDeliveryAddress(
-            id: availableDeliveryAddresses.first.internalID,
+          UpdateSlots(
+            deliverySlots: timeSlots['deliverySlots']!,
+            collectionSlots: timeSlots['collectionSlots']!,
+          ),
+        );
+      } else {
+        final Map<String, TimeSlot?> nextAvaliableSlots =
+            await peeplEatsService.getNextAvaliableSlot(
+          vendorID: store.state.cartState.restaurantID,
+        );
+
+        store.dispatch(
+          UpdateNextAvaliableTimeSlots(
+            collectionSlot: nextAvaliableSlots['collectionSlot'],
+            deliverySlot: nextAvaliableSlots['deliverySlot'],
+          ),
+        );
+      }
+      final checkedTimeSlots = store.state.cartState.isDelivery
+          ? store.state.cartState.deliverySlots
+          : store.state.cartState.isCollection
+              ? store.state.cartState.collectionSlots
+              : <TimeSlot>[];
+      if (!checkedTimeSlots.any(
+        (element) =>
+            store.state.cartState.selectedTimeSlot != null &&
+            element.isEqualTo(store.state.cartState.selectedTimeSlot!),
+      )) {
+        store.dispatch(
+          updateSelectedTimeSlot(
+            selectedTimeSlot: checkedTimeSlots.firstOrNull,
           ),
         );
       }
     } catch (e, s) {
-      log.error('ERROR - autoSelectDeliveryAddress $e', stackTrace: s);
+      log.error('ERROR - checkFulfilmentSlotsAreStillValid $e', stackTrace: s);
     }
   };
 }
@@ -660,6 +685,30 @@ ThunkAction<AppState> getEligibleOrderDates() {
         e,
         stackTrace: s,
       );
+    }
+  };
+}
+
+ThunkAction<AppState> autoSelectDeliveryAddress() {
+  return (Store<AppState> store) async {
+    try {
+      final availableDeliveryAddresses =
+          store.state.userState.listOfDeliveryAddresses
+              .where(
+                (address) => address.deliversTo(
+                  store.state.cartState.fulfilmentPostalDistricts,
+                ),
+              )
+              .toList();
+      if (availableDeliveryAddresses.isNotEmpty) {
+        store.dispatch(
+          cartActions.setDeliveryAddress(
+            id: availableDeliveryAddresses.first.internalID,
+          ),
+        );
+      }
+    } catch (e, s) {
+      log.error('ERROR - autoSelectDeliveryAddress $e', stackTrace: s);
     }
   };
 }
@@ -1745,7 +1794,8 @@ ThunkAction<AppState> sendOrderObject<T extends CreateOrderForFulfilment>({
       }
 
       if (result == null) {
-        log.error('createOrder call returned null', stackTrace: StackTrace.current);
+        log.error('createOrder call returned null',
+            stackTrace: StackTrace.current);
         store
           ..dispatch(
             SetIsLoadingHttpRequest(
@@ -2345,7 +2395,10 @@ ThunkAction<AppState> startPaymentProcess({
         );
         if (store.state.userState.vegiAccountId == null) {
           const e = 'Vegi AccountId not set on state... Cannot start payment';
-          log.error(e, stackTrace: StackTrace.current,);
+          log.error(
+            e,
+            stackTrace: StackTrace.current,
+          );
           store
             ..dispatch(SetPaymentButtonFlag(false))
             ..dispatch(

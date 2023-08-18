@@ -80,6 +80,17 @@ final Token pplToken = Token(
   walletActions: WalletActions.initial(),
 );
 
+final Token greenBeanToken = Token(
+  name: 'Green Beans',
+  symbol: 'GBT',
+  // imageUrl: 'https://fuselogo.s3.eu-central-1.amazonaws.com/fuse-token.png',
+  decimals: 18,
+  address: Addresses.gbtTokenAddress,
+  timestamp: 0,
+  amount: BigInt.from(0.0),
+  walletActions: WalletActions.initial(),
+);
+
 final Token fuseDollarToken = Token(
   name: 'Fuse Dollar',
   symbol: 'fUSD',

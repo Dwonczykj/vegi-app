@@ -10,6 +10,9 @@
             "type": "dart",
             "flutterMode": "debug",
             "program": "lib/main.dart",
+            "env": [
+                "QEMU_AUDIO_DRV=none",
+            ],
             "args": [
                 "--dart-define",
                 "ENV=development",
@@ -23,6 +26,9 @@
             "type": "dart",
             "flutterMode": "debug",
             "program": "lib/main.dart",
+            "env": [
+                "QEMU_AUDIO_DRV=none",
+            ],
             "args": [
                 "--dart-define",
                 "ENV=development",
@@ -40,6 +46,9 @@
             "type": "dart",
             "flutterMode": "debug",
             "program": "lib/main.dart",
+            "env": [
+                "QEMU_AUDIO_DRV=none",
+            ],
             "args": [
                 "--dart-define",
                 "ENV=development",
@@ -55,6 +64,9 @@
             "type": "dart",
             "flutterMode": "debug",
             "program": "lib/main.dart",
+            "env": [
+                "QEMU_AUDIO_DRV=none",
+            ],
             "args": [
                 "--dart-define",
                 "ENV=development",
@@ -70,6 +82,9 @@
             "type": "dart",
             "flutterMode": "debug",
             "program": "lib/main.dart",
+            "env": [
+                "QEMU_AUDIO_DRV=none",
+            ],
             "args": [
                 "--dart-define",
                 "ENV=qa",
@@ -83,6 +98,9 @@
             "type": "dart",
             "flutterMode": "debug",
             "program": "lib/main.dart",
+            "env": [
+                "QEMU_AUDIO_DRV=none",
+            ],
             "args": [
                 "--dart-define",
                 "ENV=production",
@@ -96,6 +114,9 @@
             "type": "dart",
             "flutterMode": "release",
             "program": "lib/main.dart",
+            "env": [
+                "QEMU_AUDIO_DRV=none",
+            ],
             "args": [
                 "--dart-define",
                 "ENV=production",
@@ -109,6 +130,9 @@
             "type": "dart",
             "flutterMode": "debug",
             "program": "lib/main.dart",
+            "env": [
+                "QEMU_AUDIO_DRV=none",
+            ],
             "args": [
                 "--dart-define",
                 "ENV=development",
@@ -122,6 +146,9 @@
             "type": "dart",
             "flutterMode": "debug",
             "program": "lib/main.dart",
+            "env": [
+                "QEMU_AUDIO_DRV=none",
+            ],
             "args": [
                 "--dart-define",
                 "ENV=development",
@@ -135,6 +162,9 @@
             "type": "dart",
             "flutterMode": "debug",
             "program": "lib/main.dart",
+            "env": [
+                "QEMU_AUDIO_DRV=none",
+            ],
             "args": [
                 "--dart-define",
                 "ENV=qa",
@@ -148,6 +178,9 @@
             "type": "dart",
             "flutterMode": "profile",
             "program": "lib/main.dart",
+            "env": [
+                "QEMU_AUDIO_DRV=none",
+            ],
             "args": [
                 "--dart-define",
                 "ENV=production",

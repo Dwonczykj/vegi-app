@@ -247,6 +247,7 @@ mixin _StripeServiceMixin on IStripeService {
               status: StripePaymentStatus.paymentFailed,
             ),
           )
+          ..dispatch(checkFulfilmentSlotsAreStillValid())
           ..dispatch(
             cancelOrder(
               orderId: orderId,
@@ -360,6 +361,7 @@ mixin _StripeServiceMixin on IStripeService {
               status: StripePaymentStatus.paymentFailed,
             ),
           )
+          ..dispatch(checkFulfilmentSlotsAreStillValid())
           ..dispatch(
             cancelOrder(
               orderId: orderId,
@@ -558,6 +560,7 @@ mixin _StripeServiceMixin on IStripeService {
               status: StripePaymentStatus.paymentFailed,
             ),
           )
+          ..dispatch(checkFulfilmentSlotsAreStillValid())
           ..dispatch(
             cancelOrder(
               orderId: orderId,
@@ -633,6 +636,7 @@ mixin _StripeServiceMixin on IStripeService {
               status: StripePaymentStatus.paymentFailed,
             ),
           )
+          ..dispatch(checkFulfilmentSlotsAreStillValid())
           ..dispatch(
             cancelOrder(
               orderId: orderId,
@@ -853,7 +857,12 @@ mixin _StripeServiceMixin on IStripeService {
               },
             ),
           );
-          log.error(e.error.localizedMessage);
+          store.dispatch(checkFulfilmentSlotsAreStillValid());
+          log.error(
+            e.error.localizedMessage,
+            stackTrace: StackTrace.current,
+            additionalDetails: e.error.toJson(),
+          );
           return false;
         } else {
           return false;
@@ -903,12 +912,7 @@ mixin _StripeServiceMixin on IStripeService {
         );
         if (paymentIntentClientSecret == null) {
           log.error('Unable to create payment intent from $stripePayService');
-          await Sentry.captureException(
-            Exception(
-              'Unable to create payment intent from $stripePayService',
-            ),
-            stackTrace: StackTrace.current, // from catch (err, s)
-          );
+
           store.dispatch(
             StripePaymentStatusUpdate(
               status: StripePaymentStatus.paymentFailed,
@@ -918,12 +922,7 @@ mixin _StripeServiceMixin on IStripeService {
         } else if (currency != Currency.GBP && currency != Currency.GBPx) {
           log.error(
             'Unable to use google pay via stripe for currency: $currency',
-          );
-          await Sentry.captureException(
-            Exception(
-              'Unable to use google pay via stripe for currency: $currency',
-            ),
-            stackTrace: StackTrace.current, // from catch (err, s)
+            stackTrace: StackTrace.current,
           );
           store.dispatch(
             StripePaymentStatusUpdate(
@@ -940,10 +939,10 @@ mixin _StripeServiceMixin on IStripeService {
         clientSecret: paymentIntentClientSecret,
         confirmParams: PlatformPayConfirmParams.googlePay(
           googlePay: GooglePayParams(
-            testEnv: Env.isDev || Env.isTest,
+            testEnv: useTest || Env.isDev || Env.isTest,
             merchantCountryCode:
-                amount.inGBP.currency.name.toLowerCase().substring(0, 2),
-            currencyCode: amount.inGBP.currency.name.toLowerCase(),
+                'GB', // store.state.userState.isoCode, // always paying vegi which is 'GB'
+            currencyCode: amount.inGBP.currency.name.toUpperCase(),
           ),
         ),
       );
@@ -1016,18 +1015,18 @@ mixin _StripeServiceMixin on IStripeService {
               },
             ),
           );
-          log.error(e.error.localizedMessage);
-          await Sentry.captureException(
-            e,
-            stackTrace: s,
+          store.dispatch(checkFulfilmentSlotsAreStillValid());
+          log.error(
+            e.error.localizedMessage,
+            stackTrace: StackTrace.current,
+            additionalDetails: e.error.toJson(),
           );
           return false;
         } else {
           return false;
         }
       } else {
-        log.error(e);
-        await Sentry.captureException(
+        log.error(
           e,
           stackTrace: s,
         );

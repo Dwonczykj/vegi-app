@@ -41,7 +41,7 @@ class PeeplPayService {
     final Map<String, dynamic> result = response.data as Map<String, dynamic>;
 
     log.info(
-      'checkOrderValidity called from vegi backend to verify pyamnetIntent matches the order created on backend',
+      'checkOrderValidity called from vegi backend to verify payment intent matches the order created on backend',
       stackTrace: StackTrace.current,
       additionalDetails: {'Payment Intent Result': result},
     );

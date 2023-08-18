@@ -109,11 +109,11 @@ class UserState with _$UserState {
     @Default([]) List<String> networks,
     @Default([]) List<String> mnemonic,
     @Default('') String pincode,
-    @Default('') String countryCode,
+    @Default('') String countryCode, // i.e. +44
     @Default('') String phoneNumber,
     @Default('') String phoneNumberNoCountry,
     @Default(false) bool warnSendDialogShowed,
-    @Default('') String isoCode,
+    @Default('') String isoCode, // i.e. 'GB'
     @Default('') String jwtToken,
     @Default(VegiConstants.defaultDisplayName) String displayName,
     @Default('') String avatarUrl,

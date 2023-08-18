@@ -1,13 +1,12 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'user_cart_state.dart';
+part of 'cart_state.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$_UserCartState _$$_UserCartStateFromJson(Map<String, dynamic> json) =>
-    _$_UserCartState(
+_$_CartState _$$_CartStateFromJson(Map<String, dynamic> json) => _$_CartState(
       cartItems: (json['cartItems'] as List<dynamic>?)
               ?.map((e) => CartItem.fromJson(e as Map<String, dynamic>))
               .toList() ??
@@ -88,6 +87,9 @@ _$_UserCartState _$$_UserCartStateFromJson(Map<String, dynamic> json) =>
       selectedPaymentMethod: $enumDecodeNullable(
               _$PaymentMethodEnumMap, json['selectedPaymentMethod']) ??
           null,
+      preferredPaymentMethod: $enumDecodeNullable(
+              _$PaymentMethodEnumMap, json['preferredPaymentMethod']) ??
+          null,
       fulfilmentPostalDistricts:
           (json['fulfilmentPostalDistricts'] as List<dynamic>?)
                   ?.map((e) => e as String)
@@ -123,7 +125,7 @@ _$_UserCartState _$$_UserCartStateFromJson(Map<String, dynamic> json) =>
               json['paymentInProcess'] as Map<String, dynamic>),
     );
 
-Map<String, dynamic> _$$_UserCartStateToJson(_$_UserCartState instance) =>
+Map<String, dynamic> _$$_CartStateToJson(_$_CartState instance) =>
     <String, dynamic>{
       'cartItems': instance.cartItems.map((e) => e.toJson()).toList(),
       'cartSubTotal': Money.toJson(instance.cartSubTotal),
@@ -164,6 +166,8 @@ Map<String, dynamic> _$$_UserCartStateToJson(_$_UserCartState instance) =>
       'deliveryInstructions': instance.deliveryInstructions,
       'selectedPaymentMethod':
           _$PaymentMethodEnumMap[instance.selectedPaymentMethod],
+      'preferredPaymentMethod':
+          _$PaymentMethodEnumMap[instance.preferredPaymentMethod],
       'fulfilmentPostalDistricts': instance.fulfilmentPostalDistricts,
       'eligibleOrderDates':
           instance.eligibleOrderDates.map((e) => e.toIso8601String()).toList(),

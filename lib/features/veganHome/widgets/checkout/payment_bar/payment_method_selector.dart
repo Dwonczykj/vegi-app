@@ -54,15 +54,22 @@ class PaymentMethodSelector extends StatelessWidget {
           StoreConnector<AppState, PaymentMethodViewModel>(
             converter: PaymentMethodViewModel.fromStore,
             onInit: (store) {
-              final pplBalance = store
-                  .state.cashWalletState.tokens[pplToken.address]!
+              final gbtBalance = store
+                  .state.cashWalletState.tokens[greenBeanToken.address]!
                   .getAmount();
 
-              if (pplBalance < 10) {
-                store.dispatch(SetPaymentMethod(PaymentMethod.stripe));
-                return;
+              // if (gbtBalance > 100) {
+              //   store.dispatch(SetPaymentMethod(PaymentMethod.stripe));
+              //   return;
+              // }
+              if (store.state.cartState.selectedTimeSlot == null) {
+                store.dispatch(
+                  SetPaymentMethod(
+                    store.state.cartState.preferredPaymentMethod ??
+                        PaymentMethod.stripe,
+                  ),
+                );
               }
-              store.dispatch(SetPaymentMethod(PaymentMethod.stripe));
             },
             builder: (context, viewmodel) {
               return Text(

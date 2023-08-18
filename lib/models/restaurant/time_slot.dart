@@ -50,4 +50,27 @@ class TimeSlot with _$TimeSlot {
 
     return '${dateFormat.format(startTime).replaceAll(' AM', '').replaceAll(' PM', '')}-${dateFormat.format(endTime)}';
   }
+
+  /// The function compares the current TimeSlot object with another TimeSlot object.
+  /// 
+  /// Args:
+  ///   other (TimeSlot): The "other" parameter is an object of the TimeSlot class that we are comparing
+  /// the current TimeSlot object to.
+  int compareTo(TimeSlot other) {
+    if (startTime == other.startTime &&
+        endTime == other.endTime &&
+        fulfilmentMethodId == other.fulfilmentMethodId) {
+      return 0;
+    } else if (startTime.isBefore(other.startTime)) {
+      return -1;
+    } else {
+      return 1;
+    }
+  }
+
+  /// The function checks if a given TimeSlot object is equal to another TimeSlot object.
+  /// 
+  /// Args:
+  ///   other (TimeSlot): The "other" parameter is of type TimeSlot.
+  bool isEqualTo(TimeSlot other) => compareTo(other) == 0;
 }

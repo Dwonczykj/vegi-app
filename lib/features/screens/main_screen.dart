@@ -172,12 +172,14 @@ Future<void> requestAppTracking() async {
 
 void startFirebaseNotifs(Store<AppState> store) {
   //BUG: This breaks on android devices as not registered yet like APN from app store for ios app on firebase console
-  FirebaseMessaging.onBackgroundMessage(
-    (remoteMessage) => _firebaseMessagingBackgroundHandler(
-      remoteMessage,
-      store,
-    ),
-  );
+  tryCatchInline(
+      () => FirebaseMessaging.onBackgroundMessage(
+            (remoteMessage) => _firebaseMessagingBackgroundHandler(
+              remoteMessage,
+              store,
+            ),
+          ),
+      null);
 
   FirebaseMessaging.onMessageOpenedApp.listen(
     (message) => handleFCMOpenedApp(

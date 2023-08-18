@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:vegan_liverpool/constants/enums.dart';
@@ -16,8 +18,8 @@ import 'package:vegan_liverpool/models/restaurant/time_slot.dart';
 import 'package:vegan_liverpool/redux/viewsmodels/errorDetails.dart';
 import 'package:vegan_liverpool/redux/viewsmodels/signUpErrorDetails.dart';
 
-part 'user_cart_state.freezed.dart';
-part 'user_cart_state.g.dart';
+part 'cart_state.freezed.dart';
+part 'cart_state.g.dart';
 
 Map<String, dynamic> paymentInProcessToJson(
   LivePayment? paymentInProcess,
@@ -25,9 +27,9 @@ Map<String, dynamic> paymentInProcessToJson(
     paymentInProcess?.toJson() ?? {};
 
 @Freezed()
-class UserCartState with _$UserCartState {
+class CartState with _$CartState {
   @JsonSerializable()
-  factory UserCartState({
+  factory CartState({
     @Default([]) List<CartItem> cartItems,
     @JsonKey(
       fromJson: Money.fromJson,
@@ -105,6 +107,7 @@ class UserCartState with _$UserCartState {
     Money restaurantPlatformFee,
     @Default('') String deliveryInstructions,
     @Default(null) PaymentMethod? selectedPaymentMethod,
+    @Default(null) PaymentMethod? preferredPaymentMethod,
     @Default([]) List<String> fulfilmentPostalDistricts,
     @Default([]) List<DateTime> eligibleOrderDates,
     @Default(null) TimeSlot? nextCollectionSlot,
@@ -126,11 +129,11 @@ class UserCartState with _$UserCartState {
     @JsonKey(includeFromJson: false, includeToJson: false)
     @Default(null)
     ErrorDetails<CartErrCode>? errorDetails,
-  }) = _UserCartState;
+  }) = _CartState;
 
-  const UserCartState._();
+  const CartState._();
 
-  factory UserCartState.initial() => UserCartState(
+  factory CartState.initial() => CartState(
         cartItems: [],
         cartDiscountPercent: 0.0,
         deliverySlots: [],
@@ -139,11 +142,16 @@ class UserCartState with _$UserCartState {
         fulfilmentPostalDistricts: [],
         eligibleOrderDates: [],
         paymentInProcess: LivePayment.initial(),
+        preferredPaymentMethod: Platform.isIOS
+            ? PaymentMethod.applePay
+            : Platform.isAndroid
+                ? PaymentMethod.googlePay
+                : PaymentMethod.stripe,
       );
 
-  factory UserCartState.fromJson(Map<String, dynamic> json) =>
+  factory CartState.fromJson(Map<String, dynamic> json) =>
       tryCatchRethrowInline(
-        () => _$UserCartStateFromJson(json),
+        () => _$CartStateFromJson(json),
       );
 
   String get orderID => order?.id.toString() ?? '';
@@ -233,17 +241,15 @@ class UserCartState with _$UserCartState {
       );
 }
 
-class UserCartStateConverter
-    implements JsonConverter<UserCartState, Map<String, dynamic>?> {
-  const UserCartStateConverter();
+class CartStateConverter
+    implements JsonConverter<CartState, Map<String, dynamic>?> {
+  const CartStateConverter();
 
   @override
-  UserCartState fromJson(Map<String, dynamic>? json) => tryCatchRethrowInline(
-        () => json != null
-            ? UserCartState.fromJson(json)
-            : UserCartState.initial(),
+  CartState fromJson(Map<String, dynamic>? json) => tryCatchRethrowInline(
+        () => json != null ? CartState.fromJson(json) : CartState.initial(),
       );
 
   @override
-  Map<String, dynamic> toJson(UserCartState instance) => instance.toJson();
+  Map<String, dynamic> toJson(CartState instance) => instance.toJson();
 }

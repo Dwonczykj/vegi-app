@@ -9,7 +9,7 @@ import 'package:vegan_liverpool/models/home_page_state.dart';
 import 'package:vegan_liverpool/models/menu_item_state.dart';
 import 'package:vegan_liverpool/models/onboarding_state.dart';
 import 'package:vegan_liverpool/models/past_order_state.dart';
-import 'package:vegan_liverpool/models/user_cart_state.dart';
+import 'package:vegan_liverpool/models/cart_state.dart';
 import 'package:vegan_liverpool/models/user_state.dart';
 
 part 'app_state.freezed.dart';
@@ -26,7 +26,7 @@ class AppState with _$AppState {
     @UserStateConverter() required UserState userState,
     @CashWalletStateConverter() required CashWalletState cashWalletState,
     @HomePageStateConverter() required HomePageState homePageState,
-    @UserCartStateConverter() required UserCartState cartState,
+    @CartStateConverter() required CartState cartState,
     @MenuItemStateConverter() required MenuItemState menuItemState,
     @PastOrderStateConverter() required PastOrderState pastOrderState,
     @OnboardingStateConverter() required OnboardingState onboardingState,
@@ -42,7 +42,7 @@ class AppState with _$AppState {
       userState: UserState.initial(),
       cashWalletState: CashWalletState.initial(),
       homePageState: HomePageState.initial(),
-      cartState: UserCartState.initial(),
+      cartState: CartState.initial(),
       menuItemState: MenuItemState.initial(),
       pastOrderState: PastOrderState.initial(),
       onboardingState: OnboardingState.initial(),
@@ -62,7 +62,7 @@ class AppState with _$AppState {
       cashWalletState: const CashWalletStateConverter()
           .fromJson(json['cashWalletState'] as Map<String, dynamic>?),
       homePageState: HomePageState.initial(),
-      cartState: UserCartState.initial(),
+      cartState: CartState.initial(),
       menuItemState: MenuItemState.initial(),
       pastOrderState: const PastOrderStateConverter()
           .fromJson(json['pastOrderState'] as Map<String, dynamic>?),
