@@ -106,6 +106,7 @@ abstract class CreateOrderForFulfilment {
   late final String fulfilmentSlotFrom;
   late final String fulfilmentSlotTo;
   late final bool isDelivery;
+  late final String fcmToken;
   late final String publicId;
 
   @override
@@ -137,7 +138,7 @@ abstract class CreateOrderForFulfilment {
         'vendor': vendor,
         'walletAddress': walletAddress,
         'isDelivery': isDelivery,
-        'firebaseRegistrationToken': await firebaseMessaging.getToken(),
+        'firebaseRegistrationToken': fcmToken,
       })
       ..addAll(
         {
@@ -179,6 +180,7 @@ abstract class CreateOrderForFulfilment {
       vendor: json['vendor']! as String,
       walletAddress: json['walletAddress']! as String,
       isDelivery: json['isDelivery']! as bool,
+      fcmToken: json['fcmToken'] ?? '',
       address: DeliveryAddresses.fromCartJson(
         json['address'] as Map<String, dynamic>,
       ),

@@ -27,6 +27,7 @@ _$_CreateOrderForCollection _$$_CreateOrderForCollectionFromJson(
       fulfilmentSlotFrom: json['fulfilmentSlotFrom'] as String,
       fulfilmentSlotTo: json['fulfilmentSlotTo'] as String,
       isDelivery: json['isDelivery'] as bool,
+      fcmToken: json['fcmToken'] as String,
       publicId: json['publicId'] as String,
     );
 
@@ -46,6 +47,7 @@ Map<String, dynamic> _$$_CreateOrderForCollectionToJson(
       'fulfilmentSlotFrom': instance.fulfilmentSlotFrom,
       'fulfilmentSlotTo': instance.fulfilmentSlotTo,
       'isDelivery': instance.isDelivery,
+      'fcmToken': instance.fcmToken,
       'publicId': instance.publicId,
     };
 

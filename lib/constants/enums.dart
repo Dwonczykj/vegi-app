@@ -733,7 +733,7 @@ enum StripePaymentStatus {
   mintingSucceeded,
   mintingFailed,
   paymentCancelled,
-  paymentAttemptCreated,
+  paymentAttemptCreated, paymentMethodNotSupportedOnDevice,
 }
 
 enum StripePaymentMethodType {

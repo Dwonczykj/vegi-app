@@ -8,6 +8,7 @@ import 'package:mime/mime.dart' as mime;
 import 'package:vegan_liverpool/common/router/routes.gr.dart';
 import 'package:vegan_liverpool/constants/enums.dart';
 import 'package:vegan_liverpool/features/veganHome/Helpers/extensions.dart';
+import 'package:vegan_liverpool/redux/actions/home_page_actions.dart';
 import 'package:vegan_liverpool/redux/actions/user_actions.dart';
 import 'package:vegan_liverpool/services.dart';
 import 'package:vegan_liverpool/utils/constants.dart';
@@ -142,10 +143,11 @@ abstract class HttpService {
           data = jsonEncode(response.requestOptions.queryParameters);
         }
         log.info(
-          '${response.requestOptions.method}: "${response.requestOptions.uri}" -> [${response.statusCode}]$cookiePresentStr \n params:"$data"',
+          '🌐 ${response.requestOptions.method} RESP [${response.statusCode}]$cookiePresentStr: "${response.requestOptions.uri}" -> \n params:"$data"',
           additionalDetails: response.data != null && response.data is Map
-              ? ((response.data as Map<String,dynamic>?) ?? <String,dynamic>{})
-              : <String,dynamic>{},
+              ? ((response.data as Map<String, dynamic>?) ??
+                  <String, dynamic>{})
+              : <String, dynamic>{},
         );
         return response;
       },
@@ -162,6 +164,12 @@ abstract class HttpService {
     void Function(String errCode)? handleErrorCodes,
   }) async {
     late final Response<T> response;
+    final store = await reduxStore;
+    store.dispatch(
+      SetIsLoadingHttpRequest(
+        isLoading: true,
+      ),
+    );
     // Future.value(
     //   Response(
     //     data: errorResponseData,
@@ -177,9 +185,19 @@ abstract class HttpService {
     // );
     try {
       response = await responseAwaiterCallback();
-    } on DioError catch (error, stackTrace) {
+      store.dispatch(
+        SetIsLoadingHttpRequest(
+          isLoading: false,
+        ),
+      );
+    } on DioException catch (error, stackTrace) {
+      store.dispatch(
+        SetIsLoadingHttpRequest(
+          isLoading: false,
+        ),
+      );
       log.error(
-        'Handle DioError from [$httpProtocol]: "${error.response?.realUri}"',
+        'Handle DioException from [$httpProtocol]: "${error.response?.realUri}"',
         error: error,
         stackTrace: stackTrace,
       );
@@ -285,6 +303,11 @@ abstract class HttpService {
         );
       }
     } on Exception catch (error, stackTrace) {
+      store.dispatch(
+        SetIsLoadingHttpRequest(
+          isLoading: false,
+        ),
+      );
       log.error(
         error,
         stackTrace: stackTrace,
@@ -302,6 +325,11 @@ abstract class HttpService {
             RequestOptions(path: '${dio.options.baseUrl}/unknown...'),
       );
     } catch (error, stackTrace) {
+      store.dispatch(
+        SetIsLoadingHttpRequest(
+          isLoading: false,
+        ),
+      );
       if (error.toString().contains('Connection reset by peer') ||
           error.toString().contains('Unauthorized')) {
         await deleteSessionCookie(); //todo: return a 401...
@@ -371,7 +399,7 @@ abstract class HttpService {
     }
     if (dontLog == false) {
       log.info(
-        '$protocol: "${dio.options.baseUrl}$path_"',
+        '🌐 $protocol REQ: "${dio.options.baseUrl}$path_"',
         sentry: true,
       );
     }
@@ -455,7 +483,6 @@ abstract class HttpService {
       options.headers!.addAll(customHeaders!);
       options.headers!['Accept'] = 'application/json';
     }
-
     return _handleHttpResult(
       () => _logHttpResult(
         dio.post<T>(

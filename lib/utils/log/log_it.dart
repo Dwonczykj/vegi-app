@@ -30,12 +30,11 @@ class LogIt {
     if (store == null) {
       return;
     }
-    if (store!.state.userState.isLoggedIn ||
-        store!.state.userState.identifier.isNotEmpty) {
+    if (store!.state.userState.identifier.isNotEmpty) {
       if (store!.state.userState.identifier.isNotEmpty) {
         deviceMeta['identifier'] = store!.state.userState.identifier;
         deviceMeta['deviceName'] = store!.state.userState.deviceName;
-        deviceMeta['deviceName'] = store!.state.userState.deviceOSName;
+        deviceMeta['deviceOSName'] = store!.state.userState.deviceOSName;
         deviceMeta['env'] = Env.activeEnv;
         deviceMeta['simulator'] = (await DebugHelpers.deviceIsSimulator())
             ? 'simulator'
@@ -74,17 +73,20 @@ class LogIt {
     if (logLevel.index > level.index) {
       return;
     }
-    final filteredStackTrace = stackTraceLines.isEmpty
-        ? (stackTrace ?? StackTrace.current).filterCallStack(
-            dontMatch: RegExp(
-              r'([A-Za-z_]+)\.([A-Za-z_. <>]+)\s\((package:vegan_liverpool)\/(utils\/log\/)(log\.dart):(\d+):(\d+)\)',
-            ),
-            removeLinesContaining: [
-              'log_it.dart',
-              'vegi_debug_route_observer.dart',
-            ],
-          )
-        : stackTraceLines;
+    if (store == null) {
+      connectReduxStoreToLogs();
+    }
+    // final filteredStackTrace = stackTraceLines.isEmpty
+    //     ? (stackTrace ?? StackTrace.current).filterCallStack(
+    //         dontMatch: RegExp(
+    //           r'([A-Za-z_]+)\.([A-Za-z_. <>]+)\s\((package:vegan_liverpool)\/(utils\/log\/)(log\.dart):(\d+):(\d+)\)',
+    //         ),
+    //         removeLinesContaining: [
+    //           'log_it.dart',
+    //           'vegi_debug_route_observer.dart',
+    //         ],
+    //       )
+    //     : stackTraceLines;
     try {
       if (stackTrace == null && stackTraceLines.isNotEmpty) {
         stackTrace = StackTraceFilter.fromStackLines(stackTraceLines);
@@ -169,17 +171,19 @@ class LogIt {
     //   );
     // }
     if (!dontLog) {
+      final ts = DateTime.now().toIso8601String();
       var logMetaData = {
         'stackTrace': stackTrace.toString(),
         'meta': deviceMeta,
         'level': level.name,
         'detail': additionalDetails,
+        'timestamp': ts,
       };
       if (level == LogLevel.error) {
         logMetaData.addAll({'AppState': store?.state.toJson() ?? {}});
       }
       peeplEatsService.writeLog(
-        message: '$message [${DateTime.now()}]',
+        message: '$message [$ts]',
         details: logMetaData,
       );
 

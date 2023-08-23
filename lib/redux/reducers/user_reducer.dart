@@ -60,6 +60,8 @@ final userReducers = combineReducers<UserState>([
   TypedReducer<UserState, SetFirebaseCredentials>(_setFirebaseCredentials).call,
   TypedReducer<UserState, SetFirebaseSessionToken>(_setFirebaseSessionToken)
       .call,
+  TypedReducer<UserState, SetFirebaseMessagingToken>(_setFirebaseMessagingToken)
+      .call,
   TypedReducer<UserState, SetFuseWalletCredentials>(_setFuseWalletCredentials)
       .call,
   TypedReducer<UserState, SetVerificationId>(_setVerificationId).call,
@@ -275,7 +277,7 @@ UserState _setUserAuthenticationStatus(
 ) {
   log.info(
     'AUTH CHG: (${state.authStateEmj}) + (${action.updates()}) => '
-    '(🔥->${authEnumToEmoji(action.firebaseStatus ?? state.firebaseAuthenticationStatus)}, 🥑->${authEnumToEmoji(action.vegiStatus ?? state.vegiAuthenticationStatus)}, 👾->${authEnumToEmoji(action.fuseStatus ?? state.fuseAuthenticationStatus)})',
+    '(🔥->${authEnumToEmoji(action.firebaseStatus ?? state.firebaseAuthenticationStatus)}, 👾->${authEnumToEmoji(action.fuseStatus ?? state.fuseAuthenticationStatus)}, 🥑->${authEnumToEmoji(action.vegiStatus ?? state.vegiAuthenticationStatus)})',
     sentry: true,
     stackTrace: StackTrace.current,
   );
@@ -593,6 +595,16 @@ UserState _setFirebaseSessionToken(
   return state.copyWith(
     firebaseSessionToken: action.firebaseSessionToken,
     firebaseAuthenticationStatus: FirebaseAuthenticationStatus.authenticated,
+  );
+}
+
+UserState _setFirebaseMessagingToken(
+  UserState state,
+  SetFirebaseMessagingToken action,
+) {
+  return state.copyWith(
+    firebaseMessagingToken: action.fcmToken,
+    firebaseMessagingAPNSToken: action.apnsToken,
   );
 }
 

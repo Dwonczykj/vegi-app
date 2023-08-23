@@ -734,17 +734,11 @@ ThunkAction<AppState> registerEmailWaitingListHandler({
 }) {
   return (Store<AppState> store) async {
     try {
-      store
-        ..dispatch(
-          SetIsLoadingHttpRequest(
-            isLoading: true,
-          ),
-        )
-        ..dispatch(
-          SetCartIsLoading(
-            isLoading: true,
-          ),
-        );
+      store.dispatch(
+        SetCartIsLoading(
+          isLoading: true,
+        ),
+      );
 
       final newEntry = await peeplEatsService.registerEmailToWaitingList(
         email,
@@ -1299,7 +1293,7 @@ ThunkAction<AppState> scanRestaurantMenuItemQRCode(
         e,
         stackTrace: s,
       );
-      if (e is DioError && e.response != null) {
+      if (e is DioException && e.response != null) {
         if (e.response!.statusCode == 404) {
           return errorHandler(
             'ERROR - scanRestaurantMenuItemQRCode $e',
@@ -1912,12 +1906,21 @@ ThunkAction<AppState> sendOrderObject<T extends CreateOrderForFulfilment>({
                 showBottomPaymentSheet: showBottomPaymentSheet,
               ),
             );
-          // todo: this needs to be replaced with the result.order.firebaseRegistrationToken subscription
-          // do a cmd f12 of all locations where the below subscribeToTopic function is called from
-          unawaited(
-            firebaseMessaging
-                .subscribeToTopic('order-${result.order.publicId}'),
-          );
+
+          if (store.state.userState.firebaseMessagingAPNSToken.isNotEmpty) {
+            try {
+              unawaited(
+                firebaseMessaging
+                    .subscribeToTopic('order-${result.order.publicId}'),
+              );
+            } on Exception catch (e, s) {
+              log.error(
+                'Unable to subscribe to firebase topic: "order-${result.order.publicId}" with error: $e',
+                error: e,
+                stackTrace: s,
+              );
+            }
+          }
           unawaited(
             Analytics.track(
               eventName: AnalyticsEvents.orderGen,
@@ -1932,7 +1935,7 @@ ThunkAction<AppState> sendOrderObject<T extends CreateOrderForFulfilment>({
           );
         }
       }
-    } on DioError catch (e, s) {
+    } on DioException catch (e, s) {
       unawaited(
         Analytics.track(
           eventName: AnalyticsEvents.orderGen,
@@ -1990,11 +1993,7 @@ ThunkAction<AppState> sendOrderObject<T extends CreateOrderForFulfilment>({
           ),
         );
       log.error(
-        'ERROR - sendOrderObject $e',
-        stackTrace: s,
-      );
-      await Sentry.captureException(
-        e,
+        'ERROR - sendOrderObject [$e]',
         stackTrace: s,
       );
     }
@@ -2324,12 +2323,43 @@ ThunkAction<AppState> startPaymentProcess({
             );
           return;
         }
+        final orderIdNum = num.tryParse(store.state.cartState.orderID);
+        if (orderIdNum == null) {
+          store
+                ..dispatch(SetPaymentButtonFlag(false))
+                ..dispatch(
+                  SetIsLoadingHttpRequest(
+                    isLoading: false,
+                  ),
+                )
+                // ..dispatch(
+                //   cancelOrder(
+                //     orderId: 0,
+                //     senderWalletAddress: store.state.userState.walletAddress,
+                //   ),
+                // )
+                ..dispatch(SetTransferringPayment(flag: false))
+                ..dispatch(
+                  OrderCreationProcessStatusUpdate(
+                    status: OrderCreationProcessStatus.orderCancelled,
+                    orderCreationStatusMessage: 'Order cancelled',
+                  ),
+                )
+              // ..dispatch(
+              //   SetConfirmed(
+              //     flag: false,
+              //     orderId: int.tryParse(store.state.cartState.orderID) ?? 0,
+              //   ),
+              // );
+              ;
+          return;
+        }
         await (stripeService
               ..setTestMode(isTester: store.state.userState.isTester))
             .handleApplePay(
           recipientWalletAddress: store.state.cartState.restaurantWalletAddress,
           senderWalletAddress: store.state.userState.walletAddress,
-          orderId: num.parse(store.state.cartState.orderID),
+          orderId: orderIdNum,
           accountId: store.state.userState.vegiAccountId!,
           store: store,
           amount: store.state.cartState.cartTotal,
@@ -2351,7 +2381,7 @@ ThunkAction<AppState> startPaymentProcess({
                 )
                 ..dispatch(
                   cancelOrder(
-                    orderId: int.parse(store.state.cartState.orderID),
+                    orderId: orderIdNum.round(),
                     senderWalletAddress: store.state.userState.walletAddress,
                   ),
                 )
@@ -2368,7 +2398,7 @@ ThunkAction<AppState> startPaymentProcess({
                 ..dispatch(
                   SetConfirmed(
                     flag: value,
-                    orderId: int.parse(store.state.cartState.orderID),
+                    orderId: orderIdNum.round(),
                   ),
                 );
               return;
@@ -2384,7 +2414,11 @@ ThunkAction<AppState> startPaymentProcess({
             store.dispatch(subscribeToOrderUpdates());
           },
         ).catchError((dynamic error) {
-          throw Exception('Apple Pay Failed - $error');
+          if (error is Exception) {
+            throw error;
+          } else {
+            throw Exception('Apple Pay Failed - $error');
+          }
         });
       } else if (store.state.cartState.selectedPaymentMethod ==
           PaymentMethod.googlePay) {
@@ -2720,11 +2754,7 @@ ThunkAction<AppState> startPaymentProcess({
         );
       }
       log.error(
-        'ERROR - sendOrderObject $e',
-        stackTrace: s,
-      );
-      await Sentry.captureException(
-        e,
+        'ERROR - startPaymentProcess [$e]',
         stackTrace: s,
       );
     }
@@ -2806,11 +2836,7 @@ ThunkAction<AppState> startPeeplPayProcess() {
           ),
         );
       log.error(
-        'ERROR - sendOrderObject $e',
-        stackTrace: s,
-      );
-      await Sentry.captureException(
-        e,
+        'ERROR - startPeeplPayProcess [$e]',
         stackTrace: s,
       );
     }
@@ -3053,6 +3079,10 @@ ThunkAction<AppState> startPaymentConfirmationCheck() {
 
 ThunkAction<AppState> subscribeToOrderUpdates() {
   return (Store<AppState> store) async {
+    logFunctionCall(
+      className: 'cart_actions',
+      funcName: 'subscribeToOrderUpdates',
+    );
     final orderDetails = await peeplEatsService.getOrderFromUri(
       vegiRelUri:
           peeplEatsService.getOrderRelUri(store.state.cartState.orderID),
@@ -3067,7 +3097,18 @@ ThunkAction<AppState> subscribeToOrderUpdates() {
       );
       return;
     }
-    await firebaseMessaging.subscribeToTopic('order-${orderDetails.publicId}');
+    if (store.state.userState.firebaseMessagingAPNSToken.isNotEmpty) {
+      try {
+        await firebaseMessaging
+            .subscribeToTopic('order-${orderDetails.publicId}');
+      } on Exception catch (e, s) {
+        log.error(
+          'Unable to subscribe to firebase topic: "order-${orderDetails.publicId}" with error: $e',
+          error: e,
+          stackTrace: s,
+        );
+      }
+    }
     store
       ..dispatch(SetTransferringPayment(flag: false))
       ..dispatch(

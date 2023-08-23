@@ -20,6 +20,7 @@ AppLogState _$AppLogStateFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$AppLogState {
+  @JsonKey(includeFromJson: false, includeToJson: false)
   List<LogEvent> get logs => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -34,7 +35,9 @@ abstract class $AppLogStateCopyWith<$Res> {
           AppLogState value, $Res Function(AppLogState) then) =
       _$AppLogStateCopyWithImpl<$Res, AppLogState>;
   @useResult
-  $Res call({List<LogEvent> logs});
+  $Res call(
+      {@JsonKey(includeFromJson: false, includeToJson: false)
+      List<LogEvent> logs});
 }
 
 /// @nodoc
@@ -69,7 +72,9 @@ abstract class _$$_AppLogStateCopyWith<$Res>
       __$$_AppLogStateCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({List<LogEvent> logs});
+  $Res call(
+      {@JsonKey(includeFromJson: false, includeToJson: false)
+      List<LogEvent> logs});
 }
 
 /// @nodoc
@@ -98,12 +103,16 @@ class __$$_AppLogStateCopyWithImpl<$Res>
 
 @JsonSerializable()
 class _$_AppLogState extends _AppLogState {
-  _$_AppLogState({required this.logs}) : super._();
+  _$_AppLogState(
+      {@JsonKey(includeFromJson: false, includeToJson: false)
+      this.logs = const <LogEvent>[]})
+      : super._();
 
   factory _$_AppLogState.fromJson(Map<String, dynamic> json) =>
       _$$_AppLogStateFromJson(json);
 
   @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
   final List<LogEvent> logs;
 
   @override
@@ -139,13 +148,16 @@ class _$_AppLogState extends _AppLogState {
 }
 
 abstract class _AppLogState extends AppLogState {
-  factory _AppLogState({required final List<LogEvent> logs}) = _$_AppLogState;
+  factory _AppLogState(
+      {@JsonKey(includeFromJson: false, includeToJson: false)
+      final List<LogEvent> logs}) = _$_AppLogState;
   _AppLogState._() : super._();
 
   factory _AppLogState.fromJson(Map<String, dynamic> json) =
       _$_AppLogState.fromJson;
 
   @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
   List<LogEvent> get logs;
   @override
   @JsonKey(ignore: true)

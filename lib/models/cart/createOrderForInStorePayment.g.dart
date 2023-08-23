@@ -21,6 +21,7 @@ _$_CreateOrderForInStorePayment _$$_CreateOrderForInStorePaymentFromJson(
           .toList(),
       vendor: json['vendor'] as String,
       walletAddress: json['walletAddress'] as String,
+      fcmToken: json['fcmToken'] as String,
       publicId: json['publicId'] as String,
     )
       ..address =
@@ -46,6 +47,7 @@ Map<String, dynamic> _$$_CreateOrderForInStorePaymentToJson(
       'discountCodes': instance.discountCodes,
       'vendor': instance.vendor,
       'walletAddress': instance.walletAddress,
+      'fcmToken': instance.fcmToken,
       'publicId': instance.publicId,
     };
 

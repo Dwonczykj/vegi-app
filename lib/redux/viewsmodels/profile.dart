@@ -65,11 +65,6 @@ class ProfileViewModel extends Equatable {
       }) {
         store
           ..dispatch(
-            SetIsLoadingHttpRequest(
-              isLoading: true,
-            ),
-          )
-          ..dispatch(
             updateUserAvatarCall(
               source,
               progressCallback: progressCallback,

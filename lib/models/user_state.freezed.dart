@@ -58,11 +58,11 @@ mixin _$UserState {
   List<String> get networks => throw _privateConstructorUsedError;
   List<String> get mnemonic => throw _privateConstructorUsedError;
   String get pincode => throw _privateConstructorUsedError;
-  String get countryCode => throw _privateConstructorUsedError;
+  String get countryCode => throw _privateConstructorUsedError; // i.e. +44
   String get phoneNumber => throw _privateConstructorUsedError;
   String get phoneNumberNoCountry => throw _privateConstructorUsedError;
   bool get warnSendDialogShowed => throw _privateConstructorUsedError;
-  String get isoCode => throw _privateConstructorUsedError;
+  String get isoCode => throw _privateConstructorUsedError; // i.e. 'GB'
   String get jwtToken => throw _privateConstructorUsedError;
   String get displayName => throw _privateConstructorUsedError;
   String get avatarUrl => throw _privateConstructorUsedError;
@@ -96,6 +96,8 @@ mixin _$UserState {
   @JsonKey(ignore: true)
   AuthCredential? get firebaseCredentials => throw _privateConstructorUsedError;
   String? get firebaseSessionToken => throw _privateConstructorUsedError;
+  String get firebaseMessagingToken => throw _privateConstructorUsedError;
+  String get firebaseMessagingAPNSToken => throw _privateConstructorUsedError;
   String? get vegiSessionCookie => throw _privateConstructorUsedError;
   List<DeliveryAddresses> get listOfDeliveryAddresses =>
       throw _privateConstructorUsedError;
@@ -190,6 +192,8 @@ abstract class $UserStateCopyWith<$Res> {
       @JsonKey(fromJson: localeFromJson, toJson: localeToJson) Locale? locale,
       @JsonKey(ignore: true) AuthCredential? firebaseCredentials,
       String? firebaseSessionToken,
+      String firebaseMessagingToken,
+      String firebaseMessagingAPNSToken,
       String? vegiSessionCookie,
       List<DeliveryAddresses> listOfDeliveryAddresses,
       bool hasSavedSeedPhrase,
@@ -283,6 +287,8 @@ class _$UserStateCopyWithImpl<$Res, $Val extends UserState>
     Object? locale = freezed,
     Object? firebaseCredentials = freezed,
     Object? firebaseSessionToken = freezed,
+    Object? firebaseMessagingToken = null,
+    Object? firebaseMessagingAPNSToken = null,
     Object? vegiSessionCookie = freezed,
     Object? listOfDeliveryAddresses = null,
     Object? hasSavedSeedPhrase = null,
@@ -494,6 +500,14 @@ class _$UserStateCopyWithImpl<$Res, $Val extends UserState>
           ? _value.firebaseSessionToken
           : firebaseSessionToken // ignore: cast_nullable_to_non_nullable
               as String?,
+      firebaseMessagingToken: null == firebaseMessagingToken
+          ? _value.firebaseMessagingToken
+          : firebaseMessagingToken // ignore: cast_nullable_to_non_nullable
+              as String,
+      firebaseMessagingAPNSToken: null == firebaseMessagingAPNSToken
+          ? _value.firebaseMessagingAPNSToken
+          : firebaseMessagingAPNSToken // ignore: cast_nullable_to_non_nullable
+              as String,
       vegiSessionCookie: freezed == vegiSessionCookie
           ? _value.vegiSessionCookie
           : vegiSessionCookie // ignore: cast_nullable_to_non_nullable
@@ -676,6 +690,8 @@ abstract class _$$_UserStateCopyWith<$Res> implements $UserStateCopyWith<$Res> {
       @JsonKey(fromJson: localeFromJson, toJson: localeToJson) Locale? locale,
       @JsonKey(ignore: true) AuthCredential? firebaseCredentials,
       String? firebaseSessionToken,
+      String firebaseMessagingToken,
+      String firebaseMessagingAPNSToken,
       String? vegiSessionCookie,
       List<DeliveryAddresses> listOfDeliveryAddresses,
       bool hasSavedSeedPhrase,
@@ -769,6 +785,8 @@ class __$$_UserStateCopyWithImpl<$Res>
     Object? locale = freezed,
     Object? firebaseCredentials = freezed,
     Object? firebaseSessionToken = freezed,
+    Object? firebaseMessagingToken = null,
+    Object? firebaseMessagingAPNSToken = null,
     Object? vegiSessionCookie = freezed,
     Object? listOfDeliveryAddresses = null,
     Object? hasSavedSeedPhrase = null,
@@ -980,6 +998,14 @@ class __$$_UserStateCopyWithImpl<$Res>
           ? _value.firebaseSessionToken
           : firebaseSessionToken // ignore: cast_nullable_to_non_nullable
               as String?,
+      firebaseMessagingToken: null == firebaseMessagingToken
+          ? _value.firebaseMessagingToken
+          : firebaseMessagingToken // ignore: cast_nullable_to_non_nullable
+              as String,
+      firebaseMessagingAPNSToken: null == firebaseMessagingAPNSToken
+          ? _value.firebaseMessagingAPNSToken
+          : firebaseMessagingAPNSToken // ignore: cast_nullable_to_non_nullable
+              as String,
       vegiSessionCookie: freezed == vegiSessionCookie
           ? _value.vegiSessionCookie
           : vegiSessionCookie // ignore: cast_nullable_to_non_nullable
@@ -1137,6 +1163,8 @@ class _$_UserState extends _UserState with DiagnosticableTreeMixin {
       @JsonKey(fromJson: localeFromJson, toJson: localeToJson) this.locale,
       @JsonKey(ignore: true) this.firebaseCredentials = null,
       this.firebaseSessionToken = null,
+      this.firebaseMessagingToken = '',
+      this.firebaseMessagingAPNSToken = '',
       this.vegiSessionCookie = null,
       this.listOfDeliveryAddresses = const [],
       this.hasSavedSeedPhrase = false,
@@ -1235,6 +1263,7 @@ class _$_UserState extends _UserState with DiagnosticableTreeMixin {
   @override
   @JsonKey()
   final String countryCode;
+// i.e. +44
   @override
   @JsonKey()
   final String phoneNumber;
@@ -1247,6 +1276,7 @@ class _$_UserState extends _UserState with DiagnosticableTreeMixin {
   @override
   @JsonKey()
   final String isoCode;
+// i.e. 'GB'
   @override
   @JsonKey()
   final String jwtToken;
@@ -1323,6 +1353,12 @@ class _$_UserState extends _UserState with DiagnosticableTreeMixin {
   final String? firebaseSessionToken;
   @override
   @JsonKey()
+  final String firebaseMessagingToken;
+  @override
+  @JsonKey()
+  final String firebaseMessagingAPNSToken;
+  @override
+  @JsonKey()
   final String? vegiSessionCookie;
   @override
   @JsonKey()
@@ -1396,7 +1432,7 @@ class _$_UserState extends _UserState with DiagnosticableTreeMixin {
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'UserState(wcURI: $wcURI, walletModules: $walletModules, installedAt: $installedAt, isContactsSynced: $isContactsSynced, scrollToTop: $scrollToTop, walletAddress: $walletAddress, privateKey: $privateKey, fuseWalletCredentials: $fuseWalletCredentials, smartWallet: $smartWallet, fuseAuthenticationStatus: $fuseAuthenticationStatus, firebaseAuthenticationStatus: $firebaseAuthenticationStatus, vegiAuthenticationStatus: $vegiAuthenticationStatus, backup: $backup, networks: $networks, mnemonic: $mnemonic, pincode: $pincode, countryCode: $countryCode, phoneNumber: $phoneNumber, phoneNumberNoCountry: $phoneNumberNoCountry, warnSendDialogShowed: $warnSendDialogShowed, isoCode: $isoCode, jwtToken: $jwtToken, displayName: $displayName, avatarUrl: $avatarUrl, avatarTempFilePath: $avatarTempFilePath, preferredSignonMethod: $preferredSignonMethod, email: $email, password: $password, verificationId: $verificationId, verificationPassed: $verificationPassed, identifier: $identifier, deviceName: $deviceName, deviceOSName: $deviceOSName, deviceReleaseName: $deviceReleaseName, appUpdateNeeded: $appUpdateNeeded, appUpdateNextVersion: $appUpdateNextVersion, appUpdateNotificationSeenForBuildNumber: $appUpdateNotificationSeenForBuildNumber, syncedContacts: $syncedContacts, reverseContacts: $reverseContacts, currency: $currency, hasUpgrade: $hasUpgrade, authType: $authType, biometricallyAuthenticated: $biometricallyAuthenticated, locale: $locale, firebaseCredentials: $firebaseCredentials, firebaseSessionToken: $firebaseSessionToken, vegiSessionCookie: $vegiSessionCookie, listOfDeliveryAddresses: $listOfDeliveryAddresses, hasSavedSeedPhrase: $hasSavedSeedPhrase, useLiveLocation: $useLiveLocation, userIsVerified: $userIsVerified, userLocation: $userLocation, isUsingSimulator: $isUsingSimulator, isUsingIosSimulator: $isUsingIosSimulator, initialLoginDateTime: $initialLoginDateTime, showSeedPhraseBanner: $showSeedPhraseBanner, surveyQuestions: $surveyQuestions, surveyCompleted: $surveyCompleted, surveyEmailUsed: $surveyEmailUsed, isVendor: $isVendor, stripeCustomerId: $stripeCustomerId, vegiAccountId: $vegiAccountId, vegiUserId: $vegiUserId, isTester: $isTester, isVegiSuperAdmin: $isVegiSuperAdmin, userVegiRole: $userVegiRole, positionInWaitingList: $positionInWaitingList, subscribedToWaitingListUpdates: $subscribedToWaitingListUpdates, waitingListEntryId: $waitingListEntryId, loginCounter: $loginCounter)';
+    return 'UserState(wcURI: $wcURI, walletModules: $walletModules, installedAt: $installedAt, isContactsSynced: $isContactsSynced, scrollToTop: $scrollToTop, walletAddress: $walletAddress, privateKey: $privateKey, fuseWalletCredentials: $fuseWalletCredentials, smartWallet: $smartWallet, fuseAuthenticationStatus: $fuseAuthenticationStatus, firebaseAuthenticationStatus: $firebaseAuthenticationStatus, vegiAuthenticationStatus: $vegiAuthenticationStatus, backup: $backup, networks: $networks, mnemonic: $mnemonic, pincode: $pincode, countryCode: $countryCode, phoneNumber: $phoneNumber, phoneNumberNoCountry: $phoneNumberNoCountry, warnSendDialogShowed: $warnSendDialogShowed, isoCode: $isoCode, jwtToken: $jwtToken, displayName: $displayName, avatarUrl: $avatarUrl, avatarTempFilePath: $avatarTempFilePath, preferredSignonMethod: $preferredSignonMethod, email: $email, password: $password, verificationId: $verificationId, verificationPassed: $verificationPassed, identifier: $identifier, deviceName: $deviceName, deviceOSName: $deviceOSName, deviceReleaseName: $deviceReleaseName, appUpdateNeeded: $appUpdateNeeded, appUpdateNextVersion: $appUpdateNextVersion, appUpdateNotificationSeenForBuildNumber: $appUpdateNotificationSeenForBuildNumber, syncedContacts: $syncedContacts, reverseContacts: $reverseContacts, currency: $currency, hasUpgrade: $hasUpgrade, authType: $authType, biometricallyAuthenticated: $biometricallyAuthenticated, locale: $locale, firebaseCredentials: $firebaseCredentials, firebaseSessionToken: $firebaseSessionToken, firebaseMessagingToken: $firebaseMessagingToken, firebaseMessagingAPNSToken: $firebaseMessagingAPNSToken, vegiSessionCookie: $vegiSessionCookie, listOfDeliveryAddresses: $listOfDeliveryAddresses, hasSavedSeedPhrase: $hasSavedSeedPhrase, useLiveLocation: $useLiveLocation, userIsVerified: $userIsVerified, userLocation: $userLocation, isUsingSimulator: $isUsingSimulator, isUsingIosSimulator: $isUsingIosSimulator, initialLoginDateTime: $initialLoginDateTime, showSeedPhraseBanner: $showSeedPhraseBanner, surveyQuestions: $surveyQuestions, surveyCompleted: $surveyCompleted, surveyEmailUsed: $surveyEmailUsed, isVendor: $isVendor, stripeCustomerId: $stripeCustomerId, vegiAccountId: $vegiAccountId, vegiUserId: $vegiUserId, isTester: $isTester, isVegiSuperAdmin: $isVegiSuperAdmin, userVegiRole: $userVegiRole, positionInWaitingList: $positionInWaitingList, subscribedToWaitingListUpdates: $subscribedToWaitingListUpdates, waitingListEntryId: $waitingListEntryId, loginCounter: $loginCounter)';
   }
 
   @override
@@ -1455,6 +1491,10 @@ class _$_UserState extends _UserState with DiagnosticableTreeMixin {
       ..add(DiagnosticsProperty('locale', locale))
       ..add(DiagnosticsProperty('firebaseCredentials', firebaseCredentials))
       ..add(DiagnosticsProperty('firebaseSessionToken', firebaseSessionToken))
+      ..add(
+          DiagnosticsProperty('firebaseMessagingToken', firebaseMessagingToken))
+      ..add(DiagnosticsProperty(
+          'firebaseMessagingAPNSToken', firebaseMessagingAPNSToken))
       ..add(DiagnosticsProperty('vegiSessionCookie', vegiSessionCookie))
       ..add(DiagnosticsProperty(
           'listOfDeliveryAddresses', listOfDeliveryAddresses))
@@ -1562,6 +1602,8 @@ class _$_UserState extends _UserState with DiagnosticableTreeMixin {
             (identical(other.locale, locale) || other.locale == locale) &&
             (identical(other.firebaseCredentials, firebaseCredentials) || other.firebaseCredentials == firebaseCredentials) &&
             (identical(other.firebaseSessionToken, firebaseSessionToken) || other.firebaseSessionToken == firebaseSessionToken) &&
+            (identical(other.firebaseMessagingToken, firebaseMessagingToken) || other.firebaseMessagingToken == firebaseMessagingToken) &&
+            (identical(other.firebaseMessagingAPNSToken, firebaseMessagingAPNSToken) || other.firebaseMessagingAPNSToken == firebaseMessagingAPNSToken) &&
             (identical(other.vegiSessionCookie, vegiSessionCookie) || other.vegiSessionCookie == vegiSessionCookie) &&
             const DeepCollectionEquality().equals(other.listOfDeliveryAddresses, listOfDeliveryAddresses) &&
             (identical(other.hasSavedSeedPhrase, hasSavedSeedPhrase) || other.hasSavedSeedPhrase == hasSavedSeedPhrase) &&
@@ -1638,6 +1680,8 @@ class _$_UserState extends _UserState with DiagnosticableTreeMixin {
         locale,
         firebaseCredentials,
         firebaseSessionToken,
+        firebaseMessagingToken,
+        firebaseMessagingAPNSToken,
         vegiSessionCookie,
         const DeepCollectionEquality().hash(listOfDeliveryAddresses),
         hasSavedSeedPhrase,
@@ -1733,6 +1777,8 @@ abstract class _UserState extends UserState {
       final Locale? locale,
       @JsonKey(ignore: true) final AuthCredential? firebaseCredentials,
       final String? firebaseSessionToken,
+      final String firebaseMessagingToken,
+      final String firebaseMessagingAPNSToken,
       final String? vegiSessionCookie,
       final List<DeliveryAddresses> listOfDeliveryAddresses,
       final bool hasSavedSeedPhrase,
@@ -1819,7 +1865,7 @@ abstract class _UserState extends UserState {
   String get pincode;
   @override
   String get countryCode;
-  @override
+  @override // i.e. +44
   String get phoneNumber;
   @override
   String get phoneNumberNoCountry;
@@ -1827,7 +1873,7 @@ abstract class _UserState extends UserState {
   bool get warnSendDialogShowed;
   @override
   String get isoCode;
-  @override
+  @override // i.e. 'GB'
   String get jwtToken;
   @override
   String get displayName;
@@ -1883,6 +1929,10 @@ abstract class _UserState extends UserState {
   AuthCredential? get firebaseCredentials;
   @override
   String? get firebaseSessionToken;
+  @override
+  String get firebaseMessagingToken;
+  @override
+  String get firebaseMessagingAPNSToken;
   @override
   String? get vegiSessionCookie;
   @override

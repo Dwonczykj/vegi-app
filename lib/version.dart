@@ -4,7 +4,6 @@ import 'package:vegan_liverpool/utils/log/log.dart';
 
 /// Provides immutable storage and comparison of semantic version numbers.
 class Version implements Comparable<Version> {
-
   /// Creates a new instance of [Version].
   ///
   /// [major], [minor], and [patch] are all required, all must be greater than 0 and not null, and at least one must be greater than 0.
@@ -12,9 +11,13 @@ class Version implements Comparable<Version> {
   /// [build] is optional, but if specified must be a [String]. must contain only [0-9A-Za-z-.], and must not be null.
   /// Throws a [FormatException] if the [String] content does not follow the character constraints defined above.
   /// Throes an [ArgumentError] if any of the other conditions are violated.
-  Version(this.major, this.minor, this.patch,
-      {List<String> preRelease = const <String>[], this.build = '',})
-      : _preRelease = preRelease {
+  Version(
+    this.major,
+    this.minor,
+    this.patch, {
+    List<String> preRelease = const <String>[],
+    this.build = '',
+  }) : _preRelease = preRelease {
     for (int i = 0; i < _preRelease.length; i++) {
       if (_preRelease[i].trim().isEmpty) {
         throw ArgumentError('preRelease segments must not be empty');
@@ -23,7 +26,8 @@ class Version implements Comparable<Version> {
       _preRelease[i] = _preRelease[i];
       if (!_preReleaseRegex.hasMatch(_preRelease[i])) {
         throw const FormatException(
-            'preRelease segments must only contain [0-9A-Za-z-]',);
+          'preRelease segments must only contain [0-9A-Za-z-]',
+        );
       }
     }
     if (build.isNotEmpty && !_buildRegex.hasMatch(build)) {
@@ -128,7 +132,8 @@ class Version implements Comparable<Version> {
   Version incrementPreRelease() {
     if (!isPreRelease) {
       throw Exception(
-          'Cannot increment pre-release on a non-pre-release [Version]',);
+        'Cannot increment pre-release on a non-pre-release [Version]',
+      );
     }
     final newPreRelease = preRelease;
 
@@ -147,8 +152,12 @@ class Version implements Comparable<Version> {
       newPreRelease.add('1');
     }
 
-    return Version(major, minor, patch,
-        preRelease: newPreRelease,);
+    return Version(
+      major,
+      minor,
+      patch,
+      preRelease: newPreRelease,
+    );
   }
 
   /// Returns a [String] representation of the [Version].
@@ -171,7 +180,7 @@ class Version implements Comparable<Version> {
   }
 
   static bool isWellFormatted(String versionString) =>
-      RegExp(r'^\d+\.\d+\.\d+$').hasMatch(versionString);
+      RegExp(r'^\d+\.\d+\.\d+|\d+\.\d+\+\d+$').hasMatch(versionString);
 
   /// Creates a [Version] instance from a string.
   ///
@@ -189,12 +198,14 @@ class Version implements Comparable<Version> {
     final String version = m.group(1)!;
 
     int? major, minor, patch;
-    final List<String> parts = version.split('.');
+    final List<String> parts = version.split(RegExp(r'\.|\+'));
     major = int.parse(parts[0]);
     if (parts.length > 1) {
       minor = int.parse(parts[1]);
       if (parts.length > 2) {
         patch = int.parse(parts[2]);
+      } else if(m.group(4) != null){
+        patch = int.parse(m.group(4)!);
       }
     }
 
@@ -205,8 +216,13 @@ class Version implements Comparable<Version> {
     }
     final String build = m.group(5) ?? '';
 
-    return Version(major, minor ?? 0, patch ?? 0,
-        build: build, preRelease: preReleaseList,);
+    return Version(
+      major,
+      minor ?? 0,
+      patch ?? 0,
+      build: build,
+      preRelease: preReleaseList,
+    );
   }
 
   static int _compare(Version? a, Version? b) {
@@ -273,8 +289,11 @@ class Version implements Comparable<Version> {
     return 0;
   }
 
-  static Version? tryParse(String versionString) =>
-      tryCatchInline(() => Version.isWellFormatted(versionString) ? Version.parse(versionString) : null, null);
+  static Version? tryParse(String versionString) => tryCatchInline(
+      () => Version.isWellFormatted(versionString)
+          ? Version.parse(versionString)
+          : null,
+      null);
 
   static bool _isNumeric(String? s) {
     if (s == null) {

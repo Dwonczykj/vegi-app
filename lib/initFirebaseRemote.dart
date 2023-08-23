@@ -18,8 +18,8 @@ Future<void> initFirebaseRemote() async {
   );
 
   await firebaseRemoteConfig.setDefaults({
-    'requiredBuildNumberAndroid': PackageConstants.iosBuildVersion,
-    'requiredBuildNumberIOS': PackageConstants.androidBuildVersion,
+    'requiredBuildNumberIOS': PackageConstants.iosBuildVersion,
+    'requiredBuildNumberAndroid': PackageConstants.androidBuildVersion,
     'requiredWebScriptsCacheUID': 'TODO_GUID_NEEDS_GENERATING'
   });
 

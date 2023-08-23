@@ -60,6 +60,7 @@ class StripeService extends IStripeService with _StripeServiceMixin {
     //   throw e;
     // }
     Stripe.merchantIdentifier = STRIPE_MERCHANT_ID_CONST_DONT_CHANGE;
+    instance.applySettings();
   }
 
   void setTestMode({required bool isTester}) {
@@ -71,6 +72,7 @@ class StripeService extends IStripeService with _StripeServiceMixin {
       useTest = false;
       Stripe.publishableKey = Secrets.STRIPE_API_KEY_LIVE;
     }
+    instance.applySettings();
   }
 }
 
@@ -173,9 +175,9 @@ mixin _StripeServiceMixin on IStripeService {
           customerId: stripeCustomerId,
           // Extra options
           // primaryButtonLabel: 'Pay now',
-          // applePay: PaymentSheetApplePay(
-          //   merchantCountryCode: 'DE',
-          // ),
+          applePay: PaymentSheetApplePay(
+            merchantCountryCode: 'GB',
+          ),
           // googlePay: PaymentSheetGooglePay(
           //   merchantCountryCode: 'DE',
           //   testEnv: true,
@@ -714,7 +716,10 @@ mixin _StripeServiceMixin on IStripeService {
     required bool shouldPushToHome,
   }) async {
     log.verbose(
-      'handleApplePay called on $this using ${useTest ? 'test' : 'live'} keys starting: "${Stripe.publishableKey.substring(0, 8)}". To use on real device, submit realcard details which will be tokenized to stripe test card on stripe test dashboard and will not charge you.',
+      'handleApplePay called on $this using ${useTest ? 'test' : 'live'} keys starting: "${Stripe.publishableKey.substring(0, 8)}". ' +
+          (useTest
+              ? 'To use on real device, submit realcard details which will be tokenized to stripe test card on stripe test dashboard and will not charge you.'
+              : ''),
       stackTrace: StackTrace.current,
     );
     try {
@@ -775,18 +780,39 @@ mixin _StripeServiceMixin on IStripeService {
       // );
 
       // 2. Confirm apple pay payment
-      await Stripe.instance.confirmPlatformPayPaymentIntent(
+      final applePaySupported = await instance.isPlatformPaySupported();
+      if (!applePaySupported) {
+        log.warn(
+            'Apple pay is NOT supported on this device: [${store.state.userState.deviceName} (${store.state.userState.deviceOSName} ${store.state.userState.deviceReleaseName})]');
+        store.dispatch(
+          StripePaymentStatusUpdate(
+            status: StripePaymentStatus.paymentMethodNotSupportedOnDevice,
+          ),
+        );
+        return false;
+      }
+      await instance.confirmPlatformPayPaymentIntent(
         clientSecret: paymentIntentClientSecret,
         confirmParams: PlatformPayConfirmParams.applePay(
           applePay: ApplePayParams(
             cartItems: [
               ApplePayCartSummaryItem.immediate(
-                label: productName,
+                label: "total",
+                // AMOUNT IN GBP as String
                 amount: amount.inGBPValue.toStringAsFixed(2),
-              )
+              ),
+              // ApplePayCartSummaryItem.immediate(
+              //   label: "grand total",
+              //   // amount: amount.inGBPValue.toStringAsFixed(2), // Does this need to be a whole number rounded amount > 0?
+              //   amount: amount.inGBPxValue.toStringAsFixed(
+              //       0), // Does this need to be a whole number rounded amount > 0?
+              // )
             ],
+
+            /// ISO 3166-1 alpha-2 country code where the transaction is processed. ~ https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2
             merchantCountryCode:
-                amount.inGBP.currency.name.toLowerCase().substring(0, 2),
+                'GB', // store.state.userState.isoCode, // always paying vegi which is 'GB'
+            /// ISO 4217 alphabetic currency code. ~
             currencyCode: amount.inGBP.currency.name.toLowerCase(),
           ),
         ),

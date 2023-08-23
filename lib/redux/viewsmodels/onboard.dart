@@ -99,11 +99,6 @@ class VerifyOnboardViewModel extends Equatable {
       }) {
         store
           ..dispatch(
-            SetIsLoadingHttpRequest(
-              isLoading: true,
-            ),
-          )
-          ..dispatch(
             updateUserAvatarCall(
               source,
               progressCallback: progressCallback,

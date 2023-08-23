@@ -60,6 +60,7 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     return StoreConnector<AppState, MainScreenViewModel>(
       onInit: (store) {
+        initFirebaseMessaging(store);
         firebaseMessaging.getInitialMessage().then(
               (remoteMessage) => handleFCMOpenedApp(
                 remoteMessage,
@@ -194,6 +195,34 @@ void startFirebaseNotifs(Store<AppState> store) {
       store,
     ),
   );
+}
+
+Future<void> initFirebaseMessaging(
+  Store<AppState> store,
+) async {
+  if (!(await firebaseMessaging.isSupported())) {
+    log.warn(
+        'Firebase messaging not supported on this ${(await DebugHelpers.deviceIsSimulator()) ? 'Simulator' : 'Real'} device');
+    return;
+  }
+  final hasPermission = await FirebaseMessaging.instance.requestPermission();
+  if (hasPermission.alert != AppleNotificationSetting.disabled) {
+    final apnsToken = await FirebaseMessaging.instance.getAPNSToken();
+    if (apnsToken == null || apnsToken.isEmpty) {
+      log.warn(
+        'Unable to get FirebaseMessaging ASPN token from apple. Please enable the with firebase and apple',
+        stackTrace: StackTrace.current,
+      );
+      return;
+    }
+    final fcmToken = await FirebaseMessaging.instance.getToken();
+    store.dispatch(
+      SetFirebaseMessagingToken(
+        fcmToken: fcmToken ?? '',
+        apnsToken: apnsToken ?? '',
+      ),
+    );
+  }
 }
 
 Future<void> _firebaseMessagingBackgroundHandler(

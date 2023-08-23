@@ -14,7 +14,12 @@ AppLogState? fromJsonAppLogState(dynamic json) =>
 class AppLogState with _$AppLogState {
   @JsonSerializable()
   factory AppLogState({
-    required List<LogEvent> logs,
+    @JsonKey(
+      includeFromJson: false,
+      includeToJson: false,
+    )
+    @Default(<LogEvent>[])
+    List<LogEvent> logs,
   }) = _AppLogState;
 
   const AppLogState._();

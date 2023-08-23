@@ -31,6 +31,7 @@ class CreateOrderForCollection extends CreateOrderForFulfilment
     required String fulfilmentSlotFrom,
     required String fulfilmentSlotTo,
     required bool isDelivery,
+    required String fcmToken,
     required String publicId,
   }) = _CreateOrderForCollection;
 
@@ -48,6 +49,7 @@ class CreateOrderForCollection extends CreateOrderForFulfilment
       ],
       vendor: store.state.cartState.restaurantID,
       walletAddress: store.state.userState.walletAddress,
+      fcmToken: store.state.userState.firebaseMessagingToken,
       address: DeliveryAddresses(
         label: DeliveryAddressLabel.work,
         internalID:

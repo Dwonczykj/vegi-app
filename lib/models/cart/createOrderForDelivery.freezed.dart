@@ -34,6 +34,7 @@ mixin _$CreateOrderForDelivery {
   String get fulfilmentSlotFrom => throw _privateConstructorUsedError;
   String get fulfilmentSlotTo => throw _privateConstructorUsedError;
   bool get isDelivery => throw _privateConstructorUsedError;
+  String get fcmToken => throw _privateConstructorUsedError;
   String get publicId => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -62,6 +63,7 @@ abstract class $CreateOrderForDeliveryCopyWith<$Res> {
       String fulfilmentSlotFrom,
       String fulfilmentSlotTo,
       bool isDelivery,
+      String fcmToken,
       String publicId});
 
   $DeliveryAddressesCopyWith<$Res> get address;
@@ -94,6 +96,7 @@ class _$CreateOrderForDeliveryCopyWithImpl<$Res,
     Object? fulfilmentSlotFrom = null,
     Object? fulfilmentSlotTo = null,
     Object? isDelivery = null,
+    Object? fcmToken = null,
     Object? publicId = null,
   }) {
     return _then(_value.copyWith(
@@ -149,6 +152,10 @@ class _$CreateOrderForDeliveryCopyWithImpl<$Res,
           ? _value.isDelivery
           : isDelivery // ignore: cast_nullable_to_non_nullable
               as bool,
+      fcmToken: null == fcmToken
+          ? _value.fcmToken
+          : fcmToken // ignore: cast_nullable_to_non_nullable
+              as String,
       publicId: null == publicId
           ? _value.publicId
           : publicId // ignore: cast_nullable_to_non_nullable
@@ -187,6 +194,7 @@ abstract class _$$_CreateOrderForDeliveryCopyWith<$Res>
       String fulfilmentSlotFrom,
       String fulfilmentSlotTo,
       bool isDelivery,
+      String fcmToken,
       String publicId});
 
   @override
@@ -218,6 +226,7 @@ class __$$_CreateOrderForDeliveryCopyWithImpl<$Res>
     Object? fulfilmentSlotFrom = null,
     Object? fulfilmentSlotTo = null,
     Object? isDelivery = null,
+    Object? fcmToken = null,
     Object? publicId = null,
   }) {
     return _then(_$_CreateOrderForDelivery(
@@ -273,6 +282,10 @@ class __$$_CreateOrderForDeliveryCopyWithImpl<$Res>
           ? _value.isDelivery
           : isDelivery // ignore: cast_nullable_to_non_nullable
               as bool,
+      fcmToken: null == fcmToken
+          ? _value.fcmToken
+          : fcmToken // ignore: cast_nullable_to_non_nullable
+              as String,
       publicId: null == publicId
           ? _value.publicId
           : publicId // ignore: cast_nullable_to_non_nullable
@@ -299,6 +312,7 @@ class _$_CreateOrderForDelivery extends _CreateOrderForDelivery {
       required this.fulfilmentSlotFrom,
       required this.fulfilmentSlotTo,
       required this.isDelivery,
+      required this.fcmToken,
       required this.publicId})
       : super._();
 
@@ -332,6 +346,8 @@ class _$_CreateOrderForDelivery extends _CreateOrderForDelivery {
   @override
   final bool isDelivery;
   @override
+  final String fcmToken;
+  @override
   final String publicId;
 
   @override
@@ -361,6 +377,8 @@ class _$_CreateOrderForDelivery extends _CreateOrderForDelivery {
                 other.fulfilmentSlotTo == fulfilmentSlotTo) &&
             (identical(other.isDelivery, isDelivery) ||
                 other.isDelivery == isDelivery) &&
+            (identical(other.fcmToken, fcmToken) ||
+                other.fcmToken == fcmToken) &&
             (identical(other.publicId, publicId) ||
                 other.publicId == publicId));
   }
@@ -382,6 +400,7 @@ class _$_CreateOrderForDelivery extends _CreateOrderForDelivery {
       fulfilmentSlotFrom,
       fulfilmentSlotTo,
       isDelivery,
+      fcmToken,
       publicId);
 
   @JsonKey(ignore: true)
@@ -414,6 +433,7 @@ abstract class _CreateOrderForDelivery extends CreateOrderForDelivery {
       required final String fulfilmentSlotFrom,
       required final String fulfilmentSlotTo,
       required final bool isDelivery,
+      required final String fcmToken,
       required final String publicId}) = _$_CreateOrderForDelivery;
   _CreateOrderForDelivery._() : super._();
 
@@ -446,6 +466,8 @@ abstract class _CreateOrderForDelivery extends CreateOrderForDelivery {
   String get fulfilmentSlotTo;
   @override
   bool get isDelivery;
+  @override
+  String get fcmToken;
   @override
   String get publicId;
   @override

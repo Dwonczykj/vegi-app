@@ -199,7 +199,7 @@ class PeeplEatsService extends HttpService {
       }
 
       return validSession;
-    } on DioError catch (dioErr, s) {
+    } on DioException catch (dioErr, s) {
       final onRealDevice = await DebugHelpers.deviceIsNotSimulator();
       if ((dioErr.message?.contains('Connection refused') ?? false) &&
           onRealDevice) {
@@ -438,7 +438,7 @@ class PeeplEatsService extends HttpService {
         return result;
       }
     } on Exception catch (e) {
-      if (e is DioError) {
+      if (e is DioException) {
         if (e.response != null && e.response!.statusCode == 404) {
           return null;
         }
@@ -544,7 +544,7 @@ class PeeplEatsService extends HttpService {
     //   },
     // ).onError((error, stackTrace) {
     //   log.error(error, stackTrace: stackTrace);
-    //   if (error is DioError &&
+    //   if (error is DioException &&
     //       (error.message?.startsWith('SocketException:') ?? false) &&
     //       dio.options.baseUrl.startsWith('http://localhost')) {
     //     log.warn(
@@ -1324,7 +1324,7 @@ class PeeplEatsService extends HttpService {
         } else {
           log.error((error as Map<String, Response>)['response']!.toString());
         }
-      } else if (error is DioError) {
+      } else if (error is DioException) {
         log.error((error as Map<String, Response>)['response']!.toString());
       }
       return Response(
@@ -1504,6 +1504,12 @@ class PeeplEatsService extends HttpService {
     String phoneNoCountry,
     void Function(String error) onError,
   ) async {
+    if(email.toLowerCase().trim().isEmpty){
+      log.warn('Ignoring user-details request as email is blank', stackTrace: StackTrace.current);
+    } else if (phoneNoCountry.isEmpty) {
+      log.warn('Ignoring user-details request as email is blank',
+          stackTrace: StackTrace.current);
+    }
     try {
       final Response<dynamic> response = await dioGet(
         '/api/v1/admin/user-details',
@@ -1531,7 +1537,7 @@ class PeeplEatsService extends HttpService {
         return result;
       }
     } on Exception catch (e) {
-      if (e is DioError) {
+      if (e is DioException) {
         if (e.response != null && e.response!.statusCode == 404) {
           return null;
         }
@@ -2145,18 +2151,6 @@ class PeeplEatsService extends HttpService {
     required String message,
     Map<String, dynamic> details = const {},
   }) async {
-    bool authenticated = false;
-    try {
-      final store = await reduxStore;
-      if (!store.state.userState.isLoggedIn) {
-        return;
-      }
-      authenticated = true;
-    } catch (err) {
-      authenticated = false;
-      return;
-    }
-
     final Response<dynamic> response = await dioPost(
       'api/v1/logging/log',
       data: {

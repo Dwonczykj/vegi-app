@@ -6,7 +6,10 @@ import 'package:vegan_liverpool/redux/viewsmodels/checkout/cart_item_list_vm.dar
 
 class CartItemSingle extends StatelessWidget {
   const CartItemSingle({
-    required this.width, required this.animation, required this.index, Key? key,
+    required this.width,
+    required this.animation,
+    required this.index,
+    Key? key,
   }) : super(key: key);
 
   final double width;
@@ -27,6 +30,11 @@ class CartItemSingle extends StatelessWidget {
           child: StoreConnector<AppState, CartItemListViewModel>(
             converter: CartItemListViewModel.fromStore,
             builder: (_, viewmodel) {
+              if (viewmodel.names.isEmpty) {
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
               return Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [

@@ -195,6 +195,13 @@ class Authentication {
     store
       ..dispatch(SignupLoading(isLoading: true))
       ..dispatch(
+        SignUpErrorDetails(
+          title: '',
+          message: '',
+          code: null,
+        ),
+      )
+      ..dispatch(
         SetUserAuthenticationStatus(
           firebaseStatus: FirebaseAuthenticationStatus.unauthenticated,
           vegiStatus: VegiAuthenticationStatus.unauthenticated,

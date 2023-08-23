@@ -26,6 +26,7 @@ class CreateOrderForInStorePayment extends CreateOrderForFulfilment
     required List<String> discountCodes,
     required String vendor,
     required String walletAddress,
+    required String fcmToken,
     required String publicId,
   }) = _CreateOrderForInStorePayment;
 
@@ -36,6 +37,7 @@ class CreateOrderForInStorePayment extends CreateOrderForFulfilment
       currency: store.state.cartState.cartTotal.currency,
       tipAmount: store.state.cartState.selectedTipAmount.inGBPxValue.round(),
       marketingOptIn: false,
+      fcmToken: store.state.userState.firebaseMessagingToken,
       discountCodes: store.state.cartState.discountCode.isEmpty
           ? store.state.cartState.appliedVouchers
               .map((voucher) => voucher.code)

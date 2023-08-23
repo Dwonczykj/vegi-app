@@ -13,6 +13,7 @@ import 'package:vegan_liverpool/common/di/env.dart';
 import 'package:vegan_liverpool/features/veganHome/Helpers/extensions.dart';
 import 'package:vegan_liverpool/loadAppState.dart';
 import 'package:vegan_liverpool/models/app_state.dart';
+import 'package:vegan_liverpool/redux/actions/app_log_actions.dart';
 import 'package:vegan_liverpool/redux/reducers/app_reducer.dart';
 import 'package:vegan_liverpool/scan_network.dart';
 import 'package:vegan_liverpool/utils/constants.dart';
@@ -52,7 +53,10 @@ abstract class RegisterModule {
       dynamic action,
       DateTime timestamp,
     ) {
-      print(action.runtimeType);
+      // print(action.runtimeType);
+      if (action is AddAppLog) {
+        return '';
+      }
       return '{ts: ${timestamp.formatToHHmmss}, Action: $action}';
     }
 

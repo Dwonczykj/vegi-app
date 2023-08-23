@@ -157,6 +157,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
             newViewModel.signupError!.toString(),
             stackTrace: StackTrace.current,
           );
+        } else if (newViewModel.signupError == null ||
+            newViewModel.signupError?.message == null) {
+          log.verbose(
+              'Ignoring signuperror snack on signup_screen.build as signupError is null');
+        } else {
+          log.verbose(
+              'Ignoring signuperror snack on signup_screen.build as signupError has not changed since previous state. {SignUpError: [${newViewModel.signupError}]}');
         }
       },
       builder: (context, viewmodel) {
@@ -433,22 +440,22 @@ class _SignUpScreenState extends State<SignUpScreen> {
     required MainScreenViewModel viewmodel,
   }) async {
     viewmodel.setLoading(true);
-    final String phoneNumber = '${countryCode.dialCode}${phoneController.text}';
-    var value = await parsePhoneDetails(
+    var phoneNumber = await parsePhoneDetails(
       countryCode: countryCode,
       phoneNoCountry: phoneController.text,
     );
-    final dummyCountryCodeDontUse = await parseCountryCode(
-      countryCode: countryCode.code ?? 'GB',
-    );
-    if (value == null) {
+    // final String phoneNumberStr = '${countryCode.dialCode}${phoneController.text}';
+    // final dummyCountryCodeDontUse = await parseCountryCode(
+    //   countryCode: countryCode.code ?? 'GB',
+    // );
+    if (phoneNumber == null) {
       viewmodel.setLoading(false);
       return null;
     }
 
     viewmodel.signin(
       countryCode: countryCode,
-      phoneNumber: value,
+      phoneNumber: phoneNumber,
     );
     return null;
   }

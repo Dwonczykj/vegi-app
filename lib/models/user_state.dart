@@ -160,6 +160,8 @@ class UserState with _$UserState {
     @Default(null)
     AuthCredential? firebaseCredentials,
     @Default(null) String? firebaseSessionToken,
+    @Default('') String firebaseMessagingToken,
+    @Default('') String firebaseMessagingAPNSToken,
     @Default(null) String? vegiSessionCookie,
     @Default([]) List<DeliveryAddresses> listOfDeliveryAddresses,
     @Default(false) bool hasSavedSeedPhrase,
@@ -245,7 +247,7 @@ class UserState with _$UserState {
       'vegi:[$vegiAuthenticationStatus],firebase:[$firebaseAuthenticationStatus],fuse:[$fuseAuthenticationStatus]';
 
   String get authStateEmj =>
-      '🔥->${authEnumToEmoji(firebaseAuthenticationStatus)}, 🥑->${authEnumToEmoji(vegiAuthenticationStatus)}, 👾->${authEnumToEmoji(fuseAuthenticationStatus)}';
+      '🔥->${authEnumToEmoji(firebaseAuthenticationStatus)}, 👾->${authEnumToEmoji(fuseAuthenticationStatus)}, 🥑->${authEnumToEmoji(vegiAuthenticationStatus)}';
 
   bool get usingTestCredentials =>
       countryCode == Secrets.testPhoneNumberCountryCode &&

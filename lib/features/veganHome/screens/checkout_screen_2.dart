@@ -21,6 +21,7 @@ import 'package:vegan_liverpool/features/veganHome/widgets/checkout/other_cards/
 import 'package:vegan_liverpool/features/veganHome/widgets/checkout/other_cards/tip_selection_card.dart';
 import 'package:vegan_liverpool/features/veganHome/widgets/checkout/other_cards/your_details_card.dart';
 import 'package:vegan_liverpool/features/veganHome/widgets/checkout/payment_bar/payment_bar.dart';
+import 'package:vegan_liverpool/features/veganHome/widgets/shared/dialogs/addCardsToWalletDialog.dart';
 import 'package:vegan_liverpool/models/app_state.dart';
 import 'package:vegan_liverpool/redux/actions/cart_actions.dart';
 import 'package:vegan_liverpool/redux/viewsmodels/checkout/payment_method_vm.dart';
@@ -312,6 +313,13 @@ class CheckoutScreenPt2 extends StatelessWidget {
                   previousViewModel?.stripePaymentStatus !=
                       StripePaymentStatus.paymentConfirmed) {
                 await rootRouter.push(const OrderConfirmedScreen());
+              } else if (newViewModel.stripePaymentStatus ==
+                      StripePaymentStatus.paymentMethodNotSupportedOnDevice &&
+                  previousViewModel?.stripePaymentStatus !=
+                      StripePaymentStatus.paymentMethodNotSupportedOnDevice) {
+                await showDialog(
+                    context: context,
+                    builder: ((context) => AddCardsToWalletDialog()));
               } else {
                 log.info(
                   'Ignoring StripePaymentStatus update: "${newViewModel.stripePaymentStatus.name}"',

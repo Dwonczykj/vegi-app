@@ -242,6 +242,8 @@ PODS:
     - gRPC-Swift (~> 1.8.0)
   - pay_ios (0.0.1):
     - Flutter
+  - permission_handler_apple (9.1.1):
+    - Flutter
   - phone_number (1.0.0):
     - Flutter
     - PhoneNumberKit/PhoneNumberKitCore (= 3.3.4)
@@ -471,6 +473,7 @@ DEPENDENCIES:
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
   - patrol (from `.symlinks/plugins/patrol/ios`)
   - pay_ios (from `.symlinks/plugins/pay_ios/ios`)
+  - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
   - phone_number (from `.symlinks/plugins/phone_number/ios`)
   - qr_code_scanner (from `.symlinks/plugins/qr_code_scanner/ios`)
   - screen_capture_event (from `.symlinks/plugins/screen_capture_event/ios`)
@@ -600,6 +603,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/patrol/ios"
   pay_ios:
     :path: ".symlinks/plugins/pay_ios/ios"
+  permission_handler_apple:
+    :path: ".symlinks/plugins/permission_handler_apple/ios"
   phone_number:
     :path: ".symlinks/plugins/phone_number/ios"
   qr_code_scanner:
@@ -680,6 +685,7 @@ SPEC CHECKSUMS:
   path_provider_foundation: 29f094ae23ebbca9d3d0cec13889cd9060c0e943
   patrol: a7622350c42b3a944962fbfe052d07e3691789e5
   pay_ios: 8c7beb9c61d885f3f51b61f75f8793023fc8843a
+  permission_handler_apple: e76247795d700c14ea09e3a2d8855d41ee80a2e6
   phone_number: ad6f917e4fd2e507a198b93dca5eadcb463ec8c2
   PhoneNumberKit: 441e8b26ec88d598e3591de9061eff18f5dd12e8
   PromisesObjC: c50d2056b5253dadbd6c2bea79b0674bd5a52fa4

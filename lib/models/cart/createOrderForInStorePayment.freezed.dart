@@ -29,6 +29,7 @@ mixin _$CreateOrderForInStorePayment {
   List<String> get discountCodes => throw _privateConstructorUsedError;
   String get vendor => throw _privateConstructorUsedError;
   String get walletAddress => throw _privateConstructorUsedError;
+  String get fcmToken => throw _privateConstructorUsedError;
   String get publicId => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -54,6 +55,7 @@ abstract class $CreateOrderForInStorePaymentCopyWith<$Res> {
       List<String> discountCodes,
       String vendor,
       String walletAddress,
+      String fcmToken,
       String publicId});
 }
 
@@ -79,6 +81,7 @@ class _$CreateOrderForInStorePaymentCopyWithImpl<$Res,
     Object? discountCodes = null,
     Object? vendor = null,
     Object? walletAddress = null,
+    Object? fcmToken = null,
     Object? publicId = null,
   }) {
     return _then(_value.copyWith(
@@ -114,6 +117,10 @@ class _$CreateOrderForInStorePaymentCopyWithImpl<$Res,
           ? _value.walletAddress
           : walletAddress // ignore: cast_nullable_to_non_nullable
               as String,
+      fcmToken: null == fcmToken
+          ? _value.fcmToken
+          : fcmToken // ignore: cast_nullable_to_non_nullable
+              as String,
       publicId: null == publicId
           ? _value.publicId
           : publicId // ignore: cast_nullable_to_non_nullable
@@ -140,6 +147,7 @@ abstract class _$$_CreateOrderForInStorePaymentCopyWith<$Res>
       List<String> discountCodes,
       String vendor,
       String walletAddress,
+      String fcmToken,
       String publicId});
 }
 
@@ -164,6 +172,7 @@ class __$$_CreateOrderForInStorePaymentCopyWithImpl<$Res>
     Object? discountCodes = null,
     Object? vendor = null,
     Object? walletAddress = null,
+    Object? fcmToken = null,
     Object? publicId = null,
   }) {
     return _then(_$_CreateOrderForInStorePayment(
@@ -199,6 +208,10 @@ class __$$_CreateOrderForInStorePaymentCopyWithImpl<$Res>
           ? _value.walletAddress
           : walletAddress // ignore: cast_nullable_to_non_nullable
               as String,
+      fcmToken: null == fcmToken
+          ? _value.fcmToken
+          : fcmToken // ignore: cast_nullable_to_non_nullable
+              as String,
       publicId: null == publicId
           ? _value.publicId
           : publicId // ignore: cast_nullable_to_non_nullable
@@ -220,6 +233,7 @@ class _$_CreateOrderForInStorePayment extends _CreateOrderForInStorePayment {
       required this.discountCodes,
       required this.vendor,
       required this.walletAddress,
+      required this.fcmToken,
       required this.publicId})
       : super._();
 
@@ -243,6 +257,8 @@ class _$_CreateOrderForInStorePayment extends _CreateOrderForInStorePayment {
   @override
   final String walletAddress;
   @override
+  final String fcmToken;
+  @override
   final String publicId;
 
   @override
@@ -263,6 +279,8 @@ class _$_CreateOrderForInStorePayment extends _CreateOrderForInStorePayment {
             (identical(other.vendor, vendor) || other.vendor == vendor) &&
             (identical(other.walletAddress, walletAddress) ||
                 other.walletAddress == walletAddress) &&
+            (identical(other.fcmToken, fcmToken) ||
+                other.fcmToken == fcmToken) &&
             (identical(other.publicId, publicId) ||
                 other.publicId == publicId));
   }
@@ -279,6 +297,7 @@ class _$_CreateOrderForInStorePayment extends _CreateOrderForInStorePayment {
       const DeepCollectionEquality().hash(discountCodes),
       vendor,
       walletAddress,
+      fcmToken,
       publicId);
 
   @JsonKey(ignore: true)
@@ -307,6 +326,7 @@ abstract class _CreateOrderForInStorePayment
       required final List<String> discountCodes,
       required final String vendor,
       required final String walletAddress,
+      required final String fcmToken,
       required final String publicId}) = _$_CreateOrderForInStorePayment;
   _CreateOrderForInStorePayment._() : super._();
 
@@ -329,6 +349,8 @@ abstract class _CreateOrderForInStorePayment
   String get vendor;
   @override
   String get walletAddress;
+  @override
+  String get fcmToken;
   @override
   String get publicId;
   @override

@@ -266,4 +266,6 @@ const _$StripePaymentStatusEnumMap = {
   StripePaymentStatus.mintingFailed: 'mintingFailed',
   StripePaymentStatus.paymentCancelled: 'paymentCancelled',
   StripePaymentStatus.paymentAttemptCreated: 'paymentAttemptCreated',
+  StripePaymentStatus.paymentMethodNotSupportedOnDevice:
+      'paymentMethodNotSupportedOnDevice',
 };

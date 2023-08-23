@@ -89,6 +89,9 @@ _$_UserState _$$_UserStateFromJson(Map<String, dynamic> json) => _$_UserState(
           BiometricAuth.none,
       locale: localeFromJson(json['locale'] as Map<String, dynamic>?),
       firebaseSessionToken: json['firebaseSessionToken'] as String? ?? null,
+      firebaseMessagingToken: json['firebaseMessagingToken'] as String? ?? '',
+      firebaseMessagingAPNSToken:
+          json['firebaseMessagingAPNSToken'] as String? ?? '',
       vegiSessionCookie: json['vegiSessionCookie'] as String? ?? null,
       listOfDeliveryAddresses: (json['listOfDeliveryAddresses']
                   as List<dynamic>?)
@@ -168,6 +171,8 @@ Map<String, dynamic> _$$_UserStateToJson(_$_UserState instance) =>
       'authType': _$BiometricAuthEnumMap[instance.authType]!,
       'locale': localeToJson(instance.locale),
       'firebaseSessionToken': instance.firebaseSessionToken,
+      'firebaseMessagingToken': instance.firebaseMessagingToken,
+      'firebaseMessagingAPNSToken': instance.firebaseMessagingAPNSToken,
       'vegiSessionCookie': instance.vegiSessionCookie,
       'listOfDeliveryAddresses':
           instance.listOfDeliveryAddresses.map((e) => e.toJson()).toList(),

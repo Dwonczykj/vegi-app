@@ -34,6 +34,7 @@ mixin _$CreateOrderForCollection {
   String get fulfilmentSlotFrom => throw _privateConstructorUsedError;
   String get fulfilmentSlotTo => throw _privateConstructorUsedError;
   bool get isDelivery => throw _privateConstructorUsedError;
+  String get fcmToken => throw _privateConstructorUsedError;
   String get publicId => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -62,6 +63,7 @@ abstract class $CreateOrderForCollectionCopyWith<$Res> {
       String fulfilmentSlotFrom,
       String fulfilmentSlotTo,
       bool isDelivery,
+      String fcmToken,
       String publicId});
 
   $DeliveryAddressesCopyWith<$Res> get address;
@@ -94,6 +96,7 @@ class _$CreateOrderForCollectionCopyWithImpl<$Res,
     Object? fulfilmentSlotFrom = null,
     Object? fulfilmentSlotTo = null,
     Object? isDelivery = null,
+    Object? fcmToken = null,
     Object? publicId = null,
   }) {
     return _then(_value.copyWith(
@@ -149,6 +152,10 @@ class _$CreateOrderForCollectionCopyWithImpl<$Res,
           ? _value.isDelivery
           : isDelivery // ignore: cast_nullable_to_non_nullable
               as bool,
+      fcmToken: null == fcmToken
+          ? _value.fcmToken
+          : fcmToken // ignore: cast_nullable_to_non_nullable
+              as String,
       publicId: null == publicId
           ? _value.publicId
           : publicId // ignore: cast_nullable_to_non_nullable
@@ -188,6 +195,7 @@ abstract class _$$_CreateOrderForCollectionCopyWith<$Res>
       String fulfilmentSlotFrom,
       String fulfilmentSlotTo,
       bool isDelivery,
+      String fcmToken,
       String publicId});
 
   @override
@@ -219,6 +227,7 @@ class __$$_CreateOrderForCollectionCopyWithImpl<$Res>
     Object? fulfilmentSlotFrom = null,
     Object? fulfilmentSlotTo = null,
     Object? isDelivery = null,
+    Object? fcmToken = null,
     Object? publicId = null,
   }) {
     return _then(_$_CreateOrderForCollection(
@@ -274,6 +283,10 @@ class __$$_CreateOrderForCollectionCopyWithImpl<$Res>
           ? _value.isDelivery
           : isDelivery // ignore: cast_nullable_to_non_nullable
               as bool,
+      fcmToken: null == fcmToken
+          ? _value.fcmToken
+          : fcmToken // ignore: cast_nullable_to_non_nullable
+              as String,
       publicId: null == publicId
           ? _value.publicId
           : publicId // ignore: cast_nullable_to_non_nullable
@@ -300,6 +313,7 @@ class _$_CreateOrderForCollection extends _CreateOrderForCollection {
       required this.fulfilmentSlotFrom,
       required this.fulfilmentSlotTo,
       required this.isDelivery,
+      required this.fcmToken,
       required this.publicId})
       : super._();
 
@@ -333,6 +347,8 @@ class _$_CreateOrderForCollection extends _CreateOrderForCollection {
   @override
   final bool isDelivery;
   @override
+  final String fcmToken;
+  @override
   final String publicId;
 
   @override
@@ -362,6 +378,8 @@ class _$_CreateOrderForCollection extends _CreateOrderForCollection {
                 other.fulfilmentSlotTo == fulfilmentSlotTo) &&
             (identical(other.isDelivery, isDelivery) ||
                 other.isDelivery == isDelivery) &&
+            (identical(other.fcmToken, fcmToken) ||
+                other.fcmToken == fcmToken) &&
             (identical(other.publicId, publicId) ||
                 other.publicId == publicId));
   }
@@ -383,6 +401,7 @@ class _$_CreateOrderForCollection extends _CreateOrderForCollection {
       fulfilmentSlotFrom,
       fulfilmentSlotTo,
       isDelivery,
+      fcmToken,
       publicId);
 
   @JsonKey(ignore: true)
@@ -415,6 +434,7 @@ abstract class _CreateOrderForCollection extends CreateOrderForCollection {
       required final String fulfilmentSlotFrom,
       required final String fulfilmentSlotTo,
       required final bool isDelivery,
+      required final String fcmToken,
       required final String publicId}) = _$_CreateOrderForCollection;
   _CreateOrderForCollection._() : super._();
 
@@ -447,6 +467,8 @@ abstract class _CreateOrderForCollection extends CreateOrderForCollection {
   String get fulfilmentSlotTo;
   @override
   bool get isDelivery;
+  @override
+  String get fcmToken;
   @override
   String get publicId;
   @override

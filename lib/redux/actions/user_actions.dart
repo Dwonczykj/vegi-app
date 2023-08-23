@@ -285,16 +285,16 @@ class SetUserAuthenticationStatus {
 
   String updates() {
     String updateStr = '';
-    if (vegiStatus != null) {
-      final add = '🥑: ${vegiStatus!.name}';
-      updateStr = updateStr.isEmpty ? add : '$updateStr, $add';
-    }
     if (firebaseStatus != null) {
       final add = '🔥: ${firebaseStatus!.name}';
       updateStr = updateStr.isEmpty ? add : '$updateStr, $add';
     }
     if (fuseStatus != null) {
       final add = '👾: ${fuseStatus!.name}';
+      updateStr = updateStr.isEmpty ? add : '$updateStr, $add';
+    }
+    if (vegiStatus != null) {
+      final add = '🥑: ${vegiStatus!.name}';
       updateStr = updateStr.isEmpty ? add : '$updateStr, $add';
     }
     return updateStr;
@@ -595,6 +595,21 @@ class SetFirebaseSessionToken {
   @override
   String toString() =>
       'SetFirebaseSessionToken : firebaseSessionToken: $firebaseSessionToken';
+}
+
+class SetFirebaseMessagingToken {
+  SetFirebaseMessagingToken({
+    required this.fcmToken,
+    required this.apnsToken,
+  });
+
+  final String fcmToken;
+  final String apnsToken;
+
+  @override
+  String toString() {
+    return 'SetFirebaseMessagingToken : fcmToken:"$fcmToken"';
+  }
 }
 
 class SetFuseWalletCredentials {
@@ -980,10 +995,18 @@ ThunkAction<AppState> checkForUpdatesFirebaseRemoteConfig() {
             : 'requiredWebScriptsCacheUID';
 
     try {
+      final firebaseRemoteConfigValue = firebaseRemoteConfig.getString(
+        remoteConfigBuildNoKey, // 1.0.2
+      );
+      if (firebaseRemoteConfigValue.isEmpty) {
+        log.warn(
+          'In firebase_remote_config, no key value has been set for the "$remoteConfigBuildNoKey" key.',
+          stackTrace: StackTrace.current,
+        );
+        return;
+      }
       final requiredBuildNumber = Version.parse(
-        firebaseRemoteConfig.getString(
-          remoteConfigBuildNoKey, // 1.0.2
-        ),
+        firebaseRemoteConfigValue,
       );
 
       final currentBuildVersionStatus = await newVersion.getVersionStatus();
@@ -1641,8 +1664,6 @@ ThunkAction<AppState> updateDisplayNameCall(String displayName) {
 ThunkAction<AppState> setRandomUserAvatarIfNone() {
   return (Store<AppState> store) async {
     try {
-      store.dispatch(SetIsLoadingHttpRequest(isLoading: true));
-
       final userDetails = await peeplEatsService.getUserDetails(
         store.state.userState.email,
         store.state.userState.phoneNumberNoCountry,
@@ -1663,11 +1684,8 @@ ThunkAction<AppState> setRandomUserAvatarIfNone() {
           store.state.userState.avatarUrl.isEmpty) {
         store.dispatch(SetUserAvatar(userDetails.imageUrl));
       }
-
-      store.dispatch(SetIsLoadingHttpRequest(isLoading: false));
     } catch (e, s) {
       log.error('ERROR - setRandomUserAvatarIfNone $e', stackTrace: s);
-      store.dispatch(SetIsLoadingHttpRequest(isLoading: false));
     }
   };
 }
@@ -1677,11 +1695,6 @@ ThunkAction<AppState> setRandomUserAvatar({
 }) {
   return (Store<AppState> store) async {
     try {
-      store.dispatch(
-        SetIsLoadingHttpRequest(
-          isLoading: true,
-        ),
-      );
       final imageUrl = await peeplEatsService.setRandomAvatar(
         userId: vegiUserId,
         onError: (error) async {
@@ -1690,20 +1703,9 @@ ThunkAction<AppState> setRandomUserAvatar({
             error: error,
             stackTrace: StackTrace.current,
           );
-          store.dispatch(
-            SetIsLoadingHttpRequest(
-              isLoading: false,
-            ),
-          );
         },
       );
-      store
-        ..dispatch(SetUserAvatar(imageUrl))
-        ..dispatch(
-          SetIsLoadingHttpRequest(
-            isLoading: false,
-          ),
-        );
+      store.dispatch(SetUserAvatar(imageUrl));
       await updateFirebaseCurrentUser(({required User firebaseUser}) async {
         if (imageUrl.isNotEmpty) {
           await firebaseUser.updatePhotoURL(imageUrl);
@@ -1799,23 +1801,13 @@ ThunkAction<AppState> updateUserAvatarCall(
                 stackTrace: StackTrace.current,
               );
               onError?.call(error);
-              store.dispatch(
-                SetIsLoadingHttpRequest(
-                  isLoading: false,
-                ),
-              );
             },
             onReceiveProgress: progressCallback,
           );
           if (imageUrl != null) {
             await firebaseUser.updatePhotoURL(imageUrl);
             store
-              ..dispatch(SetUserAvatar(imageUrl))
-              ..dispatch(
-                SetIsLoadingHttpRequest(
-                  isLoading: false,
-                ),
-              );
+              .dispatch(SetUserAvatar(imageUrl));
             onSuccess?.call();
           }
         });
@@ -1824,11 +1816,6 @@ ThunkAction<AppState> updateUserAvatarCall(
           'ERROR - updateUserAvatarCall',
           error: e,
           stackTrace: s,
-        );
-        store.dispatch(
-          SetIsLoadingHttpRequest(
-            isLoading: false,
-          ),
         );
       }
     } else {
