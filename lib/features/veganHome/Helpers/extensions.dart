@@ -150,10 +150,26 @@ extension CapitalizeString on String {
   }
 
   String capitalizeWordsFromLowerCamelCase() {
-    return replaceAll(RegExp('(a-z)([A-Z])'), r'$1'.toUpperCase() + r'_$2')
+    return capitalizeWordsFromLowerCamelCase2()
         .split('_')
         .map((str) => str.capitalize())
         .join(' ');
+  }
+
+  String capitalizeFirstWordFromLowerCamelCase() {
+    return capitalizeWordsFromLowerCamelCase2().split('_').join(' ');
+  }
+
+  String capitalizeWordsFromLowerCamelCase2() {
+    return capitalize()
+        .replaceAllMapped(
+          RegExp('([A-Z])([A-Z])'),
+          (Match m) => '${m[1]}' + '_${m[2]}'.toLowerCase(),
+        )
+        .replaceAllMapped(
+          RegExp('([a-z])([A-Z])'),
+          (Match m) => '${m[1]}' + '_${m[2]}'.toLowerCase(),
+        );
   }
 
   String capitalizeWordsFromLowerSnakeCase() {

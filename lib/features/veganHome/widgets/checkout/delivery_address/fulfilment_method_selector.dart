@@ -54,16 +54,18 @@ class _FulfilmentMethodSelectorState extends State<FulfilmentMethodSelector>
         _tabController.addListener(
           () {
             if (_tabController.indexIsChanging) {
-              store.dispatch(
-                SetFulfilmentMethod(
-                  fulfilmentMethodType: _tabController.index == 0
-                      ? FulfilmentMethodType.delivery
-                      : (_tabController.index == 1 ||
-                              !store.state.userState.isVegiSuperAdmin)
-                          ? FulfilmentMethodType.collection
-                          : FulfilmentMethodType.inStore,
-                ),
-              );
+              store
+                ..dispatch(resetOrderCreationProcessStatus())
+                ..dispatch(
+                  SetFulfilmentMethod(
+                    fulfilmentMethodType: _tabController.index == 0
+                        ? FulfilmentMethodType.delivery
+                        : (_tabController.index == 1 ||
+                                !store.state.userState.isVegiSuperAdmin)
+                            ? FulfilmentMethodType.collection
+                            : FulfilmentMethodType.inStore,
+                  ),
+                );
               if (_tabController.index == 0) {
                 store.dispatch(
                   updateSelectedTimeSlot(

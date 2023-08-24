@@ -9,7 +9,7 @@
 
 # ~ https://stackoverflow.com/a/38116261
 
-zsh set_production_config_ids_appstore.sh
+zsh scripts/set_production_config_ids_appstore.sh
 
 cd ./ios
 
@@ -100,6 +100,10 @@ xcrun agvtool what-version
 
 cd ..
 
+open ./build/ios/ipa/
+
+open -a Transporter
+
 # ~ https://stackoverflow.com/a/43267603
 set -a # automatically export all variables
 source environment/.env_build
@@ -107,11 +111,12 @@ set +a
 
 # ~ https://medium.com/ynap-tech/using-apples-itms-transporter-api-to-upload-builds-to-testflight-60dba18b07bc
 # Create the .itmsp folder
-ITMSP_DIR="$HOME/appstore_testflights.itmsp"
-IPA_FILE="build/ios/ipa/vegi.ipa"
-APPLE_ID="<Your Apple ID>"
-APPSTORE_CONNECT_USERNAME="<Your username>"
-APPSTORE_CONNECT_PASSWORD="<Your password>".
+ITMSP_DIR="$HOME/appstore_testflights"
+IPA_FILE="./build/ios/ipa/vegi.ipa"
+# configured in env_build; 
+# APPLE_ID="<Your Apple ID>"
+# APPSTORE_CONNECT_USERNAME="<Your username>"
+# APPSTORE_CONNECT_PASSWORD="<Your password>".
 mkdir "$ITMSP_DIR"
 
 # Move your .ipa file into the .itmsp folder
@@ -135,17 +140,13 @@ echo "    </software_assets>" >> $ITMSP_DIR/metadata.xml
 echo "</package>" >> $ITMSP_DIR/metadata.xml
 
 # Upload the .itmsp folder to iTunes Connect
-"/Applications/Xcode.app/Contents/Applications/Application Loader.app/Contents/itms/bin/iTMSTransporter" \
+# ~ https://help.apple.com/itc/transporteruserguide/#/apdATD1E1288-D1E1A1303-D1E1288A1126
+"/Applications/Transporter.app/Contents/itms/bin/iTMSTransporter" \
     -m upload \
+    -f $ITMSP_DIR \
     -u $APPSTORE_CONNECT_USERNAME \
     -p $APPSTORE_CONNECT_PASSWORD \
-    -f $ITMSP_DIR \
-    -t DAV -t Signiant \
     -k 100000 \
     -v eXtreme
-
-open build/ios/ipa/
-
-open -a Transporter
 
 

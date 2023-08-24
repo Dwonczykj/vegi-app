@@ -159,17 +159,20 @@ abstract class HttpService {
     required String httpProtocol,
     T? errorResponseData,
     bool dontRoute = false,
+    bool dontEmitHttpLoadingStatus = false,
     List<int> allowStatusCodes = const <int>[],
     Pattern? allowErrorMessage,
     void Function(String errCode)? handleErrorCodes,
   }) async {
     late final Response<T> response;
     final store = await reduxStore;
-    store.dispatch(
-      SetIsLoadingHttpRequest(
-        isLoading: true,
-      ),
-    );
+    if (dontEmitHttpLoadingStatus) {
+      store.dispatch(
+        SetIsLoadingHttpRequest(
+          isLoading: true,
+        ),
+      );
+    }
     // Future.value(
     //   Response(
     //     data: errorResponseData,
@@ -185,17 +188,21 @@ abstract class HttpService {
     // );
     try {
       response = await responseAwaiterCallback();
-      store.dispatch(
-        SetIsLoadingHttpRequest(
-          isLoading: false,
-        ),
-      );
+      if (dontEmitHttpLoadingStatus) {
+        store.dispatch(
+          SetIsLoadingHttpRequest(
+            isLoading: false,
+          ),
+        );
+      }
     } on DioException catch (error, stackTrace) {
-      store.dispatch(
-        SetIsLoadingHttpRequest(
-          isLoading: false,
-        ),
-      );
+      if (dontEmitHttpLoadingStatus) {
+        store.dispatch(
+          SetIsLoadingHttpRequest(
+            isLoading: false,
+          ),
+        );
+      }
       log.error(
         'Handle DioException from [$httpProtocol]: "${error.response?.realUri}"',
         error: error,
@@ -303,11 +310,13 @@ abstract class HttpService {
         );
       }
     } on Exception catch (error, stackTrace) {
-      store.dispatch(
-        SetIsLoadingHttpRequest(
-          isLoading: false,
-        ),
-      );
+      if (dontEmitHttpLoadingStatus) {
+        store.dispatch(
+          SetIsLoadingHttpRequest(
+            isLoading: false,
+          ),
+        );
+      }
       log.error(
         error,
         stackTrace: stackTrace,
@@ -325,11 +334,13 @@ abstract class HttpService {
             RequestOptions(path: '${dio.options.baseUrl}/unknown...'),
       );
     } catch (error, stackTrace) {
-      store.dispatch(
-        SetIsLoadingHttpRequest(
-          isLoading: false,
-        ),
-      );
+      if (dontEmitHttpLoadingStatus) {
+        store.dispatch(
+          SetIsLoadingHttpRequest(
+            isLoading: false,
+          ),
+        );
+      }
       if (error.toString().contains('Connection reset by peer') ||
           error.toString().contains('Unauthorized')) {
         await deleteSessionCookie(); //todo: return a 401...

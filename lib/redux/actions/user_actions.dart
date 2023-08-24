@@ -1806,8 +1806,7 @@ ThunkAction<AppState> updateUserAvatarCall(
           );
           if (imageUrl != null) {
             await firebaseUser.updatePhotoURL(imageUrl);
-            store
-              .dispatch(SetUserAvatar(imageUrl));
+            store.dispatch(SetUserAvatar(imageUrl));
             onSuccess?.call();
           }
         });
@@ -1858,6 +1857,10 @@ ThunkAction<AppState> removeDeliveryAddress({
             ..removeWhere((element) => element.internalID == addressId);
 
       store.dispatch(UpdateListOfDeliveryAddresses(listOfAddresses));
+      if ((store.state.cartState.selectedDeliveryAddress?.internalID ?? -1) ==
+          addressId) {
+        store.dispatch(UpdateSelectedDeliveryAddress(null));
+      }
     } catch (e, s) {
       log.error(
         'ERROR - removeDeliveryAddress',

@@ -34,6 +34,7 @@ class PaymentMethodViewModel extends Equatable {
     required this.processingPayment,
     required this.setPaymentMethod,
     required this.isDelivery,
+    required this.isLoadingHttpRequest,
   });
 
   factory PaymentMethodViewModel.fromStore(Store<AppState> store) {
@@ -41,11 +42,12 @@ class PaymentMethodViewModel extends Equatable {
         store.state.cashWalletState.tokens[pplToken.address]!.getAmount();
 
     return PaymentMethodViewModel(
-      selectedPaymentMethod:
-          store.state.cartState.selectedPaymentMethod ?? store.state.cartState.preferredPaymentMethod ??
+      selectedPaymentMethod: store.state.cartState.selectedPaymentMethod ??
+          store.state.cartState.preferredPaymentMethod ??
           PaymentMethod.stripe,
       pplBalance: '£${getPoundValueFormattedFromPPL(pplBalance)}',
       isLoading: store.state.cartState.payButtonLoading,
+      isLoadingHttpRequest: store.state.homePageState.isLoadingHttpRequest,
       isDelivery: store.state.cartState.isDelivery,
       selectedRestaurantIsLive: store.state.cartState.restaurantIsLive,
       selectedFulfilmentMethod: store.state.cartState.fulfilmentMethod,
@@ -75,11 +77,13 @@ class PaymentMethodViewModel extends Equatable {
             stopPaymentProcess(),
           );
         } else {
-          store.dispatch(
-            startOrderCreationProcess(
-              showBottomPaymentSheet: showBottomPaymentSheet,
-            ),
-          );
+          store
+            ..dispatch(resetOrderCreationProcessStatus())
+            ..dispatch(
+              startOrderCreationProcess(
+                showBottomPaymentSheet: showBottomPaymentSheet,
+              ),
+            );
         }
       },
       setPaymentMethod: ({required PaymentMethod paymentMethod}) {
@@ -92,6 +96,7 @@ class PaymentMethodViewModel extends Equatable {
   final String pplBalance;
   final bool hasPplBalance;
   final bool isLoading;
+  final bool isLoadingHttpRequest;
   final bool isDelivery;
   final bool isSuperAdmin;
   final bool showvegiPay;
@@ -123,6 +128,7 @@ class PaymentMethodViewModel extends Equatable {
         selectedPaymentMethod,
         pplBalance,
         isLoading,
+        isLoadingHttpRequest,
         isDelivery,
         isSuperAdmin,
         selectedRestaurantIsLive,

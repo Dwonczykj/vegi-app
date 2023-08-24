@@ -959,7 +959,7 @@ class _$_CartState extends _CartState with DiagnosticableTreeMixin {
       this.restaurantIsLive = false,
       this.restaurantAddress = null,
       this.restaurantWalletAddress = '',
-      this.fulfilmentMethod = FulfilmentMethodType.delivery,
+      this.fulfilmentMethod = FulfilmentMethodType.collection,
       this.restaurantMinimumOrder = 0,
       @JsonKey(fromJson: Money.fromJson, toJson: Money.toJson)
       this.restaurantPlatformFee = const Money.zeroGBP(),

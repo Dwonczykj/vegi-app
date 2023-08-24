@@ -9,7 +9,7 @@
 
 # ~ https://stackoverflow.com/a/38116261
 
-zsh set_test_config_ids_appstore.sh
+zsh scripts/set_production_config_ids_appstore.sh
 
 cd ./ios
 

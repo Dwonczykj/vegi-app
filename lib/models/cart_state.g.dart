@@ -77,7 +77,7 @@ _$_CartState _$$_CartStateFromJson(Map<String, dynamic> json) => _$_CartState(
       restaurantWalletAddress: json['restaurantWalletAddress'] as String? ?? '',
       fulfilmentMethod: $enumDecodeNullable(
               _$FulfilmentMethodTypeEnumMap, json['fulfilmentMethod']) ??
-          FulfilmentMethodType.delivery,
+          FulfilmentMethodType.collection,
       restaurantMinimumOrder: json['restaurantMinimumOrder'] as int? ?? 0,
       restaurantPlatformFee: json['restaurantPlatformFee'] == null
           ? const Money.zeroGBP()

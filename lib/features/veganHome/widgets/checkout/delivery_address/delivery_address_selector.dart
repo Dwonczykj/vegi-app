@@ -11,12 +11,18 @@ import 'package:vegan_liverpool/redux/viewsmodels/checkout/delivery_address_vm.d
 import 'package:vegan_liverpool/utils/analytics.dart';
 
 class DeliveryAddressSelector extends StatelessWidget {
-  const DeliveryAddressSelector({Key? key}) : super(key: key);
+  const DeliveryAddressSelector({Key? key,
+    required this.diplayOffsetFromBottom,
+    // required this.diplayHeight,
+  }) : super(key: key);
+
+  final double? diplayOffsetFromBottom;
+  // final double? diplayHeight;
 
   @override
   Widget build(BuildContext context) {
-    return const Positioned(
-      bottom: 100,
+    return Positioned(
+      bottom: diplayOffsetFromBottom,
       child: DeliveryAddressSelectorButton(),
     );
   }

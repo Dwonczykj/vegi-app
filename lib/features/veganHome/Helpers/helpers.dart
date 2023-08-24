@@ -671,7 +671,7 @@ double rectArea(
 
 Future<Size> calculateImageDimensionFromUrl({
   required String imageUrl,
-}) {
+}) async {
   final completer = Completer<Size>();
   final image = Image(
     image: CachedNetworkImageProvider(

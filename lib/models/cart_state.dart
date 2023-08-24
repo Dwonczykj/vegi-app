@@ -96,7 +96,7 @@ class CartState with _$CartState {
     @Default(false) bool restaurantIsLive,
     @Default(null) DeliveryAddresses? restaurantAddress,
     @Default('') String restaurantWalletAddress,
-    @Default(FulfilmentMethodType.delivery)
+    @Default(FulfilmentMethodType.collection)
     FulfilmentMethodType fulfilmentMethod,
     @Default(0) int restaurantMinimumOrder,
     @JsonKey(

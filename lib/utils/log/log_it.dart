@@ -30,31 +30,29 @@ class LogIt {
     if (store == null) {
       return;
     }
-    if (store!.state.userState.identifier.isNotEmpty) {
-      if (store!.state.userState.identifier.isNotEmpty) {
-        deviceMeta['identifier'] = store!.state.userState.identifier;
-        deviceMeta['deviceName'] = store!.state.userState.deviceName;
-        deviceMeta['deviceOSName'] = store!.state.userState.deviceOSName;
-        deviceMeta['env'] = Env.activeEnv;
-        deviceMeta['simulator'] = (await DebugHelpers.deviceIsSimulator())
-            ? 'simulator'
-            : 'real device';
-      }
-    }
+    deviceMeta['identifier'] = store!.state.userState.identifier;
+    deviceMeta['displayName'] = store!.state.userState.displayName;
+    deviceMeta['deviceName'] = store!.state.userState.deviceName;
+    deviceMeta['deviceOSName'] = store!.state.userState.deviceOSName;
+    deviceMeta['deviceOSReleaseName'] =
+        store!.state.userState.deviceReleaseName;
+    deviceMeta['env'] = Env.activeEnv;
+    deviceMeta['simulator'] =
+        (await DebugHelpers.deviceIsSimulator()) ? 'simulator' : 'real device';
   }
 
   Map<String, String> deviceMeta = {};
 
-  final AnsiPen greenPen = AnsiPen()..green();
-  final AnsiPen greenBackGroundPen = AnsiPen()..green(bg: true);
+  final AnsiPen _greenPen = AnsiPen()..green();
+  final AnsiPen _greenBackGroundPen = AnsiPen()..green(bg: true);
 
-  final AnsiPen redTextBlueBackgroundPen = AnsiPen()
+  final AnsiPen _redTextBlueBackgroundPen = AnsiPen()
     ..blue(bg: true)
     ..red();
 
-  final AnsiPen boldPen = AnsiPen()..white(bold: true);
+  final AnsiPen _boldPen = AnsiPen()..white(bold: true);
 
-  final AnsiPen someColorPen = AnsiPen()..rgb(r: .5, g: .2, b: .4);
+  final AnsiPen _someColorPen = AnsiPen()..rgb(r: .5, g: .2, b: .4);
 
   // ~ lib/common/di/logger_di.dart:7
   final Logger logger;
@@ -183,7 +181,7 @@ class LogIt {
         logMetaData.addAll({'AppState': store?.state.toJson() ?? {}});
       }
       peeplEatsService.writeLog(
-        message: '$message [$ts]',
+        message: '$emoji $message',
         details: logMetaData,
       );
 

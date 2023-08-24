@@ -80,8 +80,16 @@ class DeliveryAddressSelectorButton extends StatelessWidget {
                                     ? 'Please select an address'
                                     : 'Delivery at '
                                         '${viewmodel.selectedAddress!.label.name.capitalize()}',
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontWeight: FontWeight.w700,
+                                  color: viewmodel.selectedAddress == null ||
+                                          (viewmodel.selectedAddress
+                                                      ?.deliversTo(viewmodel
+                                                          .fulfilmentPostalDistricts) ??
+                                                  true) ==
+                                              false
+                                      ? Colors.red
+                                      : null,
                                 ),
                               ),
                               if (viewmodel.selectedAddress != null)

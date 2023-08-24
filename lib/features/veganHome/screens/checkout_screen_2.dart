@@ -20,6 +20,7 @@ import 'package:vegan_liverpool/features/veganHome/widgets/checkout/other_cards/
 import 'package:vegan_liverpool/features/veganHome/widgets/checkout/other_cards/save_the_oceans_card.dart';
 import 'package:vegan_liverpool/features/veganHome/widgets/checkout/other_cards/tip_selection_card.dart';
 import 'package:vegan_liverpool/features/veganHome/widgets/checkout/other_cards/your_details_card.dart';
+import 'package:vegan_liverpool/features/veganHome/widgets/checkout/payment_bar/checkout_error_bar.dart';
 import 'package:vegan_liverpool/features/veganHome/widgets/checkout/payment_bar/payment_bar.dart';
 import 'package:vegan_liverpool/features/veganHome/widgets/shared/dialogs/addCardsToWalletDialog.dart';
 import 'package:vegan_liverpool/models/app_state.dart';
@@ -57,38 +58,52 @@ class CheckoutScreenPt2 extends StatelessWidget {
           distinct: true,
           onWillChange: (previousViewModel, newViewModel) async {
             final store = StoreProvider.of<AppState>(context);
+            final showErrorBar = ![
+              OrderCreationProcessStatus.none,
+              OrderCreationProcessStatus.success
+            ].contains(newViewModel.orderCreationProcessStatus);
+            final orderStatusMessageUpdated =
+                newViewModel.orderCreationProcessStatus !=
+                    (previousViewModel?.orderCreationProcessStatus ??
+                        OrderCreationProcessStatus.none);
+            final stripeMessageUpdated = newViewModel.stripePaymentStatus !=
+                (previousViewModel?.stripePaymentStatus ??
+                    StripePaymentStatus.none);
             if (newViewModel.transferringTokens &&
                 !(previousViewModel?.transferringTokens ?? false)) {
               await showDialog<void>(
                 context: context,
                 builder: (context) => const ProcessingPayment(),
               );
-            } else if (newViewModel.orderCreationProcessStatus !=
-                (previousViewModel?.orderCreationProcessStatus ??
-                    OrderCreationProcessStatus.none)) {
+            } else if (orderStatusMessageUpdated ||
+                (!stripeMessageUpdated && showErrorBar)) {
               if (newViewModel.orderCreationProcessStatus ==
                   OrderCreationProcessStatus.needToSelectATimeSlot) {
                 await showErrorSnack(
                   context: context,
                   title: 'Please select a time slot',
+                  message: '',
                 );
               } else if (newViewModel.orderCreationProcessStatus ==
                   OrderCreationProcessStatus.needToSelectADeliveryAddress) {
                 await showErrorSnack(
                   context: context,
                   title: 'Please select a delivery address',
+                  message: '',
                 );
               } else if (newViewModel.orderCreationProcessStatus ==
                   OrderCreationProcessStatus.sendOrderCallServerError) {
                 await showErrorSnack(
                   context: context,
                   title: newViewModel.orderCreationStatusMessage,
+                  message: '',
                 );
               } else if (newViewModel.orderCreationProcessStatus ==
                   OrderCreationProcessStatus.sendOrderCallClientError) {
                 await showErrorSnack(
                   context: context,
                   title: 'Failed to process order',
+                  message: '',
                 );
               } else if (newViewModel.orderCreationProcessStatus ==
                   OrderCreationProcessStatus.success) {
@@ -98,6 +113,7 @@ class CheckoutScreenPt2 extends StatelessWidget {
                 await showErrorSnack(
                   context: context,
                   title: newViewModel.orderCreationStatusMessage,
+                  message: '',
                 );
               } else if (newViewModel.orderCreationProcessStatus ==
                   OrderCreationProcessStatus
@@ -105,6 +121,7 @@ class CheckoutScreenPt2 extends StatelessWidget {
                 await showErrorSnack(
                   context: context,
                   title: "Order totals aren't matching",
+                  message: '',
                 );
               } else if (newViewModel.orderCreationProcessStatus ==
                   OrderCreationProcessStatus.paymentIntentCheckNotFound) {
@@ -119,6 +136,7 @@ class CheckoutScreenPt2 extends StatelessWidget {
                   context: context,
                   title: 'This restaurant is not accepting orders below '
                       '${newViewModel.restaurantMinimumOrder.formattedGBPxPrice}',
+                  message: '',
                 );
               } else if (newViewModel.orderCreationProcessStatus ==
                   OrderCreationProcessStatus.orderCancelled) {
@@ -246,9 +264,7 @@ class CheckoutScreenPt2 extends StatelessWidget {
                   stackTrace: StackTrace.current,
                 );
               }
-            } else if (newViewModel.stripePaymentStatus !=
-                (previousViewModel?.stripePaymentStatus ??
-                    StripePaymentStatus.none)) {
+            } else if (stripeMessageUpdated) {
               String title = '';
               String message = '';
               if (newViewModel.stripePaymentStatus ==
@@ -329,6 +345,11 @@ class CheckoutScreenPt2 extends StatelessWidget {
           },
           builder: (context, viewmodel) {
             final isDelivery = viewmodel.isDelivery;
+            final showErrorBar = ![
+              OrderCreationProcessStatus.none,
+              OrderCreationProcessStatus.success
+            ].contains(viewmodel.orderCreationProcessStatus);
+            final double errorBarAdditionalHeight = showErrorBar ? 100 : 0;
             return Stack(
               children: [
                 ListView(
@@ -347,8 +368,16 @@ class CheckoutScreenPt2 extends StatelessWidget {
                     )
                   ],
                 ),
-                const DeliveryAddressSelector(),
-                const PaymentBar(),
+                DeliveryAddressSelector(
+                  diplayOffsetFromBottom: 100 + errorBarAdditionalHeight,
+                ),
+                PaymentBar(
+                  diplayOffsetFromBottom: 0 + errorBarAdditionalHeight,
+                  diplayHeight: 100,
+                ),
+                if (showErrorBar)
+                  CheckoutErrorBar(
+                      displayHeight: errorBarAdditionalHeight.toDouble()),
               ],
             );
           },

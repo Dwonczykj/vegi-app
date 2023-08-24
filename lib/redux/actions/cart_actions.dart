@@ -994,7 +994,7 @@ ThunkAction<AppState> updateSelectedTimeSlot({
         )
         ..dispatch(computeCartTotals());
     } catch (e, s) {
-      log.error('ERROR - updateCartDiscount $e');
+      log.error('ERROR - updateSelectedTimeSlot $e');
       await Sentry.captureException(
         e,
         stackTrace: s,
@@ -1570,6 +1570,9 @@ ThunkAction<AppState> removeCartItem(int itemId) {
 
 ThunkAction<AppState> computeCartTotals() {
   return (Store<AppState> store) async {
+    if (store.state.cartState.restaurantID.isEmpty) {
+      return;
+    }
     final updateCartItems = await computeTotalsFromCart(
       cartItems: store.state.cartState.cartItems,
       fulfilmentCharge: await store.state.cartState.fulfilmentChargeGBP,
@@ -1588,10 +1591,47 @@ ThunkAction<AppState> computeCartTotals() {
   };
 }
 
+ThunkAction<AppState> resetOrderCreationProcessStatus() {
+  return (Store<AppState> store) async {
+    try {
+      store
+        ..dispatch(
+          OrderCreationProcessStatusUpdate(
+            status: OrderCreationProcessStatus.none,
+            orderCreationStatusMessage: '',
+          ),
+        )
+        ..dispatch(
+          StripePaymentStatusUpdate(
+            status: StripePaymentStatus.none,
+          ),
+        )
+        ..dispatch(SetPaymentButtonFlag(false));
+    } catch (e, s) {
+      log.error('ERROR - resetOrderCreationProcessStatus $e', stackTrace: s);
+    }
+  };
+}
+
 ThunkAction<AppState> startOrderCreationProcess({
   required Future<void> Function(PaymentMethod?) showBottomPaymentSheet,
 }) {
   return (Store<AppState> store) async {
+    // reset all order creation and stirpe payment states that we listen for on the checkout screen
+    // we can use a class here that is aware of all field states that we need to reset and set to show updates for teh checkout_screen
+    store
+      ..dispatch(
+        OrderCreationProcessStatusUpdate(
+          status: OrderCreationProcessStatus.none,
+          orderCreationStatusMessage: '',
+        ),
+      )
+      ..dispatch(
+        StripePaymentStatusUpdate(
+          status: StripePaymentStatus.none,
+        ),
+      )
+      ..dispatch(SetPaymentButtonFlag(true));
     try {
       final cartState = store.state.cartState;
       log.verbose(
@@ -1602,9 +1642,8 @@ ThunkAction<AppState> startOrderCreationProcess({
       ) {
         final message =
             'OrderCreationProcessStatus changed to "${status.name}"';
-        log.info(
+        log.verbose(
           message,
-          sentry: true,
         );
         return status;
       }
@@ -1691,9 +1730,8 @@ ThunkAction<AppState> startOrderCreationProcess({
         }
       }
     } catch (e, s) {
-      log.error('ERROR - checkCartForErrors $e');
-      await Sentry.captureException(
-        e,
+      log.error(
+        'ERROR - checkCartForErrors $e',
         stackTrace: s,
       );
     }
@@ -2770,19 +2808,11 @@ ThunkAction<AppState> startPeeplPayProcess() {
           e,
           stackTrace: StackTrace.current,
         );
-        await Sentry.captureException(
-          Exception(e),
-          stackTrace: StackTrace.current, // from catch (e, s)
-        );
       } else if (store.state.userState.stripeCustomerId == null) {
         const e = 'stripe customer id not set on state... Cannot start payment';
         log.error(
           e,
           stackTrace: StackTrace.current,
-        );
-        await Sentry.captureException(
-          Exception(e),
-          stackTrace: StackTrace.current, // from catch (e, s)
         );
       }
 

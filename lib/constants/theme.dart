@@ -53,6 +53,7 @@ const Color themeLightShade100 = Color.fromARGB(255, 248, 248, 231);
 const Color themeLightShade300 = Color(0xFFF8F6D3);
 const Color themeLightShade500 = Color.fromARGB(255, 221, 219, 174);
 const Color themeLightShade800 = Color.fromARGB(255, 182, 179, 113);
+const Color themeLightShade900 = Color.fromARGB(255, 244, 214, 168);
 const Color themeLightShade1000 = Color(0xFFE5AA52);
 const Color themeLightShade1200 = Color.fromARGB(255, 193, 127, 28);
 
