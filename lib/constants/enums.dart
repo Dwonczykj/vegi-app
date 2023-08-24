@@ -2,6 +2,7 @@
 
 import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:vegan_liverpool/utils/constants.dart';
 import 'package:vegan_liverpool/utils/log/log.dart';
 
 enum ImageSourceType { gallery, camera }
@@ -187,12 +188,13 @@ enum SignUpErrCode {
 
 extension SignUpErrCodeHelpers on SignUpErrCode {
   static SignUpErrCode? fromFuseErrCode(
-      FuseAuthenticationStatus fuseAuthenticationStatus,) {
+    FuseAuthenticationStatus fuseAuthenticationStatus,
+  ) {
     switch (fuseAuthenticationStatus) {
       case FuseAuthenticationStatus.failedAuthentication:
         return SignUpErrCode.fuseWalletSDKFailedAuthentication;
       case FuseAuthenticationStatus
-          .failedAuthenticationAsMissingUserDetailsToAuthFuseWallet:
+            .failedAuthenticationAsMissingUserDetailsToAuthFuseWallet:
         return SignUpErrCode
             .fuseWalletSDKFailedAuthenticationAsMissingUserDetailsToAuthFuseWallet;
       case FuseAuthenticationStatus.failedCreateLocalAccountPrivateKey:
@@ -200,7 +202,7 @@ extension SignUpErrCodeHelpers on SignUpErrCode {
       case FuseAuthenticationStatus.failedCreate:
         return SignUpErrCode.fuseWalletSDKFailedCreate;
       case FuseAuthenticationStatus
-          .failedToAuthenticateWalletSDKWithJWTTokenAfterInitialisationAttempt:
+            .failedToAuthenticateWalletSDKWithJWTTokenAfterInitialisationAttempt:
         return SignUpErrCode
             .fuseWalletSDKFailedToAuthenticateWalletSDKWithJWTTokenAfterInitialisationAttempt;
       case FuseAuthenticationStatus.failedFetch:
@@ -317,10 +319,10 @@ extension DeliveryOrderCreationStatusHelpers on DeliveryOrderCreationStatus {
   String get imageTitle {
     switch (this) {
       case DeliveryOrderCreationStatus.confirmed:
-        return 'images/order-confirmed.png';
+        return ImagePaths.orderConfirmedCollection;
 
       case DeliveryOrderCreationStatus.failed:
-        return 'images/order-accepted.gif';
+        return ImagePaths.orderAcceptedDelivery;
     }
   }
 }
@@ -348,10 +350,10 @@ extension CollectionOrderCreationStatusHelpers
   String get imageTitle {
     switch (this) {
       case CollectionOrderCreationStatus.confirmed:
-        return 'images/order-confirmed.png';
+        return ImagePaths.orderConfirmedCollection;
 
       case CollectionOrderCreationStatus.failed:
-        return 'images/order-accepted.gif';
+        return ImagePaths.orderAcceptedCollection;
     }
   }
 }
@@ -718,10 +720,21 @@ enum OrderCreationProcessStatus {
   orderAlreadyBeingCreated,
   paymentIntentCheckNotFound,
   unableToGetStripeCustomerIdFromCreateOrderRequest,
-  orderPaymentAttemptCreated, 
-  stripeServiceFailedOnServer, 
-  invalidSlot, 
-  invalidPostalDistrict, invalidDiscountCode, badItemsRequest, allItemsUnavailable, minimumOrderAmount, noItemsFound, invalidVendor, invalidFulfilmentMethod, invalidProduct, invalidProductOption, invalidUserAddress, deliveryPartnerUnavailable,
+  orderPaymentAttemptCreated,
+  stripeServiceFailedOnServer,
+  invalidSlot,
+  invalidPostalDistrict,
+  invalidDiscountCode,
+  badItemsRequest,
+  allItemsUnavailable,
+  minimumOrderAmount,
+  noItemsFound,
+  invalidVendor,
+  invalidFulfilmentMethod,
+  invalidProduct,
+  invalidProductOption,
+  invalidUserAddress,
+  deliveryPartnerUnavailable,
 }
 
 enum StripePaymentStatus {
@@ -733,7 +746,8 @@ enum StripePaymentStatus {
   mintingSucceeded,
   mintingFailed,
   paymentCancelled,
-  paymentAttemptCreated, paymentMethodNotSupportedOnDevice,
+  paymentAttemptCreated,
+  paymentMethodNotSupportedOnDevice,
 }
 
 enum StripePaymentMethodType {

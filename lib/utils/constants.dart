@@ -462,6 +462,11 @@ class ImagePaths {
 
   static const String usernamePlaceholder = 'assets/images/username.svg';
 
+  static const String orderConfirmedDelivery = 'assets/images/herobean.png';
+  static const String orderConfirmedCollection = 'assets/images/herobean.png';
+  static const String orderAcceptedDelivery = 'assets/images/order-accepted.gif';
+  static const String orderAcceptedCollection = 'assets/images/order-accepted.gif';
+
   static const String onboardingPage2HeadingImage1 = 'plant-icon.svg';
   static const String onboardingPage3HeadingImage2 = 'local-icon.svg';
   static const String onboardingPage4HeadingImage3 = 'rewards-icon.svg';
@@ -645,18 +650,17 @@ class DebugHelpers {
 class PackageConstants {
   static const String iosAppIdVegiTest = '1643896043'; // i.e. 1600049497
   static const String iosAppIdVegiProd = '1608208174'; // i.e. 1600049497
-  
+
   static const String androidAppIdVegiProd =
       'com.vegi.vegiAppTest'; // i.e. 1600049497
   static String iosBuildVersion =
       '${packageInfo.version}.${packageInfo.buildNumber}';
-  static Version? buildVersionInfo = Version.tryParse(iosBuildVersion); // i.e. 1.5.202
+  static Version? buildVersionInfo =
+      Version.tryParse(iosBuildVersion); // i.e. 1.5.202
   static String androidBuildVersion =
       '${packageInfo.version}+${packageInfo.buildNumber}'; // i.e. 1.5.0+202
-  static String buildVersionMajor =
-      packageInfo.version;
-  static String buildVersionMinor =
-      packageInfo.buildNumber;
+  static String buildVersionMajor = packageInfo.version;
+  static String buildVersionMinor = packageInfo.buildNumber;
   static String versionString = 'Version ${packageInfo.version},'
       ' Build ${packageInfo.buildNumber},'
       ' Env ${Env.activeEnv}';

@@ -58,6 +58,7 @@ class FirebaseStrategy implements IOnBoardStrategy {
     required CountryCode countryCode,
     required PhoneNumber phoneNumber,
     required void Function() onCompleteFlow,
+    bool retryRequest = false,
   }) async {
     logFunctionCall(
       className: 'FirebaseStrategy',
@@ -150,7 +151,16 @@ class FirebaseStrategy implements IOnBoardStrategy {
           ),
         ),
       );
-
+      if (retryRequest) {
+        return await Future.delayed(const Duration(seconds: 5), () {
+          return login(
+            countryCode: countryCode,
+            phoneNumber: phoneNumber,
+            onCompleteFlow: onCompleteFlow,
+            retryRequest: false,
+          );
+        });
+      }
       onCompleteFlow();
       return _complete(
         store: store,

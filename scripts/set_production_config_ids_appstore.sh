@@ -64,7 +64,7 @@ traverse_directory() {
                 cp -f "$file" "$dest_file"
             else
                 # If the destination file doesn't exist, copy it
-                echo "Copying file: $dest_file [from $file]"
+                echo "Copying file to $dest_file [from $file]"
                 cp "$file" "$dest_file"
             fi
         fi

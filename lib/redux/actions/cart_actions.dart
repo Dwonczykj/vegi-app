@@ -715,6 +715,7 @@ ThunkAction<AppState> autoSelectDeliveryAddress() {
 
 ThunkAction<AppState> updateCartTip(Money newTip) {
   return (Store<AppState> store) async {
+    store.dispatch(resetOrderCreationProcessStatus());
     try {
       store
         ..dispatch(UpdateTipAmount(newTip))
@@ -957,6 +958,7 @@ ThunkAction<AppState> updateCartDiscount({
   required void Function() errorCallback,
 }) {
   return (Store<AppState> store) async {
+    store.dispatch(resetOrderCreationProcessStatus());
     try {
       final int discountPercent =
           await peeplEatsService.checkDiscountCode(newDiscountCode).onError(
@@ -987,6 +989,7 @@ ThunkAction<AppState> updateSelectedTimeSlot({
   required TimeSlot? selectedTimeSlot,
 }) {
   return (Store<AppState> store) async {
+    store.dispatch(resetOrderCreationProcessStatus());
     try {
       store
         ..dispatch(
@@ -1005,6 +1008,7 @@ ThunkAction<AppState> updateSelectedTimeSlot({
 
 ThunkAction<AppState> removeCartDiscount() {
   return (Store<AppState> store) async {
+    store.dispatch(resetOrderCreationProcessStatus());
     try {
       store
         ..dispatch(UpdateCartDiscount(0, ''))
@@ -1023,6 +1027,7 @@ ThunkAction<AppState> removeCartAppliedVoucher({
   required Discount voucher,
 }) {
   return (Store<AppState> store) async {
+    store.dispatch(resetOrderCreationProcessStatus());
     try {
       store
         ..dispatch(
@@ -1046,6 +1051,7 @@ ThunkAction<AppState> removeCartAppliedVoucher({
 
 ThunkAction<AppState> updateCartItems(List<CartItem> itemsToAdd) {
   return (Store<AppState> store) async {
+    store.dispatch(resetOrderCreationProcessStatus());
     try {
       final List<CartItem> cartItems =
           List.from(store.state.cartState.cartItems)..addAll(itemsToAdd);
@@ -1518,6 +1524,7 @@ ThunkAction<AppState> uploadProductSuggestion(
 
 ThunkAction<AppState> addDuplicateCartItem(int itemId) {
   return (Store<AppState> store) async {
+    store.dispatch(resetOrderCreationProcessStatus());
     try {
       final cartItem = store.state.cartState.cartItems
           .where((element) => element.id == itemId)
@@ -1546,6 +1553,7 @@ ThunkAction<AppState> addDuplicateCartItem(int itemId) {
 
 ThunkAction<AppState> removeCartItem(int itemId) {
   return (Store<AppState> store) async {
+    store.dispatch(resetOrderCreationProcessStatus());
     try {
       final List<CartItem> cartItems =
           List.from(store.state.cartState.cartItems)

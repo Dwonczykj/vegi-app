@@ -882,6 +882,7 @@ class Authentication {
         countryCode: countryCode,
         phoneNumber: phoneNumber,
         onCompleteFlow: onCompleteFlow,
+        retryRequest: true,
         // phoneNumber.e164,
       );
       return true;

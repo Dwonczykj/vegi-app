@@ -8,8 +8,8 @@
 # grep -rl 'project.pbxproj' ./ios | xargs sed -i 's/$BuildNumber/$NewBuildNumber/g'
 
 # ~ https://stackoverflow.com/a/38116261
-
-zsh scripts/set_production_config_ids_appstore.sh
+# remove while have sunset p
+# zsh scripts/set_production_config_ids_appstore.sh
 
 cd ./ios
 

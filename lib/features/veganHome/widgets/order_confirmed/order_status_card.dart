@@ -39,8 +39,8 @@ class _OrderStatusCardState extends State<OrderStatusCard> {
                 children: [
                   Image.asset(
                     widget.isDelivery
-                        ? 'assets/${DeliveryOrderCreationStatus.confirmed.imageTitle}'
-                        : 'assets/${CollectionOrderCreationStatus.confirmed.imageTitle}',
+                        ? '${DeliveryOrderCreationStatus.confirmed.imageTitle}'
+                        : '${CollectionOrderCreationStatus.confirmed.imageTitle}',
                     width: MediaQuery.of(context).size.width * 0.6,
                   ),
                 ],

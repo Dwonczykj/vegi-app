@@ -7,7 +7,9 @@ import 'package:vegan_liverpool/utils/constants.dart';
 
 class ThankYouCard extends StatefulWidget {
   const ThankYouCard({
-    required this.isDelivery, required this.orderId, Key? key,
+    required this.isDelivery,
+    required this.orderId,
+    Key? key,
   }) : super(key: key);
 
   final bool isDelivery;
@@ -62,8 +64,8 @@ class _ThankYouCardState extends State<ThankYouCard> {
                 children: [
                   Image.asset(
                     widget.isDelivery
-                        ? 'assets/${DeliveryOrderCreationStatus.confirmed.imageTitle}'
-                        : 'assets/${CollectionOrderCreationStatus.confirmed.imageTitle}',
+                        ? '${DeliveryOrderCreationStatus.confirmed.imageTitle}'
+                        : '${CollectionOrderCreationStatus.confirmed.imageTitle}',
                     width: MediaQuery.of(context).size.width * 0.6,
                   ),
                   // ConfettiWidget(
@@ -96,7 +98,8 @@ class _ThankYouCardState extends State<ThankYouCard> {
               height: 20,
             ),
             Text(
-             Messages.checkoutSuccessOrderReceivedButNotConfirmed(widget.orderId),
+              Messages.checkoutSuccessOrderReceivedButNotConfirmed(
+                  widget.orderId),
               textAlign: TextAlign.center,
               style: const TextStyle(
                 fontSize: 16,
