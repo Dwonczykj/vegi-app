@@ -684,7 +684,9 @@ Future<Size> calculateImageDimensionFromUrl({
       (ImageInfo image, bool synchronousCall) {
         final myImage = image.image;
         final size = Size(myImage.width.toDouble(), myImage.height.toDouble());
-        completer.complete(size);
+        if (!completer.isCompleted) {
+          completer.complete(size);
+        }
       },
     ),
   );
@@ -979,4 +981,24 @@ String getFunctionName(Function function) {
     return stringRepresentation;
   }
   return stringRepresentation.substring(start, end);
+}
+
+Widget debugWidgetWrap({
+  required Widget child,
+  Color fillColor = Colors.transparent,
+  Color borderColor = Colors.purple,
+}) {
+  return Container(
+    decoration: BoxDecoration(
+      border: Border.all(
+        color: borderColor,
+        width: 4,
+      ),
+      borderRadius: BorderRadius.circular(4),
+    ),
+    child: ColoredBox(
+      color: fillColor,
+      child: child,
+    ),
+  );
 }

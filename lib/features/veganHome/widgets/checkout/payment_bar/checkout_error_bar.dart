@@ -51,19 +51,19 @@ class CheckoutErrorBar extends StatelessWidget {
                     const SizedBox(
                       width: 5,
                     ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          viewmodel.orderCreationProcessStatus.name
-                              .capitalizeFirstWordFromLowerCamelCase(),
-                          style: TextStyle(
-                            fontWeight: FontWeight.w700,
-                            color: Colors.red,
-                          ),
+                    Expanded(
+                      child: Text(
+                        viewmodel.orderCreationStatusMessage.isNotEmpty
+                            ? viewmodel.orderCreationStatusMessage
+                            : viewmodel.orderCreationProcessStatus.name
+                                .capitalizeFirstWordFromLowerCamelCase(),
+                        style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          color: Colors.red,
                         ),
-                      ],
+                        // softWrap: false,
+                        // maxLines: 1,
+                      ),
                     ),
                   ],
                 ),

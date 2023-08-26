@@ -8,13 +8,14 @@ import 'package:vegan_liverpool/features/veganHome/Helpers/helpers.dart';
 import 'package:vegan_liverpool/features/veganHome/widgets/restaurant/confirm_switch_restaurant_dialog.dart';
 import 'package:vegan_liverpool/models/app_state.dart';
 import 'package:vegan_liverpool/models/restaurant/restaurantItem.dart';
-import 'package:vegan_liverpool/redux/actions/home_page_actions.dart';
 import 'package:vegan_liverpool/redux/viewsmodels/restaurantItem.dart';
 import 'package:vegan_liverpool/utils/analytics.dart';
+import 'package:vegan_liverpool/utils/constants.dart';
 
 class SingleRestaurantItem extends StatelessWidget {
   const SingleRestaurantItem({
-    required this.vendorItem, Key? key,
+    required this.vendorItem,
+    Key? key,
   }) : super(key: key);
 
   final RestaurantItem vendorItem;
@@ -23,40 +24,44 @@ class SingleRestaurantItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return StoreConnector<AppState, RestaurantItemViewModel>(
       converter: RestaurantItemViewModel.fromStore,
-      builder: (_, viewmodel) {
+      builder: (context, viewmodel) {
         // final restaurantItem = viewmodel.selectedVendor ?? vendorItem;
         final restaurantItem = vendorItem;
+        final size = MediaQuery.of(context).size;
         return Opacity(
           opacity: restaurantItem.status == 'active' ? 1.0 : 0.5,
           child: GestureDetector(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                DecoratedBox(
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Colors.black12,
-                      strokeAlign: BorderSide.strokeAlignOutside,
+                Center(
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: Colors.black12,
+                        strokeAlign: BorderSide.strokeAlignOutside,
+                      ),
+                      borderRadius: BorderRadius.circular(10),
+                      boxShadow: const [
+                        BoxShadow(
+                          color: Colors.black26,
+                          offset: Offset(0, 5),
+                          blurRadius: 5,
+                        ),
+                      ],
                     ),
-                    borderRadius: BorderRadius.circular(10),
-                    boxShadow: const [
-                      BoxShadow(
-                        color: Colors.black26,
-                        offset: Offset(0, 5),
-                        blurRadius: 5,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(10),
+                      child: CachedNetworkImage(
+                        memCacheWidth: size.width.toInt(),
+                        imageUrl: restaurantItem.imageURL,
+                        fit: BoxFit.cover,
+                        width: size.width,
+                        errorWidget: (context, error, stackTrace) => const Icon(
+                          Icons.broken_image,
+                          size: 50,
+                        ),
                       ),
-                    ],
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(10),
-                    child: CachedNetworkImage(
-                      memCacheWidth: MediaQuery.of(context).size.width.toInt(),
-                      imageUrl: restaurantItem.imageURL,
-                      errorWidget: (context, error, stackTrace) => const Icon(
-                        Icons.broken_image,
-                        size: 50,
-                      ),
-                      width: MediaQuery.of(context).size.width * 0.9,
                     ),
                   ),
                 ),
@@ -110,7 +115,7 @@ class SingleRestaurantItem extends StatelessWidget {
                       Padding(
                         padding: const EdgeInsets.all(2),
                         child: Image.asset(
-                          'assets/images/vegan-only-icon.png',
+                          ImagePaths.veganOnlyIcon,
                           width: 25,
                         ),
                       )

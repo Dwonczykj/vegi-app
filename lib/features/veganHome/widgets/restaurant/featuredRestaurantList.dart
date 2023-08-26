@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:vegan_liverpool/common/router/routes.gr.dart';
 import 'package:vegan_liverpool/constants/theme.dart';
+import 'package:vegan_liverpool/features/veganHome/Helpers/helpers.dart';
 import 'package:vegan_liverpool/features/veganHome/widgets/restaurant/singleRestaurantItem.dart';
 import 'package:vegan_liverpool/features/veganHome/widgets/shared/emptyStatePage.dart';
 import 'package:vegan_liverpool/models/app_state.dart';
@@ -86,7 +87,8 @@ class FeaturedRestaurantList extends StatelessWidget {
 
 class VegiPayBottomButton extends StatelessWidget {
   const VegiPayBottomButton({
-    required this.userInVendorMode, Key? key,
+    required this.userInVendorMode,
+    Key? key,
   }) : super(key: key);
 
   final bool userInVendorMode;

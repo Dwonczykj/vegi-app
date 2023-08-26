@@ -38,15 +38,17 @@ class SingleFeaturedMenuItem extends StatelessWidget {
                   ),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(20),
-                    child: CachedNetworkImage(
-                      memCacheWidth: size.width.toInt(),
-                      fit: BoxFit.cover,
-                      width: double.infinity,
-                      height: size.height * 0.2,
-                      imageUrl: menuItem.imageURL,
-                      errorWidget: (context, error, stackTrace) => const Icon(
-                        Icons.broken_image,
-                        size: 50,
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(maxHeight: size.height * 0.5),
+                      child: CachedNetworkImage(
+                        memCacheWidth: size.width.toInt(),
+                        fit: BoxFit.cover,
+                        width: double.infinity,
+                        imageUrl: menuItem.imageURL,
+                        errorWidget: (context, error, stackTrace) => const Icon(
+                          Icons.broken_image,
+                          size: 50,
+                        ),
                       ),
                     ),
                   ),

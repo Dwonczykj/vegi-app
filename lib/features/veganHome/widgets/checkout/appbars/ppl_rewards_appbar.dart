@@ -3,6 +3,7 @@ import 'package:flutter_redux/flutter_redux.dart';
 import 'package:vegan_liverpool/constants/theme.dart';
 import 'package:vegan_liverpool/features/veganHome/Helpers/helpers.dart';
 import 'package:vegan_liverpool/models/app_state.dart';
+import 'package:vegan_liverpool/utils/constants.dart';
 
 class PeeplRewardsAppBar extends StatelessWidget {
   const PeeplRewardsAppBar({Key? key}) : super(key: key);
@@ -10,6 +11,7 @@ class PeeplRewardsAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double top = 0;
+    double width = 0;
     return SliverAppBar(
       automaticallyImplyLeading: false,
       scrolledUnderElevation: 5,
@@ -23,12 +25,13 @@ class PeeplRewardsAppBar extends StatelessWidget {
       flexibleSpace: LayoutBuilder(
         builder: (_, constraints) {
           top = constraints.biggest.height;
+          width = constraints.biggest.width;
           return FlexibleSpaceBar(
             expandedTitleScale: 1,
             titlePadding: EdgeInsets.zero,
             centerTitle: true,
             title: AnimatedScale(
-              scale: top == 50 ? 1.0 : 1.1,
+              scale: top == 50 ? 1.0 : 1.05,
               duration: const Duration(milliseconds: 200),
               child: Card(
                 margin: top == 50
@@ -58,8 +61,8 @@ class PeeplRewardsAppBar extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const Text(
-                          'Peepl Rewards Earned: ',
+                        Text(
+                          '${greenBeanToken.name} Rewards Earned: ',
                           style: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.w500,
@@ -71,10 +74,10 @@ class PeeplRewardsAppBar extends StatelessWidget {
                               store.state.cartState.cartTotal.inGBPxValue,
                             );
                           },
-                          builder: (context, pplBalance) {
+                          builder: (context, vegiRewardsForBasket) {
                             return Text(
-                              '${pplBalance.toStringAsFixed(2)} PPL '
-                              '(£${getPoundValueFormattedFromPPL(pplBalance)})',
+                              '${vegiRewardsForBasket.toStringAsFixed(2)} ${greenBeanToken.symbol} '
+                              '(£${getPoundValueFormattedFromPPL(vegiRewardsForBasket)})',
                               style: const TextStyle(
                                 fontSize: 15,
                                 fontWeight: FontWeight.w700,

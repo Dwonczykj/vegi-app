@@ -1697,7 +1697,7 @@ ThunkAction<AppState> startOrderCreationProcess({
               OrderCreationProcessStatus.orderIsBelowVendorMinimumOrder,
             ),
             orderCreationStatusMessage:
-                "Your order is below the vendor's minimum order amount. Please add more to order.",
+                "The item sub-total of your order is below the vendor's minimum order amount. Please add more to order.",
           ),
         );
       } else {

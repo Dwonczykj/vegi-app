@@ -377,7 +377,7 @@ class CheckoutScreenPt2 extends StatelessWidget {
                 ),
                 if (showErrorBar)
                   CheckoutErrorBar(
-                      displayHeight: errorBarAdditionalHeight.toDouble()),
+                      displayHeight: errorBarAdditionalHeight.toDouble(),),
               ],
             );
           },
