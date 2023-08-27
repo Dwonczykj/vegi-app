@@ -17,12 +17,13 @@ Product fromJsonProduct(dynamic json) =>
 class Product with _$Product {
   @JsonSerializable()
   factory Product({
+    int? id,
     required String name,
     required int basePrice,
     // required List<OrderProductOptionValue> options,
     @JsonKey(fromJson: fromJsonOrderProductOptionValueList)
     @Default([])
-        List<OrderProductOptionValue> options,
+    List<OrderProductOptionValue> options,
   }) = _Product;
 
   factory Product.fromJson(Map<String, dynamic> json) =>
@@ -31,7 +32,10 @@ class Product with _$Product {
   const Product._();
 
   static Product empty() {
-    return Product(name: 'n/a', basePrice: 0);
+    return Product(
+      name: 'n/a',
+      basePrice: 0,
+    );
   }
 
   //Section Getters

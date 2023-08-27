@@ -139,6 +139,7 @@ echo "        </asset>" >> $ITMSP_DIR/metadata.xml
 echo "    </software_assets>" >> $ITMSP_DIR/metadata.xml 
 echo "</package>" >> $ITMSP_DIR/metadata.xml
 
+# Generate teh APPSTORE_CONNECT_PASSWORD for app specific using ~ https://appleid.apple.com/account/manage
 # Upload the .itmsp folder to iTunes Connect
 # ~ https://help.apple.com/itc/transporteruserguide/#/apdATD1E1288-D1E1A1303-D1E1288A1126
 "/Applications/Transporter.app/Contents/itms/bin/iTMSTransporter" \

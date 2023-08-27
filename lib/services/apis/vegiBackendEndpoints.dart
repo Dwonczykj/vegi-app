@@ -20,3 +20,14 @@ class VegiBackendEndpoints {
   ) =>
       'api/v1/home/nearest-vendors?location=${geoLocation.lat},${geoLocation.lng}&fulfilmentMethodType=$fulfilmentMethodType$distanceFromQueryParam';
 }
+
+class VegiESCServiceEndpoints {
+  static const vegiUsers = 'vegi-users';
+  static String rateVegiProduct({required int productId}) =>
+      'rate-vegi-product/$productId';
+  // TODO: Implement on Server
+  static String getESCSource({required int sourceId}) => 'sources/$sourceId';
+  // TODO: Implement on Server
+  static String getESCExplanationsForRating({required int escRatingId}) =>
+      'explanations?ratingId=$escRatingId';
+}

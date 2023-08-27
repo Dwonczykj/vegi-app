@@ -21,13 +21,16 @@ ESCRating _$ESCRatingFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$ESCRating {
   int get id => throw _privateConstructorUsedError;
-  double get createdAt => throw _privateConstructorUsedError;
-  String get productPublicId => throw _privateConstructorUsedError;
+  @JsonKey(
+      fromJson: jsonToTimeStampNullable, toJson: timeStampToJsonIntNullable)
+  DateTime? get calculatedOn =>
+      throw _privateConstructorUsedError; // required double createdAt,
+// required Product product,
+  int get product =>
+      throw _privateConstructorUsedError; // required String productPublicId,
+  String get product_id => throw _privateConstructorUsedError;
+  String get product_name => throw _privateConstructorUsedError;
   num get rating => throw _privateConstructorUsedError;
-  DateTime get calculatedOn => throw _privateConstructorUsedError;
-  Product get product => throw _privateConstructorUsedError;
-  Object get evidence => throw _privateConstructorUsedError;
-  List<ESCExplanation> get explanations => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -42,15 +45,13 @@ abstract class $ESCRatingCopyWith<$Res> {
   @useResult
   $Res call(
       {int id,
-      double createdAt,
-      String productPublicId,
-      num rating,
-      DateTime calculatedOn,
-      Product product,
-      Object evidence,
-      List<ESCExplanation> explanations});
-
-  $ProductCopyWith<$Res> get product;
+      @JsonKey(
+          fromJson: jsonToTimeStampNullable, toJson: timeStampToJsonIntNullable)
+      DateTime? calculatedOn,
+      int product,
+      String product_id,
+      String product_name,
+      num rating});
 }
 
 /// @nodoc
@@ -67,53 +68,38 @@ class _$ESCRatingCopyWithImpl<$Res, $Val extends ESCRating>
   @override
   $Res call({
     Object? id = null,
-    Object? createdAt = null,
-    Object? productPublicId = null,
-    Object? rating = null,
-    Object? calculatedOn = null,
+    Object? calculatedOn = freezed,
     Object? product = null,
-    Object? evidence = null,
-    Object? explanations = null,
+    Object? product_id = null,
+    Object? product_name = null,
+    Object? rating = null,
   }) {
     return _then(_value.copyWith(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int,
-      createdAt: null == createdAt
-          ? _value.createdAt
-          : createdAt // ignore: cast_nullable_to_non_nullable
-              as double,
-      productPublicId: null == productPublicId
-          ? _value.productPublicId
-          : productPublicId // ignore: cast_nullable_to_non_nullable
+      calculatedOn: freezed == calculatedOn
+          ? _value.calculatedOn
+          : calculatedOn // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      product: null == product
+          ? _value.product
+          : product // ignore: cast_nullable_to_non_nullable
+              as int,
+      product_id: null == product_id
+          ? _value.product_id
+          : product_id // ignore: cast_nullable_to_non_nullable
+              as String,
+      product_name: null == product_name
+          ? _value.product_name
+          : product_name // ignore: cast_nullable_to_non_nullable
               as String,
       rating: null == rating
           ? _value.rating
           : rating // ignore: cast_nullable_to_non_nullable
               as num,
-      calculatedOn: null == calculatedOn
-          ? _value.calculatedOn
-          : calculatedOn // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      product: null == product
-          ? _value.product
-          : product // ignore: cast_nullable_to_non_nullable
-              as Product,
-      evidence: null == evidence ? _value.evidence : evidence,
-      explanations: null == explanations
-          ? _value.explanations
-          : explanations // ignore: cast_nullable_to_non_nullable
-              as List<ESCExplanation>,
     ) as $Val);
-  }
-
-  @override
-  @pragma('vm:prefer-inline')
-  $ProductCopyWith<$Res> get product {
-    return $ProductCopyWith<$Res>(_value.product, (value) {
-      return _then(_value.copyWith(product: value) as $Val);
-    });
   }
 }
 
@@ -126,16 +112,13 @@ abstract class _$$_ESCRatingCopyWith<$Res> implements $ESCRatingCopyWith<$Res> {
   @useResult
   $Res call(
       {int id,
-      double createdAt,
-      String productPublicId,
-      num rating,
-      DateTime calculatedOn,
-      Product product,
-      Object evidence,
-      List<ESCExplanation> explanations});
-
-  @override
-  $ProductCopyWith<$Res> get product;
+      @JsonKey(
+          fromJson: jsonToTimeStampNullable, toJson: timeStampToJsonIntNullable)
+      DateTime? calculatedOn,
+      int product,
+      String product_id,
+      String product_name,
+      num rating});
 }
 
 /// @nodoc
@@ -150,44 +133,37 @@ class __$$_ESCRatingCopyWithImpl<$Res>
   @override
   $Res call({
     Object? id = null,
-    Object? createdAt = null,
-    Object? productPublicId = null,
-    Object? rating = null,
-    Object? calculatedOn = null,
+    Object? calculatedOn = freezed,
     Object? product = null,
-    Object? evidence = null,
-    Object? explanations = null,
+    Object? product_id = null,
+    Object? product_name = null,
+    Object? rating = null,
   }) {
     return _then(_$_ESCRating(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int,
-      createdAt: null == createdAt
-          ? _value.createdAt
-          : createdAt // ignore: cast_nullable_to_non_nullable
-              as double,
-      productPublicId: null == productPublicId
-          ? _value.productPublicId
-          : productPublicId // ignore: cast_nullable_to_non_nullable
+      calculatedOn: freezed == calculatedOn
+          ? _value.calculatedOn
+          : calculatedOn // ignore: cast_nullable_to_non_nullable
+              as DateTime?,
+      product: null == product
+          ? _value.product
+          : product // ignore: cast_nullable_to_non_nullable
+              as int,
+      product_id: null == product_id
+          ? _value.product_id
+          : product_id // ignore: cast_nullable_to_non_nullable
+              as String,
+      product_name: null == product_name
+          ? _value.product_name
+          : product_name // ignore: cast_nullable_to_non_nullable
               as String,
       rating: null == rating
           ? _value.rating
           : rating // ignore: cast_nullable_to_non_nullable
               as num,
-      calculatedOn: null == calculatedOn
-          ? _value.calculatedOn
-          : calculatedOn // ignore: cast_nullable_to_non_nullable
-              as DateTime,
-      product: null == product
-          ? _value.product
-          : product // ignore: cast_nullable_to_non_nullable
-              as Product,
-      evidence: null == evidence ? _value.evidence : evidence,
-      explanations: null == explanations
-          ? _value.explanations
-          : explanations // ignore: cast_nullable_to_non_nullable
-              as List<ESCExplanation>,
     ));
   }
 }
@@ -198,13 +174,13 @@ class __$$_ESCRatingCopyWithImpl<$Res>
 class _$_ESCRating extends _ESCRating {
   _$_ESCRating(
       {required this.id,
-      required this.createdAt,
-      required this.productPublicId,
-      required this.rating,
+      @JsonKey(
+          fromJson: jsonToTimeStampNullable, toJson: timeStampToJsonIntNullable)
       required this.calculatedOn,
       required this.product,
-      this.evidence = const {},
-      this.explanations = const []})
+      required this.product_id,
+      required this.product_name,
+      required this.rating})
       : super._();
 
   factory _$_ESCRating.fromJson(Map<String, dynamic> json) =>
@@ -213,25 +189,24 @@ class _$_ESCRating extends _ESCRating {
   @override
   final int id;
   @override
-  final double createdAt;
+  @JsonKey(
+      fromJson: jsonToTimeStampNullable, toJson: timeStampToJsonIntNullable)
+  final DateTime? calculatedOn;
+// required double createdAt,
+// required Product product,
   @override
-  final String productPublicId;
+  final int product;
+// required String productPublicId,
+  @override
+  final String product_id;
+  @override
+  final String product_name;
   @override
   final num rating;
-  @override
-  final DateTime calculatedOn;
-  @override
-  final Product product;
-  @override
-  @JsonKey()
-  final Object evidence;
-  @override
-  @JsonKey()
-  final List<ESCExplanation> explanations;
 
   @override
   String toString() {
-    return 'ESCRating(id: $id, createdAt: $createdAt, productPublicId: $productPublicId, rating: $rating, calculatedOn: $calculatedOn, product: $product, evidence: $evidence, explanations: $explanations)';
+    return 'ESCRating(id: $id, calculatedOn: $calculatedOn, product: $product, product_id: $product_id, product_name: $product_name, rating: $rating)';
   }
 
   @override
@@ -240,31 +215,20 @@ class _$_ESCRating extends _ESCRating {
         (other.runtimeType == runtimeType &&
             other is _$_ESCRating &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.createdAt, createdAt) ||
-                other.createdAt == createdAt) &&
-            (identical(other.productPublicId, productPublicId) ||
-                other.productPublicId == productPublicId) &&
-            (identical(other.rating, rating) || other.rating == rating) &&
             (identical(other.calculatedOn, calculatedOn) ||
                 other.calculatedOn == calculatedOn) &&
             (identical(other.product, product) || other.product == product) &&
-            const DeepCollectionEquality().equals(other.evidence, evidence) &&
-            const DeepCollectionEquality()
-                .equals(other.explanations, explanations));
+            (identical(other.product_id, product_id) ||
+                other.product_id == product_id) &&
+            (identical(other.product_name, product_name) ||
+                other.product_name == product_name) &&
+            (identical(other.rating, rating) || other.rating == rating));
   }
 
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
-      runtimeType,
-      id,
-      createdAt,
-      productPublicId,
-      rating,
-      calculatedOn,
-      product,
-      const DeepCollectionEquality().hash(evidence),
-      const DeepCollectionEquality().hash(explanations));
+      runtimeType, id, calculatedOn, product, product_id, product_name, rating);
 
   @JsonKey(ignore: true)
   @override
@@ -283,13 +247,13 @@ class _$_ESCRating extends _ESCRating {
 abstract class _ESCRating extends ESCRating {
   factory _ESCRating(
       {required final int id,
-      required final double createdAt,
-      required final String productPublicId,
-      required final num rating,
-      required final DateTime calculatedOn,
-      required final Product product,
-      final Object evidence,
-      final List<ESCExplanation> explanations}) = _$_ESCRating;
+      @JsonKey(
+          fromJson: jsonToTimeStampNullable, toJson: timeStampToJsonIntNullable)
+      required final DateTime? calculatedOn,
+      required final int product,
+      required final String product_id,
+      required final String product_name,
+      required final num rating}) = _$_ESCRating;
   _ESCRating._() : super._();
 
   factory _ESCRating.fromJson(Map<String, dynamic> json) =
@@ -298,19 +262,18 @@ abstract class _ESCRating extends ESCRating {
   @override
   int get id;
   @override
-  double get createdAt;
+  @JsonKey(
+      fromJson: jsonToTimeStampNullable, toJson: timeStampToJsonIntNullable)
+  DateTime? get calculatedOn;
+  @override // required double createdAt,
+// required Product product,
+  int get product;
+  @override // required String productPublicId,
+  String get product_id;
   @override
-  String get productPublicId;
+  String get product_name;
   @override
   num get rating;
-  @override
-  DateTime get calculatedOn;
-  @override
-  Product get product;
-  @override
-  Object get evidence;
-  @override
-  List<ESCExplanation> get explanations;
   @override
   @JsonKey(ignore: true)
   _$$_ESCRatingCopyWith<_$_ESCRating> get copyWith =>

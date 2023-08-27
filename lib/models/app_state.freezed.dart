@@ -26,6 +26,8 @@ mixin _$AppState {
   AuthState get authState => throw _privateConstructorUsedError;
   @AppLogStateConverter()
   AppLogState get appLogState => throw _privateConstructorUsedError;
+  @EscStateConverter()
+  EscState get escState => throw _privateConstructorUsedError;
   @UserStateConverter()
   UserState get userState => throw _privateConstructorUsedError;
   @CashWalletStateConverter()
@@ -56,6 +58,7 @@ abstract class $AppStateCopyWith<$Res> {
       {@AppEnvStateConverter() AppEnvState appEnvState,
       @AuthStateConverter() AuthState authState,
       @AppLogStateConverter() AppLogState appLogState,
+      @EscStateConverter() EscState escState,
       @UserStateConverter() UserState userState,
       @CashWalletStateConverter() CashWalletState cashWalletState,
       @HomePageStateConverter() HomePageState homePageState,
@@ -67,6 +70,7 @@ abstract class $AppStateCopyWith<$Res> {
   $AppEnvStateCopyWith<$Res> get appEnvState;
   $AuthStateCopyWith<$Res> get authState;
   $AppLogStateCopyWith<$Res> get appLogState;
+  $EscStateCopyWith<$Res> get escState;
   $UserStateCopyWith<$Res> get userState;
   $CashWalletStateCopyWith<$Res> get cashWalletState;
   $HomePageStateCopyWith<$Res> get homePageState;
@@ -92,6 +96,7 @@ class _$AppStateCopyWithImpl<$Res, $Val extends AppState>
     Object? appEnvState = null,
     Object? authState = null,
     Object? appLogState = null,
+    Object? escState = null,
     Object? userState = null,
     Object? cashWalletState = null,
     Object? homePageState = null,
@@ -113,6 +118,10 @@ class _$AppStateCopyWithImpl<$Res, $Val extends AppState>
           ? _value.appLogState
           : appLogState // ignore: cast_nullable_to_non_nullable
               as AppLogState,
+      escState: null == escState
+          ? _value.escState
+          : escState // ignore: cast_nullable_to_non_nullable
+              as EscState,
       userState: null == userState
           ? _value.userState
           : userState // ignore: cast_nullable_to_non_nullable
@@ -165,6 +174,14 @@ class _$AppStateCopyWithImpl<$Res, $Val extends AppState>
   $AppLogStateCopyWith<$Res> get appLogState {
     return $AppLogStateCopyWith<$Res>(_value.appLogState, (value) {
       return _then(_value.copyWith(appLogState: value) as $Val);
+    });
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $EscStateCopyWith<$Res> get escState {
+    return $EscStateCopyWith<$Res>(_value.escState, (value) {
+      return _then(_value.copyWith(escState: value) as $Val);
     });
   }
 
@@ -236,6 +253,7 @@ abstract class _$$_AppStateCopyWith<$Res> implements $AppStateCopyWith<$Res> {
       {@AppEnvStateConverter() AppEnvState appEnvState,
       @AuthStateConverter() AuthState authState,
       @AppLogStateConverter() AppLogState appLogState,
+      @EscStateConverter() EscState escState,
       @UserStateConverter() UserState userState,
       @CashWalletStateConverter() CashWalletState cashWalletState,
       @HomePageStateConverter() HomePageState homePageState,
@@ -250,6 +268,8 @@ abstract class _$$_AppStateCopyWith<$Res> implements $AppStateCopyWith<$Res> {
   $AuthStateCopyWith<$Res> get authState;
   @override
   $AppLogStateCopyWith<$Res> get appLogState;
+  @override
+  $EscStateCopyWith<$Res> get escState;
   @override
   $UserStateCopyWith<$Res> get userState;
   @override
@@ -280,6 +300,7 @@ class __$$_AppStateCopyWithImpl<$Res>
     Object? appEnvState = null,
     Object? authState = null,
     Object? appLogState = null,
+    Object? escState = null,
     Object? userState = null,
     Object? cashWalletState = null,
     Object? homePageState = null,
@@ -301,6 +322,10 @@ class __$$_AppStateCopyWithImpl<$Res>
           ? _value.appLogState
           : appLogState // ignore: cast_nullable_to_non_nullable
               as AppLogState,
+      escState: null == escState
+          ? _value.escState
+          : escState // ignore: cast_nullable_to_non_nullable
+              as EscState,
       userState: null == userState
           ? _value.userState
           : userState // ignore: cast_nullable_to_non_nullable
@@ -341,6 +366,7 @@ class _$_AppState extends _AppState with DiagnosticableTreeMixin {
       {@AppEnvStateConverter() required this.appEnvState,
       @AuthStateConverter() required this.authState,
       @AppLogStateConverter() required this.appLogState,
+      @EscStateConverter() required this.escState,
       @UserStateConverter() required this.userState,
       @CashWalletStateConverter() required this.cashWalletState,
       @HomePageStateConverter() required this.homePageState,
@@ -362,6 +388,9 @@ class _$_AppState extends _AppState with DiagnosticableTreeMixin {
   @override
   @AppLogStateConverter()
   final AppLogState appLogState;
+  @override
+  @EscStateConverter()
+  final EscState escState;
   @override
   @UserStateConverter()
   final UserState userState;
@@ -386,7 +415,7 @@ class _$_AppState extends _AppState with DiagnosticableTreeMixin {
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'AppState(appEnvState: $appEnvState, authState: $authState, appLogState: $appLogState, userState: $userState, cashWalletState: $cashWalletState, homePageState: $homePageState, cartState: $cartState, menuItemState: $menuItemState, pastOrderState: $pastOrderState, onboardingState: $onboardingState)';
+    return 'AppState(appEnvState: $appEnvState, authState: $authState, appLogState: $appLogState, escState: $escState, userState: $userState, cashWalletState: $cashWalletState, homePageState: $homePageState, cartState: $cartState, menuItemState: $menuItemState, pastOrderState: $pastOrderState, onboardingState: $onboardingState)';
   }
 
   @override
@@ -397,6 +426,7 @@ class _$_AppState extends _AppState with DiagnosticableTreeMixin {
       ..add(DiagnosticsProperty('appEnvState', appEnvState))
       ..add(DiagnosticsProperty('authState', authState))
       ..add(DiagnosticsProperty('appLogState', appLogState))
+      ..add(DiagnosticsProperty('escState', escState))
       ..add(DiagnosticsProperty('userState', userState))
       ..add(DiagnosticsProperty('cashWalletState', cashWalletState))
       ..add(DiagnosticsProperty('homePageState', homePageState))
@@ -417,6 +447,8 @@ class _$_AppState extends _AppState with DiagnosticableTreeMixin {
                 other.authState == authState) &&
             (identical(other.appLogState, appLogState) ||
                 other.appLogState == appLogState) &&
+            (identical(other.escState, escState) ||
+                other.escState == escState) &&
             (identical(other.userState, userState) ||
                 other.userState == userState) &&
             (identical(other.cashWalletState, cashWalletState) ||
@@ -440,6 +472,7 @@ class _$_AppState extends _AppState with DiagnosticableTreeMixin {
       appEnvState,
       authState,
       appLogState,
+      escState,
       userState,
       cashWalletState,
       homePageState,
@@ -467,6 +500,7 @@ abstract class _AppState extends AppState {
       {@AppEnvStateConverter() required final AppEnvState appEnvState,
       @AuthStateConverter() required final AuthState authState,
       @AppLogStateConverter() required final AppLogState appLogState,
+      @EscStateConverter() required final EscState escState,
       @UserStateConverter() required final UserState userState,
       @CashWalletStateConverter()
       required final CashWalletState cashWalletState,
@@ -489,6 +523,9 @@ abstract class _AppState extends AppState {
   @override
   @AppLogStateConverter()
   AppLogState get appLogState;
+  @override
+  @EscStateConverter()
+  EscState get escState;
   @override
   @UserStateConverter()
   UserState get userState;

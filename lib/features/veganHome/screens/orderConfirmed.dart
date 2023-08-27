@@ -50,6 +50,7 @@ class OrderConfirmedScreen extends StatelessWidget {
                     orderItems: viewmodel.cartItems
                         .map(
                           (oi) => ViewItem(
+                            id: int.tryParse(oi.menuItem.menuItemID),
                             name: oi.menuItem.name,
                             totalPriceFormatted: oi.formattedPrice,
                             chosenOptions: oi.selectedProductOptionsString,

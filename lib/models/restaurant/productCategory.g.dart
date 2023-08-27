@@ -8,12 +8,18 @@ part of 'productCategory.dart';
 
 _$_ProductCategory _$$_ProductCategoryFromJson(Map<String, dynamic> json) =>
     _$_ProductCategory(
-      name: json['name'] as String,
+      categoryGroup: json['categoryGroup'] as int?,
       id: json['id'] as int?,
+      imageUrl: json['imageUrl'] as String? ?? '',
+      name: json['name'] as String,
+      vendor: fromJsonVendorDTO(json['vendor']),
     );
 
 Map<String, dynamic> _$$_ProductCategoryToJson(_$_ProductCategory instance) =>
     <String, dynamic>{
-      'name': instance.name,
+      'categoryGroup': instance.categoryGroup,
       'id': instance.id,
+      'imageUrl': instance.imageUrl,
+      'name': instance.name,
+      'vendor': instance.vendor?.toJson(),
     };

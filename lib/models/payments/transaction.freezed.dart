@@ -24,7 +24,10 @@ mixin _$Transaction {
   Currency get currency => throw _privateConstructorUsedError;
   GreenBeanToken get rewards => throw _privateConstructorUsedError;
   PaymentStatus get paymentStatus => throw _privateConstructorUsedError;
-  DateTime get paymentCreatedTimeStamp => throw _privateConstructorUsedError;
+  @JsonKey(
+      fromJson: jsonToTimeStampNullable, toJson: timeStampToJsonIntNullable)
+  DateTime? get paymentCreatedTimeStamp => throw _privateConstructorUsedError;
+  @JsonKey(fromJson: jsonToTimeStamp, toJson: timeStampToJsonInt)
   DateTime get paymentCompletedTimeStamp => throw _privateConstructorUsedError;
   String get receiverId => throw _privateConstructorUsedError;
   String get payerId => throw _privateConstructorUsedError;
@@ -48,7 +51,10 @@ abstract class $TransactionCopyWith<$Res> {
       Currency currency,
       GreenBeanToken rewards,
       PaymentStatus paymentStatus,
-      DateTime paymentCreatedTimeStamp,
+      @JsonKey(
+          fromJson: jsonToTimeStampNullable, toJson: timeStampToJsonIntNullable)
+      DateTime? paymentCreatedTimeStamp,
+      @JsonKey(fromJson: jsonToTimeStamp, toJson: timeStampToJsonInt)
       DateTime paymentCompletedTimeStamp,
       String receiverId,
       String payerId,
@@ -74,7 +80,7 @@ class _$TransactionCopyWithImpl<$Res, $Val extends Transaction>
     Object? currency = null,
     Object? rewards = null,
     Object? paymentStatus = null,
-    Object? paymentCreatedTimeStamp = null,
+    Object? paymentCreatedTimeStamp = freezed,
     Object? paymentCompletedTimeStamp = null,
     Object? receiverId = null,
     Object? payerId = null,
@@ -97,10 +103,10 @@ class _$TransactionCopyWithImpl<$Res, $Val extends Transaction>
           ? _value.paymentStatus
           : paymentStatus // ignore: cast_nullable_to_non_nullable
               as PaymentStatus,
-      paymentCreatedTimeStamp: null == paymentCreatedTimeStamp
+      paymentCreatedTimeStamp: freezed == paymentCreatedTimeStamp
           ? _value.paymentCreatedTimeStamp
           : paymentCreatedTimeStamp // ignore: cast_nullable_to_non_nullable
-              as DateTime,
+              as DateTime?,
       paymentCompletedTimeStamp: null == paymentCompletedTimeStamp
           ? _value.paymentCompletedTimeStamp
           : paymentCompletedTimeStamp // ignore: cast_nullable_to_non_nullable
@@ -142,7 +148,10 @@ abstract class _$$_TransactionCopyWith<$Res>
       Currency currency,
       GreenBeanToken rewards,
       PaymentStatus paymentStatus,
-      DateTime paymentCreatedTimeStamp,
+      @JsonKey(
+          fromJson: jsonToTimeStampNullable, toJson: timeStampToJsonIntNullable)
+      DateTime? paymentCreatedTimeStamp,
+      @JsonKey(fromJson: jsonToTimeStamp, toJson: timeStampToJsonInt)
       DateTime paymentCompletedTimeStamp,
       String receiverId,
       String payerId,
@@ -167,7 +176,7 @@ class __$$_TransactionCopyWithImpl<$Res>
     Object? currency = null,
     Object? rewards = null,
     Object? paymentStatus = null,
-    Object? paymentCreatedTimeStamp = null,
+    Object? paymentCreatedTimeStamp = freezed,
     Object? paymentCompletedTimeStamp = null,
     Object? receiverId = null,
     Object? payerId = null,
@@ -190,10 +199,10 @@ class __$$_TransactionCopyWithImpl<$Res>
           ? _value.paymentStatus
           : paymentStatus // ignore: cast_nullable_to_non_nullable
               as PaymentStatus,
-      paymentCreatedTimeStamp: null == paymentCreatedTimeStamp
+      paymentCreatedTimeStamp: freezed == paymentCreatedTimeStamp
           ? _value.paymentCreatedTimeStamp
           : paymentCreatedTimeStamp // ignore: cast_nullable_to_non_nullable
-              as DateTime,
+              as DateTime?,
       paymentCompletedTimeStamp: null == paymentCompletedTimeStamp
           ? _value.paymentCompletedTimeStamp
           : paymentCompletedTimeStamp // ignore: cast_nullable_to_non_nullable
@@ -223,7 +232,10 @@ class _$_Transaction extends _Transaction {
       required this.currency,
       required this.rewards,
       required this.paymentStatus,
+      @JsonKey(
+          fromJson: jsonToTimeStampNullable, toJson: timeStampToJsonIntNullable)
       required this.paymentCreatedTimeStamp,
+      @JsonKey(fromJson: jsonToTimeStamp, toJson: timeStampToJsonInt)
       required this.paymentCompletedTimeStamp,
       required this.receiverId,
       required this.payerId,
@@ -242,8 +254,11 @@ class _$_Transaction extends _Transaction {
   @override
   final PaymentStatus paymentStatus;
   @override
-  final DateTime paymentCreatedTimeStamp;
+  @JsonKey(
+      fromJson: jsonToTimeStampNullable, toJson: timeStampToJsonIntNullable)
+  final DateTime? paymentCreatedTimeStamp;
   @override
+  @JsonKey(fromJson: jsonToTimeStamp, toJson: timeStampToJsonInt)
   final DateTime paymentCompletedTimeStamp;
   @override
   final String receiverId;
@@ -315,7 +330,10 @@ abstract class _Transaction extends Transaction {
       required final Currency currency,
       required final GreenBeanToken rewards,
       required final PaymentStatus paymentStatus,
-      required final DateTime paymentCreatedTimeStamp,
+      @JsonKey(
+          fromJson: jsonToTimeStampNullable, toJson: timeStampToJsonIntNullable)
+      required final DateTime? paymentCreatedTimeStamp,
+      @JsonKey(fromJson: jsonToTimeStamp, toJson: timeStampToJsonInt)
       required final DateTime paymentCompletedTimeStamp,
       required final String receiverId,
       required final String payerId,
@@ -334,8 +352,11 @@ abstract class _Transaction extends Transaction {
   @override
   PaymentStatus get paymentStatus;
   @override
-  DateTime get paymentCreatedTimeStamp;
+  @JsonKey(
+      fromJson: jsonToTimeStampNullable, toJson: timeStampToJsonIntNullable)
+  DateTime? get paymentCreatedTimeStamp;
   @override
+  @JsonKey(fromJson: jsonToTimeStamp, toJson: timeStampToJsonInt)
   DateTime get paymentCompletedTimeStamp;
   @override
   String get receiverId;

@@ -13,6 +13,8 @@ _$_AppState _$$_AppStateFromJson(Map<String, dynamic> json) => _$_AppState(
           .fromJson(json['authState'] as Map<String, dynamic>?),
       appLogState: const AppLogStateConverter()
           .fromJson(json['appLogState'] as Map<String, dynamic>?),
+      escState: const EscStateConverter()
+          .fromJson(json['escState'] as Map<String, dynamic>?),
       userState: const UserStateConverter()
           .fromJson(json['userState'] as Map<String, dynamic>?),
       cashWalletState: const CashWalletStateConverter()
@@ -34,6 +36,7 @@ Map<String, dynamic> _$$_AppStateToJson(_$_AppState instance) =>
       'appEnvState': const AppEnvStateConverter().toJson(instance.appEnvState),
       'authState': const AuthStateConverter().toJson(instance.authState),
       'appLogState': const AppLogStateConverter().toJson(instance.appLogState),
+      'escState': const EscStateConverter().toJson(instance.escState),
       'userState': const UserStateConverter().toJson(instance.userState),
       'cashWalletState':
           const CashWalletStateConverter().toJson(instance.cashWalletState),

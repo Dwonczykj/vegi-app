@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:vegan_liverpool/features/veganHome/Helpers/helpers.dart';
 import 'package:vegan_liverpool/models/cart/product.dart';
 import 'package:vegan_liverpool/models/restaurant/ESCExplanation.dart';
 
@@ -13,7 +14,13 @@ class ProductRating with _$ProductRating {
     required double createdAt,
     required String productPublicId,
     required num rating,
-    required DateTime calculatedOn, required Product product, @Default({}) Object evidence,
+    @JsonKey(
+      fromJson: jsonToTimeStampNullable,
+      toJson: timeStampToJsonIntNullable,
+    )
+    required DateTime? calculatedOn, 
+    required Product product, 
+    @Default({}) Object evidence,
     @Default([]) List<ESCExplanation> explanations,
   }) = _ProductRating;
 

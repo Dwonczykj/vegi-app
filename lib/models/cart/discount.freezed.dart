@@ -25,8 +25,9 @@ mixin _$Discount {
   num get value => throw _privateConstructorUsedError;
   Currency get currency => throw _privateConstructorUsedError;
   DiscountType get discountType => throw _privateConstructorUsedError;
-  @JsonKey(fromJson: jsonToTimeStamp, toJson: timeStampToJsonInt)
-  DateTime get expiryDateTime => throw _privateConstructorUsedError;
+  @JsonKey(
+      fromJson: jsonToTimeStampNullable, toJson: timeStampToJsonIntNullable)
+  DateTime? get expiryDateTime => throw _privateConstructorUsedError;
   int? get timesUsed => throw _privateConstructorUsedError;
   int? get maxUses => throw _privateConstructorUsedError;
   String? get linkedWalletAddress => throw _privateConstructorUsedError;
@@ -51,8 +52,9 @@ abstract class $DiscountCopyWith<$Res> {
       num value,
       Currency currency,
       DiscountType discountType,
-      @JsonKey(fromJson: jsonToTimeStamp, toJson: timeStampToJsonInt)
-      DateTime expiryDateTime,
+      @JsonKey(
+          fromJson: jsonToTimeStampNullable, toJson: timeStampToJsonIntNullable)
+      DateTime? expiryDateTime,
       int? timesUsed,
       int? maxUses,
       String? linkedWalletAddress,
@@ -80,7 +82,7 @@ class _$DiscountCopyWithImpl<$Res, $Val extends Discount>
     Object? value = null,
     Object? currency = null,
     Object? discountType = null,
-    Object? expiryDateTime = null,
+    Object? expiryDateTime = freezed,
     Object? timesUsed = freezed,
     Object? maxUses = freezed,
     Object? linkedWalletAddress = freezed,
@@ -108,10 +110,10 @@ class _$DiscountCopyWithImpl<$Res, $Val extends Discount>
           ? _value.discountType
           : discountType // ignore: cast_nullable_to_non_nullable
               as DiscountType,
-      expiryDateTime: null == expiryDateTime
+      expiryDateTime: freezed == expiryDateTime
           ? _value.expiryDateTime
           : expiryDateTime // ignore: cast_nullable_to_non_nullable
-              as DateTime,
+              as DateTime?,
       timesUsed: freezed == timesUsed
           ? _value.timesUsed
           : timesUsed // ignore: cast_nullable_to_non_nullable
@@ -161,8 +163,9 @@ abstract class _$$_DiscountCopyWith<$Res> implements $DiscountCopyWith<$Res> {
       num value,
       Currency currency,
       DiscountType discountType,
-      @JsonKey(fromJson: jsonToTimeStamp, toJson: timeStampToJsonInt)
-      DateTime expiryDateTime,
+      @JsonKey(
+          fromJson: jsonToTimeStampNullable, toJson: timeStampToJsonIntNullable)
+      DateTime? expiryDateTime,
       int? timesUsed,
       int? maxUses,
       String? linkedWalletAddress,
@@ -189,7 +192,7 @@ class __$$_DiscountCopyWithImpl<$Res>
     Object? value = null,
     Object? currency = null,
     Object? discountType = null,
-    Object? expiryDateTime = null,
+    Object? expiryDateTime = freezed,
     Object? timesUsed = freezed,
     Object? maxUses = freezed,
     Object? linkedWalletAddress = freezed,
@@ -217,10 +220,10 @@ class __$$_DiscountCopyWithImpl<$Res>
           ? _value.discountType
           : discountType // ignore: cast_nullable_to_non_nullable
               as DiscountType,
-      expiryDateTime: null == expiryDateTime
+      expiryDateTime: freezed == expiryDateTime
           ? _value.expiryDateTime
           : expiryDateTime // ignore: cast_nullable_to_non_nullable
-              as DateTime,
+              as DateTime?,
       timesUsed: freezed == timesUsed
           ? _value.timesUsed
           : timesUsed // ignore: cast_nullable_to_non_nullable
@@ -255,7 +258,8 @@ class _$_Discount extends _Discount {
       required this.value,
       required this.currency,
       required this.discountType,
-      @JsonKey(fromJson: jsonToTimeStamp, toJson: timeStampToJsonInt)
+      @JsonKey(
+          fromJson: jsonToTimeStampNullable, toJson: timeStampToJsonIntNullable)
       required this.expiryDateTime,
       required this.timesUsed,
       required this.maxUses,
@@ -278,8 +282,9 @@ class _$_Discount extends _Discount {
   @override
   final DiscountType discountType;
   @override
-  @JsonKey(fromJson: jsonToTimeStamp, toJson: timeStampToJsonInt)
-  final DateTime expiryDateTime;
+  @JsonKey(
+      fromJson: jsonToTimeStampNullable, toJson: timeStampToJsonIntNullable)
+  final DateTime? expiryDateTime;
   @override
   final int? timesUsed;
   @override
@@ -359,8 +364,9 @@ abstract class _Discount extends Discount {
       required final num value,
       required final Currency currency,
       required final DiscountType discountType,
-      @JsonKey(fromJson: jsonToTimeStamp, toJson: timeStampToJsonInt)
-      required final DateTime expiryDateTime,
+      @JsonKey(
+          fromJson: jsonToTimeStampNullable, toJson: timeStampToJsonIntNullable)
+      required final DateTime? expiryDateTime,
       required final int? timesUsed,
       required final int? maxUses,
       required final String? linkedWalletAddress,
@@ -381,8 +387,9 @@ abstract class _Discount extends Discount {
   @override
   DiscountType get discountType;
   @override
-  @JsonKey(fromJson: jsonToTimeStamp, toJson: timeStampToJsonInt)
-  DateTime get expiryDateTime;
+  @JsonKey(
+      fromJson: jsonToTimeStampNullable, toJson: timeStampToJsonIntNullable)
+  DateTime? get expiryDateTime;
   @override
   int? get timesUsed;
   @override

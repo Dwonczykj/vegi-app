@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:vegan_liverpool/constants/enums.dart';
+import 'package:vegan_liverpool/features/veganHome/Helpers/helpers.dart';
 import 'package:vegan_liverpool/models/payments/green_bean_token.dart';
 
 part 'transaction.freezed.dart';
@@ -13,7 +14,15 @@ class Transaction with _$Transaction {
     required Currency currency,
     required GreenBeanToken rewards,
     required PaymentStatus paymentStatus,
-    required DateTime paymentCreatedTimeStamp,
+    @JsonKey(
+      fromJson: jsonToTimeStampNullable,
+      toJson: timeStampToJsonIntNullable,
+    )
+    required DateTime? paymentCreatedTimeStamp,
+    @JsonKey(
+      fromJson: jsonToTimeStamp,
+      toJson: timeStampToJsonInt,
+    )
     required DateTime paymentCompletedTimeStamp,
     required String receiverId,
     required String payerId,

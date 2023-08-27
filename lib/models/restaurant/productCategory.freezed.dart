@@ -20,8 +20,12 @@ ProductCategory _$ProductCategoryFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$ProductCategory {
-  String get name => throw _privateConstructorUsedError;
+  int? get categoryGroup => throw _privateConstructorUsedError;
   int? get id => throw _privateConstructorUsedError;
+  String get imageUrl => throw _privateConstructorUsedError;
+  String get name => throw _privateConstructorUsedError;
+  @JsonKey(fromJson: fromJsonVendorDTO)
+  VendorDTO? get vendor => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -35,7 +39,14 @@ abstract class $ProductCategoryCopyWith<$Res> {
           ProductCategory value, $Res Function(ProductCategory) then) =
       _$ProductCategoryCopyWithImpl<$Res, ProductCategory>;
   @useResult
-  $Res call({String name, int? id});
+  $Res call(
+      {int? categoryGroup,
+      int? id,
+      String imageUrl,
+      String name,
+      @JsonKey(fromJson: fromJsonVendorDTO) VendorDTO? vendor});
+
+  $VendorDTOCopyWith<$Res>? get vendor;
 }
 
 /// @nodoc
@@ -51,19 +62,46 @@ class _$ProductCategoryCopyWithImpl<$Res, $Val extends ProductCategory>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? name = null,
+    Object? categoryGroup = freezed,
     Object? id = freezed,
+    Object? imageUrl = null,
+    Object? name = null,
+    Object? vendor = freezed,
   }) {
     return _then(_value.copyWith(
-      name: null == name
-          ? _value.name
-          : name // ignore: cast_nullable_to_non_nullable
-              as String,
+      categoryGroup: freezed == categoryGroup
+          ? _value.categoryGroup
+          : categoryGroup // ignore: cast_nullable_to_non_nullable
+              as int?,
       id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int?,
+      imageUrl: null == imageUrl
+          ? _value.imageUrl
+          : imageUrl // ignore: cast_nullable_to_non_nullable
+              as String,
+      name: null == name
+          ? _value.name
+          : name // ignore: cast_nullable_to_non_nullable
+              as String,
+      vendor: freezed == vendor
+          ? _value.vendor
+          : vendor // ignore: cast_nullable_to_non_nullable
+              as VendorDTO?,
     ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $VendorDTOCopyWith<$Res>? get vendor {
+    if (_value.vendor == null) {
+      return null;
+    }
+
+    return $VendorDTOCopyWith<$Res>(_value.vendor!, (value) {
+      return _then(_value.copyWith(vendor: value) as $Val);
+    });
   }
 }
 
@@ -75,7 +113,15 @@ abstract class _$$_ProductCategoryCopyWith<$Res>
       __$$_ProductCategoryCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String name, int? id});
+  $Res call(
+      {int? categoryGroup,
+      int? id,
+      String imageUrl,
+      String name,
+      @JsonKey(fromJson: fromJsonVendorDTO) VendorDTO? vendor});
+
+  @override
+  $VendorDTOCopyWith<$Res>? get vendor;
 }
 
 /// @nodoc
@@ -89,18 +135,33 @@ class __$$_ProductCategoryCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? name = null,
+    Object? categoryGroup = freezed,
     Object? id = freezed,
+    Object? imageUrl = null,
+    Object? name = null,
+    Object? vendor = freezed,
   }) {
     return _then(_$_ProductCategory(
-      name: null == name
-          ? _value.name
-          : name // ignore: cast_nullable_to_non_nullable
-              as String,
+      categoryGroup: freezed == categoryGroup
+          ? _value.categoryGroup
+          : categoryGroup // ignore: cast_nullable_to_non_nullable
+              as int?,
       id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
               as int?,
+      imageUrl: null == imageUrl
+          ? _value.imageUrl
+          : imageUrl // ignore: cast_nullable_to_non_nullable
+              as String,
+      name: null == name
+          ? _value.name
+          : name // ignore: cast_nullable_to_non_nullable
+              as String,
+      vendor: freezed == vendor
+          ? _value.vendor
+          : vendor // ignore: cast_nullable_to_non_nullable
+              as VendorDTO?,
     ));
   }
 }
@@ -109,19 +170,33 @@ class __$$_ProductCategoryCopyWithImpl<$Res>
 
 @JsonSerializable()
 class _$_ProductCategory extends _ProductCategory {
-  _$_ProductCategory({required this.name, this.id}) : super._();
+  _$_ProductCategory(
+      {this.categoryGroup,
+      this.id,
+      this.imageUrl = '',
+      required this.name,
+      @JsonKey(fromJson: fromJsonVendorDTO) this.vendor})
+      : super._();
 
   factory _$_ProductCategory.fromJson(Map<String, dynamic> json) =>
       _$$_ProductCategoryFromJson(json);
 
   @override
-  final String name;
+  final int? categoryGroup;
   @override
   final int? id;
+  @override
+  @JsonKey()
+  final String imageUrl;
+  @override
+  final String name;
+  @override
+  @JsonKey(fromJson: fromJsonVendorDTO)
+  final VendorDTO? vendor;
 
   @override
   String toString() {
-    return 'ProductCategory(name: $name, id: $id)';
+    return 'ProductCategory(categoryGroup: $categoryGroup, id: $id, imageUrl: $imageUrl, name: $name, vendor: $vendor)';
   }
 
   @override
@@ -129,13 +204,19 @@ class _$_ProductCategory extends _ProductCategory {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_ProductCategory &&
+            (identical(other.categoryGroup, categoryGroup) ||
+                other.categoryGroup == categoryGroup) &&
+            (identical(other.id, id) || other.id == id) &&
+            (identical(other.imageUrl, imageUrl) ||
+                other.imageUrl == imageUrl) &&
             (identical(other.name, name) || other.name == name) &&
-            (identical(other.id, id) || other.id == id));
+            (identical(other.vendor, vendor) || other.vendor == vendor));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, name, id);
+  int get hashCode =>
+      Object.hash(runtimeType, categoryGroup, id, imageUrl, name, vendor);
 
   @JsonKey(ignore: true)
   @override
@@ -152,7 +233,12 @@ class _$_ProductCategory extends _ProductCategory {
 }
 
 abstract class _ProductCategory extends ProductCategory {
-  factory _ProductCategory({required final String name, final int? id}) =
+  factory _ProductCategory(
+          {final int? categoryGroup,
+          final int? id,
+          final String imageUrl,
+          required final String name,
+          @JsonKey(fromJson: fromJsonVendorDTO) final VendorDTO? vendor}) =
       _$_ProductCategory;
   _ProductCategory._() : super._();
 
@@ -160,9 +246,16 @@ abstract class _ProductCategory extends ProductCategory {
       _$_ProductCategory.fromJson;
 
   @override
-  String get name;
+  int? get categoryGroup;
   @override
   int? get id;
+  @override
+  String get imageUrl;
+  @override
+  String get name;
+  @override
+  @JsonKey(fromJson: fromJsonVendorDTO)
+  VendorDTO? get vendor;
   @override
   @JsonKey(ignore: true)
   _$$_ProductCategoryCopyWith<_$_ProductCategory> get copyWith =>

@@ -24,7 +24,9 @@ mixin _$ProductRating {
   double get createdAt => throw _privateConstructorUsedError;
   String get productPublicId => throw _privateConstructorUsedError;
   num get rating => throw _privateConstructorUsedError;
-  DateTime get calculatedOn => throw _privateConstructorUsedError;
+  @JsonKey(
+      fromJson: jsonToTimeStampNullable, toJson: timeStampToJsonIntNullable)
+  DateTime? get calculatedOn => throw _privateConstructorUsedError;
   Product get product => throw _privateConstructorUsedError;
   Object get evidence => throw _privateConstructorUsedError;
   List<ESCExplanation> get explanations => throw _privateConstructorUsedError;
@@ -46,7 +48,9 @@ abstract class $ProductRatingCopyWith<$Res> {
       double createdAt,
       String productPublicId,
       num rating,
-      DateTime calculatedOn,
+      @JsonKey(
+          fromJson: jsonToTimeStampNullable, toJson: timeStampToJsonIntNullable)
+      DateTime? calculatedOn,
       Product product,
       Object evidence,
       List<ESCExplanation> explanations});
@@ -71,7 +75,7 @@ class _$ProductRatingCopyWithImpl<$Res, $Val extends ProductRating>
     Object? createdAt = null,
     Object? productPublicId = null,
     Object? rating = null,
-    Object? calculatedOn = null,
+    Object? calculatedOn = freezed,
     Object? product = null,
     Object? evidence = null,
     Object? explanations = null,
@@ -93,10 +97,10 @@ class _$ProductRatingCopyWithImpl<$Res, $Val extends ProductRating>
           ? _value.rating
           : rating // ignore: cast_nullable_to_non_nullable
               as num,
-      calculatedOn: null == calculatedOn
+      calculatedOn: freezed == calculatedOn
           ? _value.calculatedOn
           : calculatedOn // ignore: cast_nullable_to_non_nullable
-              as DateTime,
+              as DateTime?,
       product: null == product
           ? _value.product
           : product // ignore: cast_nullable_to_non_nullable
@@ -131,7 +135,9 @@ abstract class _$$_ProductRatingCopyWith<$Res>
       double createdAt,
       String productPublicId,
       num rating,
-      DateTime calculatedOn,
+      @JsonKey(
+          fromJson: jsonToTimeStampNullable, toJson: timeStampToJsonIntNullable)
+      DateTime? calculatedOn,
       Product product,
       Object evidence,
       List<ESCExplanation> explanations});
@@ -155,7 +161,7 @@ class __$$_ProductRatingCopyWithImpl<$Res>
     Object? createdAt = null,
     Object? productPublicId = null,
     Object? rating = null,
-    Object? calculatedOn = null,
+    Object? calculatedOn = freezed,
     Object? product = null,
     Object? evidence = null,
     Object? explanations = null,
@@ -177,10 +183,10 @@ class __$$_ProductRatingCopyWithImpl<$Res>
           ? _value.rating
           : rating // ignore: cast_nullable_to_non_nullable
               as num,
-      calculatedOn: null == calculatedOn
+      calculatedOn: freezed == calculatedOn
           ? _value.calculatedOn
           : calculatedOn // ignore: cast_nullable_to_non_nullable
-              as DateTime,
+              as DateTime?,
       product: null == product
           ? _value.product
           : product // ignore: cast_nullable_to_non_nullable
@@ -203,6 +209,8 @@ class _$_ProductRating extends _ProductRating {
       required this.createdAt,
       required this.productPublicId,
       required this.rating,
+      @JsonKey(
+          fromJson: jsonToTimeStampNullable, toJson: timeStampToJsonIntNullable)
       required this.calculatedOn,
       required this.product,
       this.evidence = const {},
@@ -221,7 +229,9 @@ class _$_ProductRating extends _ProductRating {
   @override
   final num rating;
   @override
-  final DateTime calculatedOn;
+  @JsonKey(
+      fromJson: jsonToTimeStampNullable, toJson: timeStampToJsonIntNullable)
+  final DateTime? calculatedOn;
   @override
   final Product product;
   @override
@@ -288,7 +298,9 @@ abstract class _ProductRating extends ProductRating {
       required final double createdAt,
       required final String productPublicId,
       required final num rating,
-      required final DateTime calculatedOn,
+      @JsonKey(
+          fromJson: jsonToTimeStampNullable, toJson: timeStampToJsonIntNullable)
+      required final DateTime? calculatedOn,
       required final Product product,
       final Object evidence,
       final List<ESCExplanation> explanations}) = _$_ProductRating;
@@ -306,7 +318,9 @@ abstract class _ProductRating extends ProductRating {
   @override
   num get rating;
   @override
-  DateTime get calculatedOn;
+  @JsonKey(
+      fromJson: jsonToTimeStampNullable, toJson: timeStampToJsonIntNullable)
+  DateTime? get calculatedOn;
   @override
   Product get product;
   @override

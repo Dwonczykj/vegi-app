@@ -17,15 +17,30 @@ List<ProductDTO> fromJsonProductDTOList(dynamic json) =>
 ProductDTO? fromJsonProductDTO(dynamic json) =>
     fromSailsObjectJson<ProductDTO>(ProductDTO.fromJson)(json);
 
+int castDoubleToInt(dynamic json) => json is int
+    ? json
+    : json is double
+        ? json.round()
+        : 0;
+
 @Freezed()
 class ProductDTO with _$ProductDTO {
   @JsonSerializable()
   factory ProductDTO({
-    required int id,
+    int? id,
     required String name,
+
     /// this is the price in pence of the restaurant item without any product options applied
-    required int basePrice, required bool isAvailable, required int priority, required bool isFeatured, required ProductDiscontinuedStatus status, required String productBarCode, @JsonKey(fromJson: fromJsonVendorDTO) required VendorDTO? vendor, @JsonKey(fromJson: fromJsonProductCategory)
-        required ProductCategory? category, @Default('') String description,
+    @JsonKey(fromJson: castDoubleToInt) required int basePrice,
+    required bool isAvailable,
+    required int priority,
+    required bool isFeatured,
+    required ProductDiscontinuedStatus status,
+    required String productBarCode,
+    @JsonKey(fromJson: fromJsonVendorDTO) required VendorDTO? vendor,
+    @JsonKey(fromJson: fromJsonProductCategory)
+    required ProductCategory? category,
+    @Default('') String description,
     @Default('') String shortDescription,
     @Default('') String imageURL,
     String? ingredients,
@@ -39,7 +54,7 @@ class ProductDTO with _$ProductDTO {
     @Default('') String taxGroup,
     @JsonKey(fromJson: fromJsonProductOptionList)
     @Default([])
-        List<ProductOption> options,
+    List<ProductOption> options,
     @JsonKey(fromJson: fromJsonESCRating) @Default(null) ESCRating? rating,
   }) = _ProductDTO;
 

@@ -8,9 +8,9 @@ part of 'productDTO.dart';
 
 _$_ProductDTO _$$_ProductDTOFromJson(Map<String, dynamic> json) =>
     _$_ProductDTO(
-      id: json['id'] as int,
+      id: json['id'] as int?,
       name: json['name'] as String,
-      basePrice: json['basePrice'] as int,
+      basePrice: castDoubleToInt(json['basePrice']),
       isAvailable: json['isAvailable'] as bool,
       priority: json['priority'] as int,
       isFeatured: json['isFeatured'] as bool,

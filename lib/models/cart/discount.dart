@@ -22,10 +22,10 @@ class Discount with _$Discount {
     required Currency currency,
     required DiscountType discountType,
     @JsonKey(
-      fromJson: jsonToTimeStamp,
-      toJson: timeStampToJsonInt,
+      fromJson: jsonToTimeStampNullable,
+      toJson: timeStampToJsonIntNullable,
     )
-        required DateTime expiryDateTime,
+    required DateTime? expiryDateTime,
     required int? timesUsed,
     required int? maxUses,
     required String? linkedWalletAddress, @Default(false)

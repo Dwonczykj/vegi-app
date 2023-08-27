@@ -66,6 +66,8 @@ class RestaurantMenuItem with _$RestaurantMenuItem {
     ESCRating? rating,
   }) = _RestaurantMenuItem;
 
+  int? get menuItemIdAsInt => int.tryParse(menuItemID);
+
   const RestaurantMenuItem._();
 
   factory RestaurantMenuItem.fromJson(Map<String, dynamic> json) =>

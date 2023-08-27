@@ -13,9 +13,9 @@ _$_Transaction _$$_TransactionFromJson(Map<String, dynamic> json) =>
       rewards: GreenBeanToken.fromJson(json['rewards'] as Map<String, dynamic>),
       paymentStatus: $enumDecode(_$PaymentStatusEnumMap, json['paymentStatus']),
       paymentCreatedTimeStamp:
-          DateTime.parse(json['paymentCreatedTimeStamp'] as String),
+          jsonToTimeStampNullable(json['paymentCreatedTimeStamp']),
       paymentCompletedTimeStamp:
-          DateTime.parse(json['paymentCompletedTimeStamp'] as String),
+          jsonToTimeStamp(json['paymentCompletedTimeStamp']),
       receiverId: json['receiverId'] as String,
       payerId: json['payerId'] as String,
       paymentNetworkType:
@@ -29,9 +29,9 @@ Map<String, dynamic> _$$_TransactionToJson(_$_Transaction instance) =>
       'rewards': instance.rewards.toJson(),
       'paymentStatus': _$PaymentStatusEnumMap[instance.paymentStatus]!,
       'paymentCreatedTimeStamp':
-          instance.paymentCreatedTimeStamp.toIso8601String(),
+          timeStampToJsonIntNullable(instance.paymentCreatedTimeStamp),
       'paymentCompletedTimeStamp':
-          instance.paymentCompletedTimeStamp.toIso8601String(),
+          timeStampToJsonInt(instance.paymentCompletedTimeStamp),
       'receiverId': instance.receiverId,
       'payerId': instance.payerId,
       'paymentNetworkType':

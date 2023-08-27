@@ -13,6 +13,7 @@ import 'package:vegan_liverpool/services/apis/peeplEats.dart';
 import 'package:vegan_liverpool/services/apis/locationService.dart';
 import 'package:vegan_liverpool/services/apis/peeplPay2.dart';
 import 'package:vegan_liverpool/services/apis/stripePay2.dart';
+import 'package:vegan_liverpool/services/apis/vegiESCService.dart';
 import 'package:vegan_liverpool/utils/onboard/Istrategy.dart';
 import 'package:vegan_liverpool/utils/onboard/authentication.dart';
 import 'package:vegan_liverpool/utils/onboard/firebase.dart';
@@ -28,6 +29,8 @@ final LocationService locationService = getIt<LocationService>();
 final FXService fxService = getIt<FXService>();
 
 final PeeplEatsService peeplEatsService = getIt<PeeplEatsService>();
+
+final VegiESCService vegiESCService = getIt<VegiESCService>();
 
 final Future<Store<AppState>> reduxStore = getIt.getAsync<Store<AppState>>();
 

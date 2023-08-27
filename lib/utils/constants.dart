@@ -115,6 +115,7 @@ class Secrets {
 
   // static String get PEEPL_PAY_BACKEND => dotenv.env['PEEPL_PAY_BACKEND']!;
   static String get VEGI_EATS_BACKEND => dotenv.env['VEGI_EATS_BACKEND']!;
+  static String get VEGI_ESC_BACKEND => dotenv.env['VEGI_ESC_BACKEND']!;
 
   static String get CHARGE_API_KEY => dotenv.env['CHARGE_API_KEY']!;
   static String get FUSE_WALLET_SDK_PUBLIC_KEY =>
@@ -457,6 +458,8 @@ class ImagePaths {
   static const String pplAvatar35width = 'assets/images/avatar-ppl-red.png';
   static const String vegiBeanManNSEW = 'assets/images/beanman-nsew.png';
   static const String anomAvatar = 'assets/images/anom.png';
+  static const String lock = 'assets/images/lock.svg';
+  static const String securityLockInfoBlack = 'assets/images/info_black.svg';
   static const String avatarPlaceholder = 'assets/images/username.svg';
   static const String pincode = 'assets/images/pincode.svg';
 
@@ -464,8 +467,10 @@ class ImagePaths {
 
   static const String orderConfirmedDelivery = 'assets/images/herobean.png';
   static const String orderConfirmedCollection = 'assets/images/herobean.png';
-  static const String orderAcceptedDelivery = 'assets/images/order-accepted.gif';
-  static const String orderAcceptedCollection = 'assets/images/order-accepted.gif';
+  static const String orderAcceptedDelivery =
+      'assets/images/order-accepted.gif';
+  static const String orderAcceptedCollection =
+      'assets/images/order-accepted.gif';
 
   static const String onboardingPage2HeadingImage1 = 'plant-icon.svg';
   static const String onboardingPage3HeadingImage2 = 'local-icon.svg';

@@ -8,18 +8,25 @@ part of 'ESCExplanation.dart';
 
 _$_ESCExplanation _$$_ESCExplanationFromJson(Map<String, dynamic> json) =>
     _$_ESCExplanation(
+      evidence: json['evidence'] as String,
       id: json['id'] as int,
-      title: json['title'] as String,
-      description: json['description'] as String,
       measure: json['measure'] as num,
-      escrating: ESCRating.fromJson(json['escrating'] as Map<String, dynamic>),
+      rating: json['rating'] as num,
+      source: json['source'] as int,
+      title: json['title'] as String,
+      reasons:
+          (json['reasons'] as List<dynamic>).map((e) => e as String).toList(),
+      imageUrl: json['imageUrl'] as String? ?? '',
     );
 
 Map<String, dynamic> _$$_ESCExplanationToJson(_$_ESCExplanation instance) =>
     <String, dynamic>{
+      'evidence': instance.evidence,
       'id': instance.id,
-      'title': instance.title,
-      'description': instance.description,
       'measure': instance.measure,
-      'escrating': instance.escrating.toJson(),
+      'rating': instance.rating,
+      'source': instance.source,
+      'title': instance.title,
+      'reasons': instance.reasons,
+      'imageUrl': instance.imageUrl,
     };

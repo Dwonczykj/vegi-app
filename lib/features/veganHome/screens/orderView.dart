@@ -78,7 +78,8 @@ class OrderViewScreen extends StatelessWidget {
                     orderItems: order.items
                         .map(
                           (element) => ViewItem(
-                            name: element.product.name ?? 'N/A',
+                          id: element.product.id,
+                            name: element.product.name,
                             totalPriceFormatted: element.formattedPrice,
                             chosenOptions: element.selectedProductOptionsString,
                           ),

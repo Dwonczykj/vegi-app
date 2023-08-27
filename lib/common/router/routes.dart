@@ -62,14 +62,16 @@ class RootRouter extends $RootRouter {
     AutoRoute(page: ViewJsonScreen.page),
     AutoRoute(page: ChooseSecurityOption.page),
     AutoRoute(page: VerifyEmailLinkRoute.page),
-    AutoRoute(page: FirebaseAuthLinkRoute.page, path: '/firebaseauth/link'), // routes at the route of the router have to start with a '/'
+    AutoRoute(
+        page: FirebaseAuthLinkRoute.page,
+        path:
+            '/firebaseauth/link'), // routes at the route of the router have to start with a '/'
     AutoRoute(page: PinCodeScreen.page),
     AutoRoute(page: RestoreFromBackupScreen.page),
     AutoRoute(page: OnBoardScreen.page),
     AutoRoute(page: ProfileScreen.page),
     AutoRoute(page: SignUpScreen.page),
-    AutoRoute(
-        page: SignUpWithEmailAndPasswordScreen.page),
+    AutoRoute(page: SignUpWithEmailAndPasswordScreen.page),
     AutoRoute(page: SignUpEmailLinkScreen.page),
     AutoRoute(page: SetEmailOnboardingScreen.page),
     AutoRoute(page: CreateWithEmailAndPasswordScreen.page),
@@ -86,6 +88,7 @@ class RootRouter extends $RootRouter {
     AutoRoute(page: SurveyThanksScreen.page),
     AutoRoute(page: SuggestProductFunnelScreen.page),
     AutoRoute(page: ImageFromGalleryEx.page),
+    AutoRoute(page: ESCExplainRatingScreen.page),
     if (kDebugMode) AutoRoute(page: ReduxStateViewer.page),
     AutoRoute(
         page: MainScreen.page,
@@ -94,8 +97,7 @@ class RootRouter extends $RootRouter {
           // AutoRoute(page: VeganHomeRouter.page),
           veganHomeTab,
           topUpRoute,
-        ]
-    ),
+        ]),
     AutoRoute(
       page: ShowUserMnemonicScreen.page,
       // guards: [AuthGuard]

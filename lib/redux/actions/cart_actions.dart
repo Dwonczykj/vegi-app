@@ -39,6 +39,7 @@ import 'package:vegan_liverpool/models/restaurant/restaurantItem.dart';
 import 'package:vegan_liverpool/models/restaurant/restaurantMenuItem.dart';
 import 'package:vegan_liverpool/models/restaurant/time_slot.dart';
 import 'package:vegan_liverpool/models/waitingListFunnel/waitingListEntry.dart';
+import 'package:vegan_liverpool/redux/actions/esc_actions.dart';
 import 'package:vegan_liverpool/redux/actions/home_page_actions.dart';
 import 'package:vegan_liverpool/redux/actions/user_actions.dart';
 import 'package:vegan_liverpool/redux/actions/cart_actions.dart' as cartActions;
@@ -1059,6 +1060,23 @@ ThunkAction<AppState> updateCartItems(List<CartItem> itemsToAdd) {
       store
         ..dispatch(UpdateCartItems(cartItems: cartItems))
         ..dispatch(computeCartTotals());
+      itemsToAdd.forEach((element) async {
+        if (element.menuItem.menuItemIdAsInt == null) {
+          return;
+        }
+        final productRating = await vegiESCService.rateProduct(
+          productId: element.menuItem.menuItemIdAsInt!,
+        );
+        if (productRating == null) {
+          return;
+        }
+        store.dispatch(
+          SetExplanationsForProduct(
+            productId: element.menuItem.menuItemIdAsInt!,
+            newRating: productRating.new_rating,
+          ),
+        );
+      });
     } catch (e, s) {
       log.error('ERROR - updateCartItems $e');
       await Sentry.captureException(

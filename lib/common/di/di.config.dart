@@ -24,17 +24,17 @@ import 'package:logger/logger.dart' as _i16;
 import 'package:package_info/package_info.dart' as _i19;
 import 'package:phone_number/phone_number.dart' as _i23;
 import 'package:redux/redux.dart' as _i25;
-import 'package:vegan_liverpool/common/di/authenticator.dart' as _i37;
-import 'package:vegan_liverpool/common/di/dio.dart' as _i34;
-import 'package:vegan_liverpool/common/di/firebase.dart' as _i36;
-import 'package:vegan_liverpool/common/di/logger_di.dart' as _i33;
-import 'package:vegan_liverpool/common/di/network_info_di.dart' as _i38;
-import 'package:vegan_liverpool/common/di/onboard.dart' as _i35;
-import 'package:vegan_liverpool/common/di/package_info.dart' as _i39;
-import 'package:vegan_liverpool/common/di/phone.dart' as _i32;
-import 'package:vegan_liverpool/common/network/services.dart' as _i40;
+import 'package:vegan_liverpool/common/di/authenticator.dart' as _i38;
+import 'package:vegan_liverpool/common/di/dio.dart' as _i35;
+import 'package:vegan_liverpool/common/di/firebase.dart' as _i37;
+import 'package:vegan_liverpool/common/di/logger_di.dart' as _i34;
+import 'package:vegan_liverpool/common/di/network_info_di.dart' as _i39;
+import 'package:vegan_liverpool/common/di/onboard.dart' as _i36;
+import 'package:vegan_liverpool/common/di/package_info.dart' as _i40;
+import 'package:vegan_liverpool/common/di/phone.dart' as _i33;
+import 'package:vegan_liverpool/common/network/services.dart' as _i41;
 import 'package:vegan_liverpool/common/router/routes.dart' as _i24;
-import 'package:vegan_liverpool/initStore.dart' as _i31;
+import 'package:vegan_liverpool/initStore.dart' as _i32;
 import 'package:vegan_liverpool/models/app_state.dart' as _i26;
 import 'package:vegan_liverpool/new_version.dart' as _i18;
 import 'package:vegan_liverpool/services/apis/fxService.dart' as _i5;
@@ -42,10 +42,11 @@ import 'package:vegan_liverpool/services/apis/locationService.dart' as _i15;
 import 'package:vegan_liverpool/services/apis/peeplEats.dart' as _i20;
 import 'package:vegan_liverpool/services/apis/peeplPay.dart' as _i21;
 import 'package:vegan_liverpool/services/apis/peeplPay2.dart' as _i22;
-import 'package:vegan_liverpool/services/apis/stripePay.dart' as _i27;
-import 'package:vegan_liverpool/services/apis/stripePay2.dart' as _i28;
+import 'package:vegan_liverpool/services/apis/stripePay.dart' as _i28;
+import 'package:vegan_liverpool/services/apis/stripePay2.dart' as _i27;
+import 'package:vegan_liverpool/services/apis/vegiESCService.dart' as _i30;
 import 'package:vegan_liverpool/utils/connectionChecker.dart' as _i17;
-import 'package:vegan_liverpool/utils/log/log_it.dart' as _i30;
+import 'package:vegan_liverpool/utils/log/log_it.dart' as _i31;
 import 'package:vegan_liverpool/utils/onboard/authentication.dart' as _i3;
 import 'package:vegan_liverpool/utils/onboard/firebase.dart' as _i11;
 import 'package:vegan_liverpool/utils/onboard/Istrategy.dart' as _i13;
@@ -124,32 +125,34 @@ extension GetItInjectableX on _i1.GetIt {
     gh.lazySingleton<_i23.PhoneNumberUtil>(() => phone.phoneNumberUtil);
     gh.lazySingleton<_i24.RootRouter>(() => servicesModule.rootRouter);
     gh.singletonAsync<_i25.Store<_i26.AppState>>(() => registerModule.store());
-    gh.lazySingleton<_i27.StripePayService>(
-        () => _i27.StripePayService(gh<_i4.Dio>()));
-    gh.lazySingleton<_i28.StripePayService>(() => _i28.StripePayService());
+    gh.lazySingleton<_i27.StripePayService>(() => _i27.StripePayService());
+    gh.lazySingleton<_i28.StripePayService>(
+        () => _i28.StripePayService(gh<_i4.Dio>()));
     gh.lazySingleton<_i29.StripeService>(() => _i29.StripeService());
-    gh.lazySingleton<_i30.LogIt>(() => _i30.LogIt(gh<_i16.Logger>()));
+    gh.lazySingleton<_i30.VegiESCService>(
+        () => _i30.VegiESCService(gh<_i4.Dio>()));
+    gh.lazySingleton<_i31.LogIt>(() => _i31.LogIt(gh<_i16.Logger>()));
     return this;
   }
 }
 
-class _$RegisterModule extends _i31.RegisterModule {}
+class _$RegisterModule extends _i32.RegisterModule {}
 
-class _$Phone extends _i32.Phone {}
+class _$Phone extends _i33.Phone {}
 
-class _$LoggerDi extends _i33.LoggerDi {}
+class _$LoggerDi extends _i34.LoggerDi {}
 
-class _$DioDi extends _i34.DioDi {}
+class _$DioDi extends _i35.DioDi {}
 
-class _$OnBoardStrategy extends _i35.OnBoardStrategy {}
+class _$OnBoardStrategy extends _i36.OnBoardStrategy {}
 
-class _$FirebaseInjectableModule extends _i36.FirebaseInjectableModule {}
+class _$FirebaseInjectableModule extends _i37.FirebaseInjectableModule {}
 
 class _$AuthenticationInjectableModule
-    extends _i37.AuthenticationInjectableModule {}
+    extends _i38.AuthenticationInjectableModule {}
 
-class _$NetworkInfoDi extends _i38.NetworkInfoDi {}
+class _$NetworkInfoDi extends _i39.NetworkInfoDi {}
 
-class _$PackageInfoDi extends _i39.PackageInfoDi {}
+class _$PackageInfoDi extends _i40.PackageInfoDi {}
 
-class _$ServicesModule extends _i40.ServicesModule {}
+class _$ServicesModule extends _i41.ServicesModule {}

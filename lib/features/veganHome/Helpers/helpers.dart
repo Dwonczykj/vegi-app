@@ -169,17 +169,17 @@ String cFPriceNoDec(int price) {
 
 Color? colorForESCRating(num rating) {
   if (rating > 4) {
-    return Colors.greenAccent[500];
+    return const Color.fromRGBO(105, 240, 174, 1);
   } else if (rating > 3) {
-    return Colors.greenAccent[300];
+    return Color.fromARGB(255, 174, 223, 16);
   } else if (rating > 2) {
-    return Colors.greenAccent[100];
+    return Color.fromARGB(255, 239, 246, 185);
   } else if (rating > 1) {
-    return Colors.amberAccent[100];
+    return Color.fromARGB(255, 255, 202, 127);
   } else if (rating > 0) {
-    return Colors.amberAccent[200];
+    return Color.fromARGB(255, 255, 169, 64);
   } else {
-    return Colors.orangeAccent[400];
+    return Color.fromARGB(255, 200, 66, 13);
   }
 }
 
@@ -737,10 +737,6 @@ T tryCatchRethrowInline<T>(
     log.error(
       e,
       stackTrace: s,
-    );
-    Sentry.captureException(
-      e,
-      stackTrace: s, // from catch (err, s)
     );
     rethrow;
   }

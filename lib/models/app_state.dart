@@ -5,6 +5,7 @@ import 'package:vegan_liverpool/models/app_env_state.dart';
 import 'package:vegan_liverpool/models/app_log_state.dart';
 import 'package:vegan_liverpool/models/auth_state.dart';
 import 'package:vegan_liverpool/models/cash_wallet_state.dart';
+import 'package:vegan_liverpool/models/esc_state.dart';
 import 'package:vegan_liverpool/models/home_page_state.dart';
 import 'package:vegan_liverpool/models/menu_item_state.dart';
 import 'package:vegan_liverpool/models/onboarding_state.dart';
@@ -23,6 +24,7 @@ class AppState with _$AppState {
     @AppEnvStateConverter() required AppEnvState appEnvState,
     @AuthStateConverter() required AuthState authState,
     @AppLogStateConverter() required AppLogState appLogState,
+    @EscStateConverter() required EscState escState,
     @UserStateConverter() required UserState userState,
     @CashWalletStateConverter() required CashWalletState cashWalletState,
     @HomePageStateConverter() required HomePageState homePageState,
@@ -39,6 +41,7 @@ class AppState with _$AppState {
       appEnvState: AppEnvState.initial(),
       authState: AuthState.initial(),
       appLogState: AppLogState.initial(),
+      escState: EscState.initial(),
       userState: UserState.initial(),
       cashWalletState: CashWalletState.initial(),
       homePageState: HomePageState.initial(),
@@ -57,6 +60,8 @@ class AppState with _$AppState {
           .fromJson(json['authState'] as Map<String, dynamic>?),
       appLogState: const AppLogStateConverter()
           .fromJson(json['appLog'] as Map<String, dynamic>?),
+      escState: const EscStateConverter()
+          .fromJson(json['escState'] as Map<String, dynamic>?),
       userState: const UserStateConverter()
           .fromJson(json['userState'] as Map<String, dynamic>?),
       cashWalletState: const CashWalletStateConverter()

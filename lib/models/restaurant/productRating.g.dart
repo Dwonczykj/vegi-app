@@ -12,7 +12,7 @@ _$_ProductRating _$$_ProductRatingFromJson(Map<String, dynamic> json) =>
       createdAt: (json['createdAt'] as num).toDouble(),
       productPublicId: json['productPublicId'] as String,
       rating: json['rating'] as num,
-      calculatedOn: DateTime.parse(json['calculatedOn'] as String),
+      calculatedOn: jsonToTimeStampNullable(json['calculatedOn']),
       product: Product.fromJson(json['product'] as Map<String, dynamic>),
       evidence: json['evidence'] as Object? ?? const {},
       explanations: (json['explanations'] as List<dynamic>?)
@@ -27,7 +27,7 @@ Map<String, dynamic> _$$_ProductRatingToJson(_$_ProductRating instance) =>
       'createdAt': instance.createdAt,
       'productPublicId': instance.productPublicId,
       'rating': instance.rating,
-      'calculatedOn': instance.calculatedOn.toIso8601String(),
+      'calculatedOn': timeStampToJsonIntNullable(instance.calculatedOn),
       'product': instance.product.toJson(),
       'evidence': instance.evidence,
       'explanations': instance.explanations.map((e) => e.toJson()).toList(),

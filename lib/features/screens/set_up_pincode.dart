@@ -13,7 +13,8 @@ import 'package:vegan_liverpool/utils/analytics.dart';
 
 class SetUpPinCodeScreen extends StatefulWidget {
   const SetUpPinCodeScreen({
-    required this.onSuccess, Key? key,
+    required this.onSuccess,
+    Key? key,
   }) : super(key: key);
   final void Function() onSuccess;
   @override
@@ -46,100 +47,103 @@ class _SetUpPinCodeScreenState extends State<SetUpPinCodeScreen> {
   Widget build(BuildContext context) {
     return MyScaffold(
       title: I10n.of(context).pincode,
-      body: SizedBox(
-        height: MediaQuery.of(context).size.height * .5,
-        width: MediaQuery.of(context).size.height * .5,
-        child: Column(
-          children: <Widget>[
-            const SizedBox(
-              height: 150,
-            ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Text(
-                  isRetype
-                      ? I10n.of(context).re_type_passcode
-                      : I10n.of(context).create_passcode,
-                  style: const TextStyle(
-                    fontSize: 25,
-                  ),
-                ),
-                const SizedBox(
-                  height: 50,
-                ),
-                Form(
-                  key: formKey,
-                  child: SizedBox(
-                    width: 250,
-                    child: PinCodeTextField(
-                      key: ValueKey("SetUpPincodeTextField"),
-                      length: 6,
-                      showCursor: false,
-                      appContext: context,
-                      enableActiveFill: true,
-                      obscureText: true,
-                      enablePinAutofill: false,
-                      autoFocus: true,
-                      focusNode: textNode,
-                      keyboardType: TextInputType.number,
-                      animationType: AnimationType.fade,
-                      controller: textEditingController,
-                      errorAnimationController: errorController,
-                      pinTheme: PinTheme(
-                        borderWidth: 4,
-                        shape: PinCodeFieldShape.underline,
-                        inactiveColor: const Color(0xFFDDDDDD),
-                        inactiveFillColor: Theme.of(context).canvasColor,
-                        selectedFillColor: Theme.of(context).canvasColor,
-                        disabledColor: Theme.of(context).primaryColor,
-                        selectedColor: Theme.of(context).colorScheme.onSurface,
-                        activeColor: Theme.of(context).colorScheme.onSurface,
-                        activeFillColor: Theme.of(context).canvasColor,
-                      ),
-                      onCompleted: (pin) {
-                        Analytics.track(
-                          eventName: AnalyticsEvents.pincodeScreen,
-                        );
-                        if (isRetype && pin == lastPinCode) {
-                          StoreProvider.of<AppState>(context)
-                            ..dispatch(
-                              SetSecurityType(
-                                biometricAuth: BiometricAuth.pincode,
-                              ),
-                            )
-                            ..dispatch(SetPincodeSuccess(pin))
-                            ..dispatch(
-                              SetBiometricallyAuthenticated(
-                                isBiometricallyAuthenticated: true,
-                              ),
-                            )
-                            ..dispatch(
-                              SetCompletedOnboardingSuccess(
-                                onboardingCompleted: true,
-                              ),
-                            );
-                          widget.onSuccess();
-                        } else {
-                          setState(() {
-                            isRetype = true;
-                            lastPinCode = pin;
-                          });
-                          textEditingController.clear();
-                          textNode.requestFocus();
-                        }
-                      },
-                      onChanged: (value) {
-                        setState(() {
-                          currentText = value;
-                        });
-                      },
+      body: Center(
+        child: SizedBox(
+          height: MediaQuery.of(context).size.height * .5,
+          width: MediaQuery.of(context).size.height * .5,
+          child: Column(
+            children: <Widget>[
+              const SizedBox(
+                height: 150,
+              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  Text(
+                    isRetype
+                        ? I10n.of(context).re_type_passcode
+                        : I10n.of(context).create_passcode,
+                    style: const TextStyle(
+                      fontSize: 25,
                     ),
                   ),
-                ),
-              ],
-            )
-          ],
+                  const SizedBox(
+                    height: 50,
+                  ),
+                  Form(
+                    key: formKey,
+                    child: SizedBox(
+                      width: 250,
+                      child: PinCodeTextField(
+                        key: ValueKey("SetUpPincodeTextField"),
+                        length: 6,
+                        showCursor: false,
+                        appContext: context,
+                        enableActiveFill: true,
+                        obscureText: true,
+                        enablePinAutofill: false,
+                        autoFocus: true,
+                        focusNode: textNode,
+                        keyboardType: TextInputType.number,
+                        animationType: AnimationType.fade,
+                        controller: textEditingController,
+                        errorAnimationController: errorController,
+                        pinTheme: PinTheme(
+                          borderWidth: 4,
+                          shape: PinCodeFieldShape.underline,
+                          inactiveColor: const Color(0xFFDDDDDD),
+                          inactiveFillColor: Theme.of(context).canvasColor,
+                          selectedFillColor: Theme.of(context).canvasColor,
+                          disabledColor: Theme.of(context).primaryColor,
+                          selectedColor:
+                              Theme.of(context).colorScheme.onSurface,
+                          activeColor: Theme.of(context).colorScheme.onSurface,
+                          activeFillColor: Theme.of(context).canvasColor,
+                        ),
+                        onCompleted: (pin) {
+                          Analytics.track(
+                            eventName: AnalyticsEvents.pincodeScreen,
+                          );
+                          if (isRetype && pin == lastPinCode) {
+                            StoreProvider.of<AppState>(context)
+                              ..dispatch(
+                                SetSecurityType(
+                                  biometricAuth: BiometricAuth.pincode,
+                                ),
+                              )
+                              ..dispatch(SetPincodeSuccess(pin))
+                              ..dispatch(
+                                SetBiometricallyAuthenticated(
+                                  isBiometricallyAuthenticated: true,
+                                ),
+                              )
+                              ..dispatch(
+                                SetCompletedOnboardingSuccess(
+                                  onboardingCompleted: true,
+                                ),
+                              );
+                            widget.onSuccess();
+                          } else {
+                            setState(() {
+                              isRetype = true;
+                              lastPinCode = pin;
+                            });
+                            textEditingController.clear();
+                            textNode.requestFocus();
+                          }
+                        },
+                        onChanged: (value) {
+                          setState(() {
+                            currentText = value;
+                          });
+                        },
+                      ),
+                    ),
+                  ),
+                ],
+              )
+            ],
+          ),
         ),
       ),
     );

@@ -20,10 +20,11 @@ ProductDTO _$ProductDTOFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$ProductDTO {
-  int get id => throw _privateConstructorUsedError;
+  int? get id => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
 
   /// this is the price in pence of the restaurant item without any product options applied
+  @JsonKey(fromJson: castDoubleToInt)
   int get basePrice => throw _privateConstructorUsedError;
   bool get isAvailable => throw _privateConstructorUsedError;
   int get priority => throw _privateConstructorUsedError;
@@ -64,9 +65,9 @@ abstract class $ProductDTOCopyWith<$Res> {
       _$ProductDTOCopyWithImpl<$Res, ProductDTO>;
   @useResult
   $Res call(
-      {int id,
+      {int? id,
       String name,
-      int basePrice,
+      @JsonKey(fromJson: castDoubleToInt) int basePrice,
       bool isAvailable,
       int priority,
       bool isFeatured,
@@ -107,7 +108,7 @@ class _$ProductDTOCopyWithImpl<$Res, $Val extends ProductDTO>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = null,
+    Object? id = freezed,
     Object? name = null,
     Object? basePrice = null,
     Object? isAvailable = null,
@@ -133,10 +134,10 @@ class _$ProductDTOCopyWithImpl<$Res, $Val extends ProductDTO>
     Object? rating = freezed,
   }) {
     return _then(_value.copyWith(
-      id: null == id
+      id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as int,
+              as int?,
       name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -278,9 +279,9 @@ abstract class _$$_ProductDTOCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {int id,
+      {int? id,
       String name,
-      int basePrice,
+      @JsonKey(fromJson: castDoubleToInt) int basePrice,
       bool isAvailable,
       int priority,
       bool isFeatured,
@@ -322,7 +323,7 @@ class __$$_ProductDTOCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? id = null,
+    Object? id = freezed,
     Object? name = null,
     Object? basePrice = null,
     Object? isAvailable = null,
@@ -348,10 +349,10 @@ class __$$_ProductDTOCopyWithImpl<$Res>
     Object? rating = freezed,
   }) {
     return _then(_$_ProductDTO(
-      id: null == id
+      id: freezed == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
-              as int,
+              as int?,
       name: null == name
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -453,9 +454,9 @@ class __$$_ProductDTOCopyWithImpl<$Res>
 @JsonSerializable()
 class _$_ProductDTO extends _ProductDTO {
   _$_ProductDTO(
-      {required this.id,
+      {this.id,
       required this.name,
-      required this.basePrice,
+      @JsonKey(fromJson: castDoubleToInt) required this.basePrice,
       required this.isAvailable,
       required this.priority,
       required this.isFeatured,
@@ -483,12 +484,13 @@ class _$_ProductDTO extends _ProductDTO {
       _$$_ProductDTOFromJson(json);
 
   @override
-  final int id;
+  final int? id;
   @override
   final String name;
 
   /// this is the price in pence of the restaurant item without any product options applied
   @override
+  @JsonKey(fromJson: castDoubleToInt)
   final int basePrice;
   @override
   final bool isAvailable;
@@ -648,9 +650,9 @@ class _$_ProductDTO extends _ProductDTO {
 
 abstract class _ProductDTO extends ProductDTO {
   factory _ProductDTO(
-      {required final int id,
+      {final int? id,
       required final String name,
-      required final int basePrice,
+      @JsonKey(fromJson: castDoubleToInt) required final int basePrice,
       required final bool isAvailable,
       required final int priority,
       required final bool isFeatured,
@@ -681,12 +683,13 @@ abstract class _ProductDTO extends ProductDTO {
       _$_ProductDTO.fromJson;
 
   @override
-  int get id;
+  int? get id;
   @override
   String get name;
   @override
 
   /// this is the price in pence of the restaurant item without any product options applied
+  @JsonKey(fromJson: castDoubleToInt)
   int get basePrice;
   @override
   bool get isAvailable;

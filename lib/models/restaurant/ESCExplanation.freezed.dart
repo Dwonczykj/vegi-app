@@ -20,11 +20,16 @@ ESCExplanation _$ESCExplanationFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$ESCExplanation {
+  String get evidence => throw _privateConstructorUsedError;
   int get id => throw _privateConstructorUsedError;
-  String get title => throw _privateConstructorUsedError;
-  String get description => throw _privateConstructorUsedError;
-  num get measure => throw _privateConstructorUsedError;
-  ESCRating get escrating => throw _privateConstructorUsedError;
+  num get measure =>
+      throw _privateConstructorUsedError; // required ESCRating escrating,
+  num get rating => throw _privateConstructorUsedError;
+  int get source => throw _privateConstructorUsedError;
+  String get title =>
+      throw _privateConstructorUsedError; // required String description,
+  List<String> get reasons => throw _privateConstructorUsedError;
+  String get imageUrl => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -39,13 +44,14 @@ abstract class $ESCExplanationCopyWith<$Res> {
       _$ESCExplanationCopyWithImpl<$Res, ESCExplanation>;
   @useResult
   $Res call(
-      {int id,
-      String title,
-      String description,
+      {String evidence,
+      int id,
       num measure,
-      ESCRating escrating});
-
-  $ESCRatingCopyWith<$Res> get escrating;
+      num rating,
+      int source,
+      String title,
+      List<String> reasons,
+      String imageUrl});
 }
 
 /// @nodoc
@@ -61,42 +67,49 @@ class _$ESCExplanationCopyWithImpl<$Res, $Val extends ESCExplanation>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? evidence = null,
     Object? id = null,
-    Object? title = null,
-    Object? description = null,
     Object? measure = null,
-    Object? escrating = null,
+    Object? rating = null,
+    Object? source = null,
+    Object? title = null,
+    Object? reasons = null,
+    Object? imageUrl = null,
   }) {
     return _then(_value.copyWith(
+      evidence: null == evidence
+          ? _value.evidence
+          : evidence // ignore: cast_nullable_to_non_nullable
+              as String,
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
+              as int,
+      measure: null == measure
+          ? _value.measure
+          : measure // ignore: cast_nullable_to_non_nullable
+              as num,
+      rating: null == rating
+          ? _value.rating
+          : rating // ignore: cast_nullable_to_non_nullable
+              as num,
+      source: null == source
+          ? _value.source
+          : source // ignore: cast_nullable_to_non_nullable
               as int,
       title: null == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
               as String,
-      description: null == description
-          ? _value.description
-          : description // ignore: cast_nullable_to_non_nullable
+      reasons: null == reasons
+          ? _value.reasons
+          : reasons // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      imageUrl: null == imageUrl
+          ? _value.imageUrl
+          : imageUrl // ignore: cast_nullable_to_non_nullable
               as String,
-      measure: null == measure
-          ? _value.measure
-          : measure // ignore: cast_nullable_to_non_nullable
-              as num,
-      escrating: null == escrating
-          ? _value.escrating
-          : escrating // ignore: cast_nullable_to_non_nullable
-              as ESCRating,
     ) as $Val);
-  }
-
-  @override
-  @pragma('vm:prefer-inline')
-  $ESCRatingCopyWith<$Res> get escrating {
-    return $ESCRatingCopyWith<$Res>(_value.escrating, (value) {
-      return _then(_value.copyWith(escrating: value) as $Val);
-    });
   }
 }
 
@@ -109,14 +122,14 @@ abstract class _$$_ESCExplanationCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {int id,
-      String title,
-      String description,
+      {String evidence,
+      int id,
       num measure,
-      ESCRating escrating});
-
-  @override
-  $ESCRatingCopyWith<$Res> get escrating;
+      num rating,
+      int source,
+      String title,
+      List<String> reasons,
+      String imageUrl});
 }
 
 /// @nodoc
@@ -130,33 +143,48 @@ class __$$_ESCExplanationCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? evidence = null,
     Object? id = null,
-    Object? title = null,
-    Object? description = null,
     Object? measure = null,
-    Object? escrating = null,
+    Object? rating = null,
+    Object? source = null,
+    Object? title = null,
+    Object? reasons = null,
+    Object? imageUrl = null,
   }) {
     return _then(_$_ESCExplanation(
+      evidence: null == evidence
+          ? _value.evidence
+          : evidence // ignore: cast_nullable_to_non_nullable
+              as String,
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
+              as int,
+      measure: null == measure
+          ? _value.measure
+          : measure // ignore: cast_nullable_to_non_nullable
+              as num,
+      rating: null == rating
+          ? _value.rating
+          : rating // ignore: cast_nullable_to_non_nullable
+              as num,
+      source: null == source
+          ? _value.source
+          : source // ignore: cast_nullable_to_non_nullable
               as int,
       title: null == title
           ? _value.title
           : title // ignore: cast_nullable_to_non_nullable
               as String,
-      description: null == description
-          ? _value.description
-          : description // ignore: cast_nullable_to_non_nullable
+      reasons: null == reasons
+          ? _value.reasons
+          : reasons // ignore: cast_nullable_to_non_nullable
+              as List<String>,
+      imageUrl: null == imageUrl
+          ? _value.imageUrl
+          : imageUrl // ignore: cast_nullable_to_non_nullable
               as String,
-      measure: null == measure
-          ? _value.measure
-          : measure // ignore: cast_nullable_to_non_nullable
-              as num,
-      escrating: null == escrating
-          ? _value.escrating
-          : escrating // ignore: cast_nullable_to_non_nullable
-              as ESCRating,
     ));
   }
 }
@@ -166,30 +194,42 @@ class __$$_ESCExplanationCopyWithImpl<$Res>
 @JsonSerializable()
 class _$_ESCExplanation extends _ESCExplanation {
   _$_ESCExplanation(
-      {required this.id,
-      required this.title,
-      required this.description,
+      {required this.evidence,
+      required this.id,
       required this.measure,
-      required this.escrating})
+      required this.rating,
+      required this.source,
+      required this.title,
+      required this.reasons,
+      this.imageUrl = ''})
       : super._();
 
   factory _$_ESCExplanation.fromJson(Map<String, dynamic> json) =>
       _$$_ESCExplanationFromJson(json);
 
   @override
+  final String evidence;
+  @override
   final int id;
   @override
-  final String title;
-  @override
-  final String description;
-  @override
   final num measure;
+// required ESCRating escrating,
   @override
-  final ESCRating escrating;
+  final num rating;
+  @override
+  final int source;
+  @override
+  final String title;
+// required String description,
+  @override
+  final List<String> reasons;
+  @override
+  @JsonKey()
+  final String imageUrl;
 
   @override
   String toString() {
-    return 'ESCExplanation(id: $id, title: $title, description: $description, measure: $measure, escrating: $escrating)';
+    return 'ESCExplanation(evidence: $evidence, id: $id, measure: $measure, rating: $rating, source: $source, title: $title, reasons: $reasons, imageUrl: $imageUrl)';
   }
 
   @override
@@ -197,19 +237,22 @@ class _$_ESCExplanation extends _ESCExplanation {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_ESCExplanation &&
+            (identical(other.evidence, evidence) ||
+                other.evidence == evidence) &&
             (identical(other.id, id) || other.id == id) &&
-            (identical(other.title, title) || other.title == title) &&
-            (identical(other.description, description) ||
-                other.description == description) &&
             (identical(other.measure, measure) || other.measure == measure) &&
-            (identical(other.escrating, escrating) ||
-                other.escrating == escrating));
+            (identical(other.rating, rating) || other.rating == rating) &&
+            (identical(other.source, source) || other.source == source) &&
+            (identical(other.title, title) || other.title == title) &&
+            const DeepCollectionEquality().equals(other.reasons, reasons) &&
+            (identical(other.imageUrl, imageUrl) ||
+                other.imageUrl == imageUrl));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, id, title, description, measure, escrating);
+  int get hashCode => Object.hash(runtimeType, evidence, id, measure, rating,
+      source, title, const DeepCollectionEquality().hash(reasons), imageUrl);
 
   @JsonKey(ignore: true)
   @override
@@ -227,26 +270,35 @@ class _$_ESCExplanation extends _ESCExplanation {
 
 abstract class _ESCExplanation extends ESCExplanation {
   factory _ESCExplanation(
-      {required final int id,
-      required final String title,
-      required final String description,
+      {required final String evidence,
+      required final int id,
       required final num measure,
-      required final ESCRating escrating}) = _$_ESCExplanation;
+      required final num rating,
+      required final int source,
+      required final String title,
+      required final List<String> reasons,
+      final String imageUrl}) = _$_ESCExplanation;
   _ESCExplanation._() : super._();
 
   factory _ESCExplanation.fromJson(Map<String, dynamic> json) =
       _$_ESCExplanation.fromJson;
 
   @override
+  String get evidence;
+  @override
   int get id;
   @override
-  String get title;
-  @override
-  String get description;
-  @override
   num get measure;
+  @override // required ESCRating escrating,
+  num get rating;
   @override
-  ESCRating get escrating;
+  int get source;
+  @override
+  String get title;
+  @override // required String description,
+  List<String> get reasons;
+  @override
+  String get imageUrl;
   @override
   @JsonKey(ignore: true)
   _$$_ESCExplanationCopyWith<_$_ESCExplanation> get copyWith =>

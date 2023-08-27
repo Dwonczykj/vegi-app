@@ -8,131 +8,133 @@
 // coverage:ignore-file
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'dart:io' as _i58;
+import 'dart:io' as _i59;
 
-import 'package:auto_route/auto_route.dart' as _i54;
-import 'package:flutter/cupertino.dart' as _i55;
-import 'package:flutter/foundation.dart' as _i59;
-import 'package:flutter/material.dart' as _i56;
-import 'package:redux_dev_tools/redux_dev_tools.dart' as _i61;
-import 'package:vegan_liverpool/constants/enums.dart' as _i57;
+import 'package:auto_route/auto_route.dart' as _i55;
+import 'package:flutter/cupertino.dart' as _i56;
+import 'package:flutter/foundation.dart' as _i60;
+import 'package:flutter/material.dart' as _i57;
+import 'package:redux_dev_tools/redux_dev_tools.dart' as _i62;
+import 'package:vegan_liverpool/constants/enums.dart' as _i58;
 import 'package:vegan_liverpool/features/account/router/router.dart' as _i2;
-import 'package:vegan_liverpool/features/account/screens/profile.dart' as _i22;
+import 'package:vegan_liverpool/features/account/screens/profile.dart' as _i23;
 import 'package:vegan_liverpool/features/onboard/screens/create_email_password_screen.dart'
     as _i10;
 import 'package:vegan_liverpool/features/onboard/screens/createWalletFirstScreen.dart'
     as _i9;
 import 'package:vegan_liverpool/features/onboard/screens/firebaseAuthLink.dart'
-    as _i12;
+    as _i13;
 import 'package:vegan_liverpool/features/onboard/screens/registerEmailOnboardingScreen.dart'
-    as _i25;
+    as _i26;
 import 'package:vegan_liverpool/features/onboard/screens/restore_wallet_screen.dart'
-    as _i28;
+    as _i29;
 import 'package:vegan_liverpool/features/onboard/screens/security_screen.dart'
     as _i8;
 import 'package:vegan_liverpool/features/onboard/screens/set_email_onboarding_screen.dart'
-    as _i32;
-import 'package:vegan_liverpool/features/onboard/screens/show_user_mnemonic.dart'
     as _i33;
-import 'package:vegan_liverpool/features/onboard/screens/signup_email_link_screen.dart'
+import 'package:vegan_liverpool/features/onboard/screens/show_user_mnemonic.dart'
     as _i34;
-import 'package:vegan_liverpool/features/onboard/screens/signup_email_password_screen.dart'
-    as _i36;
-import 'package:vegan_liverpool/features/onboard/screens/signup_screen.dart'
+import 'package:vegan_liverpool/features/onboard/screens/signup_email_link_screen.dart'
     as _i35;
+import 'package:vegan_liverpool/features/onboard/screens/signup_email_password_screen.dart'
+    as _i37;
+import 'package:vegan_liverpool/features/onboard/screens/signup_screen.dart'
+    as _i36;
 import 'package:vegan_liverpool/features/onboard/screens/username_screen.dart'
-    as _i43;
+    as _i44;
 import 'package:vegan_liverpool/features/onboard/screens/verify_screen.dart'
-    as _i48;
-import 'package:vegan_liverpool/features/onboard/screens/verify_user_mnemonic.dart'
     as _i49;
+import 'package:vegan_liverpool/features/onboard/screens/verify_user_mnemonic.dart'
+    as _i50;
 import 'package:vegan_liverpool/features/onboard/screens/verifyEmailLink.dart'
-    as _i47;
+    as _i48;
 import 'package:vegan_liverpool/features/pay/screens/generate_QR_from_cart_screen.dart'
-    as _i13;
+    as _i14;
 import 'package:vegan_liverpool/features/pay/screens/scan_payment_recipient_qr.dart'
-    as _i30;
+    as _i31;
 import 'package:vegan_liverpool/features/screens/app_log_list_view.dart' as _i5;
 import 'package:vegan_liverpool/features/screens/appStateViewScreen.dart'
     as _i6;
-import 'package:vegan_liverpool/features/screens/main_screen.dart' as _i16;
-import 'package:vegan_liverpool/features/screens/on_board_screen.dart' as _i17;
-import 'package:vegan_liverpool/features/screens/pincode_screen.dart' as _i19;
-import 'package:vegan_liverpool/features/screens/splash_screen.dart' as _i37;
-import 'package:vegan_liverpool/features/screens/viewJsonScreen.dart' as _i50;
+import 'package:vegan_liverpool/features/screens/main_screen.dart' as _i17;
+import 'package:vegan_liverpool/features/screens/on_board_screen.dart' as _i18;
+import 'package:vegan_liverpool/features/screens/pincode_screen.dart' as _i20;
+import 'package:vegan_liverpool/features/screens/splash_screen.dart' as _i38;
+import 'package:vegan_liverpool/features/screens/viewJsonScreen.dart' as _i51;
 import 'package:vegan_liverpool/features/topup/router/topup_router.dart'
-    as _i40;
-import 'package:vegan_liverpool/features/topup/screens/topup.dart' as _i42;
-import 'package:vegan_liverpool/features/topup/screens/topup_explained.dart'
     as _i41;
-import 'package:vegan_liverpool/features/veganHome/router/router.dart' as _i44;
+import 'package:vegan_liverpool/features/topup/screens/topup.dart' as _i43;
+import 'package:vegan_liverpool/features/topup/screens/topup_explained.dart'
+    as _i42;
+import 'package:vegan_liverpool/features/veganHome/router/router.dart' as _i45;
 import 'package:vegan_liverpool/features/veganHome/screens/aboutScreen.dart'
     as _i1;
 import 'package:vegan_liverpool/features/veganHome/screens/allOrdersPage.dart'
     as _i4;
 import 'package:vegan_liverpool/features/veganHome/screens/checkout_screen_2.dart'
     as _i7;
-import 'package:vegan_liverpool/features/veganHome/screens/faqScreen.dart'
+import 'package:vegan_liverpool/features/veganHome/screens/escExplainRatingScreen.dart'
     as _i11;
+import 'package:vegan_liverpool/features/veganHome/screens/faqScreen.dart'
+    as _i12;
 import 'package:vegan_liverpool/features/veganHome/screens/imageFromGalleryEx.dart'
-    as _i14;
+    as _i15;
 import 'package:vegan_liverpool/features/veganHome/screens/orderConfirmed.dart'
-    as _i18;
+    as _i19;
 import 'package:vegan_liverpool/features/veganHome/screens/preparingOrderScreen.dart'
-    as _i21;
+    as _i22;
 import 'package:vegan_liverpool/features/veganHome/screens/restaurantMenuScreen.dart'
-    as _i27;
+    as _i28;
 import 'package:vegan_liverpool/features/veganHome/screens/scan_listed_product_qrcode.dart'
-    as _i29;
+    as _i30;
 import 'package:vegan_liverpool/features/veganHome/screens/scheduledOrdersPage.dart'
-    as _i31;
+    as _i32;
 import 'package:vegan_liverpool/features/veganHome/screens/suggestProductFunnel.dart'
-    as _i38;
+    as _i39;
 import 'package:vegan_liverpool/features/veganHome/screens/veganHome.dart'
-    as _i45;
-import 'package:vegan_liverpool/features/veganHome/screens/vegiHomePage.dart'
     as _i46;
+import 'package:vegan_liverpool/features/veganHome/screens/vegiHomePage.dart'
+    as _i47;
 import 'package:vegan_liverpool/features/veganHome/widgets/shared/redux_state_viewer.dart'
-    as _i23;
+    as _i24;
 import 'package:vegan_liverpool/features/waitingListFunnel/screens/addDiscountCodeScreen.dart'
     as _i3;
 import 'package:vegan_liverpool/features/waitingListFunnel/screens/preLaunchPerksDetailsPage.dart'
-    as _i20;
+    as _i21;
 import 'package:vegan_liverpool/features/waitingListFunnel/screens/registerEmailNotificationsScreen.dart'
-    as _i24;
+    as _i25;
 import 'package:vegan_liverpool/features/waitingListFunnel/screens/surveyThanksScreen.dart'
-    as _i39;
+    as _i40;
 import 'package:vegan_liverpool/features/waitingListFunnel/screens/waitingListFunnel.dart'
-    as _i51;
-import 'package:vegan_liverpool/features/waitingListFunnel/screens/waitingListPositionInQueuePage.dart'
     as _i52;
-import 'package:vegan_liverpool/features/waitingListFunnel/screens/waitingListSurveyQuestions.dart'
+import 'package:vegan_liverpool/features/waitingListFunnel/screens/waitingListPositionInQueuePage.dart'
     as _i53;
-import 'package:vegan_liverpool/models/app_state.dart' as _i62;
-import 'package:vegan_liverpool/models/cart/order.dart' as _i60;
-import 'package:vegan_liverpool/redux/viewsmodels/logoutApp.dart' as _i15;
-import 'package:vegan_liverpool/redux/viewsmodels/reset_app.dart' as _i26;
+import 'package:vegan_liverpool/features/waitingListFunnel/screens/waitingListSurveyQuestions.dart'
+    as _i54;
+import 'package:vegan_liverpool/models/app_state.dart' as _i63;
+import 'package:vegan_liverpool/models/cart/order.dart' as _i61;
+import 'package:vegan_liverpool/redux/viewsmodels/logoutApp.dart' as _i16;
+import 'package:vegan_liverpool/redux/viewsmodels/reset_app.dart' as _i27;
 
-abstract class $RootRouter extends _i54.RootStackRouter {
+abstract class $RootRouter extends _i55.RootStackRouter {
   $RootRouter({super.navigatorKey});
 
   @override
-  final Map<String, _i54.PageFactory> pagesMap = {
+  final Map<String, _i55.PageFactory> pagesMap = {
     AboutScreen.name: (routeData) {
-      return _i54.AutoRoutePage<dynamic>(
+      return _i55.AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const _i1.AboutScreen(),
       );
     },
     AccountsRouter.name: (routeData) {
-      return _i54.AutoRoutePage<dynamic>(
+      return _i55.AutoRoutePage<dynamic>(
         routeData: routeData,
         child: _i2.AccountsRouterPage(),
       );
     },
     AddDiscountCodeScreen.name: (routeData) {
       final args = routeData.argsAs<AddDiscountCodeScreenArgs>();
-      return _i54.AutoRoutePage<dynamic>(
+      return _i55.AutoRoutePage<dynamic>(
         routeData: routeData,
         child: _i3.AddDiscountCodeScreen(
           onVerifyDiscountCode: args.onVerifyDiscountCode,
@@ -141,59 +143,69 @@ abstract class $RootRouter extends _i54.RootStackRouter {
       );
     },
     AllOrdersRoute.name: (routeData) {
-      return _i54.AutoRoutePage<dynamic>(
+      return _i55.AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const _i4.AllOrdersPage(),
       );
     },
     AppLogListView.name: (routeData) {
-      return _i54.AutoRoutePage<dynamic>(
+      return _i55.AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const _i5.AppLogListView(),
       );
     },
     AppStateViewScreen.name: (routeData) {
-      return _i54.AutoRoutePage<dynamic>(
+      return _i55.AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const _i6.AppStateViewScreen(),
       );
     },
     CheckoutScreenPt2.name: (routeData) {
-      return _i54.AutoRoutePage<dynamic>(
+      return _i55.AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const _i7.CheckoutScreenPt2(),
       );
     },
     ChooseSecurityOption.name: (routeData) {
-      return _i54.AutoRoutePage<dynamic>(
+      return _i55.AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const _i8.ChooseSecurityOption(),
       );
     },
     CreateWalletFirstOnboardingScreen.name: (routeData) {
-      return _i54.AutoRoutePage<dynamic>(
+      return _i55.AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const _i9.CreateWalletFirstOnboardingScreen(),
       );
     },
     CreateWithEmailAndPasswordScreen.name: (routeData) {
-      return _i54.AutoRoutePage<dynamic>(
+      return _i55.AutoRoutePage<dynamic>(
         routeData: routeData,
         child: const _i10.CreateWithEmailAndPasswordScreen(),
       );
     },
-    FAQScreen.name: (routeData) {
-      return _i54.AutoRoutePage<dynamic>(
+    ESCExplainRatingScreen.name: (routeData) {
+      final args = routeData.argsAs<ESCExplainRatingScreenArgs>();
+      return _i55.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i11.FAQScreen(),
+        child: _i11.ESCExplainRatingScreen(
+          productId: args.productId,
+          key: args.key,
+        ),
+      );
+    },
+    FAQScreen.name: (routeData) {
+      return _i55.AutoRoutePage<dynamic>(
+        routeData: routeData,
+        child: const _i12.FAQScreen(),
       );
     },
     FirebaseAuthLinkRoute.name: (routeData) {
       final args = routeData.argsAs<FirebaseAuthLinkRouteArgs>(
           orElse: () => const FirebaseAuthLinkRouteArgs());
-      return _i54.AutoRoutePage<dynamic>(
+      return _i55.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: _i12.FirebaseAuthLinkPage(
+        child: _i13.FirebaseAuthLinkPage(
           recaptchaToken: args.recaptchaToken,
           deepLinkId: args.deepLinkId,
           key: args.key,
@@ -203,16 +215,16 @@ abstract class $RootRouter extends _i54.RootStackRouter {
     GenerateQRFromCartScreen.name: (routeData) {
       final args = routeData.argsAs<GenerateQRFromCartScreenArgs>(
           orElse: () => const GenerateQRFromCartScreenArgs());
-      return _i54.AutoRoutePage<dynamic>(
+      return _i55.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: _i13.GenerateQRFromCartScreen(key: args.key),
+        child: _i14.GenerateQRFromCartScreen(key: args.key),
       );
     },
     ImageFromGalleryEx.name: (routeData) {
       final args = routeData.argsAs<ImageFromGalleryExArgs>();
-      return _i54.AutoRoutePage<dynamic>(
+      return _i55.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: _i14.ImageFromGalleryEx(
+        child: _i15.ImageFromGalleryEx(
           args.type,
           handleImagePicked: args.handleImagePicked,
           key: args.key,
@@ -220,62 +232,62 @@ abstract class $RootRouter extends _i54.RootStackRouter {
       );
     },
     LogoutApp.name: (routeData) {
-      return _i54.AutoRoutePage<dynamic>(
+      return _i55.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i15.LogoutApp(),
+        child: const _i16.LogoutApp(),
       );
     },
     MainScreen.name: (routeData) {
-      return _i54.AutoRoutePage<dynamic>(
+      return _i55.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i16.MainScreen(),
+        child: const _i17.MainScreen(),
       );
     },
     OnBoardScreen.name: (routeData) {
-      return _i54.AutoRoutePage<dynamic>(
+      return _i55.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i17.OnBoardScreen(),
+        child: const _i18.OnBoardScreen(),
       );
     },
     OrderConfirmedScreen.name: (routeData) {
-      return _i54.AutoRoutePage<dynamic>(
+      return _i55.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i18.OrderConfirmedScreen(),
+        child: const _i19.OrderConfirmedScreen(),
       );
     },
     PinCodeScreen.name: (routeData) {
-      return _i54.AutoRoutePage<dynamic>(
+      return _i55.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i19.PinCodeScreen(),
+        child: const _i20.PinCodeScreen(),
       );
     },
     PreLaunchPerksDetailsRoute.name: (routeData) {
-      return _i54.AutoRoutePage<dynamic>(
+      return _i55.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i20.PreLaunchPerksDetailsPage(),
+        child: const _i21.PreLaunchPerksDetailsPage(),
       );
     },
     PreparingOrderRoute.name: (routeData) {
       final args = routeData.argsAs<PreparingOrderRouteArgs>();
-      return _i54.AutoRoutePage<dynamic>(
+      return _i55.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: _i21.PreparingOrderPage(
+        child: _i22.PreparingOrderPage(
           order: args.order,
           key: args.key,
         ),
       );
     },
     ProfileScreen.name: (routeData) {
-      return _i54.AutoRoutePage<dynamic>(
+      return _i55.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i22.ProfileScreen(),
+        child: const _i23.ProfileScreen(),
       );
     },
     ReduxStateViewer.name: (routeData) {
       final args = routeData.argsAs<ReduxStateViewerArgs>();
-      return _i54.AutoRoutePage<dynamic>(
+      return _i55.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: _i23.ReduxStateViewer(
+        child: _i24.ReduxStateViewer(
           args.store,
           key: args.key,
           actionMaxLines: args.actionMaxLines,
@@ -286,9 +298,9 @@ abstract class $RootRouter extends _i54.RootStackRouter {
     RegisterEmailNotificationsScreen.name: (routeData) {
       final args = routeData.argsAs<RegisterEmailNotificationsScreenArgs>(
           orElse: () => const RegisterEmailNotificationsScreenArgs());
-      return _i54.AutoRoutePage<dynamic>(
+      return _i55.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: _i24.RegisterEmailNotificationsScreen(
+        child: _i25.RegisterEmailNotificationsScreen(
           key: args.key,
           onSubmitEmail: args.onSubmitEmail,
         ),
@@ -297,86 +309,86 @@ abstract class $RootRouter extends _i54.RootStackRouter {
     RegisterEmailOnBoardingScreen.name: (routeData) {
       final args = routeData.argsAs<RegisterEmailOnBoardingScreenArgs>(
           orElse: () => const RegisterEmailOnBoardingScreenArgs());
-      return _i54.AutoRoutePage<dynamic>(
+      return _i55.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: _i25.RegisterEmailOnBoardingScreen(
+        child: _i26.RegisterEmailOnBoardingScreen(
           key: args.key,
           onSubmitEmail: args.onSubmitEmail,
         ),
       );
     },
     ResetApp.name: (routeData) {
-      return _i54.AutoRoutePage<dynamic>(
+      return _i55.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i26.ResetApp(),
+        child: const _i27.ResetApp(),
       );
     },
     RestaurantMenuScreen.name: (routeData) {
-      return _i54.AutoRoutePage<dynamic>(
+      return _i55.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i27.RestaurantMenuScreen(),
+        child: const _i28.RestaurantMenuScreen(),
       );
     },
     RestoreFromBackupScreen.name: (routeData) {
-      return _i54.AutoRoutePage<dynamic>(
+      return _i55.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i28.RestoreFromBackupScreen(),
+        child: const _i29.RestoreFromBackupScreen(),
       );
     },
     ScanListedProductQRCodeScreen.name: (routeData) {
-      return _i54.AutoRoutePage<dynamic>(
+      return _i55.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i29.ScanListedProductQRCodeScreen(),
+        child: const _i30.ScanListedProductQRCodeScreen(),
       );
     },
     ScanPaymentRecipientQR.name: (routeData) {
-      return _i54.AutoRoutePage<dynamic>(
+      return _i55.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i30.ScanPaymentRecipientQR(),
+        child: const _i31.ScanPaymentRecipientQR(),
       );
     },
     ScheduledOrdersRoute.name: (routeData) {
-      return _i54.AutoRoutePage<dynamic>(
+      return _i55.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i31.ScheduledOrdersPage(),
+        child: const _i32.ScheduledOrdersPage(),
       );
     },
     SetEmailOnboardingScreen.name: (routeData) {
-      return _i54.AutoRoutePage<dynamic>(
+      return _i55.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i32.SetEmailOnboardingScreen(),
+        child: const _i33.SetEmailOnboardingScreen(),
       );
     },
     ShowUserMnemonicScreen.name: (routeData) {
-      return _i54.AutoRoutePage<dynamic>(
+      return _i55.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i33.ShowUserMnemonicScreen(),
+        child: const _i34.ShowUserMnemonicScreen(),
       );
     },
     SignUpEmailLinkScreen.name: (routeData) {
-      return _i54.AutoRoutePage<dynamic>(
+      return _i55.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i34.SignUpEmailLinkScreen(),
+        child: const _i35.SignUpEmailLinkScreen(),
       );
     },
     SignUpScreen.name: (routeData) {
-      return _i54.AutoRoutePage<dynamic>(
+      return _i55.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i35.SignUpScreen(),
+        child: const _i36.SignUpScreen(),
       );
     },
     SignUpWithEmailAndPasswordScreen.name: (routeData) {
-      return _i54.AutoRoutePage<dynamic>(
+      return _i55.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i36.SignUpWithEmailAndPasswordScreen(),
+        child: const _i37.SignUpWithEmailAndPasswordScreen(),
       );
     },
     SplashScreen.name: (routeData) {
       final args = routeData.argsAs<SplashScreenArgs>(
           orElse: () => const SplashScreenArgs());
-      return _i54.AutoRoutePage<dynamic>(
+      return _i55.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: _i37.SplashScreen(
+        child: _i38.SplashScreen(
           key: args.key,
           onLoginResult: args.onLoginResult,
         ),
@@ -385,69 +397,69 @@ abstract class $RootRouter extends _i54.RootStackRouter {
     SuggestProductFunnelScreen.name: (routeData) {
       final args = routeData.argsAs<SuggestProductFunnelScreenArgs>(
           orElse: () => const SuggestProductFunnelScreenArgs());
-      return _i54.AutoRoutePage<dynamic>(
+      return _i55.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: _i38.SuggestProductFunnelScreen(
+        child: _i39.SuggestProductFunnelScreen(
           key: args.key,
           scannedQRCode: args.scannedQRCode,
         ),
       );
     },
     SurveyThanksScreen.name: (routeData) {
-      return _i54.AutoRoutePage<dynamic>(
+      return _i55.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i39.SurveyThanksScreen(),
+        child: const _i40.SurveyThanksScreen(),
       );
     },
     TopUpRouter.name: (routeData) {
-      return _i54.AutoRoutePage<dynamic>(
+      return _i55.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: _i40.TopUpRouterPage(),
+        child: _i41.TopUpRouterPage(),
       );
     },
     TopupExplained.name: (routeData) {
-      return _i54.AutoRoutePage<dynamic>(
+      return _i55.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i41.TopupExplained(),
+        child: const _i42.TopupExplained(),
       );
     },
     TopupScreen.name: (routeData) {
-      return _i54.AutoRoutePage<dynamic>(
+      return _i55.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i42.TopupScreen(),
+        child: const _i43.TopupScreen(),
       );
     },
     UserNameScreen.name: (routeData) {
       final args = routeData.argsAs<UserNameScreenArgs>(
           orElse: () => const UserNameScreenArgs());
-      return _i54.AutoRoutePage<dynamic>(
+      return _i55.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: _i43.UserNameScreen(key: args.key),
+        child: _i44.UserNameScreen(key: args.key),
       );
     },
     VeganHomeRouter.name: (routeData) {
-      return _i54.AutoRoutePage<dynamic>(
+      return _i55.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: _i44.VeganHomeRouterPage(),
+        child: _i45.VeganHomeRouterPage(),
       );
     },
     VeganHomeScreen.name: (routeData) {
-      return _i54.AutoRoutePage<dynamic>(
+      return _i55.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i45.VeganHomeScreen(),
+        child: const _i46.VeganHomeScreen(),
       );
     },
     VegiHomeRoute.name: (routeData) {
-      return _i54.AutoRoutePage<dynamic>(
+      return _i55.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: _i46.VegiHomePage(),
+        child: _i47.VegiHomePage(),
       );
     },
     VerifyEmailLinkRoute.name: (routeData) {
       final args = routeData.argsAs<VerifyEmailLinkRouteArgs>();
-      return _i54.AutoRoutePage<dynamic>(
+      return _i55.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: _i47.VerifyEmailLinkPage(
+        child: _i48.VerifyEmailLinkPage(
           emailAddress: args.emailAddress,
           emailLinkFromVerificationEmail: args.emailLinkFromVerificationEmail,
           key: args.key,
@@ -457,47 +469,47 @@ abstract class $RootRouter extends _i54.RootStackRouter {
     VerifyPhoneNumber.name: (routeData) {
       final args = routeData.argsAs<VerifyPhoneNumberArgs>(
           orElse: () => const VerifyPhoneNumberArgs());
-      return _i54.AutoRoutePage<dynamic>(
+      return _i55.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: _i48.VerifyPhoneNumber(
+        child: _i49.VerifyPhoneNumber(
           key: args.key,
           verificationId: args.verificationId,
         ),
       );
     },
     VerifyUserMnemonic.name: (routeData) {
-      return _i54.AutoRoutePage<dynamic>(
+      return _i55.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i49.VerifyUserMnemonic(),
+        child: const _i50.VerifyUserMnemonic(),
       );
     },
     ViewJsonScreen.name: (routeData) {
       final args = routeData.argsAs<ViewJsonScreenArgs>();
-      return _i54.AutoRoutePage<dynamic>(
+      return _i55.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: _i50.ViewJsonScreen(
+        child: _i51.ViewJsonScreen(
           data: args.data,
           key: args.key,
         ),
       );
     },
     WaitingListFunnelScreen.name: (routeData) {
-      return _i54.AutoRoutePage<dynamic>(
+      return _i55.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i51.WaitingListFunnelScreen(),
+        child: const _i52.WaitingListFunnelScreen(),
       );
     },
     WaitingListPositionInQueueRoute.name: (routeData) {
-      return _i54.AutoRoutePage<dynamic>(
+      return _i55.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: const _i52.WaitingListPositionInQueuePage(),
+        child: const _i53.WaitingListPositionInQueuePage(),
       );
     },
     WaitingListSurveyQuestionsScreens.name: (routeData) {
       final args = routeData.argsAs<WaitingListSurveyQuestionsScreensArgs>();
-      return _i54.AutoRoutePage<dynamic>(
+      return _i55.AutoRoutePage<dynamic>(
         routeData: routeData,
-        child: _i53.WaitingListSurveyQuestionsScreens(
+        child: _i54.WaitingListSurveyQuestionsScreens(
           surveyCompleted: args.surveyCompleted,
           key: args.key,
         ),
@@ -508,8 +520,8 @@ abstract class $RootRouter extends _i54.RootStackRouter {
 
 /// generated route for
 /// [_i1.AboutScreen]
-class AboutScreen extends _i54.PageRouteInfo<void> {
-  const AboutScreen({List<_i54.PageRouteInfo>? children})
+class AboutScreen extends _i55.PageRouteInfo<void> {
+  const AboutScreen({List<_i55.PageRouteInfo>? children})
       : super(
           AboutScreen.name,
           initialChildren: children,
@@ -517,13 +529,13 @@ class AboutScreen extends _i54.PageRouteInfo<void> {
 
   static const String name = 'AboutScreen';
 
-  static const _i54.PageInfo<void> page = _i54.PageInfo<void>(name);
+  static const _i55.PageInfo<void> page = _i55.PageInfo<void>(name);
 }
 
 /// generated route for
 /// [_i2.AccountsRouterPage]
-class AccountsRouter extends _i54.PageRouteInfo<void> {
-  const AccountsRouter({List<_i54.PageRouteInfo>? children})
+class AccountsRouter extends _i55.PageRouteInfo<void> {
+  const AccountsRouter({List<_i55.PageRouteInfo>? children})
       : super(
           AccountsRouter.name,
           initialChildren: children,
@@ -531,17 +543,17 @@ class AccountsRouter extends _i54.PageRouteInfo<void> {
 
   static const String name = 'AccountsRouter';
 
-  static const _i54.PageInfo<void> page = _i54.PageInfo<void>(name);
+  static const _i55.PageInfo<void> page = _i55.PageInfo<void>(name);
 }
 
 /// generated route for
 /// [_i3.AddDiscountCodeScreen]
 class AddDiscountCodeScreen
-    extends _i54.PageRouteInfo<AddDiscountCodeScreenArgs> {
+    extends _i55.PageRouteInfo<AddDiscountCodeScreenArgs> {
   AddDiscountCodeScreen({
     required void Function() onVerifyDiscountCode,
-    _i55.Key? key,
-    List<_i54.PageRouteInfo>? children,
+    _i56.Key? key,
+    List<_i55.PageRouteInfo>? children,
   }) : super(
           AddDiscountCodeScreen.name,
           args: AddDiscountCodeScreenArgs(
@@ -553,8 +565,8 @@ class AddDiscountCodeScreen
 
   static const String name = 'AddDiscountCodeScreen';
 
-  static const _i54.PageInfo<AddDiscountCodeScreenArgs> page =
-      _i54.PageInfo<AddDiscountCodeScreenArgs>(name);
+  static const _i55.PageInfo<AddDiscountCodeScreenArgs> page =
+      _i55.PageInfo<AddDiscountCodeScreenArgs>(name);
 }
 
 class AddDiscountCodeScreenArgs {
@@ -565,7 +577,7 @@ class AddDiscountCodeScreenArgs {
 
   final void Function() onVerifyDiscountCode;
 
-  final _i55.Key? key;
+  final _i56.Key? key;
 
   @override
   String toString() {
@@ -575,8 +587,8 @@ class AddDiscountCodeScreenArgs {
 
 /// generated route for
 /// [_i4.AllOrdersPage]
-class AllOrdersRoute extends _i54.PageRouteInfo<void> {
-  const AllOrdersRoute({List<_i54.PageRouteInfo>? children})
+class AllOrdersRoute extends _i55.PageRouteInfo<void> {
+  const AllOrdersRoute({List<_i55.PageRouteInfo>? children})
       : super(
           AllOrdersRoute.name,
           initialChildren: children,
@@ -584,13 +596,13 @@ class AllOrdersRoute extends _i54.PageRouteInfo<void> {
 
   static const String name = 'AllOrdersRoute';
 
-  static const _i54.PageInfo<void> page = _i54.PageInfo<void>(name);
+  static const _i55.PageInfo<void> page = _i55.PageInfo<void>(name);
 }
 
 /// generated route for
 /// [_i5.AppLogListView]
-class AppLogListView extends _i54.PageRouteInfo<void> {
-  const AppLogListView({List<_i54.PageRouteInfo>? children})
+class AppLogListView extends _i55.PageRouteInfo<void> {
+  const AppLogListView({List<_i55.PageRouteInfo>? children})
       : super(
           AppLogListView.name,
           initialChildren: children,
@@ -598,13 +610,13 @@ class AppLogListView extends _i54.PageRouteInfo<void> {
 
   static const String name = 'AppLogListView';
 
-  static const _i54.PageInfo<void> page = _i54.PageInfo<void>(name);
+  static const _i55.PageInfo<void> page = _i55.PageInfo<void>(name);
 }
 
 /// generated route for
 /// [_i6.AppStateViewScreen]
-class AppStateViewScreen extends _i54.PageRouteInfo<void> {
-  const AppStateViewScreen({List<_i54.PageRouteInfo>? children})
+class AppStateViewScreen extends _i55.PageRouteInfo<void> {
+  const AppStateViewScreen({List<_i55.PageRouteInfo>? children})
       : super(
           AppStateViewScreen.name,
           initialChildren: children,
@@ -612,13 +624,13 @@ class AppStateViewScreen extends _i54.PageRouteInfo<void> {
 
   static const String name = 'AppStateViewScreen';
 
-  static const _i54.PageInfo<void> page = _i54.PageInfo<void>(name);
+  static const _i55.PageInfo<void> page = _i55.PageInfo<void>(name);
 }
 
 /// generated route for
 /// [_i7.CheckoutScreenPt2]
-class CheckoutScreenPt2 extends _i54.PageRouteInfo<void> {
-  const CheckoutScreenPt2({List<_i54.PageRouteInfo>? children})
+class CheckoutScreenPt2 extends _i55.PageRouteInfo<void> {
+  const CheckoutScreenPt2({List<_i55.PageRouteInfo>? children})
       : super(
           CheckoutScreenPt2.name,
           initialChildren: children,
@@ -626,13 +638,13 @@ class CheckoutScreenPt2 extends _i54.PageRouteInfo<void> {
 
   static const String name = 'CheckoutScreenPt2';
 
-  static const _i54.PageInfo<void> page = _i54.PageInfo<void>(name);
+  static const _i55.PageInfo<void> page = _i55.PageInfo<void>(name);
 }
 
 /// generated route for
 /// [_i8.ChooseSecurityOption]
-class ChooseSecurityOption extends _i54.PageRouteInfo<void> {
-  const ChooseSecurityOption({List<_i54.PageRouteInfo>? children})
+class ChooseSecurityOption extends _i55.PageRouteInfo<void> {
+  const ChooseSecurityOption({List<_i55.PageRouteInfo>? children})
       : super(
           ChooseSecurityOption.name,
           initialChildren: children,
@@ -640,13 +652,13 @@ class ChooseSecurityOption extends _i54.PageRouteInfo<void> {
 
   static const String name = 'ChooseSecurityOption';
 
-  static const _i54.PageInfo<void> page = _i54.PageInfo<void>(name);
+  static const _i55.PageInfo<void> page = _i55.PageInfo<void>(name);
 }
 
 /// generated route for
 /// [_i9.CreateWalletFirstOnboardingScreen]
-class CreateWalletFirstOnboardingScreen extends _i54.PageRouteInfo<void> {
-  const CreateWalletFirstOnboardingScreen({List<_i54.PageRouteInfo>? children})
+class CreateWalletFirstOnboardingScreen extends _i55.PageRouteInfo<void> {
+  const CreateWalletFirstOnboardingScreen({List<_i55.PageRouteInfo>? children})
       : super(
           CreateWalletFirstOnboardingScreen.name,
           initialChildren: children,
@@ -654,13 +666,13 @@ class CreateWalletFirstOnboardingScreen extends _i54.PageRouteInfo<void> {
 
   static const String name = 'CreateWalletFirstOnboardingScreen';
 
-  static const _i54.PageInfo<void> page = _i54.PageInfo<void>(name);
+  static const _i55.PageInfo<void> page = _i55.PageInfo<void>(name);
 }
 
 /// generated route for
 /// [_i10.CreateWithEmailAndPasswordScreen]
-class CreateWithEmailAndPasswordScreen extends _i54.PageRouteInfo<void> {
-  const CreateWithEmailAndPasswordScreen({List<_i54.PageRouteInfo>? children})
+class CreateWithEmailAndPasswordScreen extends _i55.PageRouteInfo<void> {
+  const CreateWithEmailAndPasswordScreen({List<_i55.PageRouteInfo>? children})
       : super(
           CreateWithEmailAndPasswordScreen.name,
           initialChildren: children,
@@ -668,13 +680,52 @@ class CreateWithEmailAndPasswordScreen extends _i54.PageRouteInfo<void> {
 
   static const String name = 'CreateWithEmailAndPasswordScreen';
 
-  static const _i54.PageInfo<void> page = _i54.PageInfo<void>(name);
+  static const _i55.PageInfo<void> page = _i55.PageInfo<void>(name);
 }
 
 /// generated route for
-/// [_i11.FAQScreen]
-class FAQScreen extends _i54.PageRouteInfo<void> {
-  const FAQScreen({List<_i54.PageRouteInfo>? children})
+/// [_i11.ESCExplainRatingScreen]
+class ESCExplainRatingScreen
+    extends _i55.PageRouteInfo<ESCExplainRatingScreenArgs> {
+  ESCExplainRatingScreen({
+    required int productId,
+    _i57.Key? key,
+    List<_i55.PageRouteInfo>? children,
+  }) : super(
+          ESCExplainRatingScreen.name,
+          args: ESCExplainRatingScreenArgs(
+            productId: productId,
+            key: key,
+          ),
+          initialChildren: children,
+        );
+
+  static const String name = 'ESCExplainRatingScreen';
+
+  static const _i55.PageInfo<ESCExplainRatingScreenArgs> page =
+      _i55.PageInfo<ESCExplainRatingScreenArgs>(name);
+}
+
+class ESCExplainRatingScreenArgs {
+  const ESCExplainRatingScreenArgs({
+    required this.productId,
+    this.key,
+  });
+
+  final int productId;
+
+  final _i57.Key? key;
+
+  @override
+  String toString() {
+    return 'ESCExplainRatingScreenArgs{productId: $productId, key: $key}';
+  }
+}
+
+/// generated route for
+/// [_i12.FAQScreen]
+class FAQScreen extends _i55.PageRouteInfo<void> {
+  const FAQScreen({List<_i55.PageRouteInfo>? children})
       : super(
           FAQScreen.name,
           initialChildren: children,
@@ -682,18 +733,18 @@ class FAQScreen extends _i54.PageRouteInfo<void> {
 
   static const String name = 'FAQScreen';
 
-  static const _i54.PageInfo<void> page = _i54.PageInfo<void>(name);
+  static const _i55.PageInfo<void> page = _i55.PageInfo<void>(name);
 }
 
 /// generated route for
-/// [_i12.FirebaseAuthLinkPage]
+/// [_i13.FirebaseAuthLinkPage]
 class FirebaseAuthLinkRoute
-    extends _i54.PageRouteInfo<FirebaseAuthLinkRouteArgs> {
+    extends _i55.PageRouteInfo<FirebaseAuthLinkRouteArgs> {
   FirebaseAuthLinkRoute({
     String? recaptchaToken,
     String? deepLinkId,
-    _i56.Key? key,
-    List<_i54.PageRouteInfo>? children,
+    _i57.Key? key,
+    List<_i55.PageRouteInfo>? children,
   }) : super(
           FirebaseAuthLinkRoute.name,
           args: FirebaseAuthLinkRouteArgs(
@@ -706,8 +757,8 @@ class FirebaseAuthLinkRoute
 
   static const String name = 'FirebaseAuthLinkRoute';
 
-  static const _i54.PageInfo<FirebaseAuthLinkRouteArgs> page =
-      _i54.PageInfo<FirebaseAuthLinkRouteArgs>(name);
+  static const _i55.PageInfo<FirebaseAuthLinkRouteArgs> page =
+      _i55.PageInfo<FirebaseAuthLinkRouteArgs>(name);
 }
 
 class FirebaseAuthLinkRouteArgs {
@@ -721,7 +772,7 @@ class FirebaseAuthLinkRouteArgs {
 
   final String? deepLinkId;
 
-  final _i56.Key? key;
+  final _i57.Key? key;
 
   @override
   String toString() {
@@ -730,12 +781,12 @@ class FirebaseAuthLinkRouteArgs {
 }
 
 /// generated route for
-/// [_i13.GenerateQRFromCartScreen]
+/// [_i14.GenerateQRFromCartScreen]
 class GenerateQRFromCartScreen
-    extends _i54.PageRouteInfo<GenerateQRFromCartScreenArgs> {
+    extends _i55.PageRouteInfo<GenerateQRFromCartScreenArgs> {
   GenerateQRFromCartScreen({
-    _i56.Key? key,
-    List<_i54.PageRouteInfo>? children,
+    _i57.Key? key,
+    List<_i55.PageRouteInfo>? children,
   }) : super(
           GenerateQRFromCartScreen.name,
           args: GenerateQRFromCartScreenArgs(key: key),
@@ -744,14 +795,14 @@ class GenerateQRFromCartScreen
 
   static const String name = 'GenerateQRFromCartScreen';
 
-  static const _i54.PageInfo<GenerateQRFromCartScreenArgs> page =
-      _i54.PageInfo<GenerateQRFromCartScreenArgs>(name);
+  static const _i55.PageInfo<GenerateQRFromCartScreenArgs> page =
+      _i55.PageInfo<GenerateQRFromCartScreenArgs>(name);
 }
 
 class GenerateQRFromCartScreenArgs {
   const GenerateQRFromCartScreenArgs({this.key});
 
-  final _i56.Key? key;
+  final _i57.Key? key;
 
   @override
   String toString() {
@@ -760,13 +811,13 @@ class GenerateQRFromCartScreenArgs {
 }
 
 /// generated route for
-/// [_i14.ImageFromGalleryEx]
-class ImageFromGalleryEx extends _i54.PageRouteInfo<ImageFromGalleryExArgs> {
+/// [_i15.ImageFromGalleryEx]
+class ImageFromGalleryEx extends _i55.PageRouteInfo<ImageFromGalleryExArgs> {
   ImageFromGalleryEx({
-    required _i57.ImageSourceType type,
-    required void Function(_i58.File?) handleImagePicked,
-    _i59.Key? key,
-    List<_i54.PageRouteInfo>? children,
+    required _i58.ImageSourceType type,
+    required void Function(_i59.File?) handleImagePicked,
+    _i60.Key? key,
+    List<_i55.PageRouteInfo>? children,
   }) : super(
           ImageFromGalleryEx.name,
           args: ImageFromGalleryExArgs(
@@ -779,8 +830,8 @@ class ImageFromGalleryEx extends _i54.PageRouteInfo<ImageFromGalleryExArgs> {
 
   static const String name = 'ImageFromGalleryEx';
 
-  static const _i54.PageInfo<ImageFromGalleryExArgs> page =
-      _i54.PageInfo<ImageFromGalleryExArgs>(name);
+  static const _i55.PageInfo<ImageFromGalleryExArgs> page =
+      _i55.PageInfo<ImageFromGalleryExArgs>(name);
 }
 
 class ImageFromGalleryExArgs {
@@ -790,11 +841,11 @@ class ImageFromGalleryExArgs {
     this.key,
   });
 
-  final _i57.ImageSourceType type;
+  final _i58.ImageSourceType type;
 
-  final void Function(_i58.File?) handleImagePicked;
+  final void Function(_i59.File?) handleImagePicked;
 
-  final _i59.Key? key;
+  final _i60.Key? key;
 
   @override
   String toString() {
@@ -803,9 +854,9 @@ class ImageFromGalleryExArgs {
 }
 
 /// generated route for
-/// [_i15.LogoutApp]
-class LogoutApp extends _i54.PageRouteInfo<void> {
-  const LogoutApp({List<_i54.PageRouteInfo>? children})
+/// [_i16.LogoutApp]
+class LogoutApp extends _i55.PageRouteInfo<void> {
+  const LogoutApp({List<_i55.PageRouteInfo>? children})
       : super(
           LogoutApp.name,
           initialChildren: children,
@@ -813,13 +864,13 @@ class LogoutApp extends _i54.PageRouteInfo<void> {
 
   static const String name = 'LogoutApp';
 
-  static const _i54.PageInfo<void> page = _i54.PageInfo<void>(name);
+  static const _i55.PageInfo<void> page = _i55.PageInfo<void>(name);
 }
 
 /// generated route for
-/// [_i16.MainScreen]
-class MainScreen extends _i54.PageRouteInfo<void> {
-  const MainScreen({List<_i54.PageRouteInfo>? children})
+/// [_i17.MainScreen]
+class MainScreen extends _i55.PageRouteInfo<void> {
+  const MainScreen({List<_i55.PageRouteInfo>? children})
       : super(
           MainScreen.name,
           initialChildren: children,
@@ -827,13 +878,13 @@ class MainScreen extends _i54.PageRouteInfo<void> {
 
   static const String name = 'MainScreen';
 
-  static const _i54.PageInfo<void> page = _i54.PageInfo<void>(name);
+  static const _i55.PageInfo<void> page = _i55.PageInfo<void>(name);
 }
 
 /// generated route for
-/// [_i17.OnBoardScreen]
-class OnBoardScreen extends _i54.PageRouteInfo<void> {
-  const OnBoardScreen({List<_i54.PageRouteInfo>? children})
+/// [_i18.OnBoardScreen]
+class OnBoardScreen extends _i55.PageRouteInfo<void> {
+  const OnBoardScreen({List<_i55.PageRouteInfo>? children})
       : super(
           OnBoardScreen.name,
           initialChildren: children,
@@ -841,13 +892,13 @@ class OnBoardScreen extends _i54.PageRouteInfo<void> {
 
   static const String name = 'OnBoardScreen';
 
-  static const _i54.PageInfo<void> page = _i54.PageInfo<void>(name);
+  static const _i55.PageInfo<void> page = _i55.PageInfo<void>(name);
 }
 
 /// generated route for
-/// [_i18.OrderConfirmedScreen]
-class OrderConfirmedScreen extends _i54.PageRouteInfo<void> {
-  const OrderConfirmedScreen({List<_i54.PageRouteInfo>? children})
+/// [_i19.OrderConfirmedScreen]
+class OrderConfirmedScreen extends _i55.PageRouteInfo<void> {
+  const OrderConfirmedScreen({List<_i55.PageRouteInfo>? children})
       : super(
           OrderConfirmedScreen.name,
           initialChildren: children,
@@ -855,13 +906,13 @@ class OrderConfirmedScreen extends _i54.PageRouteInfo<void> {
 
   static const String name = 'OrderConfirmedScreen';
 
-  static const _i54.PageInfo<void> page = _i54.PageInfo<void>(name);
+  static const _i55.PageInfo<void> page = _i55.PageInfo<void>(name);
 }
 
 /// generated route for
-/// [_i19.PinCodeScreen]
-class PinCodeScreen extends _i54.PageRouteInfo<void> {
-  const PinCodeScreen({List<_i54.PageRouteInfo>? children})
+/// [_i20.PinCodeScreen]
+class PinCodeScreen extends _i55.PageRouteInfo<void> {
+  const PinCodeScreen({List<_i55.PageRouteInfo>? children})
       : super(
           PinCodeScreen.name,
           initialChildren: children,
@@ -869,13 +920,13 @@ class PinCodeScreen extends _i54.PageRouteInfo<void> {
 
   static const String name = 'PinCodeScreen';
 
-  static const _i54.PageInfo<void> page = _i54.PageInfo<void>(name);
+  static const _i55.PageInfo<void> page = _i55.PageInfo<void>(name);
 }
 
 /// generated route for
-/// [_i20.PreLaunchPerksDetailsPage]
-class PreLaunchPerksDetailsRoute extends _i54.PageRouteInfo<void> {
-  const PreLaunchPerksDetailsRoute({List<_i54.PageRouteInfo>? children})
+/// [_i21.PreLaunchPerksDetailsPage]
+class PreLaunchPerksDetailsRoute extends _i55.PageRouteInfo<void> {
+  const PreLaunchPerksDetailsRoute({List<_i55.PageRouteInfo>? children})
       : super(
           PreLaunchPerksDetailsRoute.name,
           initialChildren: children,
@@ -883,16 +934,16 @@ class PreLaunchPerksDetailsRoute extends _i54.PageRouteInfo<void> {
 
   static const String name = 'PreLaunchPerksDetailsRoute';
 
-  static const _i54.PageInfo<void> page = _i54.PageInfo<void>(name);
+  static const _i55.PageInfo<void> page = _i55.PageInfo<void>(name);
 }
 
 /// generated route for
-/// [_i21.PreparingOrderPage]
-class PreparingOrderRoute extends _i54.PageRouteInfo<PreparingOrderRouteArgs> {
+/// [_i22.PreparingOrderPage]
+class PreparingOrderRoute extends _i55.PageRouteInfo<PreparingOrderRouteArgs> {
   PreparingOrderRoute({
-    required _i60.Order order,
-    _i56.Key? key,
-    List<_i54.PageRouteInfo>? children,
+    required _i61.Order order,
+    _i57.Key? key,
+    List<_i55.PageRouteInfo>? children,
   }) : super(
           PreparingOrderRoute.name,
           args: PreparingOrderRouteArgs(
@@ -904,8 +955,8 @@ class PreparingOrderRoute extends _i54.PageRouteInfo<PreparingOrderRouteArgs> {
 
   static const String name = 'PreparingOrderRoute';
 
-  static const _i54.PageInfo<PreparingOrderRouteArgs> page =
-      _i54.PageInfo<PreparingOrderRouteArgs>(name);
+  static const _i55.PageInfo<PreparingOrderRouteArgs> page =
+      _i55.PageInfo<PreparingOrderRouteArgs>(name);
 }
 
 class PreparingOrderRouteArgs {
@@ -914,9 +965,9 @@ class PreparingOrderRouteArgs {
     this.key,
   });
 
-  final _i60.Order order;
+  final _i61.Order order;
 
-  final _i56.Key? key;
+  final _i57.Key? key;
 
   @override
   String toString() {
@@ -925,9 +976,9 @@ class PreparingOrderRouteArgs {
 }
 
 /// generated route for
-/// [_i22.ProfileScreen]
-class ProfileScreen extends _i54.PageRouteInfo<void> {
-  const ProfileScreen({List<_i54.PageRouteInfo>? children})
+/// [_i23.ProfileScreen]
+class ProfileScreen extends _i55.PageRouteInfo<void> {
+  const ProfileScreen({List<_i55.PageRouteInfo>? children})
       : super(
           ProfileScreen.name,
           initialChildren: children,
@@ -935,18 +986,18 @@ class ProfileScreen extends _i54.PageRouteInfo<void> {
 
   static const String name = 'ProfileScreen';
 
-  static const _i54.PageInfo<void> page = _i54.PageInfo<void>(name);
+  static const _i55.PageInfo<void> page = _i55.PageInfo<void>(name);
 }
 
 /// generated route for
-/// [_i23.ReduxStateViewer]
-class ReduxStateViewer extends _i54.PageRouteInfo<ReduxStateViewerArgs> {
+/// [_i24.ReduxStateViewer]
+class ReduxStateViewer extends _i55.PageRouteInfo<ReduxStateViewerArgs> {
   ReduxStateViewer({
-    required _i61.DevToolsStore<_i62.AppState> store,
-    _i56.Key? key,
+    required _i62.DevToolsStore<_i63.AppState> store,
+    _i57.Key? key,
     int actionMaxLines = 2,
     int stateMaxLines = 5,
-    List<_i54.PageRouteInfo>? children,
+    List<_i55.PageRouteInfo>? children,
   }) : super(
           ReduxStateViewer.name,
           args: ReduxStateViewerArgs(
@@ -960,8 +1011,8 @@ class ReduxStateViewer extends _i54.PageRouteInfo<ReduxStateViewerArgs> {
 
   static const String name = 'ReduxStateViewer';
 
-  static const _i54.PageInfo<ReduxStateViewerArgs> page =
-      _i54.PageInfo<ReduxStateViewerArgs>(name);
+  static const _i55.PageInfo<ReduxStateViewerArgs> page =
+      _i55.PageInfo<ReduxStateViewerArgs>(name);
 }
 
 class ReduxStateViewerArgs {
@@ -972,9 +1023,9 @@ class ReduxStateViewerArgs {
     this.stateMaxLines = 5,
   });
 
-  final _i61.DevToolsStore<_i62.AppState> store;
+  final _i62.DevToolsStore<_i63.AppState> store;
 
-  final _i56.Key? key;
+  final _i57.Key? key;
 
   final int actionMaxLines;
 
@@ -987,13 +1038,13 @@ class ReduxStateViewerArgs {
 }
 
 /// generated route for
-/// [_i24.RegisterEmailNotificationsScreen]
+/// [_i25.RegisterEmailNotificationsScreen]
 class RegisterEmailNotificationsScreen
-    extends _i54.PageRouteInfo<RegisterEmailNotificationsScreenArgs> {
+    extends _i55.PageRouteInfo<RegisterEmailNotificationsScreenArgs> {
   RegisterEmailNotificationsScreen({
-    _i56.Key? key,
+    _i57.Key? key,
     void Function()? onSubmitEmail,
-    List<_i54.PageRouteInfo>? children,
+    List<_i55.PageRouteInfo>? children,
   }) : super(
           RegisterEmailNotificationsScreen.name,
           args: RegisterEmailNotificationsScreenArgs(
@@ -1005,8 +1056,8 @@ class RegisterEmailNotificationsScreen
 
   static const String name = 'RegisterEmailNotificationsScreen';
 
-  static const _i54.PageInfo<RegisterEmailNotificationsScreenArgs> page =
-      _i54.PageInfo<RegisterEmailNotificationsScreenArgs>(name);
+  static const _i55.PageInfo<RegisterEmailNotificationsScreenArgs> page =
+      _i55.PageInfo<RegisterEmailNotificationsScreenArgs>(name);
 }
 
 class RegisterEmailNotificationsScreenArgs {
@@ -1015,7 +1066,7 @@ class RegisterEmailNotificationsScreenArgs {
     this.onSubmitEmail,
   });
 
-  final _i56.Key? key;
+  final _i57.Key? key;
 
   final void Function()? onSubmitEmail;
 
@@ -1026,13 +1077,13 @@ class RegisterEmailNotificationsScreenArgs {
 }
 
 /// generated route for
-/// [_i25.RegisterEmailOnBoardingScreen]
+/// [_i26.RegisterEmailOnBoardingScreen]
 class RegisterEmailOnBoardingScreen
-    extends _i54.PageRouteInfo<RegisterEmailOnBoardingScreenArgs> {
+    extends _i55.PageRouteInfo<RegisterEmailOnBoardingScreenArgs> {
   RegisterEmailOnBoardingScreen({
-    _i56.Key? key,
+    _i57.Key? key,
     void Function()? onSubmitEmail,
-    List<_i54.PageRouteInfo>? children,
+    List<_i55.PageRouteInfo>? children,
   }) : super(
           RegisterEmailOnBoardingScreen.name,
           args: RegisterEmailOnBoardingScreenArgs(
@@ -1044,8 +1095,8 @@ class RegisterEmailOnBoardingScreen
 
   static const String name = 'RegisterEmailOnBoardingScreen';
 
-  static const _i54.PageInfo<RegisterEmailOnBoardingScreenArgs> page =
-      _i54.PageInfo<RegisterEmailOnBoardingScreenArgs>(name);
+  static const _i55.PageInfo<RegisterEmailOnBoardingScreenArgs> page =
+      _i55.PageInfo<RegisterEmailOnBoardingScreenArgs>(name);
 }
 
 class RegisterEmailOnBoardingScreenArgs {
@@ -1054,7 +1105,7 @@ class RegisterEmailOnBoardingScreenArgs {
     this.onSubmitEmail,
   });
 
-  final _i56.Key? key;
+  final _i57.Key? key;
 
   final void Function()? onSubmitEmail;
 
@@ -1065,9 +1116,9 @@ class RegisterEmailOnBoardingScreenArgs {
 }
 
 /// generated route for
-/// [_i26.ResetApp]
-class ResetApp extends _i54.PageRouteInfo<void> {
-  const ResetApp({List<_i54.PageRouteInfo>? children})
+/// [_i27.ResetApp]
+class ResetApp extends _i55.PageRouteInfo<void> {
+  const ResetApp({List<_i55.PageRouteInfo>? children})
       : super(
           ResetApp.name,
           initialChildren: children,
@@ -1075,13 +1126,13 @@ class ResetApp extends _i54.PageRouteInfo<void> {
 
   static const String name = 'ResetApp';
 
-  static const _i54.PageInfo<void> page = _i54.PageInfo<void>(name);
+  static const _i55.PageInfo<void> page = _i55.PageInfo<void>(name);
 }
 
 /// generated route for
-/// [_i27.RestaurantMenuScreen]
-class RestaurantMenuScreen extends _i54.PageRouteInfo<void> {
-  const RestaurantMenuScreen({List<_i54.PageRouteInfo>? children})
+/// [_i28.RestaurantMenuScreen]
+class RestaurantMenuScreen extends _i55.PageRouteInfo<void> {
+  const RestaurantMenuScreen({List<_i55.PageRouteInfo>? children})
       : super(
           RestaurantMenuScreen.name,
           initialChildren: children,
@@ -1089,13 +1140,13 @@ class RestaurantMenuScreen extends _i54.PageRouteInfo<void> {
 
   static const String name = 'RestaurantMenuScreen';
 
-  static const _i54.PageInfo<void> page = _i54.PageInfo<void>(name);
+  static const _i55.PageInfo<void> page = _i55.PageInfo<void>(name);
 }
 
 /// generated route for
-/// [_i28.RestoreFromBackupScreen]
-class RestoreFromBackupScreen extends _i54.PageRouteInfo<void> {
-  const RestoreFromBackupScreen({List<_i54.PageRouteInfo>? children})
+/// [_i29.RestoreFromBackupScreen]
+class RestoreFromBackupScreen extends _i55.PageRouteInfo<void> {
+  const RestoreFromBackupScreen({List<_i55.PageRouteInfo>? children})
       : super(
           RestoreFromBackupScreen.name,
           initialChildren: children,
@@ -1103,13 +1154,13 @@ class RestoreFromBackupScreen extends _i54.PageRouteInfo<void> {
 
   static const String name = 'RestoreFromBackupScreen';
 
-  static const _i54.PageInfo<void> page = _i54.PageInfo<void>(name);
+  static const _i55.PageInfo<void> page = _i55.PageInfo<void>(name);
 }
 
 /// generated route for
-/// [_i29.ScanListedProductQRCodeScreen]
-class ScanListedProductQRCodeScreen extends _i54.PageRouteInfo<void> {
-  const ScanListedProductQRCodeScreen({List<_i54.PageRouteInfo>? children})
+/// [_i30.ScanListedProductQRCodeScreen]
+class ScanListedProductQRCodeScreen extends _i55.PageRouteInfo<void> {
+  const ScanListedProductQRCodeScreen({List<_i55.PageRouteInfo>? children})
       : super(
           ScanListedProductQRCodeScreen.name,
           initialChildren: children,
@@ -1117,13 +1168,13 @@ class ScanListedProductQRCodeScreen extends _i54.PageRouteInfo<void> {
 
   static const String name = 'ScanListedProductQRCodeScreen';
 
-  static const _i54.PageInfo<void> page = _i54.PageInfo<void>(name);
+  static const _i55.PageInfo<void> page = _i55.PageInfo<void>(name);
 }
 
 /// generated route for
-/// [_i30.ScanPaymentRecipientQR]
-class ScanPaymentRecipientQR extends _i54.PageRouteInfo<void> {
-  const ScanPaymentRecipientQR({List<_i54.PageRouteInfo>? children})
+/// [_i31.ScanPaymentRecipientQR]
+class ScanPaymentRecipientQR extends _i55.PageRouteInfo<void> {
+  const ScanPaymentRecipientQR({List<_i55.PageRouteInfo>? children})
       : super(
           ScanPaymentRecipientQR.name,
           initialChildren: children,
@@ -1131,13 +1182,13 @@ class ScanPaymentRecipientQR extends _i54.PageRouteInfo<void> {
 
   static const String name = 'ScanPaymentRecipientQR';
 
-  static const _i54.PageInfo<void> page = _i54.PageInfo<void>(name);
+  static const _i55.PageInfo<void> page = _i55.PageInfo<void>(name);
 }
 
 /// generated route for
-/// [_i31.ScheduledOrdersPage]
-class ScheduledOrdersRoute extends _i54.PageRouteInfo<void> {
-  const ScheduledOrdersRoute({List<_i54.PageRouteInfo>? children})
+/// [_i32.ScheduledOrdersPage]
+class ScheduledOrdersRoute extends _i55.PageRouteInfo<void> {
+  const ScheduledOrdersRoute({List<_i55.PageRouteInfo>? children})
       : super(
           ScheduledOrdersRoute.name,
           initialChildren: children,
@@ -1145,13 +1196,13 @@ class ScheduledOrdersRoute extends _i54.PageRouteInfo<void> {
 
   static const String name = 'ScheduledOrdersRoute';
 
-  static const _i54.PageInfo<void> page = _i54.PageInfo<void>(name);
+  static const _i55.PageInfo<void> page = _i55.PageInfo<void>(name);
 }
 
 /// generated route for
-/// [_i32.SetEmailOnboardingScreen]
-class SetEmailOnboardingScreen extends _i54.PageRouteInfo<void> {
-  const SetEmailOnboardingScreen({List<_i54.PageRouteInfo>? children})
+/// [_i33.SetEmailOnboardingScreen]
+class SetEmailOnboardingScreen extends _i55.PageRouteInfo<void> {
+  const SetEmailOnboardingScreen({List<_i55.PageRouteInfo>? children})
       : super(
           SetEmailOnboardingScreen.name,
           initialChildren: children,
@@ -1159,13 +1210,13 @@ class SetEmailOnboardingScreen extends _i54.PageRouteInfo<void> {
 
   static const String name = 'SetEmailOnboardingScreen';
 
-  static const _i54.PageInfo<void> page = _i54.PageInfo<void>(name);
+  static const _i55.PageInfo<void> page = _i55.PageInfo<void>(name);
 }
 
 /// generated route for
-/// [_i33.ShowUserMnemonicScreen]
-class ShowUserMnemonicScreen extends _i54.PageRouteInfo<void> {
-  const ShowUserMnemonicScreen({List<_i54.PageRouteInfo>? children})
+/// [_i34.ShowUserMnemonicScreen]
+class ShowUserMnemonicScreen extends _i55.PageRouteInfo<void> {
+  const ShowUserMnemonicScreen({List<_i55.PageRouteInfo>? children})
       : super(
           ShowUserMnemonicScreen.name,
           initialChildren: children,
@@ -1173,13 +1224,13 @@ class ShowUserMnemonicScreen extends _i54.PageRouteInfo<void> {
 
   static const String name = 'ShowUserMnemonicScreen';
 
-  static const _i54.PageInfo<void> page = _i54.PageInfo<void>(name);
+  static const _i55.PageInfo<void> page = _i55.PageInfo<void>(name);
 }
 
 /// generated route for
-/// [_i34.SignUpEmailLinkScreen]
-class SignUpEmailLinkScreen extends _i54.PageRouteInfo<void> {
-  const SignUpEmailLinkScreen({List<_i54.PageRouteInfo>? children})
+/// [_i35.SignUpEmailLinkScreen]
+class SignUpEmailLinkScreen extends _i55.PageRouteInfo<void> {
+  const SignUpEmailLinkScreen({List<_i55.PageRouteInfo>? children})
       : super(
           SignUpEmailLinkScreen.name,
           initialChildren: children,
@@ -1187,13 +1238,13 @@ class SignUpEmailLinkScreen extends _i54.PageRouteInfo<void> {
 
   static const String name = 'SignUpEmailLinkScreen';
 
-  static const _i54.PageInfo<void> page = _i54.PageInfo<void>(name);
+  static const _i55.PageInfo<void> page = _i55.PageInfo<void>(name);
 }
 
 /// generated route for
-/// [_i35.SignUpScreen]
-class SignUpScreen extends _i54.PageRouteInfo<void> {
-  const SignUpScreen({List<_i54.PageRouteInfo>? children})
+/// [_i36.SignUpScreen]
+class SignUpScreen extends _i55.PageRouteInfo<void> {
+  const SignUpScreen({List<_i55.PageRouteInfo>? children})
       : super(
           SignUpScreen.name,
           initialChildren: children,
@@ -1201,13 +1252,13 @@ class SignUpScreen extends _i54.PageRouteInfo<void> {
 
   static const String name = 'SignUpScreen';
 
-  static const _i54.PageInfo<void> page = _i54.PageInfo<void>(name);
+  static const _i55.PageInfo<void> page = _i55.PageInfo<void>(name);
 }
 
 /// generated route for
-/// [_i36.SignUpWithEmailAndPasswordScreen]
-class SignUpWithEmailAndPasswordScreen extends _i54.PageRouteInfo<void> {
-  const SignUpWithEmailAndPasswordScreen({List<_i54.PageRouteInfo>? children})
+/// [_i37.SignUpWithEmailAndPasswordScreen]
+class SignUpWithEmailAndPasswordScreen extends _i55.PageRouteInfo<void> {
+  const SignUpWithEmailAndPasswordScreen({List<_i55.PageRouteInfo>? children})
       : super(
           SignUpWithEmailAndPasswordScreen.name,
           initialChildren: children,
@@ -1215,16 +1266,16 @@ class SignUpWithEmailAndPasswordScreen extends _i54.PageRouteInfo<void> {
 
   static const String name = 'SignUpWithEmailAndPasswordScreen';
 
-  static const _i54.PageInfo<void> page = _i54.PageInfo<void>(name);
+  static const _i55.PageInfo<void> page = _i55.PageInfo<void>(name);
 }
 
 /// generated route for
-/// [_i37.SplashScreen]
-class SplashScreen extends _i54.PageRouteInfo<SplashScreenArgs> {
+/// [_i38.SplashScreen]
+class SplashScreen extends _i55.PageRouteInfo<SplashScreenArgs> {
   SplashScreen({
-    _i56.Key? key,
+    _i57.Key? key,
     void Function(bool)? onLoginResult,
-    List<_i54.PageRouteInfo>? children,
+    List<_i55.PageRouteInfo>? children,
   }) : super(
           SplashScreen.name,
           args: SplashScreenArgs(
@@ -1236,8 +1287,8 @@ class SplashScreen extends _i54.PageRouteInfo<SplashScreenArgs> {
 
   static const String name = 'SplashScreen';
 
-  static const _i54.PageInfo<SplashScreenArgs> page =
-      _i54.PageInfo<SplashScreenArgs>(name);
+  static const _i55.PageInfo<SplashScreenArgs> page =
+      _i55.PageInfo<SplashScreenArgs>(name);
 }
 
 class SplashScreenArgs {
@@ -1246,7 +1297,7 @@ class SplashScreenArgs {
     this.onLoginResult,
   });
 
-  final _i56.Key? key;
+  final _i57.Key? key;
 
   final void Function(bool)? onLoginResult;
 
@@ -1257,13 +1308,13 @@ class SplashScreenArgs {
 }
 
 /// generated route for
-/// [_i38.SuggestProductFunnelScreen]
+/// [_i39.SuggestProductFunnelScreen]
 class SuggestProductFunnelScreen
-    extends _i54.PageRouteInfo<SuggestProductFunnelScreenArgs> {
+    extends _i55.PageRouteInfo<SuggestProductFunnelScreenArgs> {
   SuggestProductFunnelScreen({
-    _i56.Key? key,
+    _i57.Key? key,
     String? scannedQRCode,
-    List<_i54.PageRouteInfo>? children,
+    List<_i55.PageRouteInfo>? children,
   }) : super(
           SuggestProductFunnelScreen.name,
           args: SuggestProductFunnelScreenArgs(
@@ -1275,8 +1326,8 @@ class SuggestProductFunnelScreen
 
   static const String name = 'SuggestProductFunnelScreen';
 
-  static const _i54.PageInfo<SuggestProductFunnelScreenArgs> page =
-      _i54.PageInfo<SuggestProductFunnelScreenArgs>(name);
+  static const _i55.PageInfo<SuggestProductFunnelScreenArgs> page =
+      _i55.PageInfo<SuggestProductFunnelScreenArgs>(name);
 }
 
 class SuggestProductFunnelScreenArgs {
@@ -1285,7 +1336,7 @@ class SuggestProductFunnelScreenArgs {
     this.scannedQRCode,
   });
 
-  final _i56.Key? key;
+  final _i57.Key? key;
 
   final String? scannedQRCode;
 
@@ -1296,9 +1347,9 @@ class SuggestProductFunnelScreenArgs {
 }
 
 /// generated route for
-/// [_i39.SurveyThanksScreen]
-class SurveyThanksScreen extends _i54.PageRouteInfo<void> {
-  const SurveyThanksScreen({List<_i54.PageRouteInfo>? children})
+/// [_i40.SurveyThanksScreen]
+class SurveyThanksScreen extends _i55.PageRouteInfo<void> {
+  const SurveyThanksScreen({List<_i55.PageRouteInfo>? children})
       : super(
           SurveyThanksScreen.name,
           initialChildren: children,
@@ -1306,13 +1357,13 @@ class SurveyThanksScreen extends _i54.PageRouteInfo<void> {
 
   static const String name = 'SurveyThanksScreen';
 
-  static const _i54.PageInfo<void> page = _i54.PageInfo<void>(name);
+  static const _i55.PageInfo<void> page = _i55.PageInfo<void>(name);
 }
 
 /// generated route for
-/// [_i40.TopUpRouterPage]
-class TopUpRouter extends _i54.PageRouteInfo<void> {
-  const TopUpRouter({List<_i54.PageRouteInfo>? children})
+/// [_i41.TopUpRouterPage]
+class TopUpRouter extends _i55.PageRouteInfo<void> {
+  const TopUpRouter({List<_i55.PageRouteInfo>? children})
       : super(
           TopUpRouter.name,
           initialChildren: children,
@@ -1320,13 +1371,13 @@ class TopUpRouter extends _i54.PageRouteInfo<void> {
 
   static const String name = 'TopUpRouter';
 
-  static const _i54.PageInfo<void> page = _i54.PageInfo<void>(name);
+  static const _i55.PageInfo<void> page = _i55.PageInfo<void>(name);
 }
 
 /// generated route for
-/// [_i41.TopupExplained]
-class TopupExplained extends _i54.PageRouteInfo<void> {
-  const TopupExplained({List<_i54.PageRouteInfo>? children})
+/// [_i42.TopupExplained]
+class TopupExplained extends _i55.PageRouteInfo<void> {
+  const TopupExplained({List<_i55.PageRouteInfo>? children})
       : super(
           TopupExplained.name,
           initialChildren: children,
@@ -1334,13 +1385,13 @@ class TopupExplained extends _i54.PageRouteInfo<void> {
 
   static const String name = 'TopupExplained';
 
-  static const _i54.PageInfo<void> page = _i54.PageInfo<void>(name);
+  static const _i55.PageInfo<void> page = _i55.PageInfo<void>(name);
 }
 
 /// generated route for
-/// [_i42.TopupScreen]
-class TopupScreen extends _i54.PageRouteInfo<void> {
-  const TopupScreen({List<_i54.PageRouteInfo>? children})
+/// [_i43.TopupScreen]
+class TopupScreen extends _i55.PageRouteInfo<void> {
+  const TopupScreen({List<_i55.PageRouteInfo>? children})
       : super(
           TopupScreen.name,
           initialChildren: children,
@@ -1348,15 +1399,15 @@ class TopupScreen extends _i54.PageRouteInfo<void> {
 
   static const String name = 'TopupScreen';
 
-  static const _i54.PageInfo<void> page = _i54.PageInfo<void>(name);
+  static const _i55.PageInfo<void> page = _i55.PageInfo<void>(name);
 }
 
 /// generated route for
-/// [_i43.UserNameScreen]
-class UserNameScreen extends _i54.PageRouteInfo<UserNameScreenArgs> {
+/// [_i44.UserNameScreen]
+class UserNameScreen extends _i55.PageRouteInfo<UserNameScreenArgs> {
   UserNameScreen({
-    _i56.Key? key,
-    List<_i54.PageRouteInfo>? children,
+    _i57.Key? key,
+    List<_i55.PageRouteInfo>? children,
   }) : super(
           UserNameScreen.name,
           args: UserNameScreenArgs(key: key),
@@ -1365,14 +1416,14 @@ class UserNameScreen extends _i54.PageRouteInfo<UserNameScreenArgs> {
 
   static const String name = 'UserNameScreen';
 
-  static const _i54.PageInfo<UserNameScreenArgs> page =
-      _i54.PageInfo<UserNameScreenArgs>(name);
+  static const _i55.PageInfo<UserNameScreenArgs> page =
+      _i55.PageInfo<UserNameScreenArgs>(name);
 }
 
 class UserNameScreenArgs {
   const UserNameScreenArgs({this.key});
 
-  final _i56.Key? key;
+  final _i57.Key? key;
 
   @override
   String toString() {
@@ -1381,9 +1432,9 @@ class UserNameScreenArgs {
 }
 
 /// generated route for
-/// [_i44.VeganHomeRouterPage]
-class VeganHomeRouter extends _i54.PageRouteInfo<void> {
-  const VeganHomeRouter({List<_i54.PageRouteInfo>? children})
+/// [_i45.VeganHomeRouterPage]
+class VeganHomeRouter extends _i55.PageRouteInfo<void> {
+  const VeganHomeRouter({List<_i55.PageRouteInfo>? children})
       : super(
           VeganHomeRouter.name,
           initialChildren: children,
@@ -1391,13 +1442,13 @@ class VeganHomeRouter extends _i54.PageRouteInfo<void> {
 
   static const String name = 'VeganHomeRouter';
 
-  static const _i54.PageInfo<void> page = _i54.PageInfo<void>(name);
+  static const _i55.PageInfo<void> page = _i55.PageInfo<void>(name);
 }
 
 /// generated route for
-/// [_i45.VeganHomeScreen]
-class VeganHomeScreen extends _i54.PageRouteInfo<void> {
-  const VeganHomeScreen({List<_i54.PageRouteInfo>? children})
+/// [_i46.VeganHomeScreen]
+class VeganHomeScreen extends _i55.PageRouteInfo<void> {
+  const VeganHomeScreen({List<_i55.PageRouteInfo>? children})
       : super(
           VeganHomeScreen.name,
           initialChildren: children,
@@ -1405,13 +1456,13 @@ class VeganHomeScreen extends _i54.PageRouteInfo<void> {
 
   static const String name = 'VeganHomeScreen';
 
-  static const _i54.PageInfo<void> page = _i54.PageInfo<void>(name);
+  static const _i55.PageInfo<void> page = _i55.PageInfo<void>(name);
 }
 
 /// generated route for
-/// [_i46.VegiHomePage]
-class VegiHomeRoute extends _i54.PageRouteInfo<void> {
-  const VegiHomeRoute({List<_i54.PageRouteInfo>? children})
+/// [_i47.VegiHomePage]
+class VegiHomeRoute extends _i55.PageRouteInfo<void> {
+  const VegiHomeRoute({List<_i55.PageRouteInfo>? children})
       : super(
           VegiHomeRoute.name,
           initialChildren: children,
@@ -1419,18 +1470,18 @@ class VegiHomeRoute extends _i54.PageRouteInfo<void> {
 
   static const String name = 'VegiHomeRoute';
 
-  static const _i54.PageInfo<void> page = _i54.PageInfo<void>(name);
+  static const _i55.PageInfo<void> page = _i55.PageInfo<void>(name);
 }
 
 /// generated route for
-/// [_i47.VerifyEmailLinkPage]
+/// [_i48.VerifyEmailLinkPage]
 class VerifyEmailLinkRoute
-    extends _i54.PageRouteInfo<VerifyEmailLinkRouteArgs> {
+    extends _i55.PageRouteInfo<VerifyEmailLinkRouteArgs> {
   VerifyEmailLinkRoute({
     required String emailAddress,
     required String emailLinkFromVerificationEmail,
-    _i56.Key? key,
-    List<_i54.PageRouteInfo>? children,
+    _i57.Key? key,
+    List<_i55.PageRouteInfo>? children,
   }) : super(
           VerifyEmailLinkRoute.name,
           args: VerifyEmailLinkRouteArgs(
@@ -1443,8 +1494,8 @@ class VerifyEmailLinkRoute
 
   static const String name = 'VerifyEmailLinkRoute';
 
-  static const _i54.PageInfo<VerifyEmailLinkRouteArgs> page =
-      _i54.PageInfo<VerifyEmailLinkRouteArgs>(name);
+  static const _i55.PageInfo<VerifyEmailLinkRouteArgs> page =
+      _i55.PageInfo<VerifyEmailLinkRouteArgs>(name);
 }
 
 class VerifyEmailLinkRouteArgs {
@@ -1458,7 +1509,7 @@ class VerifyEmailLinkRouteArgs {
 
   final String emailLinkFromVerificationEmail;
 
-  final _i56.Key? key;
+  final _i57.Key? key;
 
   @override
   String toString() {
@@ -1467,12 +1518,12 @@ class VerifyEmailLinkRouteArgs {
 }
 
 /// generated route for
-/// [_i48.VerifyPhoneNumber]
-class VerifyPhoneNumber extends _i54.PageRouteInfo<VerifyPhoneNumberArgs> {
+/// [_i49.VerifyPhoneNumber]
+class VerifyPhoneNumber extends _i55.PageRouteInfo<VerifyPhoneNumberArgs> {
   VerifyPhoneNumber({
-    _i56.Key? key,
+    _i57.Key? key,
     String? verificationId,
-    List<_i54.PageRouteInfo>? children,
+    List<_i55.PageRouteInfo>? children,
   }) : super(
           VerifyPhoneNumber.name,
           args: VerifyPhoneNumberArgs(
@@ -1484,8 +1535,8 @@ class VerifyPhoneNumber extends _i54.PageRouteInfo<VerifyPhoneNumberArgs> {
 
   static const String name = 'VerifyPhoneNumber';
 
-  static const _i54.PageInfo<VerifyPhoneNumberArgs> page =
-      _i54.PageInfo<VerifyPhoneNumberArgs>(name);
+  static const _i55.PageInfo<VerifyPhoneNumberArgs> page =
+      _i55.PageInfo<VerifyPhoneNumberArgs>(name);
 }
 
 class VerifyPhoneNumberArgs {
@@ -1494,7 +1545,7 @@ class VerifyPhoneNumberArgs {
     this.verificationId,
   });
 
-  final _i56.Key? key;
+  final _i57.Key? key;
 
   final String? verificationId;
 
@@ -1505,9 +1556,9 @@ class VerifyPhoneNumberArgs {
 }
 
 /// generated route for
-/// [_i49.VerifyUserMnemonic]
-class VerifyUserMnemonic extends _i54.PageRouteInfo<void> {
-  const VerifyUserMnemonic({List<_i54.PageRouteInfo>? children})
+/// [_i50.VerifyUserMnemonic]
+class VerifyUserMnemonic extends _i55.PageRouteInfo<void> {
+  const VerifyUserMnemonic({List<_i55.PageRouteInfo>? children})
       : super(
           VerifyUserMnemonic.name,
           initialChildren: children,
@@ -1515,16 +1566,16 @@ class VerifyUserMnemonic extends _i54.PageRouteInfo<void> {
 
   static const String name = 'VerifyUserMnemonic';
 
-  static const _i54.PageInfo<void> page = _i54.PageInfo<void>(name);
+  static const _i55.PageInfo<void> page = _i55.PageInfo<void>(name);
 }
 
 /// generated route for
-/// [_i50.ViewJsonScreen]
-class ViewJsonScreen extends _i54.PageRouteInfo<ViewJsonScreenArgs> {
+/// [_i51.ViewJsonScreen]
+class ViewJsonScreen extends _i55.PageRouteInfo<ViewJsonScreenArgs> {
   ViewJsonScreen({
     required Map<String, dynamic> data,
-    _i56.Key? key,
-    List<_i54.PageRouteInfo>? children,
+    _i57.Key? key,
+    List<_i55.PageRouteInfo>? children,
   }) : super(
           ViewJsonScreen.name,
           args: ViewJsonScreenArgs(
@@ -1536,8 +1587,8 @@ class ViewJsonScreen extends _i54.PageRouteInfo<ViewJsonScreenArgs> {
 
   static const String name = 'ViewJsonScreen';
 
-  static const _i54.PageInfo<ViewJsonScreenArgs> page =
-      _i54.PageInfo<ViewJsonScreenArgs>(name);
+  static const _i55.PageInfo<ViewJsonScreenArgs> page =
+      _i55.PageInfo<ViewJsonScreenArgs>(name);
 }
 
 class ViewJsonScreenArgs {
@@ -1548,7 +1599,7 @@ class ViewJsonScreenArgs {
 
   final Map<String, dynamic> data;
 
-  final _i56.Key? key;
+  final _i57.Key? key;
 
   @override
   String toString() {
@@ -1557,9 +1608,9 @@ class ViewJsonScreenArgs {
 }
 
 /// generated route for
-/// [_i51.WaitingListFunnelScreen]
-class WaitingListFunnelScreen extends _i54.PageRouteInfo<void> {
-  const WaitingListFunnelScreen({List<_i54.PageRouteInfo>? children})
+/// [_i52.WaitingListFunnelScreen]
+class WaitingListFunnelScreen extends _i55.PageRouteInfo<void> {
+  const WaitingListFunnelScreen({List<_i55.PageRouteInfo>? children})
       : super(
           WaitingListFunnelScreen.name,
           initialChildren: children,
@@ -1567,13 +1618,13 @@ class WaitingListFunnelScreen extends _i54.PageRouteInfo<void> {
 
   static const String name = 'WaitingListFunnelScreen';
 
-  static const _i54.PageInfo<void> page = _i54.PageInfo<void>(name);
+  static const _i55.PageInfo<void> page = _i55.PageInfo<void>(name);
 }
 
 /// generated route for
-/// [_i52.WaitingListPositionInQueuePage]
-class WaitingListPositionInQueueRoute extends _i54.PageRouteInfo<void> {
-  const WaitingListPositionInQueueRoute({List<_i54.PageRouteInfo>? children})
+/// [_i53.WaitingListPositionInQueuePage]
+class WaitingListPositionInQueueRoute extends _i55.PageRouteInfo<void> {
+  const WaitingListPositionInQueueRoute({List<_i55.PageRouteInfo>? children})
       : super(
           WaitingListPositionInQueueRoute.name,
           initialChildren: children,
@@ -1581,17 +1632,17 @@ class WaitingListPositionInQueueRoute extends _i54.PageRouteInfo<void> {
 
   static const String name = 'WaitingListPositionInQueueRoute';
 
-  static const _i54.PageInfo<void> page = _i54.PageInfo<void>(name);
+  static const _i55.PageInfo<void> page = _i55.PageInfo<void>(name);
 }
 
 /// generated route for
-/// [_i53.WaitingListSurveyQuestionsScreens]
+/// [_i54.WaitingListSurveyQuestionsScreens]
 class WaitingListSurveyQuestionsScreens
-    extends _i54.PageRouteInfo<WaitingListSurveyQuestionsScreensArgs> {
+    extends _i55.PageRouteInfo<WaitingListSurveyQuestionsScreensArgs> {
   WaitingListSurveyQuestionsScreens({
     required bool surveyCompleted,
-    _i56.Key? key,
-    List<_i54.PageRouteInfo>? children,
+    _i57.Key? key,
+    List<_i55.PageRouteInfo>? children,
   }) : super(
           WaitingListSurveyQuestionsScreens.name,
           args: WaitingListSurveyQuestionsScreensArgs(
@@ -1603,8 +1654,8 @@ class WaitingListSurveyQuestionsScreens
 
   static const String name = 'WaitingListSurveyQuestionsScreens';
 
-  static const _i54.PageInfo<WaitingListSurveyQuestionsScreensArgs> page =
-      _i54.PageInfo<WaitingListSurveyQuestionsScreensArgs>(name);
+  static const _i55.PageInfo<WaitingListSurveyQuestionsScreensArgs> page =
+      _i55.PageInfo<WaitingListSurveyQuestionsScreensArgs>(name);
 }
 
 class WaitingListSurveyQuestionsScreensArgs {
@@ -1615,7 +1666,7 @@ class WaitingListSurveyQuestionsScreensArgs {
 
   final bool surveyCompleted;
 
-  final _i56.Key? key;
+  final _i57.Key? key;
 
   @override
   String toString() {
