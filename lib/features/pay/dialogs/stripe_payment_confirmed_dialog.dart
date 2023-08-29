@@ -81,6 +81,7 @@ class _StripePaymentConfirmedDialogState
               height: 25,
             ),
             Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 PrimaryButton(
                   onPressed: () {
