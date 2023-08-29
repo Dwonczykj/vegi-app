@@ -1064,8 +1064,10 @@ ThunkAction<AppState> updateCartItems(List<CartItem> itemsToAdd) {
         if (element.menuItem.menuItemIdAsInt == null) {
           return;
         }
-        final productRating = await vegiESCService.rateProduct(
-          productId: element.menuItem.menuItemIdAsInt!,
+
+        final productRating = await vegiESCService.rateProductName(
+          // productId: element.menuItem.menuItemIdAsInt!,
+          name: element.menuItem.name,
         );
         if (productRating == null) {
           return;
@@ -1078,9 +1080,8 @@ ThunkAction<AppState> updateCartItems(List<CartItem> itemsToAdd) {
         );
       });
     } catch (e, s) {
-      log.error('ERROR - updateCartItems $e');
-      await Sentry.captureException(
-        e,
+      log.error(
+        'ERROR - updateCartItems $e',
         stackTrace: s,
       );
     }

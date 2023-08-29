@@ -20,6 +20,9 @@ _$_GetOrdersResponse _$$_GetOrdersResponseFromJson(Map<String, dynamic> json) =>
       unpaidOrders: (json['unpaidOrders'] as List<dynamic>)
           .map((e) => Order.fromJson(e as Map<String, dynamic>))
           .toList(),
+      allMyOrders: (json['allMyOrders'] as List<dynamic>)
+          .map((e) => Order.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
 
 Map<String, dynamic> _$$_GetOrdersResponseToJson(
@@ -30,4 +33,5 @@ Map<String, dynamic> _$$_GetOrdersResponseToJson(
           instance.scheduledOrders.map((e) => e.toJson()).toList(),
       'pastOrders': instance.pastOrders.map((e) => e.toJson()).toList(),
       'unpaidOrders': instance.unpaidOrders.map((e) => e.toJson()).toList(),
+      'allMyOrders': instance.allMyOrders.map((e) => e.toJson()).toList(),
     };

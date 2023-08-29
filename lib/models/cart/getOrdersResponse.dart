@@ -12,6 +12,7 @@ class GetOrdersResponse with _$GetOrdersResponse {
     required List<Order> scheduledOrders,
     required List<Order> pastOrders,
     required List<Order> unpaidOrders,
+    required List<Order> allMyOrders,
   }) = _GetOrdersResponse;
 
   const GetOrdersResponse._();

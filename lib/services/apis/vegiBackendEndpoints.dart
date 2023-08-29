@@ -25,6 +25,8 @@ class VegiESCServiceEndpoints {
   static const vegiUsers = 'vegi-users';
   static String rateVegiProduct({required int productId}) =>
       'rate-vegi-product/$productId';
+  static String rateProductName({required String name}) =>
+      'rate-vegi-product?name=$name';
   // TODO: Implement on Server
   static String getESCSource({required int sourceId}) => 'sources/$sourceId';
   // TODO: Implement on Server

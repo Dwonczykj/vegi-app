@@ -30,6 +30,9 @@ mixin _$MenuItemState {
   Map<int, ProductOptionValue> get selectedProductOptionsForCategory =>
       throw _privateConstructorUsedError;
   @JsonKey(includeFromJson: false, includeToJson: false)
+  Map<int, GetProductResponse> get productsPurchased =>
+      throw _privateConstructorUsedError;
+  @JsonKey(includeFromJson: false, includeToJson: false)
   bool get loadingProductOptions => throw _privateConstructorUsedError;
   @JsonKey(includeFromJson: false, includeToJson: false)
   int get quantity => throw _privateConstructorUsedError;
@@ -54,6 +57,8 @@ abstract class $MenuItemStateCopyWith<$Res> {
       @JsonKey(includeFromJson: false, includeToJson: false)
       Map<int, ProductOptionValue> selectedProductOptionsForCategory,
       @JsonKey(includeFromJson: false, includeToJson: false)
+      Map<int, GetProductResponse> productsPurchased,
+      @JsonKey(includeFromJson: false, includeToJson: false)
       bool loadingProductOptions,
       @JsonKey(includeFromJson: false, includeToJson: false) int quantity});
 
@@ -77,6 +82,7 @@ class _$MenuItemStateCopyWithImpl<$Res, $Val extends MenuItemState>
     Object? totalPrice = null,
     Object? itemReward = null,
     Object? selectedProductOptionsForCategory = null,
+    Object? productsPurchased = null,
     Object? loadingProductOptions = null,
     Object? quantity = null,
   }) {
@@ -98,6 +104,10 @@ class _$MenuItemStateCopyWithImpl<$Res, $Val extends MenuItemState>
           ? _value.selectedProductOptionsForCategory
           : selectedProductOptionsForCategory // ignore: cast_nullable_to_non_nullable
               as Map<int, ProductOptionValue>,
+      productsPurchased: null == productsPurchased
+          ? _value.productsPurchased
+          : productsPurchased // ignore: cast_nullable_to_non_nullable
+              as Map<int, GetProductResponse>,
       loadingProductOptions: null == loadingProductOptions
           ? _value.loadingProductOptions
           : loadingProductOptions // ignore: cast_nullable_to_non_nullable
@@ -138,6 +148,8 @@ abstract class _$$_MenuItemStateCopyWith<$Res>
       @JsonKey(includeFromJson: false, includeToJson: false)
       Map<int, ProductOptionValue> selectedProductOptionsForCategory,
       @JsonKey(includeFromJson: false, includeToJson: false)
+      Map<int, GetProductResponse> productsPurchased,
+      @JsonKey(includeFromJson: false, includeToJson: false)
       bool loadingProductOptions,
       @JsonKey(includeFromJson: false, includeToJson: false) int quantity});
 
@@ -160,6 +172,7 @@ class __$$_MenuItemStateCopyWithImpl<$Res>
     Object? totalPrice = null,
     Object? itemReward = null,
     Object? selectedProductOptionsForCategory = null,
+    Object? productsPurchased = null,
     Object? loadingProductOptions = null,
     Object? quantity = null,
   }) {
@@ -181,6 +194,10 @@ class __$$_MenuItemStateCopyWithImpl<$Res>
           ? _value.selectedProductOptionsForCategory
           : selectedProductOptionsForCategory // ignore: cast_nullable_to_non_nullable
               as Map<int, ProductOptionValue>,
+      productsPurchased: null == productsPurchased
+          ? _value.productsPurchased
+          : productsPurchased // ignore: cast_nullable_to_non_nullable
+              as Map<int, GetProductResponse>,
       loadingProductOptions: null == loadingProductOptions
           ? _value.loadingProductOptions
           : loadingProductOptions // ignore: cast_nullable_to_non_nullable
@@ -207,6 +224,8 @@ class _$_MenuItemState extends _MenuItemState {
       @JsonKey(includeFromJson: false, includeToJson: false)
       this.selectedProductOptionsForCategory = const {},
       @JsonKey(includeFromJson: false, includeToJson: false)
+      this.productsPurchased = const {},
+      @JsonKey(includeFromJson: false, includeToJson: false)
       this.loadingProductOptions = false,
       @JsonKey(includeFromJson: false, includeToJson: false) this.quantity = 0})
       : super._();
@@ -228,6 +247,9 @@ class _$_MenuItemState extends _MenuItemState {
   final Map<int, ProductOptionValue> selectedProductOptionsForCategory;
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
+  final Map<int, GetProductResponse> productsPurchased;
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
   final bool loadingProductOptions;
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -235,7 +257,7 @@ class _$_MenuItemState extends _MenuItemState {
 
   @override
   String toString() {
-    return 'MenuItemState(menuItem: $menuItem, totalPrice: $totalPrice, itemReward: $itemReward, selectedProductOptionsForCategory: $selectedProductOptionsForCategory, loadingProductOptions: $loadingProductOptions, quantity: $quantity)';
+    return 'MenuItemState(menuItem: $menuItem, totalPrice: $totalPrice, itemReward: $itemReward, selectedProductOptionsForCategory: $selectedProductOptionsForCategory, productsPurchased: $productsPurchased, loadingProductOptions: $loadingProductOptions, quantity: $quantity)';
   }
 
   @override
@@ -252,6 +274,8 @@ class _$_MenuItemState extends _MenuItemState {
             const DeepCollectionEquality().equals(
                 other.selectedProductOptionsForCategory,
                 selectedProductOptionsForCategory) &&
+            const DeepCollectionEquality()
+                .equals(other.productsPurchased, productsPurchased) &&
             (identical(other.loadingProductOptions, loadingProductOptions) ||
                 other.loadingProductOptions == loadingProductOptions) &&
             (identical(other.quantity, quantity) ||
@@ -266,6 +290,7 @@ class _$_MenuItemState extends _MenuItemState {
       totalPrice,
       itemReward,
       const DeepCollectionEquality().hash(selectedProductOptionsForCategory),
+      const DeepCollectionEquality().hash(productsPurchased),
       loadingProductOptions,
       quantity);
 
@@ -294,6 +319,8 @@ abstract class _MenuItemState extends MenuItemState {
       @JsonKey(includeFromJson: false, includeToJson: false)
       final Map<int, ProductOptionValue> selectedProductOptionsForCategory,
       @JsonKey(includeFromJson: false, includeToJson: false)
+      final Map<int, GetProductResponse> productsPurchased,
+      @JsonKey(includeFromJson: false, includeToJson: false)
       final bool loadingProductOptions,
       @JsonKey(includeFromJson: false, includeToJson: false)
       final int quantity}) = _$_MenuItemState;
@@ -314,6 +341,9 @@ abstract class _MenuItemState extends MenuItemState {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   Map<int, ProductOptionValue> get selectedProductOptionsForCategory;
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
+  Map<int, GetProductResponse> get productsPurchased;
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   bool get loadingProductOptions;

@@ -33,7 +33,9 @@ import 'package:vegan_liverpool/models/payments/transaction_item.dart';
 import 'package:vegan_liverpool/models/restaurant/cartItem.dart';
 import 'package:vegan_liverpool/models/restaurant/deliveryAddresses.dart';
 import 'package:vegan_liverpool/models/restaurant/deliveryPartnerDTO.dart';
+import 'package:vegan_liverpool/models/restaurant/getProductResponse.dart';
 import 'package:vegan_liverpool/models/restaurant/productCategory.dart';
+import 'package:vegan_liverpool/models/restaurant/productDTO.dart';
 import 'package:vegan_liverpool/models/restaurant/productOptionValue.dart';
 import 'package:vegan_liverpool/models/restaurant/productOptionsCategory.dart';
 import 'package:vegan_liverpool/models/restaurant/productRating.dart';
@@ -987,6 +989,24 @@ class PeeplEatsService extends HttpService {
     }
   }
 
+  Future<GetProductResponse?> getProduct(
+    int productId, {
+    bool dontRoute = false,
+  }) async {
+    final Response<dynamic> response = await dioGet(
+      '/api/v1/products/${productId}',
+    );
+
+    if (responseHasErrorStatus(response) ||
+        !(response.data as Map).containsKey('product') ||
+        !(response.data as Map).containsKey('category')) {
+      log.error('Unable to fetch product details for id: [${productId}]');
+      return null;
+    }
+
+    return GetProductResponse.fromJson(response.data as Map<String, dynamic>);
+  }
+
   Future<List<ProductCategory>> getProductCategoriesForVendor(
     int vendorId, {
     bool dontRoute = false,
@@ -1504,8 +1524,9 @@ class PeeplEatsService extends HttpService {
     String phoneNoCountry,
     void Function(String error) onError,
   ) async {
-    if(email.toLowerCase().trim().isEmpty){
-      log.warn('Ignoring user-details request as email is blank', stackTrace: StackTrace.current);
+    if (email.toLowerCase().trim().isEmpty) {
+      log.warn('Ignoring user-details request as email is blank',
+          stackTrace: StackTrace.current);
     } else if (phoneNoCountry.isEmpty) {
       log.warn('Ignoring user-details request as email is blank',
           stackTrace: StackTrace.current);
@@ -2113,11 +2134,19 @@ class PeeplEatsService extends HttpService {
           .toList()
           .reversed
           .toList();
+      final allMyOrders = (response.data['allMyOrders'] as List<dynamic>)
+          .map(
+            (order) => OrderModel.Order.fromJson(order as Map<String, dynamic>),
+          )
+          .toList()
+          .reversed
+          .toList();
       return GetOrdersResponse(
         ongoingOrders: ongoingOrders,
         scheduledOrders: scheduledOrders,
         pastOrders: pastOrders,
         unpaidOrders: unpaidOrders,
+        allMyOrders: allMyOrders,
       );
     } catch (e, stackTrace) {
       log.error(

@@ -18,7 +18,8 @@ class ESCRating with _$ESCRating {
     required int id,
     @JsonKey(
       fromJson: jsonToTimeStampNullable,
-      toJson: timeStampToJsonIntNullable,
+      toJson: timeStampToJsonStringNullable,
+      name: 'calculated_on',
     )
     required DateTime? calculatedOn,
     // required double createdAt,

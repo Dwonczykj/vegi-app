@@ -2,6 +2,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:vegan_liverpool/constants/enums.dart';
 import 'package:vegan_liverpool/features/veganHome/Helpers/helpers.dart';
 import 'package:vegan_liverpool/models/payments/money.dart';
+import 'package:vegan_liverpool/models/restaurant/getProductResponse.dart';
 import 'package:vegan_liverpool/models/restaurant/productOptionValue.dart';
 import 'package:vegan_liverpool/models/restaurant/restaurantMenuItem.dart';
 
@@ -24,6 +25,9 @@ class MenuItemState with _$MenuItemState {
     @JsonKey(includeFromJson: false, includeToJson: false)
     @Default({})
     Map<int, ProductOptionValue> selectedProductOptionsForCategory,
+    @JsonKey(includeFromJson: false, includeToJson: false)
+    @Default({})
+    Map<int, GetProductResponse> productsPurchased,
     @JsonKey(includeFromJson: false, includeToJson: false)
     @Default(false)
     bool loadingProductOptions,

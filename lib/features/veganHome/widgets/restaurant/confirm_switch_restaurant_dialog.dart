@@ -1,4 +1,5 @@
 import 'package:auto_route/auto_route.dart';
+import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:vegan_liverpool/common/router/routes.gr.dart';
@@ -59,65 +60,68 @@ class _ConfirmSwitchRestaurantState extends State<ConfirmSwitchRestaurant>
           ),
         ),
         content: Container(
-            padding: const EdgeInsets.all(10),
-            child: StoreConnector<AppState, RestaurantItemViewModel>(
-              converter: RestaurantItemViewModel.fromStore,
-              builder: (context, viewmodel) {
-                return Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.min,
-                  children: <Widget>[
-                    Text(
-                      'You have existing items'
-                      ' in cart from ${viewmodel.restaurantName}',
-                      style: const TextStyle(
-                        fontSize: 20,
+          padding: const EdgeInsets.all(10),
+          child: StoreConnector<AppState, RestaurantItemViewModel>(
+            converter: RestaurantItemViewModel.fromStore,
+            builder: (context, viewmodel) {
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Text(
+                    'You have existing items'
+                    ' in cart from ${viewmodel.restaurantName}',
+                    style: const TextStyle(
+                      fontSize: 20,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 20),
+                  const Text(
+                    'Do you want to remove these items?',
+                    style: TextStyle(
+                      fontSize: 15,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(
+                    height: 25,
+                  ),
+                  Row(
+                    children: [
+                      PrimaryButton(
+                        onPressed: () {
+                          viewmodel.updateRestaurantDetails(
+                            restaurantItem: widget.restaurantItem,
+                            clearCart: true,
+                          );
+                          context.router.pop();
+                          context.router.push(
+                            const RestaurantMenuScreen(),
+                          );
+                        },
+                        label: 'Yes',
+                        width: width * 0.3,
+                        height: 40,
                       ),
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 20),
-                    const Text(
-                      'Do you want to remove these items?',
-                      style: TextStyle(
-                        fontSize: 15,
+                      const SizedBox(
+                        width: 8,
                       ),
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(
-                      height: 25,
-                    ),
-                    Row(
-                      children: [
-                        PrimaryButton(
-                          onPressed: () {
-                            viewmodel.updateRestaurantDetails(
-                              restaurantItem: widget.restaurantItem,
-                              clearCart: true,
-                            );
-                            context.router.pop();
-                            context.router.push(
-                              const RestaurantMenuScreen(),
-                            );
-                          },
-                          label: 'Yes',
-                          width: width * 0.3,
-                          height: 40,
-                        ),
-                        const Spacer(),
-                        PrimaryButton(
-                          onPressed: () {
-                            context.router.pop();
-                          },
-                          label: 'No',
-                          width: width * 0.3,
-                          height: 40,
-                        ),
-                      ],
-                    )
-                  ],
-                );
-              },
-            ),),
+                      PrimaryButton(
+                        onPressed: () {
+                          context.router.pop();
+                        },
+                        label: 'No',
+                        width: width * 0.3,
+                        height: 40,
+                      ),
+                    ],
+                  )
+                ],
+              );
+            },
+          ),
+        ),
       ),
     );
   }

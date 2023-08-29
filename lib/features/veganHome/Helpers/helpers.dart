@@ -198,6 +198,9 @@ DateTime jsonToTimeStamp(dynamic json) => jsonToTimeStampNullable(json)!;
 int? timeStampToJsonIntNullable(DateTime? json) => tryCatchRethrowInline(
       () => json?.millisecondsSinceEpoch,
     );
+String? timeStampToJsonStringNullable(DateTime? json) => tryCatchRethrowInline(
+      () => json?.formattedForAPI,
+    );
 int timeStampToJsonInt(DateTime json) => timeStampToJsonIntNullable(json)!;
 
 int objectIdFromJson(dynamic obj) {

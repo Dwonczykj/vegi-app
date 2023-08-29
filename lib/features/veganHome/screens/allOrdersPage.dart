@@ -5,6 +5,7 @@ import 'package:expandable_sliver_list/expandable_sliver_list.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_sticky_header/flutter_sticky_header.dart';
+import 'package:vegan_liverpool/common/router/routes.gr.dart';
 import 'package:vegan_liverpool/constants/theme.dart';
 import 'package:vegan_liverpool/features/shared/widgets/snackbars.dart';
 import 'package:vegan_liverpool/features/shared/widgets/transparent_button.dart';
@@ -147,8 +148,11 @@ class _AllOrdersPageState extends State<AllOrdersPage> {
                 initialItems: categories[categoryName]!.values,
                 builder: (context, item, index) =>
                     categories[categoryName]!.containsKey(item.id)
-                        ? SingleOrderCard(
-                            order: item,
+                        ? Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 8.0),
+                            child: SingleOrderCard(
+                              order: item,
+                            ),
                           )
                         : Container(),
                 controller: categoryItemsControllers[categoryName]!,
@@ -436,39 +440,50 @@ class SingleProductOrderItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-                  Text(
-                    orderItem.product.name,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.w700,
-                      fontSize: 14,
+    return GestureDetector(
+      onTap: () {
+        if (orderItem.product.id != null) {
+          rootRouter
+              .push(ESCExplainRatingScreen(productId: orderItem.product.id!));
+        } else {
+          showInfoSnack(context,
+              title: 'No explanations available for this product right now');
+        }
+      },
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                    Text(
+                      orderItem.product.name,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w700,
+                        fontSize: 14,
+                      ),
                     ),
-                  ),
-                ] +
-                orderItem.product.options.map<Widget>((element) {
-                  return Text('${element.name} - ${element.chosenOption}');
-                }).toList(),
-          ),
-        ),
-        const SizedBox(
-          width: 15,
-        ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            const SizedBox(
-              height: 10,
+                  ] +
+                  orderItem.product.options.map<Widget>((element) {
+                    return Text('${element.name} - ${element.chosenOption}');
+                  }).toList(),
             ),
-            Text(orderItem.product.totalPriceFormatted),
-          ],
-        )
-      ],
+          ),
+          const SizedBox(
+            width: 15,
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              const SizedBox(
+                height: 10,
+              ),
+              Text(orderItem.product.totalPriceFormatted),
+            ],
+          )
+        ],
+      ),
     );
   }
 }

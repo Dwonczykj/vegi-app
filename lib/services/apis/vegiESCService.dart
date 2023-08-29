@@ -80,4 +80,29 @@ class VegiESCService extends HttpService {
       rethrow;
     }
   }
+
+  Future<EscRateProductResponse?> rateProductName({
+    required String name,
+  }) async {
+    try {
+      final Response<dynamic> response = await dioGet(
+        VegiESCServiceEndpoints.rateProductName(name: name),
+      );
+      if (responseHasErrorStatus(response)) {
+        log.error(response.statusMessage ?? 'Unknown Error');
+        return null;
+      } else {
+        final result =
+            EscRateProductResponse.fromJson(response.data as Map<String, dynamic>);
+        return result;
+      }
+    } on Exception catch (e) {
+      if (e is DioException) {
+        if (e.response != null && e.response!.statusCode == 404) {
+          return null;
+        }
+      }
+      rethrow;
+    }
+  }
 }

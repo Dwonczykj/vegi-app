@@ -22,7 +22,9 @@ ESCRating _$ESCRatingFromJson(Map<String, dynamic> json) {
 mixin _$ESCRating {
   int get id => throw _privateConstructorUsedError;
   @JsonKey(
-      fromJson: jsonToTimeStampNullable, toJson: timeStampToJsonIntNullable)
+      fromJson: jsonToTimeStampNullable,
+      toJson: timeStampToJsonStringNullable,
+      name: 'calculated_on')
   DateTime? get calculatedOn =>
       throw _privateConstructorUsedError; // required double createdAt,
 // required Product product,
@@ -46,7 +48,9 @@ abstract class $ESCRatingCopyWith<$Res> {
   $Res call(
       {int id,
       @JsonKey(
-          fromJson: jsonToTimeStampNullable, toJson: timeStampToJsonIntNullable)
+          fromJson: jsonToTimeStampNullable,
+          toJson: timeStampToJsonStringNullable,
+          name: 'calculated_on')
       DateTime? calculatedOn,
       int product,
       String product_id,
@@ -113,7 +117,9 @@ abstract class _$$_ESCRatingCopyWith<$Res> implements $ESCRatingCopyWith<$Res> {
   $Res call(
       {int id,
       @JsonKey(
-          fromJson: jsonToTimeStampNullable, toJson: timeStampToJsonIntNullable)
+          fromJson: jsonToTimeStampNullable,
+          toJson: timeStampToJsonStringNullable,
+          name: 'calculated_on')
       DateTime? calculatedOn,
       int product,
       String product_id,
@@ -175,7 +181,9 @@ class _$_ESCRating extends _ESCRating {
   _$_ESCRating(
       {required this.id,
       @JsonKey(
-          fromJson: jsonToTimeStampNullable, toJson: timeStampToJsonIntNullable)
+          fromJson: jsonToTimeStampNullable,
+          toJson: timeStampToJsonStringNullable,
+          name: 'calculated_on')
       required this.calculatedOn,
       required this.product,
       required this.product_id,
@@ -190,7 +198,9 @@ class _$_ESCRating extends _ESCRating {
   final int id;
   @override
   @JsonKey(
-      fromJson: jsonToTimeStampNullable, toJson: timeStampToJsonIntNullable)
+      fromJson: jsonToTimeStampNullable,
+      toJson: timeStampToJsonStringNullable,
+      name: 'calculated_on')
   final DateTime? calculatedOn;
 // required double createdAt,
 // required Product product,
@@ -248,7 +258,9 @@ abstract class _ESCRating extends ESCRating {
   factory _ESCRating(
       {required final int id,
       @JsonKey(
-          fromJson: jsonToTimeStampNullable, toJson: timeStampToJsonIntNullable)
+          fromJson: jsonToTimeStampNullable,
+          toJson: timeStampToJsonStringNullable,
+          name: 'calculated_on')
       required final DateTime? calculatedOn,
       required final int product,
       required final String product_id,
@@ -263,7 +275,9 @@ abstract class _ESCRating extends ESCRating {
   int get id;
   @override
   @JsonKey(
-      fromJson: jsonToTimeStampNullable, toJson: timeStampToJsonIntNullable)
+      fromJson: jsonToTimeStampNullable,
+      toJson: timeStampToJsonStringNullable,
+      name: 'calculated_on')
   DateTime? get calculatedOn;
   @override // required double createdAt,
 // required Product product,

@@ -17,6 +17,9 @@ final menuItemReducers = combineReducers<MenuItemState>(
     TypedReducer<MenuItemState, LoadingProductOptions>(
       _setLoadingProductOptions,
     ).call,
+    TypedReducer<MenuItemState, LoadProductDetails>(
+      _setProductPurchasedDetails,
+    ).call,
   ],
 );
 
@@ -82,4 +85,19 @@ MenuItemState _setLoadingProductOptions(
   LoadingProductOptions action,
 ) {
   return state.copyWith(loadingProductOptions: action.flag);
+}
+
+MenuItemState _setProductPurchasedDetails(
+  MenuItemState state,
+  LoadProductDetails action,
+) {
+  final newMap = action.productDetails.product?.id == null
+      ? state.productsPurchased
+      : state.productsPurchased
+    ..removeWhere(
+        (key, value) => key == (action.productDetails.product?.id ?? 0))
+    ..addAll({
+      (action.productDetails.product?.id ?? 0): action.productDetails,
+    });
+  return state.copyWith(productsPurchased: newMap);
 }

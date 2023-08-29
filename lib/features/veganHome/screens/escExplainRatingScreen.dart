@@ -1,10 +1,13 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:vegan_liverpool/features/shared/widgets/my_scaffold.dart';
 import 'package:vegan_liverpool/features/veganHome/widgets/esc/explanations_card.dart';
 import 'package:vegan_liverpool/features/veganHome/widgets/esc/rating_card.dart';
 import 'package:vegan_liverpool/features/veganHome/widgets/shared/shimmerButton.dart';
 import 'package:vegan_liverpool/models/app_state.dart';
+import 'package:vegan_liverpool/models/restaurant/getProductResponse.dart';
+import 'package:vegan_liverpool/redux/actions/menu_item_actions.dart';
 import 'package:vegan_liverpool/redux/viewsmodels/escExplanationsViewModel.dart';
 
 @RoutePage()
@@ -24,20 +27,31 @@ class _ESCExplainRatingScreenState extends State<ESCExplainRatingScreen> {
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, EscExplanationsViewModel>(
+      onInit: (store) =>
+          store.dispatch(loadProductDetails(productId: widget.productId)),
+      distinct: true,
       converter: EscExplanationsViewModel.fromStore,
       builder: (_, viewmodel) {
         final productRating =
             viewmodel.getExplanationsForProduct(widget.productId);
-        return Scaffold(
+        final productDetails = viewmodel.getProduct(widget.productId);
+
+        final productName = productDetails?.product?.name ??
+            productRating?.rating?.product_name ??
+            'Product';
+        return MyScaffold(
+          title: '$productName research',
           // body: SingleChildScrollView(
           body: RefreshIndicator(
-            onRefresh: () =>
-                viewmodel.refreshRatingsForProduct(productId: widget.productId),
+            onRefresh: () => viewmodel.refreshRatingsForProduct(
+              productId: widget.productId,
+              name: productName,
+            ),
             child: SingleChildScrollView(
               child: Padding(
                 padding: EdgeInsets.only(
                   bottom: 30,
-                  top: MediaQuery.of(context).size.height * 0.08,
+                  top: 10,
                 ),
                 child: Column(
                   children:
@@ -49,7 +63,6 @@ class _ESCExplainRatingScreenState extends State<ESCExplainRatingScreen> {
                               RatingCard(
                                 rating: productRating.rating!,
                               ),
-                              
                               ...(productRating.explanations.map((explanation) {
                                 return ExplanationsCard(
                                   explanation: explanation,

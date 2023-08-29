@@ -2,6 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:vegan_liverpool/common/router/routes.gr.dart';
+import 'package:vegan_liverpool/features/shared/widgets/primary_button.dart';
 import 'package:vegan_liverpool/features/veganHome/widgets/shared/vegiDialog.dart';
 import 'package:vegan_liverpool/features/veganHome/widgets/shared/vegiDialogButton.dart';
 import 'package:vegan_liverpool/generated/l10n.dart';
@@ -60,39 +61,49 @@ class _StripePaymentConfirmedDialogState
         // await rootRouter.popAndPush(const OrderConfirmedScreen());
       },
     );
+    final width = MediaQuery.of(context).size.width;
     return VegiDialog<_StripePaymentConfirmedDialogViewModel>(
       storeConverter: _StripePaymentConfirmedDialogViewModel.fromStore,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const Text(
-            'Payment submitted',
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 32,
-              fontWeight: FontWeight.w800,
+      child: Padding(
+        padding: const EdgeInsets.all(10),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Text(
+              'Payment submitted',
+              style: const TextStyle(
+                fontSize: 20,
+              ),
+              textAlign: TextAlign.center,
             ),
-          ),
-          const SizedBox(height: 15),
-          VegiDialogButton(
-            label: 'O.K.',
-            icon: Icons.thumb_up_alt,
-            onPressed: () {
-              if (hasNavigatedAway) {
-                return;
-              }
-              setState(() {
-                hasNavigatedAway = true;
-              });
-              context.router.pop().then(
-                    (_) =>
-                        context.router.navigate(const OrderConfirmedScreen()),
-                  );
-              // await rootRouter.popAndPush(const OrderConfirmedScreen());
-            },
-          ),
-        ],
+            const SizedBox(
+              height: 25,
+            ),
+            Row(
+              children: [
+                PrimaryButton(
+                  onPressed: () {
+                    if (hasNavigatedAway) {
+                      return;
+                    }
+                    setState(() {
+                      hasNavigatedAway = true;
+                    });
+                    context.router.pop().then(
+                          (_) => context.router
+                              .navigate(const OrderConfirmedScreen()),
+                        );
+                    // await rootRouter.popAndPush(const OrderConfirmedScreen());
+                  },
+                  label: 'ok',
+                  width: width * 0.3,
+                  height: 40,
+                ),
+              ],
+            )
+          ],
+        ),
       ),
     );
   }

@@ -15,6 +15,8 @@ class PrimaryButton extends StatelessWidget {
     this.preload = false,
     this.disabled = false,
     this.buttonColor,
+    this.padding,
+    this.margin,
   }) : super(key: key);
   final GestureTapCallback onPressed;
   final GestureTapCallback? onPressedDisabled;
@@ -25,12 +27,16 @@ class PrimaryButton extends StatelessWidget {
   final bool disabled;
   final double fontSize;
   final Color? buttonColor;
+  final EdgeInsetsGeometry? padding;
+  final EdgeInsetsGeometry? margin;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: width,
       height: height,
+      padding: padding,
+      margin: margin,
       decoration: BoxDecoration(
         gradient: buttonColor == null
             ? LinearGradient(

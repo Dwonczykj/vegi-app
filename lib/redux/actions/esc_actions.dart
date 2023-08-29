@@ -42,3 +42,27 @@ ThunkAction<AppState> getRatingsForProduct({
     }
   };
 }
+
+ThunkAction<AppState> getRatingsForProductName({
+  required int productId,
+  required String name,
+}) {
+  return (Store<AppState> store) async {
+    try {
+      final productRating = await vegiESCService.rateProductName(
+        name: name,
+      );
+      if (productRating == null) {
+        return;
+      }
+      store.dispatch(
+        SetExplanationsForProduct(
+          productId: productId,
+          newRating: productRating.new_rating,
+        ),
+      );
+    } catch (e, s) {
+      log.error('ERROR - getRatingsForProduct $e', stackTrace: s);
+    }
+  };
+}

@@ -119,9 +119,31 @@ class ExplanationsCard extends StatelessWidget {
                   ),
                   ...explanation.reasons.mapIndexed(
                     (i, reason) {
-                      return Text.rich(
-                        TextSpan(
-                          text: '#$i ${reason}',
+                      return SizedBox(
+                        width: MediaQuery.of(context).size.width,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20),
+                          child: Row(
+                            children: [
+                              Text('$i.'),
+                              const SizedBox(
+                                width: 5,
+                              ),
+                              Expanded(
+                                child: Text.rich(
+                                  TextSpan(
+                                    text: '${reason}',
+                                  ),
+                                  // style: TextStyle(
+                                  //   fontWeight: FontWeight.w700,
+                                  //   color: Colors.red,
+                                  // ),
+                                  // softWrap: false,
+                                  // maxLines: 1,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       );
                     },

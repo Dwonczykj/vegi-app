@@ -3,6 +3,7 @@ import 'package:redux_thunk/redux_thunk.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:vegan_liverpool/models/app_state.dart';
 import 'package:vegan_liverpool/models/payments/money.dart';
+import 'package:vegan_liverpool/models/restaurant/getProductResponse.dart';
 import 'package:vegan_liverpool/models/restaurant/productOptionValue.dart';
 import 'package:vegan_liverpool/models/restaurant/productOptionsCategory.dart';
 import 'package:vegan_liverpool/models/restaurant/restaurantMenuItem.dart';
@@ -65,6 +66,19 @@ class LoadingProductOptions {
   String toString() => 'LoadingProductOptions : flag: $flag';
 }
 
+class LoadProductDetails {
+  LoadProductDetails({
+    required this.productDetails,
+  });
+
+  final GetProductResponse productDetails;
+
+  @override
+  String toString() {
+    return 'LoadProductDetails : productId:"${productDetails.product?.menuItemID}"';
+  }
+}
+
 ThunkAction<AppState> fetchProductOptions(String itemID) {
   return (Store<AppState> store) async {
     try {
@@ -90,6 +104,22 @@ ThunkAction<AppState> fetchProductOptions(String itemID) {
         e,
         stackTrace: s,
       );
+    }
+  };
+}
+
+ThunkAction<AppState> loadProductDetails({
+  required int productId,
+}) {
+  return (Store<AppState> store) async {
+    try {
+      final productDetails = await peeplEatsService.getProduct(productId);
+      if (productDetails == null) {
+        return;
+      }
+      store.dispatch(LoadProductDetails(productDetails: productDetails));
+    } catch (e, s) {
+      log.error('ERROR - loadProductDetails $e', stackTrace: s);
     }
   };
 }
