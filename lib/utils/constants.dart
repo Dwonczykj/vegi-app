@@ -508,6 +508,7 @@ class Labels {
       'Register';
   static const String homeScreenRouteLabel = 'Home';
   static const String stripeVegiProductName = 'vegi';
+  static const String stripeVegiMerchantName = "vegiapp ltd";
   static const String launchAppStore = 'Open AppStore';
   static const String cancelButtonLabel = 'Cancel';
 

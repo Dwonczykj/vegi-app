@@ -797,7 +797,7 @@ mixin _StripeServiceMixin on IStripeService {
           applePay: ApplePayParams(
             cartItems: [
               ApplePayCartSummaryItem.immediate(
-                label: "total",
+                label: Labels.stripeVegiMerchantName,
                 // AMOUNT IN GBP as String
                 amount: amount.inGBPValue.toStringAsFixed(2),
               ),
