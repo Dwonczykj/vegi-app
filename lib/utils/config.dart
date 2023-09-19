@@ -6,6 +6,7 @@ const NEARBY_VENDORS_DISTANCE_KM = 5;
 
 class AppConfig {
   static const useFusePayments = false;
+  static const useWeb3Auth = true;
   static const waitingListQueuePreLaunchPerksBound = 100;
   static const rewardCurrency = Currency.PPL; // TODO: Change this to GBT
   static const stripeCardPaymentFlowTimeOutMillis = 60 * 1000;

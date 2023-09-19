@@ -72,7 +72,7 @@ class Token with _$Token implements Comparable<Token> {
     }
     try {
       final tokenBalanceData =
-          await fuseWalletSDK.explorerModule.getTokenBalance(
+          await (await fuseWalletSDK).explorerModule.getTokenBalance(
         address,
         accountAddress,
       );
@@ -101,7 +101,7 @@ class Token with _$Token implements Comparable<Token> {
     String currency = 'usd',
   }) async {
     try {
-      final priceData = await fuseWalletSDK.tradeModule.price(address);
+      final priceData = await (await fuseWalletSDK).tradeModule.price(address);
       return priceData.pick(
         onData: (String tokenPrice) {
           // Do you magic here
@@ -128,7 +128,7 @@ class Token with _$Token implements Comparable<Token> {
   }) async {
     try {
       final priceChangeData =
-          await fuseWalletSDK.tradeModule.priceChange(address);
+          await (await fuseWalletSDK).tradeModule.priceChange(address);
       priceChangeData.pick(
         onData: (String priceChange) {
           onDone(num.parse(Decimal.parse(priceChange).toString()));
@@ -150,7 +150,7 @@ class Token with _$Token implements Comparable<Token> {
   }) async {
     try {
       final intervalData =
-          await fuseWalletSDK.tradeModule.interval(address, timeFrame);
+          await (await fuseWalletSDK).tradeModule.interval(address, timeFrame);
       return intervalData.pick(
         onData: (List<IntervalStats> stats) {
           onDone(stats);

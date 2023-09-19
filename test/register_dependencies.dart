@@ -8,7 +8,6 @@ import 'package:logger/logger.dart';
 import 'package:phone_number/phone_number.dart';
 import 'package:vegan_liverpool/common/di/di.dart';
 import 'package:vegan_liverpool/common/di/env.dart';
-import 'package:vegan_liverpool/common/network/web3auth.dart';
 import 'package:vegan_liverpool/common/router/route_guards.dart';
 import 'package:vegan_liverpool/common/router/routes.dart';
 import 'package:vegan_liverpool/common/router/vegi_debug_route_observer.dart';

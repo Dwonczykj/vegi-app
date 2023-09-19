@@ -25,15 +25,12 @@ void main() {
       // Your test code using Firebase services
       // For example, Firestore queries, Authentication, etc.
       final store = await reduxStore;
-      await authenticatorTestInstance.initFuse(
-        // this code will not be waited for as runs once stream receives an event...
-        onWalletInitialised: () {
-          expect(
-            fuseWalletSDK.smartWallet != null,
-            true,
-            reason: 'fuse wallet sdk has been successfully initialised',
-          );
-        },
+      final fuseSDK = (await fuseWalletSDK);
+      // ! most likely need to signin with web3auth so that there is a privatekey to use to fetch fuse wallet.
+      expect(
+        fuseSDK.wallet.getSender().isNotEmpty,
+        true,
+        reason: 'fuse wallet sdk has been successfully initialised',
       );
       var currentFuseStatus = store.state.userState.fuseAuthenticationStatus;
       log.info('Start checking fuse initialisation status');

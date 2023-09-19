@@ -66,19 +66,19 @@ class _MyAppState extends State<MyApp> with SingleTickerProviderStateMixin {
   }
 
   //Authentication token used for calls with Fuse
-  void setJwtToken(Store<AppState> store) {
-    final String jwtToken = store.state.userState.jwtToken;
-    if (![null, ''].contains(jwtToken)) {
-      isAuthenticatedRouteGuard = true;
-      log.info('JWT: $jwtToken');
-      fuseWalletSDK.jwtToken = jwtToken;
-    }
-  }
+  // void setJwtToken(Store<AppState> store) {
+  //   final String jwtToken = store.state.userState.jwtToken;
+  //   if (![null, ''].contains(jwtToken)) {
+  //     isAuthenticatedRouteGuard = true;
+  //     log.info('JWT: $jwtToken');
+  //     (await fuseWalletSDK).jwtToken = jwtToken;
+  //   }
+  // }
 
   @override
   void initState() {
     super.initState();
-    setJwtToken(widget.store);
+    // setJwtToken(widget.store);
     widget.store
       ..dispatch(fetchHomePageData())
       // ..dispatch(

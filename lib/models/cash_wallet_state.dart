@@ -6,7 +6,6 @@ import 'package:vegan_liverpool/models/actions/actions.dart';
 import 'package:vegan_liverpool/models/actions/wallet_action.dart';
 import 'package:vegan_liverpool/models/tokens/token.dart';
 import 'package:vegan_liverpool/utils/constants.dart';
-import 'package:wallet_connect/wc_session_store.dart';
 
 part 'cash_wallet_state.freezed.dart';
 part 'cash_wallet_state.g.dart';
@@ -61,7 +60,6 @@ class CashWalletState with _$CashWalletState {
     @JsonKey(includeFromJson: false, includeToJson: false)
     @Default(false)
     bool isFetchingBalances,
-    @Default([]) List<WCSessionStore> wcSessionStores,
   }) = _CashWalletState;
 
   const CashWalletState._();

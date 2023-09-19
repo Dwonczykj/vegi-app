@@ -7,7 +7,7 @@ import 'package:vegan_liverpool/models/tokens/token.dart';
 import 'package:vegan_liverpool/redux/actions/app_env_actions.dart';
 import 'package:vegan_liverpool/redux/actions/cash_wallet_actions.dart';
 import 'package:vegan_liverpool/redux/actions/user_actions.dart';
-import 'package:wallet_connect/wc_session_store.dart';
+// import 'package:wallet_connect/wc_session_store.dart';
 
 final cashWalletReducers = combineReducers<CashWalletState>([
   TypedReducer<CashWalletState, LogoutRequestSuccess>(
@@ -19,10 +19,6 @@ final cashWalletReducers = combineReducers<CashWalletState>([
   TypedReducer<CashWalletState, ResetAppState>(_resetApp).call,
   TypedReducer<CashWalletState, GetTokenIntervalStatsSuccess>(
     _getTokenIntervalStatsSuccess,
-  ).call,
-  TypedReducer<CashWalletState, AddSession>(_addSession).call,
-  TypedReducer<CashWalletState, RemoveSession>(
-    _removeSession,
   ).call,
   TypedReducer<CashWalletState, CreateLocalAccountSuccess>(
     _createNewWalletSuccess,
@@ -81,38 +77,6 @@ CashWalletState _getTokenListSuccess(
   final Map<String, Token> existing = state.tokens;
   final Map<String, Token> newOne = action.tokensByAddress;
   return state.copyWith(tokens: existing..addAll(newOne));
-}
-
-CashWalletState _addSession(
-  CashWalletState state,
-  AddSession action,
-) {
-  final List<WCSessionStore> currentSessions = state.wcSessionStores.toList()
-    ..removeWhere(
-      (element) =>
-          action.session.remotePeerMeta.name == element.remotePeerMeta.name,
-    )
-    ..toList();
-  return state.copyWith(
-    wcSessionStores: [
-      ...currentSessions,
-      action.session,
-    ],
-  );
-}
-
-CashWalletState _removeSession(
-  CashWalletState state,
-  RemoveSession action,
-) {
-  final List<WCSessionStore> wcSessionStores = state.wcSessionStores
-    ..remove(
-      action.session,
-    )
-    ..toList();
-  return state.copyWith(
-    wcSessionStores: wcSessionStores,
-  );
 }
 
 CashWalletState _createNewWalletSuccess(

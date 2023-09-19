@@ -23,11 +23,13 @@ import 'package:vegan_liverpool/redux/actions/user_actions.dart';
 import 'package:vegan_liverpool/redux/viewsmodels/signUpErrorDetails.dart';
 import 'package:vegan_liverpool/services.dart';
 import 'package:vegan_liverpool/utils/analytics.dart';
+import 'package:vegan_liverpool/utils/config.dart';
 import 'package:vegan_liverpool/utils/constants.dart';
 import 'package:vegan_liverpool/utils/log/log.dart';
 import 'package:vegan_liverpool/utils/onboard/firebase.dart'
     show LoggedInToVegiResult;
-import 'package:vegan_liverpool/utils/onboard/fuseAuthUtils.dart';
+import 'package:vegan_liverpool/utils/onboard/web3Auth.dart';
+import 'package:web3auth_flutter/web3auth_flutter.dart';
 
 abstract class iLoginDetails {}
 
@@ -87,33 +89,37 @@ class Authentication {
   Future<bool> appIsAuthenticated() async =>
       (await reduxStore).state.userState.isLoggedIn;
 
-  Future<void> initFuse({
-    void Function()? onWalletInitialised,
-  }) async {
-    (await reduxStore).dispatch(SignupLoading(isLoading: true));
-    logFunctionCall<void>(
-      className: 'Authentication',
-      funcName: 'initFuse',
-    );
-    return _loginToFuse(
-      onWalletInitialised: onWalletInitialised,
-    );
-  }
+  // Future<void> initFuse({
+  //   void Function()? onWalletInitialised,
+  // }) async {
+  //   (await reduxStore).dispatch(SignupLoading(isLoading: true));
+  //   logFunctionCall<void>(
+  //     className: 'Authentication',
+  //     funcName: 'initFuse',
+  //   );
+  //   // return _loginToFuse(
+  //   //   onWalletInitialised: onWalletInitialised,
+  //   // );
+  //   // doesnt wait for blockchian to create wallet anymore so no need for the callback like this.
+  //   await defiAuthenticate(credential: credential);
+  //   onWalletInitialised?.call();
+  //   return;
+  // }
 
-  Future<void> restoreFuseFromMnemonic({
-    required List<String> mnemonicWords,
-    void Function()? onWalletInitialised,
-  }) async {
-    (await reduxStore).dispatch(SignupLoading(isLoading: true));
-    logFunctionCall<void>(
-      className: 'Authentication',
-      funcName: 'restoreFuseFromMnemonic',
-    );
-    return _loginToFuse(
-      onWalletInitialised: onWalletInitialised,
-      useMnemonicWords: mnemonicWords,
-    );
-  }
+  // Future<void> restoreFuseFromMnemonic({
+  //   required List<String> mnemonicWords,
+  //   void Function()? onWalletInitialised,
+  // }) async {
+  //   (await reduxStore).dispatch(SignupLoading(isLoading: true));
+  //   logFunctionCall<void>(
+  //     className: 'Authentication',
+  //     funcName: 'restoreFuseFromMnemonic',
+  //   );
+  //   return _loginToFuse(
+  //     onWalletInitialised: onWalletInitialised,
+  //     useMnemonicWords: mnemonicWords,
+  //   );
+  // }
 
   Future<void> signUpFirebaseEmail({
     // required iLoginDetails loginDetails,
@@ -152,34 +158,35 @@ class Authentication {
       className: 'Authentication',
       funcName: 'reauthenticate',
     );
-    final store = await reduxStore;
-    store.dispatch(SignupLoading(isLoading: true));
-    final firebaseReauthenticationSucceeded =
-        await _signupFirebaseTryReauthenticate();
-    if (firebaseReauthenticationSucceeded) {
-      // * vegi Auth
-      await _signupVegiTryReauthenticate();
-    }
-    if (store.state.userState.vegiAuthenticationStatus !=
-        VegiAuthenticationStatus.authenticated) {
-      log.error(
-        'Unable to call authentcator.reauthenticate and authentiate vegi. So stopping auth flow here',
-      );
-      return;
-    }
-    // check fuse
-    // * Fuse part
-    await _loginToFuse(
-        // onWalletInitialised: () async {
-        //   // * Firebase part
-        //   final firebaseReauthenticationSucceeded =
-        //       await _signupFirebaseTryReauthenticate();
-        //   if (firebaseReauthenticationSucceeded) {
-        //     // * vegi Auth
-        //     await _signupVegiTryReauthenticate();
-        //   }
-        // },
-        );
+    log.warn('Reauthentication dicontinued for now');
+    return;
+    // final store = await reduxStore;
+    // store.dispatch(SignupLoading(isLoading: true));
+    // final firebaseReauthenticationSucceeded =
+    //     await _signupFirebaseTryReauthenticate();
+    // if (firebaseReauthenticationSucceeded) {
+    //   // * vegi Auth
+    //   await _signupVegiTryReauthenticate();
+    // }
+    // if (store.state.userState.vegiAuthenticationStatus !=
+    //     VegiAuthenticationStatus.authenticated) {
+    //   log.error(
+    //     'Unable to call authenticator.reauthenticate and authentiate vegi. So stopping auth flow here',
+    //   );
+    //   return;
+    // }
+    // // check fuse
+    // // * login to fuse
+    // if (store.state.userState.vegiAuthenticationStatus ==
+    //     VegiAuthenticationStatus.authenticated) {
+    //   await defiAuthenticate(
+    //       credential: store.state.userState.firebaseCredentials!);
+    // } else {
+    //   log.error(
+    //     'Unable to initFuse at end of authenticator.verifySMSVericationCode as failed to auth vegi with status: [${store.state.userState.vegiAuthenticationStatus}] and firebaseStatus: ["${store.state.userState.firebaseAuthenticationStatus}"]',
+    //   );
+    //   store.dispatch(SignupLoading(isLoading: false));
+    // }
   }
 
   /// to be called from loginHandler on Sign_up_screen via MainScreenViewModel
@@ -224,6 +231,7 @@ class Authentication {
         store.dispatch(ResetPhoneNumber());
       }
     }
+
     await _logInFirebaseRequestVerificationCodeStep2(
       loginDetails: loginDetails,
       onCompleteFlow: () {
@@ -305,7 +313,8 @@ class Authentication {
       // initFuse
       if (store.state.userState.vegiAuthenticationStatus ==
           VegiAuthenticationStatus.authenticated) {
-        await _loginToFuse();
+        // perhaps i can configure test credentials
+        // await defiAuthenticate(credential: credential);
       } else {
         log.error(
           'Unable to initFuse at end of authenticator.verifySMSVericationCode as failed to auth vegi USING TEST PHONE CREDENTIALS with status: [${store.state.userState.vegiAuthenticationStatus}] and firebaseStatus: ["${store.state.userState.firebaseAuthenticationStatus}"]',
@@ -350,14 +359,7 @@ class Authentication {
       phoneCountryCode: int.tryParse(store.state.userState.countryCode),
       firebaseSessionToken: firebaseSessionToken!,
     );
-    if (store.state.userState.vegiAuthenticationStatus ==
-        VegiAuthenticationStatus.authenticated) {
-      await _loginToFuse();
-    } else {
-      log.error(
-        'Unable to initFuse at end of authenticator.verifySMSVericationCode as failed to auth vegi with status: [${store.state.userState.vegiAuthenticationStatus}] and firebaseStatus: ["${store.state.userState.firebaseAuthenticationStatus}"]',
-      );
-    }
+    await defiAuthenticate(credential: userCredential);
   }
 
   Future<bool> verifyEmailLinkCallback({
@@ -392,7 +394,7 @@ class Authentication {
     // * login to fuse
     if (store.state.userState.vegiAuthenticationStatus ==
         VegiAuthenticationStatus.authenticated) {
-      await _loginToFuse();
+      await defiAuthenticate(credential: userCredential);
     } else {
       log.error(
         'Unable to initFuse at end of authenticator.verifySMSVericationCode as failed to auth vegi with status: [${store.state.userState.vegiAuthenticationStatus}] and firebaseStatus: ["${store.state.userState.firebaseAuthenticationStatus}"]',
@@ -441,6 +443,8 @@ class Authentication {
           sentryHint: 'Error signing out of vegi from authenticator',
         );
       }
+      // logout of defi / fuse / web3auth
+      await defiSignout();
       await Analytics.track(eventName: AnalyticsEvents.logout);
       store
         ..dispatch(LogoutRequestSuccess())
@@ -617,11 +621,12 @@ class Authentication {
       // * login to fuse
       if (store.state.userState.vegiAuthenticationStatus ==
           VegiAuthenticationStatus.authenticated) {
-        await _loginToFuse();
+        await defiAuthenticate(credential: userCredential);
       } else {
         log.error(
           'Unable to initFuse at end of authenticator.verifySMSVericationCode as failed to auth vegi with status: [${store.state.userState.vegiAuthenticationStatus}] and firebaseStatus: ["${store.state.userState.firebaseAuthenticationStatus}"]',
         );
+        store.dispatch(SignupLoading(isLoading: false));
         return false;
       }
       return true;
@@ -638,7 +643,7 @@ class Authentication {
     );
     final store = await reduxStore;
     if (store.state.userState.firebaseCredentialIsValid) {
-      final reauthSucceeded = await onBoardStrategy.reauthenticateUser();
+      final reauthSucceeded = await firebaseOnboarding.reauthenticateUser();
 
       if (!reauthSucceeded) {
         store.dispatch(
@@ -812,34 +817,34 @@ class Authentication {
     }
   }
 
-  Future<void> _loginToFuse({
-    void Function()? onWalletInitialised,
-    List<String>? useMnemonicWords,
-  }) async {
-    logFunctionCall<void>(
-      className: 'Authentication',
-      funcName: '_loginToFuse',
-    );
-    final store = await reduxStore;
-    store.dispatch(SignUpLoadingMessage(message: 'Fetching wallet 👾...'));
-    final privateKeyForPhone = await _getFusePrivateKeyForPhoneInStore(
-      useMnemonicWords: useMnemonicWords,
-    );
-    if (privateKeyForPhone != store.state.userState.privateKey) {
-      store.dispatch(
-        ResetFuseCredentials(
-          privateKeyForPhone: privateKeyForPhone,
-        ),
-      );
-    }
+  // Future<void> _loginToFuse({
+  //   void Function()? onWalletInitialised,
+  //   List<String>? useMnemonicWords,
+  // }) async {
+  //   logFunctionCall<void>(
+  //     className: 'Authentication',
+  //     funcName: '_loginToFuse',
+  //   );
+  //   final store = await reduxStore;
+  //   store.dispatch(SignUpLoadingMessage(message: 'Fetching wallet 👾...'));
+  //   final privateKeyForPhone = await _getFusePrivateKeyForPhoneInStore(
+  //     useMnemonicWords: useMnemonicWords,
+  //   );
+  //   if (privateKeyForPhone != store.state.userState.privateKey) {
+  //     store.dispatch(
+  //       ResetFuseCredentials(
+  //         privateKeyForPhone: privateKeyForPhone,
+  //       ),
+  //     );
+  //   }
 
-    await _initFuseWallet(
-      store,
-      onWalletInitialised: onWalletInitialised,
-      useMnemonicWords: useMnemonicWords,
-      privateKey: privateKeyForPhone,
-    );
-  }
+  //   await _initFuseWallet(
+  //     store,
+  //     onWalletInitialised: onWalletInitialised,
+  //     useMnemonicWords: useMnemonicWords,
+  //     privateKey: privateKeyForPhone,
+  //   );
+  // }
 
   Future<UserCredential?> _signInToOnboardingProviderWithEmail({
     required String email,
@@ -869,8 +874,8 @@ class Authentication {
       className: 'Authentication',
       funcName: '_requestSMSCodeForPhoneNumber',
     );
-    const bool useWeb3Auth = false;
     final store = await reduxStore;
+
     try {
       store.dispatch(setDevicePhoneNumberForId(phoneNumber.e164));
       await Analytics.setUserId(phoneNumber.e164);
@@ -1182,8 +1187,7 @@ class Authentication {
         ),
       );
 
-  /// Function to create the single External Owner Account that can have at most
-  /// ONE smart wallet linked with it.
+  /// Replacement function to init fuse and sort wallet saving all in one
   Future<void> _initFuseWallet(
     Store<AppState> store, {
     required String? privateKey,
@@ -1199,597 +1203,616 @@ class Authentication {
         fuseStatus: FuseAuthenticationStatus.loading,
       ),
     );
-    late final EthPrivateKey credentials;
-    final mnemonicInState = store.state.userState.mnemonic;
-    final mnemonic = useMnemonicWords ?? store.state.userState.mnemonic;
-    // * Fuse - Create PrivateKey if no privateKey in state or no mnemonic in state
-    if (privateKey == null ||
-        privateKey.isEmpty ||
-        mnemonicInState.isEmpty ||
-        mnemonicInState.first.isEmpty) {
-      if (mnemonic.isEmpty ||
-          mnemonic.first.isEmpty &&
-              (privateKey != null || (privateKey?.isNotEmpty ?? false))) {
-        log.warn(
-          'Creating a new wallet even though have already created one for this phone number as have lost the mnemonic in the state',
-        );
-      }
-      log.info(
-        'Creating a new FuseSDK private key for phoneNumber: ${store.state.userState.phoneNumber}${useMnemonicWords != null ? " using recovery mnemonic" : ""}',
-        sentry: true,
-      );
-      final String mnemonicStr = useMnemonicWords != null
-          ? useMnemonicWords.join(' ')
-          : mnemonicInState.isNotEmpty && mnemonicInState.first.isNotEmpty
-              ? mnemonicInState.join(' ')
-              : Mnemonic.generate();
-      final newPrivateKey = Mnemonic.privateKeyFromMnemonic(mnemonicStr);
-      credentials = EthPrivateKey.fromHex(newPrivateKey);
-      final EthereumAddress accountAddress = credentials.address;
-      store
-        ..dispatch(
-          CreateLocalAccountSuccess(
-            mnemonicStr.split(' '),
-            newPrivateKey,
-            credentials,
-            // accountAddress.toString(),
-          ),
-        )
-        ..dispatch(
-          RegisterNewFusePrivateKey(
-            fusePrivateKey: newPrivateKey,
-            phoneNumberCountryCode: store.state.userState.countryCode,
-            phoneNumberNoCountry: store.state.userState.phoneNumberNoCountry,
-          ),
-        );
-      log.info(
-        'Created a new FuseSDK private key for phoneNumber: ${store.state.userState.phoneNumber} succesfully',
-        sentry: true,
-      );
-      await Analytics.track(
-        eventName: AnalyticsEvents.createWallet,
-      );
-    } else {
-      log.info(
-        'reauthenticating fuseSDK using existing private key stored against phoneNumber: ${store.state.userState.phoneNumber}',
-      );
-      credentials = EthPrivateKey.fromHex(privateKey);
-      if (store.state.userState.mnemonic.isEmpty ||
-          store.state.userState.mnemonic.first.isEmpty) {
-        // we need to get the user mnemonic or not delete it...
-        log.error('No mnemonic set for user, we need to generate a new wallet');
-      }
-    }
-
-    final authSucceeded = await authenticateSDK(
-      store,
-      credentials: credentials,
-    );
-    if (!authSucceeded) {
-      // return FuseAuthenticationStatus.failedAuthentication;
-      return;
-    }
-
-    if (store.state.userState.fuseAuthenticationStatus ==
-            FuseAuthenticationStatus.authenticated &&
-        (privateKey?.isNotEmpty ?? false)) {
-      // return true;
-      onWalletInitialised?.call();
-
-      try {
-        await _emitWallet(fuseWalletSDK.smartWallet);
-        return;
-      } on Exception catch (e, s) {
-        log.warn(
-          'Unable to return smartWallet even though loaded and sdk not initialised yet.',
-          error: e,
-          stackTrace: s,
-        );
-      }
-    }
-
-    // * FUSE - Fetch/Create Wallet from FuseSDK
-    try {
-      await _fetchCreateWallet(
-        onWalletInitialised: onWalletInitialised,
-        newPrivateKeyUsed: privateKey?.isEmpty ?? true,
-      );
-      return;
-    } catch (e, s) {
-      log.error(
-        'ERROR - fetchFuseSmartWallet',
-        error: e,
-        stackTrace: s,
-      );
-      store.dispatch(
-        SetUserAuthenticationStatus(
-          fuseStatus: FuseAuthenticationStatus.failedFetch,
-        ),
-      );
-      // return FuseAuthenticationStatus.failedFetch;
-      return;
-    }
   }
 
-  // bool _fuseSDKNeedsAuthenticationFirst({
-  //   required DC<Exception, SmartWallet> walletData,
-  // }) {
-  //   return walletData.hasError &&
-  //       walletData.error.toString().contains('LateInit');
+  // /// Function to create the single External Owner Account that can have at most
+  // /// ONE smart wallet linked with it.
+  // Future<void> _initFuseWallet(
+  //   Store<AppState> store, {
+  //   required String? privateKey,
+  //   void Function()? onWalletInitialised,
+  //   List<String>? useMnemonicWords,
+  // }) async {
+  //   logFunctionCall<void>(
+  //     className: 'Authentication',
+  //     funcName: '_initFuseWallet',
+  //   );
+  //   store.dispatch(
+  //     SetUserAuthenticationStatus(
+  //       fuseStatus: FuseAuthenticationStatus.loading,
+  //     ),
+  //   );
+  //   late final EthPrivateKey credentials;
+  //   final mnemonicInState = store.state.userState.mnemonic;
+  //   final mnemonic = useMnemonicWords ?? store.state.userState.mnemonic;
+  //   // * Fuse - Create PrivateKey if no privateKey in state or no mnemonic in state
+  //   if (privateKey == null ||
+  //       privateKey.isEmpty ||
+  //       mnemonicInState.isEmpty ||
+  //       mnemonicInState.first.isEmpty) {
+  //     if (mnemonic.isEmpty ||
+  //         mnemonic.first.isEmpty &&
+  //             (privateKey != null || (privateKey?.isNotEmpty ?? false))) {
+  //       log.warn(
+  //         'Creating a new wallet even though have already created one for this phone number as have lost the mnemonic in the state',
+  //       );
+  //     }
+  //     log.info(
+  //       'Creating a new FuseSDK private key for phoneNumber: ${store.state.userState.phoneNumber}${useMnemonicWords != null ? " using recovery mnemonic" : ""}',
+  //       sentry: true,
+  //     );
+  //     final String mnemonicStr = useMnemonicWords != null
+  //         ? useMnemonicWords.join(' ')
+  //         : mnemonicInState.isNotEmpty && mnemonicInState.first.isNotEmpty
+  //             ? mnemonicInState.join(' ')
+  //             : Mnemonic.generate();
+  //     final newPrivateKey = Mnemonic.privateKeyFromMnemonic(mnemonicStr);
+  //     credentials = EthPrivateKey.fromHex(newPrivateKey);
+  //     final EthereumAddress accountAddress = credentials.address;
+  //     store
+  //       ..dispatch(
+  //         CreateLocalAccountSuccess(
+  //           mnemonicStr.split(' '),
+  //           newPrivateKey,
+  //           credentials,
+  //           // accountAddress.toString(),
+  //         ),
+  //       )
+  //       ..dispatch(
+  //         RegisterNewFusePrivateKey(
+  //           fusePrivateKey: newPrivateKey,
+  //           phoneNumberCountryCode: store.state.userState.countryCode,
+  //           phoneNumberNoCountry: store.state.userState.phoneNumberNoCountry,
+  //         ),
+  //       );
+  //     log.info(
+  //       'Created a new FuseSDK private key for phoneNumber: ${store.state.userState.phoneNumber} succesfully',
+  //       sentry: true,
+  //     );
+  //     await Analytics.track(
+  //       eventName: AnalyticsEvents.createWallet,
+  //     );
+  //   } else {
+  //     log.info(
+  //       'reauthenticating fuseSDK using existing private key stored against phoneNumber: ${store.state.userState.phoneNumber}',
+  //     );
+  //     credentials = EthPrivateKey.fromHex(privateKey);
+  //     if (store.state.userState.mnemonic.isEmpty ||
+  //         store.state.userState.mnemonic.first.isEmpty) {
+  //       // we need to get the user mnemonic or not delete it...
+  //       log.error('No mnemonic set for user, we need to generate a new wallet');
+  //     }
+  //   }
+  //   // ! the below is all depreccated
+  //   final authSucceeded = await authenticateSDK(
+  //     store,
+  //     credentials: credentials,
+  //   );
+  //   if (!authSucceeded) {
+  //     // return FuseAuthenticationStatus.failedAuthentication;
+  //     return;
+  //   }
+
+  //   if (store.state.userState.fuseAuthenticationStatus ==
+  //           FuseAuthenticationStatus.authenticated &&
+  //       (privateKey?.isNotEmpty ?? false)) {
+  //     // return true;
+  //     onWalletInitialised?.call();
+
+  //     try {
+  //       await _emitWallet(fuseWalletSDK.smartWallet);
+  //       return;
+  //     } on Exception catch (e, s) {
+  //       log.warn(
+  //         'Unable to return smartWallet even though loaded and sdk not initialised yet.',
+  //         error: e,
+  //         stackTrace: s,
+  //       );
+  //     }
+  //   }
+
+  //   // * FUSE - Fetch/Create Wallet from FuseSDK
+  //   try {
+  //     await _fetchCreateWallet(
+  //       onWalletInitialised: onWalletInitialised,
+  //       newPrivateKeyUsed: privateKey?.isEmpty ?? true,
+  //     );
+  //     return;
+  //   } catch (e, s) {
+  //     log.error(
+  //       'ERROR - fetchFuseSmartWallet',
+  //       error: e,
+  //       stackTrace: s,
+  //     );
+  //     store.dispatch(
+  //       SetUserAuthenticationStatus(
+  //         fuseStatus: FuseAuthenticationStatus.failedFetch,
+  //       ),
+  //     );
+  //     // return FuseAuthenticationStatus.failedFetch;
+  //     return;
+  //   }
   // }
 
-  Future<void> _emitWallet(SmartWallet userWallet) async {
-    logFunctionCall<void>(
-      className: 'Authentication',
-      funcName: '_emitWallet',
-    );
-    await saveSmartWallet(
-      smartWallet: userWallet,
-    );
-    final store = await reduxStore;
-    store
-      ..dispatch(
-        SetSmartWalletInMemory(
-          smartWallet: userWallet,
-        ),
-      )
-      ..dispatch(
-        SetUserAuthenticationStatus(
-          fuseStatus: FuseAuthenticationStatus.authenticated,
-        ),
-      )
-      ..dispatch(
-        SignUpFailed(
-          error: null,
-        ),
-      )
-      ..dispatch(
-        SignUpLoadingMessage(
-          message: '',
-        ),
-      )
-      ..dispatch(SignupLoading(isLoading: false))
-      ..dispatch(getVegiWalletAccountDetails())
-      ..dispatch(setRandomUserAvatarIfNone());
+  // // bool _fuseSDKNeedsAuthenticationFirst({
+  // //   required DC<Exception, SmartWallet> walletData,
+  // // }) {
+  // //   return walletData.hasError &&
+  // //       walletData.error.toString().contains('LateInit');
+  // // }
 
-    await firebaseOnboarding.nextOnboardingPage();
-  }
+  // Future<void> _emitWallet(SmartWallet userWallet) async {
+  //   logFunctionCall<void>(
+  //     className: 'Authentication',
+  //     funcName: '_emitWallet',
+  //   );
+  //   await saveSmartWallet(
+  //     smartWallet: userWallet,
+  //   );
+  //   final store = await reduxStore;
+  //   store
+  //     ..dispatch(
+  //       SetSmartWalletInMemory(
+  //         smartWallet: userWallet,
+  //       ),
+  //     )
+  //     ..dispatch(
+  //       SetUserAuthenticationStatus(
+  //         fuseStatus: FuseAuthenticationStatus.authenticated,
+  //       ),
+  //     )
+  //     ..dispatch(
+  //       SignUpFailed(
+  //         error: null,
+  //       ),
+  //     )
+  //     ..dispatch(
+  //       SignUpLoadingMessage(
+  //         message: '',
+  //       ),
+  //     )
+  //     ..dispatch(SignupLoading(isLoading: false))
+  //     ..dispatch(getVegiWalletAccountDetails())
+  //     ..dispatch(setRandomUserAvatarIfNone());
 
-  Future<void> _oldFetchCreateWallet() async {
-    final store = await reduxStore;
-    final walletData = await fuseWalletSDK.fetchWallet();
-    if (walletData.hasData) {
-      final smartWallet = walletData.data!;
-      log.info(
-        'Successfully refetched smart wallet address ${smartWallet.smartWalletAddress}',
-      );
-      store
-        ..dispatch(
-          saveSmartWallet(
-            smartWallet: fuseWalletSDK.smartWallet,
-          ),
-        )
-        ..dispatch(
-          SetUserAuthenticationStatus(
-            fuseStatus: FuseAuthenticationStatus.authenticated,
-          ),
-        );
-      // return FuseAuthenticationStatus.authenticated;
-      return;
-    } else if (walletData.hasError) {
-      // } else if (fuseSDKNeedsAuthenticationFirst(walletData: walletData)) {
-      final exception = walletData.error!;
-      final wasLateInitJwtIssue = exception.toString().contains('LateInit');
-      if (wasLateInitJwtIssue) {
-        // * FUSE - Authenticate SDK
-        final authSucceeded = await authenticateSDK(
-          store,
-          credentials: EthPrivateKey.fromHex(
-            store.state.userState.privateKey,
-          ),
-        );
-        if (!authSucceeded) {
-          return;
-        }
-      }
-      final tryCreateWalletStatus = await _tryCreateWallet(store);
-      if (tryCreateWalletStatus == FuseAuthenticationStatus.authenticated) {
-        return;
-      }
-      // Try to REfetch wallet for the EOA, if it doesn't exist create one
+  //   await firebaseOnboarding.nextOnboardingPage();
+  // }
 
-      final walletDataReFetched = await fuseWalletSDK.fetchWallet();
-      if (walletDataReFetched.hasData) {
-        final smartWallet = walletDataReFetched.data!;
-        log.info(
-          'Successfully refetched smart wallet address ${smartWallet.smartWalletAddress}',
-        );
-        await _emitWallet(fuseWalletSDK.smartWallet);
-      } else if (walletDataReFetched.hasError) {
-        final exception = walletDataReFetched.error!;
-        if (exception.toString().contains('LateInit')) {
-          store.dispatch(
-            SetUserAuthenticationStatus(
-              fuseStatus: FuseAuthenticationStatus
-                  .failedToAuthenticateWalletSDKWithJWTTokenAfterInitialisationAttempt,
-            ),
-          );
-          // return FuseAuthenticationStatus
-          //     .failedToAuthenticateWalletSDKWithJWTTokenAfterInitialisationAttempt;
-          return;
-        } else {
-          await _tryCreateWallet(store);
-        }
-      }
-    }
-    // return store.state.userState.fuseAuthenticationStatus;
-    return;
-  }
+  // Future<void> _oldFetchCreateWallet() async {
+  //   final store = await reduxStore;
+  //   final walletData = await fuseWalletSDK.fetchWallet();
+  //   if (walletData.hasData) {
+  //     final smartWallet = walletData.data!;
+  //     log.info(
+  //       'Successfully refetched smart wallet address ${smartWallet.smartWalletAddress}',
+  //     );
+  //     store
+  //       ..dispatch(
+  //         saveSmartWallet(
+  //           smartWallet: fuseWalletSDK.smartWallet,
+  //         ),
+  //       )
+  //       ..dispatch(
+  //         SetUserAuthenticationStatus(
+  //           fuseStatus: FuseAuthenticationStatus.authenticated,
+  //         ),
+  //       );
+  //     // return FuseAuthenticationStatus.authenticated;
+  //     return;
+  //   } else if (walletData.hasError) {
+  //     // } else if (fuseSDKNeedsAuthenticationFirst(walletData: walletData)) {
+  //     final exception = walletData.error!;
+  //     final wasLateInitJwtIssue = exception.toString().contains('LateInit');
+  //     if (wasLateInitJwtIssue) {
+  //       // * FUSE - Authenticate SDK
+  //       final authSucceeded = await authenticateSDK(
+  //         store,
+  //         credentials: EthPrivateKey.fromHex(
+  //           store.state.userState.privateKey,
+  //         ),
+  //       );
+  //       if (!authSucceeded) {
+  //         return;
+  //       }
+  //     }
+  //     final tryCreateWalletStatus = await _tryCreateWallet(store);
+  //     if (tryCreateWalletStatus == FuseAuthenticationStatus.authenticated) {
+  //       return;
+  //     }
+  //     // Try to REfetch wallet for the EOA, if it doesn't exist create one
+
+  //     final walletDataReFetched = await fuseWalletSDK.fetchWallet();
+  //     if (walletDataReFetched.hasData) {
+  //       final smartWallet = walletDataReFetched.data!;
+  //       log.info(
+  //         'Successfully refetched smart wallet address ${smartWallet.smartWalletAddress}',
+  //       );
+  //       await _emitWallet(fuseWalletSDK.smartWallet);
+  //     } else if (walletDataReFetched.hasError) {
+  //       final exception = walletDataReFetched.error!;
+  //       if (exception.toString().contains('LateInit')) {
+  //         store.dispatch(
+  //           SetUserAuthenticationStatus(
+  //             fuseStatus: FuseAuthenticationStatus
+  //                 .failedToAuthenticateWalletSDKWithJWTTokenAfterInitialisationAttempt,
+  //           ),
+  //         );
+  //         // return FuseAuthenticationStatus
+  //         //     .failedToAuthenticateWalletSDKWithJWTTokenAfterInitialisationAttempt;
+  //         return;
+  //       } else {
+  //         await _tryCreateWallet(store);
+  //       }
+  //     }
+  //   }
+  //   // return store.state.userState.fuseAuthenticationStatus;
+  //   return;
+  // }
 
   /// Method to fetch wallet if exists else create taken from
   /// ~ https://docs.fuse.io/docs/developers/fuse-sdk/flutter-sdk/features#fetch-or-create-a-smart-wallet
-  Future<void> _fetchCreateWallet({
-    void Function()? onWalletInitialised,
-    bool newPrivateKeyUsed = false,
-  }) async {
-    logFunctionCall<void>(
-      className: 'Authentication',
-      funcName: '_fetchCreateWallet',
-    );
-    final store = await reduxStore;
-    // Try to fetch a wallet for the EOA, if it doesn't exist create one
-    final walletData = await fuseWalletSDK.fetchWallet();
-    walletData.pick(
-      onData: (SmartWallet smartWallet) async {
-        if (newPrivateKeyUsed) {
-          log.warn(
-            'fuseWalletSDK.fetchWallet succeeded despite using a new privateKey for phone: "${store.state.userState.phoneNumber}" with Smart wallet address "${smartWallet.smartWalletAddress}"',
-          );
-        } else {
-          log.info(
-            'fuseWalletSDK.fetchWallet succeeded for phone: "${store.state.userState.phoneNumber}" with Smart wallet address "${smartWallet.smartWalletAddress}"',
-            sentry: true,
-          );
-        }
-        // set the smart wallet on the store on an ignore propetrty of the state (i.e. not serialized, just memory & set fuse auth to true)
-        // then write a helper method next that listens for exactly that store update with signature (newStore, oldStore?) that can be called by each viewmodel...
-        await _emitWallet(smartWallet);
-        onWalletInitialised?.call();
-      },
-      onError: (Exception exception) async {
-        if (newPrivateKeyUsed) {
-          log.info(
-            'Authenticator._fetchCreateWallet - creating a new fuse smart wallet with new private key (expected) for phone: "${store.state.userState.phoneNumber}"...',
-            sentry: true,
-          );
-        } else {
-          log
-              // ..error(
-              //     'fuseWalletSDK.fetchWallet failed to fetch fuse smart wallet with error: "$exception"')
-              .warn(
-            'Authenticator._fetchCreateWallet - UNEXPECTED - create a new fuse smart wallet as failed to fetch despite using an existing private key for phone: "${store.state.userState.phoneNumber}"...',
-          );
-        }
-        store.dispatch(
-          SetUserAuthenticationStatus(
-            fuseStatus: FuseAuthenticationStatus.loading,
-          ),
-        );
-        final exceptionOrStream = await fuseWalletSDK.createWallet();
-        if (exceptionOrStream.hasError) {
-          log.error(
-            'fuseWalletSDK.createWallet failed with error: "${exceptionOrStream.error}"',
-            error: exceptionOrStream.error,
-            stackTrace: StackTrace.current,
-          );
-          store.dispatch(
-            SignUpLoadingMessage(
-              message: 'Failed to create vegi wallet 👾 👎',
-            ),
-          );
-        } else if (exceptionOrStream.hasData) {
-          final smartWalletEventStream = exceptionOrStream.data!
-            ..listen(
-              (SmartWalletEvent event) {
-                switch (event.name) {
-                  case 'smartWalletCreationStarted':
-                    log.info(
-                      'Authenticator._fetchCreateFuseWallet fuseWalletSDK.createWallet - smartWalletCreationStarted',
-                      sentry: true,
-                    );
-                    break;
-                  case 'transactionHash':
-                    log.info(
-                      'Authenticator._fetchCreateFuseWallet fuseWalletSDK.createWallet - transactionHash "${event.data}"',
-                    );
-                    break;
-                  case 'smartWalletCreationSucceeded':
-                    log.info(
-                      'Authenticator._fetchCreateFuseWallet fuseWalletSDK.createWallet - smartWalletCreationSucceeded ${event.data}',
-                      sentry: true,
-                    );
-                    _emitWallet(SmartWallet.fromJson(event.data));
-                    onWalletInitialised?.call();
-                    break;
-                  case 'smartWalletCreationFailed':
-                    log.error(
-                      'Authenticator._fetchCreateFuseWallet fuseWalletSDK.createWallet - transaction stream failed on chain with error ${event.data}',
-                    );
-                    store.dispatch(
-                      SignUpLoadingMessage(
-                        message: 'Failed to create vegi wallet 👾 👎',
-                      ),
-                    );
-                    store.dispatch(
-                      SetUserAuthenticationStatus(
-                        fuseStatus: FuseAuthenticationStatus.failedCreate,
-                      ),
-                    );
-                    break;
-                }
-              },
-              onError: (dynamic error) {
-                log.error(
-                  'Authentication._fetchCreateWallet fuseWalletSDK.createWallet Error occurred: $error',
-                );
-                store.dispatch(
-                  SetUserAuthenticationStatus(
-                    fuseStatus: FuseAuthenticationStatus.failedCreate,
-                  ),
-                );
-                store.dispatch(
-                  SignUpLoadingMessage(
-                    message: 'Failed to create vegi wallet 👾 👎',
-                  ),
-                );
-              },
-            );
-        }
-      },
-    );
-  }
+  // Future<void> _fetchCreateWallet({
+  //   void Function()? onWalletInitialised,
+  //   bool newPrivateKeyUsed = false,
+  // }) async {
+  //   logFunctionCall<void>(
+  //     className: 'Authentication',
+  //     funcName: '_fetchCreateWallet',
+  //   );
+  //   final store = await reduxStore;
+  //   // Try to fetch a wallet for the EOA, if it doesn't exist create one
+  //   final walletData = await fuseWalletSDK.fetchWallet();
+  //   walletData.pick(
+  //     onData: (SmartWallet smartWallet) async {
+  //       if (newPrivateKeyUsed) {
+  //         log.warn(
+  //           'fuseWalletSDK.fetchWallet succeeded despite using a new privateKey for phone: "${store.state.userState.phoneNumber}" with Smart wallet address "${smartWallet.smartWalletAddress}"',
+  //         );
+  //       } else {
+  //         log.info(
+  //           'fuseWalletSDK.fetchWallet succeeded for phone: "${store.state.userState.phoneNumber}" with Smart wallet address "${smartWallet.smartWalletAddress}"',
+  //           sentry: true,
+  //         );
+  //       }
+  //       // set the smart wallet on the store on an ignore propetrty of the state (i.e. not serialized, just memory & set fuse auth to true)
+  //       // then write a helper method next that listens for exactly that store update with signature (newStore, oldStore?) that can be called by each viewmodel...
+  //       await _emitWallet(smartWallet);
+  //       onWalletInitialised?.call();
+  //     },
+  //     onError: (Exception exception) async {
+  //       if (newPrivateKeyUsed) {
+  //         log.info(
+  //           'Authenticator._fetchCreateWallet - creating a new fuse smart wallet with new private key (expected) for phone: "${store.state.userState.phoneNumber}"...',
+  //           sentry: true,
+  //         );
+  //       } else {
+  //         log
+  //             // ..error(
+  //             //     'fuseWalletSDK.fetchWallet failed to fetch fuse smart wallet with error: "$exception"')
+  //             .warn(
+  //           'Authenticator._fetchCreateWallet - UNEXPECTED - create a new fuse smart wallet as failed to fetch despite using an existing private key for phone: "${store.state.userState.phoneNumber}"...',
+  //         );
+  //       }
+  //       store.dispatch(
+  //         SetUserAuthenticationStatus(
+  //           fuseStatus: FuseAuthenticationStatus.loading,
+  //         ),
+  //       );
+  //       final exceptionOrStream = await fuseWalletSDK.createWallet();
+  //       if (exceptionOrStream.hasError) {
+  //         log.error(
+  //           'fuseWalletSDK.createWallet failed with error: "${exceptionOrStream.error}"',
+  //           error: exceptionOrStream.error,
+  //           stackTrace: StackTrace.current,
+  //         );
+  //         store.dispatch(
+  //           SignUpLoadingMessage(
+  //             message: 'Failed to create vegi wallet 👾 👎',
+  //           ),
+  //         );
+  //       } else if (exceptionOrStream.hasData) {
+  //         final smartWalletEventStream = exceptionOrStream.data!
+  //           ..listen(
+  //             (SmartWalletEvent event) {
+  //               switch (event.name) {
+  //                 case 'smartWalletCreationStarted':
+  //                   log.info(
+  //                     'Authenticator._fetchCreateFuseWallet fuseWalletSDK.createWallet - smartWalletCreationStarted',
+  //                     sentry: true,
+  //                   );
+  //                   break;
+  //                 case 'transactionHash':
+  //                   log.info(
+  //                     'Authenticator._fetchCreateFuseWallet fuseWalletSDK.createWallet - transactionHash "${event.data}"',
+  //                   );
+  //                   break;
+  //                 case 'smartWalletCreationSucceeded':
+  //                   log.info(
+  //                     'Authenticator._fetchCreateFuseWallet fuseWalletSDK.createWallet - smartWalletCreationSucceeded ${event.data}',
+  //                     sentry: true,
+  //                   );
+  //                   _emitWallet(SmartWallet.fromJson(event.data));
+  //                   onWalletInitialised?.call();
+  //                   break;
+  //                 case 'smartWalletCreationFailed':
+  //                   log.error(
+  //                     'Authenticator._fetchCreateFuseWallet fuseWalletSDK.createWallet - transaction stream failed on chain with error ${event.data}',
+  //                   );
+  //                   store.dispatch(
+  //                     SignUpLoadingMessage(
+  //                       message: 'Failed to create vegi wallet 👾 👎',
+  //                     ),
+  //                   );
+  //                   store.dispatch(
+  //                     SetUserAuthenticationStatus(
+  //                       fuseStatus: FuseAuthenticationStatus.failedCreate,
+  //                     ),
+  //                   );
+  //                   break;
+  //               }
+  //             },
+  //             onError: (dynamic error) {
+  //               log.error(
+  //                 'Authentication._fetchCreateWallet fuseWalletSDK.createWallet Error occurred: $error',
+  //               );
+  //               store.dispatch(
+  //                 SetUserAuthenticationStatus(
+  //                   fuseStatus: FuseAuthenticationStatus.failedCreate,
+  //                 ),
+  //               );
+  //               store.dispatch(
+  //                 SignUpLoadingMessage(
+  //                   message: 'Failed to create vegi wallet 👾 👎',
+  //                 ),
+  //               );
+  //             },
+  //           );
+  //       }
+  //     },
+  //   );
+  // }
 
-  Future<FuseAuthenticationStatus> _tryCreateWallet(
-    Store<AppState> store, {
-    bool forceCreateNew = false,
-  }) async {
-    logFunctionCall<void>(
-      className: 'Authentication',
-      funcName: '_tryCreateWallet',
-    );
-    if (forceCreateNew != true) {
-      final walletDataReFetched = await fuseWalletSDK.fetchWallet();
-      if (walletDataReFetched.hasData) {
-        final smartWallet = walletDataReFetched.data!;
-        log.info(
-          'Successfully refetched smart wallet address ${smartWallet.smartWalletAddress} so no need to create a new wallet as requested',
-          sentry: true,
-        );
-        store
-          ..dispatch(
-            saveSmartWallet(
-              smartWallet: smartWallet,
-            ),
-          )
-          ..dispatch(
-            SetUserAuthenticationStatus(
-              fuseStatus: FuseAuthenticationStatus.authenticated,
-            ),
-          );
-        return FuseAuthenticationStatus.authenticated;
-      }
-    } else {
-      log.info(
-        'Failed to fetch wallet from fuseWalletSDK so will attempt to create a new wallet',
-        stackTrace: StackTrace.current,
-        sentry: true,
-      );
-    }
-    // we move to createWallet call below
-    store.dispatch(
-      SetUserAuthenticationStatus(
-        fuseStatus: FuseAuthenticationStatus.createWalletForEOA,
-      ),
-    );
+  // Future<FuseAuthenticationStatus> _tryCreateWallet(
+  //   Store<AppState> store, {
+  //   bool forceCreateNew = false,
+  // }) async {
+  //   logFunctionCall<void>(
+  //     className: 'Authentication',
+  //     funcName: '_tryCreateWallet',
+  //   );
+  //   if (forceCreateNew != true) {
+  //     final walletDataReFetched = await fuseWalletSDK.fetchWallet();
+  //     if (walletDataReFetched.hasData) {
+  //       final smartWallet = walletDataReFetched.data!;
+  //       log.info(
+  //         'Successfully refetched smart wallet address ${smartWallet.smartWalletAddress} so no need to create a new wallet as requested',
+  //         sentry: true,
+  //       );
+  //       store
+  //         ..dispatch(
+  //           saveSmartWallet(
+  //             smartWallet: smartWallet,
+  //           ),
+  //         )
+  //         ..dispatch(
+  //           SetUserAuthenticationStatus(
+  //             fuseStatus: FuseAuthenticationStatus.authenticated,
+  //           ),
+  //         );
+  //       return FuseAuthenticationStatus.authenticated;
+  //     }
+  //   } else {
+  //     log.info(
+  //       'Failed to fetch wallet from fuseWalletSDK so will attempt to create a new wallet',
+  //       stackTrace: StackTrace.current,
+  //       sentry: true,
+  //     );
+  //   }
+  //   // we move to createWallet call below
+  //   store.dispatch(
+  //     SetUserAuthenticationStatus(
+  //       fuseStatus: FuseAuthenticationStatus.createWalletForEOA,
+  //     ),
+  //   );
 
-    try {
-      final smartWallet0 = fuseWalletSDK.smartWallet;
-      store
-        ..dispatch(
-          saveSmartWallet(
-            smartWallet: smartWallet0,
-          ),
-        )
-        ..dispatch(
-          SetUserAuthenticationStatus(
-            fuseStatus: FuseAuthenticationStatus.authenticated,
-          ),
-        );
-      return FuseAuthenticationStatus.authenticated;
-    } catch (e) {
-      // TODO
-      // do nothing
-    }
+  //   try {
+  //     final smartWallet0 = fuseWalletSDK.smartWallet;
+  //     store
+  //       ..dispatch(
+  //         saveSmartWallet(
+  //           smartWallet: smartWallet0,
+  //         ),
+  //       )
+  //       ..dispatch(
+  //         SetUserAuthenticationStatus(
+  //           fuseStatus: FuseAuthenticationStatus.authenticated,
+  //         ),
+  //       );
+  //     return FuseAuthenticationStatus.authenticated;
+  //   } catch (e) {
+  //     // TODO
+  //     // do nothing
+  //   }
 
-    final walletCreationResult = await fuseWalletSDK.createWallet();
-    if (walletCreationResult.hasData) {
-      store.dispatch(
-        SetUserAuthenticationStatus(
-          fuseStatus: FuseAuthenticationStatus.created,
-        ),
-      );
-      walletCreationResult.data!.listen(
-        (SmartWalletEvent event) {
-          if (event.name == 'smartWalletCreationStarted') {
-            log.info('smartWalletCreationStarted ${event.data}');
-            store.dispatch(
-              SetUserAuthenticationStatus(
-                fuseStatus: FuseAuthenticationStatus.creationStarted,
-              ),
-            );
-          } else if (event.name == 'transactionHash') {
-            log.info(
-              'transactionHash ${event.data}',
-              sentry: true,
-            );
-            store.dispatch(
-              SetUserAuthenticationStatus(
-                fuseStatus: FuseAuthenticationStatus.creationTransactionHash,
-              ),
-            );
-          } else if (event.name == 'smartWalletCreationSucceeded') {
-            final smartWalletAddress =
-                event.data['smartWalletAddress'] as String?;
-            final EOA = event.data['ownerAddress'] as String?;
-            WalletModules? walletModules;
-            if (event.data.containsKey('walletModules')) {
-              walletModules = WalletModules.fromJson(
-                event.data['walletModules'] as Map<String, dynamic>,
-              );
-            }
-            List<String> networks = <String>[];
-            if (event.data.containsKey('networks')) {
-              networks = List<String>.from(
-                event.data['networks'] as Iterable<dynamic>,
-              );
-            }
-            final fuseSDKVersion = event.data['version'];
-            log.info(
-              'smartWalletCreationSucceeded with smartwalletaddress: "$smartWalletAddress"',
-              sentry: true,
-            );
+  //   final walletCreationResult = await fuseWalletSDK.createWallet();
+  //   if (walletCreationResult.hasData) {
+  //     store.dispatch(
+  //       SetUserAuthenticationStatus(
+  //         fuseStatus: FuseAuthenticationStatus.created,
+  //       ),
+  //     );
+  //     walletCreationResult.data!.listen(
+  //       (SmartWalletEvent event) {
+  //         if (event.name == 'smartWalletCreationStarted') {
+  //           log.info('smartWalletCreationStarted ${event.data}');
+  //           store.dispatch(
+  //             SetUserAuthenticationStatus(
+  //               fuseStatus: FuseAuthenticationStatus.creationStarted,
+  //             ),
+  //           );
+  //         } else if (event.name == 'transactionHash') {
+  //           log.info(
+  //             'transactionHash ${event.data}',
+  //             sentry: true,
+  //           );
+  //           store.dispatch(
+  //             SetUserAuthenticationStatus(
+  //               fuseStatus: FuseAuthenticationStatus.creationTransactionHash,
+  //             ),
+  //           );
+  //         } else if (event.name == 'smartWalletCreationSucceeded') {
+  //           final smartWalletAddress =
+  //               event.data['smartWalletAddress'] as String?;
+  //           final EOA = event.data['ownerAddress'] as String?;
+  //           WalletModules? walletModules;
+  //           if (event.data.containsKey('walletModules')) {
+  //             walletModules = WalletModules.fromJson(
+  //               event.data['walletModules'] as Map<String, dynamic>,
+  //             );
+  //           }
+  //           List<String> networks = <String>[];
+  //           if (event.data.containsKey('networks')) {
+  //             networks = List<String>.from(
+  //               event.data['networks'] as Iterable<dynamic>,
+  //             );
+  //           }
+  //           final fuseSDKVersion = event.data['version'];
+  //           log.info(
+  //             'smartWalletCreationSucceeded with smartwalletaddress: "$smartWalletAddress"',
+  //             sentry: true,
+  //           );
 
-            if (smartWalletAddress != null && walletModules != null) {
-              store
-                ..dispatch(
-                  GotWalletDataSuccess(
-                    walletAddress: smartWalletAddress,
-                    networks: networks,
-                    walletModules: walletModules,
-                  ),
-                )
-                ..dispatch(
-                  SetUserAuthenticationStatus(
-                    fuseStatus: FuseAuthenticationStatus.authenticated,
-                  ),
-                );
-              return;
-            }
-            store.dispatch(
-              SetUserAuthenticationStatus(
-                fuseStatus: FuseAuthenticationStatus.creationSucceeded,
-              ),
-            );
+  //           if (smartWalletAddress != null && walletModules != null) {
+  //             store
+  //               ..dispatch(
+  //                 GotWalletDataSuccess(
+  //                   walletAddress: smartWalletAddress,
+  //                   networks: networks,
+  //                   walletModules: walletModules,
+  //                 ),
+  //               )
+  //               ..dispatch(
+  //                 SetUserAuthenticationStatus(
+  //                   fuseStatus: FuseAuthenticationStatus.authenticated,
+  //                 ),
+  //               );
+  //             return;
+  //           }
+  //           store.dispatch(
+  //             SetUserAuthenticationStatus(
+  //               fuseStatus: FuseAuthenticationStatus.creationSucceeded,
+  //             ),
+  //           );
 
-            fuseWalletSDK.fetchWallet().then((walletDataFetchPostCreate) {
-              if (walletDataFetchPostCreate.hasData) {
-                final smartWallet = walletDataFetchPostCreate.data!;
-                log.info(
-                  'Successfully refetched smart wallet address ${smartWallet.smartWalletAddress}',
-                  sentry: true,
-                );
-                store
-                  ..dispatch(
-                    saveSmartWallet(
-                      smartWallet: fuseWalletSDK.smartWallet,
-                    ),
-                  )
-                  ..dispatch(
-                    SetUserAuthenticationStatus(
-                      fuseStatus: FuseAuthenticationStatus.authenticated,
-                    ),
-                  );
-              } else if (walletDataFetchPostCreate.hasError) {
-                final exception = walletDataFetchPostCreate.error!;
-                if (exception.toString().contains('LateInit')) {
-                  store.dispatch(
-                    SetUserAuthenticationStatus(
-                      fuseStatus: FuseAuthenticationStatus
-                          .failedToAuthenticateWalletSDKWithJWTTokenAfterInitialisationAttempt,
-                    ),
-                  );
-                  return null;
-                } else {
-                  // we move to createWallet call below
-                  store.dispatch(
-                    SetUserAuthenticationStatus(
-                      fuseStatus: FuseAuthenticationStatus.createWalletForEOA,
-                    ),
-                  );
-                }
-              }
-            });
-          } else if (event.name == 'smartWalletCreationFailed') {
-            log.error(
-              'smartWalletCreationFailed ${event.data}',
-              stackTrace: StackTrace.current,
-            );
-            store.dispatch(
-              SetUserAuthenticationStatus(
-                fuseStatus: FuseAuthenticationStatus.failedCreate,
-              ),
-            );
-          } else {
-            log.warn('No event handler for fuseWalletSDK.fetchWallet event: '
-                '"${event.name}"');
-          }
-        },
-        cancelOnError: true,
-        onError: (dynamic error) {
-          log.error(
-            error,
-            stackTrace: StackTrace.current,
-            sentryHint:
-                'ERROR - user_actions.dart.createLocalAccountCall[createWalletStream] $error',
-          );
-        },
-      );
-      return FuseAuthenticationStatus.created;
-    } else if (walletCreationResult.hasError) {
-      final errStr = walletCreationResult.error is DioError
-          ? 'FuseSDK failed to create a new wallet... Message: "${(walletCreationResult.error as DioError?)?.message}", Err: ${(walletCreationResult.error as DioError?)?.error}'
-          : '${walletCreationResult.error}';
-      log.error(
-        errStr,
-        error: walletCreationResult.error,
-        sentryHint: errStr,
-      );
-      store.dispatch(
-        SetUserAuthenticationStatus(
-          fuseStatus: FuseAuthenticationStatus.failedCreate,
-        ),
-      );
-      return FuseAuthenticationStatus.failedCreate;
-    } else {
-      //cant get here as either of hasError or hasData on walletCreationResult will always be true.
-      return FuseAuthenticationStatus.failedCreate;
-    }
-  }
+  //           fuseWalletSDK.fetchWallet().then((walletDataFetchPostCreate) {
+  //             if (walletDataFetchPostCreate.hasData) {
+  //               final smartWallet = walletDataFetchPostCreate.data!;
+  //               log.info(
+  //                 'Successfully refetched smart wallet address ${smartWallet.smartWalletAddress}',
+  //                 sentry: true,
+  //               );
+  //               store
+  //                 ..dispatch(
+  //                   saveSmartWallet(
+  //                     smartWallet: fuseWalletSDK.smartWallet,
+  //                   ),
+  //                 )
+  //                 ..dispatch(
+  //                   SetUserAuthenticationStatus(
+  //                     fuseStatus: FuseAuthenticationStatus.authenticated,
+  //                   ),
+  //                 );
+  //             } else if (walletDataFetchPostCreate.hasError) {
+  //               final exception = walletDataFetchPostCreate.error!;
+  //               if (exception.toString().contains('LateInit')) {
+  //                 store.dispatch(
+  //                   SetUserAuthenticationStatus(
+  //                     fuseStatus: FuseAuthenticationStatus
+  //                         .failedToAuthenticateWalletSDKWithJWTTokenAfterInitialisationAttempt,
+  //                   ),
+  //                 );
+  //                 return null;
+  //               } else {
+  //                 // we move to createWallet call below
+  //                 store.dispatch(
+  //                   SetUserAuthenticationStatus(
+  //                     fuseStatus: FuseAuthenticationStatus.createWalletForEOA,
+  //                   ),
+  //                 );
+  //               }
+  //             }
+  //           });
+  //         } else if (event.name == 'smartWalletCreationFailed') {
+  //           log.error(
+  //             'smartWalletCreationFailed ${event.data}',
+  //             stackTrace: StackTrace.current,
+  //           );
+  //           store.dispatch(
+  //             SetUserAuthenticationStatus(
+  //               fuseStatus: FuseAuthenticationStatus.failedCreate,
+  //             ),
+  //           );
+  //         } else {
+  //           log.warn('No event handler for fuseWalletSDK.fetchWallet event: '
+  //               '"${event.name}"');
+  //         }
+  //       },
+  //       cancelOnError: true,
+  //       onError: (dynamic error) {
+  //         log.error(
+  //           error,
+  //           stackTrace: StackTrace.current,
+  //           sentryHint:
+  //               'ERROR - user_actions.dart.createLocalAccountCall[createWalletStream] $error',
+  //         );
+  //       },
+  //     );
+  //     return FuseAuthenticationStatus.created;
+  //   } else if (walletCreationResult.hasError) {
+  //     final errStr = walletCreationResult.error is DioError
+  //         ? 'FuseSDK failed to create a new wallet... Message: "${(walletCreationResult.error as DioError?)?.message}", Err: ${(walletCreationResult.error as DioError?)?.error}'
+  //         : '${walletCreationResult.error}';
+  //     log.error(
+  //       errStr,
+  //       error: walletCreationResult.error,
+  //       sentryHint: errStr,
+  //     );
+  //     store.dispatch(
+  //       SetUserAuthenticationStatus(
+  //         fuseStatus: FuseAuthenticationStatus.failedCreate,
+  //       ),
+  //     );
+  //     return FuseAuthenticationStatus.failedCreate;
+  //   } else {
+  //     //cant get here as either of hasError or hasData on walletCreationResult will always be true.
+  //     return FuseAuthenticationStatus.failedCreate;
+  //   }
+  // }
 
-  Future<void> saveSmartWallet({
-    required SmartWallet smartWallet,
-  }) async {
-    logFunctionCall<void>(
-      className: 'Authentication',
-      funcName: 'saveSmartWallet',
-    );
-    final store = await reduxStore;
-    try {
-      store.dispatch(
-        GotWalletDataSuccess(
-          walletAddress: smartWallet.smartWalletAddress,
-          networks: smartWallet.networks,
-          walletModules: smartWallet.walletModules,
-        ),
-      );
-    } catch (e, s) {
-      log.error(
-        'ERROR - setupWalletCall',
-        error: e,
-        stackTrace: s,
-      );
-    }
-  }
+  // Future<void> saveSmartWallet({
+  //   required SmartWallet smartWallet,
+  // }) async {
+  //   logFunctionCall<void>(
+  //     className: 'Authentication',
+  //     funcName: 'saveSmartWallet',
+  //   );
+  //   final store = await reduxStore;
+  //   try {
+  //     store.dispatch(
+  //       GotWalletDataSuccess(
+  //         walletAddress: smartWallet.smartWalletAddress,
+  //         networks: smartWallet.networks,
+  //         walletModules: smartWallet.walletModules,
+  //       ),
+  //     );
+  //   } catch (e, s) {
+  //     log.error(
+  //       'ERROR - setupWalletCall',
+  //       error: e,
+  //       stackTrace: s,
+  //     );
+  //   }
+  // }
 
   Future<void> routeToLoginScreen() async {
     logFunctionCall<void>(

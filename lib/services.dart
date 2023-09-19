@@ -22,7 +22,8 @@ import 'package:redux/redux.dart';
 
 final RootRouter rootRouter = getIt<RootRouter>();
 
-final FuseWalletSDK fuseWalletSDK = getIt<FuseWalletSDK>();
+// final FuseWalletSDK fuseWalletSDK = getIt<FuseWalletSDK>();
+final Future<FuseSDK> fuseWalletSDK = getIt.getAsync<FuseSDK>();
 
 final LocationService locationService = getIt<LocationService>();
 

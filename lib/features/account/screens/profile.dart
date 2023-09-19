@@ -559,16 +559,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                           buttonColor: const Color.fromARGB(255, 144, 0, 0),
                         ),
-                        const Divider(),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        PrimaryButton(
-                          label: 'Restore Wallet',
-                          onPressed: () =>
-                              rootRouter.push(const RestoreFromBackupScreen()),
-                          buttonColor: themeLightShade800,
-                        ),
+                        // const Divider(),
+                        // const SizedBox(
+                        //   height: 20,
+                        // ),
+                        // PrimaryButton(
+                        //   label: 'Restore Wallet',
+                        //   onPressed: () =>
+                        //       rootRouter.push(const RestoreFromBackupScreen()),
+                        //   buttonColor: themeLightShade800,
+                        // ),
                       ],
                     )
                   ],

@@ -125,20 +125,20 @@ class _CreateWalletButtonsState extends State<CreateWalletButtons> {
                             textColor: themeShade850,
                             textLoadingColor: themeShade850,
                           ),
-                          SignUpButton(
-                            autoSizeText: true,
-                            buttonText:
-                                Labels.surveyThanksButtonRestoreBackupWallet(
-                              context,
-                            ),
-                            onPressed: _restoreBackupWallet(context, viewmodel),
-                            //! Replace with below after beta
-                            //! onPressed: _signUpNewAccount(context, viewmodel),
-                            isLoading: isPrimaryPreloading,
-                            borderColor: themeShade1000,
-                            textColor: themeShade850,
-                            textLoadingColor: themeShade850,
-                          ),
+                          // SignUpButton(
+                          //   autoSizeText: true,
+                          //   buttonText:
+                          //       Labels.surveyThanksButtonRestoreBackupWallet(
+                          //     context,
+                          //   ),
+                          //   onPressed: _restoreBackupWallet(context, viewmodel),
+                          //   //! Replace with below after beta
+                          //   //! onPressed: _signUpNewAccount(context, viewmodel),
+                          //   isLoading: isPrimaryPreloading,
+                          //   borderColor: themeShade1000,
+                          //   textColor: themeShade850,
+                          //   textLoadingColor: themeShade850,
+                          // ),
                         ],
                       ],
                     ),
@@ -228,7 +228,7 @@ class _CreateWalletButtonsState extends State<CreateWalletButtons> {
       setState(() {
         isPrimaryPreloading = true;
       });
-      await rootRouter.push(const SignUpScreen());
+      await authenticator.routeToLoginScreen();
       // removing below as moving fuseAuth to end of auth flow.
       // await viewmodel.initFuse(
       //   onWalletInitialised: () {
@@ -274,12 +274,12 @@ class _CreateWalletButtonsState extends State<CreateWalletButtons> {
     };
   }
 
-  Future<void> Function() _restoreBackupWallet(
-    BuildContext context,
-    SplashViewModel viewmodel,
-  ) {
-    return () async {
-      await context.router.push(const RestoreFromBackupScreen());
-    };
-  }
+  // Future<void> Function() _restoreBackupWallet(
+  //   BuildContext context,
+  //   SplashViewModel viewmodel,
+  // ) {
+  //   return () async {
+  //     await context.router.push(const RestoreFromBackupScreen());
+  //   };
+  // }
 }

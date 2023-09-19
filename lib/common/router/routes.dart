@@ -67,7 +67,7 @@ class RootRouter extends $RootRouter {
         path:
             '/firebaseauth/link'), // routes at the route of the router have to start with a '/'
     AutoRoute(page: PinCodeScreen.page),
-    AutoRoute(page: RestoreFromBackupScreen.page),
+    // AutoRoute(page: RestoreFromBackupScreen.page),
     AutoRoute(page: OnBoardScreen.page),
     AutoRoute(page: ProfileScreen.page),
     AutoRoute(page: SignUpScreen.page),
@@ -80,7 +80,7 @@ class RootRouter extends $RootRouter {
     AutoRoute(page: WaitingListFunnelScreen.page),
     AutoRoute(page: RegisterEmailOnBoardingScreen.page),
     AutoRoute(page: RegisterEmailNotificationsScreen.page),
-    AutoRoute(page: CreateWalletFirstOnboardingScreen.page),
+    // AutoRoute(page: CreateWalletFirstOnboardingScreen.page),
     AutoRoute(page: WaitingListSurveyQuestionsScreens.page),
     AutoRoute(page: PreLaunchPerksDetailsRoute.page),
     AutoRoute(page: WaitingListPositionInQueueRoute.page),

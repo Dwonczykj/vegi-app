@@ -21,7 +21,7 @@ class SurveyThanksViewModel extends Equatable implements IAuthViewModel {
   const SurveyThanksViewModel({
     required this.email,
     required this.accountCreated,
-    required this.initFuse,
+    // required this.initFuse,
     required this.loginAgain,
     required this.logout,
     required this.isLoggedOut,
@@ -36,7 +36,7 @@ class SurveyThanksViewModel extends Equatable implements IAuthViewModel {
       email: store.state.userState.email,
       accountCreated: store.state.userState.walletAddress.isNotEmpty,
       isLoggedOut: !store.state.userState.isLoggedIn,
-      initFuse: authenticator.initFuse,
+      // initFuse: authenticator.initFuse,
       firebaseAuthenticationStatus:
           store.state.userState.firebaseAuthenticationStatus,
       fuseAuthenticationStatus: store.state.userState.fuseAuthenticationStatus,
@@ -61,7 +61,7 @@ class SurveyThanksViewModel extends Equatable implements IAuthViewModel {
   final VegiAuthenticationStatus vegiAuthenticationStatus;
   final void Function() logout;
   final void Function() loginAgain;
-  final void Function() initFuse;
+  // final void Function() initFuse;
 
   @override
   List<Object> get props => [

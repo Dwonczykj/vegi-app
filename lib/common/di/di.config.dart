@@ -42,8 +42,8 @@ import 'package:vegan_liverpool/services/apis/locationService.dart' as _i15;
 import 'package:vegan_liverpool/services/apis/peeplEats.dart' as _i20;
 import 'package:vegan_liverpool/services/apis/peeplPay.dart' as _i21;
 import 'package:vegan_liverpool/services/apis/peeplPay2.dart' as _i22;
-import 'package:vegan_liverpool/services/apis/stripePay.dart' as _i28;
-import 'package:vegan_liverpool/services/apis/stripePay2.dart' as _i27;
+import 'package:vegan_liverpool/services/apis/stripePay.dart' as _i27;
+import 'package:vegan_liverpool/services/apis/stripePay2.dart' as _i28;
 import 'package:vegan_liverpool/services/apis/vegiESCService.dart' as _i30;
 import 'package:vegan_liverpool/utils/connectionChecker.dart' as _i17;
 import 'package:vegan_liverpool/utils/log/log_it.dart' as _i31;
@@ -102,7 +102,7 @@ extension GetItInjectableX on _i1.GetIt {
         () => firebaseInjectableModule.firebaseRemoteConfig);
     gh.lazySingleton<_i11.FirebaseStrategy>(
         () => onBoardStrategy.firebaseStrategy);
-    gh.lazySingleton<_i12.FuseWalletSDK>(() => servicesModule.fuseWalletSDK);
+    gh.lazySingletonAsync<_i12.FuseSDK>(() => servicesModule.fuseWalletSDK);
     gh.lazySingleton<_i13.IOnBoardStrategy>(
         () => onBoardStrategy.onBoardStrategy);
     gh.lazySingleton<_i14.InternetConnectionChecker>(
@@ -125,9 +125,9 @@ extension GetItInjectableX on _i1.GetIt {
     gh.lazySingleton<_i23.PhoneNumberUtil>(() => phone.phoneNumberUtil);
     gh.lazySingleton<_i24.RootRouter>(() => servicesModule.rootRouter);
     gh.singletonAsync<_i25.Store<_i26.AppState>>(() => registerModule.store());
-    gh.lazySingleton<_i27.StripePayService>(() => _i27.StripePayService());
-    gh.lazySingleton<_i28.StripePayService>(
-        () => _i28.StripePayService(gh<_i4.Dio>()));
+    gh.lazySingleton<_i27.StripePayService>(
+        () => _i27.StripePayService(gh<_i4.Dio>()));
+    gh.lazySingleton<_i28.StripePayService>(() => _i28.StripePayService());
     gh.lazySingleton<_i29.StripeService>(() => _i29.StripeService());
     gh.lazySingleton<_i30.VegiESCService>(
         () => _i30.VegiESCService(gh<_i4.Dio>()));

@@ -71,27 +71,28 @@ class _SurveyThanksScreenState extends State<SurveyThanksScreen> {
     };
   }
 
-  Future<void> Function() _restoreBackupWallet(
-    BuildContext context,
-    SurveyThanksViewModel viewmodel,
-  ) {
-    return () async {
-      // if (isPrimaryPreloading) {
-      //   return;
-      // }
-      await context.router.push(const RestoreFromBackupScreen());
-    };
-  }
+  // Future<void> Function() _restoreBackupWallet(
+  //   BuildContext context,
+  //   SurveyThanksViewModel viewmodel,
+  // ) {
+  //   return () async {
+  //     // if (isPrimaryPreloading) {
+  //     //   return;
+  //     // }
+  //     await context.router.push(const RestoreFromBackupScreen());
+  //   };
+  // }
 
   Future<void> Function() _createAccount(
     BuildContext context,
     SurveyThanksViewModel viewmodel,
   ) {
     return () async {
-      setState(() {
-        isPrimaryPreloading = true;
-      });
-      viewmodel.initFuse();
+      // setState(() {
+      //   isPrimaryPreloading = true;
+      // });
+      // viewmodel.initFuse();
+      await authenticator.routeToLoginScreen();
     };
   }
 
@@ -152,15 +153,15 @@ class _SurveyThanksScreenState extends State<SurveyThanksScreen> {
                     onPressed: _createAccount(context, viewmodel),
                     isLoading: isPrimaryPreloading,
                   ),
-                  SignUpButton(
-                    autoSizeText: true,
-                    buttonText:
-                        Labels.surveyThanksButtonRestoreBackupWallet(context),
-                    onPressed: _restoreBackupWallet(context, viewmodel),
-                    //! Replace with below after beta
-                    //! onPressed: _signUpNewAccount(context, viewmodel),
-                    isLoading: isPrimaryPreloading,
-                  ),
+                  // SignUpButton(
+                  //   autoSizeText: true,
+                  //   buttonText:
+                  //       Labels.surveyThanksButtonRestoreBackupWallet(context),
+                  //   onPressed: _restoreBackupWallet(context, viewmodel),
+                  //   //! Replace with below after beta
+                  //   //! onPressed: _signUpNewAccount(context, viewmodel),
+                  //   isLoading: isPrimaryPreloading,
+                  // ),
                 ],
               ],
             ),

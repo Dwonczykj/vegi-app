@@ -15,7 +15,6 @@ import 'package:sentry_logging/sentry_logging.dart';
 import 'package:vegan_liverpool/app.dart';
 import 'package:vegan_liverpool/common/di/di.dart';
 import 'package:vegan_liverpool/common/di/env.dart';
-import 'package:vegan_liverpool/common/network/web3auth.dart';
 import 'package:vegan_liverpool/features/veganHome/widgets/shared/redux_state_viewer.dart';
 import 'package:vegan_liverpool/initFirebaseEmulator.dart';
 import 'package:vegan_liverpool/initFirebaseRemote.dart';
@@ -48,8 +47,6 @@ void main() async {
     await dotenv.load(fileName: Env.envFile);
 
     StripeService().init();
-
-    await initWeb3AuthService();
 
     await configureDependencies(environment: envStr);
 

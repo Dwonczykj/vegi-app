@@ -13,7 +13,6 @@ import 'package:logger/logger.dart';
 import 'package:phone_number/phone_number.dart';
 import 'package:vegan_liverpool/common/di/di.dart';
 import 'package:vegan_liverpool/common/di/env.dart';
-import 'package:vegan_liverpool/common/network/web3auth.dart';
 import 'package:vegan_liverpool/common/router/route_guards.dart';
 import 'package:vegan_liverpool/common/router/routes.dart';
 import 'package:vegan_liverpool/common/router/vegi_debug_route_observer.dart';
@@ -36,6 +35,7 @@ import 'package:vegan_liverpool/utils/log/log_it.dart';
 import 'package:vegan_liverpool/utils/onboard/Istrategy.dart';
 import 'package:vegan_liverpool/utils/onboard/authentication.dart';
 import 'package:vegan_liverpool/utils/onboard/firebase.dart';
+import 'package:vegan_liverpool/utils/onboard/web3Auth.dart';
 import 'package:vegan_liverpool/utils/stripe.dart';
 import 'package:redux/redux.dart';
 
@@ -88,8 +88,7 @@ Future<void> registerDependencies() async {
 
   // * other services
 
-  GetIt.instance.registerFactory<FuseWalletSDK>(
-      () => FuseWalletSDK(Secrets.FUSE_WALLET_SDK_PUBLIC_KEY));
+  GetIt.instance.registerSingletonAsync<FuseSDK>(() => initWeb3Auth());
 
   // Future<FirebaseApp> firebaseApp => Env.isTest
   //     ? Firebase.initializeApp()

@@ -21,7 +21,7 @@ class SplashViewModel extends Equatable implements IAuthViewModel {
     required this.email,
     required this.accountCreated,
     required this.logout,
-    required this.initFuse,
+    // required this.initFuse,
     required this.surveyCompleted,
     required this.resetSurveyCompleted,
     required this.isWhiteListedAccount,
@@ -52,7 +52,7 @@ class SplashViewModel extends Equatable implements IAuthViewModel {
       logout: () {
         store.dispatch(logoutRequest());
       },
-      initFuse: authenticator.initFuse,
+      // initFuse: authenticator.initFuse,
       resetSurveyCompleted: () {
         store.dispatch(ResetSurveyCompleted());
       },
@@ -78,9 +78,9 @@ class SplashViewModel extends Equatable implements IAuthViewModel {
   final bool accountCreated;
   final void Function() logout;
   final void Function() resetSurveyCompleted;
-  final Future<void> Function({
-    void Function()? onWalletInitialised,
-  }) initFuse;
+  // final Future<void> Function({
+  //   void Function()? onWalletInitialised,
+  // }) initFuse;
 
   bool get isLoggedIn => !isLoggedOut && accountDetailsExist;
   bool get accountIsWaitlisted => surveyCompleted && !isWhiteListedAccount;

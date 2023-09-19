@@ -20,7 +20,6 @@ import 'package:redux_thunk/redux_thunk.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:vegan_liverpool/common/di/di.dart';
 import 'package:vegan_liverpool/common/di/package_info.dart';
-import 'package:vegan_liverpool/common/network/web3auth.dart';
 import 'package:vegan_liverpool/common/router/routes.dart';
 import 'package:vegan_liverpool/constants/analytics_events.dart';
 import 'package:vegan_liverpool/constants/analytics_props.dart';
@@ -47,7 +46,7 @@ import 'package:vegan_liverpool/utils/json_helpers.dart';
 import 'package:vegan_liverpool/utils/log/log.dart';
 import 'package:vegan_liverpool/utils/onboard/authentication.dart';
 import 'package:vegan_liverpool/utils/onboard/firebase.dart';
-import 'package:vegan_liverpool/utils/onboard/fuseAuthUtils.dart';
+import 'package:vegan_liverpool/utils/onboard/web3Auth.dart';
 import 'package:vegan_liverpool/version.dart';
 
 class ResetAppState {
@@ -1474,49 +1473,49 @@ ThunkAction<AppState> isUserWalletAddressAVendorAddress({
 //   };
 // }
 
-ThunkAction<AppState> restoreWalletCall(
-  // only allow to call this from a custom route link that allows myself and verity to add our mnemonics to createa our smart wallets and remove all other recoveries locations
-  List<String> mnemonicWords,
-  VoidCallback successCallback,
-  VoidCallback failureCallback,
-) {
-  return (Store<AppState> store) async {
-    try {
-      await Analytics.track(
-        eventName: AnalyticsEvents.restoreWallet,
-      );
-      await authenticator.restoreFuseFromMnemonic(
-        mnemonicWords: mnemonicWords,
-      );
-      // final mnemonic = mnemonicWords.join(' ');
-      // log
-      //   ..info('restore wallet')
-      //   ..info('compute pk');
-      // final String privateKey = Mnemonic.privateKeyFromMnemonic(mnemonic);
-      // //! await peeplEatsService.backupUserSK(privateKey);
-      // final EthPrivateKey credentials = EthPrivateKey.fromHex(privateKey);
-      // final EthereumAddress accountAddress = credentials.address;
-      // log.info('accountAddress: $accountAddress');
-      // store.dispatch(
-      //   CreateLocalAccountSuccess(
-      //     mnemonicWords,
-      //     privateKey,
-      //     credentials,
-      //     // accountAddress.toString(),
-      //   ),
-      // );
-      // await authenticator.initFuse();
-      successCallback();
-    } catch (e, s) {
-      log.error(
-        'ERROR - restoreWalletCall',
-        error: e,
-        stackTrace: s,
-      );
-      failureCallback();
-    }
-  };
-}
+// ThunkAction<AppState> restoreWalletCall(
+//   // only allow to call this from a custom route link that allows myself and verity to add our mnemonics to createa our smart wallets and remove all other recoveries locations
+//   List<String> mnemonicWords,
+//   VoidCallback successCallback,
+//   VoidCallback failureCallback,
+// ) {
+//   return (Store<AppState> store) async {
+//     try {
+//       await Analytics.track(
+//         eventName: AnalyticsEvents.restoreWallet,
+//       );
+//       await authenticator.restoreFuseFromMnemonic(
+//         mnemonicWords: mnemonicWords,
+//       );
+//       // final mnemonic = mnemonicWords.join(' ');
+//       // log
+//       //   ..info('restore wallet')
+//       //   ..info('compute pk');
+//       // final String privateKey = Mnemonic.privateKeyFromMnemonic(mnemonic);
+//       // //! await peeplEatsService.backupUserSK(privateKey);
+//       // final EthPrivateKey credentials = EthPrivateKey.fromHex(privateKey);
+//       // final EthereumAddress accountAddress = credentials.address;
+//       // log.info('accountAddress: $accountAddress');
+//       // store.dispatch(
+//       //   CreateLocalAccountSuccess(
+//       //     mnemonicWords,
+//       //     privateKey,
+//       //     credentials,
+//       //     // accountAddress.toString(),
+//       //   ),
+//       // );
+//       // await authenticator.initFuse();
+//       successCallback();
+//     } catch (e, s) {
+//       log.error(
+//         'ERROR - restoreWalletCall',
+//         error: e,
+//         stackTrace: s,
+//       );
+//       failureCallback();
+//     }
+//   };
+// }
 
 ThunkAction<AppState> setDevicePhoneNumberForId(String phoneNumber) {
   return (Store<AppState> store) async {

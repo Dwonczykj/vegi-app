@@ -28,8 +28,6 @@ mixin _$CashWalletState {
   bool get isTransfersFetchingStarted => throw _privateConstructorUsedError;
   @JsonKey(includeFromJson: false, includeToJson: false)
   bool get isFetchingBalances => throw _privateConstructorUsedError;
-  List<WCSessionStore> get wcSessionStores =>
-      throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -49,8 +47,7 @@ abstract class $CashWalletStateCopyWith<$Res> {
       @JsonKey(includeFromJson: false, includeToJson: false)
       bool isTransfersFetchingStarted,
       @JsonKey(includeFromJson: false, includeToJson: false)
-      bool isFetchingBalances,
-      List<WCSessionStore> wcSessionStores});
+      bool isFetchingBalances});
 
   $WalletActionsCopyWith<$Res>? get walletActions;
 }
@@ -72,7 +69,6 @@ class _$CashWalletStateCopyWithImpl<$Res, $Val extends CashWalletState>
     Object? walletActions = freezed,
     Object? isTransfersFetchingStarted = null,
     Object? isFetchingBalances = null,
-    Object? wcSessionStores = null,
   }) {
     return _then(_value.copyWith(
       tokens: null == tokens
@@ -91,10 +87,6 @@ class _$CashWalletStateCopyWithImpl<$Res, $Val extends CashWalletState>
           ? _value.isFetchingBalances
           : isFetchingBalances // ignore: cast_nullable_to_non_nullable
               as bool,
-      wcSessionStores: null == wcSessionStores
-          ? _value.wcSessionStores
-          : wcSessionStores // ignore: cast_nullable_to_non_nullable
-              as List<WCSessionStore>,
     ) as $Val);
   }
 
@@ -125,8 +117,7 @@ abstract class _$$_CashWalletStateCopyWith<$Res>
       @JsonKey(includeFromJson: false, includeToJson: false)
       bool isTransfersFetchingStarted,
       @JsonKey(includeFromJson: false, includeToJson: false)
-      bool isFetchingBalances,
-      List<WCSessionStore> wcSessionStores});
+      bool isFetchingBalances});
 
   @override
   $WalletActionsCopyWith<$Res>? get walletActions;
@@ -147,7 +138,6 @@ class __$$_CashWalletStateCopyWithImpl<$Res>
     Object? walletActions = freezed,
     Object? isTransfersFetchingStarted = null,
     Object? isFetchingBalances = null,
-    Object? wcSessionStores = null,
   }) {
     return _then(_$_CashWalletState(
       tokens: null == tokens
@@ -166,10 +156,6 @@ class __$$_CashWalletStateCopyWithImpl<$Res>
           ? _value.isFetchingBalances
           : isFetchingBalances // ignore: cast_nullable_to_non_nullable
               as bool,
-      wcSessionStores: null == wcSessionStores
-          ? _value.wcSessionStores
-          : wcSessionStores // ignore: cast_nullable_to_non_nullable
-              as List<WCSessionStore>,
     ));
   }
 }
@@ -183,8 +169,7 @@ class _$_CashWalletState extends _CashWalletState with DiagnosticableTreeMixin {
       @JsonKey(includeFromJson: false, includeToJson: false)
       this.isTransfersFetchingStarted = false,
       @JsonKey(includeFromJson: false, includeToJson: false)
-      this.isFetchingBalances = false,
-      this.wcSessionStores = const []})
+      this.isFetchingBalances = false})
       : super._();
 
   factory _$_CashWalletState.fromJson(Map<String, dynamic> json) =>
@@ -202,13 +187,10 @@ class _$_CashWalletState extends _CashWalletState with DiagnosticableTreeMixin {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   final bool isFetchingBalances;
-  @override
-  @JsonKey()
-  final List<WCSessionStore> wcSessionStores;
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'CashWalletState(tokens: $tokens, walletActions: $walletActions, isTransfersFetchingStarted: $isTransfersFetchingStarted, isFetchingBalances: $isFetchingBalances, wcSessionStores: $wcSessionStores)';
+    return 'CashWalletState(tokens: $tokens, walletActions: $walletActions, isTransfersFetchingStarted: $isTransfersFetchingStarted, isFetchingBalances: $isFetchingBalances)';
   }
 
   @override
@@ -220,8 +202,7 @@ class _$_CashWalletState extends _CashWalletState with DiagnosticableTreeMixin {
       ..add(DiagnosticsProperty('walletActions', walletActions))
       ..add(DiagnosticsProperty(
           'isTransfersFetchingStarted', isTransfersFetchingStarted))
-      ..add(DiagnosticsProperty('isFetchingBalances', isFetchingBalances))
-      ..add(DiagnosticsProperty('wcSessionStores', wcSessionStores));
+      ..add(DiagnosticsProperty('isFetchingBalances', isFetchingBalances));
   }
 
   @override
@@ -237,9 +218,7 @@ class _$_CashWalletState extends _CashWalletState with DiagnosticableTreeMixin {
                 other.isTransfersFetchingStarted ==
                     isTransfersFetchingStarted) &&
             (identical(other.isFetchingBalances, isFetchingBalances) ||
-                other.isFetchingBalances == isFetchingBalances) &&
-            const DeepCollectionEquality()
-                .equals(other.wcSessionStores, wcSessionStores));
+                other.isFetchingBalances == isFetchingBalances));
   }
 
   @JsonKey(ignore: true)
@@ -249,8 +228,7 @@ class _$_CashWalletState extends _CashWalletState with DiagnosticableTreeMixin {
       const DeepCollectionEquality().hash(tokens),
       walletActions,
       isTransfersFetchingStarted,
-      isFetchingBalances,
-      const DeepCollectionEquality().hash(wcSessionStores));
+      isFetchingBalances);
 
   @JsonKey(ignore: true)
   @override
@@ -274,8 +252,7 @@ abstract class _CashWalletState extends CashWalletState {
       @JsonKey(includeFromJson: false, includeToJson: false)
       final bool isTransfersFetchingStarted,
       @JsonKey(includeFromJson: false, includeToJson: false)
-      final bool isFetchingBalances,
-      final List<WCSessionStore> wcSessionStores}) = _$_CashWalletState;
+      final bool isFetchingBalances}) = _$_CashWalletState;
   _CashWalletState._() : super._();
 
   factory _CashWalletState.fromJson(Map<String, dynamic> json) =
@@ -293,8 +270,6 @@ abstract class _CashWalletState extends CashWalletState {
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   bool get isFetchingBalances;
-  @override
-  List<WCSessionStore> get wcSessionStores;
   @override
   @JsonKey(ignore: true)
   _$$_CashWalletStateCopyWith<_$_CashWalletState> get copyWith =>

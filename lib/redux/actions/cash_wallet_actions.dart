@@ -1,31 +1,20 @@
 import 'dart:async';
 import 'dart:math';
 // import 'package:charge_wallet_sdk/charge_wallet_sdk.dart';
-import 'package:collection/collection.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/foundation.dart';
 import 'package:fuse_wallet_sdk/fuse_wallet_sdk.dart' hide Variables;
 import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:vegan_liverpool/common/di/di.dart';
-import 'package:vegan_liverpool/constants/analytics_events.dart';
-import 'package:vegan_liverpool/constants/analytics_props.dart';
 import 'package:vegan_liverpool/constants/variables.dart';
 import 'package:vegan_liverpool/models/actions/actions.dart';
 import 'package:vegan_liverpool/models/actions/wallet_action.dart';
 import 'package:vegan_liverpool/models/app_state.dart';
-import 'package:vegan_liverpool/models/cash_wallet_state.dart';
 import 'package:vegan_liverpool/models/tokens/price.dart';
 import 'package:vegan_liverpool/models/tokens/token.dart';
-import 'package:vegan_liverpool/redux/actions/user_actions.dart';
 import 'package:vegan_liverpool/services.dart';
-import 'package:vegan_liverpool/utils/analytics.dart';
 import 'package:vegan_liverpool/utils/connectionChecker.dart';
-import 'package:vegan_liverpool/utils/constants.dart';
-import 'package:vegan_liverpool/utils/format.dart';
 import 'package:vegan_liverpool/utils/log/log.dart';
-import 'package:wallet_connect/wc_session_store.dart';
 
 bool clearTokensWithZero(String key, Token token) {
   if (token.timestamp == 0) return false;
@@ -34,26 +23,6 @@ bool clearTokensWithZero(String key, Token token) {
         pow(10, token.decimals),
       );
   return num.parse(formattedValue.toString()).compareTo(0) != 1;
-}
-
-class AddSession {
-  AddSession(this.session);
-  final WCSessionStore session;
-
-  @override
-  String toString() {
-    return 'AddSession : session: $session';
-  }
-}
-
-class RemoveSession {
-  RemoveSession(this.session);
-  final WCSessionStore session;
-
-  @override
-  String toString() {
-    return 'RemoveSession : session: $session';
-  }
 }
 
 class AddCashTokens {
@@ -276,7 +245,7 @@ ThunkAction<AppState> getTokensListForSmartWallet(
   return (Store<AppState> store) async {
     try {
       final tokensAccessibleToSmartWallet =
-          await fuseWalletSDK.tradeModule.fetchTokens();
+          await (await fuseWalletSDK).tradeModule.fetchTokens();
       tokensAccessibleToSmartWallet.pick(
         onData: (List<TokenDetails> tokens) {
           // Do you magic here

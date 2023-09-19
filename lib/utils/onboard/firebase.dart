@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:collection';
 import 'dart:io';
 import 'dart:math';
 
@@ -11,7 +12,18 @@ import 'package:phone_number/phone_number.dart';
 import 'package:redux/redux.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:vegan_liverpool/common/di/env.dart';
-import 'package:vegan_liverpool/common/network/web3auth.dart';
+
+import 'package:web3auth_flutter/enums.dart';
+import 'package:web3auth_flutter/input.dart';
+import 'package:web3auth_flutter/output.dart';
+
+import 'package:web3auth_flutter/web3auth_flutter.dart';
+
+// ignore: depend_on_referenced_packages
+// import 'package:http/http.dart';
+import 'package:web3dart/web3dart.dart';
+// import 'package:shared_preferences/shared_preferences.dart';
+// import 'package:vegan_liverpool/common/network/web3auth.dart';
 import 'package:vegan_liverpool/common/router/routes.dart';
 import 'package:vegan_liverpool/constants/analytics_events.dart';
 import 'package:vegan_liverpool/constants/analytics_props.dart';
