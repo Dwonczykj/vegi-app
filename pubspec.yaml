@@ -5,6 +5,7 @@ description: Food, Grocery delivery platform for Vegan products and food, with a
 environment:
   sdk: ">=2.17.0 <3.0.0"
 dependencies:
+  archive: ^3.3.8
   analyzer: ^5.10.0
   another_flushbar: ^1.12.29
   app_tracking_transparency: ^2.0.1
