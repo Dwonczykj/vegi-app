@@ -65,19 +65,20 @@ class UpdateTokenPrice {
 
 class GotWalletDataSuccess {
   GotWalletDataSuccess({
-    required this.networks,
+    // required this.networks,
     required this.walletAddress,
-    required this.walletModules,
+    // required this.walletModules,
   });
-  final List<String> networks;
+  // final List<String> networks;
   final String walletAddress;
-  final WalletModules walletModules;
+  // final WalletModules walletModules;
 
   @override
   String toString() {
     return 'GotWalletDataSuccess : walletAddress: $walletAddress'
-        ',networks: $networks, walletModules:'
-        ' $walletModules';
+        // ',networks: $networks, walletModules:'
+        // ' $walletModules'
+        ;
   }
 }
 
@@ -344,10 +345,6 @@ ThunkAction<AppState> startFetchTokensBalances() {
                 log.error(
                   'Error fetch tokens balances - $e',
                   error: e,
-                  stackTrace: s,
-                );
-                await Sentry.captureException(
-                  Exception('Error fetch tokens balances - $e'),
                   stackTrace: s,
                 );
               }

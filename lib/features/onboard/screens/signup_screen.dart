@@ -501,7 +501,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 //     await onBoardStrategy.signInWithApple();
                 //   },
                 // ),
-                if (viewmodel.phoneNumber.isNotEmpty) ...[
+                if (viewmodel.phoneNumber.isNotEmpty ||
+                    DebugHelpers.inDebugMode) ...[
                   ListTile(
                     title: const Text(Labels.emailAndPasswordSignonLabel),
                     onTap: () async {
@@ -516,6 +517,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   //       await rootRouter.replace(const SignUpEmailLinkScreen());
                   //     },
                   //   ),
+                ],
+                if (DebugHelpers.inDebugMode) ...[
+                  ListTile(
+                    title: const Text("Web3Auth Social Login"),
+                    onTap: () async {
+                      await rootRouter
+                          .replace(const Web3AuthExampleLoginScreen());
+                    },
+                  ),
                 ],
                 ListTile(
                   title: Text(Labels.signupButtonLabelLogout(context)),

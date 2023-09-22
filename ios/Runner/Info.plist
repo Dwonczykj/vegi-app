@@ -129,6 +129,8 @@
 	<string>Not in use right now</string>
 	<key>NSUserTrackingUsageDescription</key>
 	<string>This identifier will be used to track errors occur to you and for our internal analytics.</string>
+	<key>SFSafariCorrespondingIOSAppBundleIdentifier</key>
+	<string></string>
 	<key>SKAdNetworkItems</key>
 	<array>
 		<dict>

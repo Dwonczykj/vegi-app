@@ -5,6 +5,7 @@ import 'package:carrier_info/carrier_info.dart';
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:phone_number/phone_number.dart';
 import 'package:redux/src/store.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
@@ -48,8 +49,15 @@ class SignUpWithEmailAndPasswordScreen extends StatefulWidget {
 class _SignUpWithEmailAndPasswordScreenState
     extends State<SignUpWithEmailAndPasswordScreen> {
   final fullNameController = TextEditingController(text: '');
-  final emailController = TextEditingController(text: '');
-  final passwordController = TextEditingController(text: '');
+  final emailController = TextEditingController(
+      text: DebugHelpers.inDebugMode ? Secrets.testEmails[0] : '');
+  final passwordController = TextEditingController(
+      text: DebugHelpers.inDebugMode ? Secrets.testEmailPasswords[0] : '');
+  final phoneController = TextEditingController(
+      text: DebugHelpers.inDebugMode ? Secrets.testPhoneNumbers[0] : '');
+  CountryCode countryCode = DebugHelpers.inDebugMode
+      ? CountryCode(dialCode: Secrets.testPhoneNumberCountryCode, code: 'US')
+      : CountryCode(dialCode: '+44', code: 'GB');
   final _formKey = GlobalKey<FormState>();
 
   bool isRouting = false;
@@ -62,6 +70,115 @@ class _SignUpWithEmailAndPasswordScreenState
     passwordController.dispose();
     fullNameController.dispose();
     super.dispose();
+  }
+
+  Future<void> _updateCountryCode(_) async {
+    try {
+      String? isoCode;
+      if (Platform.isAndroid) {
+        if (await Permission.location.isPermanentlyDenied) {
+          // The user opted to never again see the permission request dialog for this
+          // app. The only way to change the permission's status now is to let the
+          // user manually enable it in the system settings.
+
+          bool isShown = await Permission.location.shouldShowRequestRationale;
+          final userOpennedAppSettings = await openAppSettings();
+          if (!userOpennedAppSettings) {
+            log.info(
+              'Android user decided not to reneable location permission using app settings for looking up the carrier code on the signup_screen',
+              stackTrace: StackTrace.current,
+            );
+          }
+        } else if (await Permission.location.isGranted) {
+          // Access the cell location or carrier information here
+        } else {
+          // Request permission if not granted
+          final status = await Permission.location.request();
+          if (status.isGranted) {
+            // Permission granted, access the information
+          } else {
+            // Permission denied, handle accordingly
+          }
+        }
+        final androidInfo = await CarrierInfo.getAndroidInfo();
+        if ((androidInfo?.telephonyInfo.length ?? 0) >= 1) {
+          isoCode = androidInfo?.telephonyInfo[0].isoCountryCode;
+        }
+      }
+      if (Platform.isIOS) {
+        final iosInfo = await CarrierInfo.getIosInfo();
+        if (iosInfo.carrierData.isNotEmpty) {
+          isoCode = iosInfo.carrierData[0].isoCountryCode;
+        }
+      }
+      final currentCountryCode = isoCode;
+      if (currentCountryCode != null) {
+        final Map<String, String> localeData = codes.firstWhere(
+          (Map<String, String> code) =>
+              code['code'].toString().toLowerCase() ==
+              currentCountryCode.toLowerCase(),
+        );
+        if (mounted &&
+            localeData.containsKey('dial_code') &&
+            localeData.containsKey('code')) {
+          setState(() {
+            countryCode = CountryCode(
+              dialCode: localeData['dial_code'],
+              code: localeData['code'],
+            );
+          });
+        }
+      }
+    } catch (e, s) {
+      log.error(
+        'Failed to deduce sim country code: $e',
+        stackTrace: s,
+      );
+    }
+  }
+
+  Future<Exception?> parsePhoneNumberAndSigninEmail({
+    required MainScreenViewModel viewmodel,
+  }) async {
+    viewmodel.setLoading(true);
+    return await delayed(15000, () async {
+      final Store<AppState> store = StoreProvider.of<AppState>(context);
+      if (store.state.onboardingState.signupIsInFlux) {
+        await showErrorSnack(
+          context: context,
+          title: 'Email authentication',
+          message: 'Email authentication taking too long,',
+        );
+        store.dispatch(
+          SignupLoading(isLoading: false),
+        );
+      }
+      return;
+    }, () async {
+      final Store<AppState> store = StoreProvider.of<AppState>(context);
+      var phoneNumber = await parsePhoneDetails(
+        countryCode: countryCode,
+        phoneNoCountry: phoneController.text,
+      );
+      // final String phoneNumberStr = '${countryCode.dialCode}${phoneController.text}';
+      // final dummyCountryCodeDontUse = await parseCountryCode(
+      //   countryCode: countryCode.code ?? 'GB',
+      // );
+
+      if (phoneNumber != null) {
+        viewmodel.setLoading(false);
+        store.dispatch(
+          SetPhoneNumberSuccess(
+            countryCode: countryCode,
+            phoneNumber: phoneNumber,
+          ),
+        );
+      }
+      return viewmodel.signinEmailAndPassword(
+        email: emailController.text.toLowerCase().trim(),
+        password: passwordController.text,
+      );
+    });
   }
 
   // Future<void> _route(MainScreenViewModel viewModel) async {
@@ -116,7 +233,20 @@ class _SignUpWithEmailAndPasswordScreenState
       onInit: (store) {
         final userState = store.state.userState;
         if (userState.email.isNotEmpty) {
+          if (emailController.text.isNotEmpty &&
+              emailController.text != userState.email) {
+            passwordController.text = "";
+          }
           emailController.text = userState.email;
+        }
+        if (userState.isoCode.isNotEmpty &&
+            userState.countryCode.isNotEmpty &&
+            userState.phoneNumberNoCountry.isNotEmpty) {
+          countryCode = CountryCode(
+            dialCode: userState.countryCode,
+            code: userState.isoCode,
+          );
+          phoneController.text = userState.phoneNumberNoCountry;
         }
       },
       onWillChange: (previousViewModel, newViewModel) async {
@@ -133,8 +263,10 @@ class _SignUpWithEmailAndPasswordScreenState
               bottom: 120,
             ),
           );
-          log.error(newViewModel.signupError!.toString(),
-              sentryHint: 'Error signup email and password: ',);
+          log.error(
+            newViewModel.signupError!.toString(),
+            sentryHint: 'Error signup email and password: ',
+          );
           if (newViewModel.signupError!.code != null) {
             final errCode = newViewModel.signupError!.code!;
             if (errCode == SignUpErrCode.userNotFound) {
@@ -212,6 +344,141 @@ class _SignUpWithEmailAndPasswordScreenState
                       key: _formKey,
                       child: Column(
                         children: <Widget>[
+                          Container(
+                            width: 280,
+                            decoration: BoxDecoration(
+                              border: Border(
+                                bottom: BorderSide(
+                                  color:
+                                      Theme.of(context).colorScheme.onSurface,
+                                  width: 2,
+                                ),
+                              ),
+                            ),
+                            child: Row(
+                              children: <Widget>[
+                                CountryCodePicker(
+                                  onChanged: (countryCode_) {
+                                    setState(() {
+                                      countryCode = countryCode_;
+                                    });
+                                    log.verbose(
+                                      'CountryCode changed to ${countryCode_.dialCode}',
+                                    );
+                                  },
+                                  searchDecoration: InputDecoration(
+                                    border: UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onSurface,
+                                      ),
+                                    ),
+                                    fillColor: Theme.of(context).canvasColor,
+                                    enabledBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onSurface,
+                                      ),
+                                    ),
+                                    focusedBorder: UnderlineInputBorder(
+                                      borderSide: BorderSide(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onSurface,
+                                      ),
+                                    ),
+                                  ),
+                                  dialogSize: Size(
+                                    MediaQuery.of(context).size.width * .9,
+                                    MediaQuery.of(context).size.height * 0.85,
+                                  ),
+                                  searchStyle: TextStyle(
+                                    fontSize: 18,
+                                    color:
+                                        Theme.of(context).colorScheme.onSurface,
+                                  ),
+                                  initialSelection: countryCode.code,
+                                  favorite: const <String>[
+                                    'GB', // /Users/joeyd/.pub-cache/hosted/pub.dartlang.org/country_code_picker-2.0.2/lib/country_codes.dart:1174
+                                    'US', // /Users/joeyd/.pub-cache/hosted/pub.dartlang.org/country_code_picker-2.0.2/lib/country_codes.dart:1179
+                                  ],
+                                  showDropDownButton: true,
+                                  dialogTextStyle: TextStyle(
+                                    fontSize: 18,
+                                    color:
+                                        Theme.of(context).colorScheme.onSurface,
+                                  ),
+                                  textStyle: TextStyle(
+                                    fontSize: 18,
+                                    color:
+                                        Theme.of(context).colorScheme.onSurface,
+                                  ),
+                                  padding: EdgeInsets.zero,
+                                ),
+                                Container(
+                                  height: 35,
+                                  width: 1,
+                                  color:
+                                      Theme.of(context).colorScheme.onSurface,
+                                  margin: const EdgeInsets.only(
+                                    left: 5,
+                                    right: 5,
+                                  ),
+                                ),
+                                Expanded(
+                                  child: TextFormField(
+                                    key: ValueKey(
+                                        "SignUpScreenPhoneNoCountryField"),
+                                    controller: phoneController,
+                                    keyboardType: TextInputType.number,
+                                    autofocus: true,
+                                    validator: (String? value) => value!.isEmpty
+                                        ? 'Please enter mobile number'
+                                        : null,
+                                    style: TextStyle(
+                                      fontSize: 18,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onSurface,
+                                    ),
+                                    decoration: InputDecoration(
+                                      contentPadding:
+                                          const EdgeInsets.symmetric(
+                                        vertical: 20,
+                                        horizontal: 10,
+                                      ),
+                                      hintText: I10n.of(context).phoneNumber,
+                                      border: InputBorder.none,
+                                      fillColor: Theme.of(context)
+                                          .colorScheme
+                                          .background,
+                                      focusedBorder: const OutlineInputBorder(
+                                        borderSide: BorderSide.none,
+                                      ),
+                                      enabledBorder: const OutlineInputBorder(
+                                        borderSide: BorderSide.none,
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: 40),
+                          if (errMessage.isNotEmpty) ...[
+                            const SizedBox(height: 10),
+                            Text(
+                              errMessage,
+                              style: const TextStyle(
+                                color: Colors.red,
+                              ),
+                            ),
+                          ],
+                          Center(
+                            child: Text(viewmodel.signupStatusMessage),
+                          ),
                           Container(
                             width: 280,
                             decoration: BoxDecoration(
@@ -324,29 +591,24 @@ class _SignUpWithEmailAndPasswordScreenState
                                 StoreProvider.of<AppState>(context)
                                     .dispatch(SignupLoading(isLoading: false)),
                             onPressed: () async {
-                              await delayed(
-                                15000,
-                                () async {
-                                  final Store<AppState> store =
-                                      StoreProvider.of<AppState>(context);
-                                  if (store
-                                      .state.onboardingState.signupIsInFlux) {
-                                    await showErrorSnack(
-                                      context: context,
-                                      title: 'Email authentication',
-                                      message:
-                                          'Email authentication taking too long,',
-                                    );
-                                    store.dispatch(
-                                        SignupLoading(isLoading: false),);
-                                  }
-                                },
-                                () => viewmodel.signinEmailAndPassword(
-                                  email:
-                                      emailController.text.toLowerCase().trim(),
-                                  password: passwordController.text,
-                                ),
-                              );
+                              parsePhoneNumberAndSigninEmail(
+                                viewmodel: viewmodel,
+                              ).then((e) {
+                                if (e != null) {
+                                  showErrorSnack(
+                                    message: I10n.of(context).invalid_number,
+                                    title:
+                                        I10n.of(context).something_went_wrong,
+                                    context: context,
+                                    margin: const EdgeInsets.only(
+                                      top: 8,
+                                      right: 8,
+                                      left: 8,
+                                      bottom: 120,
+                                    ),
+                                  );
+                                }
+                              });
                             },
                           ),
                           const SizedBox(height: 20),

@@ -3,10 +3,14 @@ import 'dart:io';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fuse_wallet_sdk/fuse_wallet_sdk.dart';
+import 'package:get_it/get_it.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
+import 'package:vegan_liverpool/common/di/env.dart';
 import 'package:vegan_liverpool/constants/enums.dart';
+import 'package:vegan_liverpool/features/veganHome/Helpers/helpers.dart';
 import 'package:vegan_liverpool/models/app_state.dart';
 import 'package:vegan_liverpool/redux/actions/auth_actions.dart';
+import 'package:vegan_liverpool/redux/actions/cash_wallet_actions.dart';
 import 'package:vegan_liverpool/redux/actions/onboarding_actions.dart';
 import 'package:vegan_liverpool/redux/actions/user_actions.dart';
 import 'package:vegan_liverpool/redux/viewsmodels/signUpErrorDetails.dart';
@@ -20,18 +24,21 @@ import 'package:web3auth_flutter/input.dart';
 import 'package:web3auth_flutter/output.dart';
 import 'package:web3auth_flutter/web3auth_flutter.dart';
 
-Future<FuseSDK> initWeb3Auth() async {
-  late final EthPrivateKey credentials;
-  late final FuseSDK fuseSDK;
+Future<void> initWeb3Auth() async {
   if (AppConfig.useWeb3Auth) {
     // no need for mnemonics as will use web3auth to manage users for us and give us the credentials from the web3auth
     // final jwtToken = store.state.userState.jwtToken;
     // assert(jwtToken.isNotEmpty, "JWT Token can not be empty");
+    final web3authClientId =
+        "BC0MvXuyPpJErPKwsa53LP8Bp7r3-RsGdWkTFZEbtk8383xYOztF7HANcUtxaIdB90R3uVCC-JyU_6LOpH6OPHE"; // Secrets.WEB3AUTH_CLIENT_ID;
     Uri redirectUrl;
     if (Platform.isAndroid) {
-      redirectUrl = Uri.parse('fuse-sdk-exmple://io.fuse.examplewallet/auth');
+      // redirectUrl = Uri.parse('fuse-sdk-exmple://io.fuse.examplewallet/auth');
+      redirectUrl = Uri.parse(
+          'vegi://com.vegiapp.vegi/auth'); // ~  android/app/src/main/AndroidManifest.xml:54
     } else if (Platform.isIOS) {
-      redirectUrl = Uri.parse('io.fuse.examplewallet://openlogin');
+      // redirectUrl = Uri.parse('io.fuse.examplewallet://openlogin');
+      redirectUrl = Uri.parse('com.vegiapp.vegi://openlogin');
     } else {
       throw UnKnownException('Unknown platform');
     }
@@ -45,47 +52,66 @@ Future<FuseSDK> initWeb3Auth() async {
 
     // For login with firebase we need the following bespoke config
     // ~ https://github.com/Web3Auth/web3auth-pnp-examples/blob/8c5398317cffed6deb61228d32b74a0db3bd2862/flutter/flutter-firebase-example/lib/main.dart#L64C5-L72C11
+    // ~ web3auth dashboard setup -> https://web3auth.io/docs/content-hub/guides/firebase#setup-your-web3auth-dashboard
     final loginConfig = HashMap<String, LoginConfigItem>();
     loginConfig['jwt'] = LoginConfigItem(
-      verifier: "web3auth-firebase-examples", // get it from web3auth dashboard
+      verifier:
+          // "web3auth-firebase-vegi-app-verifier", // get it from web3auth dashboard
+          "web3auth-firebase-testnet-vegi", // get it from web3auth dashboard
       typeOfLogin: TypeOfLogin.jwt,
-      name: "Firebase JWT Login",
-      clientId:
-          Secrets.WEB3AUTH_CLIENT_ID, // web3auth's plug and play client id
+      name: "Custom JWT Login",
+      clientId: web3authClientId, // web3auth's plug and play client id
     );
     HashMap themeMap = HashMap<String, String>();
     themeMap['primary'] = "#229954";
     await Web3AuthFlutter.init(Web3AuthOptions(
-        clientId: Secrets.WEB3AUTH_CLIENT_ID,
-        network: Network.mainnet,
+        clientId: web3authClientId,
+        // chainNamespace: ChainNamespace.eip155,
+        network: Network
+            .testnet, //Env.isProd || Env.isQA ? Network.mainnet : Network.testnet,
         redirectUrl: redirectUrl,
-        whiteLabel: WhiteLabelData(
-          dark: true,
-          name: "vegi app",
-          theme: themeMap,
-        ),
+        // whiteLabel: WhiteLabelData(
+        //   dark: true,
+        //   name: "vegi app",
+        //   theme: themeMap,
+        // ),
         loginConfig: loginConfig));
 
     // This performs authentication and gets the private-
     // key of the existing user if a user is already logged in
     // from within the web3auth flutter packages local shared prefs on the device
     await Web3AuthFlutter.initialize();
-
+    final store = await reduxStore;
     final String privateKey = await Web3AuthFlutter.getPrivKey();
     log.debug(privateKey);
     if (privateKey.isNotEmpty) {
       log.debug('Web3AuthResponse Success: $privateKey');
-      credentials = EthPrivateKey.fromHex(privateKey);
-      fuseSDK = await FuseSDK.init(
+      final credentials = EthPrivateKey.fromHex(privateKey);
+      final fuseSDK = await FuseSDK.init(
         Secrets.FUSE_WALLET_SDK_PUBLIC_KEY,
         credentials,
       );
+      GetIt.instance.registerSingleton<FuseSDK>(fuseSDK);
+      store
+        ..dispatch(
+          CreateLocalAccountSuccess(
+            // mnemonicStr.split(' '),
+            privateKey,
+            credentials,
+            // accountAddress.toString(),
+          ),
+        );
+    } else {
+      // else init the fuseSDK once have the private key from logging in to firebase and getting web3auth.login response
+      // GetIt.instance.registerSingleton<FuseSDK?>(null);
+      return;
     }
   } else {
     // ! old auth not accepted any longer as of commit e529d93cd2965ac96623c69da67f30e162f14677
-    throw Exception('Application error: Web3Auth is only accepted methodology');
+    throw UnimplementedError(
+        'Application error: Web3Auth is only accepted methodology');
   }
-  return fuseSDK;
+  return;
 }
 
 /// The function retrieves a JWT token from Firebase and returns a Web3AuthResponse.
@@ -95,14 +121,103 @@ Future<Web3AuthResponse> defiAuthenticate({
 }) async {
   final idToken = (await credential.user?.getIdToken(true)).toString();
   final response = await Web3AuthFlutter.login(LoginParams(
-      loginProvider: Provider.jwt,
       mfaLevel: MFALevel.NONE,
+      loginProvider: Provider.jwt,
       extraLoginOptions: ExtraLoginOptions(
         id_token: idToken, // * key Firebase JWT Token here
-        domain: 'firebase',
+        verifierIdField: "sub", // same as your JWT Verifier ID
+        domain: 'com.vegiapp.vegi',
       )));
-  (await reduxStore).dispatch(SignupLoading(isLoading: false));
+  final store = await reduxStore;
+  store.dispatch(SignupLoading(isLoading: false));
+  if (!GetIt.instance.isRegistered<FuseSDK>()) {
+    // final prefs = await SharedPreferences.getInstance();
+    // await prefs.setString('privateKey', response.privKey.toString());
+    final privateKey = response.privKey.toString();
+    final credentials = EthPrivateKey.fromHex(privateKey);
+    final fuseSDK = await FuseSDK.init(
+      Secrets.FUSE_WALLET_SDK_PUBLIC_KEY,
+      credentials,
+    );
+    GetIt.instance.registerSingleton<FuseSDK>(fuseSDK);
+    store
+      ..dispatch(CreateLocalAccountSuccess(
+        // mnemonicStr.split(' '),
+        privateKey,
+        credentials,
+        // accountAddress.toString(),
+      ));
+    try {
+      await _emitWallet(fuseSDK.wallet);
+    } on Exception catch (e, s) {
+      log.error(
+        'Unable to fetch smartWallet: $e',
+        error: e,
+        stackTrace: s,
+      );
+    }
+  }
   return response;
+}
+
+Future<void> _emitWallet(EtherspotWallet userWallet) async {
+  logFunctionCall<void>(
+    className: 'Authentication',
+    funcName: '_emitWallet',
+  );
+  await saveSmartWallet(
+    smartWallet: userWallet,
+  );
+  final store = await reduxStore;
+  store
+    // ..dispatch(
+    //   SetSmartWalletInMemory(
+    //     smartWallet: userWallet,
+    //   ),
+    // )
+    ..dispatch(
+      SetUserAuthenticationStatus(
+        fuseStatus: FuseAuthenticationStatus.authenticated,
+      ),
+    )
+    ..dispatch(
+      SignUpFailed(
+        error: null,
+      ),
+    )
+    ..dispatch(
+      SignUpLoadingMessage(
+        message: '',
+      ),
+    )
+    ..dispatch(SignupLoading(isLoading: false))
+    ..dispatch(getVegiWalletAccountDetails())
+    ..dispatch(setRandomUserAvatarIfNone());
+
+  await firebaseOnboarding.nextOnboardingPage();
+}
+
+Future<void> saveSmartWallet({
+  required EtherspotWallet smartWallet,
+}) async {
+  logFunctionCall<void>(
+    className: 'Authentication',
+    funcName: 'saveSmartWallet',
+  );
+  final store = await reduxStore;
+  try {
+    store.dispatch(
+      GotWalletDataSuccess(
+        walletAddress: smartWallet.getSender(),
+      ),
+    );
+  } catch (e, s) {
+    log.error(
+      'ERROR - setupWalletCall',
+      error: e,
+      stackTrace: s,
+    );
+  }
 }
 
 Future<bool> Function() defiSignout() {

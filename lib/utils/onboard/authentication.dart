@@ -292,35 +292,51 @@ class Authentication {
       log.warn(
         'Faking accept test auth code from firebase authenticator.verifySMSVerificationCode call using test details',
       );
-      store
-        ..dispatch(
-          SetUserAuthenticationStatus(
-            firebaseStatus: FirebaseAuthenticationStatus.authenticated,
-            // todo: mock login to vegi too by passing none firebaseSessionToken secret to backend with a process.env check in the local.js
-          ),
-        )
-        ..dispatch(
-          SetFirebaseSessionToken(
-            firebaseSessionToken: Secrets.testFirebaseSessionToken,
-          ),
-        );
-      await _loginToVegiWithPhone(
-        store: store,
-        phoneNoCountry: store.state.userState.phoneNumberNoCountry,
-        phoneCountryCode: int.tryParse(store.state.userState.countryCode),
-        firebaseSessionToken: Secrets.testFirebaseSessionToken,
+
+      await _logInFirebaseRequestVerificationCodeStep2(
+        loginDetails: EmailLoginDetails(
+          email: Secrets
+              .testEmailByNumber[store.state.userState.phoneNumberNoCountry]!,
+          password: Secrets.testEmailPasswordsByNumber[
+              store.state.userState.phoneNumberNoCountry]!,
+        ),
+        onCompleteFlow: () {
+          store
+            ..dispatch(SignupLoading(isLoading: false))
+            ..dispatch(SignUpLoadingMessage(message: ''));
+        },
       );
-      // initFuse
-      if (store.state.userState.vegiAuthenticationStatus ==
-          VegiAuthenticationStatus.authenticated) {
-        // perhaps i can configure test credentials
-        // await defiAuthenticate(credential: credential);
-      } else {
-        log.error(
-          'Unable to initFuse at end of authenticator.verifySMSVericationCode as failed to auth vegi USING TEST PHONE CREDENTIALS with status: [${store.state.userState.vegiAuthenticationStatus}] and firebaseStatus: ["${store.state.userState.firebaseAuthenticationStatus}"]',
-        );
-      }
       return;
+      // // todo - replace the below with _loginWithEmail
+      // store
+      //   ..dispatch(
+      //     SetUserAuthenticationStatus(
+      //       firebaseStatus: FirebaseAuthenticationStatus.authenticated,
+      //       // todo: mock login to vegi too by passing none firebaseSessionToken secret to backend with a process.env check in the local.js
+      //     ),
+      //   )
+      //   ..dispatch(
+      //     SetFirebaseSessionToken(
+      //       firebaseSessionToken: Secrets.testFirebaseSessionToken,
+      //     ),
+      //   );
+      // await _loginToVegiWithPhone(
+      //   store: store,
+      //   phoneNoCountry: store.state.userState.phoneNumberNoCountry,
+      //   phoneCountryCode: int.tryParse(store.state.userState.countryCode),
+      //   firebaseSessionToken: Secrets.testFirebaseSessionToken,
+      // );
+      // // initFuse
+      // if (store.state.userState.vegiAuthenticationStatus ==
+      //     VegiAuthenticationStatus.authenticated) {
+      //   // perhaps i can configure test credentials
+      //   // await defiAuthenticate(credential: credential);
+      // } else {
+      //   log.error(
+      //     'Unable to initFuse at end of authenticator.verifySMSVericationCode as failed to auth vegi USING TEST PHONE CREDENTIALS with status: [${store.state.userState.vegiAuthenticationStatus}] and firebaseStatus: ["${store.state.userState.firebaseAuthenticationStatus}"]',
+      //   );
+      // }
+      // return;
     }
 
     // * NORMAL - NOT TEST NUMBER CONTINUE HERE
@@ -599,6 +615,7 @@ class Authentication {
       );
     } else if (loginDetails is EmailLoginDetails) {
       final store = await reduxStore;
+
       final userCredential = await _signInToOnboardingProviderWithEmail(
         email: loginDetails.email,
         password: loginDetails.password,
@@ -883,6 +900,12 @@ class Authentication {
       store.dispatch(
         SignUpLoadingMessage(message: 'Sending SMS code to phone 🚀...'),
       );
+      if (Secrets.isTestPhoneDetails(
+        countryCode: countryCode.dialCode!,
+        phoneNumber: phoneNumber.nationalNumber,
+      )) {
+        return true;
+      }
       await firebaseOnboarding.login(
         countryCode: countryCode,
         phoneNumber: phoneNumber,
@@ -1187,23 +1210,23 @@ class Authentication {
         ),
       );
 
-  /// Replacement function to init fuse and sort wallet saving all in one
-  Future<void> _initFuseWallet(
-    Store<AppState> store, {
-    required String? privateKey,
-    void Function()? onWalletInitialised,
-    List<String>? useMnemonicWords,
-  }) async {
-    logFunctionCall<void>(
-      className: 'Authentication',
-      funcName: '_initFuseWallet',
-    );
-    store.dispatch(
-      SetUserAuthenticationStatus(
-        fuseStatus: FuseAuthenticationStatus.loading,
-      ),
-    );
-  }
+  // /// Replacement function to init fuse and sort wallet saving all in one
+  // Future<void> _initFuseWallet(
+  //   Store<AppState> store, {
+  //   required String? privateKey,
+  //   void Function()? onWalletInitialised,
+  //   List<String>? useMnemonicWords,
+  // }) async {
+  //   logFunctionCall<void>(
+  //     className: 'Authentication',
+  //     funcName: '_initFuseWallet',
+  //   );
+  //   store.dispatch(
+  //     SetUserAuthenticationStatus(
+  //       fuseStatus: FuseAuthenticationStatus.loading,
+  //     ),
+  //   );
+  // }
 
   // /// Function to create the single External Owner Account that can have at most
   // /// ONE smart wallet linked with it.
@@ -1334,12 +1357,12 @@ class Authentication {
   //   }
   // }
 
-  // // bool _fuseSDKNeedsAuthenticationFirst({
-  // //   required DC<Exception, SmartWallet> walletData,
-  // // }) {
-  // //   return walletData.hasError &&
-  // //       walletData.error.toString().contains('LateInit');
-  // // }
+  // bool _fuseSDKNeedsAuthenticationFirst({
+  //   required DC<Exception, SmartWallet> walletData,
+  // }) {
+  //   return walletData.hasError &&
+  //       walletData.error.toString().contains('LateInit');
+  // }
 
   // Future<void> _emitWallet(SmartWallet userWallet) async {
   //   logFunctionCall<void>(

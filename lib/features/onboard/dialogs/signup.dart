@@ -4,6 +4,7 @@ import 'package:vegan_liverpool/features/screens/webview_screen.dart';
 import 'package:vegan_liverpool/features/shared/widgets/primary_button.dart';
 import 'package:vegan_liverpool/generated/l10n.dart';
 import 'package:vegan_liverpool/utils/constants.dart';
+import 'package:vegan_liverpool/utils/url.dart';
 
 class SignUpDialog extends StatefulWidget {
   const SignUpDialog({Key? key}) : super(key: key);
@@ -159,13 +160,14 @@ class _SignUpDialogState extends State<SignUpDialog>
                   InkWell(
                     focusColor: Theme.of(context).canvasColor,
                     highlightColor: Theme.of(context).canvasColor,
-                    onTap: () => showModalBottomSheet<Widget>(
-                      context: context,
-                      builder: (_) => const WebViewScreen(
-                        url: VEGI_PRIVACY_URL,
-                        title: 'Legal',
-                      ),
-                    ),
+                    // onTap: () => showModalBottomSheet<Widget>(
+                    //   context: context,
+                    //   builder: (_) => const WebViewScreen(
+                    //     url: VEGI_PRIVACY_URL,
+                    //     title: 'Legal',
+                    //   ),
+                    // ),
+                    onTap: () => launchUrl(VEGI_PRIVACY_URL),
                     child: const Text.rich(
                       TextSpan(
                         text: VEGI_PRIVACY_URL,

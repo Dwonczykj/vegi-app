@@ -14,11 +14,10 @@ import 'package:vegan_liverpool/initFirebaseRemote.dart';
 import 'package:vegan_liverpool/services.dart';
 import 'package:vegan_liverpool/utils/constants.dart';
 import 'package:vegan_liverpool/utils/log/log.dart';
+import 'package:vegan_liverpool/utils/onboard/web3Auth.dart';
 import 'package:vegan_liverpool/utils/stripe.dart';
 
 import 'env_test.dart';
-
-
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -44,6 +43,8 @@ Future<void> main() async {
   //todo: Init firebase_core for use in test
   // ~ see solution https://stackoverflow.com/a/74477245
   await configureDependencies(environment: envStr);
+
+  await initWeb3Auth();
 
   // await initFirebaseRemote();
 

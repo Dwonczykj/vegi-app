@@ -204,12 +204,12 @@ class SetBiometricallyAuthenticated {
 
 class CreateLocalAccountSuccess {
   CreateLocalAccountSuccess(
-    this.mnemonic,
+    // this.mnemonic,
     this.privateKey,
     this.fuseWalletCredentials,
     // this.accountAddress,
   );
-  final List<String> mnemonic;
+  // final List<String> mnemonic;
   final String privateKey;
   final EthPrivateKey fuseWalletCredentials;
   // final String accountAddress;
@@ -620,18 +620,18 @@ class SetFuseWalletCredentials {
       'SetFuseWalletCredentials : fuseWalletCredentials: $fuseWalletCredentials';
 }
 
-class SetSmartWalletInMemory {
-  SetSmartWalletInMemory({
-    required this.smartWallet,
-  });
+// class SetSmartWalletInMemory {
+//   SetSmartWalletInMemory({
+//     required this.smartWallet,
+//   });
 
-  final SmartWallet smartWallet;
+//   final EtherspotWallet smartWallet;
 
-  @override
-  String toString() {
-    return 'SetSmartWalletInMemory [smartWallet]:"${smartWallet.smartWalletAddress}"';
-  }
-}
+//   @override
+//   String toString() {
+//     return 'SetSmartWalletInMemory [smartWallet]:"${smartWallet.getSender()}"';
+//   }
+// }
 
 class SetVerificationId {
   SetVerificationId(this.verificationId);

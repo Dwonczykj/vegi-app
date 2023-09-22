@@ -371,6 +371,8 @@ class PeeplEatsService extends HttpService {
           ),
         );
       if (userDetails.phoneNoCountry.isNotEmpty &&
+          userDetails.phoneNoCountry.replaceAll("0", "").isNotEmpty &&
+          userDetails.phoneNoCountry != "0000000000" &&
           userDetails.phoneCountryCode != 0 &&
           userDetails.phoneNoCountry.length > 1) {
         final phoneDetails = await getPhoneDetails(
@@ -1527,10 +1529,15 @@ class PeeplEatsService extends HttpService {
     if (email.toLowerCase().trim().isEmpty) {
       log.warn('Ignoring user-details request as email is blank',
           stackTrace: StackTrace.current);
-    } else if (phoneNoCountry.isEmpty) {
-      log.warn('Ignoring user-details request as email is blank',
-          stackTrace: StackTrace.current);
+      return null;
     }
+    // else if (phoneNoCountry.isEmpty ||
+    //     phoneNoCountry.replaceAll("0", "").isEmpty) {
+    //   log.warn('Ignoring user-details request as phone number is blank',
+    //       stackTrace: StackTrace.current);
+    //   return null;
+    // }
+
     try {
       final Response<dynamic> response = await dioGet(
         '/api/v1/admin/user-details',

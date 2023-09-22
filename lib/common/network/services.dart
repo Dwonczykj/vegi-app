@@ -23,8 +23,8 @@ abstract class ServicesModule {
           authGuard: AuthGuard(),
         );
 
-  @lazySingleton
-  Future<FuseSDK> get fuseWalletSDK => initWeb3Auth();
+  // @lazySingleton
+  // Future<FuseSDK?> get fuseWalletSDK => initWeb3Auth(); // this needs to be called always after we have a privateKey wcih can be obtained from logging in
 
   // @preResolve
   // Future<NewVersion> get newVersion => NewVersion.fromPackageInfo(); // ! BUG -> this causes app to fail before start because of the preresolve....

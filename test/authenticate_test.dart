@@ -44,8 +44,9 @@ void main() {
           );
           currentFuseStatus = store.state.userState.fuseAuthenticationStatus;
           if (currentFuseStatus == FuseAuthenticationStatus.authenticated) {
+            final fuseSDK = await fuseWalletSDK;
             expect(
-              store.state.userState.smartWallet != null,
+              fuseSDK.wallet != null,
               true,
               reason: 'Fuse Smart wallet should be initialised now!',
             );

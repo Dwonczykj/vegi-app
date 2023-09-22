@@ -25,6 +25,7 @@ import 'package:vegan_liverpool/redux/reducers/app_reducer.dart';
 import 'package:vegan_liverpool/services.dart';
 import 'package:vegan_liverpool/utils/constants.dart';
 import 'package:vegan_liverpool/utils/log/log.dart';
+import 'package:vegan_liverpool/utils/onboard/web3Auth.dart';
 import 'package:vegan_liverpool/utils/storage.dart';
 import 'package:vegan_liverpool/utils/stripe.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -68,6 +69,8 @@ void main() async {
     );
 
     await log.connectReduxStoreToLogs();
+
+    await initWeb3Auth();
 
     //Pass the store to the Main App which injects it into the entire tree.
     final store = await reduxStore;

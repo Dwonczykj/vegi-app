@@ -1570,6 +1570,7 @@ class FirebaseStrategy implements IOnBoardStrategy {
       await rootRouter.push(const SetEmailOnboardingScreen());
     } else if (store.state.userState.phoneNumberNoCountry.isEmpty &&
         rootRouter.current.name != SignUpScreen.name) {
+      // todo : add phone submission to email signup screen to stop this bug
       log.info(
         'nextOnboardingPage push ${SignUpScreen.name} as phonenumber is empty and $currentRouteInd < ${onboardingRoutesOrder.indexOf(SignUpScreen.name)}',
         sentry: true,

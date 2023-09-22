@@ -87,8 +87,8 @@ Future<void> registerDependencies() async {
   GetIt.instance.registerFactory<NetworkInfo>(() => NetworkInfo(ic));
 
   // * other services
-
-  GetIt.instance.registerSingletonAsync<FuseSDK>(() => initWeb3Auth());
+  await initWeb3Auth();
+  // GetIt.instance.registerSingletonAsync<FuseSDK>(() => initWeb3Auth());
 
   // Future<FirebaseApp> firebaseApp => Env.isTest
   //     ? Firebase.initializeApp()

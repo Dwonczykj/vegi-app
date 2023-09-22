@@ -46,8 +46,13 @@
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:scheme="http" android:host="vegiApp.co.uk" />
+                
+                <data android:scheme="http" />
                 <data android:scheme="https" />
+                
+                <!-- Accept URIs: {YOUR_APP_PACKAGE_NAME}://* -->
+                <data android:scheme="vegi" android:host="com.vegiapp.vegi" android:path="/auth" />
+                <!-- Accept URIs: w3a://com.example.w3aflutter/auth -->
             </intent-filter>
 
         </activity>

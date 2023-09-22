@@ -180,10 +180,12 @@ class LogIt {
       if (level == LogLevel.error) {
         logMetaData.addAll({'AppState': store?.state.toJson() ?? {}});
       }
-      peeplEatsService.writeLog(
-        message: '$emoji $message',
-        details: logMetaData,
-      );
+      if (!DebugHelpers.inDebugMode) {
+        peeplEatsService.writeLog(
+          message: '$emoji $message',
+          details: logMetaData,
+        );
+      }
 
       store?.dispatch(
         AddAppLog(

@@ -107,7 +107,7 @@ class _MainScreenState extends State<MainScreen> {
         }
         if (vm.hasNotOnboarded) {
           log.info(
-            'Push OnBoardScreen() from ${rootRouter.current.name} as not onboarded',
+            'Push OnBoardScreen() from ${rootRouter.current.name} as not onboarded [${store.state.userState.hasOnboardedString}]',
             sentry: true,
           );
           rootRouter.replaceAll([const OnBoardScreen()]);

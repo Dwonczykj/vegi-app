@@ -813,6 +813,12 @@ Future<PhoneNumber?> parsePhoneDetails({
 
   final String phoneNumber0 = '${countryCode.dialCode}$phoneNoCountry';
 
+  if (phoneNoCountry == "0000000000") {
+    log.debug(
+        "parsePhoneDetails helper received the Zero phone number $phoneNoCountry");
+    return null;
+  }
+
   try {
     phoneNumber = await phoneNumberUtil.parse(
       phoneNumber0,

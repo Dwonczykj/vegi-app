@@ -151,6 +151,9 @@ class Secrets {
       dotenv.env['testPhoneNumberCountryCode']!;
   static List<String> get testPhoneNumbers =>
       dotenv.env['testPhoneNumbers']!.split(',');
+  static List<String> get testEmails => dotenv.env['testEmails']!.split(',');
+  static List<String> get testEmailPasswords =>
+      dotenv.env['testerEmailPasswords']!.split(',');
   static List<String> get testPhoneNumberE164s =>
       testPhoneNumbers.map((p) => '$testPhoneNumberCountryCode$p').toList();
   static List<String> get testFirebaseSMSVerificationCodes =>
@@ -164,8 +167,40 @@ class Secrets {
               ),
             )
           : {};
+  static Map<String, String> get testEmailByNumber =>
+      testPhoneNumbers.length == testEmails.length
+          ? Map.fromEntries(
+              testPhoneNumbers.mapIndexed(
+                (index, element) =>
+                    MapEntry(element, testEmails[index]),
+              ),
+            )
+          : {};
+  static Map<String, String> get testEmailPasswordsByNumber =>
+      testPhoneNumbers.length == testEmailPasswords.length
+          ? Map.fromEntries(
+              testPhoneNumbers.mapIndexed(
+                (index, element) =>
+                    MapEntry(element, testEmailPasswords[index]),
+              ),
+            )
+          : {};
   static String get testFirebaseSessionToken =>
       dotenv.env['testFirebaseSessionToken']!;
+
+  static bool isTestPhoneDetails({
+    required String countryCode,
+    required String phoneNumber,
+  }) =>
+      countryCode == Secrets.testPhoneNumberCountryCode &&
+      Secrets.testPhoneNumbers.contains(phoneNumber);
+
+  static bool isTestEmailCredentials({
+    required String email,
+    required String password,
+  }) =>
+      Secrets.testEmails.contains(email) &&
+      Secrets.testEmailPasswords.contains(password);
 
   static String get VEGI_SERVICE_API_KEY => dotenv.env['VEGI_SERVICE_API_KEY']!;
   static String get VEGI_SERVICE_API_SECRET =>

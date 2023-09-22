@@ -46,8 +46,7 @@ mixin _$UserState {
   String get privateKey => throw _privateConstructorUsedError;
   @JsonKey(fromJson: ethPrivateKeyFromJson, toJson: ethPrivateKeyToJson)
   EthPrivateKey? get fuseWalletCredentials =>
-      throw _privateConstructorUsedError;
-  SmartWallet? get smartWallet => throw _privateConstructorUsedError;
+      throw _privateConstructorUsedError; // @Default(null) EtherspotWallet? smartWallet,
   FuseAuthenticationStatus get fuseAuthenticationStatus =>
       throw _privateConstructorUsedError;
   FirebaseAuthenticationStatus get firebaseAuthenticationStatus =>
@@ -151,7 +150,6 @@ abstract class $UserStateCopyWith<$Res> {
       String privateKey,
       @JsonKey(fromJson: ethPrivateKeyFromJson, toJson: ethPrivateKeyToJson)
       EthPrivateKey? fuseWalletCredentials,
-      SmartWallet? smartWallet,
       FuseAuthenticationStatus fuseAuthenticationStatus,
       FirebaseAuthenticationStatus firebaseAuthenticationStatus,
       VegiAuthenticationStatus vegiAuthenticationStatus,
@@ -225,7 +223,6 @@ abstract class $UserStateCopyWith<$Res> {
       int loginCounter});
 
   $WalletModulesCopyWith<$Res>? get walletModules;
-  $SmartWalletCopyWith<$Res>? get smartWallet;
 }
 
 /// @nodoc
@@ -249,7 +246,6 @@ class _$UserStateCopyWithImpl<$Res, $Val extends UserState>
     Object? walletAddress = null,
     Object? privateKey = null,
     Object? fuseWalletCredentials = freezed,
-    Object? smartWallet = freezed,
     Object? fuseAuthenticationStatus = null,
     Object? firebaseAuthenticationStatus = null,
     Object? vegiAuthenticationStatus = null,
@@ -347,10 +343,6 @@ class _$UserStateCopyWithImpl<$Res, $Val extends UserState>
           ? _value.fuseWalletCredentials
           : fuseWalletCredentials // ignore: cast_nullable_to_non_nullable
               as EthPrivateKey?,
-      smartWallet: freezed == smartWallet
-          ? _value.smartWallet
-          : smartWallet // ignore: cast_nullable_to_non_nullable
-              as SmartWallet?,
       fuseAuthenticationStatus: null == fuseAuthenticationStatus
           ? _value.fuseAuthenticationStatus
           : fuseAuthenticationStatus // ignore: cast_nullable_to_non_nullable
@@ -618,18 +610,6 @@ class _$UserStateCopyWithImpl<$Res, $Val extends UserState>
       return _then(_value.copyWith(walletModules: value) as $Val);
     });
   }
-
-  @override
-  @pragma('vm:prefer-inline')
-  $SmartWalletCopyWith<$Res>? get smartWallet {
-    if (_value.smartWallet == null) {
-      return null;
-    }
-
-    return $SmartWalletCopyWith<$Res>(_value.smartWallet!, (value) {
-      return _then(_value.copyWith(smartWallet: value) as $Val);
-    });
-  }
 }
 
 /// @nodoc
@@ -649,7 +629,6 @@ abstract class _$$_UserStateCopyWith<$Res> implements $UserStateCopyWith<$Res> {
       String privateKey,
       @JsonKey(fromJson: ethPrivateKeyFromJson, toJson: ethPrivateKeyToJson)
       EthPrivateKey? fuseWalletCredentials,
-      SmartWallet? smartWallet,
       FuseAuthenticationStatus fuseAuthenticationStatus,
       FirebaseAuthenticationStatus firebaseAuthenticationStatus,
       VegiAuthenticationStatus vegiAuthenticationStatus,
@@ -724,8 +703,6 @@ abstract class _$$_UserStateCopyWith<$Res> implements $UserStateCopyWith<$Res> {
 
   @override
   $WalletModulesCopyWith<$Res>? get walletModules;
-  @override
-  $SmartWalletCopyWith<$Res>? get smartWallet;
 }
 
 /// @nodoc
@@ -747,7 +724,6 @@ class __$$_UserStateCopyWithImpl<$Res>
     Object? walletAddress = null,
     Object? privateKey = null,
     Object? fuseWalletCredentials = freezed,
-    Object? smartWallet = freezed,
     Object? fuseAuthenticationStatus = null,
     Object? firebaseAuthenticationStatus = null,
     Object? vegiAuthenticationStatus = null,
@@ -845,10 +821,6 @@ class __$$_UserStateCopyWithImpl<$Res>
           ? _value.fuseWalletCredentials
           : fuseWalletCredentials // ignore: cast_nullable_to_non_nullable
               as EthPrivateKey?,
-      smartWallet: freezed == smartWallet
-          ? _value.smartWallet
-          : smartWallet // ignore: cast_nullable_to_non_nullable
-              as SmartWallet?,
       fuseAuthenticationStatus: null == fuseAuthenticationStatus
           ? _value.fuseAuthenticationStatus
           : fuseAuthenticationStatus // ignore: cast_nullable_to_non_nullable
@@ -1120,7 +1092,6 @@ class _$_UserState extends _UserState with DiagnosticableTreeMixin {
       this.privateKey = '',
       @JsonKey(fromJson: ethPrivateKeyFromJson, toJson: ethPrivateKeyToJson)
       this.fuseWalletCredentials = null,
-      this.smartWallet = null,
       this.fuseAuthenticationStatus = FuseAuthenticationStatus.unauthenticated,
       this.firebaseAuthenticationStatus =
           FirebaseAuthenticationStatus.unauthenticated,
@@ -1236,9 +1207,7 @@ class _$_UserState extends _UserState with DiagnosticableTreeMixin {
   @override
   @JsonKey(fromJson: ethPrivateKeyFromJson, toJson: ethPrivateKeyToJson)
   final EthPrivateKey? fuseWalletCredentials;
-  @override
-  @JsonKey()
-  final SmartWallet? smartWallet;
+// @Default(null) EtherspotWallet? smartWallet,
   @override
   @JsonKey()
   final FuseAuthenticationStatus fuseAuthenticationStatus;
@@ -1432,7 +1401,7 @@ class _$_UserState extends _UserState with DiagnosticableTreeMixin {
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'UserState(wcURI: $wcURI, walletModules: $walletModules, installedAt: $installedAt, isContactsSynced: $isContactsSynced, scrollToTop: $scrollToTop, walletAddress: $walletAddress, privateKey: $privateKey, fuseWalletCredentials: $fuseWalletCredentials, smartWallet: $smartWallet, fuseAuthenticationStatus: $fuseAuthenticationStatus, firebaseAuthenticationStatus: $firebaseAuthenticationStatus, vegiAuthenticationStatus: $vegiAuthenticationStatus, backup: $backup, networks: $networks, mnemonic: $mnemonic, pincode: $pincode, countryCode: $countryCode, phoneNumber: $phoneNumber, phoneNumberNoCountry: $phoneNumberNoCountry, warnSendDialogShowed: $warnSendDialogShowed, isoCode: $isoCode, jwtToken: $jwtToken, displayName: $displayName, avatarUrl: $avatarUrl, avatarTempFilePath: $avatarTempFilePath, preferredSignonMethod: $preferredSignonMethod, email: $email, password: $password, verificationId: $verificationId, verificationPassed: $verificationPassed, identifier: $identifier, deviceName: $deviceName, deviceOSName: $deviceOSName, deviceReleaseName: $deviceReleaseName, appUpdateNeeded: $appUpdateNeeded, appUpdateNextVersion: $appUpdateNextVersion, appUpdateNotificationSeenForBuildNumber: $appUpdateNotificationSeenForBuildNumber, syncedContacts: $syncedContacts, reverseContacts: $reverseContacts, currency: $currency, hasUpgrade: $hasUpgrade, authType: $authType, biometricallyAuthenticated: $biometricallyAuthenticated, locale: $locale, firebaseCredentials: $firebaseCredentials, firebaseSessionToken: $firebaseSessionToken, firebaseMessagingToken: $firebaseMessagingToken, firebaseMessagingAPNSToken: $firebaseMessagingAPNSToken, vegiSessionCookie: $vegiSessionCookie, listOfDeliveryAddresses: $listOfDeliveryAddresses, hasSavedSeedPhrase: $hasSavedSeedPhrase, useLiveLocation: $useLiveLocation, userIsVerified: $userIsVerified, userLocation: $userLocation, isUsingSimulator: $isUsingSimulator, isUsingIosSimulator: $isUsingIosSimulator, initialLoginDateTime: $initialLoginDateTime, showSeedPhraseBanner: $showSeedPhraseBanner, surveyQuestions: $surveyQuestions, surveyCompleted: $surveyCompleted, surveyEmailUsed: $surveyEmailUsed, isVendor: $isVendor, stripeCustomerId: $stripeCustomerId, vegiAccountId: $vegiAccountId, vegiUserId: $vegiUserId, isTester: $isTester, isVegiSuperAdmin: $isVegiSuperAdmin, userVegiRole: $userVegiRole, positionInWaitingList: $positionInWaitingList, subscribedToWaitingListUpdates: $subscribedToWaitingListUpdates, waitingListEntryId: $waitingListEntryId, loginCounter: $loginCounter)';
+    return 'UserState(wcURI: $wcURI, walletModules: $walletModules, installedAt: $installedAt, isContactsSynced: $isContactsSynced, scrollToTop: $scrollToTop, walletAddress: $walletAddress, privateKey: $privateKey, fuseWalletCredentials: $fuseWalletCredentials, fuseAuthenticationStatus: $fuseAuthenticationStatus, firebaseAuthenticationStatus: $firebaseAuthenticationStatus, vegiAuthenticationStatus: $vegiAuthenticationStatus, backup: $backup, networks: $networks, mnemonic: $mnemonic, pincode: $pincode, countryCode: $countryCode, phoneNumber: $phoneNumber, phoneNumberNoCountry: $phoneNumberNoCountry, warnSendDialogShowed: $warnSendDialogShowed, isoCode: $isoCode, jwtToken: $jwtToken, displayName: $displayName, avatarUrl: $avatarUrl, avatarTempFilePath: $avatarTempFilePath, preferredSignonMethod: $preferredSignonMethod, email: $email, password: $password, verificationId: $verificationId, verificationPassed: $verificationPassed, identifier: $identifier, deviceName: $deviceName, deviceOSName: $deviceOSName, deviceReleaseName: $deviceReleaseName, appUpdateNeeded: $appUpdateNeeded, appUpdateNextVersion: $appUpdateNextVersion, appUpdateNotificationSeenForBuildNumber: $appUpdateNotificationSeenForBuildNumber, syncedContacts: $syncedContacts, reverseContacts: $reverseContacts, currency: $currency, hasUpgrade: $hasUpgrade, authType: $authType, biometricallyAuthenticated: $biometricallyAuthenticated, locale: $locale, firebaseCredentials: $firebaseCredentials, firebaseSessionToken: $firebaseSessionToken, firebaseMessagingToken: $firebaseMessagingToken, firebaseMessagingAPNSToken: $firebaseMessagingAPNSToken, vegiSessionCookie: $vegiSessionCookie, listOfDeliveryAddresses: $listOfDeliveryAddresses, hasSavedSeedPhrase: $hasSavedSeedPhrase, useLiveLocation: $useLiveLocation, userIsVerified: $userIsVerified, userLocation: $userLocation, isUsingSimulator: $isUsingSimulator, isUsingIosSimulator: $isUsingIosSimulator, initialLoginDateTime: $initialLoginDateTime, showSeedPhraseBanner: $showSeedPhraseBanner, surveyQuestions: $surveyQuestions, surveyCompleted: $surveyCompleted, surveyEmailUsed: $surveyEmailUsed, isVendor: $isVendor, stripeCustomerId: $stripeCustomerId, vegiAccountId: $vegiAccountId, vegiUserId: $vegiUserId, isTester: $isTester, isVegiSuperAdmin: $isVegiSuperAdmin, userVegiRole: $userVegiRole, positionInWaitingList: $positionInWaitingList, subscribedToWaitingListUpdates: $subscribedToWaitingListUpdates, waitingListEntryId: $waitingListEntryId, loginCounter: $loginCounter)';
   }
 
   @override
@@ -1448,7 +1417,6 @@ class _$_UserState extends _UserState with DiagnosticableTreeMixin {
       ..add(DiagnosticsProperty('walletAddress', walletAddress))
       ..add(DiagnosticsProperty('privateKey', privateKey))
       ..add(DiagnosticsProperty('fuseWalletCredentials', fuseWalletCredentials))
-      ..add(DiagnosticsProperty('smartWallet', smartWallet))
       ..add(DiagnosticsProperty(
           'fuseAuthenticationStatus', fuseAuthenticationStatus))
       ..add(DiagnosticsProperty(
@@ -1543,8 +1511,6 @@ class _$_UserState extends _UserState with DiagnosticableTreeMixin {
                 other.privateKey == privateKey) &&
             (identical(other.fuseWalletCredentials, fuseWalletCredentials) ||
                 other.fuseWalletCredentials == fuseWalletCredentials) &&
-            (identical(other.smartWallet, smartWallet) ||
-                other.smartWallet == smartWallet) &&
             (identical(other.fuseAuthenticationStatus, fuseAuthenticationStatus) ||
                 other.fuseAuthenticationStatus == fuseAuthenticationStatus) &&
             (identical(other.firebaseAuthenticationStatus, firebaseAuthenticationStatus) ||
@@ -1590,7 +1556,8 @@ class _$_UserState extends _UserState with DiagnosticableTreeMixin {
                 other.deviceOSName == deviceOSName) &&
             (identical(other.deviceReleaseName, deviceReleaseName) ||
                 other.deviceReleaseName == deviceReleaseName) &&
-            (identical(other.appUpdateNeeded, appUpdateNeeded) || other.appUpdateNeeded == appUpdateNeeded) &&
+            (identical(other.appUpdateNeeded, appUpdateNeeded) ||
+                other.appUpdateNeeded == appUpdateNeeded) &&
             (identical(other.appUpdateNextVersion, appUpdateNextVersion) || other.appUpdateNextVersion == appUpdateNextVersion) &&
             (identical(other.appUpdateNotificationSeenForBuildNumber, appUpdateNotificationSeenForBuildNumber) || other.appUpdateNotificationSeenForBuildNumber == appUpdateNotificationSeenForBuildNumber) &&
             const DeepCollectionEquality().equals(other.syncedContacts, syncedContacts) &&
@@ -1642,7 +1609,6 @@ class _$_UserState extends _UserState with DiagnosticableTreeMixin {
         walletAddress,
         privateKey,
         fuseWalletCredentials,
-        smartWallet,
         fuseAuthenticationStatus,
         firebaseAuthenticationStatus,
         vegiAuthenticationStatus,
@@ -1734,7 +1700,6 @@ abstract class _UserState extends UserState {
       final String privateKey,
       @JsonKey(fromJson: ethPrivateKeyFromJson, toJson: ethPrivateKeyToJson)
       final EthPrivateKey? fuseWalletCredentials,
-      final SmartWallet? smartWallet,
       final FuseAuthenticationStatus fuseAuthenticationStatus,
       final FirebaseAuthenticationStatus firebaseAuthenticationStatus,
       final VegiAuthenticationStatus vegiAuthenticationStatus,
@@ -1847,9 +1812,7 @@ abstract class _UserState extends UserState {
   @override
   @JsonKey(fromJson: ethPrivateKeyFromJson, toJson: ethPrivateKeyToJson)
   EthPrivateKey? get fuseWalletCredentials;
-  @override
-  SmartWallet? get smartWallet;
-  @override
+  @override // @Default(null) EtherspotWallet? smartWallet,
   FuseAuthenticationStatus get fuseAuthenticationStatus;
   @override
   FirebaseAuthenticationStatus get firebaseAuthenticationStatus;

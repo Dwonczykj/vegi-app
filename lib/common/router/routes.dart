@@ -73,6 +73,7 @@ class RootRouter extends $RootRouter {
     AutoRoute(page: SignUpScreen.page),
     AutoRoute(page: SignUpWithEmailAndPasswordScreen.page),
     AutoRoute(page: SignUpEmailLinkScreen.page),
+    AutoRoute(page: Web3AuthExampleLoginScreen.page),
     AutoRoute(page: SetEmailOnboardingScreen.page),
     AutoRoute(page: CreateWithEmailAndPasswordScreen.page),
     AutoRoute(page: VerifyPhoneNumber.page),

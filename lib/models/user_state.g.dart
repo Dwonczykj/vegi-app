@@ -21,9 +21,6 @@ _$_UserState _$$_UserStateFromJson(Map<String, dynamic> json) => _$_UserState(
       fuseWalletCredentials: json['fuseWalletCredentials'] == null
           ? null
           : ethPrivateKeyFromJson(json['fuseWalletCredentials']),
-      smartWallet: json['smartWallet'] == null
-          ? null
-          : SmartWallet.fromJson(json['smartWallet'] as Map<String, dynamic>),
       fuseAuthenticationStatus: $enumDecodeNullable(
               _$FuseAuthenticationStatusEnumMap,
               json['fuseAuthenticationStatus']) ??
@@ -131,7 +128,6 @@ Map<String, dynamic> _$$_UserStateToJson(_$_UserState instance) =>
       'privateKey': instance.privateKey,
       'fuseWalletCredentials':
           ethPrivateKeyToJson(instance.fuseWalletCredentials),
-      'smartWallet': instance.smartWallet?.toJson(),
       'fuseAuthenticationStatus':
           _$FuseAuthenticationStatusEnumMap[instance.fuseAuthenticationStatus]!,
       'firebaseAuthenticationStatus': _$FirebaseAuthenticationStatusEnumMap[

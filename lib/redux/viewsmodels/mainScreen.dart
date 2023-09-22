@@ -62,8 +62,7 @@ class MainScreenViewModel extends Equatable implements IAuthViewModel {
           store.state.userState.walletAddress, //.replaceFirst('x', 'f'),
       signupStatusMessage: store.state.onboardingState.signupStatusMessage,
       userIsVerified: store.state.userState.userIsVerified,
-      hasNotOnboarded: store.state.userState.hasNotOnboarded ||
-          store.state.userState.jwtToken == '',
+      hasNotOnboarded: store.state.userState.hasNotOnboarded,
       loggedInToVegi: store.state.userState.isLoggedInToVegi,
       hasLoggedInBefore: store.state.userState.hasLoggedInBefore,
       surveyCompleted: store.state.userState.surveyCompleted,

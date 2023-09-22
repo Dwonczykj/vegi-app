@@ -19,7 +19,7 @@ final userReducers = combineReducers<UserState>([
   ).call,
   TypedReducer<UserState, SetWalletConnectURI>(_setWalletConnectURI).call,
   TypedReducer<UserState, GotWalletDataSuccess>(_getWalletDataSuccess).call,
-  TypedReducer<UserState, SetSmartWalletInMemory>(_setSmartWallet).call,
+  // TypedReducer<UserState, SetSmartWalletInMemory>(_setSmartWallet).call,
   TypedReducer<UserState, SetStripeCustomerDetails>(_setStripeCustomerDetails)
       .call,
   TypedReducer<UserState, ScrollToTop>(_scrollToTop).call,
@@ -233,20 +233,20 @@ UserState _getWalletDataSuccess(
   GotWalletDataSuccess action,
 ) {
   return state.copyWith(
-    networks: action.networks,
+    // networks: action.networks,
     walletAddress: action.walletAddress,
-    walletModules: action.walletModules,
+    // walletModules: action.walletModules,
   );
 }
 
-UserState _setSmartWallet(
-  UserState state,
-  SetSmartWalletInMemory action,
-) {
-  return state.copyWith(
-    smartWallet: action.smartWallet,
-  );
-}
+// UserState _setSmartWallet(
+//   UserState state,
+//   SetSmartWalletInMemory action,
+// ) {
+//   return state.copyWith(
+//     smartWallet: action.smartWallet,
+//   );
+// }
 
 UserState _setStripeCustomerDetails(
   UserState state,
@@ -316,7 +316,7 @@ UserState _createNewWalletSuccess(
   CreateLocalAccountSuccess action,
 ) {
   return state.copyWith(
-    mnemonic: action.mnemonic,
+    // mnemonic: action.mnemonic,
     privateKey: action.privateKey,
     fuseWalletCredentials: action.fuseWalletCredentials,
     // accountAddress: action.accountAddress,

@@ -98,7 +98,7 @@ class UserState with _$UserState {
     @JsonKey(fromJson: ethPrivateKeyFromJson, toJson: ethPrivateKeyToJson)
     @Default(null)
     EthPrivateKey? fuseWalletCredentials,
-    @Default(null) SmartWallet? smartWallet,
+    // @Default(null) EtherspotWallet? smartWallet,
     @Default(FuseAuthenticationStatus.unauthenticated)
     FuseAuthenticationStatus fuseAuthenticationStatus,
     @Default(FirebaseAuthenticationStatus.unauthenticated)
@@ -258,6 +258,8 @@ class UserState with _$UserState {
       displayName.isNotEmpty &&
       email.isNotEmpty &&
       authType != BiometricAuth.none;
+  String get hasOnboardedString =>
+      'displayName: ${displayName}, email: ${email}, authType: ${authType}, ';
   bool get hasNotOnboarded => !hasOnboarded;
 
   bool get hasLoggedInBefore =>
