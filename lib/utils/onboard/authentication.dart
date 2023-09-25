@@ -908,12 +908,12 @@ class Authentication {
       store.dispatch(
         SignUpLoadingMessage(message: 'Sending SMS code to phone 🚀...'),
       );
-      if (Secrets.isTestPhoneDetails(
-        countryCode: countryCode.dialCode!,
-        phoneNumber: phoneNumber.nationalNumber,
-      )) {
-        return true;
-      }
+      // if (Secrets.isTestPhoneDetails(
+      //   countryCode: countryCode.dialCode!,
+      //   phoneNumber: phoneNumber.nationalNumber,
+      // )) {
+      //   return true;
+      // }
       await firebaseOnboarding.login(
         countryCode: countryCode,
         phoneNumber: phoneNumber,

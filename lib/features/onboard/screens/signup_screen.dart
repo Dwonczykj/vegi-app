@@ -440,24 +440,59 @@ class _SignUpScreenState extends State<SignUpScreen> {
     required MainScreenViewModel viewmodel,
   }) async {
     viewmodel.setLoading(true);
-    var phoneNumber = await parsePhoneDetails(
-      countryCode: countryCode,
-      phoneNoCountry: phoneController.text,
-    );
-    // final String phoneNumberStr = '${countryCode.dialCode}${phoneController.text}';
-    // final dummyCountryCodeDontUse = await parseCountryCode(
-    //   countryCode: countryCode.code ?? 'GB',
-    // );
-    if (phoneNumber == null) {
-      viewmodel.setLoading(false);
-      return null;
-    }
+    final store = StoreProvider.of<AppState>(context);
+    return await delayed(15000, () async {
+      if (store.state.onboardingState.signupIsInFlux) {
+        await showErrorSnack(
+          context: context,
+          title: 'Email authentication',
+          message: 'Email authentication taking too long,',
+        );
+        store.dispatch(
+          SignupLoading(isLoading: false),
+        );
+      }
+      return;
+    }, () async {
+      var phoneNumber = await parsePhoneDetails(
+        countryCode: countryCode,
+        phoneNoCountry: phoneController.text,
+      );
+      // final String phoneNumberStr = '${countryCode.dialCode}${phoneController.text}';
+      // final dummyCountryCodeDontUse = await parseCountryCode(
+      //   countryCode: countryCode.code ?? 'GB',
+      // );
+      if (phoneNumber == null) {
+        viewmodel.setLoading(false);
+        return null;
+      }
 
-    viewmodel.signin(
-      countryCode: countryCode,
-      phoneNumber: phoneNumber,
-    );
-    return null;
+      if (Secrets.isTestPhoneDetails(
+        countryCode: countryCode.dialCode!,
+        phoneNumber: phoneNumber.nationalNumber,
+      )) {
+        // viewmodel.setLoading(false);
+        store.dispatch(
+          SetPhoneNumberSuccess(
+            countryCode: countryCode,
+            phoneNumber: phoneNumber,
+          ),
+        );
+
+        final email = Secrets.testEmailByNumber[phoneNumber.nationalNumber]!;
+        final pw =
+            Secrets.testEmailPasswordsByNumber[phoneNumber.nationalNumber]!;
+        return viewmodel.signinEmailAndPassword(
+          email: email,
+          password: pw,
+        );
+      } else {
+        return viewmodel.signin(
+          countryCode: countryCode,
+          phoneNumber: phoneNumber,
+        );
+      }
+    });
   }
 
   @override
