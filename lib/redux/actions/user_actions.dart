@@ -873,7 +873,11 @@ ThunkAction<AppState> updateEmail({
         countryCodeInt = int.parse(matchFull.group(1)!);
       }
 
+      if (store.state.userState.vegiUserId == null) {
+        return;
+      }
       final errMsg = await peeplEatsService.updateUserDetails(
+        userId: store.state.userState.vegiUserId!,
         phoneNoCountry: store.state.userState.phoneNumberNoCountry,
         phoneCountryCode: countryCodeInt,
         email: email,
@@ -1263,9 +1267,13 @@ ThunkAction<AppState> getUserDetails({
         onFailed?.call();
         return;
       }
+      if (store.state.userState.vegiUserId == null) {
+        return;
+      }
       final vegiUser = await peeplEatsService.getUserDetails(
-        store.state.userState.email,
-        store.state.userState.phoneNumberNoCountry,
+        store.state.userState.vegiUserId!,
+        // store.state.userState.email,
+        // store.state.userState.phoneNumberNoCountry,
         (eStr) {
           Analytics.track(
             eventName: AnalyticsEvents.getUserForWalletAddress,
@@ -1637,7 +1645,11 @@ ThunkAction<AppState> updateDisplayNameCall(String displayName) {
     try {
       // * Do this first to avoid app breaking as load mainscreen before username is set, same for email
       store.dispatch(SetDisplayName(displayName));
+      if (store.state.userState.vegiUserId == null) {
+        return;
+      }
       final errMsg = await peeplEatsService.updateUserDetails(
+        userId: store.state.userState.vegiUserId!,
         phoneNoCountry: store.state.userState.phoneNumberNoCountry,
         phoneCountryCode: int.tryParse(store.state.userState.countryCode) ?? 44,
         name: displayName,
@@ -1663,9 +1675,13 @@ ThunkAction<AppState> updateDisplayNameCall(String displayName) {
 ThunkAction<AppState> setRandomUserAvatarIfNone() {
   return (Store<AppState> store) async {
     try {
+      if (store.state.userState.vegiUserId == null) {
+        return;
+      }
       final userDetails = await peeplEatsService.getUserDetails(
-        store.state.userState.email,
-        store.state.userState.phoneNumberNoCountry,
+        store.state.userState.vegiUserId!,
+        // store.state.userState.email,
+        // store.state.userState.phoneNumberNoCountry,
         (error) {},
       );
       if (userDetails == null) {

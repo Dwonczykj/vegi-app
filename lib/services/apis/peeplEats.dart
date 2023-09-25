@@ -364,12 +364,24 @@ class PeeplEatsService extends HttpService {
           ),
         )
         ..dispatch(
+          SetVegiUserId(
+            id: userDetails.id,
+          ),
+        )
+        ..dispatch(
           SetUserRoleOnVegi(
             userRole: userDetails.role,
             isSuperAdmin: userDetails.isSuperAdmin,
             isTester: userDetails.isTester,
           ),
         );
+      if (userDetails.email != null) {
+        (await reduxStore).dispatch(
+          SetEmail(
+            userDetails.email!,
+          ),
+        );
+      }
       if (userDetails.phoneNoCountry.isNotEmpty &&
           userDetails.phoneNoCountry.replaceAll("0", "").isNotEmpty &&
           userDetails.phoneNoCountry != "0000000000" &&
@@ -1522,15 +1534,16 @@ class PeeplEatsService extends HttpService {
   }
 
   Future<UserDTO?> getUserDetails(
-    String email,
-    String phoneNoCountry,
+    // String email,
+    // String phoneNoCountry,
+    int userId,
     void Function(String error) onError,
   ) async {
-    if (email.toLowerCase().trim().isEmpty) {
-      log.warn('Ignoring user-details request as email is blank',
-          stackTrace: StackTrace.current);
-      return null;
-    }
+    // if (email.toLowerCase().trim().isEmpty) {
+    //   log.warn('Ignoring user-details request as email is blank',
+    //       stackTrace: StackTrace.current);
+    //   return null;
+    // }
     // else if (phoneNoCountry.isEmpty ||
     //     phoneNoCountry.replaceAll("0", "").isEmpty) {
     //   log.warn('Ignoring user-details request as phone number is blank',
@@ -1542,8 +1555,9 @@ class PeeplEatsService extends HttpService {
       final Response<dynamic> response = await dioGet(
         '/api/v1/admin/user-details',
         queryParameters: {
-          'email': email.toLowerCase(),
-          'phoneNoCountry': phoneNoCountry,
+          // 'email': email.toLowerCase(),
+          // 'phoneNoCountry': phoneNoCountry,
+          'userId': userId,
         },
         sendWithAuthCreds: true,
         allowStatusCodes: [404],
@@ -1576,6 +1590,7 @@ class PeeplEatsService extends HttpService {
 
   Future<String?> updateUserDetails({
     required String phoneNoCountry,
+    required int userId,
     int phoneCountryCode = 44,
     String? email,
     String? name,
@@ -1585,6 +1600,7 @@ class PeeplEatsService extends HttpService {
     // void Function(String error)? onError,
   }) async {
     final params = <String, dynamic>{
+      'userId': userId,
       'phoneNoCountry': phoneNoCountry,
       'phoneCountryCode': phoneCountryCode,
     };

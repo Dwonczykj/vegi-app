@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -28,6 +29,11 @@ abstract class FirebaseInjectableModule {
 
   @lazySingleton
   FirebaseAnalytics get firebaseAnalytics => FirebaseAnalytics.instance;
+
+  /// Class instance singleton for cloud storage in Firebase
+  /// ~ https://firebase.google.com/docs/firestore/quickstart
+  @lazySingleton
+  FirebaseFirestore get firebaseFirestore => FirebaseFirestore.instance;
 
   @lazySingleton
   FirebaseRemoteConfig get firebaseRemoteConfig =>

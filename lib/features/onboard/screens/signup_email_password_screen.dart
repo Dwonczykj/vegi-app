@@ -166,7 +166,7 @@ class _SignUpWithEmailAndPasswordScreenState
       // );
 
       if (phoneNumber != null) {
-        viewmodel.setLoading(false);
+        // viewmodel.setLoading(false);
         store.dispatch(
           SetPhoneNumberSuccess(
             countryCode: countryCode,

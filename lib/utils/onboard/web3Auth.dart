@@ -1,6 +1,7 @@
 import 'dart:collection';
 import 'dart:io';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fuse_wallet_sdk/fuse_wallet_sdk.dart';
 import 'package:get_it/get_it.dart';
@@ -107,57 +108,109 @@ Future<void> initWeb3Auth() async {
       return;
     }
   } else {
-    // ! old auth not accepted any longer as of commit e529d93cd2965ac96623c69da67f30e162f14677
-    throw UnimplementedError(
-        'Application error: Web3Auth is only accepted methodology');
+    // do nothing as using backup firebase cloud store
+    // TODO:  Cloud Store init goes here
   }
   return;
 }
 
 /// The function retrieves a JWT token from Firebase and returns a Web3AuthResponse.
 /// ~ https://web3auth.io/docs/content-hub/guides/firebase
-Future<Web3AuthResponse> defiAuthenticate({
+Future<void> defiAuthenticate({
   required UserCredential credential,
 }) async {
-  final idToken = (await credential.user?.getIdToken(true)).toString();
-  final response = await Web3AuthFlutter.login(LoginParams(
-      mfaLevel: MFALevel.NONE,
-      loginProvider: Provider.jwt,
-      extraLoginOptions: ExtraLoginOptions(
-        id_token: idToken, // * key Firebase JWT Token here
-        verifierIdField: "sub", // same as your JWT Verifier ID
-        domain: 'com.vegiapp.vegi',
-      )));
+  late final String privateKey;
   final store = await reduxStore;
-  store.dispatch(SignupLoading(isLoading: false));
-  if (!GetIt.instance.isRegistered<FuseSDK>()) {
+  if (AppConfig.useWeb3Auth) {
+    final idToken = (await credential.user?.getIdToken(true)).toString();
+    final response = await Web3AuthFlutter.login(LoginParams(
+        mfaLevel: MFALevel.NONE,
+        loginProvider: Provider.jwt,
+        extraLoginOptions: ExtraLoginOptions(
+          id_token: idToken, // * key Firebase JWT Token here
+          verifierIdField: "sub", // same as your JWT Verifier ID
+          domain: 'com.vegiapp.vegi',
+        )));
+    store.dispatch(SignupLoading(isLoading: false));
     // final prefs = await SharedPreferences.getInstance();
     // await prefs.setString('privateKey', response.privKey.toString());
-    final privateKey = response.privKey.toString();
-    final credentials = EthPrivateKey.fromHex(privateKey);
-    final fuseSDK = await FuseSDK.init(
-      Secrets.FUSE_WALLET_SDK_PUBLIC_KEY,
-      credentials,
-    );
-    GetIt.instance.registerSingleton<FuseSDK>(fuseSDK);
-    store
-      ..dispatch(CreateLocalAccountSuccess(
-        // mnemonicStr.split(' '),
-        privateKey,
-        credentials,
-        // accountAddress.toString(),
-      ));
-    try {
-      await _emitWallet(fuseSDK.wallet);
-    } on Exception catch (e, s) {
+    privateKey = response.privKey.toString();
+  } else {
+    // Define the read rules
+    // ~ https://firebase.google.com/docs/firestore/solutions/role-based-access#rules
+
+    // ~ https://firebase.google.com/docs/firestore/query-data/get-data#dart
+
+    final uid = firebaseAuth.currentUser?.uid;
+    if (uid == null) {
       log.error(
-        'Unable to fetch smartWallet: $e',
-        error: e,
+          'Firebase uid is null as no firebase user logged in. Should always be logged in to init web3auth.');
+      throw Exception(
+          'Firebase uid is null as no firebase user logged in. Should always be logged in to init web3auth.');
+    }
+    late final String mn;
+    try {
+      final docRef = firebaseFirestore
+          .collection(Secrets.FIREBASE_USER_DETAILS_COLLECTION_ID)
+          .doc(uid);
+      final doc = await docRef.get();
+      if (doc.exists == false) {
+        mn = Mnemonic.generate();
+        docRef.set(<String, dynamic>{
+          Secrets.FIREBASE_USER_DETAILS_COLLECTION_FIELD1: mn,
+        });
+        log.debug("Successfully created new backup for wallet: \"${mn}\"");
+      } else {
+        final data = doc.data() as Map<String, dynamic>;
+        mn = data[Secrets.FIREBASE_USER_DETAILS_COLLECTION_FIELD1];
+        log.debug("Successfully retrieved backup for wallet: \"${mn}\"");
+      }
+    } on Exception catch (e, s) {
+      // TODO
+      log.error(
+        "Error getting ud doc from firebase for logged in user: \"$uid\" with error: $e",
         stackTrace: s,
       );
+      return;
     }
+
+    privateKey = Mnemonic.privateKeyFromMnemonic(mn);
+    log.debug("Save privateKey: : \"${privateKey}\"");
   }
-  return response;
+  try {
+    if (!GetIt.instance.isRegistered<FuseSDK>()) {
+      final credentials = EthPrivateKey.fromHex(privateKey);
+      final fuseSDK = await FuseSDK.init(
+        Secrets.FUSE_WALLET_SDK_PUBLIC_KEY,
+        credentials,
+      );
+      GetIt.instance.registerSingleton<FuseSDK>(fuseSDK);
+      store
+        ..dispatch(CreateLocalAccountSuccess(
+          // mnemonicStr.split(' '),
+          privateKey,
+          credentials,
+          // accountAddress.toString(),
+        ));
+    }
+  } on Exception catch (e, s) {
+    log.error(
+      'Unable to init fuseSDK smart wallet: $e',
+      error: e,
+      stackTrace: s,
+    );
+  }
+  try {
+    final fuseSDK = fuseWalletSDK;
+    await _emitWallet(fuseSDK.wallet);
+  } on Exception catch (e, s) {
+    log.error(
+      'Unable to emit fuseSDK smartWallet: $e',
+      error: e,
+      stackTrace: s,
+    );
+  }
+  return;
 }
 
 Future<void> _emitWallet(EtherspotWallet userWallet) async {

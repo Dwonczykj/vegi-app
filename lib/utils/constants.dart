@@ -118,6 +118,11 @@ class Secrets {
   static String get VEGI_ESC_BACKEND => dotenv.env['VEGI_ESC_BACKEND']!;
 
   static String get CHARGE_API_KEY => dotenv.env['CHARGE_API_KEY']!;
+  
+  static String get FIREBASE_USER_DETAILS_COLLECTION_ID => dotenv.env['FIREBASE_USER_DETAILS_COLLECTION_ID']!;
+  static String get FIREBASE_USER_DETAILS_COLLECTION_FIELD1 => dotenv.env['FIREBASE_USER_DETAILS_COLLECTION_FIELD1']!;
+  static String get FIREBASE_USER_DETAILS_COLLECTION_FIELD2 => dotenv.env['FIREBASE_USER_DETAILS_COLLECTION_FIELD2']!;
+
   static String get FUSE_WALLET_SDK_PUBLIC_KEY =>
       dotenv.env['FUSE_WALLET_SDK_PK']!;
   static String? get FUSE_WALLET_SDK_PRIVATE_CREDENTIAL_FOR_UNIT_TEST_ONLY =>

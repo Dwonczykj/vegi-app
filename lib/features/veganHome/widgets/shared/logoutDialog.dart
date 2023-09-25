@@ -6,6 +6,7 @@ import 'package:vegan_liverpool/constants/analytics_events.dart';
 import 'package:vegan_liverpool/features/shared/widgets/primary_button.dart';
 import 'package:vegan_liverpool/models/app_state.dart';
 import 'package:vegan_liverpool/redux/actions/user_actions.dart';
+import 'package:vegan_liverpool/services.dart';
 import 'package:vegan_liverpool/utils/analytics.dart';
 
 class LogoutDialog extends StatefulWidget {
@@ -56,7 +57,7 @@ class _LogoutDialogState extends State<LogoutDialog>
             Analytics.track(eventName: AnalyticsEvents.logout);
           }
           context.router.pop();
-          context.router.push(const ShowUserMnemonicScreen());
+          authenticator.logout();
         };
       },
       builder: (_, viewmodel) {
@@ -73,22 +74,22 @@ class _LogoutDialogState extends State<LogoutDialog>
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   const Text(
-                    'Please save your seed phrase before logging out!',
+                    'Are you sure you would like to logout?',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 25,
                       fontWeight: FontWeight.w800,
                     ),
                   ),
-                  const SizedBox(height: 20),
-                  const Text(
-                    'Your seed phrase can be found in the'
-                    ' Account section. See you soon 👋',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 20,
-                    ),
-                  ),
+                  // const SizedBox(height: 20),
+                  // const Text(
+                  //   'Your seed phrase can be found in the'
+                  //   ' Account section. See you soon 👋',
+                  //   textAlign: TextAlign.center,
+                  //   style: TextStyle(
+                  //     fontSize: 20,
+                  //   ),
+                  // ),
                   const SizedBox(height: 20),
                   PrimaryButton(onPressed: () => logout(), label: 'Logout')
                 ],

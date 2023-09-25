@@ -228,7 +228,7 @@ class Authentication {
     } else if (loginDetails is EmailLoginDetails) {
       if (store.state.userState.email.trim().toLowerCase() !=
           loginDetails.email.trim().toLowerCase()) {
-        store.dispatch(ResetPhoneNumber());
+        // store.dispatch(ResetPhoneNumber());
       }
     }
 
@@ -470,8 +470,11 @@ class Authentication {
     if (rootRouter.current.name.toLowerCase().contains('dialog')) {
       await rootRouter.pop();
     }
-    await rootRouter.push(const ShowUserMnemonicScreen());
+    // await rootRouter.push(const ShowUserMnemonicScreen());
     store.dispatch(SignupLoading(isLoading: false));
+    store.dispatch(logoutRequest());
+    rootRouter.replace(const OnBoardScreen());
+    Analytics.track(eventName: AnalyticsEvents.logout);
     return;
   }
 
@@ -627,6 +630,11 @@ class Authentication {
         );
         return false;
       }
+      // if ((userCredential.user?.phoneNumber ?? '').isEmpty ||
+      //     userCredential.user?.phoneNumber! !=
+      //         store.state.userState.phoneNumberE164) {
+      //   userCredential.user?.updatePhoneNumber(phoneCredential)
+      // }
       //vegi login
       final firebaseSessionToken =
           await _getFirebaseSessionToken(userCredential: userCredential);
