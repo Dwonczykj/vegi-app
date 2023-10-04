@@ -6,23 +6,25 @@ part 'transaction_item.freezed.dart';
 part 'transaction_item.g.dart';
 
 List<TransactionItem> fromJsonTransactionItemList(dynamic json) =>
-  fromSailsListOfObjectJson<TransactionItem>(TransactionItem.fromJson)(json);
+    fromSailsListOfObjectJson<TransactionItem>(TransactionItem.fromJson)(json);
 TransactionItem? fromJsonTransactionItem(dynamic json) =>
-  fromSailsObjectJson<TransactionItem>(TransactionItem.fromJson)(json);
-
+    fromSailsObjectJson<TransactionItem>(TransactionItem.fromJson)(json);
 
 @Freezed()
 class TransactionItem with _$TransactionItem {
   @JsonSerializable()
   factory TransactionItem({
-    @JsonKey(fromJson: jsonToTimeStamp,
+    int? id,
+    @JsonKey(
+      fromJson: jsonToTimeStamp,
       toJson: timeStampToJsonInt,
-    ) required DateTime timestamp,
+    )
+    required DateTime timestamp,
     required num amount,
     required Currency currency,
     @JsonKey(fromJson: objectIdFromJson) required int receiver,
     @JsonKey(fromJson: objectIdFromJson) required int payer,
-    @JsonKey(fromJson: objectIdFromJson) required int order,
+    @JsonKey(fromJson: objectIdFromJsonNullable) required int? order,
   }) = _TransactionItem;
 
   const TransactionItem._();

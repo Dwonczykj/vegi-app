@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 import 'package:dio/dio.dart';
@@ -10,6 +11,7 @@ import 'package:redux/redux.dart';
 import 'package:redux_thunk/redux_thunk.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:vegan_liverpool/common/di/di.dart';
+import 'package:vegan_liverpool/common/di/env.dart';
 import 'package:vegan_liverpool/constants/analytics_events.dart';
 import 'package:vegan_liverpool/constants/analytics_props.dart';
 import 'package:vegan_liverpool/constants/enums.dart';
@@ -39,6 +41,7 @@ import 'package:vegan_liverpool/models/restaurant/restaurantItem.dart';
 import 'package:vegan_liverpool/models/restaurant/restaurantMenuItem.dart';
 import 'package:vegan_liverpool/models/restaurant/time_slot.dart';
 import 'package:vegan_liverpool/models/waitingListFunnel/waitingListEntry.dart';
+import 'package:vegan_liverpool/redux/actions/cash_wallet_actions.dart';
 import 'package:vegan_liverpool/redux/actions/esc_actions.dart';
 import 'package:vegan_liverpool/redux/actions/home_page_actions.dart';
 import 'package:vegan_liverpool/redux/actions/user_actions.dart';
@@ -48,6 +51,7 @@ import 'package:vegan_liverpool/redux/viewsmodels/signUpErrorDetails.dart';
 import 'package:vegan_liverpool/services.dart';
 import 'package:vegan_liverpool/utils/analytics.dart';
 import 'package:vegan_liverpool/utils/constants.dart';
+import 'package:vegan_liverpool/utils/format.dart';
 import 'package:vegan_liverpool/utils/log/log.dart';
 
 class UpdateCartItems {
@@ -233,17 +237,20 @@ class UpdateComputedCartValues {
     this.cartSubTotal,
     this.cartTax,
     this.cartTotal,
+    this.cartTotalWithoutGBTRewards,
     this.cartDiscountComputed,
   );
   final Money cartSubTotal;
   final Money cartTax;
   final Money cartTotal;
   final Money cartDiscountComputed;
+  final Money cartTotalWithoutGBTRewards;
 
   @override
   String toString() {
     return 'UpdateComputedCartValues : CartSubTotal: $cartSubTotal, '
         'cartTax: $cartTax, cartTotal: $cartTotal, '
+        'cartTotalWithoutGBTRewards: $cartTotalWithoutGBTRewards, '
         'cartDiscountComputed: $cartDiscountComputed';
   }
 }
@@ -439,6 +446,19 @@ class UpdateSelectedAmounts {
   String toString() {
     return 'UpdateSelectedAmounts : GBPxAmount: $gbpxAmount,'
         'PPLAmount:$pplAmount';
+  }
+}
+
+class UpdateSelectedCashBackAppliedToCart {
+  UpdateSelectedCashBackAppliedToCart({
+    required this.applyCashBack,
+  });
+
+  final Money applyCashBack;
+
+  @override
+  String toString() {
+    return 'UpdateSelectedCashBackAppliedToCart : applyCashBack:"$applyCashBack"';
   }
 }
 
@@ -686,6 +706,62 @@ ThunkAction<AppState> getEligibleOrderDates() {
         e,
         stackTrace: s,
       );
+    }
+  };
+}
+
+ThunkAction<AppState> resetCashbackAmountSelected() {
+  return (Store<AppState> store) async {
+    try {
+      final gbtBalance = store.state.cashWalletState
+          .tokens[TokenDefinitions.greenBeanToken.address]!
+          .getBalanceMoney();
+      store.dispatch(
+        UpdateSelectedCashBackAppliedToCart(
+          applyCashBack: Money(
+            currency: gbtBalance.currency,
+            value: getGBTValueFromPounds(
+                getPoundValueFromGBT(gbtBalance.value).floor()),
+          ),
+        ),
+      );
+    } catch (e, s) {
+      log.error('ERROR - resetCashbackAmountSelected $e', stackTrace: s);
+    }
+  };
+}
+
+ThunkAction<AppState> selectCashbackToApplyToCart({
+  required num intAbsoluteValueGBT,
+}) {
+  return (Store<AppState> store) async {
+    try {
+      final existingBalance = store.state.cashWalletState
+          .tokens[TokenDefinitions.greenBeanToken.address]!
+          .getBalanceMoney();
+      final floorAbsValueGBT = getGBTValueFromPounds(
+              getPoundValueFromGBT(intAbsoluteValueGBT).floor())
+          .floor();
+      late final int applyCashBack;
+      if (floorAbsValueGBT > existingBalance.value || floorAbsValueGBT < 0) {
+        applyCashBack = getGBTValueFromPounds(
+                getPoundValueFromGBT(existingBalance.value).floor())
+            .floor();
+      } else {
+        applyCashBack = floorAbsValueGBT;
+      }
+      store
+        ..dispatch(
+          UpdateSelectedCashBackAppliedToCart(
+            applyCashBack: Money(
+              currency: Currency.GBT,
+              value: applyCashBack,
+            ),
+          ),
+        )
+        ..dispatch(computeCartTotals());
+    } catch (e, s) {
+      log.error('ERROR - selectCashbackToApplytToCart $e', stackTrace: s);
     }
   };
 }
@@ -949,6 +1025,58 @@ ThunkAction<AppState> spendVoucherPot({
         e,
         stackTrace: s,
       );
+    }
+  };
+}
+
+ThunkAction<AppState> acceptVoucher({
+  required String newDiscountCode,
+  void Function()? successCallback,
+  void Function()? errorCallback,
+}) {
+  return (Store<AppState> store) async {
+    store.dispatch(resetOrderCreationProcessStatus());
+    try {
+      if (store.state.userState.vegiAccountId == null) {
+        log.warn(
+            'Can\'t update cart discount without having a vegi account id');
+        return;
+      }
+      final discountCodeAccepted = await peeplEatsService
+          .acceptDiscountCode(
+        discountCode: newDiscountCode,
+        vegiAccountId: store.state.userState.vegiAccountId!,
+      )
+          .onError(
+        (error, stackTrace) {
+          errorCallback?.call();
+          return null;
+        },
+      );
+
+      if (discountCodeAccepted != null &&
+          discountCodeAccepted.codeAcceptanceStatus ==
+              DiscountCodeAcceptanceStatus.accepted) {
+        if (discountCodeAccepted.discount!.discountType ==
+            DiscountType.percentage) {
+          store
+            ..dispatch(UpdateCartDiscount(
+                discountCodeAccepted.discount!.value.round(), newDiscountCode))
+            ..dispatch(computeCartTotals());
+        } else {
+          // ! dont add fixed discounts as lines in discount on checkout screen as we just discount the entire GBT balance line on checkout screen
+          store.dispatch(fetchTokenBalancesOnce());
+          // ..dispatch(computeCartTotals());
+        }
+
+        successCallback?.call();
+      }
+    } catch (e, s) {
+      log.error(
+        'ERROR - acceptVoucher $e',
+        stackTrace: s,
+      );
+      errorCallback?.call();
     }
   };
 }
@@ -1913,7 +2041,8 @@ ThunkAction<AppState> sendOrderObject<T extends CreateOrderForFulfilment>({
           'value':
               num.tryParse(paymentIntent.metadata['amount'] as String) ?? 0.0,
         });
-        if (paymentIntentAmount.compareTo(store.state.cartState.cartTotal) !=
+        if (paymentIntentAmount
+                .compareTo(store.state.cartState.cartTotalWithoutGBTRewards) !=
             0) {
           store
             ..dispatch(
@@ -2134,7 +2263,7 @@ ThunkAction<AppState> startPaymentProcess({
             eventName: AnalyticsEvents.payStripe,
           ),
         );
-        final paymentIntentID = store.state.cartState.paymentIntentID;
+        // final paymentIntentID = store.state.cartState.paymentIntentID;
         if (store.state.userState.vegiAccountId == null) {
           const e = 'vegi AccountId not set on state... Cannot start payment';
           log.error(e, stackTrace: StackTrace.current);
@@ -2185,6 +2314,7 @@ ThunkAction<AppState> startPaymentProcess({
           return;
         }
         final orderId = int.parse(store.state.cartState.orderID);
+        // todo check that amount is correct after cash back has been discounted
         await (stripeService
               ..setTestMode(isTester: store.state.userState.isTester))
             .handleStripeCardPayment(
@@ -2200,7 +2330,7 @@ ThunkAction<AppState> startPaymentProcess({
           shouldPushToHome: true,
         )
             .then(
-          (value) {
+          (value) async {
             if (!value) {
               store.dispatch(
                 SetConfirmed(
@@ -2210,6 +2340,41 @@ ThunkAction<AppState> startPaymentProcess({
               );
               return;
             }
+            // store
+            //   ..dispatch(
+            //     UpdateSelectedAmounts(
+            //       gbpxAmount:
+            //           store.state.cartState.cartTotal.inGBPxValue.toDouble(),
+            //       pplAmount: 0,
+            //     ),
+            //   );
+            // ..dispatch(
+            //   startTokenPaymentToRestaurant(),
+            // );
+
+            await sendGBTToAddress(
+              sendToAddress: store.state.cartState.restaurantWalletAddress,
+              amountTokens: store.state.cartState.selectedCashBackAppliedToCart
+                  .inCcy(Currency.GBT)
+                  .value,
+            );
+
+            store.dispatch(subscribeToOrderUpdates());
+
+            if (Env.isDev && DebugHelpers.inDebugMode) {
+              try {
+                await peeplEatsService.updateOrderStatus(
+                  orderId: int.parse(store.state.cartState.orderID),
+                  paymentStatus: PaymentStatus.succeeded,
+                );
+              } catch (e, s) {
+                log.error(
+                  'ERROR - startPaymentProcess when making call to peeplEatsService.updateOrderStatus $e',
+                  stackTrace: s,
+                );
+              }
+            }
+            
             unawaited(
               Analytics.track(
                 eventName: AnalyticsEvents.payStripe,
@@ -2218,7 +2383,6 @@ ThunkAction<AppState> startPaymentProcess({
                 },
               ),
             );
-            store.dispatch(subscribeToOrderUpdates());
           },
         );
       } else if (store.state.cartState.selectedPaymentMethod ==
@@ -2435,7 +2599,7 @@ ThunkAction<AppState> startPaymentProcess({
           productName: Labels.stripeVegiProductName,
         )
             .then(
-          (value) {
+          (value) async {
             if (!value) {
               store
                 ..dispatch(SetPaymentButtonFlag(false))
@@ -2476,7 +2640,26 @@ ThunkAction<AppState> startPaymentProcess({
                 },
               ),
             );
+            await sendGBTToAddress(
+              sendToAddress: store.state.cartState.restaurantWalletAddress,
+              amountTokens: store.state.cartState.selectedCashBackAppliedToCart
+                  .inCcy(Currency.GBT)
+                  .value,
+            );
             store.dispatch(subscribeToOrderUpdates());
+            if (Env.isDev && DebugHelpers.inDebugMode) {
+              try {
+                await peeplEatsService.updateOrderStatus(
+                  orderId: int.parse(store.state.cartState.orderID),
+                  paymentStatus: PaymentStatus.succeeded,
+                );
+              } catch (e, s) {
+                log.error(
+                  'ERROR - startPaymentProcess when making call to peeplEatsService.updateOrderStatus $e',
+                  stackTrace: s,
+                );
+              }
+            }
           },
         ).catchError((dynamic error) {
           if (error is Exception) {
@@ -2547,7 +2730,7 @@ ThunkAction<AppState> startPaymentProcess({
           productName: Labels.stripeVegiProductName,
         )
             .then(
-          (value) {
+          (value) async {
             if (!value) {
               store
                 ..dispatch(SetPaymentButtonFlag(false))
@@ -2588,7 +2771,26 @@ ThunkAction<AppState> startPaymentProcess({
                 },
               ),
             );
+            await sendGBTToAddress(
+              sendToAddress: store.state.cartState.restaurantWalletAddress,
+              amountTokens: store.state.cartState.selectedCashBackAppliedToCart
+                  .inCcy(Currency.GBT)
+                  .value,
+            );
             store.dispatch(subscribeToOrderUpdates());
+            if (Env.isDev && DebugHelpers.inDebugMode) {
+              try {
+                await peeplEatsService.updateOrderStatus(
+                  orderId: int.parse(store.state.cartState.orderID),
+                  paymentStatus: PaymentStatus.succeeded,
+                );
+              } catch (e, s) {
+                log.error(
+                  'ERROR - startPaymentProcess when making call to peeplEatsService.updateOrderStatus $e',
+                  stackTrace: s,
+                );
+              }
+            }
           },
         ).catchError((dynamic error) {
           throw Exception('Google Pay Failed - $error');
@@ -2826,82 +3028,233 @@ ThunkAction<AppState> startPaymentProcess({
   };
 }
 
-ThunkAction<AppState> startPeeplPayProcess() {
-  return (Store<AppState> store) async {
-    try {
-      if (store.state.userState.vegiAccountId == null) {
-        const e = 'vegi AccountId not set on state... Cannot start payment';
-        log.error(
-          e,
-          stackTrace: StackTrace.current,
-        );
-      } else if (store.state.userState.stripeCustomerId == null) {
-        const e = 'stripe customer id not set on state... Cannot start payment';
-        log.error(
-          e,
-          stackTrace: StackTrace.current,
-        );
-      }
+// ThunkAction<AppState> startPeeplPayProcess() {
+//   return (Store<AppState> store) async {
+//     try {
+//       if (store.state.userState.vegiAccountId == null) {
+//         const e = 'vegi AccountId not set on state... Cannot start payment';
+//         log.error(
+//           e,
+//           stackTrace: StackTrace.current,
+//         );
+//       } else if (store.state.userState.stripeCustomerId == null) {
+//         const e = 'stripe customer id not set on state... Cannot start payment';
+//         log.error(
+//           e,
+//           stackTrace: StackTrace.current,
+//         );
+//       }
 
-      // TODO: REDO this method to use FUSE tech but using FUSE USD and GBT if using rewards.
-      final double currentGBPXAmount =
-          store.state.cashWalletState.tokens[gbpxToken.address]!.getAmount();
+//       // TODO: REDO this method to use FUSE tech but using FUSE USD and GBT if using rewards.
+//       final double currentGBPXAmount = store
+//           .state.cashWalletState.tokens[gbpxToken.address]!
+//           .getAmountTokens();
 
-      final double selectedGBPXAmount =
-          store.state.cartState.selectedGBPxAmount;
+//       final double selectedGBPXAmount =
+//           store.state.cartState.selectedGBPxAmount;
 
-      final hasSufficientGbpxBalance =
-          selectedGBPXAmount.compareTo(currentGBPXAmount) < 0;
+//       final hasSufficientGbpxBalance =
+//           selectedGBPXAmount.compareTo(currentGBPXAmount) < 0;
 
-      if (hasSufficientGbpxBalance) {
-        store.dispatch(startTokenPaymentToRestaurant());
-      } else {
-        // ! This is a topup call
-        await (stripeService
-              ..setTestMode(isTester: store.state.userState.isTester))
-            .handleStripeTopupForMintingCryptoByCard(
-          recipientWalletAddress: store.state.userState.walletAddress,
-          senderWalletAddress: store.state.userState.walletAddress,
-          orderId: int.parse(store.state.cartState.orderID),
-          accountId: store.state.userState.vegiAccountId!,
-          stripeCustomerId: store.state.userState.stripeCustomerId!,
-          amount: Money(
-            currency: Currency.GBP,
-            value: selectedGBPXAmount, // this is actually a GBP value.
-          ),
-          store: store,
-          shouldPushToHome: false,
-        )
-            .then(
-          (value) {
-            if (!value) {
-              store.dispatch(SetTransferringPayment(flag: value));
-              return;
-            }
-            store.dispatch(
-              startTokenPaymentToRestaurant(),
-            );
-          },
-        );
-      }
-    } catch (e, s) {
-      store
-        ..dispatch(SetPaymentButtonFlag(false))
-        ..dispatch(
-          SetIsLoadingHttpRequest(
-            isLoading: false,
-          ),
-        );
-      log.error(
-        'ERROR - startPeeplPayProcess [$e]',
-        stackTrace: s,
+//       if (hasSufficientGbpxBalance) {
+//         store.dispatch(startTokenPaymentToRestaurant());
+//       } else {
+//         // ! This is a topup call
+//         await (stripeService
+//               ..setTestMode(isTester: store.state.userState.isTester))
+//             .handleStripeTopupForMintingCryptoByCard(
+//           recipientWalletAddress: store.state.userState.walletAddress,
+//           senderWalletAddress: store.state.userState.walletAddress,
+//           orderId: int.parse(store.state.cartState.orderID),
+//           accountId: store.state.userState.vegiAccountId!,
+//           stripeCustomerId: store.state.userState.stripeCustomerId!,
+//           amount: Money(
+//             currency: Currency.GBP,
+//             value: selectedGBPXAmount, // this is actually a GBP value.
+//           ),
+//           store: store,
+//           shouldPushToHome: false,
+//         )
+//             .then(
+//           (value) {
+//             if (!value) {
+//               store.dispatch(SetTransferringPayment(flag: value));
+//               return;
+//             }
+//             store.dispatch(
+//               startTokenPaymentToRestaurant(),
+//             );
+//           },
+//         );
+//       }
+//     } catch (e, s) {
+//       store
+//         ..dispatch(SetPaymentButtonFlag(false))
+//         ..dispatch(
+//           SetIsLoadingHttpRequest(
+//             isLoading: false,
+//           ),
+//         );
+//       log.error(
+//         'ERROR - startPeeplPayProcess [$e]',
+//         stackTrace: s,
+//       );
+//     }
+//   };
+// }
+
+Future<bool> sendGBTToAddress({
+  required String sendToAddress,
+  required num amountTokens,
+}) async {
+  final store = await reduxStore;
+  try {
+    //Set loading to true
+    store
+      ..dispatch(SetTransferringPayment(flag: true))
+      ..dispatch(SetPaymentButtonFlag(false))
+      ..dispatch(
+        SetIsLoadingHttpRequest(
+          isLoading: false,
+        ),
       );
+
+    final currentGBTBalance = store
+        .state.cashWalletState.tokens[TokenDefinitions.greenBeanToken.address]!
+        .getBalanceMoney();
+
+    //TODO: Rename these values to include WEI if they are in WEI units after debugging.
+
+    // final bool isGBPXSelected = selectedGBPXAmount.compareTo(BigInt.zero) > 0;
+    final bool isGBTSelected = amountTokens > 0;
+
+    // Map<String, dynamic> gbpxResponse = {};
+    String gbtResponse = "";
+    FilterEvent? event;
+    if (isGBTSelected) {
+      if (currentGBTBalance.compareTo(amountTokens) > 0) {
+        final amountWEI = Formatter.toAmountWEI(
+          amountTokens,
+          token: TokenDefinitions.greenBeanToken,
+        );
+
+        // TODO: Before Transferring a token: we need to create the draft transaction on the backend so that we have a log of the transaction and a placeholder to then post again when payment completes to update that transaction. We get the transactionId back from server here for new transaction and use it to update that same transaction when the payment completes.
+        final newDraftTransaction =
+            await peeplEatsService.createFusePaymentIntent(
+          amountTokens: amountTokens,
+          payerWalletAddress: fuseWalletSDK.wallet.getSender(),
+          receiverWalletAddress: sendToAddress,
+          orderId: store.state.cartState.order?.id ?? -1,
+        );
+        final fuseSDK = await fuseWalletSDK;
+        // ! type 'Null' is not a subtype of type 'int' in type cast
+        ISendUserOperationResponse? res;
+        try {
+          final from =
+              EthereumAddress.fromHex(TokenDefinitions.greenBeanToken.address);
+          final to = EthereumAddress.fromHex(sendToAddress);
+          res = await fuseSDK.transferToken(
+            from, // For sending native token, use '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE'
+            to, // store.state.cartState.restaurantWalletAddress
+            amountWEI,
+            // ~ https://pub.dev/packages/fuse_wallet_sdk#troubleshooting
+            FuseSDK.defaultTxOptions,
+          );
+          log.debug('UserOpHash: ${res.userOpHash}');
+          log.debug('Waiting for transaction...');
+          event = await res.wait();
+          log.debug('transactionHash "${event?.transactionHash}"');
+          gbtResponse = event?.data ??
+              ''; // ~ https://explorer.fuse.io/tx/0x0d4166feb0825a735dcf52960e87edc58ddfaf2c75a0005d25ca43aad27f5695
+          // event.data.
+        } catch (e, s) {
+          // TODO
+          log.error(
+              'cart_actions.sendGBTToAddress fuseSDK.transferToken failed with error: "$e" on $s');
+          log.error(e, stackTrace: s);
+        }
+        if (res == null) {
+          try {
+            res = await fuseSDK.transferToken(
+              EthereumAddress.fromHex(TokenDefinitions.greenBeanToken
+                  .address), // For sending native token, use '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE'
+              EthereumAddress.fromHex(
+                  sendToAddress), // store.state.cartState.restaurantWalletAddress
+              amountWEI,
+              // ~ https://pub.dev/packages/fuse_wallet_sdk#troubleshooting
+              FuseSDK.defaultTxOptions.copyWith(
+                feePerGas: '2000000',
+                withRetry: true,
+                feeIncrementPercentage: 11,
+              ),
+            );
+            log.debug('UserOpHash: ${res.userOpHash}');
+            log.debug('Waiting for transaction...');
+            final event = await res.wait();
+            log.debug('transactionHash "${event?.transactionHash}"');
+            gbtResponse = event?.data ?? '';
+          } catch (e, s) {
+            // TODO
+            log.error(e, stackTrace: s);
+          }
+        }
+        if (gbtResponse.isEmpty) {
+          log.error('Fuse GBT Transaction Response was empty!');
+        } else if (newDraftTransaction == null) {
+          log.error(
+              'vegi backend Response was empty and did not create a transaction!');
+        } else {
+          //todo: json decode the gbt respose and get the remote job id and status from in it.
+          final web3TransactionData = decodeHex(gbtResponse);
+
+          await peeplEatsService.updateTransaction(
+            transactionId: newDraftTransaction.id ?? -1,
+            remoteJobId: event?.transactionHash ?? '',
+            // remoteJobId: web3TransactionData['remoteJobId'],
+            orderId: store.state.cartState.order?.id ?? -1,
+            // todo: fix this by adding a watch handler
+            status: event != null ? 'success' : 'failed',
+            // status: web3TransactionData['status'], // pending,
+          );
+        }
+      } else {
+        throw Exception(
+            'Did not complete payment to restaurant for order as failed to send token value.');
+      }
     }
-  };
+
+    if (isGBTSelected && gbtResponse.isEmpty) {
+      throw Exception('Error transferring GBT token: $gbtResponse');
+    }
+    log
+      // ..info('gbpxResponse: $gbpxResponse')
+      ..info('gbtResponse: $gbtResponse');
+
+    // Check order status on backend periodically until paid.
+    store.dispatch(startPaymentConfirmationCheck());
+
+    return true;
+  } catch (e, s) {
+    unawaited(
+      Analytics.track(
+        eventName: AnalyticsEvents.payment,
+        properties: {
+          'status': 'failure',
+        },
+      ),
+    );
+    store.dispatch(SetError(flag: true));
+    log.error('ERROR - sendGBTToAddress $e', stackTrace: s);
+    return false;
+  }
 }
 
 ThunkAction<AppState> startTokenPaymentToRestaurant() {
   return (Store<AppState> store) async {
+    //TODO: Move this to its own transfer function that takes amount, receiver, payer is this wallet, and return a bool etc
+    // TODO: if token transfer fails then add cash value to payment and then state unable to fund token balance at this time the payment
+    // TODO: Ensure the transcation added on backend for restaurant reflects the discounted value sent due to cash back.
+    // TODO: or better, subscribe to fuse notifications from backend and then flag the order as paid only once both parts of payment on stripe & GBT side have completed successfully.
     try {
       //Set loading to true
       store
@@ -2916,19 +3269,19 @@ ThunkAction<AppState> startTokenPaymentToRestaurant() {
       // final BigInt currentGBPXAmount =
       //     store.state.cashWalletState.tokens[gbpxToken.address]!.amount;
 
-      final BigInt currentPPLAmount =
-          store.state.cashWalletState.tokens[greenBeanToken.address]!.amount;
+      final currentGBTBalance = store.state.cashWalletState
+          .tokens[TokenDefinitions.greenBeanToken.address]!
+          .getBalanceMoney();
 
       // final BigInt selectedGBPXAmount =
       //     BigInt.from(store.state.cartState.selectedGBPxAmount);
 
-
       //TODO: Rename these values to include WEI if they are in WEI units after debugging.
-      final BigInt selectedPPLAmount =
-          BigInt.from(store.state.cartState.selectedPPLAmount);
+      final selectedGBTAmount =
+          store.state.cartState.selectedCashBackAppliedToCart;
 
       // final bool isGBPXSelected = selectedGBPXAmount.compareTo(BigInt.zero) > 0;
-      final bool isGBTSelected = selectedPPLAmount.compareTo(BigInt.zero) > 0;
+      final bool isGBTSelected = selectedGBTAmount.compareTo(BigInt.zero) > 0;
 
       // Map<String, dynamic> gbpxResponse = {};
       String gbtResponse = "";
@@ -2984,10 +3337,10 @@ ThunkAction<AppState> startTokenPaymentToRestaurant() {
       // }
 
       if (isGBTSelected) {
-        if (currentPPLAmount.compareTo(selectedPPLAmount) > 0) {
+        if (currentGBTBalance.compareTo(selectedGBTAmount) > 0) {
           final fuseSDK = await fuseWalletSDK;
           final res = await fuseSDK.transferToken(
-            EthereumAddress.fromHex(greenBeanToken
+            EthereumAddress.fromHex(TokenDefinitions.greenBeanToken
                 .address), // For sending native token, use '0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE'
             EthereumAddress.fromHex(
                 store.state.cartState.restaurantWalletAddress),
@@ -3053,6 +3406,9 @@ ThunkAction<AppState> startTokenPaymentToRestaurant() {
           //     },
           //   );
           // }
+        } else {
+          throw Exception(
+              'Did not complete payment to restaurant for order as failed to send token value.');
         }
       }
 

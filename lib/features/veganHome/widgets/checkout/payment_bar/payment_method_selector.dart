@@ -54,9 +54,9 @@ class PaymentMethodSelector extends StatelessWidget {
           StoreConnector<AppState, PaymentMethodViewModel>(
             converter: PaymentMethodViewModel.fromStore,
             onInit: (store) {
-              final gbtBalance = store
-                  .state.cashWalletState.tokens[greenBeanToken.address]!
-                  .getAmount();
+              final gbtBalance = store.state.cashWalletState
+                  .tokens[TokenDefinitions.greenBeanToken.address]!
+                  .getAmountTokens();
 
               // if (gbtBalance > 100) {
               //   store.dispatch(SetPaymentMethod(PaymentMethod.stripe));
@@ -118,13 +118,13 @@ class PaymentMethodSelectorModalSheet extends StatelessWidget {
                       context.router.pop();
                     },
                     leading: Image.asset(
-                      ImagePaths.pplAvatar35width,
+                      TokenDefinitions.greenBeanToken.imageUrl!,
                       width: 35,
                     ),
                     title: Text(PaymentMethod.peeplPay.formattedName),
-                    subtitle: viewmodel.hasPplBalance
+                    subtitle: viewmodel.hasGBTBalance
                         ? Text(
-                            'Use your rewards and save ${viewmodel.pplBalance}',
+                            'Use your rewards and save ${viewmodel.gbtBalance}',
                           )
                         : null,
                     trailing: const Icon(

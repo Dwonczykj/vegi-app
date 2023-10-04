@@ -18,8 +18,8 @@ class DrawerViewModel extends Equatable {
   const DrawerViewModel({
     required this.firstName,
     required this.logout,
-    required this.pplBalance,
-    required this.gbpxBalance,
+    required this.greenBeanBalance,
+    // required this.gbpxBalance,
     required this.avatarUrl,
     required this.scheduledOrders,
     required this.ongoingOrders,
@@ -45,19 +45,20 @@ class DrawerViewModel extends Equatable {
         final String fullName = store.state.userState.displayName;
         return fullName.split(' ')[0];
       },
-      pplBalance: cashWalletState.tokens[pplToken.address]!
-          .getAmount()
+      greenBeanBalance: cashWalletState
+          .tokens[TokenDefinitions.greenBeanToken.address]!
+          .getAmountTokens()
           .toStringAsFixed(2),
-      gbpxBalance: cashWalletState.tokens[gbpxToken.address]!
-          .getAmount()
-          .toStringAsFixed(2),
+      // gbpxBalance: cashWalletState.tokens[gbpxToken.address]!
+      //     .getAmountTokens()
+      //     .toStringAsFixed(2),
     );
   }
 
   final void Function() logout;
   final String Function() firstName;
-  final String pplBalance;
-  final String gbpxBalance;
+  final String greenBeanBalance;
+  // final String gbpxBalance;
   final String avatarUrl;
   final bool isSuperAdmin;
   final List<Order> scheduledOrders;
@@ -73,8 +74,8 @@ class DrawerViewModel extends Equatable {
   @override
   List<Object> get props => [
         avatarUrl,
-        pplBalance,
-        gbpxBalance,
+        greenBeanBalance,
+        // gbpxBalance,
         isSuperAdmin,
         allOrders.map((e) => e.id).join(';'),
       ];

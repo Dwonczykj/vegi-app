@@ -15,7 +15,9 @@ class _MintingDialogViewModel extends Equatable {
 
   factory _MintingDialogViewModel.fromStore(Store<AppState> store) {
     return _MintingDialogViewModel(
-      secondaryToken: store.state.cashWalletState.tokens[gbpxToken.address]!,
+      // secondaryToken: store.state.cashWalletState.tokens[gbpxToken.address]!,
+      secondaryToken: store.state.cashWalletState
+          .tokens[TokenDefinitions.greenBeanToken.address]!,
     );
   }
   final Token secondaryToken;
@@ -28,7 +30,9 @@ class _MintingDialogViewModel extends Equatable {
 
 class MintingDialog extends StatefulWidget {
   const MintingDialog({
-    required this.amountText, required this.shouldPushToHome, Key? key,
+    required this.amountText,
+    required this.shouldPushToHome,
+    Key? key,
   }) : super(key: key);
   final String amountText;
   final bool shouldPushToHome;
@@ -138,7 +142,7 @@ class _MintingDialogState extends State<MintingDialog>
                   duration: const Duration(milliseconds: 500),
                   child: Text(
                     _isMinting
-                        ? "Adding balance to your wallet, won't be long"
+                        ? "Adding ${TokenDefinitions.greenBeanToken.symbol} balance to your wallet, won't be long"
                         : 'Token minting complete!',
                     key: ValueKey(_isMinting),
                     textAlign: TextAlign.center,

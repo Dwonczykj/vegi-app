@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 import 'dart:math' as Math;
 
@@ -206,13 +207,22 @@ int timeStampToJsonInt(DateTime json) => timeStampToJsonIntNullable(json)!;
 int objectIdFromJson(dynamic obj) {
   if (obj is int) {
     return obj;
+  } else if (obj is String && int.tryParse(obj) != null) {
+    return int.parse(obj);
   }
   if (obj is Map) {
     if (obj.containsKey('id')) {
       return obj['id'] as int;
     }
   }
-  throw Exception('unable to cast json object to int');
+  throw Exception('unable to cast json object $obj to int');
+}
+
+int? objectIdFromJsonNullable(dynamic obj) {
+  if (obj == null) {
+    return null;
+  }
+  return objectIdFromJson(obj);
 }
 
 String parseHtmlString(String htmlString) {
@@ -220,6 +230,26 @@ String parseHtmlString(String htmlString) {
   final String parsedString = parse(document.body!.text).documentElement!.text;
 
   return parsedString;
+}
+
+String decodeHex(String hex) {
+  List<int> bytes = [];
+
+  for (int i = 0; i < hex.length; i += 2) {
+    try {
+      String byteString = hex.substring(i, i + 2);
+      int byte = int.parse(byteString, radix: 16);
+      bytes.add(byte);
+    } catch (e, s) {
+      log.error(
+        '',
+        stackTrace: s,
+      );
+      i = hex.length;
+    }
+  }
+
+  return utf8.decode(bytes);
 }
 
 double parseBalance(String balance) {
@@ -259,26 +289,30 @@ bool shouldEndOngoing(TimeSlot selectedSlot) {
   }
 }
 
-double getPPLValueFromPence(num penceAmount) {
-  return getPPLValueFromPounds(penceAmount / 100);
+double roundFloorGBP(double gbtValue) {
+  return (gbtValue / 100.0).floorToDouble() * 100.0;
 }
 
-double getPPLValueFromPounds(num poundAmount) {
-  return poundAmount * CurrencyRateConstants.numberOfPPLInOneGBP;
+double getGBTValueFromPence(num penceAmount) {
+  return getGBTValueFromPounds(penceAmount / 100);
 }
 
-double getPoundValueFromPPL(num pplAmount) {
-  return pplAmount / CurrencyRateConstants.numberOfPPLInOneGBP;
+double getGBTValueFromPounds(num poundAmount) {
+  return poundAmount * CurrencyRateConstants.numberOfGBTInOneGBP;
 }
 
-double getPPLRewardsFromPounds(num gBPAmount) {
-  return getPPLValueFromPounds(
-    gBPAmount * CurrencyRateConstants.pplRewardsPcntDelivery,
+double getPoundValueFromGBT(num gbtAmount) {
+  return gbtAmount / CurrencyRateConstants.numberOfGBTInOneGBP;
+}
+
+double getGBTRewardsFromPounds(num gBPAmount) {
+  return getGBTValueFromPounds(
+    gBPAmount * CurrencyRateConstants.rewardsPcntDelivery,
   );
 }
 
-double getPPLRewardsFromPence(num penceAmount) =>
-    getPPLRewardsFromPounds(penceAmount / 100);
+double getGBTRewardsFromPence(num penceAmount) =>
+    getGBTRewardsFromPounds(penceAmount / 100);
 
 int calculateRewardsForPrice({
   required num penceAmount,
@@ -295,8 +329,8 @@ int calculateRewardsForPrice({
               CurrencyRateConstants.maxESCRating) *
           penceAmount *
           (fulfilmentMethod == FulfilmentMethodType.inStore
-              ? CurrencyRateConstants.pplRewardsPcntPoS
-              : CurrencyRateConstants.pplRewardsPcntDelivery))
+              ? CurrencyRateConstants.rewardsPcntPoS
+              : CurrencyRateConstants.rewardsPcntDelivery))
       .floor();
   // return penceAmount * (fulfilmentMethod == FulfilmentMethodType.inStore ? 1 : 5) ~/ 100;
 }
@@ -317,8 +351,8 @@ double calculateCartRewardsForPrice({
               CurrencyRateConstants.maxESCRating) *
           item.totalItemPrice.inGBPxValue *
           (fulfilmentMethod == FulfilmentMethodType.inStore
-              ? CurrencyRateConstants.pplRewardsPcntPoS
-              : CurrencyRateConstants.pplRewardsPcntDelivery);
+              ? CurrencyRateConstants.rewardsPcntPoS
+              : CurrencyRateConstants.rewardsPcntDelivery);
     },
   ).reduce((value, element) => value + element);
   return x;
@@ -331,8 +365,8 @@ double calculateRewardsForOrder(CreateOrderForFulfilment order) {
   );
 }
 
-String getPoundValueFormattedFromPPL(num pplAmount) {
-  return getPPLValueFromPence(pplAmount).toStringAsFixed(2);
+String getPoundValueFormattedFromGBT(num gbtAmount) {
+  return getPoundValueFromGBT(gbtAmount).toStringAsFixed(2);
 }
 
 Future<UpdateTotalPrice> calculateMenuItemPrice({
@@ -352,8 +386,8 @@ Future<UpdateTotalPrice> calculateMenuItemPrice({
     totalPrice: total,
     totalRewards: total.inGBPxValue *
         (inStore
-                ? CurrencyRateConstants.pplRewardsPcntPoS
-                : CurrencyRateConstants.pplRewardsPcntDelivery)
+                ? CurrencyRateConstants.rewardsPcntPoS
+                : CurrencyRateConstants.rewardsPcntDelivery)
             .truncate(),
   );
 }
@@ -369,10 +403,12 @@ Future<UpdateComputedCartValues?> computeTotalsFromCart({
   List<Discount> appliedVouchers = const <Discount>[],
 }) async {
   try {
+    final store = await reduxStore;
     final Money cartTax = Money.zero(inCurrency: cartCurrency);
     Money cartTotal = Money.zero(inCurrency: cartCurrency);
     Money cartSubTotal = Money.zero(inCurrency: cartCurrency);
     Money cartPcntDiscountComputed = Money.zero(inCurrency: cartCurrency);
+    Money cartTotalWithoutGBTRewards = Money.zero(inCurrency: cartCurrency);
     Money cartTotalDiscountComputed = Money.zero(inCurrency: cartCurrency);
 
     for (final element in cartItems) {
@@ -421,19 +457,27 @@ Future<UpdateComputedCartValues?> computeTotalsFromCart({
     //       previousValue,
     // );
 
+    final cashbackGBTAppliedToBasket = store
+        .state.cartState.selectedCashBackAppliedToCart
+        .inCcy(cartCurrency)
+        .value;
+
     cartTotalDiscountComputed = cartPcntDiscountComputed + voucherPot;
 
-    cartTotal = (cartSubTotal +
+    cartTotalWithoutGBTRewards = (cartSubTotal +
             cartTax.inCcy(cartCurrency).value +
             cartTip.inCcy(cartCurrency).value +
             fulfilmentCharge.inCcy(cartCurrency).value +
             platformFee.inCcy(cartCurrency).value) -
         cartTotalDiscountComputed.inCcy(cartCurrency).value;
 
+    cartTotal = cartTotalWithoutGBTRewards - cashbackGBTAppliedToBasket;
+
     if (cartItems.isEmpty) {
       cartSubTotal = Money.zero(inCurrency: cartCurrency);
       cartTotal = Money.zero(inCurrency: cartCurrency);
       cartPcntDiscountComputed = Money.zero(inCurrency: cartCurrency);
+      cartTotalWithoutGBTRewards = Money.zero(inCurrency: cartCurrency);
       cartTotalDiscountComputed = Money.zero(inCurrency: cartCurrency);
     }
 
@@ -441,6 +485,7 @@ Future<UpdateComputedCartValues?> computeTotalsFromCart({
       cartSubTotal,
       cartTax,
       cartTotal,
+      cartTotalWithoutGBTRewards,
       cartTotalDiscountComputed,
     );
   } catch (e, s) {

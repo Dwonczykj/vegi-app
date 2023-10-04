@@ -28,6 +28,7 @@ import 'package:vegan_liverpool/models/cart/getOrdersResponse.dart';
 import 'package:vegan_liverpool/models/cart/order.dart' as OrderModel;
 import 'package:vegan_liverpool/models/cart/orderStatus.dart';
 import 'package:vegan_liverpool/models/cart/productSuggestion.dart';
+import 'package:vegan_liverpool/models/discounts/acceptVoucherResponse.dart';
 import 'package:vegan_liverpool/models/payments/money.dart';
 import 'package:vegan_liverpool/models/payments/transaction_item.dart';
 import 'package:vegan_liverpool/models/restaurant/cartItem.dart';
@@ -1392,9 +1393,35 @@ class PeeplEatsService extends HttpService {
     final Response<dynamic> response =
         await dioGet('api/v1/discounts/check-discount-code/$discountCode?');
 
-    final Map<dynamic, dynamic> results = response.data['discount'] as Map;
+    final results =
+        Discount.fromJson(response.data['discount'] as Map<String, dynamic>);
 
-    return results['percentage'] as int? ?? 0;
+    return results.value as int? ?? 0;
+  }
+
+  Future<AcceptVoucherResponse?> acceptDiscountCode({
+    required String discountCode,
+    required int vegiAccountId,
+    int? vendorId,
+  }) async {
+    var inputs = {
+      'vegiAccountId': vegiAccountId,
+      'discountCode': discountCode,
+    };
+    if (vendorId != null) {
+      inputs = inputs
+        ..addAll({
+          'vendorId': vendorId,
+        });
+    }
+    final Response<dynamic> response = await dioPost(
+      'api/v1/discounts/accept-discount-code',
+      data: inputs,
+    );
+
+    final result = AcceptVoucherResponse.fromJson(
+        response.data['codeAcceptanceStatus'] as Map<String, dynamic>);
+    return result;
   }
 
   Future<Discount?> validateFixedDiscountCode({
@@ -1518,6 +1545,9 @@ class PeeplEatsService extends HttpService {
       'api/v1/admin/user-for-wallet-address',
       queryParameters: {
         'walletAddress': walletAddress,
+        'accountType': Secrets.FUSE_WALLET_SDK_PUBLIC_KEY.startsWith('pk_test_')
+            ? 'fuse_spark'
+            : 'fuse',
       },
       sendWithAuthCreds: true,
     );
@@ -2045,16 +2075,35 @@ class PeeplEatsService extends HttpService {
     }
     final result = CreateOrderResponse.fromJson(response.data!);
     if (result.order.transactions.isEmpty) {
-      result.order.transactions.add(
+      // result.order.transactions.add(
+      //   TransactionItem(
+      //     amount: orderObject.total,
+      //     currency: orderObject.currency,
+      //     order: result.order.id,
+      //     payer: -1,
+      //     receiver: -2,
+      //     timestamp: DateTime.now(),
+      //   ),
+      // );
+      result.order.transactions.addAll([
         TransactionItem(
+          timestamp: result.order.orderedDateTime,
           amount: orderObject.total,
           currency: orderObject.currency,
-          order: result.order.id,
-          payer: -1,
           receiver: -2,
-          timestamp: DateTime.now(),
+          payer: store.state.userState.vegiAccountId ?? -1,
+          order: result.order.id,
         ),
-      );
+        TransactionItem(
+          timestamp: result.order.orderedDateTime,
+          amount: store.state.cartState.selectedCashBackAppliedToCart.value,
+          currency:
+              store.state.cartState.selectedCashBackAppliedToCart.currency,
+          receiver: -2,
+          payer: store.state.userState.vegiAccountId ?? -1,
+          order: result.order.id,
+        ),
+      ]);
     }
     return result;
   }
@@ -2177,6 +2226,100 @@ class PeeplEatsService extends HttpService {
       );
       throw Exception(e);
     }
+  }
+
+  Future<TransactionItem?> createFusePaymentIntent({
+    required num amountTokens,
+    required String payerWalletAddress,
+    required String receiverWalletAddress,
+    required int orderId,
+  }) async {
+    final Response<dynamic> response = await dioPost(
+        VegiBackendEndpoints.createFusePaymentIntent,
+        dontRoute: true,
+        data: {
+          "amountTokens": amountTokens,
+          "payerWalletAddress": payerWalletAddress,
+          "receiverWalletAddress": receiverWalletAddress,
+          "currency": Currency.GBT.name,
+          "metadata": {
+            "orderId": orderId,
+          }
+        });
+
+    if (responseHasErrorStatus(response)) {
+      log.error(
+        'Bad response returned when trying to createFusePaymentIntent: $response',
+      );
+      return null;
+    }
+    print(response.data);
+    return TransactionItem.fromJson(
+        response.data['transaction'] as Map<String, dynamic>);
+  }
+
+  Future<TransactionItem?> updateTransaction({
+    required int transactionId,
+
+    /// this is the remote job id assigned to the transaction by web3Auth lib via fuse SDK
+    String? remoteJobId,
+    String? status,
+    int? orderId,
+  }) async {
+    Map<String, dynamic> data = {
+      "transactionId": transactionId,
+    };
+    if (remoteJobId != null && remoteJobId.isNotEmpty) {
+      data['remoteJobId'] = remoteJobId;
+    }
+    if (status != null && status.isNotEmpty) {
+      data['status'] = status;
+    }
+    if (orderId != null && orderId > 0) {
+      data['orderId'] = orderId;
+    }
+    final Response<dynamic> response = await dioPost(
+      VegiBackendEndpoints.updateTransaction,
+      dontRoute: true,
+      data: data,
+    );
+
+    if (responseHasErrorStatus(response)) {
+      log.error(
+        'Bad response returned when trying to updateTransaction: $response',
+      );
+      return null;
+    }
+
+    return TransactionItem.fromJson(
+        response.data['transaction'] as Map<String, dynamic>);
+  }
+
+  Future<OrderModel.Order?> updateOrderStatus({
+    required int orderId,
+    required PaymentStatus paymentStatus,
+  }) async {
+    Map<String, dynamic> data = {
+      "orderId": orderId,
+      "paymentStatus": paymentStatus.name,
+    };
+    
+    final Response<dynamic> response = await dioPost(
+      VegiBackendEndpoints.updateOrderStatus,
+      dontRoute: true,
+      data: data,
+      sendWithAuthCreds: true,
+    );
+
+    if (responseHasErrorStatus(response)) {
+      log.error(
+        'Bad response returned when trying to update-order-status: $response',
+      );
+      return null;
+    }
+
+    return OrderModel.Order.fromJson(
+        response.data['order'] as Map<String, dynamic>);
   }
 
   Future<List<String>> getPostalCodes({

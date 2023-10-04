@@ -38,7 +38,7 @@ class PeeplPayBalanceCard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        viewmodel.gbpxbalance,
+                        viewmodel.gbtBalance.value.toStringAsFixed(2),
                         style: const TextStyle(
                           color: Colors.white,
                           fontSize: 25,
@@ -69,7 +69,7 @@ class PeeplPayBalanceCard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       Text(
-                        viewmodel.pplBalance,
+                        viewmodel.gbtBalance.value.toStringAsFixed(2),
                         style: const TextStyle(
                           color: Colors.white,
                           fontSize: 25,

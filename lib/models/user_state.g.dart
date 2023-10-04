@@ -17,7 +17,12 @@ _$_UserState _$$_UserStateFromJson(Map<String, dynamic> json) => _$_UserState(
       isContactsSynced: json['isContactsSynced'] as bool?,
       scrollToTop: json['scrollToTop'] as bool? ?? false,
       walletAddress: json['walletAddress'] as String? ?? '',
-      privateKey: json['privateKey'] as String? ?? '',
+      privateKeyCached:
+          (json['privateKeyCached'] as Map<String, dynamic>?)?.map(
+                (k, e) => MapEntry(k, e as String),
+              ) ??
+              const {},
+      storedFusePublicKey: json['storedFusePublicKey'] as String? ?? '',
       fuseWalletCredentials: json['fuseWalletCredentials'] == null
           ? null
           : ethPrivateKeyFromJson(json['fuseWalletCredentials']),
@@ -125,7 +130,8 @@ Map<String, dynamic> _$$_UserStateToJson(_$_UserState instance) =>
       'isContactsSynced': instance.isContactsSynced,
       'scrollToTop': instance.scrollToTop,
       'walletAddress': instance.walletAddress,
-      'privateKey': instance.privateKey,
+      'privateKeyCached': instance.privateKeyCached,
+      'storedFusePublicKey': instance.storedFusePublicKey,
       'fuseWalletCredentials':
           ethPrivateKeyToJson(instance.fuseWalletCredentials),
       'fuseAuthenticationStatus':

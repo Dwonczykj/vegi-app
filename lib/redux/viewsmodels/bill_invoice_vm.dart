@@ -17,17 +17,18 @@ class BillInvoiceViewModel extends Equatable {
 
   factory BillInvoiceViewModel.fromStore(Store<AppState> store) {
     return BillInvoiceViewModel(
-        didUsePPL: store.state.cartState.selectedPPLAmount > 0,
-        grandTotal: store.state.cartState.cartTotal,
-        gbpxUsed:
-            (store.state.cartState.selectedGBPxAmount * 100).formattedGBPxPrice,
-        pplUsed:
-            (store.state.cartState.selectedPPLAmount * 100).formattedGBPxPrice,
-        pplRewardsEarned: getPPLRewardsFromPence(
-          store.state.cartState.selectedGBPxAmount * 100,
-        ).toStringAsFixed(2),
-        pplRewardsEarnedValue:
-            '£${(getPPLRewardsFromPence(store.state.cartState.selectedGBPxAmount * 100) / 10).toStringAsFixed(2)}',);
+      didUsePPL: store.state.cartState.selectedPPLAmount > 0,
+      grandTotal: store.state.cartState.cartTotal,
+      gbpxUsed:
+          (store.state.cartState.selectedGBPxAmount * 100).formattedGBPxPrice,
+      pplUsed:
+          (store.state.cartState.selectedPPLAmount * 100).formattedGBPxPrice,
+      pplRewardsEarned: getGBTRewardsFromPence(
+        store.state.cartState.selectedGBPxAmount * 100,
+      ).toStringAsFixed(2),
+      pplRewardsEarnedValue:
+          '£${(getGBTRewardsFromPence(store.state.cartState.selectedGBPxAmount * 100) / 10).toStringAsFixed(2)}',
+    );
   }
 
   final String gbpxUsed;
@@ -39,6 +40,6 @@ class BillInvoiceViewModel extends Equatable {
 
   @override
   List<Object?> get props => [
-    grandTotal,
-  ];
+        grandTotal,
+      ];
 }

@@ -94,7 +94,8 @@ class UserState with _$UserState {
     ///
     /// The account address is a 'real' wallet generated on the device which is only stored on the device.
     // @Default('') String accountAddress,
-    @Default('') String privateKey,
+    @Default({}) Map<String,String> privateKeyCached,
+    @Default('') String storedFusePublicKey,
     @JsonKey(fromJson: ethPrivateKeyFromJson, toJson: ethPrivateKeyToJson)
     @Default(null)
     EthPrivateKey? fuseWalletCredentials,
@@ -209,8 +210,18 @@ class UserState with _$UserState {
       currency: 'gbp',
       listOfDeliveryAddresses: [],
       surveyQuestions: [],
+      privateKeyCached: {
+        Secrets.FUSE_WALLET_SDK_PUBLIC_KEY: '',
+      },
+      storedFusePublicKey: Secrets.FUSE_WALLET_SDK_PUBLIC_KEY,
     );
   }
+
+  String get privateKey =>
+      storedFusePublicKey == Secrets.FUSE_WALLET_SDK_PUBLIC_KEY ||
+              storedFusePublicKey.isEmpty
+          ? privateKeyCached.containsKey(Secrets.FUSE_WALLET_SDK_PUBLIC_KEY) ? privateKeyCached[Secrets.FUSE_WALLET_SDK_PUBLIC_KEY]! : ''
+          : '';
 
   factory UserState.fromJson(Map<String, dynamic> json) =>
       tryCatchRethrowInline(

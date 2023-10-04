@@ -90,6 +90,11 @@ class RootRouter extends $RootRouter {
     AutoRoute(page: SuggestProductFunnelScreen.page),
     AutoRoute(page: ImageFromGalleryEx.page),
     AutoRoute(page: ESCExplainRatingScreen.page),
+    AutoRoute(
+      page: GenerateQRFromUserDetails.page,
+      // name: 'generateQRFromCartScreen',
+      // guards: [AuthGuard],
+    ),
     if (kDebugMode) AutoRoute(page: ReduxStateViewer.page),
     AutoRoute(
         page: MainScreen.page,

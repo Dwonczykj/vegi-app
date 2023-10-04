@@ -24,7 +24,7 @@ class PreLaunchPerksDetailsPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Image.asset(
-              ImagePaths.vegiHorizontalLogo,
+              ImagePaths.vegiSquareLogo,
               width: MediaQuery.of(context).size.width,
             ),
             const SizedBox(

@@ -39,4 +39,6 @@ Map<String, dynamic> _$$_VegiAccountToJson(_$_VegiAccount instance) =>
 const _$VegiAccountTypeEnumMap = {
   VegiAccountType.ethereum: 'ethereum',
   VegiAccountType.bank: 'bank',
+  VegiAccountType.fuse: 'fuse',
+  VegiAccountType.fuse_spark: 'fuse_spark',
 };

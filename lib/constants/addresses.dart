@@ -3,6 +3,8 @@ class Addresses {
 
   static const String zeroAddress =
       '0x0000000000000000000000000000000000000000';
+  static const String fuseSparkTokenAddress =
+      '0x0000000000000000000000000000000000000000';
 
   static const String fusdTokenAddress =
       '0x249be57637d8b013ad64785404b24aebae9b098b';
@@ -13,7 +15,7 @@ class Addresses {
   // static const String pplTokenAddress =
   //     '0xa2c7cdb72d177f6259cd12a9a06fdfd9625419d4';
   static const String gbtTokenAddress =
-      '';
+      '0x72438A9e3Af16C9A0D762900635baf96260E8b2a';
 
   static const String nativeTokenAddress =
       '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee';

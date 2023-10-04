@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:decimal/decimal.dart';
 import 'package:number_display/number_display.dart';
 import 'package:vegan_liverpool/models/tokens/price.dart';
+import 'package:vegan_liverpool/models/tokens/token.dart';
 
 class Formatter {
   static Decimal fromWei(
@@ -57,7 +58,7 @@ class Formatter {
     final bool hasPriceInfo =
         ![null, '', '0', 0, 'NaN'].contains(priceInfo?.quote);
     if (hasPriceInfo) {
-      return '\$${formatValueToFiat(
+      return '\$${formatValueToFiatFormatted(
         value,
         decimals,
         double.parse(priceInfo!.quote),
@@ -72,14 +73,24 @@ class Formatter {
     }
   }
 
-  static String formatValueToFiat(
-    BigInt value,
+  static Decimal formatValueToFiatAmount(
+    BigInt valueWEI,
+    int decimals,
+    double price,
+  ) {
+    final Decimal formattedValue =
+        fromWei(valueWEI, decimals) * Decimal.parse(price.toString());
+    return formattedValue;
+  }
+
+  static String formatValueToFiatFormatted(
+    BigInt valueWEI,
     int decimals,
     double price, [
     bool withPrecision = false,
   ]) {
     final Decimal formattedValue =
-        fromWei(value, decimals) * Decimal.parse(price.toString());
+        fromWei(valueWEI, decimals) * Decimal.parse(price.toString());
     if (withPrecision) return formattedValue.toStringAsFixed(8);
     return smallNumbersConvertor(formattedValue);
   }
@@ -89,8 +100,21 @@ class Formatter {
     return '${address.substring(0, endIndex)}...${address.substring(address.length - 4, address.length)}';
   }
 
+  /// convert number of tokens to number of WEI
   static BigInt toBigInt(dynamic value, int? decimals) {
     if (value == null || decimals == null) return BigInt.zero;
+    final Decimal tokensAmountDecimal = Decimal.parse(value.toString());
+    final Decimal decimalsPow = Decimal.parse(pow(10, decimals).toString());
+    return BigInt.parse((tokensAmountDecimal * decimalsPow).toString());
+  }
+
+  /// convert number of tokens to number of WEI
+  static BigInt toAmountWEI(
+    dynamic value, {
+    required Token token,
+  }) {
+    final decimals = token.decimals;
+    if (value == null) return BigInt.zero;
     final Decimal tokensAmountDecimal = Decimal.parse(value.toString());
     final Decimal decimalsPow = Decimal.parse(pow(10, decimals).toString());
     return BigInt.parse((tokensAmountDecimal * decimalsPow).toString());

@@ -1,4 +1,5 @@
 import 'dart:math' as Math;
+import 'package:decimal/decimal.dart';
 import 'package:vegan_liverpool/constants/enums.dart';
 import 'package:vegan_liverpool/features/veganHome/Helpers/extensions.dart';
 import 'package:vegan_liverpool/features/veganHome/Helpers/helpers.dart';
@@ -179,6 +180,8 @@ class Money implements Comparable {
       } else {
         return 1;
       }
+    } else if (other is num || other is int || other is double || other is Decimal || other is BigInt){
+      return value.compareTo(other);
     }
     return -1;
   }

@@ -20,6 +20,7 @@ TransactionItem _$TransactionItemFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$TransactionItem {
+  int? get id => throw _privateConstructorUsedError;
   @JsonKey(fromJson: jsonToTimeStamp, toJson: timeStampToJsonInt)
   DateTime get timestamp => throw _privateConstructorUsedError;
   num get amount => throw _privateConstructorUsedError;
@@ -28,8 +29,8 @@ mixin _$TransactionItem {
   int get receiver => throw _privateConstructorUsedError;
   @JsonKey(fromJson: objectIdFromJson)
   int get payer => throw _privateConstructorUsedError;
-  @JsonKey(fromJson: objectIdFromJson)
-  int get order => throw _privateConstructorUsedError;
+  @JsonKey(fromJson: objectIdFromJsonNullable)
+  int? get order => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -44,13 +45,14 @@ abstract class $TransactionItemCopyWith<$Res> {
       _$TransactionItemCopyWithImpl<$Res, TransactionItem>;
   @useResult
   $Res call(
-      {@JsonKey(fromJson: jsonToTimeStamp, toJson: timeStampToJsonInt)
+      {int? id,
+      @JsonKey(fromJson: jsonToTimeStamp, toJson: timeStampToJsonInt)
       DateTime timestamp,
       num amount,
       Currency currency,
       @JsonKey(fromJson: objectIdFromJson) int receiver,
       @JsonKey(fromJson: objectIdFromJson) int payer,
-      @JsonKey(fromJson: objectIdFromJson) int order});
+      @JsonKey(fromJson: objectIdFromJsonNullable) int? order});
 }
 
 /// @nodoc
@@ -66,14 +68,19 @@ class _$TransactionItemCopyWithImpl<$Res, $Val extends TransactionItem>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? id = freezed,
     Object? timestamp = null,
     Object? amount = null,
     Object? currency = null,
     Object? receiver = null,
     Object? payer = null,
-    Object? order = null,
+    Object? order = freezed,
   }) {
     return _then(_value.copyWith(
+      id: freezed == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int?,
       timestamp: null == timestamp
           ? _value.timestamp
           : timestamp // ignore: cast_nullable_to_non_nullable
@@ -94,10 +101,10 @@ class _$TransactionItemCopyWithImpl<$Res, $Val extends TransactionItem>
           ? _value.payer
           : payer // ignore: cast_nullable_to_non_nullable
               as int,
-      order: null == order
+      order: freezed == order
           ? _value.order
           : order // ignore: cast_nullable_to_non_nullable
-              as int,
+              as int?,
     ) as $Val);
   }
 }
@@ -111,13 +118,14 @@ abstract class _$$_TransactionItemCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {@JsonKey(fromJson: jsonToTimeStamp, toJson: timeStampToJsonInt)
+      {int? id,
+      @JsonKey(fromJson: jsonToTimeStamp, toJson: timeStampToJsonInt)
       DateTime timestamp,
       num amount,
       Currency currency,
       @JsonKey(fromJson: objectIdFromJson) int receiver,
       @JsonKey(fromJson: objectIdFromJson) int payer,
-      @JsonKey(fromJson: objectIdFromJson) int order});
+      @JsonKey(fromJson: objectIdFromJsonNullable) int? order});
 }
 
 /// @nodoc
@@ -131,14 +139,19 @@ class __$$_TransactionItemCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? id = freezed,
     Object? timestamp = null,
     Object? amount = null,
     Object? currency = null,
     Object? receiver = null,
     Object? payer = null,
-    Object? order = null,
+    Object? order = freezed,
   }) {
     return _then(_$_TransactionItem(
+      id: freezed == id
+          ? _value.id
+          : id // ignore: cast_nullable_to_non_nullable
+              as int?,
       timestamp: null == timestamp
           ? _value.timestamp
           : timestamp // ignore: cast_nullable_to_non_nullable
@@ -159,10 +172,10 @@ class __$$_TransactionItemCopyWithImpl<$Res>
           ? _value.payer
           : payer // ignore: cast_nullable_to_non_nullable
               as int,
-      order: null == order
+      order: freezed == order
           ? _value.order
           : order // ignore: cast_nullable_to_non_nullable
-              as int,
+              as int?,
     ));
   }
 }
@@ -172,18 +185,21 @@ class __$$_TransactionItemCopyWithImpl<$Res>
 @JsonSerializable()
 class _$_TransactionItem extends _TransactionItem {
   _$_TransactionItem(
-      {@JsonKey(fromJson: jsonToTimeStamp, toJson: timeStampToJsonInt)
+      {this.id,
+      @JsonKey(fromJson: jsonToTimeStamp, toJson: timeStampToJsonInt)
       required this.timestamp,
       required this.amount,
       required this.currency,
       @JsonKey(fromJson: objectIdFromJson) required this.receiver,
       @JsonKey(fromJson: objectIdFromJson) required this.payer,
-      @JsonKey(fromJson: objectIdFromJson) required this.order})
+      @JsonKey(fromJson: objectIdFromJsonNullable) required this.order})
       : super._();
 
   factory _$_TransactionItem.fromJson(Map<String, dynamic> json) =>
       _$$_TransactionItemFromJson(json);
 
+  @override
+  final int? id;
   @override
   @JsonKey(fromJson: jsonToTimeStamp, toJson: timeStampToJsonInt)
   final DateTime timestamp;
@@ -198,12 +214,12 @@ class _$_TransactionItem extends _TransactionItem {
   @JsonKey(fromJson: objectIdFromJson)
   final int payer;
   @override
-  @JsonKey(fromJson: objectIdFromJson)
-  final int order;
+  @JsonKey(fromJson: objectIdFromJsonNullable)
+  final int? order;
 
   @override
   String toString() {
-    return 'TransactionItem(timestamp: $timestamp, amount: $amount, currency: $currency, receiver: $receiver, payer: $payer, order: $order)';
+    return 'TransactionItem(id: $id, timestamp: $timestamp, amount: $amount, currency: $currency, receiver: $receiver, payer: $payer, order: $order)';
   }
 
   @override
@@ -211,6 +227,7 @@ class _$_TransactionItem extends _TransactionItem {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_TransactionItem &&
+            (identical(other.id, id) || other.id == id) &&
             (identical(other.timestamp, timestamp) ||
                 other.timestamp == timestamp) &&
             (identical(other.amount, amount) || other.amount == amount) &&
@@ -225,7 +242,7 @@ class _$_TransactionItem extends _TransactionItem {
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
-      runtimeType, timestamp, amount, currency, receiver, payer, order);
+      runtimeType, id, timestamp, amount, currency, receiver, payer, order);
 
   @JsonKey(ignore: true)
   @override
@@ -243,19 +260,22 @@ class _$_TransactionItem extends _TransactionItem {
 
 abstract class _TransactionItem extends TransactionItem {
   factory _TransactionItem(
-          {@JsonKey(fromJson: jsonToTimeStamp, toJson: timeStampToJsonInt)
-          required final DateTime timestamp,
-          required final num amount,
-          required final Currency currency,
-          @JsonKey(fromJson: objectIdFromJson) required final int receiver,
-          @JsonKey(fromJson: objectIdFromJson) required final int payer,
-          @JsonKey(fromJson: objectIdFromJson) required final int order}) =
-      _$_TransactionItem;
+      {final int? id,
+      @JsonKey(fromJson: jsonToTimeStamp, toJson: timeStampToJsonInt)
+      required final DateTime timestamp,
+      required final num amount,
+      required final Currency currency,
+      @JsonKey(fromJson: objectIdFromJson) required final int receiver,
+      @JsonKey(fromJson: objectIdFromJson) required final int payer,
+      @JsonKey(fromJson: objectIdFromJsonNullable)
+      required final int? order}) = _$_TransactionItem;
   _TransactionItem._() : super._();
 
   factory _TransactionItem.fromJson(Map<String, dynamic> json) =
       _$_TransactionItem.fromJson;
 
+  @override
+  int? get id;
   @override
   @JsonKey(fromJson: jsonToTimeStamp, toJson: timeStampToJsonInt)
   DateTime get timestamp;
@@ -270,8 +290,8 @@ abstract class _TransactionItem extends TransactionItem {
   @JsonKey(fromJson: objectIdFromJson)
   int get payer;
   @override
-  @JsonKey(fromJson: objectIdFromJson)
-  int get order;
+  @JsonKey(fromJson: objectIdFromJsonNullable)
+  int? get order;
   @override
   @JsonKey(ignore: true)
   _$$_TransactionItemCopyWith<_$_TransactionItem> get copyWith =>

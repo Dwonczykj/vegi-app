@@ -142,7 +142,18 @@ enum DiscountType {
   fixed,
 }
 
-enum VegiAccountType { ethereum, bank }
+enum DiscountCodeAcceptanceStatus {
+  accepted,
+  rejected,
+  already_accepted,
+}
+
+enum VegiAccountType {
+  ethereum,
+  bank,
+  fuse,
+  fuse_spark,
+}
 
 enum VegiRole {
   admin,

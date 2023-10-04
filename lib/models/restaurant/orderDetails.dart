@@ -31,12 +31,12 @@ class OrderDetails with _$OrderDetails {
   factory OrderDetails.fromJson(Map<String, dynamic> json) =>
       _$OrderDetailsFromJson(json);
 
-  String get pplRewardsEarned => getPPLRewardsFromPence(
+  String get pplRewardsEarned => getGBTRewardsFromPence(
         GBPxAmountPaid * 100,
       ).toStringAsFixed(2);
 
   String get pplRewardsEarnedValue =>
-      '£${(getPPLRewardsFromPence(GBPxAmountPaid * 100) / 10).toStringAsFixed(2)}';
+      '£${(getGBTRewardsFromPence(GBPxAmountPaid * 100) / 10).toStringAsFixed(2)}';
 
   bool get didUsePPL => PPLAmountPaid != 0.0;
 }

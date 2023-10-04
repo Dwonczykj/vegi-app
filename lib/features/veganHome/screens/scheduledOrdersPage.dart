@@ -130,7 +130,7 @@ class SingleScheduledOrderCard extends StatelessWidget {
                           const WidgetSpan(child: SizedBox.shrink()),
                         TextSpan(
                           text:
-                              '${order.rewardsEarnedInPPL.toStringAsFixed(2)} ',
+                              '${order.rewardsEarnedInTokens.toStringAsFixed(2)} ',
                           style: const TextStyle(
                             fontWeight: FontWeight.w500,
                           ),

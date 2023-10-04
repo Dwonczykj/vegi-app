@@ -12,8 +12,10 @@ import 'package:vegan_liverpool/models/actions/wallet_action.dart';
 import 'package:vegan_liverpool/models/app_state.dart';
 import 'package:vegan_liverpool/models/tokens/price.dart';
 import 'package:vegan_liverpool/models/tokens/token.dart';
+import 'package:vegan_liverpool/redux/actions/onboarding_actions.dart';
 import 'package:vegan_liverpool/services.dart';
 import 'package:vegan_liverpool/utils/connectionChecker.dart';
+import 'package:vegan_liverpool/utils/format.dart';
 import 'package:vegan_liverpool/utils/log/log.dart';
 
 bool clearTokensWithZero(String key, Token token) {
@@ -288,12 +290,83 @@ ThunkAction<AppState> getTokensListForSmartWallet(
   };
 }
 
+Future<void> _fetchTokenBalances({
+  bool showLoadingIndicator = true,
+}) async {
+  final store = await reduxStore;
+  final bool isLoggedOut = !store.state.userState.isLoggedIn;
+  if (isLoggedOut) {
+    log.info('Not fetching balances as user is logged out.');
+    return;
+  }
+  final String walletAddress = store.state.userState.walletAddress;
+  final NetworkInfo networkInfo = getIt<NetworkInfo>();
+  if (await networkInfo.isConnected) {
+    try {
+      if (showLoadingIndicator) {
+        store.dispatch(SignupLoading(isLoading: true));
+      }
+      final Map<String, Token> tokens = store.state.cashWalletState.tokens;
+      for (final Token token in tokens.values) {
+        await token.fetchBalance(
+          walletAddress,
+          onDone: (balance) {
+            if (showLoadingIndicator) {
+              store.dispatch(SignupLoading(isLoading: false));
+            }
+            if (balance.compareTo(token.amount) != 0) {
+              log.debug(
+                  'Balance has changed from to ${token.getAmountTokens()} to ${Formatter.fromWei(balance, token.decimals).toDouble()}');
+              store.dispatch(
+                GotTokenBalanceSuccess(
+                  tokenBalance: balance,
+                  tokenAddress: token.address,
+                ),
+              );
+            }
+          },
+          onError: (
+            Object e,
+            StackTrace s,
+          ) {
+            if (showLoadingIndicator) {
+              store.dispatch(SignupLoading(isLoading: false));
+            }
+            log.error(
+              'Error - fetch token balance ${token.name}',
+              error: e,
+              stackTrace: s,
+            );
+          },
+        );
+      }
+    } catch (e, s) {
+      if (showLoadingIndicator) {
+        store.dispatch(SignupLoading(isLoading: false));
+      }
+      log.error(
+        'Error fetch tokens balances - $e',
+        error: e,
+        stackTrace: s,
+      );
+    }
+  } else {
+    log.error("Looks like you're offline");
+  }
+}
+
+ThunkAction<AppState> fetchTokenBalancesOnce() {
+  return (Store<AppState> store) async {
+    return _fetchTokenBalances(showLoadingIndicator: true);
+  };
+}
+
 ThunkAction<AppState> startFetchTokensBalances() {
   return (Store<AppState> store) async {
-    final bool isFetchingBalances =
+    final bool timerStartedForFetchingBalances =
         store.state.cashWalletState.isFetchingBalances;
     final String walletAddress = store.state.userState.walletAddress;
-    if (!isFetchingBalances) {
+    if (!timerStartedForFetchingBalances) {
       log.info('Start Fetching token balances');
       Timer.periodic(
         const Duration(seconds: Variables.intervalSeconds),
@@ -311,46 +384,7 @@ ThunkAction<AppState> startFetchTokensBalances() {
             store.dispatch(SetIsFetchingBalances(isFetching: false));
             timer.cancel();
           } else {
-            final NetworkInfo networkInfo = getIt<NetworkInfo>();
-            if (await networkInfo.isConnected) {
-              try {
-                final Map<String, Token> tokens =
-                    store.state.cashWalletState.tokens;
-                for (final Token token in tokens.values) {
-                  await token.fetchBalance(
-                    walletAddress,
-                    onDone: (balance) {
-                      if (balance.compareTo(token.amount) != 0) {
-                        store.dispatch(
-                          GotTokenBalanceSuccess(
-                            tokenBalance: balance,
-                            tokenAddress: token.address,
-                          ),
-                        );
-                      }
-                    },
-                    onError: (
-                      Object e,
-                      StackTrace s,
-                    ) {
-                      log.error(
-                        'Error - fetch token balance ${token.name}',
-                        error: e,
-                        stackTrace: s,
-                      );
-                    },
-                  );
-                }
-              } catch (e, s) {
-                log.error(
-                  'Error fetch tokens balances - $e',
-                  error: e,
-                  stackTrace: s,
-                );
-              }
-            } else {
-              log.error("Looks like you're offline");
-            }
+            _fetchTokenBalances(showLoadingIndicator: false);
           }
         },
       );

@@ -8,16 +8,18 @@ part of 'transaction_item.dart';
 
 _$_TransactionItem _$$_TransactionItemFromJson(Map<String, dynamic> json) =>
     _$_TransactionItem(
+      id: json['id'] as int?,
       timestamp: jsonToTimeStamp(json['timestamp']),
       amount: json['amount'] as num,
       currency: $enumDecode(_$CurrencyEnumMap, json['currency']),
       receiver: objectIdFromJson(json['receiver']),
       payer: objectIdFromJson(json['payer']),
-      order: objectIdFromJson(json['order']),
+      order: objectIdFromJsonNullable(json['order']),
     );
 
 Map<String, dynamic> _$$_TransactionItemToJson(_$_TransactionItem instance) =>
     <String, dynamic>{
+      'id': instance.id,
       'timestamp': timeStampToJsonInt(instance.timestamp),
       'amount': instance.amount,
       'currency': _$CurrencyEnumMap[instance.currency]!,

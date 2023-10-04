@@ -12,8 +12,8 @@ import 'package:vegan_liverpool/models/app_state.dart';
 import 'package:vegan_liverpool/redux/actions/cart_actions.dart';
 import 'package:vegan_liverpool/redux/viewsmodels/paymentSheet.dart';
 
-class QRFromCartSheet extends StatelessWidget {
-  const QRFromCartSheet({Key? key}) : super(key: key);
+class QRSignInAtVendor extends StatelessWidget {
+  const QRSignInAtVendor({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -57,7 +57,7 @@ class QRFromCartSheet extends StatelessWidget {
                   children: [
                     const Center(
                       child: Text(
-                        'vegiPay',
+                        'vegi',
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 32,

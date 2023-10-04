@@ -62,7 +62,7 @@ class PeeplRewardsAppBar extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          '${greenBeanToken.name} Rewards Earned: ',
+                          '${TokenDefinitions.greenBeanToken.name} Rewards Earned: ',
                           style: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.w500,
@@ -70,14 +70,14 @@ class PeeplRewardsAppBar extends StatelessWidget {
                         ),
                         StoreConnector<AppState, double>(
                           converter: (store) {
-                            return getPPLRewardsFromPence(
+                            return getGBTRewardsFromPence(
                               store.state.cartState.cartTotal.inGBPxValue,
                             );
                           },
                           builder: (context, vegiRewardsForBasket) {
                             return Text(
-                              '${vegiRewardsForBasket.toStringAsFixed(2)} ${greenBeanToken.symbol} '
-                              '(£${getPoundValueFormattedFromPPL(vegiRewardsForBasket)})',
+                              '${vegiRewardsForBasket.toStringAsFixed(2)} ${TokenDefinitions.greenBeanToken.symbol} '
+                              '(£${getPoundValueFormattedFromGBT(vegiRewardsForBasket)})',
                               style: const TextStyle(
                                 fontSize: 15,
                                 fontWeight: FontWeight.w700,

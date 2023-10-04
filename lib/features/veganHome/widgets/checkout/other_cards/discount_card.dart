@@ -10,6 +10,8 @@ import 'package:vegan_liverpool/constants/enums.dart';
 import 'package:vegan_liverpool/constants/theme.dart';
 import 'package:vegan_liverpool/features/shared/widgets/primary_button.dart';
 import 'package:vegan_liverpool/features/shared/widgets/snackbars.dart';
+import 'package:vegan_liverpool/features/veganHome/widgets/shared/chooseCashBackSlider.dart';
+import 'package:vegan_liverpool/features/veganHome/widgets/shared/paymentSheet.dart';
 import 'package:vegan_liverpool/models/app_state.dart';
 import 'package:vegan_liverpool/models/cart/discount.dart';
 import 'package:vegan_liverpool/models/payments/money.dart';
@@ -67,6 +69,7 @@ class DiscountCards extends StatelessWidget {
                 ),
               );
             }),
+            const CashBackGBTRewardsCard(),
             const CreateDiscountCard(),
           ],
         );
@@ -139,7 +142,7 @@ class DiscountCard extends StatelessWidget {
                 ),
                 if (allowRemovalAction) ...[
                   const Spacer(),
-                  if (hasDiscount)
+                  if (hasDiscount && removeDiscount != null)
                     IconButton(
                       alignment: Alignment.centerRight,
                       padding: const EdgeInsets.only(right: 2),
@@ -148,6 +151,11 @@ class DiscountCard extends StatelessWidget {
                         Icons.remove,
                         size: 18,
                       ),
+                    )
+                  else if (hasDiscount)
+                    const Icon(
+                      Icons.savings,
+                      size: 18,
                     )
                   else
                     const Icon(
@@ -160,6 +168,65 @@ class DiscountCard extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class CashBackGBTRewardsCard extends StatelessWidget {
+  const CashBackGBTRewardsCard({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    final store = StoreProvider.of<AppState>(context);
+    return StoreConnector<AppState, DiscountCardViewModel>(
+      converter: DiscountCardViewModel.fromStore,
+      builder: (context, viewmodel) {
+        return DiscountCard(
+          hasDiscount: true,
+          discountCode: 'cash back',
+          removeDiscount: null,
+          discount: Discount(
+            code: 'cash back',
+            currency: Currency.GBP,
+            discountType: DiscountType.fixed,
+            id: -1,
+            // value: store.state.cashWalletState.tokens[greenBeanToken.address]!
+            //     .getFiatBalance(),
+            value:
+                store.state.cartState.selectedCashBackAppliedToCart.inGBPValue,
+            isEnabled: true,
+            expiryDateTime: null,
+            linkedWalletAddress: null,
+            maxUses: 1,
+            timesUsed: 0,
+            vendor: null,
+          ),
+          onTap: () async {
+            unawaited(
+              Analytics.track(
+                eventName: AnalyticsEvents.addDiscount,
+              ),
+            );
+            await showModalBottomSheet<Widget>(
+              isScrollControlled: true,
+              backgroundColor: Colors.grey[900],
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.vertical(
+                  top: Radius.circular(20),
+                ),
+              ),
+              elevation: 5,
+              context: context,
+              builder: (context) => const ChooseCashBackSlider(),
+            );
+          },
+          icon: const Icon(
+            Icons.currency_pound,
+            size: 18,
+          ),
+          allowRemovalAction: true,
+        );
+      },
     );
   }
 }

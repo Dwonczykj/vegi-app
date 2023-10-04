@@ -308,7 +308,8 @@ class _SingleOrderCardState extends State<SingleOrderCard> {
                         if (widget.order.rewardsIssued != 0)
                           WidgetSpan(
                             child: Image.asset(
-                              'assets/images/avatar-ppl-red.png',
+                              ImagePaths
+                                  .vegiBeanMan, // ImagePaths.avatarPPLRed,
                               width: 25,
                             ),
                           ),

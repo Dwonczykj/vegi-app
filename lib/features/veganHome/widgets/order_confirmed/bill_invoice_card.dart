@@ -74,7 +74,7 @@ class BillInvoiceCard extends StatelessWidget {
                       ),
                     ],
                   ),
-                  if (order.didUsePPL) ...[
+                  if (order.didUseGBT) ...[
                     const SizedBox(
                       height: 5,
                     ),
@@ -82,10 +82,10 @@ class BillInvoiceCard extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'Amount paid in ${AppConfig.rewardCurrency.name} rewards',
+                          'Amount paid in ${TokenDefinitions.greenBeanToken.name}',
                         ),
                         Text(
-                          order.rewardsTokensAmountPaid.toStringAsFixed(3),
+                          order.rewardsTokensAmountPaid.toStringAsFixed(0),
                         ),
                       ],
                     ),
@@ -114,7 +114,7 @@ class BillInvoiceCard extends StatelessWidget {
                       // ),
                       const Spacer(),
                       Text(
-                        '${order.rewardsEarnedInPPLFormatted} 🟢',
+                        '${order.rewardsEarnedInTokensFormatted} ',
                         style: const TextStyle(
                           fontWeight: FontWeight.w700,
                           fontSize: 16,

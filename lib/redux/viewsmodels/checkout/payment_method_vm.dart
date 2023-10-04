@@ -14,8 +14,8 @@ import 'package:vegan_liverpool/utils/constants.dart';
 class PaymentMethodViewModel extends Equatable {
   const PaymentMethodViewModel({
     required this.selectedPaymentMethod,
-    required this.pplBalance,
-    required this.hasPplBalance,
+    required this.gbtBalance,
+    required this.hasGBTBalance,
     required this.cartTotal,
     required this.firebaseAuthenticationStatus,
     required this.fuseAuthenticationStatus,
@@ -38,14 +38,15 @@ class PaymentMethodViewModel extends Equatable {
   });
 
   factory PaymentMethodViewModel.fromStore(Store<AppState> store) {
-    final pplBalance =
-        store.state.cashWalletState.tokens[pplToken.address]!.getAmount();
+    final gbtBalance = store
+        .state.cashWalletState.tokens[TokenDefinitions.greenBeanToken.address]!
+        .getAmountTokens();
 
     return PaymentMethodViewModel(
       selectedPaymentMethod: store.state.cartState.selectedPaymentMethod ??
           store.state.cartState.preferredPaymentMethod ??
           PaymentMethod.stripe,
-      pplBalance: '£${getPoundValueFormattedFromPPL(pplBalance)}',
+      gbtBalance: '£${getPoundValueFormattedFromGBT(gbtBalance)}',
       isLoading: store.state.cartState.payButtonLoading,
       isLoadingHttpRequest: store.state.homePageState.isLoadingHttpRequest,
       isDelivery: store.state.cartState.isDelivery,
@@ -55,7 +56,7 @@ class PaymentMethodViewModel extends Equatable {
           store.state.cartState.fulfilmentMethod ==
               FulfilmentMethodType.inStore,
       isSuperAdmin: store.state.userState.isVegiSuperAdmin,
-      hasPplBalance: pplBalance > 0,
+      hasGBTBalance: gbtBalance > 0,
       cartTotal: store.state.cartState.cartTotal,
       firebaseAuthenticationStatus:
           store.state.userState.firebaseAuthenticationStatus,
@@ -93,8 +94,8 @@ class PaymentMethodViewModel extends Equatable {
   }
 
   final PaymentMethod selectedPaymentMethod;
-  final String pplBalance;
-  final bool hasPplBalance;
+  final String gbtBalance;
+  final bool hasGBTBalance;
   final bool isLoading;
   final bool isLoadingHttpRequest;
   final bool isDelivery;
@@ -126,7 +127,7 @@ class PaymentMethodViewModel extends Equatable {
   @override
   List<Object?> get props => [
         selectedPaymentMethod,
-        pplBalance,
+        gbtBalance,
         isLoading,
         isLoadingHttpRequest,
         isDelivery,
@@ -134,7 +135,7 @@ class PaymentMethodViewModel extends Equatable {
         selectedRestaurantIsLive,
         selectedFulfilmentMethod,
         showvegiPay,
-        hasPplBalance,
+        hasGBTBalance,
         restaurantMinimumOrder,
         cartTotal,
         orderCreationProcessStatus,

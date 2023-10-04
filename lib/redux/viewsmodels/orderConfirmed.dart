@@ -60,15 +60,25 @@ class OrderConfirmedViewModel extends Equatable {
       log.error('Issue initialising OrderConfirmedViewModel: $e');
     }
     if (order != null && order.transactions.isEmpty) {
-      order.transactions.add(
-        TransactionItem(
-          timestamp: order.orderedDateTime,
-          amount: store.state.cartState.cartTotal.value,
-          currency: store.state.cartState.cartTotal.currency,
-          receiver: -2,
-          payer: store.state.userState.vegiAccountId ?? -1,
-          order: order.id,
-        ),
+      order.transactions.addAll(
+        [
+          TransactionItem(
+            timestamp: order.orderedDateTime,
+            amount: store.state.cartState.cartTotal.value,
+            currency: store.state.cartState.cartTotal.currency,
+            receiver: -2,
+            payer: store.state.userState.vegiAccountId ?? -1,
+            order: order.id,
+          ),
+          TransactionItem(
+            timestamp: order.orderedDateTime,
+            amount: store.state.cartState.selectedCashBackAppliedToCart.value,
+            currency: store.state.cartState.selectedCashBackAppliedToCart.currency,
+            receiver: -2,
+            payer: store.state.userState.vegiAccountId ?? -1,
+            order: order.id,
+          ),
+        ]
       );
     }
     return OrderConfirmedViewModel(

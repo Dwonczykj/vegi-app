@@ -30,7 +30,8 @@ typedef AddDiscountCode = void Function(
 @RoutePage()
 class AddDiscountCodeScreen extends StatefulWidget {
   const AddDiscountCodeScreen({
-    required this.onVerifyDiscountCode, Key? key,
+    required this.onVerifyDiscountCode,
+    Key? key,
   }) : super(key: key);
 
   final void Function() onVerifyDiscountCode;
@@ -151,34 +152,58 @@ class _AddDiscountCodeScreenState extends State<AddDiscountCodeScreen>
                         alignment: Alignment.topRight,
                         child: Stack(
                           children: [
-                            Container(
-                              //Change to FractionallySized
+                            GestureDetector(
+                              onLongPress: () {
+                                viewModel.fetchBalance();
+                              },
+                              child: Container(
+                                //Change to FractionallySized
 
-                              width: (deviceSize.aspectRatio <= 1
-                                      ? deviceSize.width
-                                      : deviceSize.height) *
-                                  0.4,
-                              height: (deviceSize.aspectRatio <= 1
-                                      ? deviceSize.width
-                                      : deviceSize.height) *
-                                  0.4,
-                              decoration: const BoxDecoration(
-                                color: themeShade600,
-                                shape: BoxShape.circle,
-                              ),
-                              child: Center(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8),
-                                  child: AutoSizeText(
-                                    viewModel.voucherPotValue
-                                        .formattedPriceNoDecimals,
-                                    style: const TextStyle(
-                                      color: Colors.black,
-                                      fontSize: 80,
-                                      fontFamily: Fonts.fatFace,
+                                width: (deviceSize.aspectRatio <= 1
+                                        ? deviceSize.width
+                                        : deviceSize.height) *
+                                    0.4,
+                                height: (deviceSize.aspectRatio <= 1
+                                        ? deviceSize.width
+                                        : deviceSize.height) *
+                                    0.4,
+                                decoration: const BoxDecoration(
+                                  color: themeShade600,
+                                  shape: BoxShape.circle,
+                                ),
+                                child: Center(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8),
+                                    child: Column(
+                                      children: [
+                                        AutoSizeText(
+                                          // viewModel.voucherPotValue
+                                          //     .formattedPriceNoDecimals,
+                                          viewModel.gbtTokens.getFiatBalanceFormatted(),
+                                          style: const TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 80,
+                                            fontFamily: Fonts.fatFace,
+                                          ),
+                                          maxLines: 1,
+                                          maxFontSize: 100,
+                                        ),
+                                        SizedBox(
+                                          height: 5,
+                                        ),
+                                        AutoSizeText(
+                                          '${viewModel.gbtBalanceFormatted} GBT',
+                                          style: TextStyle(
+                                            color: Colors.green[900] ??
+                                                Colors.green,
+                                            fontSize: 30,
+                                            fontFamily: Fonts.fatFace,
+                                          ),
+                                          maxLines: 1,
+                                          maxFontSize: 100,
+                                        ),
+                                      ],
                                     ),
-                                    maxLines: 1,
-                                    maxFontSize: 100,
                                   ),
                                 ),
                               ),
@@ -190,8 +215,7 @@ class _AddDiscountCodeScreenState extends State<AddDiscountCodeScreen>
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 8),
+                            padding: const EdgeInsets.symmetric(horizontal: 8),
                             child: AutoSizeText(
                               Messages.addVoucherCode,
                               textAlign: TextAlign.center,
@@ -311,7 +335,7 @@ class _AddDiscountCodeScreenState extends State<AddDiscountCodeScreen>
                                           );
                                           return;
                                         }
-                                        viewModel.registerFixedVoucherCode(
+                                        viewModel.acceptVoucherCode(
                                           code: code,
                                         );
                                       }

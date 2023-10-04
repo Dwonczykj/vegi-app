@@ -17,6 +17,10 @@ _$_CartState _$$_CartStateFromJson(Map<String, dynamic> json) => _$_CartState(
       cartTax: json['cartTax'] == null
           ? const Money.zeroGBP()
           : Money.fromJson(json['cartTax'] as Map<String, dynamic>),
+      cartTotalWithoutGBTRewards: json['cartTotalWithoutGBTRewards'] == null
+          ? const Money.zeroGBP()
+          : Money.fromJson(
+              json['cartTotalWithoutGBTRewards'] as Map<String, dynamic>),
       cartTotal: json['cartTotal'] == null
           ? const Money.zeroGBP()
           : Money.fromJson(json['cartTotal'] as Map<String, dynamic>),
@@ -35,6 +39,11 @@ _$_CartState _$$_CartStateFromJson(Map<String, dynamic> json) => _$_CartState(
               ?.map((e) => Discount.fromJson(e as Map<String, dynamic>))
               .toList() ??
           const [],
+      selectedCashBackAppliedToCart: json['selectedCashBackAppliedToCart'] ==
+              null
+          ? const Money.zeroGBP()
+          : Money.fromJson(
+              json['selectedCashBackAppliedToCart'] as Map<String, dynamic>),
       deliverySlots: (json['deliverySlots'] as List<dynamic>?)
               ?.map((e) => TimeSlot.fromJson(e as Map<String, dynamic>))
               .toList() ??
@@ -130,6 +139,8 @@ Map<String, dynamic> _$$_CartStateToJson(_$_CartState instance) =>
       'cartItems': instance.cartItems.map((e) => e.toJson()).toList(),
       'cartSubTotal': Money.toJson(instance.cartSubTotal),
       'cartTax': Money.toJson(instance.cartTax),
+      'cartTotalWithoutGBTRewards':
+          Money.toJson(instance.cartTotalWithoutGBTRewards),
       'cartTotal': Money.toJson(instance.cartTotal),
       'cartCurrency': _$CurrencyEnumMap[instance.cartCurrency]!,
       'cartDiscountPercent': instance.cartDiscountPercent,
@@ -137,6 +148,8 @@ Map<String, dynamic> _$$_CartStateToJson(_$_CartState instance) =>
       'voucherPotValue': Money.toJson(instance.voucherPotValue),
       'appliedVouchers':
           instance.appliedVouchers.map((e) => e.toJson()).toList(),
+      'selectedCashBackAppliedToCart':
+          Money.toJson(instance.selectedCashBackAppliedToCart),
       'deliverySlots': instance.deliverySlots.map((e) => e.toJson()).toList(),
       'collectionSlots':
           instance.collectionSlots.map((e) => e.toJson()).toList(),

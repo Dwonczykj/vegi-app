@@ -553,15 +553,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   //     },
                   //   ),
                 ],
-                if (DebugHelpers.inDebugMode) ...[
-                  ListTile(
-                    title: const Text("Web3Auth Social Login"),
-                    onTap: () async {
-                      await rootRouter
-                          .replace(const Web3AuthExampleLoginScreen());
-                    },
-                  ),
-                ],
+                // if (DebugHelpers.inDebugMode) ...[
+                //   ListTile(
+                //     title: const Text("Web3Auth Social Login"),
+                //     onTap: () async {
+                //       await rootRouter
+                //           .replace(const Web3AuthExampleLoginScreen());
+                //     },
+                //   ),
+                // ],
                 ListTile(
                   title: Text(Labels.signupButtonLabelLogout(context)),
                   onTap: () => _logout(context),

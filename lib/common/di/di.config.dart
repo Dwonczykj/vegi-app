@@ -40,10 +40,10 @@ import 'package:vegan_liverpool/new_version.dart' as _i18;
 import 'package:vegan_liverpool/services/apis/fxService.dart' as _i5;
 import 'package:vegan_liverpool/services/apis/locationService.dart' as _i15;
 import 'package:vegan_liverpool/services/apis/peeplEats.dart' as _i20;
-import 'package:vegan_liverpool/services/apis/peeplPay.dart' as _i22;
-import 'package:vegan_liverpool/services/apis/peeplPay2.dart' as _i21;
-import 'package:vegan_liverpool/services/apis/stripePay.dart' as _i28;
-import 'package:vegan_liverpool/services/apis/stripePay2.dart' as _i27;
+import 'package:vegan_liverpool/services/apis/peeplPay.dart' as _i21;
+import 'package:vegan_liverpool/services/apis/peeplPay2.dart' as _i22;
+import 'package:vegan_liverpool/services/apis/stripePay.dart' as _i27;
+import 'package:vegan_liverpool/services/apis/stripePay2.dart' as _i28;
 import 'package:vegan_liverpool/services/apis/vegiESCService.dart' as _i30;
 import 'package:vegan_liverpool/utils/connectionChecker.dart' as _i17;
 import 'package:vegan_liverpool/utils/log/log_it.dart' as _i31;
@@ -120,15 +120,15 @@ extension GetItInjectableX on _i1.GetIt {
     );
     gh.lazySingleton<_i20.PeeplEatsService>(
         () => _i20.PeeplEatsService(gh<_i4.Dio>()));
-    gh.lazySingleton<_i21.PeeplPayService>(() => _i21.PeeplPayService());
-    gh.lazySingleton<_i22.PeeplPayService>(
-        () => _i22.PeeplPayService(gh<_i4.Dio>()));
+    gh.lazySingleton<_i21.PeeplPayService>(
+        () => _i21.PeeplPayService(gh<_i4.Dio>()));
+    gh.lazySingleton<_i22.PeeplPayService>(() => _i22.PeeplPayService());
     gh.lazySingleton<_i23.PhoneNumberUtil>(() => phone.phoneNumberUtil);
     gh.lazySingleton<_i24.RootRouter>(() => servicesModule.rootRouter);
     gh.singletonAsync<_i25.Store<_i26.AppState>>(() => registerModule.store());
-    gh.lazySingleton<_i27.StripePayService>(() => _i27.StripePayService());
-    gh.lazySingleton<_i28.StripePayService>(
-        () => _i28.StripePayService(gh<_i4.Dio>()));
+    gh.lazySingleton<_i27.StripePayService>(
+        () => _i27.StripePayService(gh<_i4.Dio>()));
+    gh.lazySingleton<_i28.StripePayService>(() => _i28.StripePayService());
     gh.lazySingleton<_i29.StripeService>(() => _i29.StripeService());
     gh.lazySingleton<_i30.VegiESCService>(
         () => _i30.VegiESCService(gh<_i4.Dio>()));

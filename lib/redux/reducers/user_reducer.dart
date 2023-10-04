@@ -5,6 +5,7 @@ import 'package:vegan_liverpool/models/user_state.dart';
 import 'package:vegan_liverpool/redux/actions/cart_actions.dart';
 import 'package:vegan_liverpool/redux/actions/cash_wallet_actions.dart';
 import 'package:vegan_liverpool/redux/actions/user_actions.dart';
+import 'package:vegan_liverpool/utils/constants.dart';
 import 'package:vegan_liverpool/utils/log/log.dart';
 
 final userReducers = combineReducers<UserState>([
@@ -315,9 +316,14 @@ UserState _createNewWalletSuccess(
   UserState state,
   CreateLocalAccountSuccess action,
 ) {
+  final newPkMap = state.privateKeyCached
+    ..addAll({
+      Secrets.FUSE_WALLET_SDK_PUBLIC_KEY: action.privateKey,
+    });
   return state.copyWith(
     // mnemonic: action.mnemonic,
-    privateKey: action.privateKey,
+    privateKeyCached: newPkMap,
+    storedFusePublicKey: Secrets.FUSE_WALLET_SDK_PUBLIC_KEY,
     fuseWalletCredentials: action.fuseWalletCredentials,
     // accountAddress: action.accountAddress,
   );
@@ -327,8 +333,15 @@ UserState _resetFuseCredentials(
   UserState state,
   ResetFuseCredentials action,
 ) {
+  final newPkMap = state.privateKeyCached
+    ..addAll(action.privateKeyForPhone == null
+        ? {}
+        : {
+            Secrets.FUSE_WALLET_SDK_PUBLIC_KEY: action.privateKeyForPhone!,
+          });
   return state.copyWith(
-    privateKey: action.privateKeyForPhone ?? '',
+    privateKeyCached: newPkMap,
+    storedFusePublicKey: Secrets.FUSE_WALLET_SDK_PUBLIC_KEY,
     fuseAuthenticationStatus: FuseAuthenticationStatus.unauthenticated,
     fuseWalletCredentials: null,
     // accountAddress: action.accountAddress,
@@ -465,7 +478,8 @@ UserState _logoutSuccess(
     jwtToken: '',
     verificationId: '',
     walletAddress: '',
-    privateKey: '',
+    privateKeyCached: state.privateKeyCached,
+    storedFusePublicKey: Secrets.FUSE_WALLET_SDK_PUBLIC_KEY,
     userIsVerified: false,
     password: '',
     // vegiUserId: null,

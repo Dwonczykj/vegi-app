@@ -19,6 +19,9 @@ class VegiBackendEndpoints {
     String fulfilmentMethodType,
   ) =>
       'api/v1/home/nearest-vendors?location=${geoLocation.lat},${geoLocation.lng}&fulfilmentMethodType=$fulfilmentMethodType$distanceFromQueryParam';
+  static const createFusePaymentIntent = 'api/v1/payments/create-fuse-payment-intent';
+  static const updateTransaction = 'api/v1/payments/update-transaction';
+  static const updateOrderStatus = 'api/v1/orders/update-order-status';
 }
 
 class VegiESCServiceEndpoints {

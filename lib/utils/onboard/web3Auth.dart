@@ -1,20 +1,14 @@
 import 'dart:collection';
 import 'dart:io';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fuse_wallet_sdk/fuse_wallet_sdk.dart';
 import 'package:get_it/get_it.dart';
-import 'package:sentry_flutter/sentry_flutter.dart';
-import 'package:vegan_liverpool/common/di/env.dart';
 import 'package:vegan_liverpool/constants/enums.dart';
 import 'package:vegan_liverpool/features/veganHome/Helpers/helpers.dart';
-import 'package:vegan_liverpool/models/app_state.dart';
-import 'package:vegan_liverpool/redux/actions/auth_actions.dart';
 import 'package:vegan_liverpool/redux/actions/cash_wallet_actions.dart';
 import 'package:vegan_liverpool/redux/actions/onboarding_actions.dart';
 import 'package:vegan_liverpool/redux/actions/user_actions.dart';
-import 'package:vegan_liverpool/redux/viewsmodels/signUpErrorDetails.dart';
 import 'package:vegan_liverpool/services.dart';
 import 'package:redux/redux.dart';
 import 'package:vegan_liverpool/utils/config.dart';
@@ -82,26 +76,11 @@ Future<void> initWeb3Auth() async {
     // key of the existing user if a user is already logged in
     // from within the web3auth flutter packages local shared prefs on the device
     await Web3AuthFlutter.initialize();
-    final store = await reduxStore;
     final String privateKey = await Web3AuthFlutter.getPrivKey();
     log.debug(privateKey);
     if (privateKey.isNotEmpty) {
       log.debug('Web3AuthResponse Success: $privateKey');
-      final credentials = EthPrivateKey.fromHex(privateKey);
-      final fuseSDK = await FuseSDK.init(
-        Secrets.FUSE_WALLET_SDK_PUBLIC_KEY,
-        credentials,
-      );
-      GetIt.instance.registerSingleton<FuseSDK>(fuseSDK);
-      store
-        ..dispatch(
-          CreateLocalAccountSuccess(
-            // mnemonicStr.split(' '),
-            privateKey,
-            credentials,
-            // accountAddress.toString(),
-          ),
-        );
+      await registerFuseSDK(privateKey: privateKey);
     } else {
       // else init the fuseSDK once have the private key from logging in to firebase and getting web3auth.login response
       // GetIt.instance.registerSingleton<FuseSDK?>(null);
@@ -136,70 +115,9 @@ Future<void> defiAuthenticate({
     // await prefs.setString('privateKey', response.privKey.toString());
     privateKey = response.privKey.toString();
   } else {
-    // Define the read rules
-    // ~ https://firebase.google.com/docs/firestore/solutions/role-based-access#rules
-
-    // ~ https://firebase.google.com/docs/firestore/query-data/get-data#dart
-
-    final uid = firebaseAuth.currentUser?.uid;
-    if (uid == null) {
-      log.error(
-          'Firebase uid is null as no firebase user logged in. Should always be logged in to init web3auth.');
-      throw Exception(
-          'Firebase uid is null as no firebase user logged in. Should always be logged in to init web3auth.');
-    }
-    late final String mn;
-    try {
-      final docRef = firebaseFirestore
-          .collection(Secrets.FIREBASE_USER_DETAILS_COLLECTION_ID)
-          .doc(uid);
-      final doc = await docRef.get();
-      if (doc.exists == false) {
-        mn = Mnemonic.generate();
-        docRef.set(<String, dynamic>{
-          Secrets.FIREBASE_USER_DETAILS_COLLECTION_FIELD1: mn,
-        });
-        log.debug("Successfully created new backup for wallet: \"${mn}\"");
-      } else {
-        final data = doc.data() as Map<String, dynamic>;
-        mn = data[Secrets.FIREBASE_USER_DETAILS_COLLECTION_FIELD1];
-        log.debug("Successfully retrieved backup for wallet: \"${mn}\"");
-      }
-    } on Exception catch (e, s) {
-      // TODO
-      log.error(
-        "Error getting ud doc from firebase for logged in user: \"$uid\" with error: $e",
-        stackTrace: s,
-      );
-      return;
-    }
-
-    privateKey = Mnemonic.privateKeyFromMnemonic(mn);
-    log.debug("Save privateKey: : \"${privateKey}\"");
+    privateKey = await loadPrivateKeyFromFirebase();
   }
-  try {
-    if (!GetIt.instance.isRegistered<FuseSDK>()) {
-      final credentials = EthPrivateKey.fromHex(privateKey);
-      final fuseSDK = await FuseSDK.init(
-        Secrets.FUSE_WALLET_SDK_PUBLIC_KEY,
-        credentials,
-      );
-      GetIt.instance.registerSingleton<FuseSDK>(fuseSDK);
-      store
-        ..dispatch(CreateLocalAccountSuccess(
-          // mnemonicStr.split(' '),
-          privateKey,
-          credentials,
-          // accountAddress.toString(),
-        ));
-    }
-  } on Exception catch (e, s) {
-    log.error(
-      'Unable to init fuseSDK smart wallet: $e',
-      error: e,
-      stackTrace: s,
-    );
-  }
+  await registerFuseSDK(privateKey: privateKey);
   try {
     final fuseSDK = fuseWalletSDK;
     await _emitWallet(fuseSDK.wallet);
@@ -211,6 +129,92 @@ Future<void> defiAuthenticate({
     );
   }
   return;
+}
+
+Future<String> loadPrivateKeyFromFirebase() async {
+  // Define the read rules
+  // ~ https://firebase.google.com/docs/firestore/solutions/role-based-access#rules
+
+  // ~ https://firebase.google.com/docs/firestore/query-data/get-data#dart
+
+  final uid = firebaseAuth.currentUser?.uid;
+  if (uid == null) {
+    log.error(
+        'Firebase uid is null as no firebase user logged in. Should always be logged in to init web3auth.');
+    throw Exception(
+        'Firebase uid is null as no firebase user logged in. Should always be logged in to init web3auth.');
+  }
+  late final String mn;
+  try {
+    final docRef = firebaseFirestore
+        .collection(Secrets.FIREBASE_USER_DETAILS_COLLECTION_ID)
+        .doc(uid);
+    final doc = await docRef.get();
+    if (doc.exists == false || (doc.data() as Map<String, dynamic>).containsKey(Secrets.FIREBASE_USER_DETAILS_COLLECTION_FIELD1) == false) {
+      mn = Mnemonic.generate();
+      docRef.set(<String, dynamic>{
+        Secrets.FIREBASE_USER_DETAILS_COLLECTION_FIELD1: mn,
+      });
+      log.debug("Successfully created new backup for wallet: \"${mn}\"");
+    } else {
+      final data = doc.data() as Map<String, dynamic>;
+      if(!data.containsKey(Secrets.FIREBASE_USER_DETAILS_COLLECTION_FIELD1)){
+        
+      }
+      mn = data[Secrets.FIREBASE_USER_DETAILS_COLLECTION_FIELD1];
+      log.debug("Successfully retrieved backup for wallet: \"${mn}\"");
+    }
+  } on Exception catch (e, s) {
+    // TODO
+    log.error(
+      "Error getting ud doc from firebase for logged in user: \"$uid\" with error: $e",
+      stackTrace: s,
+    );
+    return '';
+  }
+
+  final privateKey = Mnemonic.privateKeyFromMnemonic(mn);
+  log.debug("Save privateKey: \"${privateKey}\"");
+  return privateKey;
+}
+
+Future<FuseSDK?> registerFuseSDK({
+  required String privateKey,
+}) async {
+  final store = await reduxStore;
+  try {
+    if (privateKey.isEmpty || store.state.userState.privateKey.isEmpty) {
+      if (store.state.userState.privateKey.isEmpty) {
+        privateKey = await loadPrivateKeyFromFirebase();
+      } else {
+        privateKey = store.state.userState.privateKey;
+      }
+    }
+    if (!GetIt.instance.isRegistered<FuseSDK>()) {
+      final credentials = EthPrivateKey.fromHex(privateKey);
+      final fuseSDK = await FuseSDK.init(
+        Secrets.FUSE_WALLET_SDK_PUBLIC_KEY,
+        credentials,
+        withPaymaster: true,
+      );
+      GetIt.instance.registerSingleton<FuseSDK>(fuseSDK);
+      store
+        ..dispatch(CreateLocalAccountSuccess(
+          // mnemonicStr.split(' '),
+          privateKey,
+          credentials,
+          // accountAddress.toString(),
+        ));
+      return fuseSDK;
+    }
+  } on Exception catch (e, s) {
+    log.error(
+      'Unable to init fuseSDK smart wallet: $e',
+      error: e,
+      stackTrace: s,
+    );
+  }
+  return null;
 }
 
 Future<void> _emitWallet(EtherspotWallet userWallet) async {

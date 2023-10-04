@@ -51,6 +51,7 @@ class CheckoutScreenPt2 extends StatelessWidget {
         body: StoreConnector<AppState, PaymentMethodViewModel>(
           onInit: (store) {
             store
+              ..dispatch(resetCashbackAmountSelected())
               ..dispatch(getNextAvaliableSlot())
               ..dispatch(autoSelectDeliveryAddress());
           },
@@ -71,10 +72,10 @@ class CheckoutScreenPt2 extends StatelessWidget {
                     StripePaymentStatus.none);
             if (newViewModel.transferringTokens &&
                 !(previousViewModel?.transferringTokens ?? false)) {
-              await showDialog<void>(
-                context: context,
-                builder: (context) => const ProcessingPayment(),
-              );
+              // await showDialog<void>(
+              //   context: context,
+              //   builder: (context) => const ProcessingPayment(),
+              // );
             } else if (orderStatusMessageUpdated ||
                 (!stripeMessageUpdated && showErrorBar)) {
               if (newViewModel.orderCreationProcessStatus ==
@@ -377,7 +378,8 @@ class CheckoutScreenPt2 extends StatelessWidget {
                 ),
                 if (showErrorBar)
                   CheckoutErrorBar(
-                      displayHeight: errorBarAdditionalHeight.toDouble(),),
+                    displayHeight: errorBarAdditionalHeight.toDouble(),
+                  ),
               ],
             );
           },

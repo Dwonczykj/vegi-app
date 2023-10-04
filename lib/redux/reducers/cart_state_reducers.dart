@@ -15,6 +15,9 @@ final cartStateReducers = combineReducers<CartState>([
   TypedReducer<CartState, UpdateCartItem>(_updateCartItem).call,
   TypedReducer<CartState, UpdateComputedCartValues>(_computeCartTotals).call,
   TypedReducer<CartState, UpdateCartDiscount>(_updateCartDiscount).call,
+  TypedReducer<CartState, UpdateSelectedCashBackAppliedToCart>(
+          _updateCartSelectedCashBack)
+      .call,
   TypedReducer<CartState, AddValidVoucherCodeToCart>(
     _addValidVoucherCodeToCart,
   ).call,
@@ -119,6 +122,7 @@ CartState _computeCartTotals(
     cartSubTotal: action.cartSubTotal,
     cartTax: action.cartTax,
     cartTotal: action.cartTotal,
+    cartTotalWithoutGBTRewards: action.cartTotalWithoutGBTRewards,
     cartDiscountComputed: action.cartDiscountComputed,
   );
 }
@@ -133,6 +137,7 @@ CartState _clearCart(
     cartTax: Money.zero(inCurrency: state.cartCurrency),
     cartTotal: Money.zero(inCurrency: state.cartCurrency),
     cartDiscountPercent: 0.0,
+    cartTotalWithoutGBTRewards: Money.zero(inCurrency: state.cartCurrency),
     cartDiscountComputed: Money.zero(inCurrency: state.cartCurrency),
     selectedTimeSlot: null,
     selectedTipAmount: Money.zero(inCurrency: state.cartCurrency),
@@ -164,6 +169,15 @@ CartState _updateCartDiscount(
   return state.copyWith(
     cartDiscountPercent: action.cartDiscountPercent,
     discountCode: action.discountCode,
+  );
+}
+
+CartState _updateCartSelectedCashBack(
+  CartState state,
+  UpdateSelectedCashBackAppliedToCart action,
+) {
+  return state.copyWith(
+    selectedCashBackAppliedToCart: action.applyCashBack,
   );
 }
 

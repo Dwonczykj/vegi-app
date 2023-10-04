@@ -49,7 +49,7 @@ class Balance extends StatelessWidget {
                   TextSpan(
                     children: <TextSpan>[
                       TextSpan(
-                        text: viewModel.gbpxbalance,
+                        text: viewModel.gbtBalance.value.toStringAsFixed(2),
                       ),
                       TextSpan(
                         text: ' GBPX',
@@ -74,7 +74,7 @@ class Balance extends StatelessWidget {
                   TextSpan(
                     children: <TextSpan>[
                       TextSpan(
-                        text: viewModel.pplBalance,
+                        text: viewModel.gbtBalance.value.toStringAsFixed(2),
                       ),
                       TextSpan(
                         text: ' PPL',

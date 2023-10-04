@@ -8,7 +8,7 @@ import 'package:vegan_liverpool/features/topup/dialogs/minting_dialog.dart';
 import 'package:vegan_liverpool/features/topup/dialogs/processing_payment.dart';
 import 'package:vegan_liverpool/features/veganHome/Helpers/extensions.dart';
 import 'package:vegan_liverpool/features/veganHome/widgets/shared/ppl_balance_card.dart';
-import 'package:vegan_liverpool/features/veganHome/widgets/shared/ppl_slider_control.dart';
+import 'package:vegan_liverpool/features/veganHome/widgets/shared/gbt_choose_cashback_slider_control.dart';
 import 'package:vegan_liverpool/features/veganHome/widgets/shared/shimmerButton.dart';
 import 'package:vegan_liverpool/models/app_state.dart';
 import 'package:vegan_liverpool/redux/actions/cart_actions.dart';
@@ -106,7 +106,8 @@ class PaymentSheet extends StatelessWidget {
             );
           } else {
             log.info(
-                'Ignoring StripePaymentStatus update: "${newViewModel.stripePaymentStatus.name}"',);
+              'Ignoring StripePaymentStatus update: "${newViewModel.stripePaymentStatus.name}"',
+            );
           }
         }
       },
@@ -159,7 +160,7 @@ class PaymentSheet extends StatelessWidget {
               const Spacer(),
               const PeeplPayBalanceCard(),
               const Spacer(),
-              const PPLSlider(),
+              const GBTChooseCashBackSlider(),
               const Spacer(),
               if (viewmodel.transferringTokens)
                 const CircularProgressIndicator(
@@ -171,7 +172,7 @@ class PaymentSheet extends StatelessWidget {
                   child: ShimmerButton(
                     buttonContent: const Center(
                       child: Text(
-                        'Pay Now',
+                        'Apply',
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 18,
@@ -179,11 +180,31 @@ class PaymentSheet extends StatelessWidget {
                         ),
                       ),
                     ),
-                    buttonAction: () => viewmodel.startPaymentProcess(),
+                    buttonAction: () {
+                      Navigator.pop(context);
+                    },
                     baseColor: Colors.grey[800]!,
                     highlightColor: Colors.grey[850]!,
                   ),
                 ),
+              // SizedBox(
+              //   width: MediaQuery.of(context).size.width * 0.4,
+              //   child: ShimmerButton(
+              //     buttonContent: const Center(
+              //       child: Text(
+              //         'Pay Now',
+              //         style: TextStyle(
+              //           color: Colors.white,
+              //           fontSize: 18,
+              //           fontWeight: FontWeight.w900,
+              //         ),
+              //       ),
+              //     ),
+              //     buttonAction: () => viewmodel.startPaymentProcess(),
+              //     baseColor: Colors.grey[800]!,
+              //     highlightColor: Colors.grey[850]!,
+              //   ),
+              // ),
               const Spacer()
             ],
           ),

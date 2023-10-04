@@ -46,17 +46,23 @@ Map<String, Token> tokensFromJson(Map<String, dynamic> tokens) => tokens.map(
         }
       },
     )
-      ..putIfAbsent(gbpxToken.address, () => gbpxToken)
-      ..putIfAbsent(pplToken.address, () => pplToken);
+      // ..putIfAbsent(gbpxToken.address, () => gbpxToken)
+      // ..putIfAbsent(pplToken.address, () => pplToken)
+      ..putIfAbsent(TokenDefinitions.greenBeanToken.address,
+          () => TokenDefinitions.greenBeanToken);
 
 @freezed
 class CashWalletState with _$CashWalletState {
   factory CashWalletState({
     @JsonKey(fromJson: tokensFromJson) @Default({}) Map<String, Token> tokens,
     @JsonKey(fromJson: walletActionsFromJson) WalletActions? walletActions,
+
+    ///
     @JsonKey(includeFromJson: false, includeToJson: false)
     @Default(false)
     bool isTransfersFetchingStarted,
+
+    /// an indicator variable to show whether the periodic timer has been started to reguarly fetch balances.
     @JsonKey(includeFromJson: false, includeToJson: false)
     @Default(false)
     bool isFetchingBalances,
@@ -68,12 +74,14 @@ class CashWalletState with _$CashWalletState {
     return CashWalletState(
       tokens: Map<String, Token>.fromIterables(
         {
-          gbpxToken.address,
-          pplToken.address,
+          // gbpxToken.address,
+          // pplToken.address,
+          TokenDefinitions.greenBeanToken.address,
         },
         [
-          gbpxToken.copyWith(),
-          pplToken.copyWith(),
+          // gbpxToken.copyWith(),
+          // pplToken.copyWith(),
+          TokenDefinitions.greenBeanToken.copyWith(),
         ],
       ),
       walletActions: WalletActions().copyWith(

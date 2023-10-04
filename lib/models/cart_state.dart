@@ -48,6 +48,12 @@ class CartState with _$CartState {
       toJson: Money.toJson,
     )
     @Default(Money.zeroGBP())
+    Money cartTotalWithoutGBTRewards,
+    @JsonKey(
+      fromJson: Money.fromJson,
+      toJson: Money.toJson,
+    )
+    @Default(Money.zeroGBP())
     Money cartTotal,
     @Default(Currency.GBP) Currency cartCurrency,
     @Default(0) num cartDiscountPercent,
@@ -64,6 +70,12 @@ class CartState with _$CartState {
     @Default(Money.zeroGBP())
     Money voucherPotValue,
     @Default([]) List<Discount> appliedVouchers,
+    @JsonKey(
+      fromJson: Money.fromJson,
+      toJson: Money.toJson,
+    )
+    @Default(Money.zeroGBP())
+    Money selectedCashBackAppliedToCart,
     @Default([]) List<TimeSlot> deliverySlots,
     @Default([]) List<TimeSlot> collectionSlots,
     @Default(null) DeliveryAddresses? selectedDeliveryAddress,

@@ -26,6 +26,8 @@ mixin _$CartState {
   @JsonKey(fromJson: Money.fromJson, toJson: Money.toJson)
   Money get cartTax => throw _privateConstructorUsedError;
   @JsonKey(fromJson: Money.fromJson, toJson: Money.toJson)
+  Money get cartTotalWithoutGBTRewards => throw _privateConstructorUsedError;
+  @JsonKey(fromJson: Money.fromJson, toJson: Money.toJson)
   Money get cartTotal => throw _privateConstructorUsedError;
   Currency get cartCurrency => throw _privateConstructorUsedError;
   num get cartDiscountPercent => throw _privateConstructorUsedError;
@@ -34,6 +36,8 @@ mixin _$CartState {
   @JsonKey(fromJson: Money.fromJson, toJson: Money.toJson)
   Money get voucherPotValue => throw _privateConstructorUsedError;
   List<Discount> get appliedVouchers => throw _privateConstructorUsedError;
+  @JsonKey(fromJson: Money.fromJson, toJson: Money.toJson)
+  Money get selectedCashBackAppliedToCart => throw _privateConstructorUsedError;
   List<TimeSlot> get deliverySlots => throw _privateConstructorUsedError;
   List<TimeSlot> get collectionSlots => throw _privateConstructorUsedError;
   DeliveryAddresses? get selectedDeliveryAddress =>
@@ -108,6 +112,8 @@ abstract class $CartStateCopyWith<$Res> {
       @JsonKey(fromJson: Money.fromJson, toJson: Money.toJson)
       Money cartSubTotal,
       @JsonKey(fromJson: Money.fromJson, toJson: Money.toJson) Money cartTax,
+      @JsonKey(fromJson: Money.fromJson, toJson: Money.toJson)
+      Money cartTotalWithoutGBTRewards,
       @JsonKey(fromJson: Money.fromJson, toJson: Money.toJson) Money cartTotal,
       Currency cartCurrency,
       num cartDiscountPercent,
@@ -116,6 +122,8 @@ abstract class $CartStateCopyWith<$Res> {
       @JsonKey(fromJson: Money.fromJson, toJson: Money.toJson)
       Money voucherPotValue,
       List<Discount> appliedVouchers,
+      @JsonKey(fromJson: Money.fromJson, toJson: Money.toJson)
+      Money selectedCashBackAppliedToCart,
       List<TimeSlot> deliverySlots,
       List<TimeSlot> collectionSlots,
       DeliveryAddresses? selectedDeliveryAddress,
@@ -192,12 +200,14 @@ class _$CartStateCopyWithImpl<$Res, $Val extends CartState>
     Object? cartItems = null,
     Object? cartSubTotal = null,
     Object? cartTax = null,
+    Object? cartTotalWithoutGBTRewards = null,
     Object? cartTotal = null,
     Object? cartCurrency = null,
     Object? cartDiscountPercent = null,
     Object? cartDiscountComputed = null,
     Object? voucherPotValue = null,
     Object? appliedVouchers = null,
+    Object? selectedCashBackAppliedToCart = null,
     Object? deliverySlots = null,
     Object? collectionSlots = null,
     Object? selectedDeliveryAddress = freezed,
@@ -252,6 +262,10 @@ class _$CartStateCopyWithImpl<$Res, $Val extends CartState>
           ? _value.cartTax
           : cartTax // ignore: cast_nullable_to_non_nullable
               as Money,
+      cartTotalWithoutGBTRewards: null == cartTotalWithoutGBTRewards
+          ? _value.cartTotalWithoutGBTRewards
+          : cartTotalWithoutGBTRewards // ignore: cast_nullable_to_non_nullable
+              as Money,
       cartTotal: null == cartTotal
           ? _value.cartTotal
           : cartTotal // ignore: cast_nullable_to_non_nullable
@@ -276,6 +290,10 @@ class _$CartStateCopyWithImpl<$Res, $Val extends CartState>
           ? _value.appliedVouchers
           : appliedVouchers // ignore: cast_nullable_to_non_nullable
               as List<Discount>,
+      selectedCashBackAppliedToCart: null == selectedCashBackAppliedToCart
+          ? _value.selectedCashBackAppliedToCart
+          : selectedCashBackAppliedToCart // ignore: cast_nullable_to_non_nullable
+              as Money,
       deliverySlots: null == deliverySlots
           ? _value.deliverySlots
           : deliverySlots // ignore: cast_nullable_to_non_nullable
@@ -574,6 +592,8 @@ abstract class _$$_CartStateCopyWith<$Res> implements $CartStateCopyWith<$Res> {
       @JsonKey(fromJson: Money.fromJson, toJson: Money.toJson)
       Money cartSubTotal,
       @JsonKey(fromJson: Money.fromJson, toJson: Money.toJson) Money cartTax,
+      @JsonKey(fromJson: Money.fromJson, toJson: Money.toJson)
+      Money cartTotalWithoutGBTRewards,
       @JsonKey(fromJson: Money.fromJson, toJson: Money.toJson) Money cartTotal,
       Currency cartCurrency,
       num cartDiscountPercent,
@@ -582,6 +602,8 @@ abstract class _$$_CartStateCopyWith<$Res> implements $CartStateCopyWith<$Res> {
       @JsonKey(fromJson: Money.fromJson, toJson: Money.toJson)
       Money voucherPotValue,
       List<Discount> appliedVouchers,
+      @JsonKey(fromJson: Money.fromJson, toJson: Money.toJson)
+      Money selectedCashBackAppliedToCart,
       List<TimeSlot> deliverySlots,
       List<TimeSlot> collectionSlots,
       DeliveryAddresses? selectedDeliveryAddress,
@@ -666,12 +688,14 @@ class __$$_CartStateCopyWithImpl<$Res>
     Object? cartItems = null,
     Object? cartSubTotal = null,
     Object? cartTax = null,
+    Object? cartTotalWithoutGBTRewards = null,
     Object? cartTotal = null,
     Object? cartCurrency = null,
     Object? cartDiscountPercent = null,
     Object? cartDiscountComputed = null,
     Object? voucherPotValue = null,
     Object? appliedVouchers = null,
+    Object? selectedCashBackAppliedToCart = null,
     Object? deliverySlots = null,
     Object? collectionSlots = null,
     Object? selectedDeliveryAddress = freezed,
@@ -726,6 +750,10 @@ class __$$_CartStateCopyWithImpl<$Res>
           ? _value.cartTax
           : cartTax // ignore: cast_nullable_to_non_nullable
               as Money,
+      cartTotalWithoutGBTRewards: null == cartTotalWithoutGBTRewards
+          ? _value.cartTotalWithoutGBTRewards
+          : cartTotalWithoutGBTRewards // ignore: cast_nullable_to_non_nullable
+              as Money,
       cartTotal: null == cartTotal
           ? _value.cartTotal
           : cartTotal // ignore: cast_nullable_to_non_nullable
@@ -750,6 +778,10 @@ class __$$_CartStateCopyWithImpl<$Res>
           ? _value.appliedVouchers
           : appliedVouchers // ignore: cast_nullable_to_non_nullable
               as List<Discount>,
+      selectedCashBackAppliedToCart: null == selectedCashBackAppliedToCart
+          ? _value.selectedCashBackAppliedToCart
+          : selectedCashBackAppliedToCart // ignore: cast_nullable_to_non_nullable
+              as Money,
       deliverySlots: null == deliverySlots
           ? _value.deliverySlots
           : deliverySlots // ignore: cast_nullable_to_non_nullable
@@ -925,6 +957,8 @@ class _$_CartState extends _CartState with DiagnosticableTreeMixin {
       @JsonKey(fromJson: Money.fromJson, toJson: Money.toJson)
       this.cartTax = const Money.zeroGBP(),
       @JsonKey(fromJson: Money.fromJson, toJson: Money.toJson)
+      this.cartTotalWithoutGBTRewards = const Money.zeroGBP(),
+      @JsonKey(fromJson: Money.fromJson, toJson: Money.toJson)
       this.cartTotal = const Money.zeroGBP(),
       this.cartCurrency = Currency.GBP,
       this.cartDiscountPercent = 0,
@@ -933,6 +967,8 @@ class _$_CartState extends _CartState with DiagnosticableTreeMixin {
       @JsonKey(fromJson: Money.fromJson, toJson: Money.toJson)
       this.voucherPotValue = const Money.zeroGBP(),
       this.appliedVouchers = const [],
+      @JsonKey(fromJson: Money.fromJson, toJson: Money.toJson)
+      this.selectedCashBackAppliedToCart = const Money.zeroGBP(),
       this.deliverySlots = const [],
       this.collectionSlots = const [],
       this.selectedDeliveryAddress = null,
@@ -996,6 +1032,9 @@ class _$_CartState extends _CartState with DiagnosticableTreeMixin {
   final Money cartTax;
   @override
   @JsonKey(fromJson: Money.fromJson, toJson: Money.toJson)
+  final Money cartTotalWithoutGBTRewards;
+  @override
+  @JsonKey(fromJson: Money.fromJson, toJson: Money.toJson)
   final Money cartTotal;
   @override
   @JsonKey()
@@ -1012,6 +1051,9 @@ class _$_CartState extends _CartState with DiagnosticableTreeMixin {
   @override
   @JsonKey()
   final List<Discount> appliedVouchers;
+  @override
+  @JsonKey(fromJson: Money.fromJson, toJson: Money.toJson)
+  final Money selectedCashBackAppliedToCart;
   @override
   @JsonKey()
   final List<TimeSlot> deliverySlots;
@@ -1135,7 +1177,7 @@ class _$_CartState extends _CartState with DiagnosticableTreeMixin {
 
   @override
   String toString({DiagnosticLevel minLevel = DiagnosticLevel.info}) {
-    return 'CartState(cartItems: $cartItems, cartSubTotal: $cartSubTotal, cartTax: $cartTax, cartTotal: $cartTotal, cartCurrency: $cartCurrency, cartDiscountPercent: $cartDiscountPercent, cartDiscountComputed: $cartDiscountComputed, voucherPotValue: $voucherPotValue, appliedVouchers: $appliedVouchers, deliverySlots: $deliverySlots, collectionSlots: $collectionSlots, selectedDeliveryAddress: $selectedDeliveryAddress, selectedTimeSlot: $selectedTimeSlot, selectedTipAmount: $selectedTipAmount, discountCode: $discountCode, paymentIntentID: $paymentIntentID, paymentIntentClientSecret: $paymentIntentClientSecret, paymentIntent: $paymentIntent, ephemeralKey: $ephemeralKey, publishableKey: $publishableKey, order: $order, selectedGBPxAmount: $selectedGBPxAmount, selectedPPLAmount: $selectedPPLAmount, payButtonLoading: $payButtonLoading, transferringTokens: $transferringTokens, errorCompletingPayment: $errorCompletingPayment, confirmedPayment: $confirmedPayment, restaurantName: $restaurantName, restaurantID: $restaurantID, restaurantIsLive: $restaurantIsLive, restaurantAddress: $restaurantAddress, restaurantWalletAddress: $restaurantWalletAddress, fulfilmentMethod: $fulfilmentMethod, restaurantMinimumOrder: $restaurantMinimumOrder, restaurantPlatformFee: $restaurantPlatformFee, deliveryInstructions: $deliveryInstructions, selectedPaymentMethod: $selectedPaymentMethod, preferredPaymentMethod: $preferredPaymentMethod, fulfilmentPostalDistricts: $fulfilmentPostalDistricts, eligibleOrderDates: $eligibleOrderDates, nextCollectionSlot: $nextCollectionSlot, nextDeliverySlot: $nextDeliverySlot, productSuggestion: $productSuggestion, orderCreationProcessStatus: $orderCreationProcessStatus, orderCreationStatusMessage: $orderCreationStatusMessage, stripePaymentStatus: $stripePaymentStatus, paymentInProcess: $paymentInProcess, isLoadingCartState: $isLoadingCartState, errorDetails: $errorDetails)';
+    return 'CartState(cartItems: $cartItems, cartSubTotal: $cartSubTotal, cartTax: $cartTax, cartTotalWithoutGBTRewards: $cartTotalWithoutGBTRewards, cartTotal: $cartTotal, cartCurrency: $cartCurrency, cartDiscountPercent: $cartDiscountPercent, cartDiscountComputed: $cartDiscountComputed, voucherPotValue: $voucherPotValue, appliedVouchers: $appliedVouchers, selectedCashBackAppliedToCart: $selectedCashBackAppliedToCart, deliverySlots: $deliverySlots, collectionSlots: $collectionSlots, selectedDeliveryAddress: $selectedDeliveryAddress, selectedTimeSlot: $selectedTimeSlot, selectedTipAmount: $selectedTipAmount, discountCode: $discountCode, paymentIntentID: $paymentIntentID, paymentIntentClientSecret: $paymentIntentClientSecret, paymentIntent: $paymentIntent, ephemeralKey: $ephemeralKey, publishableKey: $publishableKey, order: $order, selectedGBPxAmount: $selectedGBPxAmount, selectedPPLAmount: $selectedPPLAmount, payButtonLoading: $payButtonLoading, transferringTokens: $transferringTokens, errorCompletingPayment: $errorCompletingPayment, confirmedPayment: $confirmedPayment, restaurantName: $restaurantName, restaurantID: $restaurantID, restaurantIsLive: $restaurantIsLive, restaurantAddress: $restaurantAddress, restaurantWalletAddress: $restaurantWalletAddress, fulfilmentMethod: $fulfilmentMethod, restaurantMinimumOrder: $restaurantMinimumOrder, restaurantPlatformFee: $restaurantPlatformFee, deliveryInstructions: $deliveryInstructions, selectedPaymentMethod: $selectedPaymentMethod, preferredPaymentMethod: $preferredPaymentMethod, fulfilmentPostalDistricts: $fulfilmentPostalDistricts, eligibleOrderDates: $eligibleOrderDates, nextCollectionSlot: $nextCollectionSlot, nextDeliverySlot: $nextDeliverySlot, productSuggestion: $productSuggestion, orderCreationProcessStatus: $orderCreationProcessStatus, orderCreationStatusMessage: $orderCreationStatusMessage, stripePaymentStatus: $stripePaymentStatus, paymentInProcess: $paymentInProcess, isLoadingCartState: $isLoadingCartState, errorDetails: $errorDetails)';
   }
 
   @override
@@ -1146,12 +1188,16 @@ class _$_CartState extends _CartState with DiagnosticableTreeMixin {
       ..add(DiagnosticsProperty('cartItems', cartItems))
       ..add(DiagnosticsProperty('cartSubTotal', cartSubTotal))
       ..add(DiagnosticsProperty('cartTax', cartTax))
+      ..add(DiagnosticsProperty(
+          'cartTotalWithoutGBTRewards', cartTotalWithoutGBTRewards))
       ..add(DiagnosticsProperty('cartTotal', cartTotal))
       ..add(DiagnosticsProperty('cartCurrency', cartCurrency))
       ..add(DiagnosticsProperty('cartDiscountPercent', cartDiscountPercent))
       ..add(DiagnosticsProperty('cartDiscountComputed', cartDiscountComputed))
       ..add(DiagnosticsProperty('voucherPotValue', voucherPotValue))
       ..add(DiagnosticsProperty('appliedVouchers', appliedVouchers))
+      ..add(DiagnosticsProperty(
+          'selectedCashBackAppliedToCart', selectedCashBackAppliedToCart))
       ..add(DiagnosticsProperty('deliverySlots', deliverySlots))
       ..add(DiagnosticsProperty('collectionSlots', collectionSlots))
       ..add(DiagnosticsProperty(
@@ -1212,6 +1258,9 @@ class _$_CartState extends _CartState with DiagnosticableTreeMixin {
             (identical(other.cartSubTotal, cartSubTotal) ||
                 other.cartSubTotal == cartSubTotal) &&
             (identical(other.cartTax, cartTax) || other.cartTax == cartTax) &&
+            (identical(other.cartTotalWithoutGBTRewards, cartTotalWithoutGBTRewards) ||
+                other.cartTotalWithoutGBTRewards ==
+                    cartTotalWithoutGBTRewards) &&
             (identical(other.cartTotal, cartTotal) ||
                 other.cartTotal == cartTotal) &&
             (identical(other.cartCurrency, cartCurrency) ||
@@ -1224,6 +1273,9 @@ class _$_CartState extends _CartState with DiagnosticableTreeMixin {
                 other.voucherPotValue == voucherPotValue) &&
             const DeepCollectionEquality()
                 .equals(other.appliedVouchers, appliedVouchers) &&
+            (identical(other.selectedCashBackAppliedToCart, selectedCashBackAppliedToCart) ||
+                other.selectedCashBackAppliedToCart ==
+                    selectedCashBackAppliedToCart) &&
             const DeepCollectionEquality()
                 .equals(other.deliverySlots, deliverySlots) &&
             const DeepCollectionEquality()
@@ -1257,22 +1309,14 @@ class _$_CartState extends _CartState with DiagnosticableTreeMixin {
                 other.transferringTokens == transferringTokens) &&
             (identical(other.errorCompletingPayment, errorCompletingPayment) ||
                 other.errorCompletingPayment == errorCompletingPayment) &&
-            (identical(other.confirmedPayment, confirmedPayment) ||
-                other.confirmedPayment == confirmedPayment) &&
-            (identical(other.restaurantName, restaurantName) ||
-                other.restaurantName == restaurantName) &&
-            (identical(other.restaurantID, restaurantID) ||
-                other.restaurantID == restaurantID) &&
-            (identical(other.restaurantIsLive, restaurantIsLive) ||
-                other.restaurantIsLive == restaurantIsLive) &&
-            (identical(other.restaurantAddress, restaurantAddress) ||
-                other.restaurantAddress == restaurantAddress) &&
-            (identical(other.restaurantWalletAddress, restaurantWalletAddress) ||
-                other.restaurantWalletAddress == restaurantWalletAddress) &&
-            (identical(other.fulfilmentMethod, fulfilmentMethod) ||
-                other.fulfilmentMethod == fulfilmentMethod) &&
-            (identical(other.restaurantMinimumOrder, restaurantMinimumOrder) ||
-                other.restaurantMinimumOrder == restaurantMinimumOrder) &&
+            (identical(other.confirmedPayment, confirmedPayment) || other.confirmedPayment == confirmedPayment) &&
+            (identical(other.restaurantName, restaurantName) || other.restaurantName == restaurantName) &&
+            (identical(other.restaurantID, restaurantID) || other.restaurantID == restaurantID) &&
+            (identical(other.restaurantIsLive, restaurantIsLive) || other.restaurantIsLive == restaurantIsLive) &&
+            (identical(other.restaurantAddress, restaurantAddress) || other.restaurantAddress == restaurantAddress) &&
+            (identical(other.restaurantWalletAddress, restaurantWalletAddress) || other.restaurantWalletAddress == restaurantWalletAddress) &&
+            (identical(other.fulfilmentMethod, fulfilmentMethod) || other.fulfilmentMethod == fulfilmentMethod) &&
+            (identical(other.restaurantMinimumOrder, restaurantMinimumOrder) || other.restaurantMinimumOrder == restaurantMinimumOrder) &&
             (identical(other.restaurantPlatformFee, restaurantPlatformFee) || other.restaurantPlatformFee == restaurantPlatformFee) &&
             (identical(other.deliveryInstructions, deliveryInstructions) || other.deliveryInstructions == deliveryInstructions) &&
             (identical(other.selectedPaymentMethod, selectedPaymentMethod) || other.selectedPaymentMethod == selectedPaymentMethod) &&
@@ -1297,12 +1341,14 @@ class _$_CartState extends _CartState with DiagnosticableTreeMixin {
         const DeepCollectionEquality().hash(cartItems),
         cartSubTotal,
         cartTax,
+        cartTotalWithoutGBTRewards,
         cartTotal,
         cartCurrency,
         cartDiscountPercent,
         cartDiscountComputed,
         voucherPotValue,
         const DeepCollectionEquality().hash(appliedVouchers),
+        selectedCashBackAppliedToCart,
         const DeepCollectionEquality().hash(deliverySlots),
         const DeepCollectionEquality().hash(collectionSlots),
         selectedDeliveryAddress,
@@ -1367,6 +1413,8 @@ abstract class _CartState extends CartState {
       @JsonKey(fromJson: Money.fromJson, toJson: Money.toJson)
       final Money cartTax,
       @JsonKey(fromJson: Money.fromJson, toJson: Money.toJson)
+      final Money cartTotalWithoutGBTRewards,
+      @JsonKey(fromJson: Money.fromJson, toJson: Money.toJson)
       final Money cartTotal,
       final Currency cartCurrency,
       final num cartDiscountPercent,
@@ -1375,6 +1423,8 @@ abstract class _CartState extends CartState {
       @JsonKey(fromJson: Money.fromJson, toJson: Money.toJson)
       final Money voucherPotValue,
       final List<Discount> appliedVouchers,
+      @JsonKey(fromJson: Money.fromJson, toJson: Money.toJson)
+      final Money selectedCashBackAppliedToCart,
       final List<TimeSlot> deliverySlots,
       final List<TimeSlot> collectionSlots,
       final DeliveryAddresses? selectedDeliveryAddress,
@@ -1437,6 +1487,9 @@ abstract class _CartState extends CartState {
   Money get cartTax;
   @override
   @JsonKey(fromJson: Money.fromJson, toJson: Money.toJson)
+  Money get cartTotalWithoutGBTRewards;
+  @override
+  @JsonKey(fromJson: Money.fromJson, toJson: Money.toJson)
   Money get cartTotal;
   @override
   Currency get cartCurrency;
@@ -1450,6 +1503,9 @@ abstract class _CartState extends CartState {
   Money get voucherPotValue;
   @override
   List<Discount> get appliedVouchers;
+  @override
+  @JsonKey(fromJson: Money.fromJson, toJson: Money.toJson)
+  Money get selectedCashBackAppliedToCart;
   @override
   List<TimeSlot> get deliverySlots;
   @override

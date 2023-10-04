@@ -19,6 +19,7 @@ import 'package:vegan_liverpool/utils/constants.dart';
 import 'package:vegan_liverpool/utils/log/log.dart';
 
 import 'package:auto_route/annotations.dart';
+import 'package:vegan_liverpool/utils/onboard/web3Auth.dart';
 
 @RoutePage()
 class PinCodeScreen extends StatefulWidget {
@@ -60,8 +61,10 @@ class _PinCodeScreenState extends State<PinCodeScreen> {
     if (store.state.userState.isLoggedIn == false ||
         store.state.userState.hasOnboarded == false) {
       if (store.state.userState.isLoggedIn) {
+        await registerFuseSDK(privateKey: store.state.userState.privateKey);
         await onBoardStrategy.nextOnboardingPage(
-            currentRoute: const routes.PinCodeScreen(),);
+          currentRoute: const routes.PinCodeScreen(),
+        );
       } else {
         await rootRouter.replaceAll([const SignUpScreen()]);
       }
@@ -75,7 +78,7 @@ class _PinCodeScreenState extends State<PinCodeScreen> {
 
       await BiometricUtils.showDefaultPopupCheckBiometricAuth(
         message: 'Please use $biometric to unlock!',
-        callback: (bool result) {
+        callback: (bool result) async {
           if (result) {
             setBiometricallyAuthenticated(
               isBiometricallyAuthenticated: true,
@@ -87,6 +90,7 @@ class _PinCodeScreenState extends State<PinCodeScreen> {
             // viewModel.setSecurityType(
             //   type,
             // );
+            await registerFuseSDK(privateKey: store.state.userState.privateKey);
             rootRouter.replace(const MainScreen());
             Analytics.track(
               eventName: AnalyticsEvents.onboardingCompleted,
@@ -103,7 +107,9 @@ class _PinCodeScreenState extends State<PinCodeScreen> {
       converter: LockScreenViewModel.fromStore,
       distinct: true,
       onWillChange: (previousViewModel, newViewModel) async {
-        if(newViewModel.biometricallyAuthenticated){
+        if (newViewModel.biometricallyAuthenticated) {
+          final store = StoreProvider.of<AppState>(context);
+          await registerFuseSDK(privateKey: store.state.userState.privateKey);
           await rootRouter.replace(const MainScreen());
         }
         // if (newViewModel.firebaseAuthenticationStatus !=
@@ -228,8 +234,14 @@ class _PinCodeScreenState extends State<PinCodeScreen> {
                                         disabledColor: Colors.transparent,
                                         activeFillColor: Colors.transparent,
                                       ),
-                                      onCompleted: (value) {
+                                      onCompleted: (value) async {
                                         if (viewModel.pincode == value) {
+                                          final store =
+                                              StoreProvider.of<AppState>(
+                                                  context);
+                                          await registerFuseSDK(
+                                              privateKey: store
+                                                  .state.userState.privateKey);
                                           rootRouter
                                               .replaceAll([const MainScreen()]);
                                           pincodeController.clear();

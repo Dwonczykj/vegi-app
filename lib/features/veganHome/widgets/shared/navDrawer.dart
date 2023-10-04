@@ -83,9 +83,7 @@ class _NavDrawerState extends State<NavDrawer> {
                       alignment: Alignment.bottomLeft,
                       child: Padding(
                         padding: EdgeInsets.all(6),
-                        child: Row(
-                          
-                        ),
+                        child: Row(),
                       ),
                     ),
                   ],
@@ -102,7 +100,8 @@ class _NavDrawerState extends State<NavDrawer> {
                           title: const Text('Scheduled Orders'),
                           onTap: () {
                             Analytics.track(
-                                eventName: AnalyticsEvents.viewSchOrders,);
+                              eventName: AnalyticsEvents.viewSchOrders,
+                            );
                             context.router.push(const ScheduledOrdersRoute());
                           },
                         ),
@@ -132,7 +131,8 @@ class _NavDrawerState extends State<NavDrawer> {
                         title: const Text('My Orders'),
                         onTap: () {
                           Analytics.track(
-                              eventName: AnalyticsEvents.viewAllOrders,);
+                            eventName: AnalyticsEvents.viewAllOrders,
+                          );
                           context.router.push(const AllOrdersRoute());
                         },
                       ),
@@ -141,7 +141,8 @@ class _NavDrawerState extends State<NavDrawer> {
                         title: const Text('Account'),
                         onTap: () {
                           Analytics.track(
-                              eventName: AnalyticsEvents.viewAccount,);
+                            eventName: AnalyticsEvents.viewAccount,
+                          );
                           context.router.push(const ProfileScreen());
                         },
                       ),
@@ -226,10 +227,39 @@ class _NavDrawerState extends State<NavDrawer> {
               Padding(
                 padding: const EdgeInsets.only(bottom: 10),
                 child: SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.4,
+                  width: MediaQuery.of(context).size.width * 0.6,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
+                      IconButton(
+                        onPressed: () async {
+                          // await context.router
+                          //     .push(const ScanPaymentRecipientQR());
+                          await context.router
+                              .push(const GenerateQRFromUserDetails());
+                          // await showModalBottomSheet<Widget>(
+                          //   isScrollControlled: true,
+                          //   backgroundColor: Color.fromARGB(255, 44, 42, 39),
+                          //   shape: const RoundedRectangleBorder(
+                          //     borderRadius: BorderRadius.vertical(
+                          //       top: Radius.circular(20),
+                          //     ),
+                          //   ),
+                          //   elevation: 5,
+                          //   context: context,
+                          //   builder: (context) => const QRFromCartSheet(),
+                          // );
+                        },
+                        // icon: const Icon(Icons.qr_code_scanner),
+                        icon: Icon(
+                          FontAwesomeIcons.qrcode,
+                          color: Colors.grey[400],
+                          size: 30,
+                        ),
+                        padding: const EdgeInsets.all(4),
+                        // icon: const Icon(Icons.contact_support),
+                        // icon: const Icon(Icons.live_help),
+                      ),
                       IconButton(
                         onPressed: () => launchUrl(
                           VEGI_INSTA_PROFILE_URL,

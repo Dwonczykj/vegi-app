@@ -3,8 +3,12 @@ import 'package:flutter/foundation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:fuse_wallet_sdk/fuse_wallet_sdk.dart';
 import 'package:vegan_liverpool/common/di/di.dart';
+import 'package:vegan_liverpool/constants/enums.dart';
+import 'package:vegan_liverpool/features/veganHome/Helpers/extensions.dart';
+import 'package:vegan_liverpool/features/veganHome/Helpers/helpers.dart';
 import 'package:vegan_liverpool/models/actions/actions.dart';
 import 'package:vegan_liverpool/models/cash_wallet_state.dart';
+import 'package:vegan_liverpool/models/payments/money.dart';
 import 'package:vegan_liverpool/models/tokens/price.dart';
 import 'package:vegan_liverpool/services.dart';
 import 'package:vegan_liverpool/utils/format.dart';
@@ -39,11 +43,21 @@ class Token with _$Token implements Comparable<Token> {
   @override
   int compareTo(Token? other) {
     if (other == null) return 1;
-    return num.parse(getFiatBalance(withPrecision: true))
-        .compareTo(num.parse(other.getFiatBalance(withPrecision: true)));
+    return num.parse(getFiatBalanceFormatted(withPrecision: true)).compareTo(
+        num.parse(other.getFiatBalanceFormatted(withPrecision: true)));
   }
 
-  double getAmount() => Formatter.fromWei(amount, decimals).toDouble();
+  double getAmountTokens() => Formatter.fromWei(amount, decimals).toDouble();
+  Money getBalanceMoney() => Money(
+        currency:
+            EnumHelpers.enumFromString<Currency>(Currency.values, symbol) ??
+                Currency.GBT,
+        value: EnumHelpers.enumFromString<Currency>(Currency.values, symbol) ==
+                null
+            ? 0.0
+            : getAmountTokens(),
+      );
+  BigInt getAmountWei() => amount;
 
   String getBalance({bool withPrecision = false}) => Formatter.formatValue(
         amount,
@@ -51,14 +65,26 @@ class Token with _$Token implements Comparable<Token> {
         withPrecision,
       );
 
-  String getFiatBalance({bool withPrecision = false}) => hasPriceInfo
-      ? Formatter.formatValueToFiat(
+  double getFiatBalance({bool withPrecision = false}) => hasPriceInfo
+      ? Formatter.formatValueToFiatAmount(
+          amount,
+          decimals,
+          double.parse(priceInfo!.quote),
+        ).toDouble()
+      : symbol == 'GBT'
+          ? getPoundValueFromGBT(getAmountTokens())
+          : 0.0;
+
+  String getFiatBalanceFormatted({bool withPrecision = false}) => hasPriceInfo
+      ? Formatter.formatValueToFiatFormatted(
           amount,
           decimals,
           double.parse(priceInfo!.quote),
           withPrecision,
         )
-      : '0';
+      : symbol == 'GBT'
+          ? getPoundValueFromGBT(getAmountTokens()).formattedGBPPriceNoDec
+          : 0.formattedGBPPriceNoDec;
 
   bool get hasPriceInfo => priceInfo != null && priceInfo?.hasPriceInfo == true;
 
@@ -72,12 +98,14 @@ class Token with _$Token implements Comparable<Token> {
     }
     try {
       final tokenBalanceData =
-          await (await fuseWalletSDK).explorerModule.getTokenBalance(
+          await fuseWalletSDK.explorerModule.getTokenBalance(
         address,
         accountAddress,
       );
       return tokenBalanceData.pick(
         onData: (BigInt value) {
+          log.debug(
+              'Token Balance Update: $symbol ${Formatter.fromWei(value, decimals).toStringAsFixed(2)}');
           onDone(value);
         },
         onError: (err) {
@@ -150,7 +178,7 @@ class Token with _$Token implements Comparable<Token> {
   }) async {
     try {
       final intervalData =
-          await (await fuseWalletSDK).tradeModule.interval(address, timeFrame);
+          await fuseWalletSDK.tradeModule.interval(address, timeFrame);
       return intervalData.pick(
         onData: (List<IntervalStats> stats) {
           onDone(stats);

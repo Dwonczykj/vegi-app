@@ -32,7 +32,8 @@ class _GenerateQRFromCartState extends State<GenerateQRFromCart> {
           ..dispatch(SetPaymentButtonFlag(false))
           ..dispatch(
             UpdateSelectedAmounts(
-              gbpxAmount: store.state.cartState.cartTotal.inGBPxValue.toDouble(),
+              gbpxAmount:
+                  store.state.cartState.cartTotal.inGBPxValue.toDouble(),
               pplAmount: 0,
             ),
           );
@@ -61,7 +62,7 @@ class _GenerateQRFromCartState extends State<GenerateQRFromCart> {
                 data: snapshot.data!,
                 backgroundColor: Theme.of(context).canvasColor,
                 embeddedImage: Image.asset(
-                  'assets/images/Vegi-Logo-square.png',
+                  ImagePaths.vegiSquareLogo,
                 ).image,
                 foregroundColor: themeShade1200,
                 size: Math.min(

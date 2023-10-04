@@ -46,61 +46,109 @@ const String wethTokenAddress = '0xa722c13135930332eb3d749b2f0906559d2c5b99';
 const String wbtcTokenAddress = '0x33284f95ccb7b948d9d352e1439561cf83d8d00d';
 const String wfuseTokenAddress = '0x0be9e53fd7edac9f859882afdda116645287c629';
 
-final Token fuseToken = Token(
-  name: 'Fuse',
-  symbol: 'FUSE',
-  imageUrl: 'https://fuselogo.s3.eu-central-1.amazonaws.com/fuse-token.png',
-  decimals: 18,
-  address: Addresses.zeroAddress,
-  isNative: true,
-  timestamp: 0,
-  amount: BigInt.from(0.0),
-  walletActions: WalletActions.initial(),
-);
+// final Token gbpxToken = Token(
+//   name: 'GBPx',
+//   symbol: 'GBPX',
+//   // imageUrl: "https://fuselogo.s3.eu-central-1.amazonaws.com/fuse-dollar.png",
+//   decimals: 18,
+//   address: Addresses.gbpxTokenAddress,
+//   timestamp: 0,
+//   amount: BigInt.from(0.0),
+//   walletActions: WalletActions.initial(),
+// );
 
-final Token gbpxToken = Token(
-  name: 'GBPx',
-  symbol: 'GBPX',
-  // imageUrl: "https://fuselogo.s3.eu-central-1.amazonaws.com/fuse-dollar.png",
-  decimals: 18,
-  address: Addresses.gbpxTokenAddress,
-  timestamp: 0,
-  amount: BigInt.from(0.0),
-  walletActions: WalletActions.initial(),
-);
+// final Token pplToken = Token(
+//   name: 'Peepl',
+//   symbol: 'PPL',
+//   // imageUrl: 'https://fuselogo.s3.eu-central-1.amazonaws.com/fuse-token.png',
+//   decimals: 18,
+//   address: Addresses.gbtTokenAddress,
+//   timestamp: 0,
+//   amount: BigInt.from(0.0),
+//   walletActions: WalletActions.initial(),
+// );
 
-final Token pplToken = Token(
-  name: 'Peepl',
-  symbol: 'PPL',
-  // imageUrl: 'https://fuselogo.s3.eu-central-1.amazonaws.com/fuse-token.png',
-  decimals: 18,
-  address: Addresses.gbtTokenAddress,
-  timestamp: 0,
-  amount: BigInt.from(0.0),
-  walletActions: WalletActions.initial(),
-);
+class TokenDefinitions {
+  static Token fuseToken = Token(
+    name: 'Fuse',
+    symbol: 'FUSE',
+    imageUrl: 'https://fuselogo.s3.eu-central-1.amazonaws.com/fuse-token.png',
+    decimals: 18,
+    address: Addresses.zeroAddress,
+    isNative: true,
+    timestamp: 0,
+    amount: BigInt.from(0.0),
+    walletActions: WalletActions.initial(),
+  );
+  static Token fuseSparkToken = Token(
+    name: 'Spark',
+    symbol: 'SPARK',
+    imageUrl: 'https://fuselogo.s3.eu-central-1.amazonaws.com/fuse-token.png',
+    decimals: 18,
+    address: Addresses.fuseSparkTokenAddress,
+    isNative: true,
+    timestamp: 0,
+    amount: BigInt.from(0.0),
+    walletActions: WalletActions.initial(),
+  );
+  // static Token gbpxToken = gbpxToken;
+  // static Token pplToken = pplToken;
+  static Token greenBeanToken = Token(
+    name: 'Green Beans',
+    symbol: 'GBT',
+    // imageUrl: 'https://fuselogo.s3.eu-central-1.amazonaws.com/fuse-token.png',
+    imageUrl: ImagePaths.vegiBeanMan,
+    decimals: 18,
+    address: Addresses.gbtTokenAddress,
+    timestamp: 0,
+    amount: BigInt.from(0.0),
+    walletActions: WalletActions.initial(),
+  );
+  static Token fuseDollarToken = Token(
+    name: 'Fuse Dollar',
+    symbol: 'fUSD',
+    imageUrl: 'https://fuselogo.s3.eu-central-1.amazonaws.com/fuse-dollar.png',
+    decimals: 18,
+    address: Addresses.fusdTokenAddress,
+    timestamp: 0,
+    amount: BigInt.from(0.0),
+    walletActions: WalletActions.initial(),
+  );
+}
 
-final Token greenBeanToken = Token(
-  name: 'Green Beans',
-  symbol: 'GBT',
-  // imageUrl: 'https://fuselogo.s3.eu-central-1.amazonaws.com/fuse-token.png',
-  decimals: 18,
-  address: Addresses.gbtTokenAddress,
-  timestamp: 0,
-  amount: BigInt.from(0.0),
-  walletActions: WalletActions.initial(),
-);
+class CurrencyRateConstants {
+  static const rewardsPcntDelivery = 0.01;
+  static const rewardsPcntPoS = 0.01;
+  static const numberOfGBTInOneGBP = 1 / GBTPoundPegValue;
+  static const gbtPenceValue = 1 / numberOfGBTInOneGBP;
+  static const gbtPoundValue = gbtPenceValue / 100.0;
+  static const minESCRating = 0.0;
+  static const maxESCRating = 5.0;
 
-final Token fuseDollarToken = Token(
-  name: 'Fuse Dollar',
-  symbol: 'fUSD',
-  imageUrl: 'https://fuselogo.s3.eu-central-1.amazonaws.com/fuse-dollar.png',
-  decimals: 18,
-  address: Addresses.fusdTokenAddress,
-  timestamp: 0,
-  amount: BigInt.from(0.0),
-  walletActions: WalletActions.initial(),
-);
+  /// Description placeholder
+  /// @date 25/05/2023 - 09:15:53
+  ///
+  /// @type {0.01}
+  ///
+  /// @value of 1 GBT in GBP
+  static const GBTPoundPegValue = 0.01;
+
+  /// Description placeholder
+  /// @date 25/05/2023 - 09:15:53
+  ///
+  /// @type {0.01}
+  ///
+  /// @value of 1 GBPx in GBP
+  static const GBPxPoundPegValue = 0.01;
+
+  /// Description placeholder
+  /// @date 25/05/2023 - 09:15:53
+  ///
+  /// @type {0.01}
+  ///
+  /// @value of 1 PPL in GBP
+  static const PPLPoundPegValue = 0.1;
+}
 
 /// Static class of DotEnv Secrets
 class Secrets {
@@ -118,11 +166,16 @@ class Secrets {
   static String get VEGI_ESC_BACKEND => dotenv.env['VEGI_ESC_BACKEND']!;
 
   static String get CHARGE_API_KEY => dotenv.env['CHARGE_API_KEY']!;
-  
-  static String get FIREBASE_USER_DETAILS_COLLECTION_ID => dotenv.env['FIREBASE_USER_DETAILS_COLLECTION_ID']!;
-  static String get FIREBASE_USER_DETAILS_COLLECTION_FIELD1 => dotenv.env['FIREBASE_USER_DETAILS_COLLECTION_FIELD1']!;
-  static String get FIREBASE_USER_DETAILS_COLLECTION_FIELD2 => dotenv.env['FIREBASE_USER_DETAILS_COLLECTION_FIELD2']!;
 
+  static String get FIREBASE_USER_DETAILS_COLLECTION_ID =>
+      dotenv.env['FIREBASE_USER_DETAILS_COLLECTION_ID']!;
+  static String get FIREBASE_USER_DETAILS_COLLECTION_FIELD1 =>
+      dotenv.env['FIREBASE_USER_DETAILS_COLLECTION_FIELD1']!;
+  static String get FIREBASE_USER_DETAILS_COLLECTION_FIELD2 =>
+      dotenv.env['FIREBASE_USER_DETAILS_COLLECTION_FIELD2']!;
+
+  static String get FUSE_CHAIN_ID =>
+      dotenv.env['FUSE_CHAIN_ID']!;
   static String get FUSE_WALLET_SDK_PUBLIC_KEY =>
       dotenv.env['FUSE_WALLET_SDK_PK']!;
   static String? get FUSE_WALLET_SDK_PRIVATE_CREDENTIAL_FOR_UNIT_TEST_ONLY =>
@@ -176,8 +229,7 @@ class Secrets {
       testPhoneNumbers.length == testEmails.length
           ? Map.fromEntries(
               testPhoneNumbers.mapIndexed(
-                (index, element) =>
-                    MapEntry(element, testEmails[index]),
+                (index, element) => MapEntry(element, testEmails[index]),
               ),
             )
           : {};
@@ -272,40 +324,6 @@ String getGuideLiverpoolLink() {
 }
 
 const showWaitingListFunnel = false;
-
-class CurrencyRateConstants {
-  static const pplRewardsPcntDelivery = 0.05;
-  static const pplRewardsPcntPoS = 0.01;
-  static const numberOfPPLInOneGBP = 10.0;
-  static const pplPenceValue = 0.1;
-  static const pplPoundValue = pplPenceValue / 100;
-  static const minESCRating = 0.0;
-  static const maxESCRating = 5.0;
-
-  /// Description placeholder
-  /// @date 25/05/2023 - 09:15:53
-  ///
-  /// @type {0.01}
-  ///
-  /// @value of 1 GBT in GBP
-  static const GBTPoundPegValue = 0.01;
-
-  /// Description placeholder
-  /// @date 25/05/2023 - 09:15:53
-  ///
-  /// @type {0.01}
-  ///
-  /// @value of 1 GBPx in GBP
-  static const GBPxPoundPegValue = 0.01;
-
-  /// Description placeholder
-  /// @date 25/05/2023 - 09:15:53
-  ///
-  /// @type {0.01}
-  ///
-  /// @value of 1 PPL in GBP
-  static const PPLPoundPegValue = 0.1;
-}
 
 class Fonts {
   static const String fatFace = 'Fat Cheeks';
@@ -488,6 +506,7 @@ class CopyWrite {
 class ImagePaths {
   static const String vegiHorizontalLogo =
       'assets/images/Vegi-Logo-horizontal.png';
+  static const String vegiSquareLogo = 'assets/images/Vegi-Logo-square.png';
   static const String vegiBeanMan = 'assets/images/beanman.jpg';
   static const String veganOnlyIcon = 'assets/images/vegan-only-icon.png';
   static const String fuseLogo = 'assets/images/fuse/fuse-logo.png';
@@ -512,6 +531,7 @@ class ImagePaths {
   static const String orderAcceptedCollection =
       'assets/images/order-accepted.gif';
 
+  static const String avatarPPLRed = 'assets/images/avatar-ppl-red.png';
   static const String onboardingPage2HeadingImage1 = 'plant-icon.svg';
   static const String onboardingPage3HeadingImage2 = 'local-icon.svg';
   static const String onboardingPage4HeadingImage3 = 'rewards-icon.svg';

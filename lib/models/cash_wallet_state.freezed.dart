@@ -24,8 +24,12 @@ mixin _$CashWalletState {
   Map<String, Token> get tokens => throw _privateConstructorUsedError;
   @JsonKey(fromJson: walletActionsFromJson)
   WalletActions? get walletActions => throw _privateConstructorUsedError;
+
+  ///
   @JsonKey(includeFromJson: false, includeToJson: false)
   bool get isTransfersFetchingStarted => throw _privateConstructorUsedError;
+
+  /// an indicator variable to show whether the periodic timer has been started to reguarly fetch balances.
   @JsonKey(includeFromJson: false, includeToJson: false)
   bool get isFetchingBalances => throw _privateConstructorUsedError;
 
@@ -181,9 +185,13 @@ class _$_CashWalletState extends _CashWalletState with DiagnosticableTreeMixin {
   @override
   @JsonKey(fromJson: walletActionsFromJson)
   final WalletActions? walletActions;
+
+  ///
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   final bool isTransfersFetchingStarted;
+
+  /// an indicator variable to show whether the periodic timer has been started to reguarly fetch balances.
   @override
   @JsonKey(includeFromJson: false, includeToJson: false)
   final bool isFetchingBalances;
@@ -265,9 +273,13 @@ abstract class _CashWalletState extends CashWalletState {
   @JsonKey(fromJson: walletActionsFromJson)
   WalletActions? get walletActions;
   @override
+
+  ///
   @JsonKey(includeFromJson: false, includeToJson: false)
   bool get isTransfersFetchingStarted;
   @override
+
+  /// an indicator variable to show whether the periodic timer has been started to reguarly fetch balances.
   @JsonKey(includeFromJson: false, includeToJson: false)
   bool get isFetchingBalances;
   @override

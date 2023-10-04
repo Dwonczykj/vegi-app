@@ -973,9 +973,8 @@ mixin _StripeServiceMixin on IStripeService {
         ),
       );
 
-      final mintingCrypto = currency == Currency.GBPx ||
-          currency == Currency.PPL ||
-          currency == Currency.GBT;
+      final mintingCrypto =
+          currency == Currency.GBPx || currency == Currency.GBT;
       if (mintingCrypto) {
         store
           ..dispatch(

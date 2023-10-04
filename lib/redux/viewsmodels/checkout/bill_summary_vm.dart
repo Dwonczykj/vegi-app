@@ -39,8 +39,13 @@ class BillSummaryViewModel extends Equatable {
       itemTotal: store.state.cartState.cartSubTotal,
       serviceCharge: store.state.cartState.restaurantPlatformFee,
       hasDiscount: store.state.cartState.discountCode.isNotEmpty ||
-          store.state.cartState.voucherPotValue.value > 0,
-      discountAmount: store.state.cartState.cartDiscountComputed,
+          store.state.cartState.voucherPotValue.value > 0 ||
+          store.state.cartState.selectedCashBackAppliedToCart.value > 0,
+      discountAmount: store.state.cartState.cartDiscountComputed
+              .inCcy(store.state.cartState.cartCurrency) +
+          store.state.cartState.selectedCashBackAppliedToCart
+              .inCcy(store.state.cartState.cartCurrency)
+              .value,
       tipAmount: store.state.cartState.selectedTipAmount,
     );
   }
@@ -60,7 +65,14 @@ class BillSummaryViewModel extends Equatable {
   @override
   List<Object?> get props => [
         grandTotal,
+        hasDiscount,
+        discountAmount.value,
         hasDeliveryCharge,
+        collectionCharge,
+        deliveryCharge,
         hasCollectionCharge,
+        serviceCharge.value,
+        hasTip,
+        tipAmount.value,
       ];
 }

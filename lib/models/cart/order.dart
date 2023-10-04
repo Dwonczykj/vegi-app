@@ -197,17 +197,17 @@ class Order with _$Order {
       .map((t) => t.amount)
       .sum();
 
-  double get rewardsEarnedInPPL => getPPLRewardsFromPounds(
+  double get rewardsEarnedInTokens => getGBTRewardsFromPounds(
         GBPAmountPaid.currency == Currency.GBP ? GBPAmountPaid.value : 0.0,
       );
 
-  String get rewardsEarnedInPPLFormatted =>
-      rewardsEarnedInPPL.toStringAsFixed(2);
+  String get rewardsEarnedInTokensFormatted =>
+      rewardsEarnedInTokens.toStringAsFixed(2);
 
   String get gbtRewardsEarnedValue =>
-      '£${getPoundValueFromPPL(rewardsEarnedInPPL).toStringAsFixed(2)}';
+      '£${getPoundValueFromGBT(rewardsEarnedInTokens).toStringAsFixed(2)}';
 
-  bool get didUsePPL => rewardsTokensAmountPaid != 0.0;
+  bool get didUseGBT => rewardsTokensAmountPaid != 0.0;
 
   //SECTION custom getter names for app readability
   String get restaurantName => vendorName;

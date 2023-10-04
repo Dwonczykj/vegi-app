@@ -10,10 +10,11 @@ import 'package:vegan_liverpool/redux/actions/cart_actions.dart';
 
 class PeeplPaySheetViewModel extends Equatable {
   const PeeplPaySheetViewModel({
-    required this.startPaymentProcess,
+    // required this.startPaymentProcess,
     required this.selectedGBPxAmount,
     required this.selectedPPLAmount,
     required this.updateSelectedValues,
+    required this.selectCashBackToApply,
     required this.transferringTokens,
     required this.errorCompletingPayment,
     required this.confirmedPayment,
@@ -41,12 +42,19 @@ class PeeplPaySheetViewModel extends Equatable {
           ),
         );
       },
+      selectCashBackToApply: (gbtAmount) {
+        store.dispatch(
+          selectCashbackToApplyToCart(
+            intAbsoluteValueGBT: gbtAmount,
+          ),
+        );
+      },
       orderCreationProcessStatus:
           store.state.cartState.orderCreationProcessStatus,
       stripePaymentStatus: store.state.cartState.stripePaymentStatus,
-      startPaymentProcess: () {
-        store.dispatch(startPeeplPayProcess());
-      },
+      // startPaymentProcess: () {
+      //   store.dispatch(startPeeplPayProcess());
+      // },
       processingPayment: store.state.cartState.paymentInProcess,
     );
   }
@@ -58,7 +66,8 @@ class PeeplPaySheetViewModel extends Equatable {
   final bool confirmedPayment;
   final String restaurantName;
   final void Function(double gbpxAmount, double pplAmount) updateSelectedValues;
-  final void Function() startPaymentProcess;
+  final void Function(double gbtAmount) selectCashBackToApply;
+  // final void Function() startPaymentProcess;
   final OrderCreationProcessStatus orderCreationProcessStatus;
   final StripePaymentStatus stripePaymentStatus;
   final LivePayment? processingPayment;
